@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -434,7 +435,27 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <Extension>
+        Private Function lapplyGeneralIDictionary(list As tqdmList,
+                                                  apply As RFunction,
+                                                  getName As Func(Of SeqValue(Of Object), [Variant](Of String, Message)),
+                                                  hasName As Boolean,
+                                                  env As Environment) As Object
+
+            Return lapplyGeneralIDictionary(list.getKeys, AddressOf list.getValue, apply, getName, hasName, env)
+        End Function
+
+        <Extension>
         Private Function lapplyGeneralIDictionary(dict As IDictionary,
+                                                  apply As RFunction,
+                                                  getName As Func(Of SeqValue(Of Object), [Variant](Of String, Message)),
+                                                  hasName As Boolean,
+                                                  env As Environment) As Object
+
+            Return lapplyGeneralIDictionary(dict.Keys, Function(key) dict(key), apply, getName, hasName, env)
+        End Function
+
+        <Extension>
+        Private Function lapplyGeneralIDictionary(keys As IEnumerable, dict As Func(Of Object, Object),
                                                   apply As RFunction,
                                                   getName As Func(Of SeqValue(Of Object), [Variant](Of String, Message)),
                                                   hasName As Boolean,
@@ -451,7 +472,7 @@ Namespace Runtime.Internal.Invokes
                 .[Namespace] = "Rsharp_clr_interop"
             }
 
-            For Each d As Object In dict.Keys
+            For Each d As Object In keys
                 value = dict(d)
 
                 ' user didn't specific the names function or value
@@ -620,6 +641,10 @@ Namespace Runtime.Internal.Invokes
                 Return New list With {.slots = New Dictionary(Of String, Object)}
             End If
 
+            ' 1. test x is exception or not?
+            ' 2. test FUN is a function or not?
+            '
+            ' get a error message if test failure
             Dim check = checkInternal(X, FUN, envir)
 
             If Not TypeOf check Is Boolean Then
@@ -631,10 +656,18 @@ Namespace Runtime.Internal.Invokes
 
             Dim apply As RFunction = FUN
             Dim getName As Func(Of SeqValue(Of Object), [Variant](Of String, Message)) = keyNameAuto(names, envir)
+            Dim xtype As Type = X.GetType
 
             envir = New Environment(envir, "lapply_internal_loop", isInherits:=True)
 
-            If X.GetType.ImplementInterface(Of IDictionary) Then
+            If TypeOf X Is tqdmList Then
+                Return DirectCast(X, tqdmList).lapplyGeneralIDictionary(
+                    apply:=apply,
+                    getName:=getName,
+                    hasName:=Not names Is Nothing,
+                    env:=envir
+                )
+            ElseIf xtype.ImplementInterface(Of IDictionary) Then
                 Return DirectCast(X, IDictionary).lapplyGeneralIDictionary(
                     apply:=apply,
                     getName:=getName,
@@ -647,7 +680,7 @@ Namespace Runtime.Internal.Invokes
                     getName:=getName,
                     env:=envir
                 )
-            ElseIf X.GetType.ImplementInterface(Of RIndex) Then
+            ElseIf xtype.ImplementInterface(Of RIndex) Then
                 Return DirectCast(X, RIndex).lapplyRNameIndex(
                     apply:=apply,
                     getName:=getName,
@@ -656,11 +689,7 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return REnv.asVector(Of Object)(X) _
                     .AsObjectEnumerator _
-                    .lapplyGeneralSequence(
-                        apply:=apply,
-                        getName:=getName,
-                        env:=envir
-                    )
+                    .lapplyGeneralSequence(apply:=apply, getName:=getName, env:=envir)
             End If
         End Function
     End Module

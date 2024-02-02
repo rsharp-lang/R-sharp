@@ -220,8 +220,6 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                         Call base.print("",, env)
                     End If
                 End If
-            ElseIf TypeOf msgFunc Is String Then
-                Call base.print(msgFunc,, env)
             ElseIf msgFunc.GetType.ImplementInterface(Of RFunction) Then
                 Call DirectCast(msgFunc, RFunction).Invoke({x}, env)
             Else

@@ -116,10 +116,14 @@ Namespace Runtime.Internal.Invokes
                                   Optional use_color As Boolean = False,
                                   Optional env As Environment = Nothing) As Object
 
-            Dim pull As Object() = REnv.asVector(Of Object)(x)
-            Dim bar = Tqdm.Wrap(pull, width:=width, printsPerSecond:=prints_perSecond, useColor:=use_color)
-            Dim pip As pipeline = pipeline.CreateFromPopulator(bar)
-            Return pip
+            If TypeOf x Is list Then
+                Return New tqdmList With {.list = x}
+            Else
+                Dim pull As Object() = REnv.asVector(Of Object)(x)
+                Dim bar = Tqdm.Wrap(pull, width:=width, printsPerSecond:=prints_perSecond, useColor:=use_color)
+                Dim pip As pipeline = pipeline.CreateFromPopulator(bar)
+                Return pip
+            End If
         End Function
 
         ''' <summary>
