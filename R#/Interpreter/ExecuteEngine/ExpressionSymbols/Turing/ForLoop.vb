@@ -253,7 +253,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                         Next
                     End Function
 
-                data = pull
+                data = pull()
             Else
                 data = ObjectSet.GetObjectSet(rawSeq, env)
             End If
