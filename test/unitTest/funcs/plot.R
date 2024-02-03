@@ -1,8 +1,9 @@
+require(ggplot);
+
 setwd(@dir);
 
 let pca_score = read.csv("./wine_PCA_score.csv", row.names = 1, check.names = FALSE);
 
-require(ggplot);
 
 print(pca_score);
 
