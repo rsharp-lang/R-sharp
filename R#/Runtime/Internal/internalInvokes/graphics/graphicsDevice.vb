@@ -73,6 +73,7 @@ Namespace Runtime.Internal.Invokes
         Dim file As Stream
         Dim args As list
         Dim index As Integer
+        Dim leaveOpen As Boolean
 
         Public ReadOnly Property isEmpty As Boolean Implements IsEmpty.IsEmpty
             Get
