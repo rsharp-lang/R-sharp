@@ -101,12 +101,37 @@ Namespace Runtime.Internal.Invokes
     <Package("utils")>
     Public Module utils
 
+        ''' <summary>
+        ''' Wraps a collection with a progress bar for iteration, providing visual feedback on progress.
+        ''' </summary>
+        ''' <param name="x">The collection to iterate over.</param>
+        ''' <param name="width">The width of the progress bar.</param>
+        ''' <param name="prints_perSecond">The update frequency of the progress bar.</param>
+        ''' <param name="use_color">Indicates whether to use colored output for the progress bar.</param>
+        ''' <returns>An enumerable that iterates over the collection with progress tracking.</returns> 
         <ExportAPI("tqdm")>
-        Public Function tqdm_wrap(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
-            Dim pull As Object() = REnv.asVector(Of Object)(x)
-            Dim bar = Tqdm.Wrap(pull)
-            Dim pip As pipeline = pipeline.CreateFromPopulator(bar)
-            Return pip
+        Public Function tqdm_wrap(<RRawVectorArgument> x As Object,
+                                  Optional width As Integer = 40,
+                                  Optional prints_perSecond As Integer = 10,
+                                  Optional use_color As Boolean = False,
+                                  Optional env As Environment = Nothing) As Object
+
+            If TypeOf x Is list Then
+                Return New tqdmList With {.list = x}
+            ElseIf x.GetType.ImplementInterface(Of IDictionary(Of String, Object)) Then
+                Return New tqdmList With {
+                    .list = New list(DirectCast(x, IDictionary(Of String, Object)))
+                }
+                'ElseIf x.GetType.ImplementInterface(Of IDictionary) Then
+                '    Return New tqdmList With {
+                '        .list = New list(DirectCast(x, IDictionary))
+                '    }
+            Else
+                Dim pull As Object() = REnv.asVector(Of Object)(x)
+                Dim bar = Tqdm.Wrap(pull, width:=width, printsPerSecond:=prints_perSecond, useColor:=use_color)
+                Dim pip As pipeline = pipeline.CreateFromPopulator(bar)
+                Return pip
+            End If
         End Function
 
         ''' <summary>

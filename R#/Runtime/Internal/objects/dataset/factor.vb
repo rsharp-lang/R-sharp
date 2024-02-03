@@ -54,10 +54,12 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.TypeCast
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports std = System.Math
 
 Namespace Runtime.Internal.Object
 
@@ -187,6 +189,18 @@ Namespace Runtime.Internal.Object
                 levels:=CLRVector.asInteger(data.data),
                 factor:=data.factor
             )
+        End Function
+
+        Public Shared Function checkSize(factor_size As Integer, factors As String()) As String
+            If std.Abs(factor_size - factors.Length) / factors.Length < 0.05 Then
+                If DataFramework.IsNumericType(DataImports.SampleForType(factors)) Then
+                    Return "the given factor collection is probably a numeric vector, consider convert as numeric vector."
+                Else
+                    Return "the given character vector is not recommended used as the factor due to the reason of factor size is too large."
+                End If
+            End If
+
+            Return Nothing
         End Function
 
         Public Shared Narrowing Operator CType(factors As factor) As Dictionary(Of String, Integer)

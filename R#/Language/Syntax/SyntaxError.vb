@@ -93,6 +93,15 @@ Namespace Language.Syntax.SyntaxParser
             Return CreateError(opts, err, opts.fromSpan, opts.toSpan)
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Friend Shared Function CreateError(opts As SyntaxBuilderOptions,
+                                           err As String,
+                                           from As CodeSpan,
+                                           [to] As CodeSpan) As SyntaxError
+
+            Return CreateError(opts, New SyntaxErrorException(err), [from], [to])
+        End Function
+
         Friend Shared Function CreateError(opts As SyntaxBuilderOptions,
                                            err As Exception,
                                            from As CodeSpan,

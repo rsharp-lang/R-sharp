@@ -2873,6 +2873,14 @@ RE0:
         ''' ``names(x) &lt;- value`` Is that of the assignment, value, Not the 
         ''' return value from the left-hand side.)
         ''' </returns>
+        ''' <example>
+        ''' x = list(1,2,3,4,5,6)
+        ''' print(names(x));
+        ''' # NULL
+        ''' names(x) = ["a", "b", "c", "d", "e", "f"];
+        ''' print(names(x));
+        ''' # [1] "a" "b" "c" "d" "e" "f"
+        ''' </example>
         <ExportAPI("names")>
         Public Function names(<RRawVectorArgument> [object] As Object,
                               <RByRefValueAssign>
@@ -2884,8 +2892,10 @@ RE0:
                 Return Nothing
             End If
             If namelist Is Nothing OrElse namelist.Length = 0 Then
+                ' get element names
                 Return RObj.names.getNames([object], envir)
             Else
+                ' set element names
                 Return RObj.names.setNames([object], namelist, envir)
             End If
         End Function

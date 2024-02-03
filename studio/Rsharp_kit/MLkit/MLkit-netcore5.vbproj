@@ -13,12 +13,12 @@
     <Description>MLkit: R# machine learning toolkit library</Description>
     <PackageIcon>Preview Icon - Rect.png</PackageIcon>
     <UseApplicationFramework>True</UseApplicationFramework>
-    <DefineConstants>DATAMINING_DATASET=1</DefineConstants>
+    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>MLkit.xml</DocumentationFile>
-   
+    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

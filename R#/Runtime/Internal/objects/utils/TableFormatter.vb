@@ -157,6 +157,8 @@ Namespace Runtime.Internal.Object.Utils
 
                     If col.Length = 1 Then
                         row(j + 1) = formatters(j)(col.GetValue(Scan0))
+                    ElseIf col.IsNullOrEmpty Then
+                        row(j + 1) = ""
                     Else
                         row(j + 1) = formatters(j)(col.GetValue(rIndex))
                     End If

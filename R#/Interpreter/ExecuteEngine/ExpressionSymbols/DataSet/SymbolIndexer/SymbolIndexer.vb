@@ -396,6 +396,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Dim i As Object = indexer.GetValue(Scan0)
 
                 If RType.TypeOf(i) Like RType.integers Then
+                    If TypeOf obj Is list Then
+                        Return DirectCast(obj, list).getByIndex(CInt(i))
+                    End If
+
                     Dim names As String() = DirectCast(obj, RNameIndex).getNames
                     Dim offset As Integer = CInt(i) - 1
 

@@ -57,7 +57,6 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
-Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports vbObject = SMRUCC.Rsharp.Runtime.Internal.Object.vbObject
 
 Namespace Runtime

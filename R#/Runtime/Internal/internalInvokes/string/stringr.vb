@@ -236,6 +236,43 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <ExportAPI("loadJSON")>
+        Public Function loadJson(file As Object, what As Object, Optional env As Environment = Nothing) As Object
+            Dim type As RType = env.globalEnvironment.GetType(what)
+            Dim info As Type
+
+            If type Is Nothing OrElse type Is RType.any Then
+                Return Internal.debug.stop("unknow data type!", env)
+            Else
+                info = type.raw
+            End If
+
+            Dim text As String
+
+            If TypeOf file Is String Then
+                text = CStr(file).SolveStream
+            Else
+                Dim s = GetFileStream(file, FileAccess.Read, env)
+
+                If s Like GetType(Message) Then
+                    Return s.TryCast(Of Message)
+                End If
+
+                text = New StreamReader(s.TryCast(Of Stream)).ReadToEnd
+            End If
+
+            text = VBStr.Trim(text)
+
+            If text.First = "["c Then
+                ' is array type
+                If Not info.IsArray Then
+                    info = info.MakeArrayType
+                End If
+            End If
+
+            Return text.LoadObject(info)
+        End Function
+
         ''' <summary>
         ''' load a .NET object from the xml data file
         ''' </summary>
