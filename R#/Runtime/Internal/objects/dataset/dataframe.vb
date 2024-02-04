@@ -74,6 +74,9 @@ Namespace Runtime.Internal.Object
     ''' <summary>
     ''' syntax helper for a readonly dataframe liked clr object
     ''' </summary>
+    ''' <remarks>
+    ''' get column by index, get row by index, and get row names
+    ''' </remarks>
     Public Interface IdataframeReader
 
         ''' <summary>

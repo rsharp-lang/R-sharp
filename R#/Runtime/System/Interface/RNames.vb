@@ -69,6 +69,12 @@ Namespace Runtime.Components.Interface
     ''' <summary>
     ''' The reflection operation helper in R# language runtime
     ''' </summary>
+    ''' <remarks>
+    ''' used this model for implements the get names:
+    ''' 
+    ''' 1. for vector and list, implements ``names`` function
+    ''' 2. for dataframe object, implements the ``colnames`` function
+    ''' </remarks>
     Public Interface IReflector
 
         Function getNames() As String()
