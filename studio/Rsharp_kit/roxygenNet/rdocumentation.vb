@@ -131,12 +131,30 @@ Public Module rdocumentation
         ' break the circle reference dead loop
         For Each clr_type As Type In pull
             If Not clr_type Like visited Then
-                visited.Add(clr_type)
-                outlist.Add(clr_type)
+                Call visited.Add(clr_type)
+                Call outlist.Add(clr_type)
             End If
         Next
 
         Return outlist.ToArray
+    End Function
+
+    ''' <summary>
+    ''' get overloads functions
+    ''' </summary>
+    ''' <param name="pkg"></param>
+    ''' <returns></returns>
+    <ExportAPI("get_overloads")>
+    Public Function getOverloads(pkg As Type) As Object
+        Return New list With {
+            .slots = RGenericOverloads _
+                .GetOverloads(pkg) _
+                .GroupBy(Function(f) f.name) _
+                .ToDictionary(Function(f) f.Key,
+                              Function(f)
+                                  Return CObj(f.ToArray)
+                              End Function)
+        }
     End Function
 
     ''' <summary>

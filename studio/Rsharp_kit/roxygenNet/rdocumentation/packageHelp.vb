@@ -66,6 +66,7 @@ Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>
@@ -93,6 +94,13 @@ Public Module packageHelp
     End Function
 
     <Extension>
+    Private Iterator Function buildclrOverloads(clr_pkg As Package, globalEnv As GlobalEnvironment) As IEnumerable(Of String)
+        Dim [overloads] As list = rdocumentation.getOverloads(clr_pkg.package)
+
+
+    End Function
+
+    <Extension>
     Private Iterator Function buildClrExportHelpIndex(clr_pkg As Package, globalEnv As GlobalEnvironment) As IEnumerable(Of String)
         Dim clr_exports As New List(Of NamedValue(Of Type))
 
@@ -106,10 +114,9 @@ Public Module packageHelp
             ))
         Next
 
-        Dim export_docs As New StringBuilder
-        Dim Rdocs = globalEnv.packages.packageDocs
+        Dim Rdocs As AnnotationDocs = globalEnv.packages.packageDocs
 
-        For Each type In clr_exports
+        For Each type As NamedValue(Of Type) In clr_exports
             Dim clr_name As String = type.Value.GetTypeElement(strict:=False).Name
             Dim clr_docs As New ScriptBuilder(
                 <tr>
@@ -143,7 +150,10 @@ Public Module packageHelp
         ' extract all clr function which tagged with
         ' exportapi attribute
         Dim apiList As String() = clr_pkg _
-            .buildExportApiHelpIndex(globalEnv) _
+            .buildclrOverloads(globalEnv) _
+            .JoinIterates(clr_pkg _
+                .buildExportApiHelpIndex(globalEnv)
+            ) _
             .ToArray
         ' extract all clr type export data
         Dim export_docs As String() = clr_pkg _
