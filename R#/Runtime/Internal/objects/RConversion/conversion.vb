@@ -68,6 +68,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Serialization
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.ValueTypes
@@ -1127,6 +1128,10 @@ RE0:
                 Return New vector(DirectCast(x, Array).AsObjectEnumerator.Select(Function(d) CDbl(d)).ToArray, RType.GetRSharpType(GetType(Double)))
             ElseIf TypeOf x Is vector AndAlso DirectCast(x, vector).elementType Like RType.floats Then
                 Return New vector(DirectCast(x, vector))
+            ElseIf x.GetType.ImplementInterface(Of IVector) Then
+                Return New vector(DirectCast(x, IVector).Data)
+            ElseIf x.GetType.ImplementInterface(Of ICTypeVector) Then
+                Return New vector(DirectCast(x, ICTypeVector).ToNumeric)
             Else
                 Dim data As Object() = pipeline _
                     .TryCreatePipeline(Of Object)(x, env) _
