@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::51800e967f57ff46f58c93f99544a5b5, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/RConversion/conversion.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1271
-    '    Code Lines: 773
-    ' Comment Lines: 367
-    '   Blank Lines: 131
-    '     File Size: 56.83 KB
+' Summaries:
 
 
-    '     Module RConversion
-    ' 
-    '         Function: asCharacters, asDataframe, asDate, asDate2, asDouble
-    '                   asInteger, asList, asLogicals, asNumeric, asObject
-    '                   asPipeline, asRaw, asVector, castArrayOfGeneric, castArrayOfObject
-    '                   castListMatrix, castListRows, castListRowsToDataframe, castListToDataframe, castType
-    '                   checkList, checkNames, handleListFeatureProjections, handleUnsure, isCharacter
-    '                   isDateTime, isLogical, populateNumeric, tryUnlistArray, unlist
-    '                   unlistOfRList, unlistRecursive
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1271
+'    Code Lines: 773
+' Comment Lines: 367
+'   Blank Lines: 131
+'     File Size: 56.83 KB
+
+
+'     Module RConversion
+' 
+'         Function: asCharacters, asDataframe, asDate, asDate2, asDouble
+'                   asInteger, asList, asLogicals, asNumeric, asObject
+'                   asPipeline, asRaw, asVector, castArrayOfGeneric, castArrayOfObject
+'                   castListMatrix, castListRows, castListRowsToDataframe, castListToDataframe, castType
+'                   checkList, checkNames, handleListFeatureProjections, handleUnsure, isCharacter
+'                   isDateTime, isLogical, populateNumeric, tryUnlistArray, unlist
+'                   unlistOfRList, unlistRecursive
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -69,6 +69,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Microsoft.VisualBasic.Serialization
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.ValueTypes
@@ -994,6 +995,8 @@ RE0:
                 Return 0
             ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
                 Return REnv.CTypeOfList(Of Long)(obj, env)
+            ElseIf obj.GetType.ImplementInterface(Of ICTypeVector) Then
+                Return DirectCast(obj, ICTypeVector).ToLong
             Else
                 If TypeOf obj Is vector Then
                     obj = DirectCast(obj, vector).data
@@ -1092,7 +1095,13 @@ RE0:
         <ExportAPI("as.double")>
         <RApiReturn(GetType(Double))>
         Public Function asDouble(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
-            Return REnv.asVector(x, GetType(Double), env)
+            If x Is Nothing Then
+                Return x
+            ElseIf x.GetType.ImplementInterface(Of ICTypeVector) Then
+                Return DirectCast(x, ICTypeVector).ToNumeric
+            Else
+                Return REnv.asVector(x, GetType(Double), env)
+            End If
         End Function
 
         ''' <summary>
