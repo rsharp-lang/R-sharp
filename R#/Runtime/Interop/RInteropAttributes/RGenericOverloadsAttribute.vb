@@ -109,17 +109,38 @@ Namespace Runtime.Interop
         Public Shared Iterator Function GetOverloads(pkg As Type) As IEnumerable(Of RGenericOverloads)
             Dim methods As MethodInfo() = pkg.GetMethods(bindingAttr:=BindingFlags.Static)
             Dim flag As RGenericOverloadsAttribute
+            Dim clr_overloads As Type()
 
             For Each f As MethodInfo In methods
                 flag = f.GetCustomAttribute(Of RGenericOverloadsAttribute)
 
                 If flag Is Nothing Then
                     Continue For
+                Else
+                    clr_overloads = flag.Overloads
+
+                    If clr_overloads.IsNullOrEmpty Then
+                        clr_overloads = {
+                            f.GetParameters _
+                                .First _
+                                .ParameterType
+                        }
+                    End If
+
+                    clr_overloads = clr_overloads _
+                        .Select(Function(t)
+                                    If t.IsArray Then
+                                        Return t.GetElementType
+                                    Else
+                                        Return t
+                                    End If
+                                End Function) _
+                        .ToArray
                 End If
 
                 Yield New RGenericOverloads With {
                    .name = flag.FunctionName,
-                   .[overloads] = flag.Overloads,
+                   .[overloads] = clr_overloads,
                    .func = New RMethodInfo(f)
                 }
             Next

@@ -51,7 +51,6 @@
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
-Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -66,7 +65,6 @@ Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>
@@ -95,9 +93,33 @@ Public Module packageHelp
 
     <Extension>
     Private Iterator Function buildclrOverloads(clr_pkg As Package, globalEnv As GlobalEnvironment) As IEnumerable(Of String)
-        Dim [overloads] As list = rdocumentation.getOverloads(clr_pkg.package)
+        Dim [overloads] As RGenericOverloads() = RGenericOverloads _
+            .GetOverloads(clr_pkg.package) _
+            .OrderBy(Function(f) f.name) _
+            .ToArray
+        Dim Rdocs As AnnotationDocs = globalEnv.packages.packageDocs
 
+        For Each method As RGenericOverloads In [overloads]
+            For Each type As Type In method.overloads
+                Dim name As String = $"{method.name}.{type.Name.ToLower}"
+                Dim innerLink As String = $"./{clr_pkg.namespace}/{name}.html"
+                Dim docs =
+                    <tr>
+                        <td id=<%= name %>><a href=<%= innerLink %>><%= name %></a></td>
+                        <td>{$summary}</td>
+                    </tr>
+                Dim html As New ScriptBuilder(docs)
+                Dim xml As ProjectType = If(Rdocs.GetAnnotations(type), New ProjectType)
 
+                html!summary =
+                    clr_xml.typeLink(type) & ": " &
+                    clr_xml.HandlingTypeReferenceInDocs(roxygen.markdown.Transform(xml.Summary))
+
+                clr_xml.push_clr(type)
+
+                Yield html.ToString
+            Next
+        Next
     End Function
 
     <Extension>
