@@ -258,7 +258,7 @@ Public Module rdocumentation
                 .Select(Function(p) DirectCast(p, MemberInfo))
         End If
 
-        For Each member As MemberInfo In members
+        For Each member As MemberInfo In members.OrderBy(Function(m) m.Name)
             If is_enum Then
                 docs = xml.GetField(member.Name)?.Summary
             Else
