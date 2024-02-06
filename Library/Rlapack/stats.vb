@@ -1468,8 +1468,8 @@ Module stats
             Return opls_mvar
         End If
 
-        Dim score = opls_mvar.GetPLSScore
-        Dim loading = opls_mvar.GetPLSLoading
+        Dim score = opls_mvar.GetPLSScore(opls:=True)
+        Dim loading = opls_mvar.GetPLSLoading(opls:=True)
         Dim components = opls_mvar.GetComponents.ToArray
         Dim scoreMN As Rdataframe = MathDataSet.toDataframe(score, Nothing, env)
         Dim loadingMN As Rdataframe = MathDataSet.toDataframe(loading, Nothing, env)
@@ -1539,8 +1539,8 @@ Module stats
             Return pls_mvar
         End If
 
-        Dim score = pls_mvar.GetPLSScore
-        Dim loading = pls_mvar.GetPLSLoading
+        Dim score = pls_mvar.GetPLSScore(opls:=False)
+        Dim loading = pls_mvar.GetPLSLoading(opls:=False)
         Dim components = pls_mvar.GetComponents.ToArray
         Dim scoreMN As Rdataframe = MathDataSet.toDataframe(score, Nothing, env)
         Dim loadingMN As Rdataframe = MathDataSet.toDataframe(loading, Nothing, env)
