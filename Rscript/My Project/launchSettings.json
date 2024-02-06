@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src ./mzkit_app/ --skip-src-build --github-page \"https://mzkit.org/assets/js/R_syntax.js\"",
+      "commandLineArgs": "E:/mzkit/src/mzkit/rstudio/pipeline/workbench/PCA.R --matrix \"D:\\metabo_test/mat.dat\" --ncomp \"6\" --sampleinfo \"D:\\metabo_test/sampleinfo.csv\" --SetDllDirectory E:/mzkit/dist/bin/Rstudio/host --debug",
       "workingDirectory": "E:\\mzkit\\Rscript\\Library"
     },
     "mzkit_debug": {
