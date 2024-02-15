@@ -1,69 +1,71 @@
 ﻿#Region "Microsoft.VisualBasic::091ca34e613c4fab0f588a6f71a44f7f, D:/GCModeller/src/R-sharp/R#//Runtime/System/Symbol.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 240
-    '    Code Lines: 144
-    ' Comment Lines: 65
-    '   Blank Lines: 31
-    '     File Size: 8.41 KB
+' Summaries:
 
 
-    '     Class Symbol
-    ' 
-    '         Properties: [readonly], [typeof], constraint, constraintValid, isCallable
-    '                     length, name, stacktrace, typeCode, typeId
-    '                     value
-    ' 
-    '         Constructor: (+4 Overloads) Sub New
-    ' 
-    '         Function: GetValueViewString, setValue, ToString, ToVector
-    ' 
-    '         Sub: setMutable
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 240
+'    Code Lines: 144
+' Comment Lines: 65
+'   Blank Lines: 31
+'     File Size: 8.41 KB
+
+
+'     Class Symbol
+' 
+'         Properties: [readonly], [typeof], constraint, constraintValid, isCallable
+'                     length, name, stacktrace, typeCode, typeId
+'                     value
+' 
+'         Constructor: (+4 Overloads) Sub New
+' 
+'         Function: GetValueViewString, setValue, ToString, ToVector
+' 
+'         Sub: setMutable
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -117,7 +119,7 @@ Namespace Runtime.Components
         End Property
 
         ''' <summary>
-        ''' Get the type of the current object <see cref="Value"/>.
+        ''' Get the .net clr type of the current object <see cref="Value"/>.
         ''' </summary>
         ''' <returns></returns>
         Public Overloads ReadOnly Property [typeof] As Type
@@ -261,7 +263,23 @@ Namespace Runtime.Components
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
-            Return $"Dim {name} As ({typeCode}){Me.typeof.FullName} = {GetValueViewString(Me)}"
+            Dim typename As String = [typeof].FullName
+
+            Select Case [typeof]
+                Case GetType(RMethodInfo), GetType(MethodInfo) : typename = "clr_function"
+                Case GetType(DeclareNewFunction) : typename = "rsharp_function"
+                Case GetType(DeclareLambdaFunction) : typename = "rsharp_lambda"
+                Case Else
+                    Dim rtype As RType = RType.GetRSharpType([typeof])
+
+                    If rtype.mode <> TypeCodes.generic AndAlso rtype.mode <> TypeCodes.NA Then
+                        typename = typeCode
+                    Else
+                        typename = $"({typeCode}){typename}"
+                    End If
+            End Select
+
+            Return $"Dim {name} As {typename} = {GetValueViewString(Me)}"
         End Function
 
         Public Shared Function GetValueViewString(var As Symbol) As String
