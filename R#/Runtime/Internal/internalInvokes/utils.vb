@@ -128,6 +128,12 @@ Namespace Runtime.Internal.Invokes
                 '    }
             Else
                 Dim pull As Object() = REnv.asVector(Of Object)(x)
+
+                ' 20240215 avoid ArgumentOutOfRangeException: Count cannot be less than zero. (Parameter 'count')
+                If pull.IsNullOrEmpty Then
+                    Return Nothing
+                End If
+
                 Dim bar = Tqdm.Wrap(pull, width:=width, printsPerSecond:=prints_perSecond, useColor:=use_color)
                 Dim pip As pipeline = pipeline.CreateFromPopulator(bar)
                 Return pip

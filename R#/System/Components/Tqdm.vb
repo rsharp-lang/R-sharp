@@ -26,6 +26,12 @@ Namespace Development.Components
             Dim size As Integer = list.length
             Dim d As Integer = size / 50
 
+            ' 20240215 
+            ' for avoid the error: ArgumentOutOfRangeException: Count cannot be less than zero. (Parameter 'count')
+            If size <= 0 Then
+                Return
+            End If
+
             For Each key As String In Tqdm.Wrap(list.slotKeys, bar:=bar)
                 If d <= 1 OrElse (n Mod d = 0) Then
                     Call bar.SetLabel(key)
