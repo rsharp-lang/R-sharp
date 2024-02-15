@@ -1,56 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::aa1bbb6f30664df73292671acc520cf1, D:/GCModeller/src/R-sharp/R#//ApiArgumentHelpers.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 239
-    '    Code Lines: 171
-    ' Comment Lines: 44
-    '   Blank Lines: 24
-    '     File Size: 9.61 KB
+' Summaries:
 
 
-    ' Module ApiArgumentHelpers
-    ' 
-    '     Function: FileStreamWriter, GetDoubleRange, GetFileStream, GetNamedValueTuple, rangeFromVector
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 239
+'    Code Lines: 171
+' Comment Lines: 44
+'   Blank Lines: 24
+'     File Size: 9.61 KB
+
+
+' Module ApiArgumentHelpers
+' 
+'     Function: FileStreamWriter, GetDoubleRange, GetFileStream, GetNamedValueTuple, rangeFromVector
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Language
@@ -240,7 +241,9 @@ Public Module ApiArgumentHelpers
     Public Function GetFileStream(file As Object,
                                   mode As FileAccess,
                                   env As Environment,
-                                  Optional suppress As Boolean = False) As [Variant](Of Stream, Message)
+                                  Optional suppress As Boolean = False,
+                                  <Out>
+                                  Optional ByRef is_filepath As Boolean = False) As [Variant](Of Stream, Message)
 
         If TypeOf file Is vector Then
             file = DirectCast(file, vector).data
@@ -256,9 +259,19 @@ Public Module ApiArgumentHelpers
             End If
         End If
 
+        If TypeOf file Is Array AndAlso DirectCast(file, Array).Length = 1 Then
+            file = DirectCast(file, Array).GetValue(Scan0)
+        End If
+
         If file Is Nothing Then
             Return Internal.debug.stop({"file output can not be nothing!"}, env, suppress)
-        ElseIf TypeOf file Is String Then
+        Else
+            is_filepath = False
+        End If
+
+        If TypeOf file Is String Then
+            is_filepath = True
+
             ' from a local file
             If mode = FileAccess.Read Then
                 Return DirectCast(file, String).Open(FileMode.Open, doClear:=False, [readOnly]:=True)
