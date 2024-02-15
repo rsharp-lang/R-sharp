@@ -273,9 +273,9 @@ Namespace Runtime.Components
                     Dim rtype As RType = RType.GetRSharpType([typeof])
 
                     If rtype.mode <> TypeCodes.generic AndAlso rtype.mode <> TypeCodes.NA Then
-                        typename = typeCode
+                        typename = typeCode.Description
                     Else
-                        typename = $"({typeCode}){typename}"
+                        typename = $"({typeCode.Description}){typename}"
                     End If
             End Select
 
