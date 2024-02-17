@@ -73,6 +73,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Development.Package.File
 
@@ -329,6 +330,15 @@ Namespace Development.Package.File
             Else
                 Dim docs = DirectCast(err, list).data.As(Of Document).ToArray
                 Dim pkg As DESCRIPTION = file.info
+
+                err = REngine.Invoke("JSON::json_encode", {err, False, False, True, True, REngine.globalEnvir})
+
+                If Program.isException(err) Then
+                    Return err
+                Else
+                    ' save json file
+                    CLRVector.asCharacter(err).SaveTo($"{package_dir}/man/index.json")
+                End If
 
                 docs_symbols.AddRange(docs.Select(Function(s) s.symbol_name))
                 err = REngine.Invoke("REnv::__RSymbolDocumentation", docs, pkg, $"{package_dir}/vignettes/R", REngine.globalEnvir)
