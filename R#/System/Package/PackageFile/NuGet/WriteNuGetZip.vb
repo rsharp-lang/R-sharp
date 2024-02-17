@@ -461,6 +461,13 @@ Namespace Development.Package.File
                 End Using
             Next
 
+            Using file As New StreamWriter(zip.CreateEntry("package/man/index.json").Open)
+                text = $"{pkg_dir}/man/index.json".ReadAllText
+                checksum.AppendLine(text.MD5)
+                file.WriteLine(text)
+                file.Flush()
+            End Using
+
             Using file As New StreamWriter(zip.CreateEntry("package/manifest/vignettes.json").Open)
                 text = htmlIndex.GetJson(indent:=True)
 
