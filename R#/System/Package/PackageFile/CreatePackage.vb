@@ -63,6 +63,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -331,14 +332,11 @@ Namespace Development.Package.File
                 Dim docs = DirectCast(err, list).data.As(Of Document).ToArray
                 Dim pkg As DESCRIPTION = file.info
 
-                err = REngine.Invoke("JSON::json_encode", {err, False, False, True, True, REngine.globalEnvir})
-
-                If Program.isException(err) Then
-                    Return err
-                Else
-                    ' save json file
-                    CLRVector.asCharacter(err).SaveTo($"{package_dir}/man/index.json")
-                End If
+                ' export symbol help index as json file 
+                Call DirectCast(err, list) _
+                    .AsGeneric(Of Document)(REngine.globalEnvir) _
+                    .GetJson _
+                    .SaveTo($"{package_dir}/man/index.json")
 
                 docs_symbols.AddRange(docs.Select(Function(s) s.symbol_name))
                 err = REngine.Invoke("REnv::__RSymbolDocumentation", docs, pkg, $"{package_dir}/vignettes/R", REngine.globalEnvir)
