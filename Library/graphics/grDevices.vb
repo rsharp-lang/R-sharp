@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::24d43fd34c983c200a7ae54196d7ea13, D:/GCModeller/src/R-sharp/Library/graphics//grDevices.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 512
-    '    Code Lines: 345
-    ' Comment Lines: 116
-    '   Blank Lines: 51
-    '     File Size: 21.69 KB
+' Summaries:
 
 
-    ' Module grDevices
-    ' 
-    '     Function: adjustAlpha, colorPopulator, colors, getFormatFromSuffix, imageAttrs
-    '               pdfDevice, registerCustomPalette, rgb, saveBitmap, saveImage
-    '               svg, tryMeasureFormat
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 512
+'    Code Lines: 345
+' Comment Lines: 116
+'   Blank Lines: 51
+'     File Size: 21.69 KB
+
+
+' Module grDevices
+' 
+'     Function: adjustAlpha, colorPopulator, colors, getFormatFromSuffix, imageAttrs
+'               pdfDevice, registerCustomPalette, rgb, saveBitmap, saveImage
+'               svg, tryMeasureFormat
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -85,6 +85,25 @@ Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 <Package("grDevices", Category:=APICategories.UtilityTools)>
 Public Module grDevices
 
+    ''' <summary>
+    ''' ### PDF Graphics Device
+    ''' 
+    ''' pdf starts the graphics device driver for producing PDF graphics.
+    ''' </summary>
+    ''' <param name="image"></param>
+    ''' <param name="file">a character String giving the file path. If it Is Of the 
+    ''' form "|cmd", the output Is piped To the command given by cmd. If it Is NULL, 
+    ''' Then no external file Is created (effectively, no drawing occurs), but the 
+    ''' device may still be queried (e.g., For size Of text).
+    '''
+    ''' For use with onefile = FALSE give a C integer format such as "Rplot%03d.pdf" 
+    ''' (the default in that case). (See postscript for further details.)
+    '''
+    ''' Tilde expansion(see path.expand) Is done. An input with a marked encoding Is 
+    ''' converted to the native encoding Or an error Is given.</param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("pdf")>
     Public Function pdfDevice(Optional image As Object = Nothing,
                               Optional file As Object = Nothing,
@@ -125,6 +144,70 @@ Public Module grDevices
         End If
     End Function
 
+    Private Function openSvgDevice(args As list, env As Environment) As Object
+        Dim size As SizeF = graphicsPipeline.getSize(args, env, New SizeF(2700, 2000))
+        ' just open a new device
+        Dim buffer = GetFileStream(File, FileAccess.Write, env)
+        Dim fill As Color = graphicsPipeline.GetRawColor(args!fill, [default]:="white")
+
+        If buffer Like GetType(Message) Then
+            Return buffer.TryCast(Of Message)
+        Else
+            Dim dpiXY = 300
+            Dim svgImage As New GraphicsSVG(size, dpiXY, dpiXY)
+
+            Call svgImage.Clear(fill)
+            Call Internal.Invokes.graphics.openNew(
+                dev:=svgImage,
+                buffer:=buffer.TryCast(Of Stream),
+                args:=args
+            )
+        End If
+
+        Return Nothing
+    End Function
+
+    Private Function saveSvgFile(image As Object, file As Object, args As list, env As Environment) As Object
+        Dim stream As Stream
+        Dim is_file As Boolean = False
+
+        If file Is Nothing Then
+            stream = Console.OpenStandardOutput
+        ElseIf TypeOf file Is String Then
+            stream = DirectCast(file, String).Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+            is_file = True
+        ElseIf TypeOf file Is Stream Then
+            stream = file
+        Else
+            Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
+        End If
+
+        If Not TypeOf image Is SVGData Then
+            If image.GetType.IsInheritsFrom(GetType(Plot)) Then
+                Dim arg1 = args.slots
+                Dim arg2 = env.GetAcceptorArguments
+                Dim size = graphicsPipeline.getSize(If(arg1.CheckSizeArgument, arg1, arg2), env, New SizeF(3300, 2700))
+                Dim wh As String = $"{size.Width},{size.Height}"
+                Dim dpi As Integer = graphicsPipeline.getDpi(If(arg1.CheckDpiArgument, arg1, arg2), env, 300)
+
+                Call DirectCast(image, Plot).Plot(wh, dpi, driver:=Drivers.SVG).Save(stream)
+            Else
+                Return Message.InCompatibleType(GetType(Plot), file.GetType, env)
+            End If
+        Else
+            Call DirectCast(image, SVGData).Save(stream)
+        End If
+
+        Call stream.Flush()
+
+        If is_file Then
+            Call stream.Close()
+            Call stream.Dispose()
+        End If
+
+        Return True
+    End Function
+
     ''' <summary>
     ''' ## Cairographics-based SVG, PDF and PostScript Graphics Devices
     ''' 
@@ -132,7 +215,11 @@ Public Module grDevices
     ''' graphics files using the cairo graphics API.
     ''' </summary>
     ''' <param name="image"></param>
-    ''' <param name="file"></param>
+    ''' <param name="file">the name of the output file. The page number is substituted if 
+    ''' a C integer format is included in the character string, as in the default. (Depending
+    ''' on the platform, the result must be less than PATH_MAX characters long, and may 
+    ''' be truncated if not. See postscript for further details.) Tilde expansion is 
+    ''' performed where supported by the platform.</param>
     ''' <returns></returns>
     <ExportAPI("svg")>
     Public Function svg(Optional image As Object = Nothing,
@@ -142,66 +229,10 @@ Public Module grDevices
                         Optional env As Environment = Nothing) As Object
 
         If image Is Nothing Then
-            Dim size As SizeF = graphicsPipeline.getSize(args, env, New SizeF(2700, 2000))
-            ' just open a new device
-            Dim buffer = GetFileStream(file, FileAccess.Write, env)
-            Dim fill As Color = graphicsPipeline.GetRawColor(args!fill, [default]:="white")
-
-            If buffer Like GetType(Message) Then
-                Return buffer.TryCast(Of Message)
-            Else
-                Dim dpiXY = 300
-                Dim svgImage As New GraphicsSVG(size, dpiXY, dpiXY)
-
-                Call svgImage.Clear(fill)
-                Call Internal.Invokes.graphics.openNew(
-                    dev:=svgImage,
-                    buffer:=buffer.TryCast(Of Stream),
-                    args:=args
-                )
-            End If
-
-            Return Nothing
+            Return openSvgDevice(args, env)
         Else
-            Dim stream As Stream
-            Dim is_file As Boolean = False
-
-            If file Is Nothing Then
-                stream = Console.OpenStandardOutput
-            ElseIf TypeOf file Is String Then
-                stream = DirectCast(file, String).Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
-                is_file = True
-            ElseIf TypeOf file Is Stream Then
-                stream = file
-            Else
-                Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
-            End If
-
-            If Not TypeOf image Is SVGData Then
-                If image.GetType.IsInheritsFrom(GetType(Plot)) Then
-                    Dim arg1 = args.slots
-                    Dim arg2 = env.GetAcceptorArguments
-                    Dim size = graphicsPipeline.getSize(If(arg1.CheckSizeArgument, arg1, arg2), env, New SizeF(3300, 2700))
-                    Dim wh As String = $"{size.Width},{size.Height}"
-                    Dim dpi As Integer = graphicsPipeline.getDpi(If(arg1.CheckDpiArgument, arg1, arg2), env, 300)
-
-                    Call DirectCast(image, Plot).Plot(wh, dpi, driver:=Drivers.SVG).Save(stream)
-                Else
-                    Return Message.InCompatibleType(GetType(Plot), file.GetType, env)
-                End If
-            Else
-                Call DirectCast(image, SVGData).Save(stream)
-            End If
-
-            Call stream.Flush()
-
-            If is_file Then
-                Call stream.Close()
-                Call stream.Dispose()
-            End If
+            Return saveSvgFile(image, file, args, env)
         End If
-
-        Return True
     End Function
 
     ''' <summary>
