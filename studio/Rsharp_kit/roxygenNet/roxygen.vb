@@ -91,7 +91,7 @@ Public Module roxygen
     ''' <summary>
     ''' parse the R# symbol documents from a given r source script
     ''' </summary>
-    ''' <param name="script"></param>
+    ''' <param name="script">the R# script text</param>
     ''' <returns>A tuple list of the R# symbol documents.</returns>
     <ExportAPI("parse")>
     <RApiReturn(GetType(Document))>
