@@ -452,10 +452,11 @@ Namespace Development.Package.File
                 text = man.ReadAllText
                 htmlIndex(man.BaseName) = md5.GetMd5Hash(text)
                 relpath = man.GetFullPath.Replace(pkg_dir, "")
+                relpath = $"package/{relpath.Replace("\", "/")}"
 
                 Call checksum.AppendLine(htmlIndex(man.BaseName))
 
-                Using file As New StreamWriter(zip.CreateEntry($"package/{relpath.Replace("\", "/")}").Open)
+                Using file As New StreamWriter(zip.CreateEntry(relpath).Open)
                     Call file.WriteLine(text)
                     Call file.Flush()
                 End Using
