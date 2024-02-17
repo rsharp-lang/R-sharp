@@ -144,10 +144,10 @@ Public Module grDevices
         End If
     End Function
 
-    Private Function openSvgDevice(args As list, env As Environment) As Object
+    Private Function openSvgDevice(file As Object, args As list, env As Environment) As Object
         Dim size As SizeF = graphicsPipeline.getSize(args, env, New SizeF(2700, 2000))
         ' just open a new device
-        Dim buffer = GetFileStream(File, FileAccess.Write, env)
+        Dim buffer = GetFileStream(file, FileAccess.Write, env)
         Dim fill As Color = graphicsPipeline.GetRawColor(args!fill, [default]:="white")
 
         If buffer Like GetType(Message) Then
@@ -229,7 +229,7 @@ Public Module grDevices
                         Optional env As Environment = Nothing) As Object
 
         If image Is Nothing Then
-            Return openSvgDevice(args, env)
+            Return openSvgDevice(file, args, env)
         Else
             Return saveSvgFile(image, file, args, env)
         End If
