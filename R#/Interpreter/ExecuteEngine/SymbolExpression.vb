@@ -160,6 +160,20 @@ Namespace Interpreter.ExecuteEngine
             Next
         End Sub
 
+        Public Sub AddCustomAttribute(name As String, ParamArray value As String())
+            If attributes Is Nothing Then
+                attributes = New Dictionary(Of String, String())
+            End If
+
+            If attributes.ContainsKey(name) Then
+                attributes(name) = attributes(name) _
+                    .JoinIterates(value) _
+                    .ToArray
+            Else
+                Call attributes.Add(name, value)
+            End If
+        End Sub
+
         ''' <summary>
         ''' Just set value, this function use for the package parser
         ''' </summary>
