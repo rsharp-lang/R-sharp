@@ -1,61 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::7f008fdb2295c1712b8a25d66f9b8e40, D:/GCModeller/src/R-sharp/R#//System/Config/Options.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 372
-    '    Code Lines: 199
-    ' Comment Lines: 126
-    '   Blank Lines: 47
-    '     File Size: 14.59 KB
+' Summaries:
 
 
-    '     Class Options
-    ' 
-    '         Properties: [lib], [strict], digits, environments, f64Format
-    '                     HTTPUserAgent, julia, lib_loc, localConfig, log4vb_redirect
-    '                     maxPrint, memoryLoad, MimeType, nwarnings, python
-    '                     stdout_multipline, typescript, verbose
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    ' 
-    '         Function: getAllConfigs, getOption, setOption, ToString
-    ' 
-    '         Sub: (+2 Overloads) Dispose, flush
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 372
+'    Code Lines: 199
+' Comment Lines: 126
+'   Blank Lines: 47
+'     File Size: 14.59 KB
+
+
+'     Class Options
+' 
+'         Properties: [lib], [strict], digits, environments, f64Format
+'                     HTTPUserAgent, julia, lib_loc, localConfig, log4vb_redirect
+'                     maxPrint, memoryLoad, MimeType, nwarnings, python
+'                     stdout_multipline, typescript, verbose
+' 
+'         Constructor: (+3 Overloads) Sub New
+' 
+'         Function: getAllConfigs, getOption, setOption, ToString
+' 
+'         Sub: (+2 Overloads) Dispose, flush
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -116,7 +116,7 @@ Namespace Development.Configuration
             Get
                 Dim defaultLibLoc As String
                 Dim localLibLoc As String = localConfig.ParentPath.GetDirectoryFullPath
-
+#If NET48 Then
                 If App.IsMicrosoftPlatform Then
                     ' 20210104
                     ' path will be ``/root/Library`` on the unix platform
@@ -128,7 +128,11 @@ Namespace Development.Configuration
                     ' and docker virtual machine.
                     defaultLibLoc = $"{UnixLib}/library/"
                 End If
-
+#Else
+                ' bugs fixed for config file conflicts between the host machine
+                ' and docker virtual machine.
+                defaultLibLoc = $"{UnixLib}/library/"
+#End If
                 If localLibLoc.StartsWith("[A-Z][:]", opt:=RegexICSng) AndAlso defaultLibLoc.First = "/"c Then
                     ' 20230519
                     ' fix for windows path
