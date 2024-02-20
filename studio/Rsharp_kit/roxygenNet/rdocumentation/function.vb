@@ -49,6 +49,7 @@
 
 #End Region
 
+Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Serialization
@@ -106,7 +107,7 @@ Public Class [function]
                 .JoinBy("<br />") _
                 .DoCall(AddressOf markdown.Transform)
             docs.parameters = xml.Params _
-                .Select(AddressOf argument) _
+                .Select(Function(p) argument(p, f:=api)) _
                 .ToArray
             docs.returns = markdown.Transform(xml.Returns)
             docs.details = markdown.Transform(xml.Remarks)
@@ -153,10 +154,41 @@ Public Class [function]
         Return createHtml(docs, template, pkg)
     End Function
 
-    Private Function argument(arg As param) As NamedValue
+    ''' <summary>
+    ''' generates the document text for a specific function parameter
+    ''' </summary>
+    ''' <param name="arg"></param>
+    ''' <returns></returns>
+    Private Function argument(arg As param, f As RMethodInfo) As NamedValue
+        Dim html As String = markdown.Transform(arg.text)
+        Dim desc As String = clr_xml.HandlingTypeReferenceInDocs(html)
+        Dim p As RMethodArgument = f.parameters _
+            .SafeQuery _
+            .Where(Function(clr_p) clr_p.name = arg.name) _
+            .DefaultFirst
+
+        If Not p Is Nothing Then
+            Dim type_str As String = clr_xml.typeLink(p.type.raw, show_clr_array:=False)
+
+            If p.type.raw IsNot GetType(Object) Then
+                type_str = $"[as {type_str}]"
+                clr_xml.push_clr(p.type.raw)
+            Else
+                type_str = ""
+            End If
+
+            If Not type_str.StringEmpty Then
+                If desc.StringEmpty(testEmptyFactor:=True) Then
+                    desc = type_str
+                Else
+                    desc = desc.Trim("."c) & ". " & type_str
+                End If
+            End If
+        End If
+
         Return New NamedValue With {
             .name = arg.name,
-            .text = clr_xml.HandlingTypeReferenceInDocs(markdown.Transform(arg.text))
+            .text = desc
         }
     End Function
 

@@ -69,6 +69,9 @@ Namespace Runtime.Interop
         ''' The argument name
         ''' </summary>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' is a reference of <see cref="PropertyInfo.Name"/>
+        ''' </remarks>
         Public Property name As String Implements INamedValue.Key
         ''' <summary>
         ''' the type of this parameter that required
