@@ -62,8 +62,10 @@ Imports System.Threading
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal.LineEdit
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.UnixBash
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
@@ -238,6 +240,12 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
     ''' </remarks>
     Public Function RunTerminal() As Integer
         Dim engineConfig As String = System.Environment.GetEnvironmentVariable("R_LIBS_USER")
+        Dim R_exec As Action(Of String) = AddressOf doRunScriptWithSpecialCommandSync
+        Dim editor As New LineEditor("Rscript", 5000) With {
+            .AutoCompleteEvent = AddressOf AutoCompletion,
+            .HeuristicsMode = True,
+            .TabAtStartCompletes = True
+        }
 
         R = RInterpreter.FromEnvironmentConfiguration(
             configs:=If(engineConfig.StringEmpty, ConfigFile.localConfigs, engineConfig)
@@ -269,11 +277,35 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
                 cts.Cancel()
             End Sub
 
-        Call New Shell(New PS1("> "), AddressOf doRunScriptWithSpecialCommandSync) With {
+        Call New Shell(New PS1("> "), R_exec, dev:=New LineReader(editor)) With {
             .Quite = "!.R#::quit" & Rnd()
         }.Run()
 
         Return 0
+    End Function
+
+    Private Function AllSymbols() As IEnumerable(Of String)
+        Return R.globalEnvir _
+            .EnumerateAllSymbols _
+            .JoinIterates(R.globalEnvir.EnumerateAllFunctions) _
+            .Select(Function(s) s.name) _
+            .Distinct
+    End Function
+
+    Private Function AutoCompletion(s As String, pos As Integer) As Completion
+        Dim prefix As String = s.Substring(0, pos)
+        Dim ls As String()
+
+        If prefix.StringEmpty Then
+            ls = AllSymbols.ToArray
+        Else
+            ls = AllSymbols _
+                .Where(Function(c) c.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) _
+                .Select(Function(c) c.Substring(pos)) _
+                .ToArray
+        End If
+
+        Return New Completion(prefix, ls)
     End Function
 
     Private Sub doRunScriptWithSpecialCommandSync(script As String)
