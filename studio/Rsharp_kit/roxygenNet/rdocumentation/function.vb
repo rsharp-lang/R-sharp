@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.Text.Parser.HtmlParser
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Runtime
@@ -160,7 +161,7 @@ Public Class [function]
     ''' <param name="arg"></param>
     ''' <returns></returns>
     Private Function argument(arg As param, f As RMethodInfo) As NamedValue
-        Dim html As String = markdown.Transform(arg.text)
+        Dim html As String = markdown.Transform(arg.text).GetValue
         Dim desc As String = clr_xml.HandlingTypeReferenceInDocs(html)
         Dim p As RMethodArgument = f.parameters _
             .SafeQuery _
