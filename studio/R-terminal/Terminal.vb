@@ -244,7 +244,8 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
         Dim editor As New LineEditor("Rscript", 5000) With {
             .AutoCompleteEvent = AddressOf AutoCompletion,
             .HeuristicsMode = True,
-            .TabAtStartCompletes = False
+            .TabAtStartCompletes = False,
+            .MaxWidth = 120
         }
         Dim file_config As String = If(engineConfig.StringEmpty, ConfigFile.localConfigs, engineConfig)
 
