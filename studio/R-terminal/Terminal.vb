@@ -248,8 +248,6 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
         }
         Dim file_config As String = If(engineConfig.StringEmpty, ConfigFile.localConfigs, engineConfig)
 
-        Call AutoCompletion("source('D:/", 0)
-
         R = RInterpreter.FromEnvironmentConfiguration(configs:=file_config)
         R.strict = False
 
@@ -303,22 +301,34 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
         Return symbols
     End Function
 
+    Private Function GetFileNamesCompletion(s As String, path_str As String) As Completion
+        Dim ls As String()
+
+        If path_str.DirectoryExists Then
+            ls = path_str _
+                .EnumerateFiles _
+                .Select(Function(f) f.FileName) _
+                .ToArray
+        Else
+            Dim check_name As String = path_str.BaseName
+
+            ls = path_str _
+                .ParentPath _
+                .EnumerateFiles _
+                .Select(Function(f) f.FileName) _
+                .Where(Function(f) f.StartsWith(check_name, StringComparison.Ordinal)) _
+                .ToArray
+        End If
+
+        Return New Completion(s, ls)
+    End Function
+
     Private Function AutoCompletion(s As String, pos As Integer) As Completion
         Dim prefix As String = Nothing
         Dim ls As String()
 
         If SMRUCC.Rsharp.Language.Syntax.IsStringOpen(s, prefix) Then
-            If prefix.DirectoryExists Then
-                ls = prefix.EnumerateFiles.Select(Function(f) f.FileName).ToArray
-            Else
-                Dim check_name As String = prefix.BaseName
-
-                ls = prefix.ParentPath _
-                    .EnumerateFiles _
-                    .Select(Function(f) f.FileName) _
-                    .Where(Function(f) f.StartsWith(check_name, StringComparison.Ordinal)) _
-                    .ToArray
-            End If
+            Return GetFileNamesCompletion(s, prefix)
         Else
             prefix = s.Substring(0, pos)
         End If
