@@ -213,7 +213,7 @@ Namespace Development.Configuration
         ''' </remarks>
         Public ReadOnly Property verbose As Boolean
             Get
-                Return getOption("verbose", [default]:="off").ParseBoolean
+                Return getOption("verbose", [default]:=DoConfiguration.verbose_flag.ToString).ParseBoolean
             End Get
         End Property
 
