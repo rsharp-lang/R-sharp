@@ -300,7 +300,7 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
             ls = AllSymbols.ToArray
         Else
             ls = AllSymbols _
-                .Where(Function(c) c.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) _
+                .Where(Function(c) c.StartsWith(prefix, StringComparison.Ordinal)) _
                 .Select(Function(c) c.Substring(pos)) _
                 .ToArray
         End If
