@@ -125,19 +125,28 @@ Module Program
     ''' <param name="args"></param>
     ''' <returns></returns>
     Private Function RunExpression(args As CommandLine) As Integer
-        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
-        Dim [error] As String = Nothing
-
-        If args.Name.isFilePath(includeWindowsFs:=True) AndAlso (args.Name.Contains("/"c) OrElse args.Name.Contains("\"c)) Then
-            ' is file path but the file is missing
-            Call Message.Error($"The given script file '{args.Name.GetFullPath}'({args.Name}) is missing on your file system!", R.globalEnvir.stackFrame) _
-                .DoCall(Sub(ex)
-                            Rscript.handleResult(ex, R.globalEnvir)
-                        End Sub)
-
-            Return 404
+        If args.Name.StartsWith("--") OrElse args.Name.StartsWith("/") Then
+            ' run shell with commandline options
+            ' example as:
+            '
+            ' R# --unix --verbose --debug
+            '
+            Return Terminal.RunTerminal
         Else
-            Return CLI.runExpression(args.cli)
+            Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
+            Dim [error] As String = Nothing
+
+            If args.Name.isFilePath(includeWindowsFs:=True) AndAlso (args.Name.Contains("/"c) OrElse args.Name.Contains("\"c)) Then
+                ' is file path but the file is missing
+                Call Message.Error($"The given script file '{args.Name.GetFullPath}'({args.Name}) is missing on your file system!", R.globalEnvir.stackFrame) _
+                    .DoCall(Sub(ex)
+                                Rscript.handleResult(ex, R.globalEnvir)
+                            End Sub)
+
+                Return 404
+            Else
+                Return CLI.runExpression(args.cli)
+            End If
         End If
     End Function
 
