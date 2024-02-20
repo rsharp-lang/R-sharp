@@ -302,8 +302,24 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
     End Function
 
     Private Function AutoCompletion(s As String, pos As Integer) As Completion
-        Dim prefix As String = s.Substring(0, pos)
+        Dim prefix As String = Nothing
         Dim ls As String()
+
+        If SMRUCC.Rsharp.Language.Syntax.IsStringOpen(s, prefix) Then
+            If prefix.DirectoryExists Then
+                ls = prefix.EnumerateFiles.Select(Function(f) f.FileName).ToArray
+            Else
+                Dim check_name As String = prefix.BaseName
+
+                ls = prefix.ParentPath _
+                    .EnumerateFiles _
+                    .Select(Function(f) f.FileName) _
+                    .Where(Function(f) f.StartsWith(check_name, StringComparison.Ordinal)) _
+                    .ToArray
+            End If
+        Else
+            prefix = s.Substring(0, pos)
+        End If
 
         If prefix.StringEmpty Then
             ls = AllSymbols.ToArray
