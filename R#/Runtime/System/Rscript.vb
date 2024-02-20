@@ -117,6 +117,10 @@ Namespace Runtime.Components
             End If
         End Function
 
+        Public Shared Function GetTokens(text As String) As Token()
+            Return FromText(text).GetTokens
+        End Function
+
         ''' <summary>
         ''' R script from local file
         ''' </summary>

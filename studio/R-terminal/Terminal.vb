@@ -248,6 +248,8 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
         }
         Dim file_config As String = If(engineConfig.StringEmpty, ConfigFile.localConfigs, engineConfig)
 
+        Call AutoCompletion("source('D:/", 0)
+
         R = RInterpreter.FromEnvironmentConfiguration(configs:=file_config)
         R.strict = False
 
