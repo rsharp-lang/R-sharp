@@ -88,7 +88,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal.Invokes
-Imports stdNum = System.Math
+Imports std = System.Math
 Imports Strings = Microsoft.VisualBasic.Strings
 
 Namespace Interpreter
@@ -114,6 +114,13 @@ Namespace Interpreter
         ''' </remarks>
         Public Property debug As Boolean = False
         Public Property silent As Boolean = False
+
+        Public ReadOnly Property verbose As Boolean
+            Get
+                Return globalEnvir.verboseOption()
+            End Get
+        End Property
+
         ''' <summary>
         ''' 是否重定向错误消息输出至<see cref="RedirectOutput"/>函数所定义的输出设备之中
         ''' </summary>
@@ -184,8 +191,8 @@ Namespace Interpreter
         Private Sub _construct(env As GlobalEnvironment)
             _globalEnvir = env
             _globalEnvir.Push(lastVariableName, Nothing, False, TypeCodes.generic)
-            _globalEnvir.Push("PI", stdNum.PI, True, TypeCodes.double)
-            _globalEnvir.Push("E", stdNum.E, True, TypeCodes.double)
+            _globalEnvir.Push("PI", std.PI, True, TypeCodes.double)
+            _globalEnvir.Push("E", std.E, True, TypeCodes.double)
             _globalEnvir.Push(".GlobalEnv", globalEnvir, True, TypeCodes.environment)
             _globalEnvir.Push(".Machine", New DotMachine().toList, True, TypeCodes.list)
 

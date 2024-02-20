@@ -246,11 +246,15 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
             .HeuristicsMode = True,
             .TabAtStartCompletes = True
         }
+        Dim file_config As String = If(engineConfig.StringEmpty, ConfigFile.localConfigs, engineConfig)
 
-        R = RInterpreter.FromEnvironmentConfiguration(
-            configs:=If(engineConfig.StringEmpty, ConfigFile.localConfigs, engineConfig)
-        )
+        R = RInterpreter.FromEnvironmentConfiguration(configs:=file_config)
         R.strict = False
+
+        If R.verbose Then
+            Call VBDebugger.EchoLine($"application platform id: {App.Platform}(is_microsoft_platform: {App.IsMicrosoftPlatform})")
+            Call VBDebugger.EchoLine($"load config file: {file_config}")
+        End If
 
         ' Call R.LoadLibrary("base")
         ' Call R.LoadLibrary("utils")
