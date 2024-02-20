@@ -285,11 +285,16 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
     End Function
 
     Private Function AllSymbols() As IEnumerable(Of String)
-        Return R.globalEnvir _
-            .EnumerateAllSymbols _
-            .JoinIterates(R.globalEnvir.EnumerateAllFunctions) _
+        Dim globalEnv = R.globalEnvir
+        Dim globalSymbols = globalEnv.EnumerateAllSymbols.JoinIterates(globalEnv.EnumerateAllFunctions)
+        ' system internal hiddens
+        Dim internals = Internal.invoke.getAllInternals
+        Dim symbols As IEnumerable(Of String) = globalSymbols _
             .Select(Function(s) s.name) _
+            .JoinIterates(internals.Select(Function(s) s.name)) _
             .Distinct
+
+        Return symbols
     End Function
 
     Private Function AutoCompletion(s As String, pos As Integer) As Completion
