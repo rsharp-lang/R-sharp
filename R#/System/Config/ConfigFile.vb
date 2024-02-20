@@ -92,11 +92,15 @@ Namespace Development.Configuration
         Shared ReadOnly GCModellerSettings As String
 
         Shared Sub New()
+#If NET48 Then
             If App.IsMicrosoftPlatform Then
                 GCModellerSettings = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}/{App.ProductName}/.settings"
             Else
                 GCModellerSettings = $"{Options.UnixLib}/.settings"
             End If
+#Else
+            GCModellerSettings = $"{Options.UnixLib}/.settings"
+#End If
 
             localConfigs = $"{GCModellerSettings}/R#.configs.xml".GetFullPath
         End Sub
