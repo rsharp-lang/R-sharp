@@ -244,7 +244,7 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
         Dim editor As New LineEditor("Rscript", 5000) With {
             .AutoCompleteEvent = AddressOf AutoCompletion,
             .HeuristicsMode = True,
-            .TabAtStartCompletes = True
+            .TabAtStartCompletes = False
         }
         Dim file_config As String = If(engineConfig.StringEmpty, ConfigFile.localConfigs, engineConfig)
 
@@ -305,18 +305,30 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
         Dim ls As String()
 
         If path_str.DirectoryExists Then
+            Dim is_dot As Boolean = path_str = "."
+
             ls = path_str _
                 .EnumerateFiles _
-                .Select(Function(f) f.FileName) _
+                .Select(Function(f)
+                            Dim name As String = f.FileName
+
+                            If is_dot Then
+                                Return "/" & name
+                            Else
+                                Return name
+                            End If
+                        End Function) _
                 .ToArray
         Else
             Dim check_name As String = path_str.BaseName
+            Dim pos As Integer = check_name.Length
 
             ls = path_str _
                 .ParentPath _
                 .EnumerateFiles _
                 .Select(Function(f) f.FileName) _
                 .Where(Function(f) f.StartsWith(check_name, StringComparison.Ordinal)) _
+                .Select(Function(si) si.Substring(pos)) _
                 .ToArray
         End If
 
