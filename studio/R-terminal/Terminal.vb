@@ -305,7 +305,7 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
         Dim ls As String()
 
         If path_str.DirectoryExists Then
-            Dim is_dot As Boolean = path_str = "."
+            Dim is_dot As Boolean = path_str.IsPattern("\.+")
 
             ls = path_str _
                 .EnumerateFiles _
