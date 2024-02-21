@@ -91,7 +91,7 @@ Public Module roxygen
     ''' <summary>
     ''' parse the R# symbol documents from a given r source script
     ''' </summary>
-    ''' <param name="script"></param>
+    ''' <param name="script">the R# script text</param>
     ''' <returns>A tuple list of the R# symbol documents.</returns>
     <ExportAPI("parse")>
     <RApiReturn(GetType(Document))>
@@ -132,7 +132,8 @@ Public Module roxygen
         Dim Rscript As Rscript
         Dim vignettes As New Dictionary(Of String, Object)
 
-        For Each Rfile As String In ls - l - r - "*.R" <= $"{package_dir}/R"
+        ' scan all rscript file inside package dir
+        For Each Rfile As String In ls - l - r - {"*.R", "*.r"} <= $"{package_dir}/R"
             Rscript = Rscript.AutoHandleScript(handle:=Rfile)
 
             Try

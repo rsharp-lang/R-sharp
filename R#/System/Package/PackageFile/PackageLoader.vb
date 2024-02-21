@@ -287,6 +287,11 @@ Namespace Development.Package.File
             Dim symbolExpression As Expression
             Dim symbols As New List(Of RFunction)
             Dim pkgEnv As PackageEnvironment = env.attachedNamespace.Add([namespace])
+            Dim helpIndex = $"{dir}/package/man/index.json".ReadAllText.LoadJSON(Of Dictionary(Of String, Document))
+
+            If helpIndex Is Nothing Then
+                helpIndex = New Dictionary(Of String, Document)
+            End If
 
             If debugEcho Then
                 Call VBDebugger.EchoLine($"load package from directory: '{dir}'.")
@@ -303,6 +308,14 @@ Namespace Development.Package.File
 
                     If symbolExpression.GetType.ImplementInterface(Of RFunction) Then
                         Call symbols.Add(symbolExpression)
+                    End If
+
+                    If TypeOf symbolExpression Is SymbolExpression Then
+                        Dim symbolExp As SymbolExpression = symbolExpression
+                        Dim help As Document = helpIndex.TryGetValue(symbolExp.GetSymbolName)
+                        Dim help_json As String = help.GetJson
+
+                        Call symbolExp.AddCustomAttribute("r-sharp-help", help_json)
                     End If
                 End Using
             Next

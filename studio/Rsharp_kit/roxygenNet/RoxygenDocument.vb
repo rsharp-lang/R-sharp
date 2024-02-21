@@ -62,6 +62,11 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Public Class RoxygenDocument
 
+    ''' <summary>
+    ''' parse the help document content for symbols from a given script text
+    ''' </summary>
+    ''' <param name="R">the script text data</param>
+    ''' <returns></returns>
     Public Shared Iterator Function ParseDocuments(R As Rscript) As IEnumerable(Of Document)
         Dim script As Program = Program.CreateProgram(R)
         Dim symbols As Expression() = (From line As Expression In script Where line.IsFunctionDeclare).ToArray
@@ -98,6 +103,11 @@ Public Class RoxygenDocument
         Next
     End Function
 
+    ''' <summary>
+    ''' parse the help documents
+    ''' </summary>
+    ''' <param name="scriptText">the R# script text</param>
+    ''' <returns>a collection of the tuple of [symbol => help document]</returns>
     Private Shared Iterator Function SplitBlocks(scriptText As String) As IEnumerable(Of NamedValue(Of Document))
         Dim buffer As New List(Of String)
 

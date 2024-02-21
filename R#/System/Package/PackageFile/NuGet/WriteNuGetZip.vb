@@ -452,14 +452,22 @@ Namespace Development.Package.File
                 text = man.ReadAllText
                 htmlIndex(man.BaseName) = md5.GetMd5Hash(text)
                 relpath = man.GetFullPath.Replace(pkg_dir, "")
+                relpath = $"package/{relpath.Replace("\", "/")}"
 
                 Call checksum.AppendLine(htmlIndex(man.BaseName))
 
-                Using file As New StreamWriter(zip.CreateEntry($"package/{relpath.Replace("\", "/")}").Open)
+                Using file As New StreamWriter(zip.CreateEntry(relpath).Open)
                     Call file.WriteLine(text)
                     Call file.Flush()
                 End Using
             Next
+
+            Using file As New StreamWriter(zip.CreateEntry("package/man/index.json").Open)
+                text = $"{pkg_dir}/man/index.json".ReadAllText
+                checksum.AppendLine(text.MD5)
+                file.WriteLine(text)
+                file.Flush()
+            End Using
 
             Using file As New StreamWriter(zip.CreateEntry("package/manifest/vignettes.json").Open)
                 text = htmlIndex.GetJson(indent:=True)
