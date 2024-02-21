@@ -855,7 +855,7 @@ Namespace Runtime.Internal.Invokes
             Dim err As New Value(Of Message)
 
             If lib_loc.StringEmpty Then
-                lib_loc = env.globalEnvironment.options.lib_loc
+                lib_loc = PackageLoader2.GetPackageDirectory(env.globalEnvironment.options, "")
             End If
 
             If package.IsNullOrEmpty Then

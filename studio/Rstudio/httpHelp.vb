@@ -69,7 +69,7 @@ Public Module httpHelp
 
     <ExportAPI("http_load")>
     Public Function load(Optional env As Environment = Nothing) As Object
-        lib_renv = env.globalEnvironment.options.lib_loc.GetDirectoryFullPath
+        lib_renv = PackageLoader2.GetPackageDirectory(env.globalEnvironment.options, "")
 
         Return True
     End Function

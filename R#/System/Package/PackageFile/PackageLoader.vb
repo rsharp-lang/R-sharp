@@ -108,7 +108,7 @@ Namespace Development.Package.File
         End Function
 
         ''' <summary>
-        ''' get the root dir of the target R#(nuget) package.
+        ''' get the root dir of the target R#(nuget/zip) package.
         ''' </summary>
         ''' <param name="opt"></param>
         ''' <param name="packageName">the R# package name</param>
@@ -117,11 +117,15 @@ Namespace Development.Package.File
         Public Function GetPackageDirectory(opt As Options, packageName$) As String
             Dim libDir As String
 
+#If NET48 Then
             If App.IsMicrosoftPlatform Then
                 libDir = opt.lib_loc & $"/Library/{packageName}"
             Else
                 libDir = $"{opt.lib_loc}/{packageName}"
             End If
+#Else
+            libDir = $"{opt.lib_loc}/{packageName}"
+#End If
 
             libDir = libDir.GetDirectoryFullPath
 
