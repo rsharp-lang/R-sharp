@@ -287,7 +287,7 @@ Namespace Development.Package.File
             Dim symbolExpression As Expression
             Dim symbols As New List(Of RFunction)
             Dim pkgEnv As PackageEnvironment = env.attachedNamespace.Add([namespace])
-            Dim helpIndex = $"{dir}/package/man/index.json".ReadAllText.LoadJSON(Of Dictionary(Of String, Document))
+            Dim helpIndex = $"{dir}/package/man/index.json".ReadAllText(throwEx:=False, suppress:=True).LoadJSON(Of Dictionary(Of String, Document))
 
             If helpIndex Is Nothing Then
                 helpIndex = New Dictionary(Of String, Document)
