@@ -1,64 +1,68 @@
 ﻿#Region "Microsoft.VisualBasic::948a74fe6e6895acb31bd56262260000, D:/GCModeller/src/R-sharp/R#//System/Document/Printer/ConsoleMarkdownPrinter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 116
-    '    Code Lines: 89
-    ' Comment Lines: 0
-    '   Blank Lines: 27
-    '     File Size: 4.17 KB
+' Summaries:
 
 
-    '     Module ConsoleMarkdownPrinter
-    ' 
-    '         Sub: printConsole, printDocs, printFuncBody, PrintText
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 116
+'    Code Lines: 89
+' Comment Lines: 0
+'   Blank Lines: 27
+'     File Size: 4.17 KB
+
+
+'     Module ConsoleMarkdownPrinter
+' 
+'         Sub: printConsole, printDocs, printFuncBody, PrintText
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Serialization
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
-Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.Text.Xml.Models
+Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports System.IO
-Imports System.Runtime.CompilerServices
 
 Namespace Development
 
@@ -126,6 +130,30 @@ Namespace Development
             Call markdown.DoPrint(contentLines(-1).Trim, 2)
 
             Call Console.WriteLine()
+        End Sub
+
+        Public Sub printDocs(f As SymbolExpression)
+            Dim doc_json As String = f.GetAttributeValue(PackageLoader2.RsharpHelp).FirstOrDefault
+            Dim help As Document = doc_json.LoadJSON(Of Document)
+
+            Call markdown.DoPrint(help.title, 1)
+            Call Console.WriteLine()
+            Call markdown.DoPrint(help.description, 1)
+            Call Console.WriteLine()
+            Call markdown.DoPrint(help.details, 2)
+            Call Console.WriteLine()
+
+            For Each param As NamedValue In help.parameters
+                Call markdown.DoPrint($"``{param.name}``: " & param.text.Trim(" "c, ASCII.CR, ASCII.LF), 3)
+            Next
+
+            Call Console.WriteLine()
+
+            If Not help.returns.StringEmpty Then
+                Call markdown.DoPrint("**returns**: ", 1)
+                Call markdown.DoPrint(help.returns, 1)
+                Call Console.WriteLine()
+            End If
         End Sub
 
         Private Sub printDocs(docs As ProjectMember)

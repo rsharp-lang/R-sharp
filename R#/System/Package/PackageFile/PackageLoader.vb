@@ -275,6 +275,11 @@ Namespace Development.Package.File
         End Function
 
         ''' <summary>
+        ''' "r-sharp-help"
+        ''' </summary>
+        Public Const RsharpHelp As String = "r-sharp-help"
+
+        ''' <summary>
         ''' attach installed package
         ''' </summary>
         ''' <param name="dir"></param>
@@ -319,7 +324,7 @@ Namespace Development.Package.File
                         Dim help As Document = helpIndex.TryGetValue(symbolExp.GetSymbolName)
                         Dim help_json As String = help.GetJson
 
-                        Call symbolExp.AddCustomAttribute("r-sharp-help", help_json)
+                        Call symbolExp.AddCustomAttribute(RsharpHelp, help_json)
                     End If
                 End Using
             Next

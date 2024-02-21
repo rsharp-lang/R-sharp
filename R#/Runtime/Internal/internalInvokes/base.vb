@@ -3389,6 +3389,8 @@ RE0:
                     .packageDocs _
                     .PrintHelp(x, env.globalEnvironment.stdout)
             ElseIf type Is GetType(DeclareNewFunction) Then
+                ' print the runtime function code
+                Call Development.ConsoleMarkdownPrinter.printDocs(DirectCast(x, DeclareNewFunction))
                 Call env.globalEnvironment.stdout.WriteLine(x.ToString)
             ElseIf type.ImplementInterface(GetType(RPrint)) Then
                 Try

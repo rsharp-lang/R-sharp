@@ -124,7 +124,7 @@ Namespace Interpreter.ExecuteEngine
         ''' Get values that associated with the current symbol object
         ''' </summary>
         ''' <param name="name">the attribute name string for get the value</param>
-        ''' <returns></returns>
+        ''' <returns>returns empty string collection if the attribute name is not exists</returns>
         Public Function GetAttributeValue(name As String) As IEnumerable(Of String)
             If attributes Is Nothing Then
                 Return New String() {}
