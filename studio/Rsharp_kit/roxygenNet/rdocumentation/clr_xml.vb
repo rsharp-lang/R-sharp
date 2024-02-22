@@ -120,6 +120,10 @@ Public Class clr_xml
         Dim rtype As RType = RType.GetRSharpType(type)
         Dim desc As String = ""
 
+        If rtype Is Nothing Then
+            Return ""
+        End If
+
         If type.ImplementInterface(GetType(IDictionary)) Then
             rtype = RType.list
         End If
