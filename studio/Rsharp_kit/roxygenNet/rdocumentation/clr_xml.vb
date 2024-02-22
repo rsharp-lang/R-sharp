@@ -158,6 +158,15 @@ Public Class clr_xml
             push_clr(type)
             desc = "iterates"
         End If
+        If type.IsConstructedGenericType AndAlso type.UnderlyingSystemType.Name = GetType(KeyValuePair(Of ,)).Name Then
+            Dim t1 As Type = type.GetGenericArguments.First
+            Dim t2 As Type = type.GetGenericArguments.Last
+
+            Call push_clr(t1)
+            Call push_clr(t2)
+
+            Return $"tuple[{typeLink(t1, show_clr_array)}, {typeLink(t2, show_clr_array)}]"
+        End If
 
         Select Case rtype.mode
             Case TypeCodes.boolean,
