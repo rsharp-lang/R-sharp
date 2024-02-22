@@ -319,9 +319,11 @@ Namespace Runtime.Internal.Object.Converts
         <Extension>
         Private Function unlistOfRList(rlist As list, containsListNames As Value(Of Boolean)) As IEnumerable
             Dim data As New List(Of NamedValue(Of Object))
-
-            For Each name As String In rlist.getNames
-                Dim a As Array = Runtime.asVector(Of Object)(rlist.slots(name)).tryUnlistArray(containsListNames).ToArray(Of Object)
+#Disable Warning
+            For Each name As String In rlist.slotKeys
+                Dim a As Array = Runtime.asVector(Of Object)(rlist.slots(name)) _
+                    .tryUnlistArray(containsListNames) _
+                    .ToArray(Of Object)
 
                 If a.Length = 1 Then
                     data.Add(New NamedValue(Of Object)(name, a.GetValue(Scan0)))
@@ -333,7 +335,7 @@ Namespace Runtime.Internal.Object.Converts
                     Next
                 End If
             Next
-
+#Enable Warning
             containsListNames.Value = True
 
             Return data
