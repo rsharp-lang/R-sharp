@@ -51,6 +51,7 @@
 
 Imports System.ComponentModel
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports System.Runtime.ConstrainedExecution
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
@@ -218,6 +219,19 @@ Public Module rdocumentation
         Return html.ToString
     End Function
 
+    <Extension>
+    Private Function hasBaseClass(type As Type) As Boolean
+        If type Is Nothing Then
+            Return False
+        ElseIf type.BaseType Is Nothing Then
+            Return False
+        ElseIf type.BaseType.FullName = "System.Object" Then
+            Return False
+        Else
+            Return True
+        End If
+    End Function
+
     ''' <summary>
     ''' generates the type definition code of the given .net clr <paramref name="type"/>
     ''' </summary>
@@ -233,7 +247,7 @@ Public Module rdocumentation
         Dim docs As String = Nothing
         Dim extends As String = ""
 
-        If Not type.BaseType Is GetType(Object) Then
+        If type.hasBaseClass Then
             Call clr_xml.push_clr(type.BaseType)
 
             ' add code show the class extends tree
