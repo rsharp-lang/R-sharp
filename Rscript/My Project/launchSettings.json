@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": " \"E:/mzkit/src/mzkit/rstudio/pipeline/MSI_peaktable.R\" --raw \"\\\\192.168.1.254\\backup3\\项目以外内容\\2024\\动物器官3D重建测试\\test3.0_small\\060.mzPack\" --save \"D:\\asdasdas.csv\" --regions \"D:/Temp/mzkit_win32/44080000/MSI_regions__88263j.cdf\" --SetDllDirectory E:/mzkit/dist/bin/Rstudio/host --debug",
+      "commandLineArgs": "--build /src \"E:\\biodeep\\biodeepdb_v3\\biodeepdb_v3\\biodeepdb_v3.Rproj\" --skip-src-build /save \"E:\\biodeep\\biodeepdb_v3\\biodeepdb_v3\\.pkg\\biodeepdbkit.zip\"",
       "workingDirectory": "E:\\mzkit\\Rscript\\Library"
     },
     "mzkit_debug": {
