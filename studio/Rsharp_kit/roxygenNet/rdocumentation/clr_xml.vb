@@ -100,6 +100,10 @@ Public Class clr_xml
     End Function
 
     Friend Shared Sub push_clr(t As Type)
+        If t Is Nothing Then
+            Return
+        End If
+
         If t.IsArray Then
             t = t.GetElementType
         End If
