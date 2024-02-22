@@ -1,6 +1,7 @@
 ﻿Imports System.Reflection
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.ApplicationServices.Development
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
@@ -120,7 +121,14 @@ Public Class clr_xml
 
         Dim base As Type = type.UnderlyingSystemType
 
-        For Each generic As Type In {GetType(IEnumerable(Of )), GetType(List(Of )), GetType(Queue(Of ))}
+        For Each generic As Type In {
+            GetType(IEnumerable(Of )),
+            GetType(List(Of )),
+            GetType(Queue(Of )),
+            GetType(IDynamicMeta(Of )),
+            GetType(DynamicPropertyBase(Of )),
+            GetType(Dictionary(Of ))
+        }
             If base.Name = generic.Name Then
                 Return True
             End If
