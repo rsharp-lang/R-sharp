@@ -7,6 +7,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text.Parser.HtmlParser
+Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 
@@ -127,7 +128,11 @@ Public Class clr_xml
             GetType(Queue(Of )),
             GetType(IDynamicMeta(Of )),
             GetType(DynamicPropertyBase(Of )),
-            GetType(Dictionary(Of ))
+            GetType(Dictionary(Of )),
+            GetType(LinkedList(Of )),
+            GetType(IList(Of )),
+            GetType(ICollection(Of )),
+            GetType(NamedCollection(Of ))
         }
             If base.Name = generic.Name Then
                 Return True
