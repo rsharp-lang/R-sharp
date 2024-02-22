@@ -137,6 +137,26 @@ Public Class clr_xml
         Return False
     End Function
 
+    Private Shared Function isGeneralTuple(type As Type) As Boolean
+        If Not type.IsConstructedGenericType Then
+            Return False
+        End If
+
+        Dim base As Type = type.UnderlyingSystemType
+
+        For Each generic As Type In {
+            GetType(KeyValuePair(Of ,)),
+            GetType(ValueTuple(Of ,)),
+            GetType([Variant](Of ,))
+        }
+            If base.Name = generic.Name Then
+                Return True
+            End If
+        Next
+
+        Return False
+    End Function
+
     ''' <summary>
     ''' this function generates the html anchor html text for link to the document of clr type
     ''' </summary>
@@ -153,12 +173,12 @@ Public Class clr_xml
         If type.ImplementInterface(GetType(IDictionary)) Then
             rtype = RType.list
         End If
-        If type.IsConstructedGenericType AndAlso isGeneralCollection(type) Then
+        If isGeneralCollection(type) Then
             type = type.GetGenericArguments.First
             push_clr(type)
             desc = "iterates"
         End If
-        If type.IsConstructedGenericType AndAlso type.UnderlyingSystemType.Name = GetType(KeyValuePair(Of ,)).Name Then
+        If isGeneralTuple(type) Then
             Dim t1 As Type = type.GetGenericArguments.First
             Dim t2 As Type = type.GetGenericArguments.Last
 
