@@ -127,7 +127,7 @@ Public Class clr_xml
         If type.ImplementInterface(GetType(IDictionary)) Then
             rtype = RType.list
         End If
-        If type Is GetType(IEnumerable(Of )) Then
+        If type.IsConstructedGenericType AndAlso type.UnderlyingSystemType Is GetType(IEnumerable(Of )) Then
             type = type.GetGenericArguments.First
             desc = "iterates"
         End If
