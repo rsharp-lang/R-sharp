@@ -106,6 +106,8 @@ Public Class clr_xml
 
         If t.IsArray Then
             t = t.GetElementType
+        ElseIf isGeneralCollection(t) Then
+            t = t.GetGenericArguments.First
         End If
 
         Call clr_types.Add(t)
@@ -145,6 +147,7 @@ Public Class clr_xml
         End If
         If type.IsConstructedGenericType AndAlso isGeneralCollection(type) Then
             type = type.GetGenericArguments.First
+            push_clr(type)
             desc = "iterates"
         End If
 
