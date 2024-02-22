@@ -116,7 +116,7 @@ Public Class clr_xml
     ''' </summary>
     ''' <param name="type"></param>
     ''' <returns></returns>
-    Friend Shared Function typeLink(type As Type, Optional show_clr_array As Boolean = True) As String
+    Public Shared Function typeLink(type As Type, Optional show_clr_array As Boolean = True) As String
         Dim rtype As RType = RType.GetRSharpType(type)
         Dim desc As String = ""
 
