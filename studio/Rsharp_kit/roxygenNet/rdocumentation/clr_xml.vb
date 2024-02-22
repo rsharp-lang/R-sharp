@@ -111,6 +111,22 @@ Public Class clr_xml
         Call clr_types.Add(t)
     End Sub
 
+    Private Shared Function isGeneralCollection(type As Type) As Boolean
+        If Not type.IsConstructedGenericType Then
+            Return False
+        End If
+
+        Dim base As Type = type.UnderlyingSystemType
+
+        For Each generic As Type In {GetType(IEnumerable(Of )), GetType(List(Of )), GetType(Queue(Of ))}
+            If base.Name = generic.Name Then
+                Return True
+            End If
+        Next
+
+        Return False
+    End Function
+
     ''' <summary>
     ''' this function generates the html anchor html text for link to the document of clr type
     ''' </summary>
@@ -127,7 +143,7 @@ Public Class clr_xml
         If type.ImplementInterface(GetType(IDictionary)) Then
             rtype = RType.list
         End If
-        If type.IsConstructedGenericType AndAlso type.UnderlyingSystemType.Name = GetType(IEnumerable(Of )).Name Then
+        If type.IsConstructedGenericType AndAlso isGeneralCollection(type) Then
             type = type.GetGenericArguments.First
             desc = "iterates"
         End If

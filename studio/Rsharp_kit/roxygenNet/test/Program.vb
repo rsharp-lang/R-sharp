@@ -8,6 +8,7 @@ Module Program
     End Sub
 
     Sub type_test()
+        Call Console.WriteLine(clr_xml.typeLink(GetType(List(Of Double))))
         Call Console.WriteLine(clr_xml.typeLink(GetType(IEnumerable(Of Double))))
     End Sub
 End Module
