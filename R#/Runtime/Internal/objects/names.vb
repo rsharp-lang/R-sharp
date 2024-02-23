@@ -53,6 +53,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
@@ -104,6 +105,17 @@ Namespace Runtime.Internal.Object
             Else
                 Return nameAll.ToArray
             End If
+        End Function
+
+        <Extension>
+        Public Iterator Function uniqueNames(Of T As {INamedValue, Class})(data As IEnumerable(Of T)) As IEnumerable(Of T)
+            Dim pool = data.SafeQuery.ToArray
+            Dim names As String() = pool.Keys.uniqueNames
+
+            For i As Integer = 0 To names.Length - 1
+                pool(i).Key = names(i)
+                Yield pool(i)
+            Next
         End Function
 
         ''' <summary>
