@@ -272,7 +272,18 @@ Public Module rdocumentation
                 .Select(Function(p) DirectCast(p, MemberInfo))
         End If
 
-        For Each member As MemberInfo In members.OrderBy(Function(m) m.Name)
+        Dim orderMembers As IEnumerable(Of MemberInfo)
+
+        If is_enum Then
+            orderMembers = members _
+                .OrderBy(Function(m)
+                             Return CDbl(DirectCast(m, FieldInfo).GetValue(Nothing))
+                         End Function)
+        Else
+            orderMembers = members.OrderBy(Function(m) m.Name)
+        End If
+
+        For Each member As MemberInfo In orderMembers
             If is_enum Then
                 docs = xml.GetField(member.Name)?.Summary
             Else
