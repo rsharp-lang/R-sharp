@@ -275,7 +275,10 @@ Public Module rdocumentation
         Dim orderMembers As IEnumerable(Of MemberInfo)
 
         If is_enum Then
-            orderMembers = members.OrderBy(Function(m) CDbl(DirectCast(m, FieldInfo).GetValue(Nothing)))
+            orderMembers = members _
+                .OrderBy(Function(m)
+                             Return CDbl(DirectCast(m, FieldInfo).GetValue(Nothing))
+                         End Function)
         Else
             orderMembers = members.OrderBy(Function(m) m.Name)
         End If
