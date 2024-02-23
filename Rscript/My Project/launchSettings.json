@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src \"E:\\biodeep\\biodeepdb_v3\\biodeepdb_v3\\biodeepdb_v3.Rproj\" --skip-src-build /save \"E:\\biodeep\\biodeepdb_v3\\biodeepdb_v3\\.pkg\\biodeepdbkit.zip\"",
-      "workingDirectory": "E:\\mzkit\\Rscript\\Library"
+      "commandLineArgs": "\"E:/mzkit/src/mzkit/rstudio/pipeline/Mummichog.R\" --biodeep_ssid \"docker-20240223083025-a4397c6862d79e2c0348fed7675b2c3a\" --raw \"D:/Temp/1/mzkit_win32/28336/mz_peaklist32595h.txt\" --argv \"D:/Temp/1/mzkit_win32/28336/arguments32595i.json\" --mz-peaks --save \"D:/Temp/1/mzkit_win32/b06e0000/Mummichog_32595j__save\" --SetDllDirectory E:/mzkit/dist/bin/Rstudio/host",
+      "workingDirectory": "E:\\mzkit\\dist\\bin\\Rstudio\\bin"
     },
     "mzkit_debug": {
       "commandName": "Project",
