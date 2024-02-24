@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Module RJSON
 
@@ -119,7 +120,7 @@ Module RJSON
             Return rawElement
         ElseIf rawElement Is Nothing Then
             If env.globalEnvironment.options.strict Then
-                Return Internal.debug.stop({
+                Return RInternal.debug.stop({
                     $"invalid format of the input json string!",
                     $"json_str: {str}"
                 }, env)
@@ -187,7 +188,7 @@ Module RJSON
 
             Return list
         Else
-            Return Internal.debug.stop(Message.InCompatibleType(GetType(JsonElement), json.GetType, env), env)
+            Return Message.InCompatibleType(GetType(JsonElement), json.GetType, env)
         End If
     End Function
 End Module
