@@ -134,7 +134,13 @@ Namespace Development
 
         Public Sub printDocs(f As SymbolExpression)
             Dim doc_json As String = f.GetAttributeValue(PackageLoader2.RsharpHelp).FirstOrDefault
-            Dim help As Document = doc_json.LoadJSON(Of Document)
+            Dim help As Document = doc_json.LoadJSON(Of Document)(throwEx:=False)
+
+            ' skip print if contains no help document
+            ' of current symbol
+            If help Is Nothing Then
+                Return
+            End If
 
             Call markdown.DoPrint(help.title, 1)
             Call Console.WriteLine()
