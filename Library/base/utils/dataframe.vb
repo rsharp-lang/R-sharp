@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::dc4a4b3172dfc9b1a7befffe5da6ca10, D:/GCModeller/src/R-sharp/Library/base//utils/dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 710
-    '    Code Lines: 527
-    ' Comment Lines: 97
-    '   Blank Lines: 86
-    '     File Size: 27.33 KB
+' Summaries:
 
 
-    ' Module dataframe
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
-    '               colnames, column, createEntityRow, CreateRowObject, dataframeTable
-    '               deserialize, measureColumnVector, openCsv, parseDataframe, parseRow
-    '               printRowVector, printTable, project, rawToDataFrame, readCsvRaw
-    '               readDataSet, rows, rowToString, RowToString, stripCommentRows
-    '               transpose, vector
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 710
+'    Code Lines: 527
+' Comment Lines: 97
+'   Blank Lines: 86
+'     File Size: 27.33 KB
+
+
+' Module dataframe
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
+'               colnames, column, createEntityRow, CreateRowObject, dataframeTable
+'               deserialize, measureColumnVector, openCsv, parseDataframe, parseRow
+'               printRowVector, printTable, project, rawToDataFrame, readCsvRaw
+'               readDataSet, rows, rowToString, RowToString, stripCommentRows
+'               transpose, vector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -201,13 +201,34 @@ Module dataframe
     ''' <returns></returns>
     <ExportAPI("as.objects")>
     <RApiReturn(GetType(vec))>
-    Public Function deserialize(data As csv, type As Object,
+    Public Function deserialize(<RRawVectorArgument> data As Object, type As Object,
                                 Optional strict As Boolean = False,
                                 Optional metaBlank$ = "",
                                 Optional silent As Boolean = True,
                                 Optional env As Environment = Nothing) As Object
 
-        Dim dataframe As Idataframe = Idataframe.CreateObject(data)
+        Dim dataframe As Idataframe
+
+        If data Is Nothing Then
+            Return Nothing
+        End If
+
+        If TypeOf data Is csv Then
+            dataframe = Idataframe.CreateObject(data)
+        ElseIf TypeOf data Is Rdataframe Then
+            With DirectCast(data, Rdataframe).DataFrameRows(True, "G7", env)
+                If .GetUnderlyingType Is GetType(Message) Then
+                    Return .TryCast(Of Message)
+                Else
+                    dataframe = Idataframe.CreateObject(.TryCast(Of csv))
+                End If
+            End With
+        ElseIf TypeOf data Is Idataframe Then
+            dataframe = data
+        Else
+            Return Message.InCompatibleType(GetType(dataframe), data.GetType, env)
+        End If
+
         Dim schema As RType = env.globalEnvironment.GetType(type)
         Dim result As IEnumerable(Of Object) = dataframe.LoadDataToObject(
             type:=schema.raw,
