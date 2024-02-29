@@ -105,6 +105,12 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        Public ReadOnly Property is_empty As Boolean
+            Get
+                Return slots.IsNullOrEmpty
+            End Get
+        End Property
+
         ''' <summary>
         ''' Get slot value by name
         ''' </summary>
