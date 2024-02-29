@@ -133,7 +133,7 @@ Namespace Development
         End Sub
 
         Public Sub printDocs(f As SymbolExpression)
-            Dim doc_json As String = f.GetAttributeValue(PackageLoader2.RsharpHelp).FirstOrDefault
+            Dim doc_json As String = f.GetAttributeValue(PackageLoader2.RsharpHelp).DefaultFirst
             Dim help As Document = doc_json.LoadJSON(Of Document)(throwEx:=False)
 
             ' skip print if contains no help document
@@ -142,15 +142,15 @@ Namespace Development
                 Return
             End If
 
-            Call markdown.DoPrint(help.title, 1)
+            Call markdown.DoPrint(If(help.title, ""), 1)
             Call Console.WriteLine()
-            Call markdown.DoPrint(help.description, 1)
+            Call markdown.DoPrint(If(help.description, ""), 1)
             Call Console.WriteLine()
-            Call markdown.DoPrint(help.details, 2)
+            Call markdown.DoPrint(If(help.details, ""), 2)
             Call Console.WriteLine()
 
-            For Each param As NamedValue In help.parameters
-                Call markdown.DoPrint($"``{param.name}``: " & param.text.Trim(" "c, ASCII.CR, ASCII.LF), 3)
+            For Each param As NamedValue In help.parameters.SafeQuery
+                Call markdown.DoPrint($"``{param.name}``: " & If(param.text, "").Trim(" "c, ASCII.CR, ASCII.LF), 3)
             Next
 
             Call Console.WriteLine()
