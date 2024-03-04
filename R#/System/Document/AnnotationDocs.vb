@@ -84,7 +84,9 @@ Namespace Development
                 projects(projectKey) = ProjectSpace.CreateDocProject(docXml)
             End If
 
-            If projects.ContainsKey(projectKey) Then
+            ' 20240304 compiler special type its full name will be nothing
+            ' skip such situation
+            If package.FullName IsNot Nothing AndAlso projects.ContainsKey(projectKey) Then
                 project = projects(projectKey)
                 type = project.GetType(package.FullName)
             Else
