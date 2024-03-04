@@ -295,7 +295,7 @@ Namespace Development.Package.File
         ''' <returns></returns>
         <Extension>
         Private Function buildUnixMan(file As PackageModel, package_dir As String) As Message
-            Dim REngine As New RInterpreter
+            Dim REngine As New RInterpreter(env_label:="build_unix_man_page")
             Dim plugin As String = LibDLL.GetDllFile("roxygenNet.dll", REngine.globalEnvir)
 
             file.unixman = New List(Of String)
@@ -405,6 +405,8 @@ Namespace Development.Package.File
                 Call dllIndex.AppendLine($"<h2>Library: {dll.FileName}</h2>")
                 Call dllIndex.AppendLine("<ul>")
 
+                Dim err1, err2 As Object
+
                 For Each pkg As Package In PackageLoader.ParsePackages(dll:=dll)
                     out = $"{package_dir}/man/{dll.BaseName}/{pkg.namespace}"
                     outputHtml = $"{package_dir}/vignettes/{dll.BaseName}/{pkg.namespace}"
@@ -413,19 +415,16 @@ Namespace Development.Package.File
                     Call Console.WriteLine($"         -> load: {pkg.info.Namespace}")
                     Call dllIndex.AppendLine($"<li><a href=""./{dll.BaseName}/{pkg.namespace}.html"">{pkg.namespace}</a></li>")
 
-                    Try
-                        ' create unix man page
-                        ' and then create html documents
-                        Call REngine.Invoke("unixMan", pkg, out, REngine.globalEnvir)
+                    ' create unix man page
+                    ' and then create html documents
+                    err1 = REngine.Invoke("unixMan", pkg, out, REngine.globalEnvir)
+                    err2 = REngine.Invoke("REnv::Rdocuments", pkg, outputHtml, file.info.Package, REngine.globalEnvir)
 
-                        err = REngine.Invoke("REnv::Rdocuments", pkg, outputHtml, file.info.Package, REngine.globalEnvir)
-
-                        If Program.isException(err) Then
-                            Return err
-                        End If
-                    Catch ex As Exception
-
-                    End Try
+                    If Program.isException(err1) Then
+                        Return err1
+                    ElseIf Program.isException(err2) Then
+                        Return err2
+                    End If
                 Next
 
                 Call dllIndex.AppendLine("</ul>")
