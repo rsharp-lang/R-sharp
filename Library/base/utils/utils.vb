@@ -475,7 +475,7 @@ Public Module utils
         ElseIf type Is GetType(file) Then
             Return DirectCast(x, file).Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf type Is GetType(IO.DataFrame) Then
-            Return DirectCast(x, IO.DataFrame).Save(path:=file, encoding:=encoding, silent:=True)
+            Return DirectCast(x, IO.DataFrame).csv.Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf REnv.isVector(Of EntityObject)(x) Then
 #Disable Warning
             Return DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).SaveDataSet(path:=file, encoding:=encoding, silent:=True)

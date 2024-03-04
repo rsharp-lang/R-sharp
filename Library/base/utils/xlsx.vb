@@ -249,7 +249,7 @@ Module xlsx
         ElseIf type Is GetType(csv) Then
             Return DirectCast(x, csv)
         ElseIf type Is GetType(DataTable) Then
-            Return DirectCast(x, DataTable)
+            Return DirectCast(x, DataTable).csv
         ElseIf REnv.isVector(Of EntityObject)(x) Then
 #Disable Warning
             Return Reflector.GetsRowData(
