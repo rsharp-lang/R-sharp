@@ -417,7 +417,12 @@ Namespace Development.Package.File
                         ' create unix man page
                         ' and then create html documents
                         Call REngine.Invoke("unixMan", pkg, out, REngine.globalEnvir)
-                        Call REngine.Invoke("REnv::Rdocuments", pkg, outputHtml, file.info.Package, REngine.globalEnvir)
+
+                        err = REngine.Invoke("REnv::Rdocuments", pkg, outputHtml, file.info.Package, REngine.globalEnvir)
+
+                        If Program.isException(err) Then
+                            Return err
+                        End If
                     Catch ex As Exception
 
                     End Try
