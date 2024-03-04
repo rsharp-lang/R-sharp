@@ -62,16 +62,34 @@ Public Class clr_xml
             pname = clr_type.Last
 
             If Not type Is Nothing Then
+                ' 20240304 xml documentation mis-matched with clr assembly
+                ' will cause the property/field/method is nothing
+                ' skip of such situation
                 Select Case ref.Name
                     Case "P"
-                        [property] = type.GetProperty(name:=pname)
-                        ptype = [property].PropertyType
+                        [property] = (From p In type.GetProperties() Where p.Name = pname).DefaultFirst
+
+                        If [property] Is Nothing Then
+                            Continue For
+                        Else
+                            ptype = [property].PropertyType
+                        End If
                     Case "F"
-                        field = type.GetField(name:=pname)
-                        ptype = field.FieldType
+                        field = (From f In type.GetFields Where f.Name = pname).DefaultFirst
+
+                        If field Is Nothing Then
+                            Continue For
+                        Else
+                            ptype = field.FieldType
+                        End If
                     Case "M"
-                        method = type.GetMethod(name:=pname)
-                        ptype = method.ReturnType
+                        method = (From m In type.GetMethods Where m.Name = pname).DefaultFirst
+
+                        If method Is Nothing Then
+                            Continue For
+                        Else
+                            ptype = method.ReturnType
+                        End If
                     Case Else
                         Throw New Exception("this exception will be never happended!")
                 End Select
