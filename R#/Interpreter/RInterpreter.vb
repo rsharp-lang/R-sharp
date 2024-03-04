@@ -180,12 +180,12 @@ Namespace Interpreter
         ''' 直接无参数调用这个构造函数，则会使用默认的配置文件创建R#脚本解释器引擎实例
         ''' </summary>
         ''' <param name="envirConf"></param>
-        Sub New(Optional envirConf As Options = Nothing)
+        Sub New(Optional envirConf As Options = Nothing, Optional env_label As String = Nothing)
             If envirConf Is Nothing Then
                 envirConf = New Options(ConfigFile.localConfigs, saveConfig:=False)
             End If
 
-            Call _construct(New GlobalEnvironment(Me, envirConf))
+            Call _construct(New GlobalEnvironment(Me, envirConf, env_label:=env_label))
         End Sub
 
         Private Sub _construct(env As GlobalEnvironment)

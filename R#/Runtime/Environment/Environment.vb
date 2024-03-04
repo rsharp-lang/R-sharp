@@ -315,7 +315,7 @@ Namespace Runtime
 
             Me.parent = globalEnv
             Me.global = globalEnv
-            Me.stackFrame = globalStackFrame
+            Me.stackFrame = New StackFrame(globalEnv.stackFrame)
             Me.profiler = globalEnv.profiler
 
             If globalEnv.log4vb_redirect Then

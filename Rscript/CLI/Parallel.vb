@@ -67,9 +67,10 @@ Partial Module CLI
     ''' <param name="args"></param>
     ''' <returns></returns>
     <ExportAPI("--parallel")>
-    <Usage("--parallel --master <master_port> [--host <localhost> --delegate <delegate_name> --redirect_stdout <logfile.txt>]")>
+    <Usage("--parallel --master <master_port> [--host <localhost> --delegate <delegate_name> --task <task_name> --redirect_stdout <logfile.txt>]")>
     <Description("Create a new parallel thread process for running a new parallel task.")>
     <Argument("--master", False, CLITypes.Integer, AcceptTypes:={GetType(Integer)}, Description:="the TCP port of the master node.")>
+    <Argument("--task", True, CLITypes.String, Description:="set the task name for current slave process, this option may affects the label tag of the global environment for run debug test.")>
     Public Function parallelMode(args As CommandLine) As Integer
         Dim masterPort As Integer = args <= "--master"
         Dim logfile As String = args <= "--redirect_stdout"
@@ -88,7 +89,7 @@ Partial Module CLI
 
         Dim delegateName As String = args("--delegate")
         Dim SetDllDirectory As String = args("--SetDllDirectory")
-        Dim REngine As New RInterpreter
+        Dim REngine As New RInterpreter(env_label:=taskName)
         Dim plugin As String = LibDLL.GetDllFile($"snowFall.dll", REngine.globalEnvir)
 
         If Not SetDllDirectory.StringEmpty Then

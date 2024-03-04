@@ -168,7 +168,9 @@ Namespace Runtime
         Friend ReadOnly dotnetCoreWarning As New List(Of Message)
         Friend ReadOnly nativeLibraries As New Dictionary(Of String, UnmanagedDll)
 
-        Friend Sub New(scriptHost As RInterpreter, options As Options)
+        Friend Sub New(scriptHost As RInterpreter, options As Options, Optional env_label As String = Nothing)
+            Call MyBase.New
+
             Me.options = options
             Me.packages = New PackageManager(options)
             Me.global = Me
@@ -178,6 +180,10 @@ Namespace Runtime
             Me.symbolLanguages = New SymbolLanguageProcessor(Me)
             Me.attachedNamespace = New SymbolNamespaceSolver(Me)
             Me.polyglot = New Polyglot.Platform(Me)
+
+            If Not env_label.StringEmpty Then
+                stackFrame.Method.Method = $"<globalEnvironment@{env_label}>"
+            End If
 
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
