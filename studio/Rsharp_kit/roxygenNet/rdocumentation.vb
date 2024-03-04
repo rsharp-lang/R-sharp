@@ -318,7 +318,9 @@ Public Module rdocumentation
                     Call ts.AppendLine($"   [@desc ""{desc.Description}""]")
                 End If
 
-                Call ts.AppendLine($"   {member.Name}: {clr_xml.typeLink(type)} = {CULng(DirectCast(member, FieldInfo).GetValue(Nothing))};")
+                ' 20240304 due to the reason of possible negative value
+                ' so using long at here, not ulong
+                Call ts.AppendLine($"   {member.Name}: {clr_xml.typeLink(type)} = {CLng(DirectCast(member, FieldInfo).GetValue(Nothing))};")
                 Call ts.AppendLine()
             Else
                 Call ts.AppendLine($"   {member.Name}: {clr_xml.typeLink(type)};")
