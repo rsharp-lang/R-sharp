@@ -357,8 +357,17 @@ Public Module rdocumentation
         Dim func As RMethodInfo
 
         For Each f As NamedValue(Of MethodInfo) In apis.TryCast(Of NamedValue(Of MethodInfo)())
-            func = New RMethodInfo(f)
-            funcs.add(func.name, func)
+            Try
+                func = New RMethodInfo(f)
+                funcs.add(func.name, func)
+            Catch ex As Exception
+                Return Internal.debug.stop({
+                    $"error load .net clr library while parse function: {f.Name}",
+                    $"package: {package}",
+                    ex.Message,
+                    ex.StackTrace
+                }, env)
+            End Try
         Next
 
         Return funcs
