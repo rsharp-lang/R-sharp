@@ -65,7 +65,6 @@ Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.LineEdit
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.UnixBash
-Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
@@ -73,8 +72,6 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports REnv = SMRUCC.Rsharp.Runtime
-Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 ''' <summary>
 ''' the ``R#`` terminal console
@@ -83,8 +80,9 @@ Module Terminal
 
     Dim R As RInterpreter
     Dim Rtask As Task
-    Dim cts As CancellationTokenSource
     Dim exec As Boolean = False
+
+    Friend cts As CancellationTokenSource
 
 #Region "enable quit the R# environment in the terminal console mode"
 
@@ -242,7 +240,6 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
         Dim engineConfig As String = System.Environment.GetEnvironmentVariable("R_LIBS_USER")
         Dim R_exec As Action(Of String) = AddressOf doRunScriptWithSpecialCommandSync
         Dim editor As New LineEditor("Rscript", 5000) With {
-            .AutoCompleteEvent = AddressOf AutoCompletion,
             .HeuristicsMode = True,
             .TabAtStartCompletes = False,
             .MaxWidth = 120
@@ -251,6 +248,8 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
 
         R = RInterpreter.FromEnvironmentConfiguration(configs:=file_config)
         R.strict = False
+
+        editor.AutoCompleteEvent = AddressOf New IntelliSense(R).AutoCompletion
 
         If R.verbose Then
             Call VBDebugger.EchoLine($"application platform id: {App.Platform}(is_microsoft_platform: {App.IsMicrosoftPlatform})")
@@ -289,100 +288,6 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
         Return 0
     End Function
 
-    Private Function AllSymbols() As IEnumerable(Of String)
-        Dim globalEnv = R.globalEnvir
-        Dim globalSymbols = globalEnv.EnumerateAllSymbols.JoinIterates(globalEnv.EnumerateAllFunctions)
-        ' system internal hiddens
-        Dim internals = Internal.invoke.getAllInternals
-        Dim symbols As IEnumerable(Of String) = globalSymbols _
-            .Select(Function(s) s.name) _
-            .JoinIterates(internals.Select(Function(s) s.name)) _
-            .Distinct
-
-        Return symbols
-    End Function
-
-    Private Function packageFunctions(package As String) As IEnumerable(Of String)
-        Dim globalEnv = R.globalEnvir
-        Dim namespace_loaded = globalEnv.attachedNamespace(package)
-
-        If namespace_loaded Is Nothing Then
-            Return {}
-        Else
-            Return namespace_loaded _
-                .EnumerateAllSymbols _
-                .JoinIterates(namespace_loaded.EnumerateAllFunctions) _
-                .Select(Function(s) s.name) _
-                .Distinct _
-                .ToArray
-        End If
-    End Function
-
-    Private Function GetFileNamesCompletion(s As String, path_str As String) As Completion
-        Dim ls As String()
-
-        If path_str.DirectoryExists Then
-            Dim is_dot As Boolean = path_str.IsPattern("\.+")
-
-            ls = path_str _
-                .EnumerateFiles _
-                .Select(Function(f)
-                            Dim name As String = f.FileName
-
-                            If is_dot Then
-                                Return "/" & name
-                            Else
-                                Return name
-                            End If
-                        End Function) _
-                .ToArray
-        Else
-            Dim check_name As String = path_str.BaseName
-            Dim pos As Integer = check_name.Length
-
-            ls = path_str _
-                .ParentPath _
-                .EnumerateFiles _
-                .Select(Function(f) f.FileName) _
-                .Where(Function(f) f.StartsWith(check_name, StringComparison.Ordinal)) _
-                .Select(Function(si) si.Substring(pos)) _
-                .ToArray
-        End If
-
-        Return New Completion(s, ls)
-    End Function
-
-    Private Function AutoCompletion(s As String, pos As Integer) As Completion
-        Dim prefix As String = Nothing
-        Dim ls As String()
-
-        If SMRUCC.Rsharp.Language.Syntax.IsStringOpen(s, prefix) Then
-            Return GetFileNamesCompletion(s, prefix)
-        Else
-            prefix = s.Substring(0, pos)
-        End If
-
-        If prefix.StringEmpty Then
-            ls = AllSymbols.ToArray
-        ElseIf prefix.EndsWith("::") Then
-            ' get package functions
-            Dim packageName = prefix.Trim(":"c, " "c).Split({" "c, "+"c, "-"c, "*"c, "/"c, "\"c, "?"c, "&"c}).LastOrDefault
-
-            If packageName.StringEmpty Then
-                ls = {}
-            Else
-                ls = packageFunctions(packageName).ToArray
-            End If
-        Else
-            ls = AllSymbols _
-                .Where(Function(c) c.StartsWith(prefix, StringComparison.Ordinal)) _
-                .Select(Function(c) c.Substring(pos)) _
-                .ToArray
-        End If
-
-        Return New Completion(prefix, ls)
-    End Function
-
     Private Sub doRunScriptWithSpecialCommandSync(script As String)
         Call doRunScriptWithSpecialCommand(script)
 
@@ -400,7 +305,7 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
                 Call Console.Clear()
             Case Else
                 If Not script.StringEmpty Then
-                    Await New RunScript(script) _
+                    Await New RunScript(R, script) _
                         .doRunScript(cts.Token) _
                         .CancelWith(
                             cancellationToken:=cts.Token,
@@ -414,33 +319,4 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
         exec = False
         Console.Title = "R# language"
     End Sub
-
-    Private Class RunScript
-
-        ReadOnly script As String
-
-        Sub New(script As String)
-            Me.script = script
-        End Sub
-
-        Public Async Function doRunScript(ct As CancellationToken) As Task(Of Integer)
-            Dim error$ = Nothing
-            Dim program As RProgram = RProgram.BuildProgram(script, [error]:=[error])
-            Dim result As Object
-
-            Await Task.Delay(1)
-
-            If Not [error].StringEmpty Then
-                result = REnv.Internal.debug.stop([error], R.globalEnvir)
-            Else
-                result = REnv.TryCatch(
-                    runScript:=Function() R.SetTaskCancelHook(Terminal.cts).Run(program),
-                    debug:=R.debug
-                )
-            End If
-
-            Return Rscript.handleResult(result, R.globalEnvir, program)
-        End Function
-
-    End Class
 End Module
