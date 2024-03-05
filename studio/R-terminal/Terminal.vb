@@ -302,6 +302,22 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
         Return symbols
     End Function
 
+    Private Function packageFunctions(package As String) As IEnumerable(Of String)
+        Dim globalEnv = R.globalEnvir
+        Dim namespace_loaded = globalEnv.attachedNamespace(package)
+
+        If namespace_loaded Is Nothing Then
+            Return {}
+        Else
+            Return namespace_loaded _
+                .EnumerateAllSymbols _
+                .JoinIterates(namespace_loaded.EnumerateAllFunctions) _
+                .Select(Function(s) s.name) _
+                .Distinct _
+                .ToArray
+        End If
+    End Function
+
     Private Function GetFileNamesCompletion(s As String, path_str As String) As Completion
         Dim ls As String()
 
@@ -348,6 +364,15 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
 
         If prefix.StringEmpty Then
             ls = AllSymbols.ToArray
+        ElseIf prefix.EndsWith("::") Then
+            ' get package functions
+            Dim packageName = prefix.Trim(":"c, " "c).Split({" "c, "+"c, "-"c, "*"c, "/"c, "\"c, "?"c, "&"c}).LastOrDefault
+
+            If packageName.StringEmpty Then
+                ls = {}
+            Else
+                ls = packageFunctions(packageName).ToArray
+            End If
         Else
             ls = AllSymbols _
                 .Where(Function(c) c.StartsWith(prefix, StringComparison.Ordinal)) _
