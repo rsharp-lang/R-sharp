@@ -59,7 +59,7 @@ Friend Class IntelliSense
                         End Function) _
                 .ToArray
         Else
-            Dim check_name As String = path_str.BaseName
+            Dim check_name As String = path_str.BaseName(allowEmpty:=True)
             Dim pos As Integer = check_name.Length
 
             ls = path_str _
