@@ -60,7 +60,6 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.MIME.text.markdown
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development
@@ -69,6 +68,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports MarkdownHTML = Microsoft.VisualBasic.MIME.text.markdown.MakrdownRender
 Imports pkg = SMRUCC.Rsharp.Development.Package.Package
 
 ''' <summary>
@@ -167,7 +167,7 @@ Public Module roxygen
     <ExportAPI("markdown2Html")>
     Public Function markdown2Html(markdown As String) As String
         SyncLock roxygen.markdown
-            Return roxygen.markdown.Transform(text:=markdown)
+            Return roxygen.markdown.Transform(markdown)
         End SyncLock
     End Function
 
