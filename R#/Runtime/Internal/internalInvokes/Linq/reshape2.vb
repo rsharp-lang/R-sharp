@@ -550,5 +550,44 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             Return df
         End Function
+
+        ''' <summary>
+        ''' fill content which is indexed by a given value list
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="values"></param>
+        ''' <param name="index"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' the length of vector <paramref name="x"/> should be 
+        ''' equals to the length of <paramref name="index"/>.
+        ''' </remarks>
+        <ExportAPI("vector_fill")>
+        Public Function vector_fill(<RRawVectorArgument> x As Object, values As list,
+                                    <RRawVectorArgument> index As Object,
+                                    Optional env As Environment = Nothing) As Object
+
+            Dim vec As Object() = REnv.asVector(Of Object)(x).AsObjectEnumerator.ToArray
+            Dim keys As String() = CLRVector.asCharacter(index)
+
+            If keys.Length <> vec.Length Then
+                Return Internal.debug.stop("the size of the given vector x and the size of the key index should be equals!", env)
+            End If
+
+            Dim data = values.slots
+
+            For i As Integer = 0 To keys.Length - 1
+                If data.ContainsKey(keys(i)) Then
+                    ' fill with the associated value
+                    vec(i) = data(keys(i))
+                Else
+                    ' leaves with vector x default value
+                    ' do nothing at here
+                End If
+            Next
+
+            Return vec
+        End Function
     End Module
 End Namespace
