@@ -9,7 +9,7 @@
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;Rsharp_app_release;mzkit;gcmodeller_desktop;PlantMAT</Configurations>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-	  <AssemblyVersion>2.33.*</AssemblyVersion>
+	  <AssemblyVersion>2.33.125.3339</AssemblyVersion>
 	  <Deterministic>false</Deterministic>
 	  <StartupObject />
 	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -50,7 +50,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PlantMAT|x64'">
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineConstants>UNIX=1</DefineConstants>
     <DocumentationFile>RData.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -84,7 +84,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineConstants>UNIX=1</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit|x64'">
@@ -96,7 +96,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineConstants>UNIX=1</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0-windows' ">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

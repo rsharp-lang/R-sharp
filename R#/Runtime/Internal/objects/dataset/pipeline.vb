@@ -254,6 +254,10 @@ Namespace Runtime.Internal.Object
         ''' the required data sequence or an error message if the 
         ''' upstream element type is not matched of the required 
         ''' target type.
+        ''' 
+        ''' this function also will returns a null reference error
+        ''' message if the given <paramref name="upstream"/> data is
+        ''' ``Nothing``.
         ''' </returns>
         Public Shared Function TryCreatePipeline(Of T)(upstream As Object, env As Environment,
                                                        Optional suppress As Boolean = False,

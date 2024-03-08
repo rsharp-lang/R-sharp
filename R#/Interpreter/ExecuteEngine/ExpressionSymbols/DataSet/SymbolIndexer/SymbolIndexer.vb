@@ -63,6 +63,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Algorithm.base
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -289,7 +290,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     If obj.columns.ContainsKey(strKey) Then
                         Return obj.getColumnVector(strKey)
                     Else
-                        Return Internal.debug.stop({"undefined columns selected", "column key: " & strKey}, envir)
+                        Return Internal.debug.stop({
+                            "undefined columns selected",
+                            "column key: " & strKey,
+                            "columns of your dataframe: " & obj.colnames.GetJson
+                        }, envir)
                     End If
                 End If
             Else

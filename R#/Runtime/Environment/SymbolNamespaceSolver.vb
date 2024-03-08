@@ -75,6 +75,11 @@ Namespace Runtime
         ''' </summary>
         Friend ReadOnly funcOverloads As New Dictionary(Of String, Dictionary(Of String, RFunction))
 
+        ''' <summary>
+        ''' get namespace by a given package name
+        ''' </summary>
+        ''' <param name="ref"></param>
+        ''' <returns>returns nothing if the given package name is not existed in current environment</returns>
         Default Public ReadOnly Property GetNamespace(ref As String) As PackageEnvironment
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
