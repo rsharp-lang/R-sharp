@@ -68,7 +68,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports MarkdownHTML = Microsoft.VisualBasic.MIME.text.markdown.MakrdownRender
+Imports MarkdownHTML = Microsoft.VisualBasic.MIME.text.markdown.MarkdownRender
 Imports pkg = SMRUCC.Rsharp.Development.Package.Package
 
 ''' <summary>

@@ -66,7 +66,7 @@ Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports MarkdownHTML = Microsoft.VisualBasic.MIME.text.markdown.MakrdownRender
+Imports MarkdownHTML = Microsoft.VisualBasic.MIME.text.markdown.MarkdownRender
 
 ''' <summary>
 ''' R# help document tools
