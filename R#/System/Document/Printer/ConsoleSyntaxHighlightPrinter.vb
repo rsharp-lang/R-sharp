@@ -61,6 +61,8 @@ Namespace Development
                         Call dev.Write(t.text)
                 End Select
             Next
+
+            Call dev.WriteLine()
         End Sub
 
         <Extension>
