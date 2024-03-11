@@ -88,6 +88,12 @@ Namespace Development.Package
 
         Friend ReadOnly attached As New Dictionary(Of String, Package)
 
+        Public ReadOnly Property packageRepository As LocalPackageDatabase
+            Get
+                Return pkgDb
+            End Get
+        End Property
+
         Sub New(config As Options)
             Me.pkgDb = LocalPackageDatabase.Load(config.lib)
             Me.config = config

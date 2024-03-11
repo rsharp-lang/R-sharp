@@ -115,7 +115,7 @@ Namespace Development.Package
     Public Class PackageLoaderEntry : Inherits PackageInfo
 
         ''' <summary>
-        ''' The package loader entry information
+        ''' The package loader clr type entry information
         ''' </summary>
         ''' <returns></returns>
         Public Property [module] As TypeInfo

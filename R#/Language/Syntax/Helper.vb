@@ -1,5 +1,6 @@
 ﻿
 Imports System.Runtime.InteropServices
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime.Components
 
@@ -33,16 +34,44 @@ Namespace Language.Syntax
             Return False
         End Function
 
+        ReadOnly likelySymbolName As Index(Of TokenType) = {TokenType.identifier, TokenType.keyword}
+
         Public Function EndWithIdentifier(line As String, <Out> ByRef symbol As String) As Boolean
             Dim tokens As Token() = Rscript.GetTokens(line)
 
-            If tokens.Length > 0 AndAlso (tokens.Last.name = TokenType.identifier OrElse tokens.Last.name = TokenType.keyword) Then
+            If tokens.Length > 0 AndAlso tokens.Last.name Like likelySymbolName Then
                 Dim last As Token = tokens.Last
                 Dim s As String = last.text
 
                 If Not s.StringEmpty Then
                     symbol = s
                     Return True
+                End If
+            End If
+
+            Return False
+        End Function
+
+        Public Function TryRequirePackage(line As String, <Out> ByRef package_prefix As String) As Boolean
+            Dim tokens As Token() = Rscript.GetTokens(line)
+
+            If tokens.Length >= 2 Then
+                Dim last = tokens.Last
+
+                If last.name Like likelySymbolName AndAlso tokens.Length >= 3 Then
+                    Dim func = tokens(tokens.Length - 3)
+
+                    If func.name Like likelySymbolName AndAlso (func.text = "require" OrElse func.text = "library") Then
+                        package_prefix = last.text
+                        Return True
+                    End If
+                ElseIf last.name = TokenType.open Then
+                    Dim func = tokens(tokens.Length - 2)
+
+                    If func.name Like likelySymbolName AndAlso (func.text = "require" OrElse func.text = "library") Then
+                        package_prefix = ""
+                        Return True
+                    End If
                 End If
             End If
 
