@@ -54,10 +54,11 @@ Namespace Development
                     Case TokenType.newLine : Call dev.WriteLine()
                     Case TokenType.annotation : Call dev.Write(New TextSpan(t.text, annotation))
                     Case TokenType.delimiter : Call dev.Write(t.text)
-                    Case TokenType.stringLiteral, TokenType.stringInterpolation : Call dev.Write(New TextSpan(t.text, text))
+                    Case TokenType.stringLiteral, TokenType.stringInterpolation, TokenType.cliShellInvoke : Call dev.Write(New TextSpan(t.text, text))
+                    Case TokenType.comment : Call dev.Write(New TextSpan(t.text, comment))
 
                     Case Else
-                        Throw New NotImplementedException
+                        Call dev.Write(t.text)
                 End Select
             Next
         End Sub
