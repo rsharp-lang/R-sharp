@@ -705,12 +705,12 @@ Namespace Runtime
         ''' get all function symbols based on the environment context lineage to the root environment
         ''' </summary>
         ''' <returns></returns>
-        Public Function EnumerateAllFunctions() As IEnumerable(Of Symbol)
+        Public Function EnumerateAllFunctions(Optional enumerateParents As Boolean = True) As IEnumerable(Of Symbol)
             Dim list = funcSymbols.SafeQuery _
                 .Select(Function(fun) fun.Value) _
                 .ToList
 
-            If Not parent Is Nothing Then
+            If enumerateParents AndAlso Not parent Is Nothing Then
                 list.AddRange(parent.EnumerateAllFunctions)
             End If
 
@@ -723,12 +723,12 @@ Namespace Runtime
         ''' <returns>
         ''' not includes the function symbols
         ''' </returns>
-        Public Function EnumerateAllSymbols() As IEnumerable(Of Symbol)
+        Public Function EnumerateAllSymbols(Optional enumerateParents As Boolean = True) As IEnumerable(Of Symbol)
             Dim list = symbols.SafeQuery _
                 .Select(Function(fun) fun.Value) _
                 .ToList
 
-            If Not parent Is Nothing Then
+            If enumerateParents AndAlso Not parent Is Nothing Then
                 list.AddRange(parent.EnumerateAllSymbols)
             End If
 

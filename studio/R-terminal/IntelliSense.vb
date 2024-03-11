@@ -32,8 +32,8 @@ Friend Class IntelliSense
             Return {}
         Else
             Return namespace_loaded _
-                .EnumerateAllSymbols _
-                .JoinIterates(namespace_loaded.EnumerateAllFunctions) _
+                .EnumerateAllSymbols(enumerateParents:=False) _
+                .JoinIterates(namespace_loaded.EnumerateAllFunctions(enumerateParents:=False)) _
                 .Select(Function(s) s.name) _
                 .Distinct _
                 .ToArray
