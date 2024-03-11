@@ -75,11 +75,14 @@ Namespace Runtime.Internal.Invokes
         ''' table.
         ''' </summary>
         ''' <param name="name">character vector of file names</param>
-        ''' <param name="[default]">
+        ''' <param name="default">
         ''' the value to use if no MIME type is found in the table for 
         ''' the given file name/extension.
         ''' </param>
         ''' <returns></returns>
+        ''' <example>
+        ''' guessMIMEType(["file.json" "data.dat" "image.png" "page.html"])
+        ''' </example>
         <ExportAPI("guessMIMEType")>
         Public Function guessMIMEType(<RRawVectorArgument>
                                       name As Object,
@@ -91,7 +94,7 @@ Namespace Runtime.Internal.Invokes
                 eval:=Function(filename)
                           Dim mime As ContentType = filename.FileMimeType(defaultUnknown:=False)
 
-                          If mime.IsEmpty Then
+                          If mime Is Nothing Then
                               Return [default]
                           Else
                               Return mime.MIMEType

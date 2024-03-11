@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
+Imports rLang = SMRUCC.Rsharp.Language.Syntax
 
 Friend Class IntelliSense
 
@@ -78,7 +79,7 @@ Friend Class IntelliSense
         Dim prefix As String = Nothing
         Dim ls As String()
 
-        If SMRUCC.Rsharp.Language.Syntax.IsStringOpen(s, prefix) Then
+        If rLang.IsStringOpen(s, prefix) Then
             Return GetFileNamesCompletion(s, prefix)
         Else
             prefix = s.Substring(0, pos)
@@ -96,6 +97,10 @@ Friend Class IntelliSense
                 ls = packageFunctions(packageName).ToArray
             End If
         Else
+            If rLang.EndWithIdentifier(prefix, prefix) Then
+                pos = prefix.Length
+            End If
+
             ls = AllSymbols _
                 .Where(Function(c) c.StartsWith(prefix, StringComparison.Ordinal)) _
                 .Select(Function(c) c.Substring(pos)) _

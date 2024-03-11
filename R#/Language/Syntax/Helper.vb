@@ -32,5 +32,21 @@ Namespace Language.Syntax
 
             Return False
         End Function
+
+        Public Function EndWithIdentifier(line As String, <Out> ByRef symbol As String) As Boolean
+            Dim tokens As Token() = Rscript.GetTokens(line)
+
+            If tokens.Length > 0 AndAlso (tokens.Last.name = TokenType.identifier OrElse tokens.Last.name = TokenType.keyword) Then
+                Dim last As Token = tokens.Last
+                Dim s As String = last.text
+
+                If Not s.StringEmpty Then
+                    symbol = s
+                    Return True
+                End If
+            End If
+
+            Return False
+        End Function
     End Module
 End Namespace
