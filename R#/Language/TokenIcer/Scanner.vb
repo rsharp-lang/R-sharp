@@ -128,13 +128,17 @@ Namespace Language.TokenIcer
         End Property
 
         <DebuggerStepThrough>
-        Sub New(source As [Variant](Of String, CharPtr), Optional tokenStringMode As Boolean = False)
+        Sub New(source As [Variant](Of String, CharPtr),
+                Optional tokenStringMode As Boolean = False,
+                Optional keepsDelimiter As Boolean = False)
+
             If source Like GetType(String) Then
                 Me.code = source.TryCast(Of String).SolveStream
             Else
                 Me.code = source.TryCast(Of CharPtr)
             End If
 
+            Me.keepsDelimiter = keepsDelimiter
             Me.tokenStringMode = tokenStringMode
         End Sub
 

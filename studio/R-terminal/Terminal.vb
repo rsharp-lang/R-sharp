@@ -66,6 +66,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Terminal.LineEdit
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
@@ -203,7 +204,9 @@ RE0:
         If docs Is Nothing Then
             Return Nothing
         Else
-            Return vbCrLf & " " & docs.example
+            Dim code_str As String = vbCrLf & " " & docs.example
+            Call ConsoleSyntaxHighlightPrinter.PrintCode(code_str, env.globalEnvironment.stdout)
+            Return code_str
         End If
     End Function
 #End Region

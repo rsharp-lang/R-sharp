@@ -66,7 +66,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Module Rscript
 
-    Dim echo As Index(Of String) = {"print", "cat", "echo", "q", "quit", "require", "library", "str"}
+    Dim echo As Index(Of String) = {"print", "cat", "echo", "q", "quit", "require", "library", "str", "example"}
 
     ''' <summary>
     ''' handle data object auto print
