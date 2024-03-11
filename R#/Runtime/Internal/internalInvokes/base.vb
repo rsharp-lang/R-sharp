@@ -634,9 +634,15 @@ Namespace Runtime.Internal.Invokes
         ''' # for the vector literal, use the syntax of [] literal is better:
         ''' 
         ''' # use c() function
-        ''' c(1,2,3,4,5,6)
+        ''' c(1,2,3,4,5,6);
         ''' # is equals to the vector literal syntax
-        ''' [1 2 3 4 5 6]
+        ''' [1 2 3 4 5 6];
+        ''' 
+        ''' # create string vector
+        ''' c("a","b","c","d");
+        ''' 
+        ''' # create logical vector
+        ''' c(TRUE, TRUE, FALSE);
         ''' </example>
         <ExportAPI("c")>
         Public Function c(<RListObjectArgument> values As Object, Optional env As Environment = Nothing) As Object
