@@ -46,6 +46,7 @@ Namespace Development
             Dim comment As New ConsoleFormat With {.Bold = False, .Underline = False, .Foreground = AnsiColor.Green, .Background = AnsiColor.Black}
             Dim annotation As New ConsoleFormat With {.Bold = True, .Underline = True, .Foreground = AnsiColor.White, .Background = AnsiColor.Black}
             Dim text As New ConsoleFormat With {.Bold = False, .Underline = False, .Foreground = AnsiColor.Magenta, .Background = AnsiColor.Black}
+            Dim word As New ConsoleFormat With {.Bold = False, .Underline = False, .Background = AnsiColor.Black, .Foreground = AnsiColor.White, .Inverted = False}
 
             For Each t As Token In tokens
                 Select Case t.name
@@ -55,13 +56,13 @@ Namespace Development
                         Call dev.Write(New TextSpan(t.text, keyword))
                     Case TokenType.newLine : Call dev.WriteLine()
                     Case TokenType.annotation : Call dev.Write(New TextSpan(t.text, annotation))
-                    Case TokenType.delimiter : Call dev.Write(t.text)
+                    Case TokenType.delimiter : Call dev.Write(New TextSpan(t.text, word))
                     Case TokenType.stringLiteral, TokenType.stringInterpolation, TokenType.cliShellInvoke
                         Call dev.Write(New TextSpan(t.text, text))
                     Case TokenType.comment : Call dev.Write(New TextSpan(t.text, comment))
 
                     Case Else
-                        Call dev.Write(t.text)
+                        Call dev.Write(New TextSpan(t.text, word))
                 End Select
             Next
 
