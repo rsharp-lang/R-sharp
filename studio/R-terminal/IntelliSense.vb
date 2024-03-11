@@ -96,22 +96,22 @@ Friend Class IntelliSense
             Else
                 ls = packageFunctions(packageName).ToArray
             End If
+        ElseIf rLang.TryRequirePackage(prefix, prefix) Then
+            Dim repo = R.globalEnvir.packages.packageRepository
+            Dim lib_loc As String = R.globalEnvir.options.lib_loc
+
+            pos = prefix.Length
+            ls = repo _
+                .enumerateClrBases _
+                .JoinIterates(repo.enumerateNugets(lib_loc)) _
+                .Where(Function(c) c.StartsWith(prefix, StringComparison.Ordinal)) _
+                .Select(Function(c) c.Substring(pos)) _
+                .ToArray
+
+            Return New Completion(prefix, ls)
         Else
             If rLang.EndWithIdentifier(prefix, prefix) Then
                 pos = prefix.Length
-            ElseIf rLang.TryRequirePackage(prefix, prefix) Then
-                Dim repo = R.globalEnvir.packages.packageRepository
-                Dim lib_loc As String = R.globalEnvir.options.lib_loc
-
-                pos = prefix.Length
-                ls = repo _
-                    .enumerateClrBases _
-                    .JoinIterates(repo.enumerateNugets(lib_loc)) _
-                    .Where(Function(c) c.StartsWith(prefix, StringComparison.Ordinal)) _
-                    .Select(Function(c) c.Substring(pos)) _
-                    .ToArray
-
-                Return New Completion(prefix, ls)
             End If
 
             ls = AllSymbols _
