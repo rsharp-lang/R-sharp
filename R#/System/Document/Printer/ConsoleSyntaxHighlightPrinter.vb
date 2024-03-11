@@ -57,7 +57,9 @@ Namespace Development
                     Case TokenType.newLine : Call dev.WriteLine()
                     Case TokenType.annotation : Call dev.Write(New TextSpan(t.text, annotation))
                     Case TokenType.delimiter : Call dev.Write(New TextSpan(t.text, word))
-                    Case TokenType.stringLiteral, TokenType.stringInterpolation, TokenType.cliShellInvoke
+                    Case TokenType.stringLiteral
+                        Call dev.Write(New TextSpan("""" & t.text & """", text))
+                    Case TokenType.stringInterpolation, TokenType.cliShellInvoke
                         Call dev.Write(New TextSpan(t.text, text))
                     Case TokenType.comment : Call dev.Write(New TextSpan(t.text, comment))
 
