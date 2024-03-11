@@ -49,12 +49,15 @@ Namespace Development
 
             For Each t As Token In tokens
                 Select Case t.name
-                    Case TokenType.booleanLiteral, TokenType.keyword, TokenType.missingLiteral
+                    Case TokenType.booleanLiteral, TokenType.missingLiteral
                         Call dev.Write(New TextSpan(t.text.ToUpper, keyword))
+                    Case TokenType.keyword
+                        Call dev.Write(New TextSpan(t.text, keyword))
                     Case TokenType.newLine : Call dev.WriteLine()
                     Case TokenType.annotation : Call dev.Write(New TextSpan(t.text, annotation))
                     Case TokenType.delimiter : Call dev.Write(t.text)
-                    Case TokenType.stringLiteral, TokenType.stringInterpolation, TokenType.cliShellInvoke : Call dev.Write(New TextSpan(t.text, text))
+                    Case TokenType.stringLiteral, TokenType.stringInterpolation, TokenType.cliShellInvoke
+                        Call dev.Write(New TextSpan(t.text, text))
                     Case TokenType.comment : Call dev.Write(New TextSpan(t.text, comment))
 
                     Case Else
@@ -67,7 +70,31 @@ Namespace Development
 
         <Extension>
         Private Sub PrintAsHtmlSpans(tokens As IEnumerable(Of Token), dev As TextWriter)
+            Dim keyword As String = "color: blue;"
+            Dim comment As String = "color: green;"
+            Dim annotation As String = ""
+            Dim text As String = "color: red;"
 
+            For Each t As Token In tokens
+                Select Case t.name
+                    Case TokenType.booleanLiteral, TokenType.missingLiteral
+                        Call dev.Write($"<span style='{keyword}'>{t.text.ToUpper}</span>")
+                    Case TokenType.keyword
+                        Call dev.Write($"<span style='{keyword}'>{t.text}</span>")
+                    Case TokenType.newLine : Call dev.WriteLine()
+                    Case TokenType.annotation : Call dev.Write($"<span style='{annotation}'>{t.text}</span>")
+                    Case TokenType.delimiter : Call dev.Write(t.text)
+                    Case TokenType.stringLiteral, TokenType.stringInterpolation, TokenType.cliShellInvoke
+                        Call dev.Write($"<span style='{text}'>{t.text}</span>")
+                    Case TokenType.comment
+                        Call dev.Write($"<span style='{comment}'>{t.text}</span>")
+
+                    Case Else
+                        Call dev.Write(t.text)
+                End Select
+            Next
+
+            Call dev.WriteLine()
         End Sub
     End Module
 End Namespace
