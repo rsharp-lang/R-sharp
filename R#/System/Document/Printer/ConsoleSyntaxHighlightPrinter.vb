@@ -42,11 +42,18 @@ Namespace Development
 
         <Extension>
         Private Sub PrintAsAnsiSequence(tokens As IEnumerable(Of Token), dev As TextWriter)
-            Dim keyword As New ConsoleFormat With {.Bold = True, .Underline = False, .Foreground = AnsiColor.Black, .Background = AnsiColor.Black}
+            Dim keyword As New ConsoleFormat With {.Bold = True, .Underline = False, .Foreground = AnsiColor.Blue, .Background = AnsiColor.Black}
             Dim comment As New ConsoleFormat With {.Bold = False, .Underline = False, .Foreground = AnsiColor.Green, .Background = AnsiColor.Black}
             Dim annotation As New ConsoleFormat With {.Bold = True, .Underline = True, .Foreground = AnsiColor.White, .Background = AnsiColor.Black}
             Dim text As New ConsoleFormat With {.Bold = False, .Underline = False, .Foreground = AnsiColor.Magenta, .Background = AnsiColor.Black}
             Dim word As New ConsoleFormat With {.Bold = False, .Underline = False, .Background = AnsiColor.Black, .Foreground = AnsiColor.White, .Inverted = False}
+            Dim link As New ConsoleFormat With {.Bold = False, .Underline = True, .Background = AnsiColor.Black, .Foreground = AnsiColor.Blue}
+            Dim number As New ConsoleFormat With {.Bold = False, .Underline = False, .Inverted = False, .Background = AnsiColor.Black, .Foreground = AnsiColor.BrightCyan}
+            Dim terminator As New ConsoleFormat With {.Bold = True, .Inverted = False, .Background = AnsiColor.Black, .Foreground = AnsiColor.Red, .Underline = False}
+            Dim [default] As New ConsoleFormat(Console.ForegroundColor, Console.BackgroundColor)
+
+            Call dev.WriteLine()
+            Call dev.WriteLine()
 
             For Each t As Token In tokens
                 Select Case t.name
@@ -58,16 +65,26 @@ Namespace Development
                     Case TokenType.annotation : Call dev.Write(New TextSpan(t.text, annotation))
                     Case TokenType.delimiter : Call dev.Write(New TextSpan(t.text, word))
                     Case TokenType.stringLiteral
-                        Call dev.Write(New TextSpan("""" & t.text & """", text))
+                        If t.text.IsURLPattern Then
+                            Call dev.Write(New TextSpan("""" & t.text & """", link))
+                        Else
+                            Call dev.Write(New TextSpan("""" & t.text & """", text))
+                        End If
                     Case TokenType.stringInterpolation, TokenType.cliShellInvoke
                         Call dev.Write(New TextSpan(t.text, text))
                     Case TokenType.comment : Call dev.Write(New TextSpan(t.text, comment))
-
+                    Case TokenType.integerLiteral, TokenType.numberLiteral
+                        Call dev.Write(New TextSpan(t.text, number))
+                    Case TokenType.terminator
+                        Call dev.Write(New TextSpan(t.text, terminator))
                     Case Else
                         Call dev.Write(New TextSpan(t.text, word))
                 End Select
             Next
 
+            ' restore to default style
+            Call dev.Write(New TextSpan(" ", [default]))
+            Call dev.WriteLine()
             Call dev.WriteLine()
         End Sub
 
