@@ -245,17 +245,17 @@ Module Visualize
 
                                 If value Is Nothing Then
                                     If showUntexture Then
-                                        Call gr.DrawCircle(center, r, colorBrush)
+                                        Call gr.DrawCircle(center, r.Average, colorBrush)
                                     End If
                                 Else
                                     Dim textureBrush As Brush = value.GetBrush
 
                                     If TypeOf textureBrush Is SolidBrush Then
-                                        Call gr.DrawCircle(center, r, textureBrush)
+                                        Call gr.DrawCircle(center, r.Average, textureBrush)
                                     Else
                                         Dim res = value.LoadImage.ColorReplace(Color.White, Color.Transparent)
                                         Dim size = res.Size
-                                        Dim maxR = r * 2.5
+                                        Dim maxR = r.Average * 2.5
                                         Dim scale = stdNum.Max(size.Width, size.Height) / maxR
                                         Dim w! = size.Width / scale
                                         Dim h! = size.Height / scale
