@@ -218,10 +218,12 @@ Module HDSutils
     ''' <param name="dir">the default directory path is root, for get all data files</param>
     ''' <returns></returns>
     <ExportAPI("files")>
+    <RApiReturn(GetType(StreamObject))>
     Public Function listFiles(pack As StreamPack,
                               Optional dir As String = "/",
                               Optional excludes_dir As Boolean = False,
                               Optional recursive As Boolean = True,
+                              Optional size_desc As Boolean = False,
                               Optional env As Environment = Nothing) As Object
 
         Dim objs As StreamObject()
@@ -251,6 +253,15 @@ Module HDSutils
         If excludes_dir Then
             objs = objs _
                 .Where(Function(o) TypeOf o Is StreamBlock) _
+                .ToArray
+        End If
+
+        If size_desc Then
+            objs = objs _
+                .OrderByDescending(
+                    Function(o)
+                        Return If(TypeOf o Is StreamBlock, DirectCast(o, StreamBlock).size, 0)
+                    End Function) _
                 .ToArray
         End If
 
