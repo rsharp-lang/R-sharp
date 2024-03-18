@@ -70,6 +70,7 @@ Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
 Imports Microsoft.VisualBasic.DataMining.BinaryTree
+Imports Microsoft.VisualBasic.DataMining.BinaryTree.AffinityPropagation
 Imports Microsoft.VisualBasic.DataMining.Clustering
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
 Imports Microsoft.VisualBasic.DataMining.DBSCAN
@@ -554,6 +555,40 @@ Module clustering
         Else
             Return builder.Solve
         End If
+    End Function
+
+    <ExportAPI("affinity_propagation")>
+    <RApiReturn(GetType(EntityClusterModel))>
+    Public Function AffinityPropagationClustering(<RRawVectorArgument> x As Object,
+                                                  Optional damping As Single = 0.9F,
+                                                  Optional max_iteration As Integer = 1000,
+                                                  Optional convergence As Integer = 200,
+                                                  Optional env As Environment = Nothing) As Object
+        If x Is Nothing Then
+            Return Nothing
+        End If
+
+        Dim model = DataMiningDataSet.getDataModel(x, env)
+
+        If model Like GetType(Message) Then
+            Return model.TryCast(Of Message)
+        End If
+
+        Dim rawdata = model.TryCast(Of EntityClusterModel())
+        Dim maps As New DataSetConvertor(rawdata)
+        Dim points = maps.GetVectors(rawdata).ToArray
+        Dim alg As New AffinityPropagation(
+            ds:=points,
+            damping:=damping,
+            max_iteration:=max_iteration,
+            convergence:=convergence)
+        Dim clusters As Integer() = alg.Fit
+
+        For i As Integer = 0 To clusters.Length - 1
+            rawdata(i).Cluster = clusters(i)
+        Next
+
+        Return rawdata
     End Function
 
     ''' <summary>
