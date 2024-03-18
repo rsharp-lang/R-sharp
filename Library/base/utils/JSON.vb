@@ -117,20 +117,27 @@ Module JSON
     Public Function json_decode(str As String,
                                 Optional throwEx As Boolean = True,
                                 Optional [typeof] As Object = Nothing,
+                                Optional strict_vector_syntax As Boolean = True,
                                 Optional env As Environment = Nothing) As Object
 
         Dim schema As Type = env.globalEnvironment.GetType([typeof])
 
         If env.globalEnvironment.debugMode Then
             If schema Is Nothing Then
-                Return fromJSON(str, raw:=False, env:=env)
+                Return fromJSON(str,
+                                raw:=False,
+                                strict_vector_syntax:=strict_vector_syntax,
+                                env:=env)
             Else
                 Return str.LoadObject(schema)
             End If
         Else
             Try
                 If schema Is Nothing Then
-                    Return fromJSON(str, raw:=False, env:=env)
+                    Return fromJSON(str,
+                                    raw:=False,
+                                    strict_vector_syntax:=strict_vector_syntax,
+                                    env:=env)
                 Else
                     Return str.LoadObject(schema)
                 End If
@@ -177,10 +184,11 @@ Module JSON
     <ExportAPI("parseJSON")>
     Public Function fromJSON(str As Object,
                              Optional raw As Boolean = False,
+                             Optional strict_vector_syntax As Boolean = True,
                              Optional env As Environment = Nothing) As Object
 
         If TypeOf str Is String Then
-            Return CStr(str).ParseJSONinternal(raw, env)
+            Return CStr(str).ParseJSONinternal(raw, strict_vector_syntax, env)
         ElseIf TypeOf str Is JsonElement Then
             If raw Then
                 Return str

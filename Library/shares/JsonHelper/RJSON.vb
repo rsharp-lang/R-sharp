@@ -106,14 +106,14 @@ Module RJSON
     ''' this function may returns an error message if the environment config of `strict` is TRUE
     ''' </remarks>
     <Extension>
-    Public Function ParseJSONinternal(str As String, raw As Boolean, env As Environment) As Object
+    Public Function ParseJSONinternal(str As String, raw As Boolean, strict_vector_syntax As Boolean, env As Environment) As Object
         Dim rawElement As JsonElement
 
-        If CStr(str).TextEquals("null") Then
+        If str.StringEmpty OrElse str.TextEquals("null") Then
             env.AddMessage("the given input json string is literal of 'null'.")
             Return Nothing
         Else
-            rawElement = New JsonParser(str).OpenJSON()
+            rawElement = New JsonParser(str, strictVectorSyntax:=strict_vector_syntax).OpenJSON()
         End If
 
         If raw Then
