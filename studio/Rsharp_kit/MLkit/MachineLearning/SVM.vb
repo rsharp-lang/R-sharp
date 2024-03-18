@@ -478,7 +478,7 @@ Module SVMkit
         Dim jsonObj As JsonObject
 
         If TypeOf x Is String Then
-            jsonObj = New json.JsonParser().OpenJSON(x)
+            jsonObj = New json.JsonParser(CStr(x)).OpenJSON()
         ElseIf TypeOf x Is JsonObject Then
             jsonObj = x
         Else

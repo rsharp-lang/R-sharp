@@ -113,7 +113,7 @@ Module RJSON
             env.AddMessage("the given input json string is literal of 'null'.")
             Return Nothing
         Else
-            rawElement = New JsonParser().OpenJSON(str)
+            rawElement = New JsonParser(str).OpenJSON()
         End If
 
         If raw Then

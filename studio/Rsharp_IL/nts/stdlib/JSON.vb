@@ -64,7 +64,7 @@ Namespace jsstd
 
         <ExportAPI("parse")>
         Public Function parse(json As String, Optional env As Environment = Nothing) As Object
-            Dim rawElement As JsonElement = New JsonParser().OpenJSON(json)
+            Dim rawElement As JsonElement = New JsonParser(json).OpenJSON()
             Dim obj = rawElement.createRObj(env)
             Return obj
         End Function

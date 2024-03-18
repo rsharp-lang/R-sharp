@@ -195,7 +195,7 @@ Module RawIO
     <Extension>
     Private Iterator Function dumpJSON(text As IEnumerable(Of String), projection As String()) As IEnumerable(Of String())
         For Each line As String In text
-            Dim json As JsonObject = New JsonParser().OpenJSON(line)
+            Dim json As JsonObject = New JsonParser(line).OpenJSON()
             Dim vals As String() = projection _
                 .Select(Function(name)
                             Return json(name).AsString(decodeMetachar:=True)
