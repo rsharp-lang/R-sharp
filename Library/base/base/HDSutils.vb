@@ -307,11 +307,18 @@ Module HDSutils
     ''' <param name="fileName"></param>
     ''' <returns></returns>
     <ExportAPI("getText")>
-    Public Function readText(pack As StreamPack, fileName As String,
+    Public Function readText(pack As StreamPack, fileName As Object,
                              Optional encoding As Object = "utf8",
                              Optional env As Environment = Nothing) As String
 
-        Dim file As StreamBlock = pack.GetObject(fileName)
+        Dim file As StreamBlock
+
+        If TypeOf fileName Is StreamBlock Then
+            file = fileName
+        Else
+            file = pack.GetObject(CStr(fileName))
+        End If
+
         Dim encoder = SMRUCC.Rsharp.GetEncoding(encoding)
 
         If file Is Nothing Then
