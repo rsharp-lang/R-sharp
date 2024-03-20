@@ -66,7 +66,9 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 
@@ -115,6 +117,10 @@ Namespace Runtime.Internal
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function [stop](message As Object, envir As Environment, Optional suppress As Boolean = False) As Message
             Dim debugMode As Boolean = envir.globalEnvironment.debugMode AndAlso Not suppress
+            ' dump sessioninfo to the error log file automatically
+            Dim session As RSessionInfo = etc.sessionInfo(envir).target
+
+            Call App.LogFile.log(MSG_TYPES.DEBUG, session.ToString, "dump_rsharp_sessioninfo")
 
             If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception), strict:=False) Then
                 Call App.LogException(DirectCast(message, Exception), trace:=getEnvironmentStack(envir).JoinBy(vbCrLf))
