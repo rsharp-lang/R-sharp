@@ -134,14 +134,17 @@ Namespace Runtime.Internal
                 If debugMode Then
                     Dim err As New Exception(DirectCast(message, Message).message.JoinBy("; "))
                     Call App.LogException(err)
+
                     Throw err
                 Else
                     Return message
                 End If
             Else
+                Dim err As New Exception(CLRVector.asCharacter(message).JoinBy("; "))
+
+                Call App.LogException(err)
+
                 If debugMode Then
-                    Dim err As New Exception(CLRVector.asCharacter(message).JoinBy("; "))
-                    Call App.LogException(err)
                     Throw err
                 Else
                     Return debug.CreateMessageInternal(message, envir, level:=MSG_TYPES.ERR)
