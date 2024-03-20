@@ -3116,6 +3116,7 @@ RE0:
         Public Function warning(<RRawVectorArgument> message As Object, Optional envir As Environment = Nothing) As Message
             Dim msg As Message = debug.CreateMessageInternal(message, envir, level:=MSG_TYPES.WRN)
             envir.messages.Add(msg)
+            App.LogFile.log(MSG_TYPES.WRN, msg.message.JoinBy(vbCrLf), "rsharp_warning")
             Return msg
         End Function
 
