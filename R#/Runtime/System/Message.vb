@@ -114,6 +114,20 @@ Namespace Runtime.Components
         End Function
 
         ''' <summary>
+        ''' convert the message level to warning level
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function AsWarning() As Message
+            Return New Message With {
+                .environmentStack = environmentStack.SafeQuery.ToArray,
+                .level = MSG_TYPES.WRN,
+                .message = message.SafeQuery.ToArray,
+                .source = source,
+                .trace = trace.SafeQuery.ToArray
+            }
+        End Function
+
+        ''' <summary>
         ''' throw the <see cref="Exception"/> data that cast from <see cref="ToCLRException()"/>
         ''' </summary>
         Public Sub ThrowCLRError()
