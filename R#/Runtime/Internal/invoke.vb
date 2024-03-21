@@ -78,7 +78,7 @@ Namespace Runtime.Internal
     ''' <summary>
     ''' The R internal function invoke helper module
     ''' </summary>
-    Friend Class invoke
+    Public NotInheritable Class invoke
 
         ''' <summary>
         ''' 内部函数索引
@@ -142,7 +142,10 @@ Namespace Runtime.Internal
             Call GetType(reshape2).DoCall(AddressOf pushEnvir)
         End Sub
 
-        Friend Shared Sub pushEnvir(baseModule As Type)
+        Private Sub New()
+        End Sub
+
+        Public Shared Sub pushEnvir(baseModule As Type)
             Try
                 Call ImportsPackage _
                     .GetAllApi(baseModule, includesInternal:=True) _

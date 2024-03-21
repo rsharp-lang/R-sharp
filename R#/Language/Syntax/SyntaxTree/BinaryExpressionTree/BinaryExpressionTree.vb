@@ -55,7 +55,6 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Serialization.Bencoding
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -64,7 +63,7 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Namespace Language.Syntax.SyntaxParser
 
-    Module BinaryExpressionTree
+    Public Module BinaryExpressionTree
 
         ''' <summary>
         ''' the math operators
@@ -232,8 +231,8 @@ Namespace Language.Syntax.SyntaxParser
                     Dim unary = tokenBlocks(Scan0)(Scan0)
 
                     If unary = (TokenType.operator, {"-", "+"}) Then
-                        If Not SyntaxResult = tokenBlocks.joinNegatives(buf, oplist, opts) Is Nothing Then
-                            Return SyntaxResult
+                        If Not syntaxResult = tokenBlocks.joinNegatives(buf, oplist, opts) Is Nothing Then
+                            Return syntaxResult
                         ElseIf buf = 1 Then
                             Return buf(Scan0).TryCast(Of SyntaxResult)
                         End If

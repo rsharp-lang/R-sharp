@@ -91,6 +91,11 @@ Namespace Interpreter
             execQueue = lines.ToArray
         End Sub
 
+        Sub New(lines As IEnumerable(Of Expression), rscript As Rscript)
+            Me.New(lines)
+            Me.Rscript = rscript
+        End Sub
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function Execute(envir As Environment) As Object
             Return New ExecutableLoop().Execute(execQueue, envir)

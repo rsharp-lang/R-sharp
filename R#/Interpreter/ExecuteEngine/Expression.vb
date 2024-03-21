@@ -113,7 +113,7 @@ Namespace Interpreter.ExecuteEngine
         ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
-        Friend Shared Function CreateExpression(code As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
+        Public Shared Function CreateExpression(code As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
             Return code _
                 .SplitByTopLevelDelimiter(TokenType.operator, includeKeyword:=True) _
                 .ParseExpression(opts)

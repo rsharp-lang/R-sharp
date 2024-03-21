@@ -61,7 +61,6 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
-Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Namespace Language.Syntax.SyntaxParser
@@ -71,7 +70,7 @@ Namespace Language.Syntax.SyntaxParser
     ''' </summary>
     <HideModuleName>
     <Extension>
-    Module ExpressionSignature
+    Public Module ExpressionSignature
 
         Friend ReadOnly iterateAssign As Index(Of String) = {"+=", "-=", "*=", "/="}
         Friend ReadOnly valueAssignOperatorSymbols As Index(Of String) = {"<-", "="}

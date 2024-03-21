@@ -111,6 +111,21 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Property
 
         ''' <summary>
+        ''' get name by index
+        ''' </summary>
+        ''' <param name="i"></param>
+        ''' <returns></returns>
+        Default Public ReadOnly Property getName(i As Integer) As String
+            Get
+                If m_names.TryCount <= i Then
+                    Return Nothing
+                Else
+                    Return m_names(i)
+                End If
+            End Get
+        End Property
+
+        ''' <summary>
         ''' get object value type for current new symbol
         ''' </summary>
         ''' <returns></returns>

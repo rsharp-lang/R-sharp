@@ -62,7 +62,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Namespace Runtime
 
     <HideModuleName>
-    Module EnvironmentExtensions
+    Public Module EnvironmentExtensions
 
         Public ReadOnly Property globalStackFrame As StackFrame
             <MethodImpl(MethodImplOptions.AggressiveInlining)>

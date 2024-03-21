@@ -89,7 +89,7 @@ Namespace Language.Syntax.SyntaxParser
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Friend Shared Function CreateError(opts As SyntaxBuilderOptions, err As Exception) As SyntaxError
+        Public Shared Function CreateError(opts As SyntaxBuilderOptions, err As Exception) As SyntaxError
             Return CreateError(opts, err, opts.fromSpan, opts.toSpan)
         End Function
 

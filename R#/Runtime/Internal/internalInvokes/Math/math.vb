@@ -91,7 +91,7 @@ Namespace Runtime.Internal.Invokes
     ''' </summary>
     ''' 
     <Package("math")>
-    Module math
+    Public Module math
 
         ''' <summary>
         ''' ### Rounding of Numbers

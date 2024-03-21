@@ -334,7 +334,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         ''' this function returns nothing if the given expression type 
         ''' is not implements for get symbol text
         ''' </returns>
-        Friend Shared Function GetSymbol(symbolName As Expression) As String
+        Public Shared Function GetSymbol(symbolName As Expression) As String
             Select Case symbolName.GetType
                 Case GetType(Literal)
                     With DirectCast(symbolName, Literal)
