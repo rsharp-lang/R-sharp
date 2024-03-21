@@ -7,7 +7,7 @@
     },
     "mzkit_debug": {
       "commandName": "Project",
-      "commandLineArgs": "\"G:/mzkit/src/mzkit/rstudio/pipeline/umap.R\" --input \"Z:\\tmp/mzkit_win32/.matrix_cache/f5dfc234eafd0716742e3b14b72a70c0.dat\" --save \"Z:/tmp/mzkit_win32/.matrix_cache/f5dfc234eafd0716742e3b14b72a70c0_umap3.csv\" --knn \"16\" --knniter \"64\" --localconnectivity \"1\" --bandwidth \"1\" --learningrate \"0.96\" --spectral_cos --read_bin --SetDllDirectory G:/mzkit/dist/bin/Rstudio/host",
+      "commandLineArgs": "E:\\mzkit\\src\\mzkit\\services\\test\\msi_test.R --SetDllDirectory /mzkit/dist/bin/Rstudio/host",
       "workingDirectory": "G:\\mzkit\\dist\\bin\\Rstudio\\bin"
     },
     "mzkit_desktop_debug": {
