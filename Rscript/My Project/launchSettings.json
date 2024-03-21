@@ -8,7 +8,7 @@
     "mzkit_debug": {
       "commandName": "Project",
       "commandLineArgs": "E:\\mzkit\\src\\mzkit\\services\\test\\msi_test.R --SetDllDirectory /mzkit/dist/bin/Rstudio/host",
-      "workingDirectory": "G:\\mzkit\\dist\\bin\\Rstudio\\bin"
+      "workingDirectory": "\\mzkit\\dist\\bin\\Rstudio\\bin"
     },
     "mzkit_desktop_debug": {
       "commandName": "Project",
