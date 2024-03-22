@@ -82,7 +82,6 @@
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\vs_solutions\dev\VisualStudio\VisualStudio.NET5.vbproj" />
     <ProjectReference Include="..\..\..\R#\Rsharp-netcore5.vbproj" />
     <ProjectReference Include="..\..\RData\RData.NET5.vbproj" />
-    <ProjectReference Include="..\..\Rsharp_IL\nts\nts.vbproj" />
     <ProjectReference Include="..\roxygenNet\roxygenNet-netcore5.vbproj" />
   </ItemGroup>
 
