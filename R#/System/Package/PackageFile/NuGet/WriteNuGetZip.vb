@@ -64,6 +64,7 @@ Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -354,6 +355,15 @@ Namespace Development.Package.File
             Dim dirRoot As String = pkg_dir.GetDirectoryFullPath.DoCall(AddressOf normPath)
 
             Using file As New StreamWriter(zip.CreateEntry("package/manifest/data.json").Open)
+                Dim check_duplicated_name = pkg.dataSymbols _
+                    .GroupBy(Function(d) getDataSymbolName(dirRoot, d.Key)) _
+                    .Where(Function(g) g.Count > 1) _
+                    .Keys
+
+                If check_duplicated_name.Any Then
+                    Throw New DuplicateNameException($"there is some file name in the ``data/`` directory is duplicated: {check_duplicated_name.GetJson}")
+                End If
+
                 text = pkg.dataSymbols _
                     .ToDictionary(Function(d) getDataSymbolName(dirRoot, d.Key),
                                   Function(d)
