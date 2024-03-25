@@ -227,9 +227,5 @@ Namespace Runtime.Components
                 Yield msg
             Next
         End Function
-
-        Public Iterator Function GetEnumerator() As IEnumerator Implements Enumeration(Of String).GetEnumerator
-            Yield GenericEnumerator()
-        End Function
     End Class
 End Namespace

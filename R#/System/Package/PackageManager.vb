@@ -443,6 +443,10 @@ Namespace Development.Package
         End Sub
 #End Region
 
+        ''' <summary>
+        ''' 从<see cref="LocalPackageDatabase.assemblies"/>中枚举出所有的<see cref="PackageLoaderEntry"/>
+        ''' </summary>
+        ''' <returns></returns>
         Public Iterator Function GenericEnumerator() As IEnumerator(Of Package) Implements Enumeration(Of Package).GenericEnumerator
             Dim pkg As Package
 
@@ -456,14 +460,6 @@ Namespace Development.Package
                     Yield pkg
                 End If
             Next
-        End Function
-
-        ''' <summary>
-        ''' 从<see cref="LocalPackageDatabase.assemblies"/>中枚举出所有的<see cref="PackageLoaderEntry"/>
-        ''' </summary>
-        ''' <returns></returns>
-        Public Iterator Function GetEnumerator() As IEnumerator Implements Enumeration(Of Package).GetEnumerator
-            Yield GenericEnumerator()
         End Function
     End Class
 End Namespace

@@ -188,9 +188,5 @@ Namespace Development.Package
                 Yield package
             Next
         End Function
-
-        Public Iterator Function GetEnumerator() As IEnumerator Implements Enumeration(Of PackageLoaderEntry).GetEnumerator
-            Yield GenericEnumerator()
-        End Function
     End Class
 End Namespace
