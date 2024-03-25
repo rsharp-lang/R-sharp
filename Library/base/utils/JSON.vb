@@ -54,11 +54,13 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -102,6 +104,29 @@ Module JSON
             .ToArray
     End Function
 
+    Private Function loadClrObjectFromJson(json_str As String, clr As Type, env As Environment) As Object
+        Dim ex As Exception = Nothing
+
+        json_str = Strings.Trim(json_str).Trim(ASCII.CR, ASCII.LF, ASCII.TAB, " "c)
+
+        If json_str.StartsWith("[") Then
+            ' is an array
+            If Not clr.IsArray Then
+                clr = clr.MakeArrayType
+            End If
+        End If
+
+        Static primitiveTypes As Type() = DataFramework _
+            .GetPrimitiveTypes _
+            .JoinIterates(DataFramework.GetPrimitiveTypes _
+            .Select(Function(scalar)
+                        Return scalar.MakeArrayType
+                    End Function)) _
+            .ToArray
+
+        Return json_str.LoadObject(clr, throwEx:=False, exception:=ex, knownTypes:=primitiveTypes)
+    End Function
+
     ''' <summary>
     ''' ### Decodes a JSON string
     ''' 
@@ -129,7 +154,7 @@ Module JSON
                                 strict_vector_syntax:=strict_vector_syntax,
                                 env:=env)
             Else
-                Return str.LoadObject(schema)
+                Return loadClrObjectFromJson(str, schema, env)
             End If
         Else
             Try
@@ -139,7 +164,7 @@ Module JSON
                                     strict_vector_syntax:=strict_vector_syntax,
                                     env:=env)
                 Else
-                    Return str.LoadObject(schema)
+                    Return loadClrObjectFromJson(str, schema, env)
                 End If
             Catch ex As Exception When throwEx
                 Return Internal.debug.stop(ex, env)
