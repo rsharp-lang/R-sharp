@@ -79,6 +79,29 @@ Namespace Runtime.Internal.Invokes
     <Package("env")>
     Module env
 
+        ''' <summary>
+        ''' ## Is an Object Defined?
+        ''' 
+        ''' Look for an R object of the given name and possibly return it
+        ''' </summary>
+        ''' <param name="name">
+        ''' a variable name (given As a character String Or a symbol).
+        ''' </param>
+        ''' <param name="envir">where to look for the object (see the details section);
+        ''' if omitted, the function will search as if the name of the object 
+        ''' appeared unquoted in an expression. an alternative way To specify an 
+        ''' environment To look In, but it Is usually simpler To just use the 
+        ''' where argument.
+        ''' </param>
+        ''' <returns>Logical, true if and only if an object of the correct name and mode is found.</returns>
+        ''' <example>
+        ''' const myEnvir = globalenv();
+        ''' 
+        ''' if (exists(myVarName, envir = myEnvir)) {
+        '''    r &lt;- get(myVarName, envir = myEnvir)
+        '''    ## ... deal with r ...
+        ''' }
+        ''' </example>
         <ExportAPI("exists")>
         Public Function exists(name As String, Optional envir As Environment = Nothing) As Boolean
             Return envir.FindSymbol(name) IsNot Nothing
@@ -144,6 +167,9 @@ Namespace Runtime.Internal.Invokes
         ''' should the enclosing frames of the environment be searched?
         ''' </param>
         ''' <returns></returns>
+        ''' <example>
+        ''' get(myVarName, envir = myEnvir)
+        ''' </example>
         <ExportAPI("get")>
         Public Function [get](x As Object, envir As Environment, Optional [inherits] As Boolean = True) As Object
             Dim name As String = REnv.asVector(Of Object)(x) _
