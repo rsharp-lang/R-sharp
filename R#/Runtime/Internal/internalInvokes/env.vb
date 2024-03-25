@@ -124,6 +124,9 @@ Namespace Runtime.Internal.Invokes
         ''' Note that assignment To an attached list Or data frame changes the 
         ''' attached copy And Not the original Object: see attach And With.
         ''' </remarks>
+        ''' <example>
+        ''' set(globalenv(), "symbol_name") &lt;- value;
+        ''' </example>
         <ExportAPI("set")>
         Public Function [set](env As Environment, name As String, <RByRefValueAssign> <RRawVectorArgument> value As Object) As Object
             Return env.AssignSymbol(name, value)
