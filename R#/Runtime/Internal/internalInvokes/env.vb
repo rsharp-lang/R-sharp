@@ -76,6 +76,9 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Invokes
 
+    ''' <summary>
+    ''' The r-sharp script runtime environment functions
+    ''' </summary>
     <Package("env")>
     Module env
 
