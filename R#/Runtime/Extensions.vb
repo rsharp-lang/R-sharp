@@ -108,7 +108,7 @@ Namespace Runtime
             Return GetType(Void)
         End Function
 
-        Public Function MeasureVectorTypes(array As Array, Optional unique As Boolean = True) As IEnumerable(Of Type)
+        Public Function MeasureVectorTypes(array As Array, Optional unique As Boolean = True, Optional excludeInterfaceOrAbstract As Boolean = False) As IEnumerable(Of Type)
             Dim arrayType As Type = array.GetType
             Dim x As Object
             Dim types As New List(Of Type)
@@ -117,8 +117,16 @@ Namespace Runtime
                 Return New Type() {}
             End If
 
-            If arrayType.HasElementType AndAlso Not arrayType.GetElementType Is GetType(Object) Then
-                Return New Type() {arrayType.GetElementType}
+            Dim elType As Type = arrayType.GetElementType
+
+            If arrayType.HasElementType AndAlso Not elType Is GetType(Object) Then
+                If excludeInterfaceOrAbstract Then
+                    If Not (elType.IsAbstract OrElse elType.IsInterface) Then
+                        Return New Type() {elType}
+                    End If
+                Else
+                    Return New Type() {elType}
+                End If
             End If
 
             For i As Integer = 0 To array.Length - 1

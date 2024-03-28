@@ -358,7 +358,13 @@ Namespace Runtime.Internal.Object
         End Function
 
         Private Shared Function TryCastObjectVector(Of T)(objs As Object(), env As Environment, suppress As Boolean) As pipeline
-            Dim types As Type() = MeasureVectorTypes(objs, unique:=False).ToArray
+            Dim target As Type = GetType(T)
+            Dim requireAbstractType As Boolean = target.IsAbstract OrElse target.IsInterface
+            Dim types As Type() = MeasureVectorTypes(
+                array:=objs,
+                unique:=False,
+                excludeInterfaceOrAbstract:=Not requireAbstractType
+            ).ToArray
             Dim type As Type = MeasureVectorType(types)
 
             If types.Length = 0 Then
