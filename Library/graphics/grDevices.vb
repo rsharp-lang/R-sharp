@@ -192,7 +192,14 @@ Public Module grDevices
 
                 Call DirectCast(image, Plot).Plot(wh, dpi, driver:=Drivers.SVG).Save(stream)
             Else
-                Return Message.InCompatibleType(GetType(Plot), file.GetType, env)
+                Dim message_str As String = "The given type is incompatible with the required type!"
+
+                If TypeOf image Is ImageData Then
+                    message_str &= "The data chart plot of the function for produce such data plot not supports the svg driver."
+                    message_str &= "Probably you should use the 'bitmap' or 'png' device for save this gdi+ raster image data to file."
+                End If
+
+                Return Message.InCompatibleType(GetType(SVGData), image.GetType, env, message_str)
             End If
         Else
             Call DirectCast(image, SVGData).Save(stream)
