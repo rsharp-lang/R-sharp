@@ -71,6 +71,7 @@ Partial Module CLI
     <Description("Create a new parallel thread process for running a new parallel task.")>
     <Argument("--master", False, CLITypes.Integer, AcceptTypes:={GetType(Integer)}, Description:="the TCP port of the master node.")>
     <Argument("--task", True, CLITypes.String, Description:="set the task name for current slave process, this option may affects the label tag of the global environment for run debug test.")>
+    <Argument("--delegate", True, CLITypes.String, Description:="the delegate function name in clr environment for solve the parallel task.")>
     Public Function parallelMode(args As CommandLine) As Integer
         Dim masterPort As Integer = args <= "--master"
         Dim logfile As String = args <= "--redirect_stdout"
@@ -125,6 +126,8 @@ Partial Module CLI
             .DoCall(Sub(pkg)
                         Call REngine.globalEnvir.ImportsStatic(pkg.package)
                     End Sub)
+
+        ' start to run the parallel task
         Call REngine.Invoke(parallelFunc, argv)
 
         ' 20221103 unsure for the bug that some working thread
