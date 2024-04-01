@@ -2,8 +2,7 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src /GCModeller/src/workbench/pkg/ --skip-src-build",
-      "workingDirectory": "E:\\biodeep\\biodeepdb_v3\\biodeepdb_v3\\.pkg"
+      "commandLineArgs": "--lambda biodeepMSMS::doMSMSalignment --SetDllDirectory \"E:\\GCModeller\\src\\R-sharp\\App\\net6.0\""
     },
     "mzkit_debug": {
       "commandName": "Project",
