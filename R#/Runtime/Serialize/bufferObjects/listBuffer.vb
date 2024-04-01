@@ -94,7 +94,7 @@ Namespace Runtime.Serialize
         End Function
 
         Public Overrides Sub Serialize(buffer As Stream)
-            Dim names As String() = listData.getNames
+            Dim names As String() = listData.slotKeys
             Dim text As Encoding = Encodings.UTF8.CodePage
             Dim tmpstr As String = names.GetJson
             Dim bytes As Byte() = text.GetBytes(tmpstr)
