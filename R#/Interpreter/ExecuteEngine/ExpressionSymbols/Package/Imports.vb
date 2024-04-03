@@ -376,7 +376,7 @@ load:       Return LoadLibrary(filepath, env, names)
                     Call hook_jsEnv(globalEnv, [namespace].namespace, [namespace].package)
                 Next
             Else
-                For Each required In names.Objects
+                For Each required As String In names.Objects
                     If packages.ContainsKey(required) Then
                         Call ImportsPackage.ImportsStatic(globalEnv, packages(required).package)
                         Call hook_jsEnv(globalEnv, required, packages(required).package)
