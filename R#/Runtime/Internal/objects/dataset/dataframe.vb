@@ -513,6 +513,11 @@ Namespace Runtime.Internal.Object
                 Dim i_raw As Integer() = CLRVector.asInteger(selector)
                 Dim i_offset As Integer()
 
+                If i_raw.All(Function(offset) offset < 0) Then
+                    ' removes rows
+                    Return FilterByRowIndex(i_raw, env)
+                End If
+
                 If i_raw.Any(Function(i) i <= 0) Then
                     ' is already zero-based
                     i_offset = i_raw
@@ -638,6 +643,24 @@ Namespace Runtime.Internal.Object
             Else
                 Return -1
             End If
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="skips">1-based index to be filter</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        Public Function FilterByRowIndex(skips As Integer(), env As Environment) As [Variant](Of dataframe, Message)
+            Dim skipsIndex As Index(Of String) = skips.Select(Function(i) i.ToString).Indexing
+            ' convert to zero-based selector index for make dataframe subsets 
+            Dim subsetIndex As Integer() = rownames _
+                .Sequence(offSet:=1) _
+                .Where(Function(i) Not i.ToString Like skipsIndex) _
+                .Select(Function(a) a - 1) _
+                .ToArray
+
+            Return GetByRowIndex(subsetIndex, env)
         End Function
 
         ''' <summary>
