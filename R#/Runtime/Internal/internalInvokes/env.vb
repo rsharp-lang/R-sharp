@@ -267,10 +267,15 @@ Namespace Runtime.Internal.Invokes
             Select Case opt.Name.ToLower
                 Case "package"
                     ' list all of the function api names in current package
-                    Dim package As Package = pkgMgr.FindPackage(opt.Value, Nothing)
+                    Dim ex As Exception = Nothing
+                    Dim package As Package = pkgMgr.FindPackage(opt.Value, env.globalEnvironment, ex)
 
                     If package Is Nothing Then
-                        Return debug.stop({"missing required package for query...", "package: " & opt.Value}, env)
+                        If Not ex Is Nothing Then
+                            Return debug.stop(New Exception("missing required package for query..." & "package: " & opt.Value, ex), env)
+                        Else
+                            Return debug.stop({"missing required package for query...", "package: " & opt.Value}, env)
+                        End If
                     Else
                         Return package.ls
                     End If

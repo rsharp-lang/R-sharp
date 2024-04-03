@@ -289,7 +289,7 @@ Namespace Runtime
             Dim RzipPackageFolder As String = Nothing
 
             If Not packages.hasLibPackage(packageName) Then
-                package = packages.FindPackage(packageName, exception)
+                package = packages.FindPackage(packageName, Me, exception)
             End If
 
             If package Is Nothing Then

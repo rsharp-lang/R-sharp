@@ -155,10 +155,12 @@ Namespace Development.Package
                 $"{level2Parent}/library"
             }
 
-            If env.options.hasOption([Imports].attach_lib_dir) Then
-                dllDirectory = {env.options.getOption([Imports].attach_lib_dir)} _
-                    .JoinIterates(dllDirectory) _
-                    .ToArray
+            If Not env Is Nothing Then
+                If env.options.hasOption([Imports].attach_lib_dir) Then
+                    dllDirectory = {env.options.getOption([Imports].attach_lib_dir)} _
+                        .JoinIterates(dllDirectory) _
+                        .ToArray
+                End If
             End If
 
             Dim loader As Type = [module].GetType(
