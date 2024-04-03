@@ -140,12 +140,17 @@ Namespace Development.Package.File
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' try to find the clr assembly file in current library folder
+        ''' </summary>
+        ''' <param name="assemblyName"></param>
+        ''' <returns></returns>
         Public Function FindAssemblyPath(assemblyName As String) As String
             ' 20220904
             ' the native library name will not be matched
             '
             If assembly.ContainsKey($"{assemblyName}.dll") Then
-#If netcore5 = 1 Then
+#If NETCOREAPP Then
                 ' is an installed package
                 Dim dllFile As String = $"{libPath}/lib/assembly/{assemblyName}.dll"
 
