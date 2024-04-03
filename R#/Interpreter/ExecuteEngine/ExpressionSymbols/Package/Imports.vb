@@ -128,6 +128,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
         Public ReadOnly Property scriptSource As String
 
+        Public Const attach_lib_dir As String = NameOf(attach_lib_dir)
+
         ''' <summary>
         ''' 当前的语句是否是用于导入其他的脚本文件模块？
         ''' </summary>

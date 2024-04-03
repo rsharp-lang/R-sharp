@@ -321,6 +321,10 @@ Namespace Development.Configuration
             Return $"{configValues.Count} configuration values: {configValues.Keys.Take(5).JoinBy(", ")}..."
         End Function
 
+        Public Function hasOption(opt As String) As Boolean
+            Return configValues.ContainsKey(opt)
+        End Function
+
         ''' <summary>
         ''' Get configuration value string, if the option is not exists in current configuration, 
         ''' then this function will create a new configuration value with use default value.
