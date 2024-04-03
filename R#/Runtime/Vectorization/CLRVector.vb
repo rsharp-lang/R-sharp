@@ -531,6 +531,8 @@ Namespace Runtime.Vectorization
         ''' </summary>
         ''' <param name="x"></param>
         ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function asObject(x As Object) As Object()
 #Disable Warning
             Return DirectCast(REnv.asVector(Of Object)(x), Object())
