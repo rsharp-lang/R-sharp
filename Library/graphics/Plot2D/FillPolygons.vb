@@ -92,8 +92,8 @@ Public Class FillPolygons : Inherits Plot
     Protected Overrides Sub PlotInternal(ByRef g As IGraphics, canvas As GraphicsRegion)
         Dim xTicks = union.xpoints.CreateAxisTicks
         Dim yTicks = union.ypoints.CreateAxisTicks
-        Dim x = d3js.scale.linear.domain(values:=xTicks).range(canvas.GetXLinearScaleRange)
-        Dim y = d3js.scale.linear.domain(values:=yTicks).range(canvas.GetYLinearScaleRange)
+        Dim x = d3js.scale.linear.domain(values:=xTicks).range(values:=canvas.GetXLinearScaleRange)
+        Dim y = d3js.scale.linear.domain(values:=yTicks).range(values:=canvas.GetYLinearScaleRange)
         Dim scaler As New DataScaler(rev:=True) With {
             .AxisTicks = (xTicks.AsVector, yTicks.AsVector),
             .region = canvas.PlotRegion,
