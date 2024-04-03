@@ -275,6 +275,11 @@ Module Program
             ' --attach GCModeller,mzkit,REnv
             ' --attach GCModeller.zip;mzkit.zip;/root/REnv/
             Dim packageList As String() = attach.Split(";"c, ","c)
+            Dim is_pkg_dir As Boolean = packageList.TryCount = 1 AndAlso packageList(0).DirectoryExists
+
+            If is_pkg_dir Then
+                Call R.globalEnvir.options.setOption("attach_lib_dir", packageList(0), R.globalEnvir)
+            End If
 
             For Each packageRef As String In packageList
                 If packageRef.FileExists Then

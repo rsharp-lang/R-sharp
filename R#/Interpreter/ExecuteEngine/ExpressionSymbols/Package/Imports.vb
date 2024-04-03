@@ -112,6 +112,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         ''' ``*.dll/*.R`` file name
         ''' </summary>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' dll file path may be affected by the ``attach_lib_dir`` in options,
+        ''' ``attach_lib_dir`` is defined based on the ``--attach`` argument value
+        ''' from the commandline.
+        ''' </remarks>
         Public ReadOnly Property library As Expression
         Public Overrides ReadOnly Property type As TypeCodes
 
@@ -291,7 +296,7 @@ load:       Return LoadLibrary(filepath, env, names)
         End Function
 
         ''' <summary>
-        ''' 
+        ''' the clr dll assembly file name(full name)
         ''' </summary>
         ''' <param name="libDll">the file name of the dll file, example like: ``file.dll``</param>
         ''' <param name="env"></param>
