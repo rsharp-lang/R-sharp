@@ -652,10 +652,17 @@ Namespace Runtime.Internal.Object
         ''' <param name="env"></param>
         ''' <returns></returns>
         Public Function FilterByRowIndex(skips As Integer(), env As Environment) As [Variant](Of dataframe, Message)
-            Dim skipsIndex As Index(Of String) = skips.Select(Function(i) i.ToString).Indexing
+            Dim skipsIndex As Index(Of String) = skips _
+                .Select(Function(i)
+                            ' convert the negative value to positive row index
+                            ' the positive row index is from 1-based
+                            ' but used for skip when do subset
+                            Return (-i).ToString
+                        End Function) _
+                .Indexing
             ' convert to zero-based selector index for make dataframe subsets 
-            Dim subsetIndex As Integer() = rownames _
-                .Sequence(offSet:=1) _
+            Dim subsetIndex As Integer() = nrows _
+                .Sequence(offset:=1) _
                 .Where(Function(i) Not i.ToString Like skipsIndex) _
                 .Select(Function(a) a - 1) _
                 .ToArray
