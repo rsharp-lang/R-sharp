@@ -278,7 +278,7 @@ Module Program
             Dim is_pkg_dir As Boolean = packageList.TryCount = 1 AndAlso packageList(0).DirectoryExists
 
             If is_pkg_dir Then
-                Call R.globalEnvir.options.setOption("attach_lib_dir", packageList(0), R.globalEnvir)
+                Call R.globalEnvir.options.setOption("attach_lib_dir", packageList(0) & "/assembly/", R.globalEnvir)
             End If
 
             For Each packageRef As String In packageList
