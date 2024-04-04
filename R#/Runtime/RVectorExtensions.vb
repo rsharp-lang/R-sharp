@@ -525,7 +525,7 @@ Namespace Runtime
                 ElseIf typeofT Is GetType(Boolean) AndAlso valueType Is GetType(String) Then
                     Return {DirectCast(value, String).ParseBoolean}
                 Else
-                    Return {Conversion.CTypeDynamic(Of T)(value)}
+                    Return New T() {Conversion.CTypeDynamic(Of T)(value)}
                 End If
             End If
         End Function

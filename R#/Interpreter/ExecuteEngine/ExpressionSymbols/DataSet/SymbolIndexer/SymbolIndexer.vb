@@ -250,8 +250,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         Return Internal.debug.stop("invalid options for slice dataframe", env)
                     End If
                 Else
-                    Dim x = REnv.asVector(Of Object)(indexVec.values(Scan0).Evaluate(env))
-                    Dim y = REnv.asVector(Of Object)(indexVec.values(1).Evaluate(env))
+                    Dim x = CLRVector.asObject(indexVec.values(Scan0).Evaluate(env))
+                    Dim y = CLRVector.asObject(indexVec.values(1).Evaluate(env))
                     Dim result = data.sliceByRow(selector:=x, env)
 
                     If result Like GetType(Message) Then
@@ -633,7 +633,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     ' 20210526 为了避免类型转换带来的性能损耗
                     ' 在这里需要手动判断数组或者向量
                     ' 最后再执行这个函数来转换数组
-                    sequence = REnv.asVector(Of Object)(obj)
+                    sequence = CLRVector.asObject(obj)
                 End If
             End If
 
