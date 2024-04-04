@@ -919,6 +919,8 @@ Namespace Runtime.Internal.Invokes
             Dim chrs As New List(Of String())
             Dim check As Integer = 1
 
+            sep = sprintf(If(sep, ""))
+
             For Each xi In x.slots
                 If Not xi.Key Like args Then
                     Dim si As String() = CLRVector.asCharacter(xi.Value)
