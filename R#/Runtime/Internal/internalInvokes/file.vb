@@ -979,6 +979,7 @@ Namespace Runtime.Internal.Invokes
                                    Optional con As Object = Nothing,
                                    Optional sep$ = vbCrLf,
                                    Optional fs As IFileSystemEnvironment = Nothing,
+                                   Optional encoding As Encodings = Encodings.UTF8WithoutBOM,
                                    Optional env As Environment = Nothing) As Object
 
             If text Is Nothing Then
@@ -1005,13 +1006,13 @@ Namespace Runtime.Internal.Invokes
             If TypeOf text Is pipeline Then
                 Return DirectCast(text, pipeline) _
                     .populates(Of String)(env) _
-                    .handleWriteLargeTextStream(con, sep, fs, env)
+                    .handleWriteLargeTextStream(con, sep, encoding.CodePage, fs, env)
             ElseIf TypeOf text Is String Then
-                Return DirectCast(text, String).handleWriteTextArray(con, fs, env)
+                Return DirectCast(text, String).handleWriteTextArray(con, encoding.CodePage, fs, env)
             Else
                 Return CLRVector.asCharacter(text) _
                     .JoinBy(sep) _
-                    .handleWriteTextArray(con, fs, env)
+                    .handleWriteTextArray(con, encoding.CodePage, fs, env)
             End If
 
             Return Nothing
@@ -1021,6 +1022,7 @@ Namespace Runtime.Internal.Invokes
         Private Function handleWriteLargeTextStream(text As IEnumerable(Of String),
                                                     con As Object,
                                                     sep As String,
+                                                    encoding As Encoding,
                                                     fs As IFileSystemEnvironment,
                                                     env As Environment) As Object
 
@@ -1038,9 +1040,9 @@ Namespace Runtime.Internal.Invokes
                 Next
             ElseIf TypeOf con Is String Then
                 If fs Is Nothing Then
-                    Call text.SaveTo(con, Encodings.UTF8WithoutBOM.CodePage)
+                    Call text.SaveTo(CStr(con), encoding)
                 Else
-                    Call fs.WriteText(text.JoinBy(vbCr), con)
+                    Call fs.WriteText(text.JoinBy(vbCr), CStr(con))
                 End If
             ElseIf TypeOf con Is textBuffer Then
                 DirectCast(con, textBuffer).text = text.JoinBy(sep)
@@ -1063,6 +1065,7 @@ Namespace Runtime.Internal.Invokes
         <Extension>
         Private Function handleWriteTextArray(text As String,
                                               con As Object,
+                                              encoding As Encoding,
                                               fs As IFileSystemEnvironment,
                                               env As Environment) As Object
 
@@ -1078,13 +1081,13 @@ Namespace Runtime.Internal.Invokes
                 Call stdOut(text)
             ElseIf TypeOf con Is String Then
                 If fs Is Nothing Then
-                    Call text.SaveTo(con, Encodings.UTF8WithoutBOM.CodePage)
+                    Call text.SaveTo(con, encoding)
                 Else
                     Call fs.WriteText(text, con)
                     Call fs.Flush()
                 End If
             ElseIf TypeOf con Is Stream Then
-                Dim writer As New StreamWriter(DirectCast(con, Stream))
+                Dim writer As New StreamWriter(DirectCast(con, Stream), encoding)
                 Call writer.WriteLine(text)
                 Call writer.Flush()
             ElseIf TypeOf con Is textBuffer Then
