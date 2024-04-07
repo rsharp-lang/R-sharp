@@ -229,7 +229,7 @@ RE0:
             Dim duplicated As String() = Nothing
             Dim namelist As String() = raw_namelist.uniqueNames(duplicated)
 
-            If duplicated.Any Then
+            If Not duplicated.IsNullOrEmpty Then
                 ' 20240407 duplicated name was found in names list
                 Call env.AddMessage({
                     $"{duplicated.Length} duplcated names was found! All these duplicated names({duplicated.Distinct.GetJson}) has been convert to unique names.",
