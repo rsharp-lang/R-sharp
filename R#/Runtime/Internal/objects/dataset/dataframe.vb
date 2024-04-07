@@ -862,10 +862,22 @@ Namespace Runtime.Internal.Object
             }
         End Function
 
+        ''' <summary>
+        ''' set column names via names function
+        ''' </summary>
+        ''' <param name="names"></param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        ''' <example>
+        ''' names(df) = x;
+        ''' ' equals to
+        ''' colnames(df) = x;
+        ''' </example>
         Public Function setNames(names() As String, envir As Environment) As Object Implements RNames.setNames
             If names.Length <> columns.Count Then
+                ' the given names vector x size is mis-matched with the column number
                 Return Internal.debug.stop({
-                    $"the given size of the column names character is not match the column numbers in this dataframe object!",
+                    $"the given size of the column names character is not match the column numbers in this dataframe object! You probably could check for the function for set dimension names on a dataframe object(names, rownames or colnames)?",
                     $"given: {names.Length}",
                     $"required: {columns.Count}"
                 }, envir)
