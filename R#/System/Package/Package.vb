@@ -57,6 +57,7 @@
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development
+Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -202,25 +203,29 @@ Namespace Development.Package
             If isMissing Then
                 Return Nothing
             Else
-                Dim pkgMgr As PackageManager = env.globalEnvironment.packages
-                Dim docs As String = pkgMgr.GetPackageDocuments([namespace])
-
-                ' 20230201
-                '
-                ' if the package module is not a registered dll file
-                ' inside the local package repository, then
-                ' we should find the package document from the external
-                ' location at here
-                If docs Is Nothing Then
-                    Dim xml = pkgMgr.packageDocs.GetAnnotations(package)
-
-                    If Not xml Is Nothing Then
-                        docs = If(remarks, xml.Remarks, xml.Summary)
-                    End If
-                End If
-
-                Return docs
+                Return GetPackageDescriptionInternal(env, remarks)
             End If
+        End Function
+
+        Private Function GetPackageDescriptionInternal(env As Environment, Optional remarks As Boolean = False) As String
+            Dim pkgMgr As PackageManager = env.globalEnvironment.packages
+            Dim docs As String = pkgMgr.GetPackageDocuments([namespace])
+
+            ' 20230201
+            '
+            ' if the package module is not a registered dll file
+            ' inside the local package repository, then
+            ' we should find the package document from the external
+            ' location at here
+            If docs Is Nothing Then
+                Dim xml As ProjectType = pkgMgr.packageDocs.GetAnnotations(package)
+
+                If Not xml Is Nothing Then
+                    docs = If(remarks, xml.Remarks, xml.Summary)
+                End If
+            End If
+
+            Return docs
         End Function
 
         Public Shared Function ParseClrType(clr As Type) As Package

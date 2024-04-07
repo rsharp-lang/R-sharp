@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -202,7 +203,13 @@ Namespace Development.Package
         Public Function ImportsStatic(env As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
             Try
 #If NETCOREAPP Then
-                Call deps.TryHandleNetCore5AssemblyBugs(package)
+                Dim opts = env.globalEnvironment.options
+
+                If opts.hasOption([Imports].attach_lib_dir) Then
+                    Call deps.TryHandleNetCore5AssemblyBugs(package, New String() {opts.getOption([Imports].attach_lib_dir)})
+                Else
+                    Call deps.TryHandleNetCore5AssemblyBugs(package, Nothing)
+                End If
 #End If
                 Call package.Assembly.TryRunZzzOnLoad
 

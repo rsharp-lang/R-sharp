@@ -377,10 +377,17 @@ Public Module rdocumentation
 
     Friend Function getPkgApisList(package As Object, env As Environment) As [Variant](Of Message, NamedValue(Of MethodInfo)())
         If TypeOf package Is String Then
-            Return env.globalEnvironment.packages _
-                .FindPackage(any.ToString(package), Nothing) _
+            Dim ex As Exception = Nothing
+            Dim func_clr = env.globalEnvironment.packages _
+                .FindPackage(any.ToString(package), env.globalEnvironment, ex) _
                 .DoCall(AddressOf ImportsPackage.GetAllApi) _
                 .ToArray
+
+            If Not ex Is Nothing Then
+                Return Internal.debug.stop(ex, env)
+            Else
+                Return func_clr
+            End If
         ElseIf TypeOf package Is Development.Package.Package Then
             Return ImportsPackage _
                 .GetAllApi(DirectCast(package, Development.Package.Package)) _
@@ -398,8 +405,15 @@ Public Module rdocumentation
 
     Friend Function getPkg(package As Object, env As Environment) As [Variant](Of Message, Development.Package.Package)
         If TypeOf package Is String Then
-            Return env.globalEnvironment.packages _
-                .FindPackage(any.ToString(package), Nothing)
+            Dim ex As Exception = Nothing
+            Dim pkg_clr = env.globalEnvironment.packages _
+                .FindPackage(any.ToString(package), env.globalEnvironment, ex)
+
+            If Not ex Is Nothing Then
+                Return Internal.debug.stop(ex, env)
+            Else
+                Return pkg_clr
+            End If
         ElseIf TypeOf package Is Development.Package.Package Then
             Return DirectCast(package, Development.Package.Package)
         ElseIf TypeOf package Is Type Then

@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text.Xml.Models
+Imports SMRUCC.Rsharp.Runtime
 
 Namespace Development.Package
 
@@ -127,7 +128,7 @@ Namespace Development.Package
         ''' <param name="packageName"></param>
         ''' <param name="exception"></param>
         ''' <returns></returns>
-        Public Function FindPackage(packageName As String, ByRef exception As Exception) As Package
+        Public Function FindPackage(packageName As String, env As GlobalEnvironment, ByRef exception As Exception) As Package
             Dim entry As PackageLoaderEntry = assemblies.items _
                 .SafeQuery _
                 .Where(Function(pkg)
@@ -138,7 +139,7 @@ Namespace Development.Package
             If entry Is Nothing Then
                 Return Nothing
             Else
-                Return entry.GetLoader(exception)
+                Return entry.GetLoader(env, exception)
             End If
         End Function
 
