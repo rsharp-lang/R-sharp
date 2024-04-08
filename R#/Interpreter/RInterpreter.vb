@@ -354,6 +354,15 @@ Namespace Interpreter
             Call REnv.str(obj,, globalEnvir)
         End Sub
 
+        ''' <summary>
+        ''' imports {<paramref name="pkgs"/>} from "<paramref name="baseDll"/>";
+        ''' </summary>
+        ''' <param name="pkgs"></param>
+        ''' <param name="baseDll"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' attach_lib_dir
+        ''' </remarks>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function [Imports](pkgs As String(), baseDll As String) As Object
             Return New [Imports](VectorLiteral.FromArray(pkgs), New Literal(baseDll)).Evaluate(globalEnvir)

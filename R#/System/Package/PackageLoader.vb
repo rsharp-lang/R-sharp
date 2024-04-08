@@ -70,11 +70,11 @@ Namespace Development.Package
         ''' <returns></returns>
         <Extension>
         Public Iterator Function ParsePackages(dll$, Optional strict As Boolean = True) As IEnumerable(Of Package)
-            Dim types As Type() = deps.LoadAssemblyOrCache(dll).GetTypes
+            Dim types As Type() = deps.LoadAssemblyOrCache(dll, strict:=strict).GetTypes
             Dim package As New Value(Of Package)
 
             For Each type As Type In types
-                If Not (package = parsePackageInternal(type)) Is Nothing Then
+                If Not (package = parsePackageInternal(type, strict:=strict)) Is Nothing Then
                     Yield CType(package, Package)
                 End If
             Next

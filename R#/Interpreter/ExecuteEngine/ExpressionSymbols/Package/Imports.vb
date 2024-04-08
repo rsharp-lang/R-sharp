@@ -112,6 +112,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         ''' ``*.dll/*.R`` file name
         ''' </summary>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' dll file path may be affected by the ``attach_lib_dir`` in options,
+        ''' ``attach_lib_dir`` is defined based on the ``--attach`` argument value
+        ''' from the commandline.
+        ''' </remarks>
         Public ReadOnly Property library As Expression
         Public Overrides ReadOnly Property type As TypeCodes
 
@@ -122,6 +127,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Property
 
         Public ReadOnly Property scriptSource As String
+
+        Public Const attach_lib_dir As String = NameOf(attach_lib_dir)
 
         ''' <summary>
         ''' 当前的语句是否是用于导入其他的脚本文件模块？
@@ -291,7 +298,7 @@ load:       Return LoadLibrary(filepath, env, names)
         End Function
 
         ''' <summary>
-        ''' 
+        ''' the clr dll assembly file name(full name)
         ''' </summary>
         ''' <param name="libDll">the file name of the dll file, example like: ``file.dll``</param>
         ''' <param name="env"></param>
@@ -371,7 +378,7 @@ load:       Return LoadLibrary(filepath, env, names)
                     Call hook_jsEnv(globalEnv, [namespace].namespace, [namespace].package)
                 Next
             Else
-                For Each required In names.Objects
+                For Each required As String In names.Objects
                     If packages.ContainsKey(required) Then
                         Call ImportsPackage.ImportsStatic(globalEnv, packages(required).package)
                         Call hook_jsEnv(globalEnv, required, packages(required).package)

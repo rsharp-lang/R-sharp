@@ -1,10 +1,14 @@
 require(igraph);
-require(igraph.layouts);
-require(igraph.render);
+
+imports ["layouts" "visualizer"] from "igraph";
 
 # let test.network as string = `${!script$dir}/demo_network`;
-let test.network = "D:\biodeep\biodeepdb_v3\Rscript\metacluster\old_network\Flavonoids\tree_network";
-let g = read.network(test.network);
+let test = read.csv(file.path(@dir, "renderNetwork", "correlation_dem_22.csv"), 
+    row.names = NULL, check.names = FALSE);
+let g = igraph::graph(
+    test$compoundA, test$compoundB,
+    test$correlation
+);
 
 # create a new empty network graph model
 # let g = empty.network()
@@ -18,9 +22,11 @@ let g = read.network(test.network);
 # view summary info of the network
 print(g);
 
-g
-:> layout.orthogonal(layoutIteration = 10)
-# Do network render plot and then 
-# saved the generated image file
-:> render.Plot(canvasSize = [2000,1400]) 
-:> save.graphics(file = `${!script$dir}/orthogonal.png`);
+bitmap(file = file.path(@dir, "orthogonal.png")) {
+    g
+    |> layout.orthogonal(layoutIteration = 10)
+    # Do network render plot and then 
+    # saved the generated image file
+    |> render(canvasSize = [2000,1400]) 
+    ;
+}

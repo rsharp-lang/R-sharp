@@ -139,7 +139,7 @@ Namespace Runtime.Internal.Object
                 isIntKey = slotKeyStr.IsPattern("\d+")
 
                 If isIntKey Then
-                    If ++i = Integer.Parse(slotKeyStr) Then
+                    If ++i = ULong.Parse(slotKeyStr) Then
                         slotKeyStr = $"[{slotKeyStr}]"
                     End If
                 Else

@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Development.CommandLine
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
@@ -275,6 +276,15 @@ Module Program
             ' --attach GCModeller,mzkit,REnv
             ' --attach GCModeller.zip;mzkit.zip;/root/REnv/
             Dim packageList As String() = attach.Split(";"c, ","c)
+            Dim is_pkg_dir As Boolean = packageList.TryCount = 1 AndAlso packageList(0).DirectoryExists
+
+            If is_pkg_dir Then
+                Call R.globalEnvir.options.setOption(
+                    opt:=[Imports].attach_lib_dir,
+                    value:=packageList(0) & "/assembly/",
+                    env:=R.globalEnvir
+                )
+            End If
 
             For Each packageRef As String In packageList
                 If packageRef.FileExists Then

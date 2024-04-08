@@ -65,6 +65,9 @@ Namespace Development.Package
         ''' <param name="env"></param>
         ''' <param name="searchContext"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' attach_lib_dir
+        ''' </remarks>
         Public Shared Function GetDllFile(libDllName As String,
                                           env As Environment,
                                           Optional ByRef searchContext As Generic.List(Of String) = Nothing) As String

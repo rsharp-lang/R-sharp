@@ -126,7 +126,11 @@ Public Class ConfigJSON
             End If
         Next
 
-        Return value
+        If TypeOf value Is String AndAlso CStr(value) = "null" Then
+            Return Nothing
+        Else
+            Return value
+        End If
     End Function
 
     Public Sub SetCommandLine(env As Environment)

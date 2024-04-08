@@ -412,6 +412,14 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' Try cast of the object type value to a generic type value
+        ''' </summary>
+        ''' <typeparam name="T">the generic type that cast to</typeparam>
+        ''' <param name="env"></param>
+        ''' <param name="default">the default element generic value if the type cast failure.</param>
+        ''' <param name="err">gets the error message for the type cast failure from this parameter.</param>
+        ''' <returns></returns>
         Public Function AsGeneric(Of T)(env As Environment,
                                         Optional [default] As T = Nothing,
                                         Optional ByRef err As Message = Nothing) As Dictionary(Of String, T)

@@ -79,7 +79,7 @@ Module docs
     <ExportAPI("markdown.docs")>
     Public Function makeMarkdownDocs(package$, Optional globalEnv As GlobalEnvironment = Nothing) As String
         Dim apis As NamedValue(Of MethodInfo)() = globalEnv.packages _
-            .FindPackage(package, Nothing) _
+            .FindPackage(package, globalEnv, Nothing) _
             .DoCall(AddressOf ImportsPackage.GetAllApi) _
             .ToArray
         Dim docs As New ScriptBuilder("")

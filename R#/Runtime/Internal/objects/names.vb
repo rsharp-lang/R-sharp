@@ -1,63 +1,66 @@
 ﻿#Region "Microsoft.VisualBasic::5745a310fae6a58e68a2ecee708cc1c8, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/names.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 253
-    '    Code Lines: 201
-    ' Comment Lines: 14
-    '   Blank Lines: 38
-    '     File Size: 9.97 KB
+' Summaries:
 
 
-    '     Module names
-    ' 
-    '         Function: checkChar, getArrayNames, getColNames, getNames, getRowNames
-    '                   makeNames, setColNames, (+2 Overloads) setNames, setRowNames, uniqueNames
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 253
+'    Code Lines: 201
+' Comment Lines: 14
+'   Blank Lines: 38
+'     File Size: 9.97 KB
+
+
+'     Module names
+' 
+'         Function: checkChar, getArrayNames, getColNames, getNames, getRowNames
+'                   makeNames, setColNames, (+2 Overloads) setNames, setRowNames, uniqueNames
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports System.Runtime.InteropServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -124,19 +127,27 @@ Namespace Runtime.Internal.Object
         ''' <param name="names"></param>
         ''' <returns></returns>
         <Extension>
-        Public Function uniqueNames(names As IEnumerable(Of String)) As String()
+        Public Function uniqueNames(names As IEnumerable(Of String), <Out> Optional ByRef duplicated As String() = Nothing) As String()
             Dim nameUniques As New Dictionary(Of String, Counter)
+            Dim duplicates As New List(Of String)
 
             For Each name As String In names
 RE0:
                 If nameUniques.ContainsKey(name) Then
                     nameUniques(name).Hit()
+                    duplicates.Add(name)
                     name = name & "_" & nameUniques(name).Value
                     GoTo RE0
                 Else
                     nameUniques.Add(name, Scan0)
                 End If
             Next
+
+            Erase duplicated
+
+            If duplicates.Any Then
+                duplicated = duplicates.ToArray
+            End If
 
             Return nameUniques.Keys.ToArray
         End Function
@@ -156,7 +167,7 @@ RE0:
                     If type.ImplementInterface(Of IReflector) Then
                         Return DirectCast([object], IReflector).getNames
                     ElseIf type.IsArray Then
-                        Dim objVec As Array = REnv.asVector(Of Object)([object])
+                        Dim objVec As Array = CLRVector.asObject([object])
                         Dim names As String() = getArrayNames(objVec)
 
                         If Not names Is Nothing Then
@@ -210,11 +221,21 @@ RE0:
         ''' 
         ''' </summary>
         ''' <param name="[object]"></param>
-        ''' <param name="namelist">This method will ensure that the value is a string vector</param>
+        ''' <param name="names">This method will ensure that the value is a string vector</param>
         ''' <param name="env"></param>
         ''' <returns></returns>
-        Public Function setNames([object] As Object, namelist As Array, env As Environment) As Object
-            namelist = CLRVector.asCharacter(namelist)
+        Public Function setNames([object] As Object, names As Array, env As Environment) As Object
+            Dim raw_namelist As String() = CLRVector.asCharacter(names)
+            Dim duplicated As String() = Nothing
+            Dim namelist As String() = raw_namelist.uniqueNames(duplicated)
+
+            If Not duplicated.IsNullOrEmpty Then
+                ' 20240407 duplicated name was found in names list
+                Call env.AddMessage({
+                    $"{duplicated.Length} duplcated names was found! All these duplicated names({duplicated.Distinct.GetJson}) has been convert to unique names.",
+                    $"duplicated names: {duplicated.Distinct.GetJson}"
+                }, MSG_TYPES.WRN)
+            End If
 
             ' set names
             Select Case [object].GetType

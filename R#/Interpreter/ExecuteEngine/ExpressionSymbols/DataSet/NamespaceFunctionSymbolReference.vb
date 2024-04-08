@@ -143,7 +143,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
             ' find package and then load method
             Dim [error] As Exception = Nothing
-            Dim pkg As RPkg = globalEnv.packages.FindPackage([namespace], [error])
+            Dim pkg As RPkg = globalEnv.packages.FindPackage([namespace], env.globalEnvironment, [error])
 
             If Not [error] Is Nothing Then
                 Return Internal.debug.stop([error], env)

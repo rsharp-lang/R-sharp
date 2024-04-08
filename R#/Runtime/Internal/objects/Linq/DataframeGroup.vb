@@ -79,6 +79,10 @@ Namespace Runtime.Internal.Object.Linq
         Public Function groupBy(data As dataframe, key As String) As Dictionary(Of String, dataframe)
             Dim values As vector = CLRVector.asCharacter(data.getColumnVector(columnName:=key)) _
                 .DoCall(Function(v)
+                            If v Is Nothing Then
+                                Throw New MissingPrimaryKeyException($"missing the field name '{key}' inside your dataframe for may data table group by field, please check of the dataframe field names or file encoding if the dataframe is read from csv file which contains non-ascii characters(example as zh-CN characters).")
+                            End If
+
                             Return vector.asVector(Of String)(v)
                         End Function)
             Dim factors As String() = DirectCast(values.data, String()).Distinct.ToArray

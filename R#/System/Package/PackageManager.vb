@@ -149,7 +149,7 @@ Namespace Development.Package
         ''' </param>
         ''' <returns></returns>
         Public Function GetPackageDocuments(pkgName As String, Optional remarks As Boolean = False) As String
-            Dim type As Type = Me.FindPackage(pkgName, Nothing)?.package
+            Dim type As Type = Me.FindPackage(pkgName, Nothing, Nothing)?.package
             Dim docs As ProjectType
 
             If type Is Nothing Then
@@ -175,8 +175,8 @@ Namespace Development.Package
         ''' then this function returns nothing
         ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function FindPackage(packageName As String, ByRef exception As Exception) As Package
-            Return pkgDb.FindPackage(packageName, exception)
+        Public Function FindPackage(packageName As String, env As GlobalEnvironment, ByRef exception As Exception) As Package
+            Return pkgDb.FindPackage(packageName, env, exception)
         End Function
 
         ''' <summary>
@@ -451,7 +451,7 @@ Namespace Development.Package
             Dim pkg As Package
 
             For Each loader As PackageLoaderEntry In pkgDb.assemblies.AsEnumerable
-                pkg = loader.GetLoader(Nothing)
+                pkg = loader.GetLoader(Nothing, Nothing)
 
                 If pkg Is Nothing Then
                     ' missing from current environment
