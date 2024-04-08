@@ -74,7 +74,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports stdNum = System.Math
+Imports std = System.Math
 
 ''' <summary>
 ''' Rendering png or svg image from a given network graph model.
@@ -94,7 +94,7 @@ Module Visualize
                 Return New Func(Of Node, Single)(
                     Function(node As Node) As Single
                         If list.slots.ContainsKey(node.label) Then
-                            Return stdNum.Max(CSng(Val(list.slots(node.label))), minNodeSize)
+                            Return std.Max(CSng(Val(list.slots(node.label))), minNodeSize)
                         Else
                             Return minNodeSize
                         End If
@@ -125,7 +125,7 @@ Module Visualize
                            End Function
                 Else
                     Return Function(n As Node)
-                               Return stdNum.Max(Val(n.data(propName)), minNodeSize)
+                               Return std.Max(Val(n.data(propName)), minNodeSize)
                            End Function
                 End If
             Case Else
@@ -256,7 +256,7 @@ Module Visualize
                                         Dim res = value.LoadImage.ColorReplace(Color.White, Color.Transparent)
                                         Dim size = res.Size
                                         Dim maxR = r.Average * 2.5
-                                        Dim scale = stdNum.Max(size.Width, size.Height) / maxR
+                                        Dim scale = std.Max(size.Width, size.Height) / maxR
                                         Dim w! = size.Width / scale
                                         Dim h! = size.Height / scale
 
