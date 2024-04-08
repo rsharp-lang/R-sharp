@@ -284,26 +284,14 @@ Module Layouts
     ''' do orthogonal layout for the network graph input
     ''' </summary>
     ''' <param name="g"></param>
-    ''' <param name="gridSize"></param>
-    ''' <param name="delta">the node movement delta</param>
-    ''' <param name="layoutIteration">
-    ''' the iteration number for run the layout process, ``-1`` means auto calculation.
-    ''' </param>
     ''' <returns></returns>
     <ExportAPI("layout.orthogonal")>
     Public Function orthogonalLayout(g As NetworkGraph,
-                                     <RRawVectorArgument>
-                                     Optional gridSize As Object = "1000,1000",
-                                     Optional delta# = 13,
-                                     Optional layoutIteration% = -1,
-                                     Optional env As Environment = Nothing) As NetworkGraph
+                                     Optional num_of_attempts As Integer = 30,
+                                     Optional optimize As Boolean = True,
+                                     Optional simplify As Boolean = True,
+                                     Optional fix_non_orthogonal As Boolean = True) As NetworkGraph
 
-        Dim size As Size = InteropArgumentHelper _
-            .getSize(gridSize, env) _
-            .SizeParser
-
-        g = Orthogonal.DoLayout(g)
-
-        Return g
+        Return Orthogonal.DoLayout(g, num_of_attempts, optimize, simplify, fix_non_orthogonal)
     End Function
 End Module
