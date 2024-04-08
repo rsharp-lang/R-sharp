@@ -73,6 +73,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports std = System.Math
 
@@ -215,7 +216,7 @@ Module Visualize
                                      Dim layout = func.Invoke(env, InvokeParameter.CreateLiterals(canvas, center, radius, node.label))
 
                                      If Not layout Is Nothing Then
-                                         layout = REnv.asVector(Of Object)(layout).GetValue(Scan0)
+                                         layout = CLRVector.asObject(layout).DefaultFirst
                                      End If
 
                                      Return layout
@@ -388,7 +389,7 @@ Module Visualize
                         End Function) _
                 .ToArray
         Else
-            Dim values = REnv.asVector(Of Object)(colors)
+            Dim values = CLRVector.asObject(colors)
             Dim unify As SolidBrush
 
             If values.Length = 1 Then
