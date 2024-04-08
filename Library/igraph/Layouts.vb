@@ -303,8 +303,7 @@ Module Layouts
             .getSize(gridSize, env) _
             .SizeParser
 
-        Call Orthogonal.DoLayout(g, size, delta, debug:=True, iterationCount:=layoutIteration)
-        Call Orthogonal.DoEdgeLayout(g)
+        g = Orthogonal.DoLayout(g)
 
         Return g
     End Function
