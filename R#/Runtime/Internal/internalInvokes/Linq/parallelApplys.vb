@@ -257,7 +257,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                         End If
 
                         SyncLock values
-                            For Each pop In result
+                            For Each pop As (i As Integer, key As String, value As Object) In result
                                 Call values.Add(pop)
                             Next
                         End SyncLock
