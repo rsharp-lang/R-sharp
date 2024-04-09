@@ -85,6 +85,7 @@ Module NLP
         Return df
     End Function
 
+    <RGenericOverloads("as.data.frame")>
     Private Function exportWordVector(vec As VectorModel, args As list, env As Environment) As rDataframe
         Dim mat = vec.wordMap.ToArray
         Dim df As New rDataframe With {
