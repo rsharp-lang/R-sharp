@@ -1298,7 +1298,11 @@ RE0:
             ElseIf x.GetType.IsArray AndAlso DirectCast(x, Array) _
                 .AsObjectEnumerator _
                 .All(Function(xi)
-                         Return xi.GetType Like RType.characters
+                         If xi Is Nothing Then
+                             Return True
+                         Else
+                             Return xi.GetType Like RType.characters
+                         End If
                      End Function) Then
 
                 Return True
