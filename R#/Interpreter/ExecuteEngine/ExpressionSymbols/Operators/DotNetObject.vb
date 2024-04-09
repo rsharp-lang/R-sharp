@@ -144,7 +144,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 array = array _
                     .AsObjectEnumerator _
                     .Select(Function(a)
-                                Return reader.GetValue(a, Nothing)
+                                ' read clr object instance data
+                                ' required of non-null object a
+                                If a Is Nothing Then
+                                    Return Nothing
+                                Else
+                                    Return reader.GetValue(a, Nothing)
+                                End If
                             End Function) _
                     .ToArray
 
