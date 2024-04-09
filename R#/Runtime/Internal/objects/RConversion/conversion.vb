@@ -1311,6 +1311,15 @@ RE0:
             End If
         End Function
 
+        ''' <summary>
+        ''' ### Logical Vectors
+        ''' 
+        ''' Create or test for objects of type "logical", and the basic logical constants.
+        ''' </summary>
+        ''' <param name="x">	
+        ''' Object To be coerced Or tested.
+        ''' </param>
+        ''' <returns></returns>
         <ExportAPI("is.logical")>
         Public Function isLogical(<RRawVectorArgument> x As Object) As Boolean
             If x Is Nothing Then
