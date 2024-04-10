@@ -56,12 +56,14 @@
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports Directory = Microsoft.VisualBasic.FileIO.Directory
 
 Namespace Runtime
 
@@ -136,9 +138,12 @@ Namespace Runtime
         ''' <returns></returns>
         Public Function Add(pkgName$, libdll$) As PackageEnvironment
             Dim pkg As PackageEnvironment = attachedNamespace.TryGetValue(pkgName)
+            Dim libdir As IFileSystemEnvironment = Directory.FromLocalFileSystem(libdll.ParentPath)
 
             If pkg Is Nothing Then
-                pkg = New PackageEnvironment(env, pkgName, libdll.ParentPath)
+                ' 20240410
+                ' libdir from the parent path of the given dll file
+                pkg = New PackageEnvironment(env, pkgName, libdir)
 
                 attachedNamespace(pkgName) = pkg
                 attachedNamespace(pkgName) _

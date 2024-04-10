@@ -57,7 +57,9 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.FileIO
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -76,11 +78,15 @@ Namespace Runtime
         Dim m_symbolSolver As SymbolNamespaceSolver
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Sub New(globalEnv As GlobalEnvironment, packageName As String, libpath As String)
+        Sub New(globalEnv As GlobalEnvironment, packageName As String, libpath As IFileSystemEnvironment)
             Call MyBase.New(globalEnv, pkgFrame(packageName), isInherits:=False)
 
-            ' config for load .NET assembly module files
-            Me.libpath = libpath
+            If TypeOf libpath Is Directory Then
+                ' config for load .NET assembly module files
+                Me.libpath = DirectCast(libpath, Directory).folder
+            Else
+                Throw New NotImplementedException(libpath.GetType.FullName)
+            End If
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
