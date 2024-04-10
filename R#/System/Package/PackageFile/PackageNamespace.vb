@@ -128,15 +128,15 @@ Namespace Development.Package.File
         ''' stream filesystem for attach package in memory.
         ''' </param>
         Sub New(dir As IFileSystemEnvironment)
-            meta = dir.ReadAllText("/package/index.json").LoadJsonFile(Of DESCRIPTION)
+            meta = dir.ReadAllText("/package/index.json").LoadJSON(Of DESCRIPTION)
             checksum = dir.ReadAllText("/CHECKSUM").ReadFirstLine
             libPath = dir
-            assembly = dir.ReadAllText($"/package/manifest/assembly.json").LoadJsonFile(Of Dictionary(Of String, String))
-            dependency = dir.ReadAllText($"/package/manifest/dependency.json").LoadJsonFile(Of Dependency())
-            symbols = dir.ReadAllText($"/package/manifest/symbols.json").LoadJsonFile(Of Dictionary(Of String, String))
-            datafiles = dir.ReadAllText($"/package/manifest/data.json").LoadJsonFile(Of Dictionary(Of String, NamedValue))
-            runtime = dir.ReadAllText($"/package/manifest/runtime.json").LoadJsonFile(Of AssemblyInfo)
-            framework = dir.ReadAllText($"/package/manifest/framework.json").LoadJsonFile(Of AssemblyInfo)
+            assembly = dir.ReadAllText($"/package/manifest/assembly.json").LoadJSON(Of Dictionary(Of String, String))
+            dependency = dir.ReadAllText($"/package/manifest/dependency.json").LoadJSON(Of Dependency())
+            symbols = dir.ReadAllText($"/package/manifest/symbols.json").LoadJSON(Of Dictionary(Of String, String))
+            datafiles = dir.ReadAllText($"/package/manifest/data.json").LoadJSON(Of Dictionary(Of String, NamedValue))
+            runtime = dir.ReadAllText($"/package/manifest/runtime.json").LoadJSON(Of AssemblyInfo)
+            framework = dir.ReadAllText($"/package/manifest/framework.json").LoadJSON(Of AssemblyInfo)
         End Sub
 
         ''' <summary>

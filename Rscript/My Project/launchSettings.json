@@ -2,7 +2,8 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--lambda biodeepMSMS::doMSMSalignment --SetDllDirectory \"E:\\GCModeller\\src\\R-sharp\\App\\net6.0\""
+      "commandLineArgs": "--build /src ../ /save ./MetaCardio.zip --skip-src-build",
+      "workingDirectory": "E:\\biodeep\\bionovogene_health\\metacardio\\.pkg"
     },
     "mzkit_debug": {
       "commandName": "Project",
