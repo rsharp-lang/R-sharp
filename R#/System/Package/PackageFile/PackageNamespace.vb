@@ -56,7 +56,6 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices
-Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Linq
@@ -64,6 +63,7 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports AssemblyInfo = Microsoft.VisualBasic.ApplicationServices.Development.AssemblyInfo
 
 Namespace Development.Package.File
 
