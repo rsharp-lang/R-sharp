@@ -304,6 +304,11 @@ Module Program
                 End If
             Next
         End If
+
+        ' 20230410
+        ' pkg_attach provides a repository directory which contains
+        ' multiple package zip files for attach into the runtime
+        ' environment
         If Not pkg_attach.StringEmpty AndAlso pkg_attach.DirectoryExists Then
             Call Console.WriteLine($"load required packages from alternative repository: '{pkg_attach.GetDirectoryFullPath}'...")
 
