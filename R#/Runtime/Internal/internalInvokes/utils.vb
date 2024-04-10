@@ -867,7 +867,7 @@ Namespace Runtime.Internal.Invokes
             End If
 
             For Each pkgFile As String In package.Select(Function(pkgName) $"{lib_loc}/{pkgName}")
-                If Not (err = env.dataSearchByPackageDir(name, pkgFile, hit)) Is Nothing Then
+                If Not (err = env.dataSearchByPackageDir(name, LibDir.FromLocalFileSystem(pkgFile), hit)) Is Nothing Then
                     Return err.Value
                 ElseIf hit Then
                     Return Nothing
@@ -897,13 +897,21 @@ Namespace Runtime.Internal.Invokes
             }, env)
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <param name="name"></param>
+        ''' <param name="lib_pkgdir">the folder path of the given installed package module</param>
+        ''' <param name="hit"></param>
+        ''' <returns></returns>
         <Extension>
         Private Function dataSearchByPackageDir(env As Environment,
                                                 name As String,
-                                                pkgFile As String,
+                                                lib_pkgdir As IFileSystemEnvironment,
                                                 ByRef hit As Boolean) As Message
 
-            Dim dataSymbols = $"{pkgFile}/package/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, NamedValue))
+            Dim dataSymbols = lib_pkgdir.ReadAllText($"/package/manifest/data.json").LoadJSON(Of Dictionary(Of String, NamedValue))
             Dim reader As String
             Dim load As Object
 
@@ -912,9 +920,16 @@ Namespace Runtime.Internal.Invokes
             If dataSymbols.IsNullOrEmpty OrElse Not dataSymbols.ContainsKey(name) Then
                 Return Nothing
             Else
+                Dim fileref As Object
+
+                If TypeOf lib_pkgdir Is LibDir Then
+                    fileref = lib_pkgdir.GetFullPath($"/data/{dataSymbols(name).name}")
+                Else
+                    fileref = lib_pkgdir.OpenFile($"/data/{dataSymbols(name).name}")
+                End If
+
                 reader = dataSymbols(name).text
-                pkgFile = $"{pkgFile}/data/{dataSymbols(name).name}"
-                load = env.readFile(reader, pkgFile)
+                load = env.readFile(reader, lib_pkgdir)
             End If
 
             If RProgram.isException(load) Then
@@ -933,7 +948,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <Extension>
-        Private Function readFile(env As Environment, reader As String, file$) As Object
+        Private Function readFile(env As Environment, reader As String, file As Object) As Object
             Dim tokens As String() = reader.Split(","c)
             Dim args As New List(Of Object)
 

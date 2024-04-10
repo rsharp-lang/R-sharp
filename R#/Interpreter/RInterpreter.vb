@@ -64,6 +64,7 @@ Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports System.Threading
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
@@ -90,6 +91,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports std = System.Math
 Imports Strings = Microsoft.VisualBasic.Strings
+Imports LibDir = Microsoft.VisualBasic.FileIO.Directory
 
 Namespace Interpreter
 
@@ -239,7 +241,7 @@ Namespace Interpreter
         ''' <param name="package"></param>
         ''' <returns></returns>
         Public Function getDataStream(dataName As String, package As String) As Stream
-            Dim pkgDir As String
+            Dim pkgDir As IFileSystemEnvironment
             Dim alternativeName As String = dataName.createAlternativeName
 
             ' 优先从已经加载的程序包位置进行加载操作
@@ -248,15 +250,13 @@ Namespace Interpreter
             ElseIf Not RFileSystem.PackageInstalled(package, globalEnvir) Then
                 Return Nothing
             Else
-                pkgDir = $"{RFileSystem.GetPackageDir(globalEnvir)}/{package}"
+                pkgDir = LibDir.FromLocalFileSystem($"{RFileSystem.GetPackageDir(globalEnvir)}/{package}")
             End If
 
-            dataName = $"{pkgDir}/{dataName}".GetFullPath
-
-            If dataName.FileExists Then
-                Return dataName.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
-            ElseIf $"{pkgDir}/{alternativeName}".FileExists Then
-                Return $"{pkgDir}/{alternativeName}".Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+            If pkgDir.FileExists(dataName) Then
+                Return pkgDir.OpenFile(dataName, FileMode.Open, FileAccess.Read)
+            ElseIf pkgDir.FileExists(alternativeName) Then
+                Return pkgDir.OpenFile(alternativeName, FileMode.Open, FileAccess.Read)
             End If
 
             ' for missing data package just

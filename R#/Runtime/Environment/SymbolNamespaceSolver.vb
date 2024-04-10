@@ -176,12 +176,17 @@ Namespace Runtime
 
         Public Iterator Function GetDllDirectories() As IEnumerable(Of String)
             For Each pkg As PackageEnvironment In Me.attachedNamespace.Values
-                Dim dir As String = $"{pkg.libpath}/lib/assembly"
+                If TypeOf pkg.libpath Is Directory Then
+                    Dim libdir As Directory = pkg.libpath
+                    Dim dir As String = $"{libdir.folder}/lib/assembly"
 
-                Yield pkg.libpath
+                    Yield libdir.folder
 
-                If dir.DirectoryExists Then
-                    Yield dir
+                    If dir.DirectoryExists Then
+                        Yield dir
+                    End If
+                Else
+                    Throw New NotImplementedException
                 End If
             Next
         End Function

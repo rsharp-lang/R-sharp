@@ -55,6 +55,7 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.DynamicInterop
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -74,7 +75,7 @@ Namespace Runtime.Internal.Invokes
                 Return x
             ElseIf TypeOf env Is PackageEnvironment Then
                 Dim pkg As PackageEnvironment = env
-                Dim dir As String = $"{pkg.libpath}/lib_c/"
+                Dim dir As String = $"{DirectCast(pkg.libpath, Directory).folder}/lib_c/"
                 Dim fileName As String = $"{dir}/{x}"
 
                 If fileName.FileExists Then

@@ -50,6 +50,7 @@
 
 #End Region
 
+Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
@@ -109,8 +110,10 @@ Namespace Development.Package
             Dim location As Value(Of String) = ""
 
             For Each pkg As PackageEnvironment In globalEnvironment.attachedNamespace
-                For Each assemblyDir As String In {$"{pkg.libpath}/assembly", $"{pkg.libpath}/lib/assembly", pkg.libpath}
-#If netcore5 = 1 Then
+                Dim lib_dir As Directory = pkg.libpath
+
+                For Each assemblyDir As String In {$"{lib_dir.folder}/assembly", $"{lib_dir.folder}/lib/assembly", lib_dir.folder}
+#If NETCOREAPP Then
                     If (location = $"{assemblyDir}/{libDll}.dll").FileExists Then
                         Return location
                     ElseIf (location = $"{assemblyDir}/{CreatePackage.getRuntimeTags}/{libDll}.dll").FileExists Then
