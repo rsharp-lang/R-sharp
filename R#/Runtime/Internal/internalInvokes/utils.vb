@@ -95,6 +95,8 @@ Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
+Imports LibDir = Microsoft.VisualBasic.FileIO.Directory
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
 Namespace Runtime.Internal.Invokes
 
@@ -1026,7 +1028,7 @@ Namespace Runtime.Internal.Invokes
 
         <Extension>
         Private Function getPackageSystemFile(env As Environment, fileName As String, package As String, mustWork As Boolean) As Object
-            Dim pkgDir As String
+            Dim pkgDir As IFileSystemEnvironment
             Dim alternativeName As String = fileName.createAlternativeName
 
             ' 优先从已经加载的程序包位置进行加载操作
@@ -1035,21 +1037,35 @@ Namespace Runtime.Internal.Invokes
             ElseIf Not RFileSystem.PackageInstalled(package, env) Then
                 Return Internal.debug.stop({$"we could not found any installed package which is named '{package}'!", $"package: {package}"}, env)
             Else
-                pkgDir = $"{RFileSystem.GetPackageDir(env)}/{package}"
+                pkgDir = LibDir.FromLocalFileSystem($"{RFileSystem.GetPackageDir(env)}/{package}")
             End If
 
-            fileName = $"{pkgDir}/{fileName}".GetFullPath
-
-            If fileName.FileExists Then
-                Return fileName.GetFullPath
-            ElseIf $"{pkgDir}/{alternativeName}".FileExists Then
-                Call env.AddMessage($"Target file '{fileName}' is missing in R file system. Use alternative file name: '{pkgDir}/{alternativeName}'...")
-                Return $"{pkgDir}/{alternativeName}"
-            ElseIf mustWork Then
-                Return Internal.debug.stop("file is not found!", env)
+            If TypeOf pkgDir Is LibDir Then
+                ' returns local file path if package is a local install directory
+                If pkgDir.FileExists(fileName) Then
+                    Return pkgDir.GetFullPath(fileName)
+                ElseIf pkgDir.FileExists(alternativeName) Then
+                    Call env.AddMessage($"Target file '{fileName}' is missing in R file system. Use alternative file name: '{pkgDir.GetFullPath(alternativeName)}'...")
+                    Return pkgDir.GetFullPath(alternativeName)
+                ElseIf mustWork Then
+                    Return Internal.debug.stop("file is not found!", env)
+                Else
+                    Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
+                    Return Nothing
+                End If
             Else
-                Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
-                Return Nothing
+                ' returns stream if package is a attached zip virtual filesystem
+                If pkgDir.FileExists(fileName) Then
+                    ' open readonly file
+                    Return pkgDir.OpenFile(fileName, FileMode.Open, FileAccess.Read)
+                ElseIf pkgDir.FileExists(alternativeName) Then
+                    Return pkgDir.OpenFile(alternativeName, FileMode.Open, FileAccess.Read)
+                ElseIf mustWork Then
+                    Return Internal.debug.stop("file is not found!", env)
+                Else
+                    Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
+                    Return Nothing
+                End If
             End If
         End Function
 

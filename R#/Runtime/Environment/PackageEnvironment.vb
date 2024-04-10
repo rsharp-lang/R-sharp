@@ -73,7 +73,15 @@ Namespace Runtime
     Public Class PackageEnvironment : Inherits Environment
 
         Public ReadOnly Property [namespace] As New PackageNamespace
-        Public ReadOnly Property libpath As String
+
+        ''' <summary>
+        ''' the package directory path that would be used for:
+        ''' 
+        ''' 1. config for load .NET assembly module files
+        ''' 2. get resource files inside the package
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property libpath As IFileSystemEnvironment
 
         Dim m_symbolSolver As SymbolNamespaceSolver
 
@@ -81,12 +89,7 @@ Namespace Runtime
         Sub New(globalEnv As GlobalEnvironment, packageName As String, libpath As IFileSystemEnvironment)
             Call MyBase.New(globalEnv, pkgFrame(packageName), isInherits:=False)
 
-            If TypeOf libpath Is Directory Then
-                ' config for load .NET assembly module files
-                Me.libpath = DirectCast(libpath, Directory).folder
-            Else
-                Throw New NotImplementedException(libpath.GetType.FullName)
-            End If
+            Me.libpath = libpath
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
