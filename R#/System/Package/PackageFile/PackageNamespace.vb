@@ -100,6 +100,19 @@ Namespace Development.Package.File
             End Get
         End Property
 
+        ''' <summary>
+        ''' current package is load from the in-memory stream zip archive?
+        ''' </summary>
+        ''' <returns>
+        ''' return true means from a in-memory zip archive stream, false means
+        ''' from local filesystem
+        ''' </returns>
+        Public ReadOnly Property inMemory As Boolean
+            Get
+                Return Not TypeOf libPath Is Directory
+            End Get
+        End Property
+
         Sub New()
         End Sub
 
@@ -138,6 +151,16 @@ Namespace Development.Package.File
             runtime = dir.ReadAllText($"/package/manifest/runtime.json").LoadJSON(Of AssemblyInfo)
             framework = dir.ReadAllText($"/package/manifest/framework.json").LoadJSON(Of AssemblyInfo)
         End Sub
+
+        Dim context As CollectibleAssemblyLoadContext
+
+        Public Function CreateLoaderContext() As CollectibleAssemblyLoadContext
+            If context Is Nothing Then
+                context = New CollectibleAssemblyLoadContext(Me)
+            End If
+
+            Return context
+        End Function
 
         ''' <summary>
         ''' check of a installed package libdir location

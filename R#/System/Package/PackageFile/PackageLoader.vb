@@ -385,7 +385,11 @@ Namespace Development.Package.File
                         End If
                     End If
 
-                    Call [Imports].LoadLibrary(dllFile, env, dependency.packages)
+                    If pkg.inMemory Then
+                        Call [Imports].LoadLibrary(dllFile, pkg.CreateLoaderContext, dependency.packages)
+                    Else
+                        Call [Imports].LoadLibrary(dllFile, env, dependency.packages)
+                    End If
                 End If
             Next
 
