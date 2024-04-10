@@ -3575,13 +3575,14 @@ RE0:
         ''' attact a given zip archive file as package
         ''' </summary>
         ''' <param name="R"></param>
-        ''' <param name="zip"></param>
+        ''' <param name="zip">the file path to the zip package</param>
         ''' <returns></returns>
         <Extension>
         Public Function attachPackageFile(R As RInterpreter, zip As String) As Object
-            Dim tmpDir As String = TempFileSystem.GetAppSysTempFile("_package", App.PID.ToHexString, zip.BaseName)
-            Call UnZip.ImprovedExtractToDirectory(zip, tmpDir, Overwrite.Always)
-            Return PackageLoader2.LoadPackage(tmpDir, R.globalEnvir)
+            Dim mount_zip_fs As New ZipStream(zip, is_readonly:=True)
+            Dim err As Message = PackageLoader2.LoadPackage(mount_zip_fs, zip.BaseName, R.globalEnvir)
+
+            Return err
         End Function
     End Module
 End Namespace

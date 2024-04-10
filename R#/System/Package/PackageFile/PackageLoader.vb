@@ -85,7 +85,7 @@ Namespace Development.Package.File
     ''' </summary>
     ''' <remarks>
     ''' the package loading procedure between the <see cref="Hotload(String, GlobalEnvironment, ByRef DESCRIPTION)"/> and
-    ''' <see cref="LoadPackage(String, GlobalEnvironment)"/> is similar to each other, but have some significatent 
+    ''' <see cref="LoadPackage"/> is similar to each other, but have some significatent 
     ''' difference between each other:
     ''' 
     ''' 1. hotload function handling the source project folder, all of the R source is the original text file
