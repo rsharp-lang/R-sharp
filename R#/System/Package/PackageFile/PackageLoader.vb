@@ -282,7 +282,7 @@ Namespace Development.Package.File
         ''' <summary>
         ''' attach installed package
         ''' </summary>
-        ''' <param name="dir"></param>
+        ''' <param name="dir">the local physical filesystem</param>
         ''' <param name="env"></param>
         Public Function LoadPackage(dir As String, env As GlobalEnvironment) As Message
             Dim result As New Value(Of Message)

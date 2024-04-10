@@ -3571,6 +3571,12 @@ RE0:
             End If
         End Function
 
+        ''' <summary>
+        ''' attact a given zip archive file as package
+        ''' </summary>
+        ''' <param name="R"></param>
+        ''' <param name="zip"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function attachPackageFile(R As RInterpreter, zip As String) As Object
             Dim tmpDir As String = TempFileSystem.GetAppSysTempFile("_package", App.PID.ToHexString, zip.BaseName)

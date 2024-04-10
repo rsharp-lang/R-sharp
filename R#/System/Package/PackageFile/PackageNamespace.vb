@@ -55,8 +55,10 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml.Models
@@ -69,11 +71,12 @@ Namespace Development.Package.File
 
         Public Property meta As DESCRIPTION
         Public Property checksum As String
+
         ''' <summary>
         ''' the root directory of the package module to load
         ''' </summary>
         ''' <returns></returns>
-        Public Property libPath As String
+        Public Property libPath As IFileSystemEnvironment
 
         ''' <summary>
         ''' [library.dll => md5]
@@ -100,9 +103,14 @@ Namespace Development.Package.File
         Sub New()
         End Sub
 
+        ''' <summary>
+        ''' create a new package namespace from source development directory
+        ''' </summary>
+        ''' <param name="pkgName"></param>
+        ''' <param name="libpath">the local source directory for the package development</param>
         Sub New(pkgName As String, libpath As String)
             Me.meta = New DESCRIPTION With {.Package = pkgName, .Title = pkgName}
-            Me.libPath = libpath
+            Me.libPath = Directory.FromLocalFileSystem(libpath)
             Me.checksum = "n/a"
             Me.assembly = New Dictionary(Of String, String)
             Me.dependency = {}
@@ -113,23 +121,30 @@ Namespace Development.Package.File
         End Sub
 
         ''' <summary>
-        ''' 
+        ''' Create package namespace model from a local package installation location
         ''' </summary>
         ''' <param name="dir">
-        ''' the root directory of the package module to load
+        ''' the root directory of the package module to load, or a zip 
+        ''' stream filesystem for attach package in memory.
         ''' </param>
-        Sub New(dir As String)
-            meta = $"{dir}/package/index.json".LoadJsonFile(Of DESCRIPTION)
-            checksum = $"{dir}/CHECKSUM".ReadFirstLine
+        Sub New(dir As IFileSystemEnvironment)
+            meta = dir.ReadAllText("/package/index.json").LoadJsonFile(Of DESCRIPTION)
+            checksum = dir.ReadAllText("/CHECKSUM").ReadFirstLine
             libPath = dir
-            assembly = $"{dir}/package/manifest/assembly.json".LoadJsonFile(Of Dictionary(Of String, String))
-            dependency = $"{dir}/package/manifest/dependency.json".LoadJsonFile(Of Dependency())
-            symbols = $"{dir}/package/manifest/symbols.json".LoadJsonFile(Of Dictionary(Of String, String))
-            datafiles = $"{dir}/package/manifest/data.json".LoadJsonFile(Of Dictionary(Of String, NamedValue))
-            runtime = $"{dir}/package/manifest/runtime.json".LoadJsonFile(Of AssemblyInfo)
-            framework = $"{dir}/package/manifest/framework.json".LoadJsonFile(Of AssemblyInfo)
+            assembly = dir.ReadAllText($"/package/manifest/assembly.json").LoadJsonFile(Of Dictionary(Of String, String))
+            dependency = dir.ReadAllText($"/package/manifest/dependency.json").LoadJsonFile(Of Dependency())
+            symbols = dir.ReadAllText($"/package/manifest/symbols.json").LoadJsonFile(Of Dictionary(Of String, String))
+            datafiles = dir.ReadAllText($"/package/manifest/data.json").LoadJsonFile(Of Dictionary(Of String, NamedValue))
+            runtime = dir.ReadAllText($"/package/manifest/runtime.json").LoadJsonFile(Of AssemblyInfo)
+            framework = dir.ReadAllText($"/package/manifest/framework.json").LoadJsonFile(Of AssemblyInfo)
         End Sub
 
+        ''' <summary>
+        ''' check of a installed package libdir location
+        ''' </summary>
+        ''' <param name="dir"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Public Shared Function Check(ByRef dir As String, env As Environment) As Message
             dir = dir.GetDirectoryFullPath
 
@@ -141,10 +156,31 @@ Namespace Development.Package.File
         End Function
 
         ''' <summary>
-        ''' try to find the clr assembly file in current library folder
+        ''' try to check of the clr assembly file is existed in current package?
         ''' </summary>
         ''' <param name="assemblyName"></param>
         ''' <returns></returns>
+        Public Function CheckAssemblyExist(assemblyName As String) As Boolean
+            If assembly.ContainsKey($"{assemblyName}.dll") Then
+                ' check if is an installed package
+                Dim check_installed As Boolean = libPath.FileExists($"/lib/assembly/{assemblyName}.dll")
+                ' check if try as a hot load package
+                Dim check_hotload As Boolean = libPath.FileExists($"/assembly/{CreatePackage.getRuntimeTags}/{assemblyName}.dll")
+
+                Return check_installed OrElse check_hotload
+            End If
+
+            Return False
+        End Function
+
+        ''' <summary>
+        ''' try to find the clr assembly file in current library folder
+        ''' </summary>
+        ''' <param name="assemblyName">the dll assembly name</param>
+        ''' <returns>
+        ''' this function maybe returns nothing if the required assembly file 
+        ''' is not exists in the package directory.
+        ''' </returns>
         Public Function FindAssemblyPath(assemblyName As String) As String
             ' 20220904
             ' the native library name will not be matched
@@ -152,16 +188,26 @@ Namespace Development.Package.File
             If assembly.ContainsKey($"{assemblyName}.dll") Then
 #If NETCOREAPP Then
                 ' is an installed package
-                Dim dllFile As String = $"{libPath}/lib/assembly/{assemblyName}.dll"
+                Dim dllFile_installed As String = $"/lib/assembly/{assemblyName}.dll"
+                Dim dllFile_hotload As String = $"/assembly/{CreatePackage.getRuntimeTags}/{assemblyName}.dll"
 
                 ' try as a hot load package
-                If Not dllFile.FileExists Then
-                    dllFile = $"{libPath}/assembly/{CreatePackage.getRuntimeTags}/{assemblyName}.dll"
+                If libPath.FileExists(dllFile_installed) Then
+                    Return libPath.GetFullPath(dllFile_installed)
+                End If
+                If libPath.FileExists(dllFile_hotload) Then
+                    Return libPath.GetFullPath(dllFile_hotload)
                 End If
 
-                Return dllFile
+                Return Nothing
 #Else
-                Return $"{libPath}/assembly/{assemblyName}.dll"
+                Dim dllfile As String = $"/assembly/{assemblyName}.dll"
+
+                If libPath.FileExists(dllfile) Then
+                    Return libPath.GetFullPath(dllfile)
+                Else
+                    Return Nothing
+                End If
 #End If
             Else
                 Return Nothing
