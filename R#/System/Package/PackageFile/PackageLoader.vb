@@ -67,6 +67,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports Directory = Microsoft.VisualBasic.FileIO.Directory
 
 Namespace Development.Package.File
 
@@ -203,7 +204,7 @@ Namespace Development.Package.File
             End If
 
             Dim pkg As New PackageNamespace With {
-                .libPath = projDir,
+                .libPath = Directory.FromLocalFileSystem(projDir),
                 .meta = meta,
                 .assembly = FindAllDllFiles(projDir)
             }
@@ -291,7 +292,7 @@ Namespace Development.Package.File
                 Return result
             End If
 
-            Dim [namespace] As New PackageNamespace(dir)
+            Dim [namespace] As New PackageNamespace(Directory.FromLocalFileSystem(dir))
             Dim debugEcho As Boolean = env.debugMode
             Dim symbolExpression As Expression
             Dim symbols As New List(Of RFunction)
@@ -368,7 +369,12 @@ Namespace Development.Package.File
                 Else
                     Dim dllFile As String = pkg.FindAssemblyPath(dependency.library)
 
-                    If Not dllFile.FileExists Then
+                    ' 20240410 dll file is empty string if dll file not found
+                    ' inside the package directory
+                    '
+                    ' if the target dll file is not existed in the
+                    ' package directory
+                    If dllFile.StringEmpty Then
                         result = [Imports].GetDllFile($"{dependency.library}.dll", env)
 
                         If TypeOf result Is Message Then
