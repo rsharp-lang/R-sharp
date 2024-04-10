@@ -236,6 +236,10 @@ Namespace Runtime
             Return $"{attachedNamespace.Count} namespace is attached: " & attachedNamespace.Keys.ToArray.GetJson
         End Function
 
+        ''' <summary>
+        ''' enumerates the <see cref="PackageEnvironment"/> inside the current <see cref="attachedNamespace"/>
+        ''' </summary>
+        ''' <returns></returns>
         Public Iterator Function GetEnumerator() As IEnumerator(Of PackageEnvironment) Implements IEnumerable(Of PackageEnvironment).GetEnumerator
             For Each ns As PackageEnvironment In attachedNamespace.Values
                 Yield ns

@@ -975,7 +975,10 @@ Namespace Runtime.Internal.Invokes
         ''' An Error occurs If more than one package name Is given.
         ''' </param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this function maybe returns a clr stream object if the required file is 
+        ''' inside an in-memory zip archive virtual filesystem.
+        ''' </returns>
         ''' <remarks>
         ''' do not add extension suffix name for csv data set due to 
         ''' the reason of csv file extension suffix will be removed
@@ -989,33 +992,64 @@ Namespace Runtime.Internal.Invokes
                                    Optional env As Environment = Nothing) As Object
 
             If Not package.StringEmpty Then
-                Dim pkgDir As String
-                Dim alternativeName As String = fileName.createAlternativeName
-
-                ' 优先从已经加载的程序包位置进行加载操作
-                If env.globalEnvironment.attachedNamespace.hasNamespace(package) Then
-                    pkgDir = env.globalEnvironment.attachedNamespace(package).libpath
-                ElseIf Not RFileSystem.PackageInstalled(package, env) Then
-                    Return Internal.debug.stop({$"we could not found any installed package which is named '{package}'!", $"package: {package}"}, env)
-                Else
-                    pkgDir = $"{RFileSystem.GetPackageDir(env)}/{package}"
-                End If
-
-                fileName = $"{pkgDir}/{fileName}".GetFullPath
-
-                If fileName.FileExists Then
-                    Return fileName.GetFullPath
-                ElseIf $"{pkgDir}/{alternativeName}".FileExists Then
-                    Call env.AddMessage($"Target file '{fileName}' is missing in R file system. Use alternative file name: '{pkgDir}/{alternativeName}'...")
-                    Return $"{pkgDir}/{alternativeName}"
-                ElseIf mustWork Then
-                    Return Internal.debug.stop("file is not found!", env)
-                Else
-                    Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
-                    Return Nothing
-                End If
+                Return env.getPackageSystemFile(fileName, package, mustWork)
             Else
-                Return Internal.debug.stop("not implemented!", env)
+                Return env.getPackageSystemFile(fileName, mustWork)
+            End If
+        End Function
+
+        <Extension>
+        Private Function getPackageSystemFile(env As Environment, fileName As String, mustWork As Boolean) As Object
+            Dim val As Object = Nothing
+            Dim globalEnvir = env.globalEnvironment
+
+            ' find in current attachedNamespace
+            For Each pkg_ns As PackageEnvironment In globalEnvir.attachedNamespace.AsEnumerable
+                val = env.getPackageSystemFile(fileName, package:=pkg_ns.namespace.packageName, mustWork)
+
+                If val Is Nothing Then
+                    Continue For
+                End If
+                If RProgram.isException(val) Then
+                    Continue For
+                End If
+
+                Return val
+            Next
+
+            If mustWork Then
+                Return Internal.debug.stop($"the required file '{fileName}' could not be found in any package namespace!", env)
+            Else
+                Return Nothing
+            End If
+        End Function
+
+        <Extension>
+        Private Function getPackageSystemFile(env As Environment, fileName As String, package As String, mustWork As Boolean) As Object
+            Dim pkgDir As String
+            Dim alternativeName As String = fileName.createAlternativeName
+
+            ' 优先从已经加载的程序包位置进行加载操作
+            If env.globalEnvironment.attachedNamespace.hasNamespace(package) Then
+                pkgDir = env.globalEnvironment.attachedNamespace(package).libpath
+            ElseIf Not RFileSystem.PackageInstalled(package, env) Then
+                Return Internal.debug.stop({$"we could not found any installed package which is named '{package}'!", $"package: {package}"}, env)
+            Else
+                pkgDir = $"{RFileSystem.GetPackageDir(env)}/{package}"
+            End If
+
+            fileName = $"{pkgDir}/{fileName}".GetFullPath
+
+            If fileName.FileExists Then
+                Return fileName.GetFullPath
+            ElseIf $"{pkgDir}/{alternativeName}".FileExists Then
+                Call env.AddMessage($"Target file '{fileName}' is missing in R file system. Use alternative file name: '{pkgDir}/{alternativeName}'...")
+                Return $"{pkgDir}/{alternativeName}"
+            ElseIf mustWork Then
+                Return Internal.debug.stop("file is not found!", env)
+            Else
+                Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
+                Return Nothing
             End If
         End Function
 
