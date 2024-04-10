@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 Imports RscriptText = SMRUCC.Rsharp.Runtime.Components.Rscript
+Imports Libdir = Microsoft.VisualBasic.FileIO.Directory
 
 ''' <summary>
 ''' 
@@ -129,7 +130,8 @@ Module Program
 
             For Each packageRef As String In packageList
                 If packageRef.DirectoryExists Then
-                    Dim err As Message = PackageLoader2.LoadPackage(packageRef.GetDirectoryFullPath, R.globalEnvir)
+                    Dim libdir2 As Libdir = Libdir.FromLocalFileSystem(packageRef)
+                    Dim err As Message = PackageLoader2.LoadPackage(libdir2, packageRef.BaseName, R.globalEnvir)
 
                     If Not err Is Nothing Then
                         Return handleResult(err, R.globalEnvir, Nothing)
@@ -210,7 +212,8 @@ Module Program
 
             For Each packageRef As String In packageList
                 If packageRef.DirectoryExists Then
-                    Dim err As Message = PackageLoader2.LoadPackage(packageRef.GetDirectoryFullPath, R.globalEnvir)
+                    Dim libdir2 As Libdir = Libdir.FromLocalFileSystem(packageRef)
+                    Dim err As Message = PackageLoader2.LoadPackage(libdir2, packageRef.BaseName, R.globalEnvir)
 
                     If Not err Is Nothing Then
                         Return handleResult(err, R.globalEnvir, Nothing)

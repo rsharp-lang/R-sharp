@@ -74,6 +74,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports R = SMRUCC.Rsharp.Runtime.Components.Rscript
+Imports LibDir = Microsoft.VisualBasic.FileIO.Directory
 
 <Package("package_utils")>
 Module package
@@ -112,7 +113,7 @@ Module package
     ''' <param name="env"></param>
     <ExportAPI("loadPackage")>
     Public Sub loadPackage(dir As String, Optional env As Environment = Nothing)
-        Call PackageLoader2.LoadPackage(dir, env.globalEnvironment)
+        Call PackageLoader2.LoadPackage(LibDir.FromLocalFileSystem(dir), dir.BaseName, env.globalEnvironment)
     End Sub
 
     ''' <summary>

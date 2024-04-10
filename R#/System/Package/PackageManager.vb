@@ -72,6 +72,7 @@ Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports fs = System.IO.Directory
+Imports Directory = Microsoft.VisualBasic.FileIO.Directory
 
 Namespace Development.Package
 
@@ -326,7 +327,7 @@ Namespace Development.Package
             pkgDb.packages = packageIndex.Values.ToArray
             pkgDb.system = GetType(LocalPackageDatabase).Assembly.FromAssembly
 
-            Call PackageLoader2.LoadPackage(libDir, GlobalEnvironment.defaultEmpty)
+            Call PackageLoader2.LoadPackage(Directory.FromLocalFileSystem(libDir), pkginfo.Package, GlobalEnvironment.defaultEmpty)
             Call Console.WriteLine()
             Call Console.WriteLine($"* DONE ({pkginfo.Package})")
 

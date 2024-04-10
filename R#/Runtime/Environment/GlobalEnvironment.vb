@@ -79,6 +79,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports anything = Microsoft.VisualBasic.Scripting
 Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
+Imports Libdir = Microsoft.VisualBasic.FileIO.Directory
 
 <Assembly: InternalsVisibleTo("Rnotebook")>
 
@@ -310,7 +311,7 @@ Namespace Runtime
             End If
 
             If (Not RzipPackageFolder.StringEmpty) AndAlso $"{RzipPackageFolder}/package/index.json".FileExists Then
-                Return PackageLoader2.LoadPackage(RzipPackageFolder, [global])
+                Return PackageLoader2.LoadPackage(Libdir.FromLocalFileSystem(RzipPackageFolder), packageName, [global])
             ElseIf package Is Nothing Then
                 If Not ignoreMissingStartupPackages Then
                     Return MissingPackage(packageName, exception)
