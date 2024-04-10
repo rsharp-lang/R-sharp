@@ -69,8 +69,13 @@ Namespace Development.Package
         ''' <param name="strict"></param>
         ''' <returns></returns>
         <Extension>
-        Public Iterator Function ParsePackages(dll$, Optional strict As Boolean = True) As IEnumerable(Of Package)
-            Dim types As Type() = deps.LoadAssemblyOrCache(dll, strict:=strict).GetTypes
+        Public Function ParsePackages(dll$, Optional strict As Boolean = True) As IEnumerable(Of Package)
+            Return deps.LoadAssemblyOrCache(dll, strict:=strict).ParsePackages(strict)
+        End Function
+
+        <Extension>
+        Public Iterator Function ParsePackages(assembly As Assembly, Optional strict As Boolean = True) As IEnumerable(Of Package)
+            Dim types As Type() = assembly.GetTypes
             Dim package As New Value(Of Package)
 
             For Each type As Type In types

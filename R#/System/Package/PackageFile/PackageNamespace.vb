@@ -154,9 +154,9 @@ Namespace Development.Package.File
 
         Dim context As CollectibleAssemblyLoadContext
 
-        Public Function CreateLoaderContext() As CollectibleAssemblyLoadContext
+        Public Function CreateLoaderContext(env As PackageEnvironment) As CollectibleAssemblyLoadContext
             If context Is Nothing Then
-                context = New CollectibleAssemblyLoadContext(Me)
+                context = New CollectibleAssemblyLoadContext(Me, env)
             End If
 
             Return context

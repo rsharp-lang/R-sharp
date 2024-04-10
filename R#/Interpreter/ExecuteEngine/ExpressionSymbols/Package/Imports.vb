@@ -66,6 +66,7 @@ Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCoreApp
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
@@ -343,20 +344,26 @@ load:       Return LoadLibrary(filepath, env, names)
         End Function
 
         Public Shared Function LoadLibrary(libDll As String, env As CollectibleAssemblyLoadContext, names As Index(Of String)) As Object
-            Dim assm_buf As Stream = env.GetAssemblyStream(libDll)
-            Dim assembly As Assembly = env.LoadFromStream(assm_buf)
+            Dim assm_buf As MemoryStream = env.GetAssemblyStream(libDll)
+            Dim assembly As Assembly = Assembly.Load(assm_buf.ToArray)
 
-            Throw New NotImplementedException
+            ' load all dependency assembly into memory at first
+            Call LoadLibraryTree(assembly, env)
+            ' then solve the package modules
+            Return LoadLibrary(assembly, "in-zip-memory:" & libDll, names, env.runtime)
         End Function
 
-        ''' <summary>
-        ''' Load packages from a given dll module file
-        ''' </summary>
-        ''' <param name="libDll">A given dll module file its file path</param>
-        ''' <param name="envir"></param>
-        ''' <param name="names">a list of package module in target assembly file <paramref name="libDll"/></param>
-        ''' <returns></returns>
-        Public Shared Function LoadLibrary(libDll$, envir As Environment, names As Index(Of String)) As Object
+        Private Shared Sub LoadLibraryTree(assembly As Assembly, env As CollectibleAssemblyLoadContext)
+            For Each dep As AssemblyName In assembly.GetReferencedAssemblies
+                If dep.Name.StartsWith("System") Then
+                    Continue For
+                End If
+
+                Call LoadLibraryTree(assembly:=env.Load(dep), env)
+            Next
+        End Sub
+
+        Private Shared Function LoadLibrary(package_asm As Assembly, libDll$, names As Index(Of String), envir As Environment) As Object
             ' test if it is imports all modules code
             Dim importsAll As Boolean = names.DoCall(AddressOf isImportsAllPackages)
             Dim packages As Dictionary(Of String, Package)
@@ -367,7 +374,7 @@ load:       Return LoadLibrary(filepath, env, names)
             End If
 
             ' get packages modules
-            packages = PackageLoader.ParsePackages(libDll) _
+            packages = PackageLoader.ParsePackages(package_asm,) _
                 .Where(Function(pkg)
                            If importsAll Then
                                Return True
@@ -402,6 +409,19 @@ load:       Return LoadLibrary(filepath, env, names)
             End If
 
             Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' Load packages from a given dll module file
+        ''' </summary>
+        ''' <param name="libDll">A given dll module file its file path</param>
+        ''' <param name="envir"></param>
+        ''' <param name="names">a list of package module in target assembly file <paramref name="libDll"/></param>
+        ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function LoadLibrary(libDll$, envir As Environment, names As Index(Of String)) As Object
+            Return LoadLibrary(deps.LoadAssemblyOrCache(libDll, ), libDll, names, envir)
         End Function
 
         Public Shared Sub hook_jsEnv(globalEnv As GlobalEnvironment, symbolName As String, ParamArray libs As Type())
