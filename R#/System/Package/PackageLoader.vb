@@ -65,7 +65,7 @@ Namespace Development.Package
         ''' <summary>
         ''' 应该是只会加载静态方法
         ''' </summary>
-        ''' <param name="dll$"></param>
+        ''' <param name="dll">the file full path of the dll package module file</param>
         ''' <param name="strict"></param>
         ''' <returns></returns>
         <Extension>

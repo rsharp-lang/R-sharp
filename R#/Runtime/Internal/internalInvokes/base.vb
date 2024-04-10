@@ -3580,7 +3580,9 @@ RE0:
         <Extension>
         Public Function attachPackageFile(R As RInterpreter, zip As String) As Object
             Dim mount_zip_fs As New ZipStream(zip, is_readonly:=True)
-            Dim err As Message = PackageLoader2.LoadPackage(mount_zip_fs, zip.BaseName, R.globalEnvir)
+            ' maybe in format like: packageName_version
+            Dim guess_pkgName As String = zip.BaseName
+            Dim err As Message = PackageLoader2.LoadPackage(mount_zip_fs, guess_pkgName, R.globalEnvir)
 
             Return err
         End Function
