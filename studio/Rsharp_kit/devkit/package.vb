@@ -75,6 +75,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports R = SMRUCC.Rsharp.Runtime.Components.Rscript
 Imports LibDir = Microsoft.VisualBasic.FileIO.Directory
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 
 <Package("package_utils")>
 Module package
@@ -143,9 +144,7 @@ Module package
     Public Function attach(package As String, Optional env As Environment = Nothing) As Object
         If package.ExtensionSuffix("zip") Then
             If package.FileExists Then
-                Dim tmpDir As String = TempFileSystem.GetAppSysTempFile("_package", App.PID.ToHexString, package.BaseName)
-                Call UnZip.ImprovedExtractToDirectory(package, tmpDir, Overwrite.Always)
-                Return PackageLoader2.LoadPackage(tmpDir, env.globalEnvironment)
+                Return base.attachPackageFile(env.globalEnvironment.Rscript, zip:=package)
             ElseIf package.First = "@" Then
                 ' source from github
                 Return github.hotLoad(package.Substring(1))
