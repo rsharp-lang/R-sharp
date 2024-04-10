@@ -345,23 +345,11 @@ load:       Return LoadLibrary(filepath, env, names)
 
         Public Shared Function LoadLibrary(libDll As String, env As CollectibleAssemblyLoadContext, names As Index(Of String)) As Object
             Dim assm_buf As MemoryStream = env.GetAssemblyStream(libDll)
-            Dim assembly As Assembly = Assembly.Load(assm_buf.ToArray)
+            Dim assembly As Assembly = env.LoadFromStream(assm_buf)
 
-            ' load all dependency assembly into memory at first
-            Call LoadLibraryTree(assembly, env)
-            ' then solve the package modules
+            ' solve the package modules
             Return LoadLibrary(assembly, "in-zip-memory:" & libDll, names, env.runtime)
         End Function
-
-        Private Shared Sub LoadLibraryTree(assembly As Assembly, env As CollectibleAssemblyLoadContext)
-            For Each dep As AssemblyName In assembly.GetReferencedAssemblies
-                If dep.Name.StartsWith("System") Then
-                    Continue For
-                End If
-
-                Call LoadLibraryTree(assembly:=env.Load(dep), env)
-            Next
-        End Sub
 
         Private Shared Function LoadLibrary(package_asm As Assembly, libDll$, names As Index(Of String), envir As Environment) As Object
             ' test if it is imports all modules code
