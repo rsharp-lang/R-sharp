@@ -640,13 +640,13 @@ Namespace Development.Package.File
         ''' <returns></returns>
         Private Function getFileReader(path As String) As String
             Select Case path.ExtensionSuffix.ToLower
-                Case "csv" : Return "read.csv,%s,1%,TRUE,TRUE,utf8,#,FALSE,-1%,$"
-                Case "txt" : Return "readLines,%s,NULL"
+                Case "csv" : Return "read.csv,%s,TRUE,1%,TRUE,TRUE,utf8,#,FALSE,-1%,$"
+                Case "txt" : Return "readLines,%s,utf8,FALSE,$"
                 Case "rda" : Return "load,%s,$,FALSE"
                 Case "rds" : Return "readRDS,%s,NULL,$"
 
                 Case Else
-                    Return "readBin,%s"
+                    Return "readBin,%s,NULL,1,NA,TRUE,big,$"
             End Select
         End Function
     End Module

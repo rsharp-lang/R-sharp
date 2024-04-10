@@ -92,11 +92,10 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Linq
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
+Imports LibDir = Microsoft.VisualBasic.FileIO.Directory
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
-Imports LibDir = Microsoft.VisualBasic.FileIO.Directory
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
 Namespace Runtime.Internal.Invokes
 
@@ -920,16 +919,16 @@ Namespace Runtime.Internal.Invokes
             If dataSymbols.IsNullOrEmpty OrElse Not dataSymbols.ContainsKey(name) Then
                 Return Nothing
             Else
-                Dim fileref As Object
+                Dim file_ref As Object
 
                 If TypeOf lib_pkgdir Is LibDir Then
-                    fileref = lib_pkgdir.GetFullPath($"/data/{dataSymbols(name).name}")
+                    file_ref = lib_pkgdir.GetFullPath($"/data/{dataSymbols(name).name}")
                 Else
-                    fileref = lib_pkgdir.OpenFile($"/data/{dataSymbols(name).name}")
+                    file_ref = lib_pkgdir.OpenFile($"/data/{dataSymbols(name).name}")
                 End If
 
                 reader = dataSymbols(name).text
-                load = env.readFile(reader, lib_pkgdir)
+                load = env.readFile(reader, file_ref)
             End If
 
             If RProgram.isException(load) Then
