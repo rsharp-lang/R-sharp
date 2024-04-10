@@ -145,12 +145,13 @@ Namespace Development.Package.File
         ''' <param name="dir"></param>
         ''' <param name="env"></param>
         ''' <returns></returns>
-        Public Shared Function Check(ByRef dir As String, env As Environment) As Message
-            dir = dir.GetDirectoryFullPath
+        Public Shared Function Check(ByRef dir As IFileSystemEnvironment, packageName As String, env As Environment) As Message
+            If dir Is Nothing Then
+                Return Internal.debug.stop({$"package '{packageName}' is not installed!", $"package: {packageName}"}, env)
+            End If
 
-            If Not dir.DirectoryExists Then Return Internal.debug.stop({$"package '{dir.BaseName}' is not installed!", $"package: {dir.BaseName}"}, env)
-            If Not $"{dir}/package/index.json".FileExists Then Return Internal.debug.stop("missing package index file!", env)
-            If Not $"{dir}/CHECKSUM".FileExists Then Return Internal.debug.stop("no package checksum data!", env)
+            If Not dir.FileExists($"/package/index.json") Then Return Internal.debug.stop("missing package index file!", env)
+            If Not dir.FileExists($"/CHECKSUM") Then Return Internal.debug.stop("no package checksum data!", env)
 
             Return Nothing
         End Function

@@ -54,6 +54,7 @@
 Imports System.IO
 Imports System.IO.Compression
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
@@ -285,19 +286,19 @@ Namespace Development.Package.File
         ''' </summary>
         ''' <param name="dir">the local physical filesystem</param>
         ''' <param name="env"></param>
-        Public Function LoadPackage(dir As String, env As GlobalEnvironment) As Message
+        Public Function LoadPackage(dir As IFileSystemEnvironment, packageName As String, env As GlobalEnvironment) As Message
             Dim result As New Value(Of Message)
 
-            If Not result = PackageNamespace.Check(dir, env) Is Nothing Then
+            If Not result = PackageNamespace.Check(dir, packageName, env) Is Nothing Then
                 Return result
             End If
 
-            Dim [namespace] As New PackageNamespace(Directory.FromLocalFileSystem(dir))
+            Dim [namespace] As New PackageNamespace(dir)
             Dim debugEcho As Boolean = env.debugMode
             Dim symbolExpression As Expression
             Dim symbols As New List(Of RFunction)
             Dim pkgEnv As PackageEnvironment = env.attachedNamespace.Add([namespace])
-            Dim helpIndex = $"{dir}/package/man/index.json".ReadAllText(throwEx:=False, suppress:=True).LoadJSON(Of Dictionary(Of String, Document))
+            Dim helpIndex = dir.ReadAllText($"/package/man/index.json").LoadJSON(Of Dictionary(Of String, Document))
 
             If helpIndex Is Nothing Then
                 helpIndex = New Dictionary(Of String, Document)
@@ -309,7 +310,7 @@ Namespace Development.Package.File
 
             ' 1. load R symbols
             For Each symbol As NamedValue(Of String) In [namespace].EnumerateSymbols
-                Using bin As New BinaryReader($"{dir}/lib/src/{symbol.Value}".OpenReadonly(retryOpen:=3, verbose:=env.verboseOption))
+                Using bin As New BinaryReader(dir.OpenFile($"/lib/src/{symbol.Value}", FileMode.Open))
                     symbolExpression = BlockReader _
                         .Read(bin) _
                         .Parse(desc:=[namespace].meta)
