@@ -135,7 +135,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Dim reader As PropertyInfo = getReader(type.GetElementType, memberName)
 
             If reader Is Nothing Then
-                If envir.globalEnvironment.options.strict Then
+                If getStrictOpt(envir) Then
                     Return Internal.debug.stop($"can not found member symbol '{memberName}' in [{type.GetElementType.FullName}].", envir)
                 Else
                     Return Nothing
@@ -158,11 +158,22 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End If
         End Function
 
+        Private Function getStrictOpt(envir As Environment) As Boolean
+            Dim globals = envir.globalEnvironment
+            Dim strict As Boolean = globals.options.strict
+
+            strict = globals.options _
+                .getOption("vector_shadow_strict", strict.ToString) _
+                .ParseBoolean
+
+            Return strict
+        End Function
+
         Private Function readSingle(objVal As Object, memberName As String, envir As Environment) As Object
             Dim reader As PropertyInfo = getReader(objVal.GetType, memberName)
 
             If reader Is Nothing Then
-                If envir.globalEnvironment.options.strict Then
+                If getStrictOpt(envir) Then
                     Return Internal.debug.stop($"can not found member symbol '{memberName}' in [{objVal.GetType.FullName}].", envir)
                 Else
                     Return Nothing
