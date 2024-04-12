@@ -242,7 +242,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
                         If rowIndex Is Nothing Then
                             ' which means the indexVec is empty, no element
-                            Return Internal.debug.stop("the required index is NULL!", env)
+                            ' the original R language returns an empty dataframe
+                            ' returns nothing at here. and also echo warning message
+                            Call env.AddMessage("the required row index is nothing!")
+
+                            If drop Then
+                                Return list.empty
+                            Else
+                                Return Nothing
+                            End If
                         End If
 
                         Dim result = data.getRowList(rowIndex, drop:=drop)
