@@ -61,6 +61,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter
@@ -177,6 +178,19 @@ Namespace Runtime.Internal.Object
         Sub New(type As RType)
             elementType = type
             slots = New Dictionary(Of String, Object)
+        End Sub
+
+        ''' <summary>
+        ''' construct a new tuple list object from a named slot value collection.
+        ''' </summary>
+        ''' <param name="data">a named slot value collection.</param>
+        Sub New(ParamArray data As ArgumentReference())
+            elementType = RType.any
+            slots = New Dictionary(Of String, Object)
+
+            For Each slot As ArgumentReference In data
+                slots(slot.Name) = slot.Value
+            Next
         End Sub
 
         Sub New(ParamArray data As (key As String, val As Object)())
