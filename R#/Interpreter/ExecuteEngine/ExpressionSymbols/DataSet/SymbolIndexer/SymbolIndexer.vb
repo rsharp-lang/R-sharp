@@ -239,6 +239,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     If TypeOf opt.targetSymbols(Scan0) Is Literal AndAlso DirectCast(opt.targetSymbols(Scan0), Literal) = "drop" Then
                         Dim drop As Boolean = CLRVector.asLogical(opt.value.Evaluate(env))(Scan0)
                         Dim rowIndex = data.getRowIndex(indexVec.values(Scan0).Evaluate(env))
+
+                        If rowIndex Is Nothing Then
+                            ' which means the indexVec is empty, no element
+                            Return Internal.debug.stop("the required index is NULL!", env)
+                        End If
+
                         Dim result = data.getRowList(rowIndex, drop:=drop)
 
                         If TypeOf result Is Dictionary(Of String, Object) Then
