@@ -169,7 +169,7 @@ Namespace Runtime
         ''' </param>
         Public Overrides Sub WriteLine(message As String)
             If split Then
-                If message Is Nothing Then
+                If message Is Nothing OrElse message.Length = 0 Then
                     Call stdout.WriteLine()
                 ElseIf message.Last = vbBack Then
                     Call stdout.Write(message.Trim(CChar(vbBack)))
@@ -179,7 +179,7 @@ Namespace Runtime
             End If
 
             If Not logfile Is Nothing Then
-                Call logfile.WriteLine(message Or EmptyString)
+                Call logfile.WriteLine((message Or EmptyString).Trim(CChar(vbBack)))
             End If
 
             Call stdout.Flush()
