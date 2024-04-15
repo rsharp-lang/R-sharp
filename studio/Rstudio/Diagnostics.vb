@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
@@ -249,7 +250,7 @@ Module Diagnostics
         Dim markdownText As String
 
         Using buffer As New MemoryStream
-            Dim markdown As New RContentOutput(New StreamWriter(buffer), OutputEnvironments.Html)
+            Dim markdown As New RContentOutput(New StreamWriter(buffer, Encodings.UTF8WithoutBOM.CodePage), OutputEnvironments.Html)
 
             Call env.globalEnvironment _
                .packages _
