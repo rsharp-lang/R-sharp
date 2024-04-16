@@ -286,7 +286,7 @@ Namespace Runtime.Internal.Invokes
             If image Is Nothing Then
                 Return Nothing
             ElseIf TypeOf image Is Image OrElse TypeOf image Is Bitmap Then
-                Return graphics.colorTable(BitmapBuffer.FromImage(CType(image, Image)).GetPixelsAll.ToArray, New list, env)
+                Return graphics.colorTable(BitmapImage.BitmapBuffer.FromImage(CType(image, Image)).GetPixelsAll.ToArray, New list, env)
             Else
                 Return Message.InCompatibleType(GetType(Image), image.GetType, env)
             End If
@@ -477,7 +477,7 @@ Namespace Runtime.Internal.Invokes
 #Enable Warning
                 End If
 
-                Return Nothing
+                Return buf
             Else
                 Return FileStreamWriter(
                     env:=env,

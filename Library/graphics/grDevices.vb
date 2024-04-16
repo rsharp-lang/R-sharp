@@ -167,6 +167,37 @@ Public Module grDevices
         Return Nothing
     End Function
 
+    Private Function requireSvgData(image As Object, env As Environment) As Message
+        Dim message_str As String = "The given type is incompatible with the required type!"
+
+        If TypeOf image Is ImageData Then
+            message_str &= "The data chart plot of the function for produce such data plot not supports the svg driver."
+            message_str &= "Probably you should use the 'bitmap' or 'png' device for save this gdi+ raster image data to file."
+        End If
+
+        Return Message.InCompatibleType(GetType(SVGData), image.GetType, env, message_str)
+    End Function
+
+    Private Function saveSvgStream(image As Object, file As textBuffer, args As list, env As Environment) As Object
+        If Not TypeOf image Is SVGData Then
+            If image.GetType.IsInheritsFrom(GetType(Plot)) Then
+                Dim arg1 = args.slots
+                Dim arg2 = env.GetAcceptorArguments
+                Dim size = graphicsPipeline.getSize(If(arg1.CheckSizeArgument, arg1, arg2), env, New SizeF(3300, 2700))
+                Dim wh As String = $"{size.Width},{size.Height}"
+                Dim dpi As Integer = graphicsPipeline.getDpi(If(arg1.CheckDpiArgument, arg1, arg2), env, 300)
+
+                file.text = DirectCast(image, Plot).Plot(wh, dpi, driver:=Drivers.SVG).AsSVG.GetSVGXml
+            Else
+                Return requireSvgData(image, env)
+            End If
+        Else
+            file.text = DirectCast(image, SVGData).GetSVGXml
+        End If
+
+        Return file
+    End Function
+
     Private Function saveSvgFile(image As Object, file As Object, args As list, env As Environment) As Object
         Dim stream As Stream
         Dim is_file As Boolean = False
@@ -192,14 +223,7 @@ Public Module grDevices
 
                 Call DirectCast(image, Plot).Plot(wh, dpi, driver:=Drivers.SVG).Save(stream)
             Else
-                Dim message_str As String = "The given type is incompatible with the required type!"
-
-                If TypeOf image Is ImageData Then
-                    message_str &= "The data chart plot of the function for produce such data plot not supports the svg driver."
-                    message_str &= "Probably you should use the 'bitmap' or 'png' device for save this gdi+ raster image data to file."
-                End If
-
-                Return Message.InCompatibleType(GetType(SVGData), image.GetType, env, message_str)
+                Return requireSvgData(image, env)
             End If
         Else
             Call DirectCast(image, SVGData).Save(stream)
@@ -237,6 +261,8 @@ Public Module grDevices
 
         If image Is Nothing Then
             Return openSvgDevice(file, args, env)
+        ElseIf TypeOf file Is textBuffer Then
+            Return saveSvgStream(image, file, args, env)
         Else
             Return saveSvgFile(image, file, args, env)
         End If
