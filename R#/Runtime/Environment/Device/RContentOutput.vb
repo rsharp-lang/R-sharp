@@ -123,6 +123,9 @@ Namespace Runtime
         ''' <param name="header$"></param>
         ''' <param name="message$"></param>
         ''' <param name="level"></param>
+        ''' <remarks>
+        ''' use <see cref="vbBack"/> for indicates that use the write function instead of writeline.
+        ''' </remarks>
         Private Sub LoggingDriver(header$, message As String, level As MSG_TYPES)
             Call WriteLine(message)
         End Sub
@@ -166,15 +169,17 @@ Namespace Runtime
         ''' </param>
         Public Overrides Sub WriteLine(message As String)
             If split Then
-                If message Is Nothing Then
+                If message Is Nothing OrElse message.Length = 0 Then
                     Call stdout.WriteLine()
+                ElseIf message.Last = vbBack Then
+                    Call stdout.Write(message.Trim(CChar(vbBack)))
                 Else
                     Call stdout.WriteLine(message)
                 End If
             End If
 
             If Not logfile Is Nothing Then
-                Call logfile.WriteLine(message Or EmptyString)
+                Call logfile.WriteLine((message Or EmptyString).Trim(CChar(vbBack)))
             End If
 
             Call stdout.Flush()

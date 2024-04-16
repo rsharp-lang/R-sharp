@@ -239,6 +239,20 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     If TypeOf opt.targetSymbols(Scan0) Is Literal AndAlso DirectCast(opt.targetSymbols(Scan0), Literal) = "drop" Then
                         Dim drop As Boolean = CLRVector.asLogical(opt.value.Evaluate(env))(Scan0)
                         Dim rowIndex = data.getRowIndex(indexVec.values(Scan0).Evaluate(env))
+
+                        If rowIndex Is Nothing Then
+                            ' which means the indexVec is empty, no element
+                            ' the original R language returns an empty dataframe
+                            ' returns nothing at here. and also echo warning message
+                            Call env.AddMessage("the required row index is nothing!")
+
+                            If drop Then
+                                Return list.empty
+                            Else
+                                Return Nothing
+                            End If
+                        End If
+
                         Dim result = data.getRowList(rowIndex, drop:=drop)
 
                         If TypeOf result Is Dictionary(Of String, Object) Then

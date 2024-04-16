@@ -167,7 +167,7 @@ Namespace Runtime.Internal.Object
                 .MaxLengthString _
                 .Length
 
-            For Each slot In keyValues
+            For Each slot As (key$, value$) In keyValues
                 Call sb.AppendLine($"{slot.key}{New String(" "c, maxPrefixSize - slot.key.Length)} : {slot.value}")
             Next
 

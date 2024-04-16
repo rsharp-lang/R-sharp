@@ -67,6 +67,15 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Public Module ApiArgumentHelpers
 
     ''' <summary>
+    ''' create a slot value reference inside a tuple <see cref="list"/> for construct a new list data
+    ''' </summary>
+    ''' <param name="name"></param>
+    ''' <returns></returns>
+    Public Function slot(name As String) As ArgumentReference
+        Return CType(name, ArgumentReference)
+    End Function
+
+    ''' <summary>
     ''' create a name tagged value object from a 
     ''' given data source value
     ''' </summary>

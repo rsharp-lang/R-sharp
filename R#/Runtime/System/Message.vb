@@ -152,7 +152,7 @@ Namespace Runtime.Components
         ''' <param name="symbolName$"></param>
         ''' <param name="type"></param>
         ''' <returns></returns>
-        Public Shared Function SymbolNotFound(envir As Environment, symbolName$, type As TypeCodes) As Message
+        Public Shared Function SymbolNotFound(envir As Environment, symbolName$, type As TypeCodes, Optional suppress_log As Boolean? = Nothing) As Message
             Dim exception$
 
             Select Case type
@@ -168,7 +168,7 @@ Namespace Runtime.Components
                 "symbol: " & symbolName
             }
 
-            Return Internal.debug.stop(messages, envir)
+            Return Internal.debug.stop(messages, envir, suppress_log:=suppress_log)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
@@ -185,7 +185,8 @@ Namespace Runtime.Components
         Public Shared Function InCompatibleType(require As Type, given As Type, envir As Environment,
                                                 Optional message$ = "The given type is incompatible with the required type!",
                                                 Optional paramName$ = Nothing,
-                                                Optional suppress As Boolean = False) As Message
+                                                Optional suppress As Boolean = False,
+                                                Optional suppress_log As Boolean? = Nothing) As Message
             Return {
                 message,
                 "required: " & require.FullName,
@@ -195,7 +196,7 @@ Namespace Runtime.Components
                              msg = msg.JoinIterates({$"parameter: {paramName}"}).ToArray
                          End If
 
-                         Return Internal.debug.stop(msg, envir, suppress)
+                         Return Internal.debug.stop(msg, envir, suppress, suppress_log:=suppress_log)
                      End Function)
         End Function
 

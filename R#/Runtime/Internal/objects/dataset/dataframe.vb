@@ -627,11 +627,17 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <param name="any"></param>
         ''' <returns></returns>
-        Public Function getRowIndex(any As Object) As Integer
+        Public Function getRowIndex(any As Object) As Integer?
             If TypeOf any Is Array Then
                 any = DirectCast(any, Array).GetValue(Scan0)
             ElseIf TypeOf any Is vector Then
-                any = DirectCast(any, vector).data.GetValue(Scan0)
+                Dim vec As vector = any
+
+                If vec.length = 0 Then
+                    Return Nothing
+                Else
+                    any = vec.data.GetValue(Scan0)
+                End If
             End If
 
             If any.GetType Like RType.characters Then

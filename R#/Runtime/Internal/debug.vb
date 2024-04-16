@@ -111,19 +111,36 @@ Namespace Runtime.Internal
         ''' this parameter indicated that the R environment should not 
         ''' throw the exception when running in debug mode. 
         ''' </param>
+        ''' <param name="suppress_log">
+        ''' suppress write the internal error log file? this parameter is 
+        ''' useful when the error stop happends inside a loop. if not suppress
+        ''' write the error log, then a log file in huge size may produced!
+        ''' </param>
         ''' <returns>
         ''' a generated error message
         ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function [stop](message As Object, envir As Environment, Optional suppress As Boolean = False) As Message
+        Public Shared Function [stop](message As Object, envir As Environment,
+                                      Optional suppress As Boolean = False,
+                                      Optional suppress_log As Boolean? = Nothing) As Message
+
             Dim debugMode As Boolean = envir.globalEnvironment.debugMode AndAlso Not suppress
-            ' dump sessioninfo to the error log file automatically
+            ' dump sessioninfo to the error log
+            ' file automatically
             Dim session As RSessionInfo = etc.sessionInfo(envir).target
 
-            Call App.LogFile.log(MSG_TYPES.DEBUG, session.ToString, "dump_rsharp_sessioninfo")
+            If suppress_log Is Nothing Then
+                suppress_log = suppress
+            End If
+
+            If Not suppress_log Then
+                Call App.LogFile.log(MSG_TYPES.DEBUG, session.ToString, "dump_rsharp_sessioninfo")
+            End If
 
             If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception), strict:=False) Then
-                Call App.LogException(DirectCast(message, Exception), trace:=getEnvironmentStack(envir).JoinBy(vbCrLf))
+                If Not suppress_log Then
+                    Call App.LogException(DirectCast(message, Exception), trace:=getEnvironmentStack(envir).JoinBy(vbCrLf))
+                End If
 
                 If debugMode Then
                     Throw DirectCast(message, Exception)
@@ -133,7 +150,10 @@ Namespace Runtime.Internal
             ElseIf message.GetType Is GetType(Message) Then
                 If debugMode Then
                     Dim err As New Exception(DirectCast(message, Message).message.JoinBy("; "))
-                    Call App.LogException(err)
+
+                    If Not suppress_log Then
+                        Call App.LogException(err)
+                    End If
 
                     Throw err
                 Else
@@ -142,7 +162,9 @@ Namespace Runtime.Internal
             Else
                 Dim err As New Exception(CLRVector.asCharacter(message).JoinBy("; "))
 
-                Call App.LogException(err)
+                If Not suppress_log Then
+                    Call App.LogException(err)
+                End If
 
                 If debugMode Then
                     Throw err

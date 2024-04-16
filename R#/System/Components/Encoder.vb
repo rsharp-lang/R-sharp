@@ -93,7 +93,7 @@ Namespace Development.Components
                 Dim list As New Dictionary(Of String, Object)
 
                 If Not DirectCast(Robj, list).slots Is Nothing Then
-                    For Each slot In DirectCast(Robj, list).slots
+                    For Each slot As KeyValuePair(Of String, Object) In DirectCast(Robj, list).slots
                         Call list.Add(slot.Key, Encoder.GetObject(slot.Value))
                     Next
                 End If
@@ -105,7 +105,7 @@ Namespace Development.Components
                 Dim raw = DirectCast(Robj, dataframe).columns
                 Dim decode As New Dictionary(Of String, Object)
 
-                For Each slot In raw
+                For Each slot As KeyValuePair(Of String, Array) In raw
                     Call decode.Add(slot.Key, Encoder.GetObject(slot.Value))
                 Next
 
