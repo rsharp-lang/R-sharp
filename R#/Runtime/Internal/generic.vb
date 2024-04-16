@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::d5c1d19df692969e8b41b3cfba204b75, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/generic.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 228
-    '    Code Lines: 137
-    ' Comment Lines: 59
-    '   Blank Lines: 32
-    '     File Size: 9.03 KB
+' Summaries:
 
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Module generic
-    ' 
-    '         Function: (+2 Overloads) exists, getGenericCallable, (+3 Overloads) invokeGeneric, missingGenericSymbol, parseGeneric
-    ' 
-    '         Sub: add
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 228
+'    Code Lines: 137
+' Comment Lines: 59
+'   Blank Lines: 32
+'     File Size: 9.03 KB
+
+
+'     Delegate Function
+' 
+' 
+'     Module generic
+' 
+'         Function: (+2 Overloads) exists, getGenericCallable, (+3 Overloads) invokeGeneric, missingGenericSymbol, parseGeneric
+' 
+'         Sub: add
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -258,11 +258,7 @@ Namespace Runtime.Internal
                                            Optional suppress As Boolean = False) As [Variant](Of Message, GenericFunction)
 
             If Not generics.ContainsKey(funcName) Then
-                If suppress Then
-                    Return New Message
-                Else
-                    Return Internal.debug.stop($"no function named '{funcName}'", env)
-                End If
+                Return Internal.debug.stop($"no function named '{funcName}'", env, suppress_log:=True)
             End If
             If type Is GetType(vbObject) AndAlso Not generics(funcName).ContainsKey(type) Then
                 x = DirectCast(x, vbObject).target
@@ -296,15 +292,11 @@ Namespace Runtime.Internal
                     End If
                 End If
 
-                If suppress Then
-                    Return New Message
-                Else
-                    Return debug.stop({
-                        $"missing loader entry for generic function '{funcName}'!",
-                        $"missing implementation for overloads type: {type.FullName}!",
-                        $"consider load required package at first!"
-                    }, env)
-                End If
+                Return debug.stop({
+                    $"missing loader entry for generic function '{funcName}'!",
+                    $"missing implementation for overloads type: {type.FullName}!",
+                    $"consider load required package at first!"
+                }, env, suppress_log:=True)
             Else
                 Return generics(funcName)(type)
             End If
