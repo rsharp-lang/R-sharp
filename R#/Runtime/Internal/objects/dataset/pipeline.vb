@@ -272,7 +272,7 @@ Namespace Runtime.Internal.Object
             End If
 
             If upstream Is Nothing Then
-                Return Internal.debug.stop("the upstream data can not be nothing!", env)
+                Return Internal.debug.stop("the upstream data can not be nothing!", env, suppress_log:=suppress)
             End If
 
             Dim upstream_type As Type = upstream.GetType
@@ -283,7 +283,9 @@ Namespace Runtime.Internal.Object
                 ElseIf GetType(T).IsInterface AndAlso DirectCast(upstream, pipeline).elementType.raw.ImplementInterface(Of T) Then
                     Return upstream
                 Else
-                    Return Message.InCompatibleType(GetType(T), DirectCast(upstream, pipeline).elementType.raw, env, suppress:=suppress)
+                    Return Message.InCompatibleType(GetType(T), DirectCast(upstream, pipeline).elementType.raw, env,
+                                                    suppress:=suppress,
+                                                    suppress_log:=suppress)
                 End If
 
             ElseIf TypeOf upstream Is T() Then
@@ -321,7 +323,7 @@ Namespace Runtime.Internal.Object
                 If GetType(T).IsInterface AndAlso upstream_type.GetElementType.ImplementInterface(Of T) Then
                     Return CreateFromPopulator(DirectCast(upstream, Array).AsObjectEnumerator.Select(Function(o) DirectCast(o, T)))
                 Else
-                    Return Message.InCompatibleType(GetType(T), upstream_type, env, suppress:=suppress)
+                    Return Message.InCompatibleType(GetType(T), upstream_type, env, suppress:=suppress, suppress_log:=suppress)
                 End If
             ElseIf DataFramework.IsNumericType(upstream_type) AndAlso DataFramework.IsNumericType(GetType(T)) Then
                 Dim vec As Array = Array.CreateInstance(GetType(T), 1)
@@ -336,7 +338,7 @@ Namespace Runtime.Internal.Object
                     End Function
                 Return CreateFromPopulator(pull())
             Else
-                Return Message.InCompatibleType(GetType(T), upstream_type, env, suppress:=suppress)
+                Return Message.InCompatibleType(GetType(T), upstream_type, env, suppress:=suppress, suppress_log:=suppress)
             End If
         End Function
 
@@ -378,7 +380,7 @@ Namespace Runtime.Internal.Object
             ElseIf types.Distinct.All(Function(subtype) subtype.IsInheritsFrom(GetType(T), strict:=False)) Then
                 Return New pipeline(objs, RType.GetRSharpType(GetType(T)))
             Else
-                Return Message.InCompatibleType(GetType(T), type, env, suppress:=suppress)
+                Return Message.InCompatibleType(GetType(T), type, env, suppress:=suppress, suppress_log:=suppress)
             End If
         End Function
 
