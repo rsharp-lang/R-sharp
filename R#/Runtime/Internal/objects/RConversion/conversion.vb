@@ -961,15 +961,18 @@ RE0:
             End If
 
             If x Is Nothing Then
+                ' returns nothing if the given data x is nothing
                 Return Nothing
             ElseIf TypeOf x Is list Then
-                ' just make a list data copy
+                ' just make a list data copy if the given data is already a R-sharp tuple list
                 Return New list(DirectCast(x, list).elementType) With {
                     .slots = New Dictionary(Of String, Object)(DirectCast(x, list).slots)
                 }
             ElseIf x.GetType.ImplementInterface(Of IDictionary) Then
+                ' try to convert the clr dictionary object as R-sharp tuple list
                 Return DirectCast(x, IDictionary).dictionaryToRList(args, env)
             ElseIf TypeOf x Is Size OrElse TypeOf x Is SizeF Then
+                ' convert clr gdi+ object as R-sharp tuple list 
                 Dim size As SizeF = If(TypeOf x Is Size, DirectCast(x, Size).SizeF, DirectCast(x, SizeF))
                 Dim listdata As New list With {
                     .elementType = RType.GetRSharpType(GetType(Double)),

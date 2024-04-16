@@ -246,7 +246,10 @@ Namespace Runtime.Internal
         ''' <param name="type"></param>
         ''' <param name="funcName"></param>
         ''' <param name="env"></param>
-        ''' <param name="suppress"></param>
+        ''' <param name="suppress">
+        ''' this function may be call by the function for check function existsed or not, no needs to throw
+        ''' the error, so set suppress to TRUE could avoid generates the error message and stop the program.
+        ''' </param>
         ''' <returns></returns>
         Public Function getGenericCallable(ByRef x As Object,
                                            type As Type,
@@ -255,7 +258,11 @@ Namespace Runtime.Internal
                                            Optional suppress As Boolean = False) As [Variant](Of Message, GenericFunction)
 
             If Not generics.ContainsKey(funcName) Then
-                Return Internal.debug.stop($"no function named '{funcName}'", env, suppress:=suppress)
+                If suppress Then
+                    Return New Message
+                Else
+                    Return Internal.debug.stop($"no function named '{funcName}'", env)
+                End If
             End If
             If type Is GetType(vbObject) AndAlso Not generics(funcName).ContainsKey(type) Then
                 x = DirectCast(x, vbObject).target
@@ -289,11 +296,15 @@ Namespace Runtime.Internal
                     End If
                 End If
 
-                Return debug.stop({
-                    $"missing loader entry for generic function '{funcName}'!",
-                    $"missing implementation for overloads type: {type.FullName}!",
-                    $"consider load required package at first!"
-                }, env)
+                If suppress Then
+                    Return New Message
+                Else
+                    Return debug.stop({
+                        $"missing loader entry for generic function '{funcName}'!",
+                        $"missing implementation for overloads type: {type.FullName}!",
+                        $"consider load required package at first!"
+                    }, env)
+                End If
             Else
                 Return generics(funcName)(type)
             End If

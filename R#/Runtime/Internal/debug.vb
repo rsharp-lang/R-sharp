@@ -141,7 +141,6 @@ Namespace Runtime.Internal
                 End If
             Else
                 Dim err As New Exception(CLRVector.asCharacter(message).JoinBy("; "))
-
                 Call App.LogException(err)
 
                 If debugMode Then
