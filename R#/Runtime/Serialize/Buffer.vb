@@ -55,7 +55,6 @@
 #End Region
 
 Imports System.IO
-Imports System.Text
 Imports Microsoft.VisualBasic.Serialization
 
 Namespace Runtime.Serialize

@@ -407,7 +407,12 @@ Public Module utils
             ms.Flush()
             text = Encoding.UTF8.GetString(ms.ToArray)
             ms.Dispose()
-            DirectCast(file, textBuffer).text = text
+
+            With DirectCast(file, textBuffer)
+                .text = text
+                .mime = "text/csv"
+            End With
+
             Return file
         ElseIf file Is Nothing OrElse TypeOf file Is String Then
             Return env.saveTextFile(x, file, row_names, fileEncoding, tsv, number_format)
