@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Rserve.NET5": {
-      "commandName": "Project",
-      "commandLineArgs": "--start --port 80 --tcp 3838 --Rweb \"E:\\biodeep\\novocell\\landscape_v2\\src\" --show_error --n_threads 2"
+      "commandName": "Project"
     }
   }
 }

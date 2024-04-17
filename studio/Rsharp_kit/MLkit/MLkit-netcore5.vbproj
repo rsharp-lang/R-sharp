@@ -16,16 +16,6 @@
     <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>MLkit.xml</DocumentationFile>
-    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DocumentationFile>MLkit.xml</DocumentationFile>
-    <DefineConstants>netcore5=1</DefineConstants>
-  </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>MLkit.xml</DocumentationFile>
   </PropertyGroup>
@@ -101,85 +91,10 @@
     <OutputPath>../../../../workbench/win32_desktop/Apps/Rstudio/library</OutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
-    <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
-    <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
-  </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|AnyCPU'">
-    <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
-    <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1</DefineConstants>
-  </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|x64'">
-    <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
-    <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1</DefineConstants>
-  </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|x64'">
-    <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
-    <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1</DefineConstants>
-  </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
-    <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
-    <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|AnyCPU'">
-    <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
-    <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|x64'">
-    <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
-    <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|x64'">
-    <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
-    <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net6.0|AnyCPU'">
-    <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
-    <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net6.0-windows|AnyCPU'">
-    <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
-    <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
-  </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net6.0|x64'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
@@ -205,21 +120,7 @@
     <DefineConstants>DATAMINING_DATASET=1,MATH_DATASET=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0-windows|AnyCPU'">
-    <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
-    <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
-  </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0|x64'">
-    <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
-    <DefineTrace>True</DefineTrace>
-    <DefineConstants>DATAMINING_DATASET=1,MATH_DATASET=1,UNIX=1</DefineConstants>
-  </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0-windows|x64'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
@@ -245,25 +146,11 @@
     <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0|x64'">
-    <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
-    <DefineTrace>True</DefineTrace>
-    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
-  </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
-    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
-  </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|x64'">
-    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
-  </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net48|x64'">
-    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
-  </PropertyGroup>
+
+
 
   <ItemGroup>
     <None Include="..\..\..\docs\images\rstudio-icons-main\Icons\Linux\Rectangle\Preview Icon - Rect.png">
