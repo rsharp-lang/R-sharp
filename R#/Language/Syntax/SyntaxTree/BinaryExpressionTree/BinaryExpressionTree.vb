@@ -224,19 +224,35 @@ Namespace Language.Syntax.SyntaxParser
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="list">always wrap with brackets ()</param>
+        ''' <param name="buf"></param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
         <Extension>
         Private Function ParseInvokeInternal(list As Token(),
                                              <Out>
                                              ByRef buf As List(Of [Variant](Of SyntaxResult, String)),
                                              ByRef opts As SyntaxBuilderOptions) As SyntaxResult
+            list = list _
+                .Skip(1) _
+                .Take(list.Length - 2) _
+                .ToArray
 
-            If buf.Last.TryCast(Of SyntaxResult) Like GetType(SymbolReference) Then
+            If buf.Count = 0 Then
+                ' maybe just wrap with the ()
+                ' example as x = (a / b);
+                Return opts.ParseExpression(list, opts)
+
+                ' maybe a function invoke expression
+                ' example as x(...)
+            ElseIf buf.Last.TryCast(Of SyntaxResult) Like GetType(SymbolReference) Then
                 Dim params As New List(Of Expression)
                 Dim trace = opts.GetStackTrace(list.First, buf.Last.ToString)
                 Dim temp As SyntaxResult = Nothing
                 Dim subblocks = list _
-                    .Skip(1) _
-                    .Take(list.Length - 2) _
                     .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True) _
                     .Split(Function(bi) bi.isComma) _
                     .Select(Function(bi) bi.IteratesALL.ToArray) _
