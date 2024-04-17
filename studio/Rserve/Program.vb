@@ -51,6 +51,7 @@
 
 Imports System.ComponentModel
 Imports System.IO
+Imports Flute.Http
 Imports Flute.Http.Core
 Imports Flute.Http.FileSystem
 Imports Microsoft.VisualBasic.CommandLine
@@ -68,7 +69,15 @@ Module Program
     End Sub
 
     Public Function Main() As Integer
-        Return GetType(Program).RunCLI(App.CommandLine)
+        Return GetType(Program).RunCLI(App.CommandLine, executeEmpty:=AddressOf listenCurrentFolder)
+    End Function
+
+    ''' <summary>
+    ''' run ``--listen`` command for current folder by default
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function listenCurrentFolder() As Integer
+        Return listen("--listen")
     End Function
 
     <ExportAPI("--listen")>
@@ -112,6 +121,16 @@ Module Program
         End If
     End Function
 
+    <ExportAPI("/make.config")>
+    <Description("export the default configuration file for the http server core.")>
+    <Usage("/make.config --export <file_path_to_save.ini>")>
+    Public Function makeconfig(args As CommandLine) As Integer
+        Dim configfile As String = args("--export")
+        Dim defaultSettings As New Configuration
+
+        Return Configuration.Save(defaultSettings, configfile).CLICode
+    End Function
+
     ''' <summary>
     ''' Run rscript
     ''' </summary>
@@ -119,7 +138,32 @@ Module Program
     ''' <returns></returns>
     <ExportAPI("--start")>
     <Description("Start R# web services, host R# script with http get request.")>
-    <Usage("--start [--port <port number, default=7452> --tcp <port_number, default=3838> --Rweb <directory, default=./Rweb> --startups <packageNames, default=""""> --show_error --n_threads <max_threads, default=8>]")>
+    <Usage("--start [--port <port number, default=7452> 
+                     --tcp <port_number, default=3838> 
+                     --Rweb <directory, default=./Rweb> 
+                     --wwwroot <directory, default=null>
+                     --startups <packageNames, default=""""> 
+                     --show_error 
+                     --n_threads <max_threads, default=8> 
+                     --config <config_file, default=null>
+                     --parent <parent_pid, default="""">]")>
+    <Argument("--Rweb", True, CLITypes.File, AcceptTypes:={GetType(String)},
+              Description:="A directory path that contains the r-sharp script file for handling the http request from the client.")>
+    <Argument("--port", True, CLITypes.Integer, AcceptTypes:={GetType(Integer)},
+              Description:="the local tcp port for listening the in-comming http request.")>
+    <Argument("--tcp", True, CLITypes.Integer, AcceptTypes:={GetType(Integer)},
+              Description:="the local tcp port for listening the rscript slave processor result for handling the http request.")>
+    <Argument("--startups", True, CLITypes.String, AcceptTypes:={GetType(String())},
+              Description:="setting up the startup R# package names when running a rscript worker for the http request. 
+              this parameter value should be a array of the package name with comma symbol as delimiter.")>
+    <Argument("--parent", True, CLITypes.Integer, AcceptTypes:={GetType(Integer)},
+              Description:="setting up the parent process its PID for binding current R# web server background service. 
+              if this parameter has been configured, then this http web server will be killed after the specific parent process exit from running status.")>
+    <Argument("---wwwroot", True, CLITypes.File, AcceptTypes:={GetType(String)},
+              Description:="the root directory for the static file, example as html files, js files or image files. 
+              leaves this argument blank means http file server function will be disabled, the http web server just handing the rscript request.")>
+    <Argument("--config", True, CLITypes.File, AcceptTypes:={GetType(String)},
+              Description:="the file path to the *.ini configuration file for the http web server.")>
     Public Function start(args As CommandLine) As Integer
         Dim port As Integer = args("--port") Or 7452
         Dim Rweb As String = args("--Rweb") Or App.CurrentDirectory & "/Rweb"
@@ -128,13 +172,23 @@ Module Program
         Dim tcp As Integer = args("--tcp") Or 3838
         Dim startups As String() = args("--startups").Split("[,;]\s*", regexp:=True)
         Dim parent As String = args("--parent")
+        Dim wwwroot As String = args("--wwwroot")
+        Dim fs As FileSystem = Nothing
+        Dim inifile As String = args("--config")
+        Dim config As Configuration = Configuration.Load(inifile)
+
+        If Not wwwroot.StringEmpty Then
+            fs = New FileSystem(wwwroot)
+        End If
 
         ' 20221007 fix of the relative path error
         ' by translate to absolute path at first!
         Rweb = Rweb.GetDirectoryFullPath
 
-        Using http As New Rweb(Rweb, port, tcp, show_error, threads:=n_threads)
+        Using http As New Rweb(Rweb, port, tcp, show_error, threads:=n_threads, configs:=config)
             Call http.Processor.WithStartups(startups)
+            Call http.SetFileSystem(fs)
+
             Call BackgroundTaskUtils.BindToMaster(parent, http)
 
             Return http.Run()

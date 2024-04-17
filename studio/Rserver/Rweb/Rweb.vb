@@ -58,9 +58,11 @@
 Imports System.IO
 Imports System.Net.Sockets
 Imports System.Runtime.CompilerServices
+Imports Flute.Http
 Imports Flute.Http.Core
 Imports Flute.Http.Core.HttpStream
 Imports Flute.Http.Core.Message
+Imports Flute.Http.FileSystem
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Net.Tcp
@@ -76,6 +78,11 @@ Public Class Rweb : Inherits HttpServer
 
     Dim socket As TcpServicesSocket
 
+    ''' <summary>
+    ''' a wrapper of the local filesystem object for hosting the static files, example as html file, image files, etc
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property fs As FileSystem
     Public ReadOnly Property Processor As RProcessor
 
     ''' <summary>
@@ -101,14 +108,19 @@ Public Class Rweb : Inherits HttpServer
                    tcp As Integer,
                    show_error As Boolean,
                    Optional threads As Integer = -1,
-                   Optional debug As Boolean = False)
+                   Optional debug As Boolean = False,
+                   Optional configs As Configuration = Nothing)
 
-        MyBase.New(port, threads)
+        MyBase.New(port, threads, configs)
 
         Me.Processor = New RProcessor(Me, Rweb, show_error, debug)
         Me.socket = New TcpServicesSocket(tcp) With {
             .ResponseHandler = AddressOf callback
         }
+    End Sub
+
+    Public Sub SetFileSystem(fs As FileSystem)
+        _fs = fs
     End Sub
 
     Public Overrides Function Run() As Integer
@@ -155,7 +167,7 @@ Public Class Rweb : Inherits HttpServer
 
                 Call p.writeSuccess(0)
             Case Else
-                Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure) With {
+                Using response As New HttpResponse(p) With {
                     .AccessControlAllowOrigin = "*"
                 }
                     Call Processor.RscriptHttpPost(request, response)
@@ -164,7 +176,7 @@ Public Class Rweb : Inherits HttpServer
     End Sub
 
     Public Overrides Sub handleOtherMethod(p As HttpProcessor)
-        Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure) With {
+        Using response As New HttpResponse(p) With {
             .AccessControlAllowOrigin = "*"
         }
             Call response.WriteHTML("passed")
@@ -174,6 +186,6 @@ Public Class Rweb : Inherits HttpServer
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Protected Overrides Function getHttpProcessor(client As TcpClient, bufferSize%) As HttpProcessor
-        Return New HttpProcessor(client, Me, MAX_POST_SIZE:=bufferSize)
+        Return New HttpProcessor(client, Me, MAX_POST_SIZE:=bufferSize, _settings)
     End Function
 End Class

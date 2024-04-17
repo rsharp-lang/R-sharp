@@ -120,6 +120,8 @@ for(header in ['123', '97.5%-tile:', '2.5%-tile:', 'xxx']) {
     End Sub
 
     Sub syntaxTest()
+        Dim result = R.Parse("a |> select(3333)")
+
         Call R.Parse("  names = 1;   names$""Removed Synonyms"" = NULL;")
 
         Pause()
@@ -242,6 +244,7 @@ bitmap(file = `./network.png`) %do% {
     End Sub
 
     Sub Main()
+        Call syntaxTest()
         Call convertTest.Main()
 
 
@@ -255,7 +258,6 @@ bitmap(file = `./network.png`) %do% {
         Call pipelineBulder()
         Call negativeValTest()
 
-        Call syntaxTest()
         Call acceptDoTest()
         Call syntaxTest2()
 
@@ -263,7 +265,7 @@ bitmap(file = `./network.png`) %do% {
         Call symbolIndextest()
 
         Call joinParserTest()
-        Call syntaxTest()
+
 
         Call linqTest()
         Call annotationTest()

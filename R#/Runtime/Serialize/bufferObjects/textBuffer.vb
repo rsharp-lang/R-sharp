@@ -57,6 +57,8 @@
 #End Region
 
 Imports System.IO
+Imports System.Text
+Imports Microsoft.VisualBasic.Serialization
 Imports Microsoft.VisualBasic.Text
 
 Namespace Runtime.Serialize
@@ -67,6 +69,12 @@ Namespace Runtime.Serialize
     Public Class textBuffer : Inherits BufferObject
 
         Public Property text As String
+        ''' <summary>
+        ''' the content text mime type
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks>used for the http service.</remarks>
+        Public Property mime As String
 
         Public Overrides ReadOnly Property code As BufferObjects
             Get
@@ -89,7 +97,10 @@ Namespace Runtime.Serialize
 
         Public Overrides Sub Serialize(buffer As Stream)
             Dim data As Byte() = Encodings.UTF8.CodePage.GetBytes(text)
+            Dim mime As Byte() = Encoding.ASCII.GetBytes(If(Me.mime, "plain/text"))
 
+            Call buffer.Write(BitConverter.GetBytes(mime.Length), Scan0, RawStream.INT32)
+            Call buffer.Write(mime, Scan0, mime.Length)
             Call buffer.Write(data, Scan0, data.Length)
             Call buffer.Flush()
 
@@ -112,9 +123,20 @@ Namespace Runtime.Serialize
                 End Using
             End If
 
+            Dim buf As Byte() = New Byte(RawStream.INT32 - 1) {}
+            Dim len As Integer
+            Dim offset As Integer
+
+            Array.ConstrainedCopy(raw, 0, buf, 0, buf.Length)
+            len = BitConverter.ToInt32(buf, 0)
+            buf = New Byte(len - 1) {}
+            offset = RawStream.INT32 + len
+            Array.ConstrainedCopy(raw, RawStream.INT32, buf, 0, buf.Length)
+
+            mime = Encoding.ASCII.GetString(buf)
             text = Encodings.UTF8 _
                 .CodePage _
-                .GetString(raw)
+                .GetString(raw, offset, raw.Length - offset)
         End Sub
     End Class
 End Namespace

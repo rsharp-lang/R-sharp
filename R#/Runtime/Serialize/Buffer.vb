@@ -55,7 +55,6 @@
 #End Region
 
 Imports System.IO
-Imports System.Text
 Imports Microsoft.VisualBasic.Serialization
 
 Namespace Runtime.Serialize
@@ -106,7 +105,7 @@ Namespace Runtime.Serialize
                             .buffer = data
                         }
                     End If
-                Case BufferObjects.text : bufferObject = New textBuffer With {.text = Encoding.UTF8.GetString(data.ToArray)}
+                Case BufferObjects.text : bufferObject = New textBuffer(data)
                 Case BufferObjects.bitmap : bufferObject = New bitmapBuffer(data)
                 Case BufferObjects.vector : bufferObject = New vectorBuffer(data)
                 Case BufferObjects.message : bufferObject = New messageBuffer(data)

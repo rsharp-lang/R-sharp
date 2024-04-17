@@ -104,17 +104,18 @@ Module RCallbackMessage
                 End If
             End Using
         ElseIf TypeOf result Is textBuffer Then
-            Dim bytes As Byte() = result.Serialize
+            Dim text As textBuffer = DirectCast(result, textBuffer)
+            Dim bytes As Byte() = Encoding.UTF8.GetBytes(text.text)
 
             If debug Then
 #Disable Warning
                 Call Console.WriteLine(vbNewLine)
-                Call Console.WriteLine(DirectCast(result, textBuffer).text)
+                Call Console.WriteLine(text.text)
                 Call Console.WriteLine(vbNewLine)
 #Enable Warning
             End If
 
-            Call response.WriteHttp("html/text", bytes.Length)
+            Call response.WriteHttp(text.mime, bytes.Length)
             Call response.Write(bytes)
         ElseIf TypeOf result Is dataframeBuffer Then
             Dim env As Environment = New RInterpreter().globalEnvir

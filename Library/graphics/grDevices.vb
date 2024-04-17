@@ -187,11 +187,13 @@ Public Module grDevices
                 Dim wh As String = $"{size.Width},{size.Height}"
                 Dim dpi As Integer = graphicsPipeline.getDpi(If(arg1.CheckDpiArgument, arg1, arg2), env, 300)
 
+                file.mime = "image/svg+xml"
                 file.text = DirectCast(image, Plot).Plot(wh, dpi, driver:=Drivers.SVG).AsSVG.GetSVGXml
             Else
                 Return requireSvgData(image, env)
             End If
         Else
+            file.mime = "image/svg+xml"
             file.text = DirectCast(image, SVGData).GetSVGXml
         End If
 
@@ -307,7 +309,11 @@ Public Module grDevices
                     DirectCast(file, bitmapBuffer).bitmap = DirectCast(graphics, ImageData).Image
                     Return file
                 ElseIf TypeOf graphics Is SVGData AndAlso TypeOf file Is textBuffer Then
-                    DirectCast(file, textBuffer).text = DirectCast(graphics, SVGData).GetSVGXml
+                    With DirectCast(file, textBuffer)
+                        .text = DirectCast(graphics, SVGData).GetSVGXml
+                        .mime = "image/svg+xml"
+                    End With
+
                     Return file
                 Else
                     Return Message.InCompatibleType(GetType(String), file.GetType, env)

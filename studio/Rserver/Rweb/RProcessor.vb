@@ -62,13 +62,13 @@ Imports System.Collections.Specialized
 Imports System.Runtime.CompilerServices
 Imports Flute.Http.Core
 Imports Flute.Http.Core.Message
+Imports Flute.Http.FileSystem
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' 
@@ -92,6 +92,11 @@ Public Class RProcessor
         Me.debug = debug
     End Sub
 
+    ''' <summary>
+    ''' setting the startup package names for run the slave rscript process.
+    ''' </summary>
+    ''' <param name="packages"></param>
+    ''' <returns></returns>
     Public Function WithStartups(ParamArray packages As String()) As RProcessor
         startups = packages.JoinBy(",")
         Return Me
@@ -148,7 +153,7 @@ Public Class RProcessor
     End Sub
 
     Public Sub RscriptHttpGet(p As HttpProcessor)
-        Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure) With {
+        Using response As New HttpResponse(p) With {
             .AccessControlAllowOrigin = "*"
         }
             ' /<scriptFileName>?...args
@@ -166,7 +171,11 @@ Public Class RProcessor
             ElseIf request.URL.path = "get_invoke" Then
                 Call pushBackResult(request.URL("request_id"), request, response)
             ElseIf Not Rscript.FileExists Then
-                Call p.writeFailure(404, "file not found!")
+                If localRServer.fs Is Nothing Then
+                    Call p.writeFailure(HTTP_RFC.RFC_NOT_FOUND, "file not found!")
+                Else
+                    Call WebFileSystemListener.HostStaticFile(localRServer.fs, request, response)
+                End If
             ElseIf is_background Then
                 Dim task As New WebTask With {
                     .Rscript = Rscript,
@@ -219,7 +228,15 @@ Public Class RProcessor
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function RscriptRouter(request As HttpRequest) As String
-        Return $"{Rweb}/{request.URL.path}.R"
+        Dim url As URL = request.URL
+
+        If url.path.StringEmpty OrElse url.path = "/" Then
+            Return $"{Rweb}/index.R"
+        ElseIf url.path.Last = "/"c Then
+            Return $"{Rweb}/{request.URL.path}/index.R"
+        Else
+            Return $"{Rweb}/{request.URL.path}.R"
+        End If
     End Function
 
     Private Sub pushBackResult(request_id$, request As HttpRequest, response As HttpResponse)
