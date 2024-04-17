@@ -68,7 +68,6 @@ Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' 
@@ -219,7 +218,15 @@ Public Class RProcessor
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function RscriptRouter(request As HttpRequest) As String
-        Return $"{Rweb}/{request.URL.path}.R"
+        Dim url As URL = request.URL
+
+        If url.path.StringEmpty OrElse url.path = "/" Then
+            Return $"{Rweb}/index.R"
+        ElseIf url.path.Last = "/"c Then
+            Return $"{Rweb}/{request.URL.path}/index.R"
+        Else
+            Return $"{Rweb}/{request.URL.path}.R"
+        End If
     End Function
 
     Private Sub pushBackResult(request_id$, request As HttpRequest, response As HttpResponse)
