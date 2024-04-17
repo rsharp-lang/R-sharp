@@ -185,17 +185,16 @@ Namespace Language.Syntax.SyntaxParser
                         If buf.Last.TryCast(Of SyntaxResult) Like GetType(SymbolReference) Then
                             Dim params As New List(Of Expression)
                             Dim trace = opts.GetStackTrace(list.First, buf.Last.ToString)
-                            Dim temp As SyntaxResult
-
-                            For Each par As Token() In list _
+                            Dim temp As SyntaxResult = Nothing
+                            Dim subblocks = list _
                                 .Skip(1) _
                                 .Take(list.Length - 2) _
-                                .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True)
+                                .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True) _
+                                .Split(Function(bi) bi.isComma) _
+                                .Select(Function(bi) bi.IteratesALL.ToArray) _
+                                .ToArray
 
-                                If par.isComma Then
-                                    Continue For
-                                End If
-
+                            For Each par As Token() In subblocks
                                 temp = opts.ParseExpression(par, opts)
 
                                 If temp.isException Then
@@ -205,7 +204,13 @@ Namespace Language.Syntax.SyntaxParser
                                 End If
                             Next
 
-                            Call buf.Add(New SyntaxResult(New FunctionInvoke(buf.Pop.TryCast(Of SyntaxResult).expression, trace, params.ToArray)))
+                            Dim calls As New FunctionInvoke(
+                                funcVar:=buf.Pop.TryCast(Of SyntaxResult).expression,
+                                stackFrame:=trace,
+                                params.ToArray
+                            )
+
+                            Call buf.Add(New SyntaxResult(calls))
                         End If
                     Else
                         Return New SyntaxResult(SyntaxError.CreateError(opts, New SyntaxErrorException()))
