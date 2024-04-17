@@ -1,57 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::b0dd5f08703e8cb004e1b9466258c132, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/BinaryExpressionTree/BinaryExpressionTree.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 474
-    '    Code Lines: 354
-    ' Comment Lines: 49
-    '   Blank Lines: 71
-    '     File Size: 21.38 KB
+' Summaries:
 
 
-    '     Module BinaryExpressionTree
-    ' 
-    '         Function: CreateBinary, CreateBinaryExpression, joinNegatives, joinRemaining, MeasureCurrentLine
-    '                   (+2 Overloads) ParseBinaryExpression, processOperators
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 474
+'    Code Lines: 354
+' Comment Lines: 49
+'   Blank Lines: 71
+'     File Size: 21.38 KB
+
+
+'     Module BinaryExpressionTree
+' 
+'         Function: CreateBinary, CreateBinaryExpression, joinNegatives, joinRemaining, MeasureCurrentLine
+'                   (+2 Overloads) ParseBinaryExpression, processOperators
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -120,6 +121,7 @@ Namespace Language.Syntax.SyntaxParser
 
             For i As Integer = Scan0 To tokenBlocks.Count - 1
                 If ++index Mod 2 = 0 Then
+                    ' should be an operator token
                     If tokenBlocks(i).isOperator("+", "-") Then
                         syntaxResult = opts.ParseExpression(tokenBlocks(i + 1), opts)
 
@@ -164,56 +166,54 @@ Namespace Language.Syntax.SyntaxParser
                             Call buf.Add(syntaxResult)
                         End If
                     Else
-                        Dim t = tokenBlocks(i)
+                        Dim list As Token() = tokenBlocks(i)
 
-                        If t.Length = 1 AndAlso t(Scan0).name = TokenType.keyword Then
-                            t(Scan0).name = TokenType.identifier
+                        If list.Length = 1 AndAlso list(Scan0).name = TokenType.keyword Then
+                            list(Scan0).name = TokenType.identifier
                         End If
 
-                        syntaxResult = opts.ParseExpression(t, opts)
+                        If list.Length = 1 AndAlso list(0) = (TokenType.operator, "|>") Then
+                            Call buf.Add(list(Scan0).text)
+                            Call oplist.Add(buf.Last.VB)
+                        ElseIf list.First = (TokenType.open, "(") AndAlso list.Last = (TokenType.close, ")") Then
+                            Dim parse = list.ParseInvokeInternal(buf, opts)
+
+                            If parse.isException Then
+                                Return parse
+                            Else
+                                Call buf.Add(parse)
+                            End If
+                        Else
+                            syntaxResult = opts.ParseExpression(list, opts)
+
+                            If syntaxResult.isException Then
+                                Return syntaxResult
+                            Else
+                                Call buf.Add(syntaxResult)
+                            End If
+                        End If
+                    End If
+                ElseIf Not tokenBlocks(i).isOperator Then
+                    Dim list As Token() = tokenBlocks(i)
+
+                    If list.First = (TokenType.open, "(") AndAlso list.Last = (TokenType.close, ")") Then
+                        Dim parse = list.ParseInvokeInternal(buf, opts)
+
+                        If parse.isException Then
+                            Return parse
+                        Else
+                            Call buf.Add(parse)
+                        End If
+                    ElseIf list.Length = 1 AndAlso (list(0).name = TokenType.identifier OrElse list(0).name = TokenType.keyword) Then
+                        Call buf.Add(New SyntaxResult(New SymbolReference(list(0))))
+                    Else
+                        syntaxResult = opts.ParseExpression(list, opts)
 
                         If syntaxResult.isException Then
                             Return syntaxResult
                         Else
                             Call buf.Add(syntaxResult)
                         End If
-                    End If
-                ElseIf Not tokenBlocks(i).isOperator Then
-                    Dim list = tokenBlocks(i)
-
-                    If list.First = (TokenType.open, "(") AndAlso list.Last = (TokenType.close, ")") Then
-                        If buf.Last.TryCast(Of SyntaxResult) Like GetType(SymbolReference) Then
-                            Dim params As New List(Of Expression)
-                            Dim trace = opts.GetStackTrace(list.First, buf.Last.ToString)
-                            Dim temp As SyntaxResult = Nothing
-                            Dim subblocks = list _
-                                .Skip(1) _
-                                .Take(list.Length - 2) _
-                                .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True) _
-                                .Split(Function(bi) bi.isComma) _
-                                .Select(Function(bi) bi.IteratesALL.ToArray) _
-                                .ToArray
-
-                            For Each par As Token() In subblocks
-                                temp = opts.ParseExpression(par, opts)
-
-                                If temp.isException Then
-                                    Return temp
-                                Else
-                                    params.Add(temp.expression)
-                                End If
-                            Next
-
-                            Dim calls As New FunctionInvoke(
-                                funcVar:=buf.Pop.TryCast(Of SyntaxResult).expression,
-                                stackFrame:=trace,
-                                params.ToArray
-                            )
-
-                            Call buf.Add(New SyntaxResult(calls))
-                        End If
-                    Else
-                        Return New SyntaxResult(SyntaxError.CreateError(opts, New SyntaxErrorException()))
                     End If
                 Else
                     Call buf.Add(tokenBlocks(i)(Scan0).text)
@@ -222,6 +222,46 @@ Namespace Language.Syntax.SyntaxParser
             Next
 
             Return Nothing
+        End Function
+
+        <Extension>
+        Private Function ParseInvokeInternal(list As Token(),
+                                             <Out>
+                                             ByRef buf As List(Of [Variant](Of SyntaxResult, String)),
+                                             ByRef opts As SyntaxBuilderOptions) As SyntaxResult
+
+            If buf.Last.TryCast(Of SyntaxResult) Like GetType(SymbolReference) Then
+                Dim params As New List(Of Expression)
+                Dim trace = opts.GetStackTrace(list.First, buf.Last.ToString)
+                Dim temp As SyntaxResult = Nothing
+                Dim subblocks = list _
+                    .Skip(1) _
+                    .Take(list.Length - 2) _
+                    .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True) _
+                    .Split(Function(bi) bi.isComma) _
+                    .Select(Function(bi) bi.IteratesALL.ToArray) _
+                    .ToArray
+
+                For Each par As Token() In subblocks
+                    temp = opts.ParseExpression(par, opts)
+
+                    If temp.isException Then
+                        Return temp
+                    Else
+                        params.Add(temp.expression)
+                    End If
+                Next
+
+                Dim calls As New FunctionInvoke(
+                    funcVar:=buf.Pop.TryCast(Of SyntaxResult).expression,
+                    stackFrame:=trace,
+                    params.ToArray
+                )
+
+                Return New SyntaxResult(calls)
+            Else
+                Return New SyntaxResult(SyntaxError.CreateError(opts, New SyntaxErrorException(list.Select(Function(t) t.text).JoinBy(" "))))
+            End If
         End Function
 
         <Extension>
