@@ -125,14 +125,14 @@ Public Class RProcessor
         Dim is_background As Boolean = request.GetBoolean("rweb_background")
 
         If Not Rscript.FileExists Then
-            Call response.WriteError(404, "not allowed!")
+            Call response.WriteError(HTTP_RFC.RFC_NOT_FOUND, "rscript file not found!")
             Return
         End If
 
         Dim form As NameValueCollection = request.POSTData.Form
         Dim request_id As String = Rserver.Rweb.NextRequestId
 
-        For Each formKey In form.AllKeys
+        For Each formKey As String In form.AllKeys
             args(formKey) = form.GetValues(formKey)
         Next
 
