@@ -91,6 +91,11 @@ Public Class RProcessor
         Me.debug = debug
     End Sub
 
+    ''' <summary>
+    ''' setting the startup package names for run the slave rscript process.
+    ''' </summary>
+    ''' <param name="packages"></param>
+    ''' <returns></returns>
     Public Function WithStartups(ParamArray packages As String()) As RProcessor
         startups = packages.JoinBy(",")
         Return Me
