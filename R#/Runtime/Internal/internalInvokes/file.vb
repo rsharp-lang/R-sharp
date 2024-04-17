@@ -79,6 +79,7 @@ Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.My.UNIX
 Imports Microsoft.VisualBasic.Net.Http
+Imports Microsoft.VisualBasic.Net.Protocols.ContentTypes
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
@@ -1513,10 +1514,18 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' create a new buffer object
         ''' </summary>
-        ''' <param name="type"></param>
+        ''' <param name="type">the r-sharp internal buffer data type</param>
+        ''' <param name="mime">the data mime-type for http response, some buffer 
+        ''' object type may required of this parameter for specific the correct 
+        ''' mine content type.</param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' this function usually works for the http web services.
+        ''' </remarks>
         <ExportAPI("buffer")>
-        Public Function buffer(Optional type As BufferObjects = BufferObjects.raw, Optional env As Environment = Nothing) As Object
+        Public Function buffer(Optional type As BufferObjects = BufferObjects.raw,
+                               Optional mime As String = MIME.Unknown,
+                               Optional env As Environment = Nothing) As Object
             Select Case type
                 Case BufferObjects.raw : Return New rawBuffer
                 Case BufferObjects.text : Return New textBuffer
