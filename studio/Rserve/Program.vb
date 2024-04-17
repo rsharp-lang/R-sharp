@@ -68,7 +68,15 @@ Module Program
     End Sub
 
     Public Function Main() As Integer
-        Return GetType(Program).RunCLI(App.CommandLine)
+        Return GetType(Program).RunCLI(App.CommandLine, executeEmpty:=AddressOf listenCurrentFolder)
+    End Function
+
+    ''' <summary>
+    ''' run ``--listen`` command for current folder by default
+    ''' </summary>
+    ''' <returns></returns>
+    Private Function listenCurrentFolder() As Integer
+        Return listen("--listen")
     End Function
 
     <ExportAPI("--listen")>
