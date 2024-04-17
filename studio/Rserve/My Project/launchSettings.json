@@ -1,7 +1,8 @@
 {
   "profiles": {
     "Rserve.NET5": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "/make.config --export ./settings.ini"
     }
   }
 }
