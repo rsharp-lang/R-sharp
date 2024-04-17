@@ -157,4 +157,6 @@
 
   <Import Project="..\..\Library\shares\dataframeHelper\dataframeHelper.projitems" Label="Shared" />
 
+  <Import Project="..\..\Library\shares\JsonHelper\JsonHelper.projitems" Label="Shared" />
+
 </Project>

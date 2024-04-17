@@ -294,7 +294,7 @@ Public Class RProcessor
         Dim task As RunSlavePipeline = Rslave.CreateSlave(arguments, workdir:=App.HOME)
 
         ' view commandline
-        Call Console.WriteLine(task.ToString)
+        Call VBDebugger.EchoLine(task.ToString)
 
         task.Shell = True
         task.Run()

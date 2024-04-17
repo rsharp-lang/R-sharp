@@ -70,7 +70,7 @@ Module jsonlite
     ''' <param name="enumToStr"></param>
     ''' <param name="unixTimestamp"></param>
     ''' <returns>
-    ''' the generated json string or error message
+    ''' the generated json string or error <see cref="Message"/>.
     ''' </returns>
     Public Function toJSON(x As Object, env As Environment,
                            Optional maskReadonly As Boolean = False,
