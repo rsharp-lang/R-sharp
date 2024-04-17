@@ -113,7 +113,7 @@
 
   <ItemGroup>  
     <ProjectReference Include="..\..\..\runtime\Darwinism\src\computing\Parallel\parallel-netcore5.vbproj" />  
-    <ProjectReference Include="..\..\..\runtime\httpd\Flute\Flute.NET5.vbproj" />  
+    <ProjectReference Include="..\..\..\runtime\httpd\src\Flute\Flute.NET5.vbproj" />  
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\BinaryData\BinaryData\binarydata-netcore5.vbproj" />  
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\BinaryData\HDSPack\HDSPack.vbproj" />  
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />  
