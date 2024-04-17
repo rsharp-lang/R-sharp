@@ -75,6 +75,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 <Assembly: InternalsVisibleTo("ggplot")>
@@ -285,7 +286,7 @@ Namespace Runtime.Internal.Invokes
             If image Is Nothing Then
                 Return Nothing
             ElseIf TypeOf image Is Image OrElse TypeOf image Is Bitmap Then
-                Return graphics.colorTable(BitmapBuffer.FromImage(CType(image, Image)).GetPixelsAll.ToArray, New list, env)
+                Return graphics.colorTable(BitmapImage.BitmapBuffer.FromImage(CType(image, Image)).GetPixelsAll.ToArray, New list, env)
             Else
                 Return Message.InCompatibleType(GetType(Image), image.GetType, env)
             End If
@@ -460,6 +461,23 @@ Namespace Runtime.Internal.Invokes
 
             If image Is Nothing Then
                 Return OpenNewBitmapDevice(file, args, env)
+            ElseIf TypeOf file Is Serialize.bitmapBuffer Then
+                Dim buf As Serialize.bitmapBuffer = file
+
+                If image.GetType.ImplementInterface(Of SaveGdiBitmap) Then
+                    Using ms As Stream = New MemoryStream
+                        Call DirectCast(image, SaveGdiBitmap).Save(ms, format.GetFormat)
+                        Call ms.Seek(0, SeekOrigin.Begin)
+
+                        buf.bitmap = Global.System.Drawing.Image.FromStream(ms)
+                    End Using
+                Else
+#Disable Warning
+                    buf.bitmap = DirectCast(image, Image)
+#Enable Warning
+                End If
+
+                Return buf
             Else
                 Return FileStreamWriter(
                     env:=env,

@@ -962,7 +962,8 @@ Module plots
                 ylim:=ylim,
                 XaxisAbsoluteScalling:=absoluteScale,
                 YaxisAbsoluteScalling:=absoluteScale,
-                dpi:=dpi
+                dpi:=dpi,
+                driver:=env.getDriver
             )
         End If
     End Function
