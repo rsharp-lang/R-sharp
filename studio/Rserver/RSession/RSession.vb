@@ -114,6 +114,6 @@ Public Class RSession : Inherits HttpServer
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Protected Overrides Function getHttpProcessor(client As TcpClient, bufferSize As Integer) As HttpProcessor
-        Return New HttpProcessor(client, Me, bufferSize)
+        Return New HttpProcessor(client, Me, bufferSize, _settings)
     End Function
 End Class

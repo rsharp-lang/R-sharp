@@ -155,7 +155,7 @@ Public Class Rweb : Inherits HttpServer
 
                 Call p.writeSuccess(0)
             Case Else
-                Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure) With {
+                Using response As New HttpResponse(p) With {
                     .AccessControlAllowOrigin = "*"
                 }
                     Call Processor.RscriptHttpPost(request, response)
@@ -164,7 +164,7 @@ Public Class Rweb : Inherits HttpServer
     End Sub
 
     Public Overrides Sub handleOtherMethod(p As HttpProcessor)
-        Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure) With {
+        Using response As New HttpResponse(p) With {
             .AccessControlAllowOrigin = "*"
         }
             Call response.WriteHTML("passed")
@@ -174,6 +174,6 @@ Public Class Rweb : Inherits HttpServer
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Protected Overrides Function getHttpProcessor(client As TcpClient, bufferSize%) As HttpProcessor
-        Return New HttpProcessor(client, Me, MAX_POST_SIZE:=bufferSize)
+        Return New HttpProcessor(client, Me, MAX_POST_SIZE:=bufferSize, _settings)
     End Function
 End Class

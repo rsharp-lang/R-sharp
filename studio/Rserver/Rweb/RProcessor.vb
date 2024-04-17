@@ -152,7 +152,7 @@ Public Class RProcessor
     End Sub
 
     Public Sub RscriptHttpGet(p As HttpProcessor)
-        Using response As New HttpResponse(p.outputStream, AddressOf p.writeFailure) With {
+        Using response As New HttpResponse(p) With {
             .AccessControlAllowOrigin = "*"
         }
             ' /<scriptFileName>?...args
