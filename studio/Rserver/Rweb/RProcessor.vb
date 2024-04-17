@@ -62,6 +62,7 @@ Imports System.Collections.Specialized
 Imports System.Runtime.CompilerServices
 Imports Flute.Http.Core
 Imports Flute.Http.Core.Message
+Imports Flute.Http.FileSystem
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Parallel
@@ -170,7 +171,11 @@ Public Class RProcessor
             ElseIf request.URL.path = "get_invoke" Then
                 Call pushBackResult(request.URL("request_id"), request, response)
             ElseIf Not Rscript.FileExists Then
-                Call p.writeFailure(404, "file not found!")
+                If localRServer.fs Is Nothing Then
+                    Call p.writeFailure(HTTP_RFC.RFC_NOT_FOUND, "file not found!")
+                Else
+                    Call WebFileSystemListener.HostStaticFile(localRServer.fs, request, response)
+                End If
             ElseIf is_background Then
                 Dim task As New WebTask With {
                     .Rscript = Rscript,

@@ -77,8 +77,12 @@ Imports SMRUCC.Rsharp.Runtime.Serialize
 Public Class Rweb : Inherits HttpServer
 
     Dim socket As TcpServicesSocket
-    Dim fs As FileSystem
 
+    ''' <summary>
+    ''' a wrapper of the local filesystem object for hosting the static files, example as html file, image files, etc
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property fs As FileSystem
     Public ReadOnly Property Processor As RProcessor
 
     ''' <summary>
@@ -116,7 +120,7 @@ Public Class Rweb : Inherits HttpServer
     End Sub
 
     Public Sub SetFileSystem(fs As FileSystem)
-        Me.fs = fs
+        _fs = fs
     End Sub
 
     Public Overrides Function Run() As Integer
