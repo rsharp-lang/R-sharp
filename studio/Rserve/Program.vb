@@ -119,7 +119,13 @@ Module Program
     ''' <returns></returns>
     <ExportAPI("--start")>
     <Description("Start R# web services, host R# script with http get request.")>
-    <Usage("--start [--port <port number, default=7452> --tcp <port_number, default=3838> --Rweb <directory, default=./Rweb> --startups <packageNames, default=""""> --show_error --n_threads <max_threads, default=8> --parent <parent_pid, default="""">]")>
+    <Usage("--start [--port <port number, default=7452> 
+                     --tcp <port_number, default=3838> 
+                     --Rweb <directory, default=./Rweb> 
+                     --startups <packageNames, default=""""> 
+                     --show_error 
+                     --n_threads <max_threads, default=8> 
+                     --parent <parent_pid, default="""">]")>
     <Argument("--Rweb", True, CLITypes.File, AcceptTypes:={GetType(String)},
               Description:="A directory path that contains the r-sharp script file for handling the http request from the client.")>
     <Argument("--port", True, CLITypes.Integer, AcceptTypes:={GetType(Integer)},
