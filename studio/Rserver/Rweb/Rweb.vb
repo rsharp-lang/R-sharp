@@ -58,9 +58,11 @@
 Imports System.IO
 Imports System.Net.Sockets
 Imports System.Runtime.CompilerServices
+Imports Flute.Http
 Imports Flute.Http.Core
 Imports Flute.Http.Core.HttpStream
 Imports Flute.Http.Core.Message
+Imports Flute.Http.FileSystem
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Net.Tcp
@@ -75,6 +77,7 @@ Imports SMRUCC.Rsharp.Runtime.Serialize
 Public Class Rweb : Inherits HttpServer
 
     Dim socket As TcpServicesSocket
+    Dim fs As FileSystem
 
     Public ReadOnly Property Processor As RProcessor
 
@@ -101,14 +104,19 @@ Public Class Rweb : Inherits HttpServer
                    tcp As Integer,
                    show_error As Boolean,
                    Optional threads As Integer = -1,
-                   Optional debug As Boolean = False)
+                   Optional debug As Boolean = False,
+                   Optional configs As Configuration = Nothing)
 
-        MyBase.New(port, threads)
+        MyBase.New(port, threads, configs)
 
         Me.Processor = New RProcessor(Me, Rweb, show_error, debug)
         Me.socket = New TcpServicesSocket(tcp) With {
             .ResponseHandler = AddressOf callback
         }
+    End Sub
+
+    Public Sub SetFileSystem(fs As FileSystem)
+        Me.fs = fs
     End Sub
 
     Public Overrides Function Run() As Integer
