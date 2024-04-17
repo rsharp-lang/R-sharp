@@ -276,7 +276,7 @@ Namespace Language.Syntax.SyntaxParser
 
                 Return New SyntaxResult(calls)
             Else
-                Return New SyntaxResult(SyntaxError.CreateError(opts, New SyntaxErrorException(list.Select(Function(t) t.text).JoinBy(" "))))
+                Return opts.ParseExpression(list, opts)
             End If
         End Function
 
