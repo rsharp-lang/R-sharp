@@ -1528,7 +1528,7 @@ Namespace Runtime.Internal.Invokes
                                Optional env As Environment = Nothing) As Object
             Select Case type
                 Case BufferObjects.raw : Return New rawBuffer
-                Case BufferObjects.text : Return New textBuffer
+                Case BufferObjects.text : Return New textBuffer With {.mime = mime}
                 Case BufferObjects.bitmap : Return New bitmapBuffer
                 Case BufferObjects.vector : Return New vectorBuffer(env)
                 Case BufferObjects.dataframe : Return New dataframeBuffer(env)
