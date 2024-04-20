@@ -174,7 +174,7 @@ R# ""$app"" $cli".Replace("{script}", script.FileName)
         If script.ExtensionSuffix("R") Then
             Dim Rscript As RlangScript = RlangScript.FromFile(script)
             Dim error$ = Nothing
-            Dim debugMode As Boolean = args.GetBoolean("--debug")
+            Dim debugMode As Boolean = args.IsTrue("--debug")
             Dim program As RProgram = RProgram.CreateProgram(
                 Rscript:=Rscript,
                 [error]:=[error],
