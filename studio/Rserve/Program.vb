@@ -127,7 +127,7 @@ Module Program
     <Usage("/make.config --export <file_path_to_save.ini>")>
     Public Function makeconfig(args As CommandLine) As Integer
         Dim configfile As String = args("--export")
-        Dim defaultSettings As New Configuration
+        Dim defaultSettings As Configuration = Configuration.Default
 
         Return Configuration.Save(defaultSettings, configfile).CLICode
     End Function

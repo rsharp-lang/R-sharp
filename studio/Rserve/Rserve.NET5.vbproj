@@ -16,6 +16,7 @@
 	  <Title>R http services</Title>
 	  <Authors>xieguigang</Authors>
 	  <Company>SMRUCC genomics Institute [GuiLin, China]</Company>
+	  <UseApplicationFramework>True</UseApplicationFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
