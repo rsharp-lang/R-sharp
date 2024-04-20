@@ -59,6 +59,7 @@ Imports System.IO
 Imports System.Net.Sockets
 Imports System.Runtime.CompilerServices
 Imports Flute.Http
+Imports Flute.Http.Configurations
 Imports Flute.Http.Core
 Imports Flute.Http.Core.HttpStream
 Imports Flute.Http.Core.Message

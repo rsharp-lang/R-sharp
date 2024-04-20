@@ -52,6 +52,7 @@
 Imports System.ComponentModel
 Imports System.IO
 Imports Flute.Http
+Imports Flute.Http.Configurations
 Imports Flute.Http.Core
 Imports Flute.Http.FileSystem
 Imports Microsoft.VisualBasic.CommandLine
