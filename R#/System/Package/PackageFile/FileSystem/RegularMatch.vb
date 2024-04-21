@@ -72,7 +72,9 @@ Namespace Development.Package.File
         End Function
 
         Public Function isMatch(relpath As String) As Boolean Implements IFilePredicate.isMatch
-            Return Norm(relpath).StartsWith(filepath)
+            Dim checkpath As String = Norm(relpath)
+            Dim check As Boolean = checkpath.StartsWith(filepath)
+            Return check
         End Function
 
         Public Overrides Function ToString() As String
