@@ -403,7 +403,7 @@ Public Module utils
                 Return document.TryCast(Of Message)
             End If
 
-            StreamIO.SaveDataFrame(document, ms, Encoding.UTF8, tsv:=tsv, silent:=False)
+            StreamIO.SaveDataFrame(document.TryCast(Of csv).Rows, ms, Encoding.UTF8, tsv:=tsv, silent:=False)
             ms.Flush()
             text = Encoding.UTF8.GetString(ms.ToArray)
             ms.Dispose()

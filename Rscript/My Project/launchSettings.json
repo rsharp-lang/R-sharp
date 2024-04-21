@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src ../ /save ./flavor.zip --skip-src-build",
-      "workingDirectory": "G:\\flavor-scape\\.pkg"
+      "commandLineArgs": " --slave /exec \"G:/flavor-scape/web/src/run/graph.R\" /argvs \"H4sIAAAAAAAACqtWykxRsopWMlSKrQUAJBJ35AwAAAA=\" /request-id \"web_request__2255onf04d\" /PORT \"13838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" /entry \"run\" /@set --internal_pipeline=FALSE",
+      "workingDirectory": "G:\\flavor-scape\\web\\etc"
     },
     "mzkit_debug": {
       "commandName": "Project",
