@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": " --slave /exec \"G:/flavor-scape/web/src/files/upload.R\" /args \"H4sIAAAAAAAACl2NywrCMBBF/2XWpRoroclWcCUi0pVOF1FGLeSFDqKU/rtJ7ULczFw4h3t7uHSWvHEE+giO2JyCDY5KfjG0BawTzaTHMW6TiKDxz0QoEBpycWf4NvKDRsQZu5ifyGf/oPuTcloIOa8nrJaqqs9lFnPHKngmz807fmeYUnkyozWd/zU25K/TlKiUlAgDtMMHwAwCoc4AAAA=\" /request-id \"web_request__94938d58e7\" /PORT \"13838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" /entry \"run\" /@set --internal_pipeline=FALSE"
+      "commandLineArgs": " --slave /exec \"G:/flavor-scape/web/src/files/upload.R\" /argvs \"H4sIAAAAAAAACl2NywrCMBBF/2XWpRoroclWcCUi0pVOF1FGLeSFDqKU/rtJ7ULczFw4h3t7uHSWvHEE+giO2JyCDY5KfjG0BawTzaTHMW6TiKDxz0QoEBpycWf4NvKDRsQZu5ifyGf/oPuTcloIOa8nrJaqqs9lFnPHKngmz807fmeYUnkyozWd/zU25K/TlKiUlAgDtMMHwAwCoc4AAAA=\" /request-id \"web_request__94938d58e7\" /PORT \"13838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" /entry \"run\" /@set --internal_pipeline=FALSE"
     },
     "mzkit_debug": {
       "commandName": "Project",
