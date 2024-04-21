@@ -142,6 +142,14 @@ Public Class RProcessor
             Next
         End If
 
+        If Not request.POSTData.files.IsNullOrEmpty Then
+            For Each file In request.POSTData.files
+                args(file.Key) = file.Value _
+                    .Select(Function(f) f.GetJson) _
+                    .ToArray
+            Next
+        End If
+
         ' the request id is send back to the client 
         ' in plain text format
         If is_background Then
