@@ -209,7 +209,7 @@ End Function
 
 ''' <summary>
 ''' ```bash
-''' --slave /exec &lt;script.R&gt; /args &lt;json_base64&gt; /request-id &lt;request_id&gt; /PORT=&lt;port_number&gt; [ /timeout=&lt;timeout in ms, default=1000&gt; /retry=&lt;retry_times, default=5&gt; /MASTER=&lt;ip, default=localhost&gt; /entry=&lt;function_name, default=run&gt; --debug --startups &lt;packageNames, default=&quot;&quot;&gt;  --attach &lt;debug_pkg_dir&gt; ]
+''' --slave /exec &lt;script.R&gt; /argvs &lt;json_base64&gt; /request-id &lt;request_id&gt; /PORT=&lt;port_number&gt; [ /timeout=&lt;timeout in ms, default=1000&gt; /retry=&lt;retry_times, default=5&gt; /MASTER=&lt;ip, default=localhost&gt; /entry=&lt;function_name, default=run&gt; --debug --startups &lt;packageNames, default=&quot;&quot;&gt;  --attach &lt;debug_pkg_dir&gt; ]
 ''' ```
 ''' Create a R# cluster node for run background or parallel task.
 ''' This IPC command will run a R# script file that specified by the ``/exec`` argument,
@@ -233,7 +233,7 @@ End Function
 ''' <param name="startups"> A list of package names for load during the current slave process startup.
 ''' </param>
 Public Function slaveMode(exec As String, 
-                             args As String, 
+                             argvs As String, 
                              request_id As String, 
                              PORT As String, 
                              Optional timeout As String = "1000", 
@@ -244,7 +244,7 @@ Public Function slaveMode(exec As String,
                              Optional attach As String = "", 
                              Optional debug As Boolean = False) As Integer
 Dim cli = GetslaveModeCommandLine(exec:=exec, 
-                             args:=args, 
+                             argvs:=argvs, 
                              request_id:=request_id, 
                              PORT:=PORT, 
                              timeout:=timeout, 
@@ -258,7 +258,7 @@ Dim cli = GetslaveModeCommandLine(exec:=exec,
     Return proc.Run()
 End Function
 Public Function GetslaveModeCommandLine(exec As String, 
-                             args As String, 
+                             argvs As String, 
                              request_id As String, 
                              PORT As String, 
                              Optional timeout As String = "1000", 
@@ -271,7 +271,7 @@ Public Function GetslaveModeCommandLine(exec As String,
     Dim CLI As New StringBuilder("--slave")
     Call CLI.Append(" ")
     Call CLI.Append("/exec " & """" & exec & """ ")
-    Call CLI.Append("/args " & """" & args & """ ")
+    Call CLI.Append("/argvs " & """" & argvs & """ ")
     Call CLI.Append("/request-id " & """" & request_id & """ ")
     Call CLI.Append("/PORT " & """" & PORT & """ ")
     If Not timeout.StringEmpty Then

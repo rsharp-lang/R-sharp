@@ -97,7 +97,7 @@ Partial Module CLI
     ''' <returns></returns>
     <ExportAPI("--slave")>
     <Usage("--slave /exec <script.R> 
-                    /args <json_base64> 
+                    /argvs <json_base64> 
                     /request-id <request_id> 
                     /PORT=<port_number> [
                     
