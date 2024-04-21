@@ -115,7 +115,7 @@ Partial Module CLI
                   and then post back the result data json to the specific master listener.")>
     <Argument("/exec", False, CLITypes.File, AcceptTypes:={GetType(String)}, Extensions:="*.R",
               Description:="a specific R# script for run as background task.")>
-    <Argument("/args", False, CLITypes.Base64, PipelineTypes.std_in,
+    <Argument("/argvs", False, CLITypes.Base64, PipelineTypes.std_in,
               AcceptTypes:={GetType(Dictionary(Of String, String))},
               Extensions:="*.json",
               Description:="The base64 text of the input arguments for running current R# script file, this is a json encoded text of the arguments. the json object should be a collection of [key => value[]] pairs.")>
@@ -138,7 +138,7 @@ Partial Module CLI
               Description:="A list of package names for load during the current slave process startup.")>
     Public Function slaveMode(args As CommandLine) As Integer
         Dim script As String = args <= "/exec"
-        Dim arguments As Dictionary(Of String, String()) = args("/args") _
+        Dim arguments As Dictionary(Of String, String()) = args("/argvs") _
             .Base64Decode(ungzip:=True) _
             .tryHandleJSON
         Dim port As Integer = CInt(Val(args <= "/PORT"))
