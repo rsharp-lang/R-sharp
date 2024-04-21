@@ -77,6 +77,7 @@ Namespace Runtime.Serialize
                     Case GetType(rscriptBuffer) : Return BufferObjects.rscript
                     Case GetType(listBuffer) : Return BufferObjects.list
                     Case GetType(dataframeBuffer) : Return BufferObjects.dataframe
+                    Case GetType(NullObject) : Return BufferObjects.vector
                     Case Else
                         Throw New NotImplementedException(data.GetType.FullName)
                 End Select
