@@ -2,7 +2,7 @@
   "profiles": {
     "Rserve.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "/make.config --export ./settings.ini",
+      "commandLineArgs": "--start --port 82 --tcp 13838 --Rweb ../src --wwwroot ../wwwroot/ --show_error --n_threads 2 --config ./settings.ini",
       "workingDirectory": "G:\\flavor-scape\\web\\etc"
     }
   }
