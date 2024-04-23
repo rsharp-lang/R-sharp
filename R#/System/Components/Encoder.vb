@@ -55,7 +55,21 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
 Namespace Development.Components
 
-    Public Module Encoder
+    ''' <summary>
+    ''' helper for json/bencode serialization of the R# runtime object.
+    ''' </summary>
+    Public Class Encoder
+
+        ''' <summary>
+        ''' options for dataframe, a new field row.names will be generates if set this option value TRUE
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property row_names As Boolean
+        ''' <summary>
+        ''' options for dataframe, make the scalar field to full size vector if set this option value TRUE
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property full_vector As Boolean
 
         ''' <summary>
         ''' R语言为向量化语言，但是其他的大部分编程语言不是向量化的
@@ -67,12 +81,12 @@ Namespace Development.Components
         ''' <returns></returns>
         Private Function TryHandleNonVector(vec As Array) As Object
             If vec.Length = 1 Then
-                Return Encoder.GetObject(vec.GetValue(Scan0))
+                Return GetObject(vec.GetValue(Scan0))
             Else
                 Dim array As New List(Of Object)
 
                 For Each x As Object In vec
-                    Call array.Add(Encoder.GetObject(x))
+                    Call array.Add(GetObject(x))
                 Next
 
                 Return array.ToArray
@@ -94,19 +108,28 @@ Namespace Development.Components
 
                 If Not DirectCast(Robj, list).slots Is Nothing Then
                     For Each slot As KeyValuePair(Of String, Object) In DirectCast(Robj, list).slots
-                        Call list.Add(slot.Key, Encoder.GetObject(slot.Value))
+                        Call list.Add(slot.Key, GetObject(slot.Value))
                     Next
                 End If
 
                 Return list
             ElseIf TypeOf Robj Is vbObject Then
-                Return Encoder.GetObject(DirectCast(Robj, vbObject).target)
+                Return GetObject(DirectCast(Robj, vbObject).target)
             ElseIf TypeOf Robj Is dataframe Then
-                Dim raw = DirectCast(Robj, dataframe).columns
+                Dim df As dataframe = DirectCast(Robj, dataframe)
+                Dim raw As Dictionary(Of String, Array) = df.columns
                 Dim decode As New Dictionary(Of String, Object)
 
+                If row_names Then
+                    Call decode.Add("row.names", df.getRowNames)
+                End If
+
                 For Each slot As KeyValuePair(Of String, Array) In raw
-                    Call decode.Add(slot.Key, Encoder.GetObject(slot.Value))
+                    If full_vector Then
+                        Call decode.Add(slot.Key, GetObject(df.getVector(slot.Key, fullSize:=True)))
+                    Else
+                        Call decode.Add(slot.Key, GetObject(slot.Value))
+                    End If
                 Next
 
                 Return decode
@@ -115,7 +138,7 @@ Namespace Development.Components
             End If
         End Function
 
-        Public Function DigestRSharpObject(any As Object, env As Environment) As Object
+        Public Shared Function DigestRSharpObject(any As Object, env As Environment) As Object
             If any Is Nothing Then
                 Return Nothing
             ElseIf TypeOf any Is vector Then
@@ -127,10 +150,13 @@ Namespace Development.Components
             ElseIf TypeOf any Is pipeline Then
                 Return DirectCast(any, pipeline).populates(Of Object)(env).ToArray
             ElseIf TypeOf any Is dataframe Then
-                Return DirectCast(any, dataframe).columns
+                Dim df As dataframe = DirectCast(any, dataframe)
+                Dim fields As New Dictionary(Of String, Array)(df.columns)
+                Call fields.Add("row.names", df.getRowNames)
+                Return fields
             Else
                 Return any
             End If
         End Function
-    End Module
+    End Class
 End Namespace

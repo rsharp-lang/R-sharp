@@ -85,6 +85,15 @@ Module jsonlite
             .enumToString = enumToStr,
             .unixTimestamp = unixTimestamp
         }
+        Dim encoder As New Encoder With {
+            .full_vector = False,
+            .row_names = False
+        }
+
+        If Not args Is Nothing Then
+            encoder.full_vector = args.getValue({"full.vector", "full_vector"}, env, [default]:=encoder.full_vector)
+            encoder.row_names = args.getValue({"row.names", "row_names", "rownames"}, env, [default]:=encoder.row_names)
+        End If
 
         If x Is Nothing Then
             Return "null"
@@ -95,7 +104,7 @@ Module jsonlite
         End If
 
         Dim err As Message = Nothing
-        Dim json As JsonElement = opts.GetJsonLiteralRaw(x, err, env)
+        Dim json As JsonElement = opts.GetJsonLiteralRaw(x, encoder, err, env)
 
         If Not err Is Nothing Then
             Return err
@@ -117,6 +126,7 @@ Module jsonlite
     <Extension>
     Public Function GetJsonLiteralRaw(opts As JSONSerializerOptions,
                                       x As Object,
+                                      encoder As Encoder,
                                       ByRef err As Message,
                                       env As Environment) As JsonElement
         Dim json As JsonElement
@@ -141,7 +151,7 @@ Module jsonlite
         End If
 
         If Not TypeOf x Is JsonElement Then
-            x = Encoder.GetObject(x)
+            x = encoder.GetObject(x)
             json = x.GetType.GetJsonElement(x, opts)
         Else
             json = DirectCast(x, JsonElement)
