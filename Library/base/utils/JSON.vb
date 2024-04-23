@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -297,6 +298,8 @@ Module JSON
                               Optional maskReadonly As Boolean = False,
                               Optional enumToStr As Boolean = True,
                               Optional unixTimestamp As Boolean = True,
+                              <RListObjectArgument>
+                              Optional args As list = Nothing,
                               Optional env As Environment = Nothing) As Object
 
         Dim stream As Stream
@@ -319,14 +322,14 @@ Module JSON
             .enumToString = enumToStr,
             .unixTimestamp = unixTimestamp
         }
-
+        Dim encoder As Encoder = Encoder.CreateEncoderWithOptions(args, env)
         Dim err As Message = Nothing
         Dim json As JsonElement
 
         If obj Is Nothing Then
             Return Internal.debug.stop("the given object data can not be nothing!", env)
         Else
-            json = opts.GetJsonLiteralRaw(obj, err, env)
+            json = opts.GetJsonLiteralRaw(obj, encoder, err, env)
         End If
 
         If Not err Is Nothing Then

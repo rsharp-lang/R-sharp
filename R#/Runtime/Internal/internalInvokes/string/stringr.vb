@@ -429,12 +429,14 @@ Namespace Runtime.Internal.Invokes
         Public Function json(<RRawVectorArgument>
                              x As Object,
                              Optional compress As Boolean = True,
+                             <RListObjectArgument>
+                             Optional args As list = Nothing,
                              Optional env As Environment = Nothing) As Object
 
             If x Is Nothing Then
                 Return "null"
             Else
-                x = encoder.GetObject(x)
+                x = encoder.CreateEncoderWithOptions(args, env).GetObject(x)
             End If
 
             Dim type As Type = x.GetType

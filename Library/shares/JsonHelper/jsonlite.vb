@@ -85,15 +85,7 @@ Module jsonlite
             .enumToString = enumToStr,
             .unixTimestamp = unixTimestamp
         }
-        Dim encoder As New Encoder With {
-            .full_vector = False,
-            .row_names = False
-        }
-
-        If Not args Is Nothing Then
-            encoder.full_vector = args.getValue({"full.vector", "full_vector"}, env, [default]:=encoder.full_vector)
-            encoder.row_names = args.getValue({"row.names", "row_names", "rownames"}, env, [default]:=encoder.row_names)
-        End If
+        Dim encoder As Encoder = Encoder.CreateEncoderWithOptions(args, env)
 
         If x Is Nothing Then
             Return "null"

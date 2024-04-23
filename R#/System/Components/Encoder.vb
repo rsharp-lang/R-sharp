@@ -158,5 +158,16 @@ Namespace Development.Components
                 Return any
             End If
         End Function
+
+        Public Shared Function CreateEncoderWithOptions(args As list, env As Environment) As Encoder
+            Dim encoder As New Encoder
+
+            If Not args Is Nothing Then
+                Encoder.full_vector = args.getValue({"full.vector", "full_vector"}, env, [default]:=Encoder.full_vector)
+                Encoder.row_names = args.getValue({"row.names", "row_names", "rownames"}, env, [default]:=Encoder.row_names)
+            End If
+
+            Return encoder
+        End Function
     End Class
 End Namespace
