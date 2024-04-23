@@ -76,7 +76,8 @@ Module jsonlite
                            Optional maskReadonly As Boolean = False,
                            Optional indent As Boolean = False,
                            Optional enumToStr As Boolean = True,
-                           Optional unixTimestamp As Boolean = True) As Object
+                           Optional unixTimestamp As Boolean = True,
+                           Optional args As list = Nothing) As Object
 
         Dim opts As New JSONSerializerOptions With {
             .indent = indent,
@@ -105,6 +106,14 @@ Module jsonlite
         Return jsonStr
     End Function
 
+    ''' <summary>
+    ''' cast R#/clr object as json element by reflection
+    ''' </summary>
+    ''' <param name="opts"></param>
+    ''' <param name="x"></param>
+    ''' <param name="err"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <Extension>
     Public Function GetJsonLiteralRaw(opts As JSONSerializerOptions,
                                       x As Object,
