@@ -58,6 +58,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Flute.Http.Core
 Imports Flute.Http.Core.Message
+Imports Microsoft.VisualBasic.Net.HTTP
 
 Public Class RSession : Inherits HttpServer
 
@@ -88,7 +89,7 @@ Public Class RSession : Inherits HttpServer
                 ' 获取指定uid对象的json数据用于前端查看
                 Call R.InspectObject(request.URL.getArgumentVal("guid"), p.openResponseStream)
             Case Else
-                Call p.writeFailure(500, "Method is not implemented!")
+                Call p.writeFailure(HTTP_RFC.RFC_NOT_IMPLEMENTED, "Method is not implemented!")
 
         End Select
     End Sub
@@ -103,13 +104,13 @@ Public Class RSession : Inherits HttpServer
 
                 Call R.RunCode(script, output)
             Case Else
-                Call p.writeFailure(500, "Method is not implemented!")
+                Call p.writeFailure(HTTP_RFC.RFC_NOT_IMPLEMENTED, "Method is not implemented!")
         End Select
     End Sub
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Overrides Sub handleOtherMethod(p As HttpProcessor)
-        Call p.writeFailure(404, "method not found")
+        Call p.writeFailure(HTTP_RFC.RFC_NOT_FOUND, "method not found")
     End Sub
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
