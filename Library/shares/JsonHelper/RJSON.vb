@@ -110,7 +110,14 @@ Module RJSON
         Dim rawElement As JsonElement
 
         If str.StringEmpty OrElse str.TextEquals("null") Then
-            env.AddMessage("the given input json string is literal of 'null'.")
+            Dim msg As String = "the given input json string is literal of 'null'."
+
+            If env Is Nothing Then
+                Call msg.Warning
+            Else
+                Call env.AddMessage(msg)
+            End If
+
             Return Nothing
         Else
             rawElement = New JsonParser(str, strictVectorSyntax:=strict_vector_syntax).OpenJSON()
