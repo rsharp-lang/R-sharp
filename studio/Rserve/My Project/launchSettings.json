@@ -2,8 +2,8 @@
   "profiles": {
     "Rserve.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--start --port 82 --tcp 13838 --Rweb ../src --wwwroot ../wwwroot/ --show_error --n_threads 2 --config ./settings.ini",
-      "workingDirectory": "G:\\flavor-scape\\web\\etc"
+      "commandLineArgs": "--start --port 80 --tcp 3838 --Rweb ../src/ --show_error --n_threads 2 --config ./settings.ini ---wwwroot \"../wwwroot\"",
+      "workingDirectory": "E:\\biodeep\\novocell\\landscape_v2\\etc"
     }
   }
 }
