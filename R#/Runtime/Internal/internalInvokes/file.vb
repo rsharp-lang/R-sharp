@@ -1524,7 +1524,7 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("buffer")>
         Public Function buffer(Optional type As BufferObjects = BufferObjects.raw,
-                               Optional mime As String = MIME.Unknown,
+                               Optional mime As String = "~ifelse(type == 'text' || type == 100, 'text/html','" & MIME.Unknown & "')",
                                Optional env As Environment = Nothing) As Object
             Select Case type
                 Case BufferObjects.raw : Return New rawBuffer
