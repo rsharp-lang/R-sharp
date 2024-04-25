@@ -353,7 +353,7 @@ Namespace Runtime.Internal.Object.Converts
         <RApiReturn(GetType(dataframe))>
         Public Function asDataframe(<RRawVectorArgument> x As Object,
                                     <RListObjectArgument>
-                                    Optional args As list = Nothing,
+                                    Optional args As Object = Nothing,
                                     Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return x
