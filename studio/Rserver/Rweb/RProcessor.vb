@@ -64,6 +64,8 @@ Imports Flute.Http.Core
 Imports Flute.Http.Core.Message
 Imports Flute.Http.FileSystem
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
+Imports Microsoft.VisualBasic.MIME.application.json
+Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -138,7 +140,11 @@ Public Class RProcessor
 
         If Not request.POSTData.Objects.IsNullOrEmpty Then
             For Each obj In request.POSTData.Objects
-                args(obj.Key) = CLRVector.asCharacter(obj.Value)
+                If TypeOf obj.Value Is JsonObject Then
+                    args(obj.Key) = {DirectCast(obj.Value, JsonObject).BuildJsonString}
+                Else
+                    args(obj.Key) = CLRVector.asCharacter(obj.Value)
+                End If
             Next
         End If
 
@@ -276,13 +282,14 @@ Public Class RProcessor
                         response As HttpResponse,
                         is_background As Boolean)
 
-        Dim argsText As String = args.GetJson.Base64String(gzip:=True)
+        Dim rawjson As String = JsonContract.GetJson(args)
+        Dim argsText As String = rawjson.Base64String(gzip:=True)
         Dim port As Integer = localRServer.TcpPort
         Dim master As String = "localhost"
         Dim entry As String = "run"
         Dim Rslave = RscriptCommandLine.Rscript.FromEnvironment(directory:=App.HOME)
 
-        Call args.GetJson.__DEBUG_ECHO
+        Call rawjson.__DEBUG_ECHO
 
         ' --slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [/MASTER=<ip, default=localhost> /entry=<function_name, default=NULL>]
         Dim arguments As String = Rslave.GetslaveModeCommandLine(
