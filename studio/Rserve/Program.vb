@@ -182,11 +182,18 @@ Module Program
             fs = New FileSystem(wwwroot)
         End If
 
+        If fs Is Nothing Then
+            Call VBDebugger.EchoLine("filesystem is not mount, static file will not be served.")
+        End If
+
         ' 20221007 fix of the relative path error
         ' by translate to absolute path at first!
         Rweb = Rweb.GetDirectoryFullPath
 
-        Using http As New Rweb(Rweb, port, tcp, show_error, threads:=n_threads, configs:=config)
+        Using http As New Rweb(Rweb, port, tcp, show_error,
+                               threads:=n_threads,
+                               configs:=config)
+
             Call http.Processor.WithStartups(startups)
             Call http.SetFileSystem(fs)
 
