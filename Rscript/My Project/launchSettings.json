@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--slave /exec \"G:/flavor-scape/web/src/run/training.R\" /argvs \"H4sIAAAAAAAACrVSwUrDQBD9lbInhSwYq5X2JlvpIRTp1abIsN3o4mZXky1Yih/gUfAi9OShH1Bv/k+p/oUz2ZTWD8jpbWbezJvJvAUrIX806tZCrkrWG7PLk5jHLKrwtMZ2jWc1ntfYQRQJsUVCXJEQUyTEEwmxREKckSDOSBBnJNpsEjFfgLZ98ECai5T9fi5/Xtcp67XGKeumLGo1DZMIVdfLzfeqVu2EVLNAqtv3A9WLkGoWql1XH5u3r1o1DqlmYfJCl86heFBF5a2BmXnIwSv0QT53XFtXau8MGQWyTGnZAqmn+NnlRzfH/Fp6mCqprNtnBmBAelfOzZ2ZS1VU1VdauhIOaX0XIpSN+dBZd6+eqRnG/pXuiPvSIRjsTzMGLZySiG2OnrUlrybFHk8zbXdFuGZGU4U1g5exJNgLH+HiFKmOgH/mD7ZUX6h5AwAA\" /request-id \"web_request__69539284ed\" /PORT \"3838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" /entry \"run\" /@set --internal_pipeline=FALSE",
+      "commandLineArgs": "--slave /exec \"G:/flavor-scape/web/src/run/regression.R\" /argvs \"H4sIAAAAAAAACqtWys1PSc2Jz0vMTVWyilYqLE3MyUyrjAeLKsXqKKVl5qTGZ6aA5AyVYmsBIGaxBjAAAAA=\" /request-id \"web_request__66286k0fdd\" /PORT \"13838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" /entry \"run\" /@set --internal_pipeline=FALSE",
       "workingDirectory": "G:\\flavor-scape\\web\\etc"
     },
     "mzkit_debug": {

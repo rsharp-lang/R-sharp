@@ -66,7 +66,7 @@ Public Class CNNFunction : Inherits RDefaultFunction
             Call data.addImageData(sample.features, 1.0)
             Call outputs.Add(cnn.predict(data))
 
-            If ++i Mod dd = 0 Then
+            If dd > 0 AndAlso ++i Mod dd = 0 Then
                 Call VBDebugger.EchoLine($"[{i}/{ds.Length}] {(i / ds.Length * 100).ToString("F2")}% ... {sample.id}")
             End If
         Next
