@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f52f0c4305c5455f79af53b65f02fab3, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//HTTP/WebTextQuery.vb"
+﻿#Region "Microsoft.VisualBasic::f52f0c4305c5455f79af53b65f02fab3, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/webKit//HTTP/WebTextQuery.vb"
 
     ' Author:
     ' 

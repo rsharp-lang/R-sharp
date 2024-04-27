@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8ece6745dd9109991fc5b1b36ca08c6d, G:/GCModeller/src/R-sharp/R#//System/Config/StartupConfigs.vb"
+﻿#Region "Microsoft.VisualBasic::8ece6745dd9109991fc5b1b36ca08c6d, E:/GCModeller/src/R-sharp/R#//System/Config/StartupConfigs.vb"
 
     ' Author:
     ' 

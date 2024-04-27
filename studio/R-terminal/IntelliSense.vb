@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d6e036694d1cd410158e1a26495fbb84, G:/GCModeller/src/R-sharp/studio/R-terminal//IntelliSense.vb"
+﻿#Region "Microsoft.VisualBasic::d6e036694d1cd410158e1a26495fbb84, E:/GCModeller/src/R-sharp/studio/R-terminal//IntelliSense.vb"
 
     ' Author:
     ' 

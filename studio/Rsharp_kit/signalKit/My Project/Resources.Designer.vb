@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::939b95c570a1389f9979e8495fe359de, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//My Project/Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::939b95c570a1389f9979e8495fe359de, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//My Project/Resources.Designer.vb"
 
     ' Author:
     ' 

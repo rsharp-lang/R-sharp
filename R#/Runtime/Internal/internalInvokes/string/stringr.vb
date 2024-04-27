@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ae07759098944ffde7baf9d13f7ddc50, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/stringr.vb"
+﻿#Region "Microsoft.VisualBasic::2f7636eaf49a56a833de56ecfaf209c4, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/stringr.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1229
-    '    Code Lines: 765
+    '   Total Lines: 1237
+    '    Code Lines: 771
     ' Comment Lines: 340
-    '   Blank Lines: 124
-    '     File Size: 51.06 KB
+    '   Blank Lines: 126
+    '     File Size: 51.29 KB
 
 
     '     Module stringr

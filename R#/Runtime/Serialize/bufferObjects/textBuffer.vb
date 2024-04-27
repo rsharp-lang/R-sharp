@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b61d0d7fdf56f8668cc2eb710e6d6c97, G:/GCModeller/src/R-sharp/R#//Runtime/Serialize/bufferObjects/textBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::b61d0d7fdf56f8668cc2eb710e6d6c97, E:/GCModeller/src/R-sharp/R#//Runtime/Serialize/bufferObjects/textBuffer.vb"
 
     ' Author:
     ' 

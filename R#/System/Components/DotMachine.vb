@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9a8bbafb02d0a3b1e1e6e669f4607648, G:/GCModeller/src/R-sharp/R#//System/Components/DotMachine.vb"
+﻿#Region "Microsoft.VisualBasic::9a8bbafb02d0a3b1e1e6e669f4607648, E:/GCModeller/src/R-sharp/R#//System/Components/DotMachine.vb"
 
     ' Author:
     ' 

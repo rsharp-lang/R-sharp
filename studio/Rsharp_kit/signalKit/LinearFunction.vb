@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1f07f0d97ae4e81cc27b18832e277376, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//LinearFunction.vb"
+﻿#Region "Microsoft.VisualBasic::1f07f0d97ae4e81cc27b18832e277376, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//LinearFunction.vb"
 
     ' Author:
     ' 
