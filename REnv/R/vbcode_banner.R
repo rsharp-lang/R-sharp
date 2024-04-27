@@ -1,9 +1,5 @@
-const vbcode_banner = function() {
-
-
-
-}
-
+#' process a single vb.net source file
+#' 
 const walkFiles = function(vbproj, refer, banner, proj_folder) {
     let v = list();
     let root = dirname(refer);
@@ -105,9 +101,12 @@ const processSingle(refer, stat = list()) {
     return(stat);
 }
 
+#' export the result as csv file
+#' 
 const code_stats = function(stats, proj_folder, save) {
     let v = [
-        proj_folder, "<root>", 
+        proj_folder, 
+        "<root>", 
         sum(stats$totalLines), 
         sum(stats$commentLines), 
         sum(stats$blankLines), 
@@ -117,13 +116,27 @@ const code_stats = function(stats, proj_folder, save) {
         sum(stats$method), 
         sum(stats$functions), 
         sum(stats$operator), 
-        sum(stats$size)];
-
-    stat = data.frame(proj = projList, files, totalLines, commentLines, blankLines, lineOfCodes, "class" = classes, property, method, functions, operator, "size(bytes)" = size)
-    stat = rbind(stat, v)
-    stat[, "size"] = byte_size(stat[, "size(bytes)"])
+        sum(stats$size)
+    ];
+    let stat = data.frame(
+        proj          = stats$projList, 
+        files         = stats$files, 
+        totalLines    = stats$totalLines, 
+        commentLines  = stats$commentLines, 
+        blankLines    = stats$blankLines, 
+        lineOfCodes   = stats$lineOfCodes, 
+        "class"       = stats$classes, 
+        property      = stats$property, 
+        method        = stats$method, 
+        functions     = stats$functions, 
+        operator      = stats$operator, 
+        "size(bytes)" = stats$size
+    );
     
-    print(stat, max.print = 13)
+    stat = rbind(stat, v);
+    stat[, "size"] = byte_size(stat[, "size(bytes)"]);
+    
+    print(stat, max.print = 13);
 
-    write.csv(stat, file = save, row.names = False)
+    write.csv(stat, file = save, row.names = FALSE);
 }
