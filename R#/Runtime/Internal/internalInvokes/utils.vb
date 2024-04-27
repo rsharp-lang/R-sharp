@@ -483,7 +483,13 @@ Namespace Runtime.Internal.Invokes
         <RApiReturn(GetType(Double))>
         Public Function memorySize(Optional max As Boolean = False) As Object
             Dim Rsharp As Process = Process.GetCurrentProcess()
-            Dim memSize As Double = Rsharp.WorkingSet64 / 1024 / 1024
+            Dim memSize As Double
+
+            If max Then
+                memSize = 0
+            Else
+                memSize = Rsharp.WorkingSet64 / 1024 / 1024
+            End If
 
             Return vector.asVector({memSize}, New unit With {.name = "MB"})
         End Function

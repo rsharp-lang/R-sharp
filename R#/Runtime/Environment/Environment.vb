@@ -86,8 +86,10 @@ Namespace Runtime
 
     ''' <summary>
     ''' A ``R#`` scripting runtime context.
-    ''' (在一个环境对象容器之中，所有的对象都是以变量来表示的)
     ''' </summary>
+    ''' <remarks>
+    ''' (在一个环境对象容器之中，所有的对象都是以变量来表示的)
+    ''' </remarks>
     Public Class Environment : Implements IEnumerable(Of Symbol)
         Implements IDisposable
 
@@ -169,9 +171,11 @@ Namespace Runtime
 
         ''' <summary>
         ''' It is the top level global environment?
-        ''' (当前的环境是否为最顶层的全局环境？)
         ''' </summary>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' (当前的环境是否为最顶层的全局环境？)
+        ''' </remarks>
         Public ReadOnly Property isGlobal As Boolean
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
@@ -188,7 +192,9 @@ Namespace Runtime
         ''' and the setter of this property is a wrapper of visit data table <see cref="symbols"/>.
         ''' </returns>
         ''' <remarks>
-        ''' If the current stack does not contains the target variable, then the program will try to find the variable in his parent
+        ''' If the current stack does not contains the target variable, then the program will try 
+        ''' to find the variable in his parent.
+        ''' 
         ''' if variable in format like [var], then it means a global or parent environment variable
         ''' </remarks>
         Default Public Overridable Property value(name As String) As Symbol
