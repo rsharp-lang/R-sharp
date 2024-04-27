@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2f4526626982ec9ad68b622577b6df90, D:/GCModeller/src/R-sharp/snowFall//My Project/Resources.Designer.vb"
+﻿#Region "Microsoft.VisualBasic::2f4526626982ec9ad68b622577b6df90, G:/GCModeller/src/R-sharp/snowFall//My Project/Resources.Designer.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::547f38485f08f707298e72ec076e91f5, D:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Expression/RFunction.vb"
+﻿#Region "Microsoft.VisualBasic::d1e2d2baadd4bfb6c95724435558cde4, G:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Expression/RFunction.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 201
-    '    Code Lines: 162
-    ' Comment Lines: 0
-    '   Blank Lines: 39
-    '     File Size: 8.82 KB
+    '   Total Lines: 241
+    '    Code Lines: 192
+    ' Comment Lines: 3
+    '   Blank Lines: 46
+    '     File Size: 10.53 KB
 
 
     '     Class RFunction
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: GetExpression, getTypeCode, parseFormula, ParseFunction, parseLambda
-    '                   parseUsingClosure
+    '         Function: GetExpression, getTypeCode, ParseAttribute, parseFormula, ParseFunction
+    '                   parseLambda, parseUsingClosure
     ' 
     '         Sub: WriteBuffer
     ' 

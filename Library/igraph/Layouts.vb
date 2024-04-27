@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c62385ae7366fddc18475dfbe190ea05, D:/GCModeller/src/R-sharp/Library/igraph//Layouts.vb"
+﻿#Region "Microsoft.VisualBasic::e760f172fb9703ea7dcdc6797daeb074, G:/GCModeller/src/R-sharp/Library/igraph//Layouts.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 260
-    '    Code Lines: 201
-    ' Comment Lines: 34
-    '   Blank Lines: 25
-    '     File Size: 11.16 KB
+    '   Total Lines: 246
+    '    Code Lines: 194
+    ' Comment Lines: 29
+    '   Blank Lines: 23
+    '     File Size: 10.66 KB
 
 
     ' Module Layouts

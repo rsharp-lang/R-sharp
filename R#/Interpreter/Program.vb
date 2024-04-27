@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e77ffcccc7d4c8bcf74d1ffed16dc736, D:/GCModeller/src/R-sharp/R#//Interpreter/Program.vb"
+﻿#Region "Microsoft.VisualBasic::ce29cb99175dd76749ea43e819d4736d, G:/GCModeller/src/R-sharp/R#//Interpreter/Program.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 132
-    '    Code Lines: 99
+    '   Total Lines: 137
+    '    Code Lines: 103
     ' Comment Lines: 11
-    '   Blank Lines: 22
-    '     File Size: 5.16 KB
+    '   Blank Lines: 23
+    '     File Size: 5.31 KB
 
 
     '     Class Program
     ' 
     '         Properties: lines
     ' 
-    '         Constructor: (+1 Overloads) Sub New
+    '         Constructor: (+2 Overloads) Sub New
     '         Function: BuildProgram, CreateProgram, EndWithFuncCalls, Execute, GetEnumerator
     '                   IEnumerable_GetEnumerator, isException, ToString
     ' 

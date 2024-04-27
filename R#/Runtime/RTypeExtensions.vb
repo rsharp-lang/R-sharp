@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::50fbb47574d324eaae49bf5e93507631, D:/GCModeller/src/R-sharp/R#//Runtime/RTypeExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::44f596a42146016717507ce2a3203c62, G:/GCModeller/src/R-sharp/R#//Runtime/RTypeExtensions.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 176
-    '    Code Lines: 114
+    '   Total Lines: 177
+    '    Code Lines: 115
     ' Comment Lines: 49
     '   Blank Lines: 13
-    '     File Size: 7.86 KB
+    '     File Size: 7.94 KB
 
 
     '     Module RTypeExtensions

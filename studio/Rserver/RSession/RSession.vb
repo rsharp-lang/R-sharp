@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9302ee5218d7d8531b1ae6957431ade9, D:/GCModeller/src/R-sharp/studio/Rserver//RSession/RSession.vb"
+﻿#Region "Microsoft.VisualBasic::6a0dae9b2fa214f8c1edb09bca12b182, G:/GCModeller/src/R-sharp/studio/Rserver//RSession/RSession.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 64
-    '    Code Lines: 48
+    '   Total Lines: 65
+    '    Code Lines: 49
     ' Comment Lines: 1
     '   Blank Lines: 15
-    '     File Size: 2.24 KB
+    '     File Size: 2.36 KB
 
 
     ' Class RSession

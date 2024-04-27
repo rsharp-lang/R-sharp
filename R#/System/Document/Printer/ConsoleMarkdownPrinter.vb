@@ -1,52 +1,52 @@
-﻿#Region "Microsoft.VisualBasic::948a74fe6e6895acb31bd56262260000, D:/GCModeller/src/R-sharp/R#//System/Document/Printer/ConsoleMarkdownPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::96bdc2b7c66905c2ee70e3a19028c7ed, G:/GCModeller/src/R-sharp/R#//System/Document/Printer/ConsoleMarkdownPrinter.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 116
-'    Code Lines: 89
-' Comment Lines: 0
-'   Blank Lines: 27
-'     File Size: 4.17 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module ConsoleMarkdownPrinter
-' 
-'         Sub: printConsole, printDocs, printFuncBody, PrintText
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 150
+    '    Code Lines: 115
+    ' Comment Lines: 2
+    '   Blank Lines: 33
+    '     File Size: 5.57 KB
+
+
+    '     Module ConsoleMarkdownPrinter
+    ' 
+    '         Sub: printConsole, (+2 Overloads) printDocs, printFuncBody, PrintText
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

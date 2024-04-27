@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a91ec2ddbee89933a1af8a7f45b8f02c, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/strings.vb"
+﻿#Region "Microsoft.VisualBasic::4d9a19d649daf7a08054156ceba1a5e7, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/strings.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 315
-    '    Code Lines: 167
-    ' Comment Lines: 123
+    '   Total Lines: 317
+    '    Code Lines: 168
+    ' Comment Lines: 124
     '   Blank Lines: 25
-    '     File Size: 14.54 KB
+    '     File Size: 14.59 KB
 
 
     '     Module strings

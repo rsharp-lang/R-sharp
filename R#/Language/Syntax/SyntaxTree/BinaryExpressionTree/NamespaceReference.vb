@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7879461321e5eaf37b11d301b284dd44, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/BinaryExpressionTree/NamespaceReference.vb"
+﻿#Region "Microsoft.VisualBasic::7879461321e5eaf37b11d301b284dd44, G:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/BinaryExpressionTree/NamespaceReference.vb"
 
     ' Author:
     ' 

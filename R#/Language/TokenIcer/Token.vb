@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6304332aa88ea1f62875190084b197f7, D:/GCModeller/src/R-sharp/R#//Language/TokenIcer/Token.vb"
+﻿#Region "Microsoft.VisualBasic::032288df14d75acf0f1c22661bda12ee, G:/GCModeller/src/R-sharp/R#//Language/TokenIcer/Token.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 74
+    '   Total Lines: 82
     '    Code Lines: 53
-    ' Comment Lines: 11
+    ' Comment Lines: 19
     '   Blank Lines: 10
-    '     File Size: 2.69 KB
+    '     File Size: 3.09 KB
 
 
     '     Class Token

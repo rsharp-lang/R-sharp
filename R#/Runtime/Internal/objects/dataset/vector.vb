@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3cfd529f4bb2769e0df76a17dffe7d00, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/vector.vb"
+﻿#Region "Microsoft.VisualBasic::aba8de8d5fa605e6a4b26897babf8047, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/vector.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 418
-    '    Code Lines: 304
+    '   Total Lines: 423
+    '    Code Lines: 308
     ' Comment Lines: 48
-    '   Blank Lines: 66
-    '     File Size: 15.66 KB
+    '   Blank Lines: 67
+    '     File Size: 15.82 KB
 
 
     '     Class vector
     ' 
     '         Properties: data, factor, length, unit
     ' 
-    '         Constructor: (+13 Overloads) Sub New
+    '         Constructor: (+14 Overloads) Sub New
     ' 
     '         Function: asVector, fromScalar, (+2 Overloads) getByIndex, getByName, getNames
     '                   hasName, isVectorOf, loadGenericCollection, setByindex, setByIndex

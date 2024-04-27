@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9d5002536ca1a3bbd3bfc147e7188499, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxError.vb"
+﻿#Region "Microsoft.VisualBasic::a2420748556b16610eed499716057484, G:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxError.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 62
-    '    Code Lines: 50
+    '   Total Lines: 71
+    '    Code Lines: 57
     ' Comment Lines: 0
-    '   Blank Lines: 12
-    '     File Size: 2.59 KB
+    '   Blank Lines: 14
+    '     File Size: 3.03 KB
 
 
     '     Class SyntaxError
@@ -46,7 +46,7 @@
     '         Properties: [to], downstream, errorBlock, exception, file
     '                     from, upstream
     ' 
-    '         Function: (+2 Overloads) CreateError, ToString
+    '         Function: (+3 Overloads) CreateError, ToString
     ' 
     ' 
     ' /********************************************************************************/

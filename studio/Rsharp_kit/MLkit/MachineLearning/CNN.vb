@@ -1,51 +1,59 @@
-﻿#Region "Microsoft.VisualBasic::a9bff2c6c1fbb09fb7035b756237c991, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/CNN.vb"
+﻿#Region "Microsoft.VisualBasic::c14edf9d976528cd772e07f0bf105ab6, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/CNN.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 71
-'    Code Lines: 40
-' Comment Lines: 22
-'   Blank Lines: 9
-'     File Size: 2.44 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module CNN
-' 
-'     Function: detectObject, loadModel, saveModel
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 769
+    '    Code Lines: 490
+    ' Comment Lines: 194
+    '   Blank Lines: 85
+    '     File Size: 31.51 KB
+
+
+    ' Module CNNTools
+    ' 
+    '     Function: AdaDeltaTrainer, AdaGradTrainer, AdamTrainer, addLayer, auto_encoder
+    '               cnn_new, conv_layer, conv_transpose_layer, detectObject, dropout_layer
+    '               full_connected_layer, gaussian_layer, input_layer, leaky_relu_layer, loadModel
+    '               lrn_layer, maxout_layer, n_threads, NesterovTrainer, pool_layer
+    '               predict, regression_layer, relu_layer, sample_dataset, sample_dataset_from_df
+    '               sample_image_dataset, saveModel, SGDTrainer, sigmoid_layer, softmax_layer
+    '               tanh_layer, training, WindowGradTrainer
+    ' 
+    '     Sub: Main
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

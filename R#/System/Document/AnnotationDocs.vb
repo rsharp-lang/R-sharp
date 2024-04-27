@@ -1,54 +1,54 @@
-﻿#Region "Microsoft.VisualBasic::3824de13a225cf9592d3e5d570688458, D:/GCModeller/src/R-sharp/R#//System/Document/AnnotationDocs.vb"
+﻿#Region "Microsoft.VisualBasic::6e05466fa1d2125494af6d57dc7af03e, G:/GCModeller/src/R-sharp/R#//System/Document/AnnotationDocs.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 93
-'    Code Lines: 57
-' Comment Lines: 21
-'   Blank Lines: 15
-'     File Size: 3.47 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class AnnotationDocs
-' 
-'         Function: (+2 Overloads) GetAnnotations
-' 
-'         Sub: PrintHelp
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 124
+    '    Code Lines: 70
+    ' Comment Lines: 34
+    '   Blank Lines: 20
+    '     File Size: 4.79 KB
+
+
+    '     Class AnnotationDocs
+    ' 
+    '         Function: get_clr_xml_document, (+2 Overloads) GetAnnotations
+    ' 
+    '         Sub: PrintHelp
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

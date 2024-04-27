@@ -1,53 +1,54 @@
-﻿#Region "Microsoft.VisualBasic::7500c3fa3b4b2bb1a217b2696d8351a7, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/reshape2.vb"
+﻿#Region "Microsoft.VisualBasic::5064bb329a81a710240607211c34ad28, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/reshape2.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 326
-'    Code Lines: 201
-' Comment Lines: 84
-'   Blank Lines: 41
-'     File Size: 15.16 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module reshape2
-' 
-'         Function: aggregate, melt, melt_array, melt_dataframe, melt_list
-'                   shift, tuple, zip
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 540
+    '    Code Lines: 330
+    ' Comment Lines: 138
+    '   Blank Lines: 72
+    '     File Size: 23.79 KB
+
+
+    '     Module reshape2
+    ' 
+    '         Function: aggregate, ConstructDataframe, (+2 Overloads) decompose, flip_list, melt
+    '                   melt_array, melt_dataframe, melt_list, shift, tuple
+    '                   vector_fill, zip
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2def19d4eddbcd7009c3464266ccf900, D:/GCModeller/src/R-sharp/R#//Runtime/RVectorExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::d6fb04f2104aa2d386b552d5b53702a2, G:/GCModeller/src/R-sharp/R#//Runtime/RVectorExtensions.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 567
-    '    Code Lines: 390
-    ' Comment Lines: 110
+    '   Total Lines: 573
+    '    Code Lines: 392
+    ' Comment Lines: 114
     '   Blank Lines: 67
-    '     File Size: 21.88 KB
+    '     File Size: 22.26 KB
 
 
     '     Module RVectorExtensions

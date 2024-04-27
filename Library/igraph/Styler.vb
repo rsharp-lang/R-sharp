@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::238e96871b7c1a058856345798d9d1ca, D:/GCModeller/src/R-sharp/Library/igraph//Styler.vb"
+﻿#Region "Microsoft.VisualBasic::238e96871b7c1a058856345798d9d1ca, G:/GCModeller/src/R-sharp/Library/igraph//Styler.vb"
 
     ' Author:
     ' 

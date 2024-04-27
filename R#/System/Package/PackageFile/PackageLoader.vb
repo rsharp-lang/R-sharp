@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1c0e351f925dd2c7046acf2fe88e4c91, D:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/PackageLoader.vb"
+﻿#Region "Microsoft.VisualBasic::0d138321709364f5db7ead7f46f1b869, G:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/PackageLoader.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 336
-    '    Code Lines: 210
-    ' Comment Lines: 77
-    '   Blank Lines: 49
-    '     File Size: 13.75 KB
+    '   Total Lines: 369
+    '    Code Lines: 231
+    ' Comment Lines: 85
+    '   Blank Lines: 53
+    '     File Size: 15.28 KB
 
 
     '     Module PackageLoader2

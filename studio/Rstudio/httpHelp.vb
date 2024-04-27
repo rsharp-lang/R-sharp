@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::920bab013cdb378665179aff14dff93e, D:/GCModeller/src/R-sharp/studio/Rstudio//httpHelp.vb"
+﻿#Region "Microsoft.VisualBasic::b4b7f915a4b4e0fd3e862b8e340a3bee, G:/GCModeller/src/R-sharp/studio/Rstudio//httpHelp.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 101
     ' Comment Lines: 10
     '   Blank Lines: 20
-    '     File Size: 4.44 KB
+    '     File Size: 4.45 KB
 
 
     ' Module httpHelp

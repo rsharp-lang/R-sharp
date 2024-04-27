@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1884f6e4a352d6c5368199ef5f023a06, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/BinaryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::a3cb29f796865677e4caf6133785171f, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/BinaryExpression.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 154
+    '   Total Lines: 161
     '    Code Lines: 128
-    ' Comment Lines: 3
+    ' Comment Lines: 10
     '   Blank Lines: 23
-    '     File Size: 6.21 KB
+    '     File Size: 6.35 KB
 
 
     '     Interface IBinaryExpression

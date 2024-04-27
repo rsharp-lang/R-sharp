@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::df32aa69bb45d84ad5ad755ae9dd5900, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/file.vb"
+﻿#Region "Microsoft.VisualBasic::d78e4cb629bc134b2efbaace5fd1b645, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/file.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,21 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1595
-    '    Code Lines: 920
-    ' Comment Lines: 520
-    '   Blank Lines: 155
-    '     File Size: 71.90 KB
+    '   Total Lines: 1737
+    '    Code Lines: 992
+    ' Comment Lines: 567
+    '   Blank Lines: 178
+    '     File Size: 77.91 KB
 
 
+    '     Enum endianness
+    ' 
+    '         big, little
+    ' 
+    '  
+    ' 
+    ' 
+    ' 
     '     Module file
     ' 
     '         Function: [erase], basename, buffer, bytes, close
@@ -52,7 +60,7 @@
     '                   normalizeFileName, normalizePath, openDir, openGzip, openZip
     '                   readBin, readFromFile, readFromStream, readLines, readList
     '                   readText, Rhome, saveList, scanZipFiles, setwd
-    '                   tempdir, tempfile, writeLines
+    '                   tempdir, tempfile, writeBin, writeLines
     ' 
     '         Sub: fileRemove, fileRename, unlinks
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d58753533c464f513d3f34e0782c515d, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/SymbolExpression.vb"
+﻿#Region "Microsoft.VisualBasic::4b47bdc4880f3b2c3829bdfdee7961a1, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/SymbolExpression.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 44
-    '    Code Lines: 20
-    ' Comment Lines: 18
-    '   Blank Lines: 6
-    '     File Size: 1.54 KB
+    '   Total Lines: 139
+    '    Code Lines: 74
+    ' Comment Lines: 49
+    '   Blank Lines: 16
+    '     File Size: 5.10 KB
 
 
     '     Class SymbolExpression
     ' 
-    '         Sub: AddCustomAttributes
+    '         Function: GetAttributeNames, GetAttributes, GetAttributeValue, hasAttribute
+    ' 
+    '         Sub: AddCustomAttribute, AddCustomAttributes, SetAttributes
     ' 
     ' 
     ' /********************************************************************************/

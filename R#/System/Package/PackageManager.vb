@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c24b50962216983fecfb2136f7d11ba5, D:/GCModeller/src/R-sharp/R#//System/Package/PackageManager.vb"
+﻿#Region "Microsoft.VisualBasic::5fca2789f5b6de23fd2744a43e2d1693, G:/GCModeller/src/R-sharp/R#//System/Package/PackageManager.vb"
 
     ' Author:
     ' 
@@ -34,22 +34,22 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 404
-    '    Code Lines: 205
+    '   Total Lines: 406
+    '    Code Lines: 207
     ' Comment Lines: 137
     '   Blank Lines: 62
-    '     File Size: 19.58 KB
+    '     File Size: 19.68 KB
 
 
     '     Class PackageManager
     ' 
-    '         Properties: loadedPackages, packageDocs
+    '         Properties: loadedPackages, packageDocs, packageRepository
     ' 
     '         Constructor: (+2 Overloads) Sub New
     ' 
-    '         Function: EnumerateAttachedPackages, FindPackage, GenericEnumerator, getEmpty, GetEnumerator
-    '                   getPackageDir, GetPackageDocuments, hasLibFile, hasLibPackage, installDll
-    '                   InstallLocals, installZip
+    '         Function: EnumerateAttachedPackages, FindPackage, GenericEnumerator, getEmpty, getPackageDir
+    '                   GetPackageDocuments, hasLibFile, hasLibPackage, installDll, InstallLocals
+    '                   installZip
     ' 
     '         Sub: addAttached, (+2 Overloads) Dispose, Flush
     ' 

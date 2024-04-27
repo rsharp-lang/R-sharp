@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::eaf981dd1090d9dbaf72f5a7a4c68775, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/dev/rust.vb"
+﻿#Region "Microsoft.VisualBasic::ad51d0dbc63a30a7410302f9154846bd, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/dev/rust.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 191
-    '    Code Lines: 103
-    ' Comment Lines: 67
+    '   Total Lines: 195
+    '    Code Lines: 106
+    ' Comment Lines: 68
     '   Blank Lines: 21
-    '     File Size: 8.31 KB
+    '     File Size: 8.46 KB
 
 
     '     Module rust

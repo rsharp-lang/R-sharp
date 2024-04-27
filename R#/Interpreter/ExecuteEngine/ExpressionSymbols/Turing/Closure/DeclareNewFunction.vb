@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a3c4528cd41f254c783c71b0055c9be3, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/Closure/DeclareNewFunction.vb"
+﻿#Region "Microsoft.VisualBasic::35b24fa7cf5d8be62cf0094d1d88a408, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/Closure/DeclareNewFunction.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 396
-    '    Code Lines: 215
-    ' Comment Lines: 135
-    '   Blank Lines: 46
-    '     File Size: 17.72 KB
+    '   Total Lines: 430
+    '    Code Lines: 240
+    ' Comment Lines: 140
+    '   Blank Lines: 50
+    '     File Size: 19.22 KB
 
 
     '     Class DeclareNewFunction

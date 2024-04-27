@@ -1,56 +1,56 @@
-﻿#Region "Microsoft.VisualBasic::38c15f7cf3bd340eccbae852d3a99e52, D:/GCModeller/src/R-sharp/R#//Runtime/System/Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::393a9b9ba0b87a8630ae8da716c12572, G:/GCModeller/src/R-sharp/R#//Runtime/System/Rscript.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 154
-'    Code Lines: 94
-' Comment Lines: 40
-'   Blank Lines: 20
-'     File Size: 5.23 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class Rscript
-' 
-'         Properties: fileName, script, source
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: AutoHandleScript, FromFile, FromText, GetByLineNumber, GetByLineRange
-'                   GetFileNameDisplay, (+2 Overloads) GetRawText, GetSourceDirectory, GetTokens, ToString
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 164
+    '    Code Lines: 102
+    ' Comment Lines: 41
+    '   Blank Lines: 21
+    '     File Size: 5.66 KB
+
+
+    '     Class Rscript
+    ' 
+    '         Properties: fileName, script, source
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: AutoHandleScript, FromFile, FromText, GetByLineNumber, GetByLineRange
+    '                   GetFileNameDisplay, (+2 Overloads) GetRawText, GetSourceDirectory, (+2 Overloads) GetTokens, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

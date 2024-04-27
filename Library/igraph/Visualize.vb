@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d9f17697762cf3e68996f716f78b617c, D:/GCModeller/src/R-sharp/Library/igraph//Visualize.vb"
+﻿#Region "Microsoft.VisualBasic::2c4b9cab4dd654d082f192eaf1dd89a2, G:/GCModeller/src/R-sharp/Library/igraph//Visualize.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 411
-    '    Code Lines: 344
+    '   Total Lines: 412
+    '    Code Lines: 345
     ' Comment Lines: 19
     '   Blank Lines: 48
-    '     File Size: 18.75 KB
+    '     File Size: 18.79 KB
 
 
     ' Module Visualize

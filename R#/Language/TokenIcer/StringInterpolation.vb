@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::951a79ba093710f6b631b33bd82bb901, D:/GCModeller/src/R-sharp/R#//Language/TokenIcer/StringInterpolation.vb"
+﻿#Region "Microsoft.VisualBasic::951a79ba093710f6b631b33bd82bb901, G:/GCModeller/src/R-sharp/R#//Language/TokenIcer/StringInterpolation.vb"
 
     ' Author:
     ' 

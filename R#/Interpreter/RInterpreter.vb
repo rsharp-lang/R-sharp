@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7aad645cdbb9297e829cbb0e0d751b81, D:/GCModeller/src/R-sharp/R#//Interpreter/RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::69dffa75cf99bbb6e1bf56348a769ae0, G:/GCModeller/src/R-sharp/R#//Interpreter/RInterpreter.vb"
 
     ' Author:
     ' 
@@ -34,22 +34,23 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 681
-    '    Code Lines: 407
-    ' Comment Lines: 174
-    '   Blank Lines: 100
-    '     File Size: 27.72 KB
+    '   Total Lines: 714
+    '    Code Lines: 428
+    ' Comment Lines: 183
+    '   Blank Lines: 103
+    '     File Size: 29.15 KB
 
 
     '     Class RInterpreter
     ' 
     '         Properties: configFile, debug, globalEnvir, globalSymbols, isExecCancel
-    '                     redirectError2stdout, Rsharp, silent, strict, warnings
+    '                     redirectError2stdout, Rsharp, silent, strict, verbose
+    '                     warnings
     ' 
     '         Constructor: (+2 Overloads) Sub New
     ' 
     '         Function: [Imports], [Set], (+3 Overloads) Evaluate, FromEnvironmentConfiguration, getDataStream
-    '                   InitializeEnvironment, (+3 Overloads) Invoke, (+2 Overloads) LoadLibrary, options, Parse
+    '                   InitializeEnvironment, (+4 Overloads) Invoke, (+2 Overloads) LoadLibrary, options, Parse
     '                   RedirectOutput, Run, RunInternal, SetTaskCancelHook, Source
     ' 
     '         Sub: _construct, (+3 Overloads) Add, (+2 Overloads) Dispose, Inspect, (+2 Overloads) Print

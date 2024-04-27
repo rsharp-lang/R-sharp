@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c8e4a3b1c6db14cba96bfa06c20051f4, D:/GCModeller/src/R-sharp/Library/base//utils/buffer.vb"
+﻿#Region "Microsoft.VisualBasic::138ff386790e116c22edc49847bef439, G:/GCModeller/src/R-sharp/Library/base//utils/buffer.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 253
+    '   Total Lines: 260
     '    Code Lines: 179
-    ' Comment Lines: 42
+    ' Comment Lines: 49
     '   Blank Lines: 32
-    '     File Size: 9.46 KB
+    '     File Size: 9.73 KB
 
 
     ' Module buffer

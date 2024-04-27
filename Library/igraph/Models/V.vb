@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::eb1013d41b41b2165c167cc4709c8d9b, D:/GCModeller/src/R-sharp/Library/igraph//Models/V.vb"
+﻿#Region "Microsoft.VisualBasic::5d35d7d1bb3bef25b10ad4006497d4bf, G:/GCModeller/src/R-sharp/Library/igraph//Models/V.vb"
 
     ' Author:
     ' 
@@ -34,21 +34,25 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 215
-    '    Code Lines: 158
-    ' Comment Lines: 23
-    '   Blank Lines: 34
-    '     File Size: 7.83 KB
+    '   Total Lines: 243
+    '    Code Lines: 174
+    ' Comment Lines: 27
+    '   Blank Lines: 42
+    '     File Size: 8.77 KB
 
 
+    ' Class GraphElementCollection
+    ' 
+    '     Constructor: (+2 Overloads) Sub New
+    '     Function: getNames, hasName, loadDataNames, setNames
+    ' 
     ' Class V
     ' 
     '     Properties: size
     ' 
     '     Constructor: (+2 Overloads) Sub New
     '     Function: ConfigSymbols, eval, EvaluateIndexer, (+2 Overloads) getByIndex, (+2 Overloads) getByName
-    '               getNames, hasName, index, setByindex, setByIndex
-    '               (+2 Overloads) setByName, setNames
+    '               index, setByindex, setByIndex, (+2 Overloads) setByName
     ' 
     ' /********************************************************************************/
 

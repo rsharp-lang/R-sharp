@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::037f2b2aa79e842b00aa0655c4e1a6c9, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/dev/RCurl.vb"
+﻿#Region "Microsoft.VisualBasic::881a9f481416f4abcc5904d9d1b19c86, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/dev/RCurl.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 48
-    '    Code Lines: 24
-    ' Comment Lines: 19
+    '   Total Lines: 53
+    '    Code Lines: 26
+    ' Comment Lines: 22
     '   Blank Lines: 5
-    '     File Size: 2.06 KB
+    '     File Size: 2.26 KB
 
 
     '     Module RCurl

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2fb9fed14c2331cff8fb88c9925b67dc, D:/GCModeller/src/R-sharp/R#//Runtime/Serialize/bufferObjects/textBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::b61d0d7fdf56f8668cc2eb710e6d6c97, G:/GCModeller/src/R-sharp/R#//Runtime/Serialize/bufferObjects/textBuffer.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 62
-    '    Code Lines: 45
-    ' Comment Lines: 3
-    '   Blank Lines: 14
-    '     File Size: 1.64 KB
+    '   Total Lines: 84
+    '    Code Lines: 60
+    ' Comment Lines: 8
+    '   Blank Lines: 16
+    '     File Size: 2.64 KB
 
 
     '     Class textBuffer
     ' 
-    '         Properties: code, text
+    '         Properties: code, mime, text
     ' 
     '         Constructor: (+3 Overloads) Sub New
     ' 

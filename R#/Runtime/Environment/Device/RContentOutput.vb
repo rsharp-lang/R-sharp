@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bdfc5713f8fd956de59f5700d72001b0, D:/GCModeller/src/R-sharp/R#//Runtime/Environment/Device/RContentOutput.vb"
+﻿#Region "Microsoft.VisualBasic::4b262729a53359b2368372534c6d52b3, G:/GCModeller/src/R-sharp/R#//Runtime/Environment/Device/RContentOutput.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 206
-    '    Code Lines: 144
-    ' Comment Lines: 26
+    '   Total Lines: 211
+    '    Code Lines: 146
+    ' Comment Lines: 29
     '   Blank Lines: 36
-    '     File Size: 6.67 KB
+    '     File Size: 6.98 KB
 
 
     '     Class RContentOutput

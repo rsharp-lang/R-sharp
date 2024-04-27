@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4cd6e2614a2f9a8363c068d1cf9e1561, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/StringInterpolation.vb"
+﻿#Region "Microsoft.VisualBasic::27b0d5e7e0250ac58c1affa057a26504, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/StringInterpolation.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 91
-    '    Code Lines: 66
-    ' Comment Lines: 8
-    '   Blank Lines: 17
-    '     File Size: 3.29 KB
+    '   Total Lines: 127
+    '    Code Lines: 92
+    ' Comment Lines: 13
+    '   Blank Lines: 22
+    '     File Size: 4.69 KB
 
 
     '     Class StringInterpolation
@@ -46,7 +46,7 @@
     '         Properties: expressionName, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, r_string_concatenate, ToString
+    '         Function: Evaluate, r_string_concatenate, ToString, UnsafeStringConcatenate
     ' 
     ' 
     ' /********************************************************************************/

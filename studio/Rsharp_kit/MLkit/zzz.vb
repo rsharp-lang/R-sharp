@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a61c65418af2b756ed33e51609f1bcd8, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//zzz.vb"
+﻿#Region "Microsoft.VisualBasic::148dfeb8915a218e550f867a1fb9e709, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//zzz.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 18
-    '    Code Lines: 13
+    '   Total Lines: 20
+    '    Code Lines: 15
     ' Comment Lines: 0
     '   Blank Lines: 5
-    '     File Size: 480 B
+    '     File Size: 535 B
 
 
     ' Class zzz

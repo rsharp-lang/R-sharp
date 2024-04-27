@@ -1,4 +1,55 @@
-﻿Imports Microsoft.VisualBasic.Language
+﻿#Region "Microsoft.VisualBasic::d2bad0fe9efff3588ad467a0fef125b3, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/CNNFunction.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 111
+    '    Code Lines: 92
+    ' Comment Lines: 2
+    '   Blank Lines: 17
+    '     File Size: 4.45 KB
+
+
+    ' Class CNNFunction
+    ' 
+    '     Function: (+2 Overloads) DoPrediction, ToString
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.CNN
 Imports Microsoft.VisualBasic.MachineLearning.CNN.data
@@ -109,3 +160,4 @@ Public Class CNNFunction : Inherits RDefaultFunction
     End Function
 
 End Class
+

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8eb3bd15d7ffc7c17b3fe6249e7aa9c6, D:/GCModeller/src/R-sharp/Library/Rlapack//models/lmCall.vb"
+﻿#Region "Microsoft.VisualBasic::d216681f3185da9380b8e2d6e03e9d4b, G:/GCModeller/src/R-sharp/Library/Rlapack//models/lmCall.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 132
-    '    Code Lines: 108
+    '   Total Lines: 167
+    '    Code Lines: 137
     ' Comment Lines: 0
-    '   Blank Lines: 24
-    '     File Size: 4.37 KB
+    '   Blank Lines: 30
+    '     File Size: 5.42 KB
 
 
     ' Class lmCall
     ' 
-    '     Properties: data, equation, formula, lm, name
-    '                 R2, variables, weights
+    '     Properties: data, equation, factors, formula, lm
+    '                 name, R2, summary, variables, weights
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: CreateFormulaCall, Predicts, ToString
+    '     Function: CreateFormulaCall, Predicts, ToString, weightLmString, weightLmSummary
     ' 
     ' /********************************************************************************/
 

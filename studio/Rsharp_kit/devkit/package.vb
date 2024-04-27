@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1da2b62639517e49b7ea0060642903e9, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//package.vb"
+﻿#Region "Microsoft.VisualBasic::fbb0074c21dd5151d02ed39b074d2e0d, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//package.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 150
-    '    Code Lines: 107
-    ' Comment Lines: 25
-    '   Blank Lines: 18
-    '     File Size: 5.81 KB
+    '   Total Lines: 162
+    '    Code Lines: 113
+    ' Comment Lines: 30
+    '   Blank Lines: 19
+    '     File Size: 6.18 KB
 
 
     ' Module package
     ' 
     '     Function: attach, createRDefinition, deserialize, loadExpr, Parse
-    '               ParseRDataRaw, serialize, UnpackObjects
+    '               parseDll, ParseRDataRaw, serialize, UnpackObjects
     ' 
     '     Sub: loadPackage
     ' 

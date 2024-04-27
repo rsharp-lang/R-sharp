@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0aac670e2fcf3629c19c2ac242dd9b64, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RType.vb"
+﻿#Region "Microsoft.VisualBasic::b1ae65f84be9503719657248690c9d96, G:/GCModeller/src/R-sharp/R#//Runtime/Interop/RType.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,23 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 361
-    '    Code Lines: 220
-    ' Comment Lines: 103
-    '   Blank Lines: 38
-    '     File Size: 13.64 KB
+    '   Total Lines: 408
+    '    Code Lines: 249
+    ' Comment Lines: 114
+    '   Blank Lines: 45
+    '     File Size: 15.59 KB
 
 
+    '     Interface IRType
+    ' 
+    '         Properties: className, mode, raw
+    ' 
     '     Class RType
     ' 
-    '         Properties: any, characters, floats, fullName, getCount
-    '                     getItem, haveDynamicsProperty, integers, isArray, isCollection
-    '                     isEnvironment, isGenericListObject, list, logicals, mode
-    '                     name, raw
+    '         Properties: any, characters, closure, floats, fullName
+    '                     getCount, getItem, haveDynamicsProperty, integers, isArray
+    '                     isCollection, isEnvironment, isGenericListObject, isPrimitive, list
+    '                     logicals, mode, name, raw
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: (+3 Overloads) [GetType], [TypeOf], getNames, GetRawElementType, GetRSharpType

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::07834f489a228ea28cce6f9753a3ec7b, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpApi/RMethodArgument.vb"
+﻿#Region "Microsoft.VisualBasic::11138971c48613e1f7825ee2f45ed40d, G:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpApi/RMethodArgument.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 177
-    '    Code Lines: 101
-    ' Comment Lines: 60
-    '   Blank Lines: 16
-    '     File Size: 7.11 KB
+    '   Total Lines: 188
+    '    Code Lines: 106
+    ' Comment Lines: 65
+    '   Blank Lines: 17
+    '     File Size: 7.58 KB
 
 
     '     Class RMethodArgument

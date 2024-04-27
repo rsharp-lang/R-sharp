@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::122758a67ec15b1a45d675e6ed9fe35a, D:/GCModeller/src/R-sharp/Library/Rlapack//zzz.vb"
+﻿#Region "Microsoft.VisualBasic::18d2c14bb19dd9161bc3dd6e002e34a4, G:/GCModeller/src/R-sharp/Library/Rlapack//zzz.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 34
-    '    Code Lines: 29
+    '   Total Lines: 35
+    '    Code Lines: 30
     ' Comment Lines: 0
     '   Blank Lines: 5
-    '     File Size: 1.18 KB
+    '     File Size: 1.21 KB
 
 
     ' Class zzz

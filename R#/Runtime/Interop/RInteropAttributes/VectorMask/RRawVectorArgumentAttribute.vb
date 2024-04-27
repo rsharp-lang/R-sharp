@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::44b235d8f72cada3121e591a9132860c, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RInteropAttributes/VectorMask/RRawVectorArgumentAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::929ed840043e204bf5858d6bdba00852, G:/GCModeller/src/R-sharp/R#//Runtime/Interop/RInteropAttributes/VectorMask/RRawVectorArgumentAttribute.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 74
+    '   Total Lines: 77
     '    Code Lines: 35
-    ' Comment Lines: 28
+    ' Comment Lines: 31
     '   Blank Lines: 11
-    '     File Size: 2.83 KB
+    '     File Size: 2.99 KB
 
 
     '     Class RRawVectorArgumentAttribute

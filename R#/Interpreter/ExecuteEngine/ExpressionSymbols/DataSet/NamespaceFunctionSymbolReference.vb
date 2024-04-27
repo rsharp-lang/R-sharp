@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2ef10102511151a5deaea165edcf291d, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/NamespaceFunctionSymbolReference.vb"
+﻿#Region "Microsoft.VisualBasic::c6aa44f23570dd488c8159813efd13cd, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/NamespaceFunctionSymbolReference.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 100
     ' Comment Lines: 15
     '   Blank Lines: 22
-    '     File Size: 5.62 KB
+    '     File Size: 5.65 KB
 
 
     '     Class NamespaceFunctionSymbolReference

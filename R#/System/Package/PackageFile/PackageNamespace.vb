@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::03e679296c8d10a5040938ba6cafc5c8, D:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/PackageNamespace.vb"
+﻿#Region "Microsoft.VisualBasic::4bf7f7925d8ba4f3e5763042a9b96aea, G:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/PackageNamespace.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,22 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 121
-    '    Code Lines: 81
-    ' Comment Lines: 23
-    '   Blank Lines: 17
-    '     File Size: 4.91 KB
+    '   Total Lines: 196
+    '    Code Lines: 113
+    ' Comment Lines: 57
+    '   Blank Lines: 26
+    '     File Size: 8.26 KB
 
 
     '     Class PackageNamespace
     ' 
     '         Properties: assembly, checksum, datafiles, dependency, framework
-    '                     libPath, meta, packageName, runtime, symbols
+    '                     inMemory, libPath, meta, packageName, runtime
+    '                     symbols
     ' 
     '         Constructor: (+3 Overloads) Sub New
-    '         Function: Check, EnumerateSymbols, FindAssemblyPath, ToString
+    '         Function: Check, CheckAssemblyExist, CreateLoaderContext, EnumerateSymbols, FindAssemblyPath
+    '                   ToString
     ' 
     ' 
     ' /********************************************************************************/

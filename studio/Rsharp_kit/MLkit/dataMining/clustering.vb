@@ -1,63 +1,66 @@
-﻿#Region "Microsoft.VisualBasic::5da78c319d4484d1288216812c64b1c4, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataMining/clustering.vb"
+﻿#Region "Microsoft.VisualBasic::eaf761d10315ad0d3e45c23e282dc774, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataMining/clustering.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 834
-'    Code Lines: 576
-' Comment Lines: 165
-'   Blank Lines: 93
-'     File Size: 35.15 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module clustering
-' 
-'     Function: btreeClusterFUN, clusterGroups, clusterResultDataFrame, clusterSummary, cmeansSummary
-'               dbscan, dbscan_objects, densityA, ensureNotIsDistance, fuzzyCMeans
-'               hclust, hdbscan_exec, hleaf, hnode, Kmeans
-'               showHclust, ToHClust
-' 
-'     Sub: Main
-'     Class point2DReader
-' 
-'         Function: activate, getByDimension, GetDimensions, metric, nodeIs
-' 
-'         Sub: setByDimensin
-' 
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 1508
+    '    Code Lines: 995
+    ' Comment Lines: 318
+    '   Blank Lines: 195
+    '     File Size: 61.59 KB
+
+
+    ' Module clustering
+    ' 
+    '     Function: AffinityPropagationClustering, btreeClusterFUN, calinski_harabasz, Canopy, clusterGroups
+    '               clusterResultDataFrame, clusters, clustersDf1, clusterSummary, cmeansSummary
+    '               dataSetCommon, dbscan, dbscan_objects, densityA, ensureNotIsDistance
+    '               fuzzyCMeans, getTraceback, gmm_components, gmm_predict, gmm_predict_proba
+    '               gmmf, hclust, hdbscan_exec, hleaf, hnode
+    '               Kmeans_func, knn, Lloyds, showHclust, silhouette_score
+    '               ToHClust, treeDf
+    ' 
+    '     Sub: Main
+    '     Class point2DReader
+    ' 
+    '         Function: activate, getByDimension, GetDimensions, metric, nodeIs
+    ' 
+    '         Sub: setByDimensin
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

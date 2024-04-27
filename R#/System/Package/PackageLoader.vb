@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b1c91eb702adee5a05eb9c5e86c52a43, D:/GCModeller/src/R-sharp/R#//System/Package/PackageLoader.vb"
+﻿#Region "Microsoft.VisualBasic::7dfc3623edb396cffa6bd1a03e16441f, G:/GCModeller/src/R-sharp/R#//System/Package/PackageLoader.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 78
-    '    Code Lines: 50
+    '   Total Lines: 83
+    '    Code Lines: 54
     ' Comment Lines: 18
-    '   Blank Lines: 10
-    '     File Size: 3.03 KB
+    '   Blank Lines: 11
+    '     File Size: 3.33 KB
 
 
     '     Module PackageLoader
     ' 
-    '         Function: ParsePackage, parsePackageInternal, ParsePackages, ScanDllFiles
+    '         Function: ParsePackage, parsePackageInternal, (+2 Overloads) ParsePackages, ScanDllFiles
     ' 
     ' 
     ' /********************************************************************************/

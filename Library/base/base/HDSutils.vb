@@ -1,53 +1,57 @@
-﻿#Region "Microsoft.VisualBasic::36936fac46a538c6ff3e187c29699800, D:/GCModeller/src/R-sharp/Library/base//base/HDSutils.vb"
+﻿#Region "Microsoft.VisualBasic::cebaf2934ba831af7ff184a8abf1987a, G:/GCModeller/src/R-sharp/Library/base//base/HDSutils.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 281
-'    Code Lines: 185
-' Comment Lines: 56
-'   Blank Lines: 40
-'     File Size: 10.54 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module HDSutils
-' 
-'     Constructor: (+1 Overloads) Sub New
-'     Function: createStream, DiskDefragmentation, ExtractFiles, getData, listFiles
-'               openStream, readText, saveFile, Tree, writeText
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 320
+    '    Code Lines: 217
+    ' Comment Lines: 56
+    '   Blank Lines: 47
+    '     File Size: 12.37 KB
+
+
+    ' Module HDSutils
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    ' 
+    '     Function: createStream, DiskDefragmentation, ExtractFiles, fileTable, getData
+    '               listFiles, openStream, readText, saveFile, Tree
+    '               writeText
+    ' 
+    '     Sub: flush
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

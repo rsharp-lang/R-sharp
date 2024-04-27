@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d40dec3b6250fb4a157b056aa332db9e, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/StringBinaryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::c784ff54f931d4d4f93f0664e69cc3bc, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/StringBinaryExpression.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 102
+    '   Total Lines: 110
     '    Code Lines: 72
-    ' Comment Lines: 13
+    ' Comment Lines: 21
     '   Blank Lines: 17
-    '     File Size: 4.08 KB
+    '     File Size: 4.53 KB
 
 
     '     Module StringBinaryExpression

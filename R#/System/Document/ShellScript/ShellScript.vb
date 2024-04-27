@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2a7057f432c84a476466503064af6604, D:/GCModeller/src/R-sharp/R#//System/Document/ShellScript/ShellScript.vb"
+﻿#Region "Microsoft.VisualBasic::1fd6279b1972d8ffa4bb27d87a0db34c, G:/GCModeller/src/R-sharp/R#//System/Document/ShellScript/ShellScript.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 475
-    '    Code Lines: 374
-    ' Comment Lines: 16
+    '   Total Lines: 476
+    '    Code Lines: 372
+    ' Comment Lines: 19
     '   Blank Lines: 85
-    '     File Size: 20.68 KB
+    '     File Size: 20.79 KB
 
 
     '     Class ShellScript
@@ -49,7 +49,7 @@
     ' 
     '         Function: AnalysisAllCommands, GetCommandArgument, loadMetaLines, parseDefault, parseMetaData
     ' 
-    '         Sub: AddArgumentValue, (+27 Overloads) analysisTree, AnalysisTree, PrintUsage
+    '         Sub: AddArgumentValue, (+26 Overloads) analysisTree, AnalysisTree, PrintUsage
     ' 
     ' 
     ' /********************************************************************************/

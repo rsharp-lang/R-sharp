@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a37806de93db15fef621de9136cdddcb, D:/GCModeller/src/R-sharp/R#//System/Config/ConfigFile.vb"
+﻿#Region "Microsoft.VisualBasic::75c64f427003d977fa7cfd48366c5853, G:/GCModeller/src/R-sharp/R#//System/Config/ConfigFile.vb"
 
     ' Author:
     ' 
@@ -35,10 +35,10 @@
     ' Code Statistics:
 
     '   Total Lines: 88
-    '    Code Lines: 61
+    '    Code Lines: 62
     ' Comment Lines: 14
-    '   Blank Lines: 13
-    '     File Size: 3.24 KB
+    '   Blank Lines: 12
+    '     File Size: 3.15 KB
 
 
     '     Class ConfigFile
@@ -46,7 +46,7 @@
     '         Properties: config, localConfigs, size, startups, system
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: EmptyConfigs, GenericEnumerator, GetEnumerator, GetStartupLoadingPackages, Load
+    '         Function: EmptyConfigs, GenericEnumerator, GetStartupLoadingPackages, Load
     ' 
     ' 
     ' /********************************************************************************/

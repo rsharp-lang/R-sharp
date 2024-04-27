@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3b690044ca4e3006f8d2803039954285, D:/GCModeller/src/R-sharp/R#//Runtime/Serialize/Buffer.vb"
+﻿#Region "Microsoft.VisualBasic::ca0eef3758e871dde21f9661493ba581, G:/GCModeller/src/R-sharp/R#//Runtime/Serialize/Buffer.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 67
     ' Comment Lines: 7
     '   Blank Lines: 14
-    '     File Size: 3.70 KB
+    '     File Size: 3.71 KB
 
 
     '     Class Buffer

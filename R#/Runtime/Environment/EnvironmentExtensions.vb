@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3ed88bdcc6212a0a7dc145e3723025c2, D:/GCModeller/src/R-sharp/R#//Runtime/Environment/EnvironmentExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::acf1538e0b7822e4a03165a34a1bcbf7, G:/GCModeller/src/R-sharp/R#//Runtime/Environment/EnvironmentExtensions.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 47
     ' Comment Lines: 0
     '   Blank Lines: 8
-    '     File Size: 2.15 KB
+    '     File Size: 2.16 KB
 
 
     '     Module EnvironmentExtensions

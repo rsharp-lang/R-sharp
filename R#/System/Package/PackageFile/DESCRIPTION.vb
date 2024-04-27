@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::874732cd62355513930b3ef6e3e90cc7, D:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/DESCRIPTION.vb"
+﻿#Region "Microsoft.VisualBasic::99e95fcac1bc921dbed08ee0b29ff19d, G:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/DESCRIPTION.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 91
-    '    Code Lines: 72
+    '   Total Lines: 92
+    '    Code Lines: 73
     ' Comment Lines: 8
     '   Blank Lines: 11
-    '     File Size: 3.49 KB
+    '     File Size: 3.58 KB
 
 
     '     Class DESCRIPTION

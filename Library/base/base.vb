@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::330f835bfab56d3c8d2cce41d334f003, D:/GCModeller/src/R-sharp/Library/base//base.vb"
+﻿#Region "Microsoft.VisualBasic::447427744cfa7d6ece71ed2c8805210c, G:/GCModeller/src/R-sharp/Library/base//base.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 67
-    '    Code Lines: 36
-    ' Comment Lines: 23
-    '   Blank Lines: 8
-    '     File Size: 2.41 KB
+    '   Total Lines: 104
+    '    Code Lines: 57
+    ' Comment Lines: 30
+    '   Blank Lines: 17
+    '     File Size: 3.71 KB
 
 
     ' Module base
     ' 
-    '     Function: impute, ParseTtl
+    '     Function: impute, loadMsgPack, ParseTtl
     ' 
     ' /********************************************************************************/
 

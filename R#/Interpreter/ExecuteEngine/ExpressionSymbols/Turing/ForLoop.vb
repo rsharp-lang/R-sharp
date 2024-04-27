@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e7365a76fff3a87eff416ebdf10cdb5f, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/ForLoop.vb"
+﻿#Region "Microsoft.VisualBasic::885060e234500d6a762d61f22c56e121, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/ForLoop.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 208
-    '    Code Lines: 139
+    '   Total Lines: 220
+    '    Code Lines: 150
     ' Comment Lines: 39
-    '   Blank Lines: 30
-    '     File Size: 7.76 KB
+    '   Blank Lines: 31
+    '     File Size: 8.29 KB
 
 
     '     Class ForLoop
@@ -46,8 +46,10 @@
     '         Properties: body, expressionName, sequence, stackFrame, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
+    ' 
     '         Function: Evaluate, exec, execParallel, GetLoopTagLabel, getSequence
     '                   RunLoop, ToString
+    ' 
     ' 
     ' 
     ' /********************************************************************************/

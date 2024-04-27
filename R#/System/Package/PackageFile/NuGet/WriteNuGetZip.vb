@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::47f80170106eff15f5b5b59dc7af9205, D:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/NuGet/WriteNuGetZip.vb"
+﻿#Region "Microsoft.VisualBasic::1adcd88b9e9625f74b31ad1e149f7a3e, G:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/NuGet/WriteNuGetZip.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 420
-    '    Code Lines: 338
+    '   Total Lines: 447
+    '    Code Lines: 362
     ' Comment Lines: 8
-    '   Blank Lines: 74
-    '     File Size: 17.10 KB
+    '   Blank Lines: 77
+    '     File Size: 18.35 KB
 
 
     '     Class NuGetZip

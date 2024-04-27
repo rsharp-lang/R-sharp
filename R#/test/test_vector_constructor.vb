@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6db864942ff9c1b2fd2b3c89dc38be86, D:/GCModeller/src/R-sharp/R#/Test//test_vector_constructor.vb"
+﻿#Region "Microsoft.VisualBasic::e488bf38f3e813498dead3ec6939b06d, G:/GCModeller/src/R-sharp/R#/Test//test_vector_constructor.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 14
-    '    Code Lines: 12
+    '   Total Lines: 18
+    '    Code Lines: 13
     ' Comment Lines: 0
-    '   Blank Lines: 2
-    '     File Size: 496 B
+    '   Blank Lines: 5
+    '     File Size: 539 B
 
 
     ' Module test_vector_constructor

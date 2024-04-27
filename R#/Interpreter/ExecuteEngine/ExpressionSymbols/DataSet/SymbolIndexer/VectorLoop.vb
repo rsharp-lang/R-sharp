@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::14bc9e156435ce4009c2f5f4fd461128, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/SymbolIndexer/VectorLoop.vb"
+﻿#Region "Microsoft.VisualBasic::adece60677284f03bf4b95ab39c91854, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/SymbolIndexer/VectorLoop.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 155
-    '    Code Lines: 101
-    ' Comment Lines: 33
-    '   Blank Lines: 21
-    '     File Size: 6.13 KB
+    '   Total Lines: 214
+    '    Code Lines: 130
+    ' Comment Lines: 58
+    '   Blank Lines: 26
+    '     File Size: 8.75 KB
 
 
     '     Class VectorLoop
@@ -46,7 +46,7 @@
     '         Properties: expressionName, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, getListVector, getVectorList, ToString
+    '         Function: (+2 Overloads) __getVectorList, Evaluate, getListVector, getVectorList, ToString
     ' 
     ' 
     ' /********************************************************************************/

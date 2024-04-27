@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f58a6966a3455cd728d67a78af9cbfec, D:/GCModeller/src/R-sharp/Library/base//utils/JSON.vb"
+﻿#Region "Microsoft.VisualBasic::41acc6b42a37bbad3697234060bc45a8, G:/GCModeller/src/R-sharp/Library/base//utils/JSON.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 261
-    '    Code Lines: 155
-    ' Comment Lines: 79
-    '   Blank Lines: 27
-    '     File Size: 10.20 KB
+    '   Total Lines: 301
+    '    Code Lines: 190
+    ' Comment Lines: 80
+    '   Blank Lines: 31
+    '     File Size: 12.10 KB
 
 
     ' Module JSON
     ' 
-    '     Function: buildObject, fromJSON, json_decode, json_encode, parseBSON
-    '               unescape, writeBSON
+    '     Function: buildObject, fromJSON, json_decode, json_encode, loadClrObjectFromJson
+    '               parseBSON, unescape, writeBSON
     ' 
     ' /********************************************************************************/
 

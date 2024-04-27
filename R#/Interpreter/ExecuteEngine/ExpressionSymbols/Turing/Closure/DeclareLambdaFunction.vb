@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7d45328638ee8f1b27d02503de1ad036, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/Closure/DeclareLambdaFunction.vb"
+﻿#Region "Microsoft.VisualBasic::d43de82fd099a80abec0b5de94da1f81, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/Closure/DeclareLambdaFunction.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 241
-    '    Code Lines: 167
-    ' Comment Lines: 40
-    '   Blank Lines: 34
-    '     File Size: 9.61 KB
+    '   Total Lines: 247
+    '    Code Lines: 170
+    ' Comment Lines: 42
+    '   Blank Lines: 35
+    '     File Size: 9.82 KB
 
 
     '     Class DeclareLambdaFunction

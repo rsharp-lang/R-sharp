@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0152354ba5ac9e456cac6a2280f24f9b, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpOperator/BinaryOperatorEngine.vb"
+﻿#Region "Microsoft.VisualBasic::e9149b71569403f14fbcecf727c31cc8, G:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpOperator/BinaryOperatorEngine.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 201
-    '    Code Lines: 144
+    '   Total Lines: 216
+    '    Code Lines: 157
     ' Comment Lines: 30
-    '   Blank Lines: 27
-    '     File Size: 15.14 KB
+    '   Blank Lines: 29
+    '     File Size: 15.71 KB
 
 
     '     Module BinaryOperatorEngine
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: getOperator
+    '         Function: dateTimeEqualsTo, getOperator, timespanAdd
     ' 
     '         Sub: addBinary, addEtcTypeCompres, addFloatOperators, addIntegerOperators, addMixedOperators
     '              arithmeticOperators, dateTimeOperators, ImportsOperators

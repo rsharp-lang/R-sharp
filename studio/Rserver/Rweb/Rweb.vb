@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::683d098ee466f9660159421b2ee67fc6, D:/GCModeller/src/R-sharp/studio/Rserver//Rweb/Rweb.vb"
+﻿#Region "Microsoft.VisualBasic::f702901b1bc26249ffed69a88509d68f, G:/GCModeller/src/R-sharp/studio/Rserver//Rweb/Rweb.vb"
 
     ' Author:
     ' 
@@ -34,22 +34,22 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 122
-    '    Code Lines: 92
-    ' Comment Lines: 11
-    '   Blank Lines: 19
-    '     File Size: 4.45 KB
+    '   Total Lines: 159
+    '    Code Lines: 119
+    ' Comment Lines: 15
+    '   Blank Lines: 25
+    '     File Size: 5.74 KB
 
 
     ' Class Rweb
     ' 
-    '     Properties: NextRequestId, Processor, TcpPort
+    '     Properties: fs, NextRequestId, Processor, TcpPort
     ' 
     '     Constructor: (+1 Overloads) Sub New
     ' 
-    '     Function: callback, getHttpProcessor, Run
+    '     Function: callback, getHttpProcessor, ParseJSON, Run
     ' 
-    '     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest
+    '     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest, SetFileSystem
     ' 
     ' /********************************************************************************/
 

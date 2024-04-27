@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6172734322782d111efe1c0b7ec84460, D:/GCModeller/src/R-sharp/studio/RData//Reader.vb"
+﻿#Region "Microsoft.VisualBasic::d2b4d1198136ae5b815e6423ceff0ba4, G:/GCModeller/src/R-sharp/studio/RData//Reader.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 262
     ' Comment Lines: 67
     '   Blank Lines: 55
-    '     File Size: 13.99 KB
+    '     File Size: 14.01 KB
 
 
     ' Delegate Function

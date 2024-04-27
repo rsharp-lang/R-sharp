@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f231ce0aed47ea84201cb48a2302e4e4, D:/GCModeller/src/R-sharp/R#//System/Package/Package.vb"
+﻿#Region "Microsoft.VisualBasic::2144ea3a3a4eac29eb5ea0dc0dc13fd8, G:/GCModeller/src/R-sharp/R#//System/Package/Package.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 169
-    '    Code Lines: 108
-    ' Comment Lines: 35
-    '   Blank Lines: 26
-    '     File Size: 5.74 KB
+    '   Total Lines: 189
+    '    Code Lines: 119
+    ' Comment Lines: 40
+    '   Blank Lines: 30
+    '     File Size: 6.53 KB
 
 
     '     Class Package
@@ -47,7 +47,8 @@
     '                     libPath, ls, package
     ' 
     '         Constructor: (+2 Overloads) Sub New
-    '         Function: GetFunction, GetFunctionInternal, GetPackageDescription, GetPackageModuleInfo, ToString
+    '         Function: GetFunction, GetFunctionInternal, GetPackageDescription, GetPackageDescriptionInternal, GetPackageModuleInfo
+    '                   ParseClrType, ToString
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::81400af510d0dd089b5c50ea0f751e3f, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/DotNetObject.vb"
+﻿#Region "Microsoft.VisualBasic::2a5c5ed0c1e8181dcbaabb0ac26fc5c9, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/DotNetObject.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 118
-    '    Code Lines: 92
-    ' Comment Lines: 7
-    '   Blank Lines: 19
-    '     File Size: 4.71 KB
+    '   Total Lines: 135
+    '    Code Lines: 104
+    ' Comment Lines: 9
+    '   Blank Lines: 22
+    '     File Size: 5.38 KB
 
 
     '     Class DotNetObject
@@ -46,7 +46,8 @@
     '         Properties: [object], expressionName, member, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, getReader, readSingle, readVectorShadows, ToString
+    '         Function: Evaluate, getReader, getStrictOpt, readSingle, readVectorShadows
+    '                   ToString
     ' 
     ' 
     ' /********************************************************************************/

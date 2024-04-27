@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::78b5d5ee92647ee9bb2ef458f52ddb9f, D:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Expression/RSymbolReference.vb"
+﻿#Region "Microsoft.VisualBasic::3f68152223851eeafc76e597e271d045, G:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Expression/RSymbolReference.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 86
-    '    Code Lines: 71
+    '   Total Lines: 105
+    '    Code Lines: 87
     ' Comment Lines: 0
-    '   Blank Lines: 15
-    '     File Size: 3.77 KB
+    '   Blank Lines: 18
+    '     File Size: 4.54 KB
 
 
     '     Class RSymbolReference
@@ -47,7 +47,7 @@
     ' 
     '         Function: GetExpression, parseFunctionRef, parseSymbol
     ' 
-    '         Sub: (+3 Overloads) WriteBuffer
+    '         Sub: (+4 Overloads) WriteBuffer
     ' 
     ' 
     ' /********************************************************************************/

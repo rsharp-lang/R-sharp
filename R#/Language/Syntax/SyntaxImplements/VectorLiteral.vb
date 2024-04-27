@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7e8561733ec26d62a34f58685a570dd8, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/VectorLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::b2cd970053bb67e06a981980690c5b2c, G:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/VectorLiteral.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 225
-    '    Code Lines: 180
+    '   Total Lines: 244
+    '    Code Lines: 196
     ' Comment Lines: 14
-    '   Blank Lines: 31
-    '     File Size: 10.14 KB
+    '   Blank Lines: 34
+    '     File Size: 10.87 KB
 
 
     '     Module VectorLiteralSyntax
     ' 
-    '         Function: LiteralSyntax, ParseAnnotation, ParseAnnotations, (+2 Overloads) SequenceLiteral, TypeCodeOf
-    '                   VectorLiteral
+    '         Function: GetVectorElements, LiteralSyntax, ParseAnnotation, ParseAnnotations, (+2 Overloads) SequenceLiteral
+    '                   TypeCodeOf, VectorLiteral
     ' 
     ' 
     ' /********************************************************************************/

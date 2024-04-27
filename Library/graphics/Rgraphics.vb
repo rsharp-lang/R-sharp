@@ -1,51 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::68a8df60b147ec003351f6b4f320200e, D:/GCModeller/src/R-sharp/Library/graphics//Rgraphics.vb"
+﻿#Region "Microsoft.VisualBasic::1886e31c01ceb4cf0b745335e1a88a47, G:/GCModeller/src/R-sharp/Library/graphics//Rgraphics.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 35
-'    Code Lines: 11
-' Comment Lines: 22
-'   Blank Lines: 2
-'     File Size: 1.36 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module Rgraphics
-' 
-'     Function: image
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 389
+    '    Code Lines: 247
+    ' Comment Lines: 95
+    '   Blank Lines: 47
+    '     File Size: 15.52 KB
+
+
+    ' Module Rgraphics
+    ' 
+    '     Function: as_raster, as_vector, bytes, colorHeightMap, image
+    '               imageFromMatrix, rasetr_matrix, rasetrFromDataframe, raster_convolution, raster_dataframe
+    '               rgb_formula
+    ' 
+    '     Sub: Main
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

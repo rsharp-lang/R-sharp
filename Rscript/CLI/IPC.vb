@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::94652558062a0236d2eb0a6086077e46, D:/GCModeller/src/R-sharp/Rscript//CLI/IPC.vb"
+﻿#Region "Microsoft.VisualBasic::c02a4fbc01658152c432513d9f779687, G:/GCModeller/src/R-sharp/Rscript//CLI/IPC.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 284
-    '    Code Lines: 224
+    '   Total Lines: 300
+    '    Code Lines: 238
     ' Comment Lines: 23
-    '   Blank Lines: 37
-    '     File Size: 12.13 KB
+    '   Blank Lines: 39
+    '     File Size: 12.44 KB
 
 
     ' Module CLI

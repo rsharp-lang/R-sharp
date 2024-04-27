@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::42548ac3498203d9e00ab3c35aa9438d, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/printer/printer.vb"
+﻿#Region "Microsoft.VisualBasic::a645ed542bd74ea3aa6338a953e9507d, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/printer/printer.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 405
-    '    Code Lines: 299
-    ' Comment Lines: 50
-    '   Blank Lines: 56
-    '     File Size: 17.50 KB
+    '   Total Lines: 449
+    '    Code Lines: 322
+    ' Comment Lines: 63
+    '   Blank Lines: 64
+    '     File Size: 18.79 KB
 
 
     '     Delegate Function
@@ -49,10 +49,10 @@
     '         Constructor: (+1 Overloads) Sub New
     ' 
     '         Function: DateToString, f64_InternalToString, getMaxColumns, getStrings, printComplex
-    '                   printStream, ToString, ValueToString
+    '                   printInternal, printList, printStream, ToString, toStringArray
+    '                   ValueToString
     ' 
-    '         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printContentArray, printInternal
-    '              printList
+    '         Sub: AttachConsoleFormatter, AttachInternalConsoleFormatter, printArray, printContentArray
     ' 
     ' 
     ' 

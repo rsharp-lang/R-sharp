@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8b039c1c209951dc9d0455bbc09ba530, D:/GCModeller/src/R-sharp/R#//System/Document/CodeAnalysis/SymbolAnalysis.vb"
+﻿#Region "Microsoft.VisualBasic::816ccd91a7aafa39b5742bbb76f39cb4, G:/GCModeller/src/R-sharp/R#//System/Document/CodeAnalysis/SymbolAnalysis.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 330
-    '    Code Lines: 257
+    '   Total Lines: 334
+    '    Code Lines: 260
     ' Comment Lines: 17
-    '   Blank Lines: 56
-    '     File Size: 14.57 KB
+    '   Blank Lines: 57
+    '     File Size: 14.86 KB
 
 
     '     Class SymbolAnalysis

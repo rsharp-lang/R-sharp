@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::62e9fa892a92534d3a89f3225bad403f, D:/GCModeller/src/R-sharp/R#//Runtime/Environment/PackageEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::452c2ee9445c36bd7ce2ff60d8d49b25, G:/GCModeller/src/R-sharp/R#//Runtime/Environment/PackageEnvironment.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 86
-    '    Code Lines: 62
-    ' Comment Lines: 8
-    '   Blank Lines: 16
-    '     File Size: 3.28 KB
+    '   Total Lines: 95
+    '    Code Lines: 64
+    ' Comment Lines: 14
+    '   Blank Lines: 17
+    '     File Size: 3.61 KB
 
 
     '     Class PackageEnvironment

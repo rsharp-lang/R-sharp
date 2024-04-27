@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ef2e65e507737b6d273c9716c8931fbf, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RDispose.vb"
+﻿#Region "Microsoft.VisualBasic::fad54b638d4718dff612589cc075dbdf, G:/GCModeller/src/R-sharp/R#//Runtime/Interop/RDispose.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 69
-    '    Code Lines: 33
+    '   Total Lines: 71
+    '    Code Lines: 34
     ' Comment Lines: 24
-    '   Blank Lines: 12
-    '     File Size: 2.38 KB
+    '   Blank Lines: 13
+    '     File Size: 2.43 KB
 
 
     '     Class RDispose
     ' 
-    '         Properties: type
+    '         Properties: env, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 

@@ -1,51 +1,53 @@
-﻿#Region "Microsoft.VisualBasic::94646487253fec71ba078416f1010afd, D:/GCModeller/src/R-sharp/studio/Rserve//Program.vb"
+﻿#Region "Microsoft.VisualBasic::321e0c3b8504cca1131f58692f9fa520, G:/GCModeller/src/R-sharp/studio/Rserve//Program.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 92
-'    Code Lines: 72
-' Comment Lines: 7
-'   Blank Lines: 13
-'     File Size: 3.67 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module Program
-' 
-'     Function: listen, Main, runSession, start
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 169
+    '    Code Lines: 136
+    ' Comment Lines: 11
+    '   Blank Lines: 22
+    '     File Size: 7.68 KB
+
+
+    ' Module Program
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    '     Function: listen, listenCurrentFolder, Main, makeconfig, runSession
+    '               start
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

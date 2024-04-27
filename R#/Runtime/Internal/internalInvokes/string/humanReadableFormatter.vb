@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::95060b38b05cb7970c4f2429e674e917, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/humanReadableFormatter.vb"
+﻿#Region "Microsoft.VisualBasic::d81fb9b3f3a91fbbfac05705837026ac, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/humanReadableFormatter.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 46
-    '    Code Lines: 30
-    ' Comment Lines: 11
-    '   Blank Lines: 5
-    '     File Size: 1.74 KB
+    '   Total Lines: 69
+    '    Code Lines: 45
+    ' Comment Lines: 16
+    '   Blank Lines: 8
+    '     File Size: 2.72 KB
 
 
     '     Module humanReadableFormatter
     ' 
-    '         Function: size, splitParagraph, timespanStr
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: size, splitParagraph, timespan_string, timespanStr
     ' 
     ' 
     ' /********************************************************************************/

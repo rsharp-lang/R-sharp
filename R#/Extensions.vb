@@ -1,53 +1,54 @@
-﻿#Region "Microsoft.VisualBasic::c1ad449e02462bb901845a5871403caf, D:/GCModeller/src/R-sharp/R#//Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::ba7543a9c834927e4899360639eab4fa, G:/GCModeller/src/R-sharp/R#//Extensions.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 271
-'    Code Lines: 198
-' Comment Lines: 42
-'   Blank Lines: 31
-'     File Size: 9.87 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module Extensions
-' 
-'     Constructor: (+1 Overloads) Sub New
-'     Function: AsRReturn, Buffer, EvaluateFramework, GetEncoding, GetObject
-'               GetString, ParseDebugLevel, SafeCreateColumns, toList
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 313
+    '    Code Lines: 220
+    ' Comment Lines: 54
+    '   Blank Lines: 39
+    '     File Size: 11.48 KB
+
+
+    ' Module Extensions
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    '     Function: AsRReturn, Buffer, CastSequence, EvaluateFramework, evaluateList
+    '               GetEncoding, GetObject, GetString, ParseDebugLevel, SafeCreateColumns
+    '               toList
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c74627bcd6f8e88a6a41f6a0964e16eb, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/DeclareNewFunctionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::3f648e5aa5ddd4f3b488df0706547d12, G:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/DeclareNewFunctionSyntax.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 144
-    '    Code Lines: 108
+    '   Total Lines: 157
+    '    Code Lines: 119
     ' Comment Lines: 16
-    '   Blank Lines: 20
-    '     File Size: 6.19 KB
+    '   Blank Lines: 22
+    '     File Size: 6.76 KB
 
 
     '     Module DeclareNewFunctionSyntax

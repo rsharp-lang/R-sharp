@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a66b3b1bbb1f5ee3ebae6ebd052e6497, D:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/AssemblyPack.vb"
+﻿#Region "Microsoft.VisualBasic::a12a5984d09a537aae447501f877797d, G:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/AssemblyPack.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 69
-    '    Code Lines: 41
-    ' Comment Lines: 19
-    '   Blank Lines: 9
-    '     File Size: 2.65 KB
+    '   Total Lines: 79
+    '    Code Lines: 46
+    ' Comment Lines: 23
+    '   Blank Lines: 10
+    '     File Size: 3.03 KB
 
 
     '     Class AssemblyPack
     ' 
     '         Properties: assembly, directory, framework
     ' 
-    '         Function: GenericEnumerator, GetAllPackageContentFiles, GetEnumerator, getRelativePath
+    '         Function: GenericEnumerator, GetAllPackageClrXmlDocumentFiles, GetAllPackageContentFiles, getRelativePath
     ' 
     ' 
     ' /********************************************************************************/

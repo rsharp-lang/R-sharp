@@ -1,59 +1,59 @@
-﻿#Region "Microsoft.VisualBasic::092b743cfaf54fd921c427185f496b97, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/stringr.vb"
+﻿#Region "Microsoft.VisualBasic::ae07759098944ffde7baf9d13f7ddc50, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/stringr.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 1066
-'    Code Lines: 678
-' Comment Lines: 285
-'   Blank Lines: 103
-'     File Size: 43.83 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module stringr
-' 
-'         Function: [objToString], base64Decode, base64Str, bencode, charAt
-'                   chr, concatenate, Csprintf, decodeObject, findToStringWithFormat
-'                   fromBstring, getElementFormat, grep, html, json
-'                   loadXml, match, nchar, paste, randomAsciiStr
-'                   rawBufferBase64, regexp, splitSingleStrAuto, sprintfSingle, str_empty
-'                   str_pad, (+2 Overloads) str_replace, strPad_internal, strsplit, substr
-'                   tagvalue, text_equals, tolower, toupper, urldecode
-'                   xml
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 1229
+    '    Code Lines: 765
+    ' Comment Lines: 340
+    '   Blank Lines: 124
+    '     File Size: 51.06 KB
+
+
+    '     Module stringr
+    ' 
+    '         Function: [objToString], base64Decode, base64Str, bencode, charAt
+    '                   chr, concatenate, Csprintf, decodeObject, findToStringWithFormat
+    '                   fromBstring, getElementFormat, grep, html, json
+    '                   loadJson, loadXml, match, nchar, paste
+    '                   paste0, randomAsciiStr, rawBufferBase64, regexp, splitSingleStrAuto
+    '                   sprintfSingle, str_empty, str_pad, (+2 Overloads) str_replace, strPad_internal
+    '                   strsplit, substr, tagvalue, text_equals, tolower
+    '                   toupper, urldecode, xml
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

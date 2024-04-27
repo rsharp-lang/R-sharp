@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b6174775df486f31a5e49823dd0cef76, D:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Serialization/Writer.vb"
+﻿#Region "Microsoft.VisualBasic::0c66222b2ae1c8a1e97dbc37fe8a13c2, G:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Serialization/Writer.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 261
-    '    Code Lines: 189
+    '   Total Lines: 266
+    '    Code Lines: 193
     ' Comment Lines: 31
-    '   Blank Lines: 41
-    '     File Size: 11.46 KB
+    '   Blank Lines: 42
+    '     File Size: 11.67 KB
 
 
     '     Class Writer
@@ -47,7 +47,7 @@
     '                     Relse, RExpr, Rfor, RFunction, Rif
     '                     RImports, RJSON, RLiteral, RReturns, RShell
     '                     RString, RSymbol, RSymbolAssign, RSymbolIndex, RSymbolRef
-    '                     RTryCatch, RTypeAssert, RUnary, RVector
+    '                     RTryCatch, RTypeAssert, RUnary, RVector, RWhile
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 

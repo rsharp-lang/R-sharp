@@ -1,65 +1,66 @@
-﻿#Region "Microsoft.VisualBasic::8ef67779a77d7b12fa1ae91e4893994d, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/linq.vb"
+﻿#Region "Microsoft.VisualBasic::06cfe9aebf2fdccd731ce36e3003ab33, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/linq.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 1567
-'    Code Lines: 890
-' Comment Lines: 500
-'   Blank Lines: 177
-'     File Size: 70.78 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module linq
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: [select], all, any, doWhile, fastIndexing
-'                   first, getPredicate, groupBy, groupDataframeRows, groupsSummary
-'                   groupSummary, last, left_join, match, orderBy
-'                   produceKeyedSequence, progress, projectAs, reverse, rotate_left
-'                   rotate_right, runFilterPipeline, runWhichFilter, skip, sort
-'                   sortByKeyFunction, sortByKeyValue, split, splitByPartitionSize, splitCollection
-'                   splitList, splitVector, take, tryKeyBy, unique
-'                   where, whichMax, whichMin
-'         Class SplitPredicateFunction
-' 
-'             Function: AssertEquals, AssertThat, GetPredicate
-' 
-' 
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 1637
+    '    Code Lines: 926
+    ' Comment Lines: 527
+    '   Blank Lines: 184
+    '     File Size: 73.02 KB
+
+
+    '     Module linq
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: [select], all, any, booleanFilter, doWhile
+    '                   fastIndexing, first, getPredicate, groupBy, groupDataframeRows
+    '                   groupsSummary, groupSummary, last, left_join, match
+    '                   objectPopulator, orderBy, produceKeyedSequence, progress, projectAs
+    '                   reverse, rotate_left, rotate_right, runFilterPipeline, runWhichFilter
+    '                   skip, sort, sortByKeyFunction, sortByKeyValue, split
+    '                   splitByPartitionSize, splitCollection, splitList, splitVector, take
+    '                   tryKeyBy, unique, where, whichGenericClrSet, whichMax
+    '                   whichMin
+    '         Class SplitPredicateFunction
+    ' 
+    '             Function: AssertEquals, AssertThat, GetPredicate
+    ' 
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

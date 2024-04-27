@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a1fc1cd029a77f6245249f7389a90036, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/utils/TableFormatter.vb"
+﻿#Region "Microsoft.VisualBasic::13b77115a3668383d086286f979c1bcb, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/utils/TableFormatter.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 123
-    '    Code Lines: 95
+    '   Total Lines: 125
+    '    Code Lines: 97
     ' Comment Lines: 7
     '   Blank Lines: 21
-    '     File Size: 5.04 KB
+    '     File Size: 5.14 KB
 
 
     '     Class TableFormatter

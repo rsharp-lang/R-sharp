@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::80bbacda3188e2e71dbacd6ce0b7af02, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//wav.vb"
+﻿#Region "Microsoft.VisualBasic::8423804878788740fd896d4de0a4effd, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//wav.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 83
+    '   Total Lines: 93
     '    Code Lines: 64
-    ' Comment Lines: 7
+    ' Comment Lines: 17
     '   Blank Lines: 12
-    '     File Size: 3.49 KB
+    '     File Size: 4.21 KB
 
 
     ' Module wavToolkit
     ' 
-    '     Constructor: (+1 Overloads) Sub New
     '     Function: readWav, wavToString
+    ' 
+    '     Sub: Main
     ' 
     ' /********************************************************************************/
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2c8d56ba1cef8335d1a719dfe2f132b8, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/invoke.vb"
+﻿#Region "Microsoft.VisualBasic::d93f5a0e34022cc7cdc085ce05e16a0c, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/invoke.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 182
-    '    Code Lines: 131
+    '   Total Lines: 185
+    '    Code Lines: 133
     ' Comment Lines: 35
-    '   Blank Lines: 16
-    '     File Size: 7.71 KB
+    '   Blank Lines: 17
+    '     File Size: 7.78 KB
 
 
     '     Class invoke
     ' 
     '         Properties: ls
     ' 
-    '         Constructor: (+1 Overloads) Sub New
+    '         Constructor: (+2 Overloads) Sub New
     ' 
     '         Function: [stop], getAllInternals, getFunction, invalidParameter, invokeInternals
     '                   isRInternal, missingParameter

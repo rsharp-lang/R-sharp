@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::da8538dfd866e3648dfac4be1a6d93a1, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RInteropAttributes/RInteropAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::dd8add571e71ecc9c8b82466351f6fef, G:/GCModeller/src/R-sharp/R#//Runtime/Interop/RInteropAttributes/RInteropAttribute.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 78
-    '    Code Lines: 40
-    ' Comment Lines: 22
-    '   Blank Lines: 16
-    '     File Size: 2.81 KB
+    '   Total Lines: 92
+    '    Code Lines: 43
+    ' Comment Lines: 32
+    '   Blank Lines: 17
+    '     File Size: 3.35 KB
 
 
     '     Class RInteropAttribute
@@ -68,7 +68,7 @@
     ' 
     '         Properties: model, name
     ' 
-    '         Constructor: (+1 Overloads) Sub New
+    '         Constructor: (+2 Overloads) Sub New
     '         Function: ToString
     ' 
     ' 

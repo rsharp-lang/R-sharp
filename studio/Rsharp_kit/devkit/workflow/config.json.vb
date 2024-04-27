@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3d788d9f7d8bcb065cfacd852f310f44, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//workflow/config.json.vb"
+﻿#Region "Microsoft.VisualBasic::94470f4b757342ca110bf3bc6c0930b9, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//workflow/config.json.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 122
-    '    Code Lines: 84
+    '   Total Lines: 126
+    '    Code Lines: 88
     ' Comment Lines: 12
     '   Blank Lines: 26
-    '     File Size: 4.19 KB
+    '     File Size: 4.32 KB
 
 
     ' Class ConfigJSON

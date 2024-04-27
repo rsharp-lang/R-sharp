@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::518f835ec6c810dc2d4439b84c7b21fa, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/vbObject.vb"
+﻿#Region "Microsoft.VisualBasic::6fd469b76d0303c0e91506c1076c1381, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/vbObject.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 260
-    '    Code Lines: 188
+    '   Total Lines: 267
+    '    Code Lines: 194
     ' Comment Lines: 40
-    '   Blank Lines: 32
-    '     File Size: 11.06 KB
+    '   Blank Lines: 33
+    '     File Size: 11.24 KB
 
 
     '     Class vbObject

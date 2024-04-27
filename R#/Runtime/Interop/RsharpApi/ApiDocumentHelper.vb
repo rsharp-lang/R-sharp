@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b3b1c89d657af9cc1c6ddc11904200e5, D:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpApi/ApiDocumentHelper.vb"
+﻿#Region "Microsoft.VisualBasic::8a18c5b624bf9c7421c88dcde41ce1d0, G:/GCModeller/src/R-sharp/R#//Runtime/Interop/RsharpApi/ApiDocumentHelper.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 76
-    '    Code Lines: 66
+    '   Total Lines: 75
+    '    Code Lines: 65
     ' Comment Lines: 0
     '   Blank Lines: 10
-    '     File Size: 2.87 KB
+    '     File Size: 2.82 KB
 
 
     '     Module ApiDocumentHelper

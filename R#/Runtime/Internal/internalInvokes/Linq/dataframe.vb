@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::37747acb205c4eee2b027ec1b2590ab6, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/base/dataframeBase.vb"
+﻿#Region "Microsoft.VisualBasic::def13cd2f7d5e32521a3173267fdb522, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/dataframe.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 95
-    '    Code Lines: 64
-    ' Comment Lines: 16
-    '   Blank Lines: 15
-    '     File Size: 3.70 KB
+    '   Total Lines: 206
+    '    Code Lines: 131
+    ' Comment Lines: 49
+    '   Blank Lines: 26
+    '     File Size: 8.60 KB
 
 
-    '     Module dataframeBase
+    '     Module dataframe_methods
     ' 
-    '         Function: colSums, eval, rename
+    '         Function: colMeans, colSums, eval, rank_unique, rename
+    '                   rowMeans, rowSums
     ' 
     ' 
     ' /********************************************************************************/

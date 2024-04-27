@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::33159b2faef434930447bb7aa4ddff17, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/Literal/Literal.vb"
+﻿#Region "Microsoft.VisualBasic::88f0b923168ae324a6abc400b4353c99, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/Literal/Literal.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,17 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 206
-    '    Code Lines: 152
+    '   Total Lines: 212
+    '    Code Lines: 157
     ' Comment Lines: 27
-    '   Blank Lines: 27
-    '     File Size: 6.48 KB
+    '   Blank Lines: 28
+    '     File Size: 6.70 KB
 
 
     '     Class Literal
     ' 
     '         Properties: [FALSE], [TRUE], expressionName, isNA, isNull
-    '                     NA, NULL, type, ValueStr
+    '                     isNumeric, NA, NULL, type, ValueStr
     ' 
     '         Constructor: (+9 Overloads) Sub New
     '         Function: Evaluate, ToString

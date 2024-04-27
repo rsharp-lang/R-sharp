@@ -1,57 +1,57 @@
-﻿#Region "Microsoft.VisualBasic::e29fd66e77520629e8e5c9a73aa94d5d, D:/GCModeller/src/R-sharp/R#//Runtime/System/InvokeParameter.vb"
+﻿#Region "Microsoft.VisualBasic::7d55900d1ded00986de79ee0ef0d10c7, G:/GCModeller/src/R-sharp/R#//Runtime/System/InvokeParameter.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 274
-'    Code Lines: 182
-' Comment Lines: 60
-'   Blank Lines: 32
-'     File Size: 10.51 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class InvokeParameter
-' 
-'         Properties: haveSymbolName, index, isAcceptor, isFormula, isProbablyVectorNameTuple
-'                     isSymbolAssign, name, value
-' 
-'         Constructor: (+3 Overloads) Sub New
-'         Function: Create, CreateArguments, CreateLiterals, Evaluate, GetLazyEvaluateExpression
-'                   GetSymbolName, ToString
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 301
+    '    Code Lines: 204
+    ' Comment Lines: 61
+    '   Blank Lines: 36
+    '     File Size: 11.77 KB
+
+
+    '     Class InvokeParameter
+    ' 
+    '         Properties: haveSymbolName, index, isAcceptor, isFormula, isProbablyVectorNameTuple
+    '                     isSymbolAssign, name, value
+    ' 
+    '         Constructor: (+3 Overloads) Sub New
+    '         Function: Create, CreateArguments, CreateLiterals, Evaluate, GetLazyEvaluateExpression
+    '                   GetSymbolName, PopulateDotDotDot, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,53 +1,53 @@
-﻿#Region "Microsoft.VisualBasic::5745a310fae6a58e68a2ecee708cc1c8, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/names.vb"
+﻿#Region "Microsoft.VisualBasic::d2d4ddbf5db7b5ae4d9ef957e5450b25, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/names.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 253
-'    Code Lines: 201
-' Comment Lines: 14
-'   Blank Lines: 38
-'     File Size: 9.97 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module names
-' 
-'         Function: checkChar, getArrayNames, getColNames, getNames, getRowNames
-'                   makeNames, setColNames, (+2 Overloads) setNames, setRowNames, uniqueNames
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 295
+    '    Code Lines: 230
+    ' Comment Lines: 22
+    '   Blank Lines: 43
+    '     File Size: 11.89 KB
+
+
+    '     Module names
+    ' 
+    '         Function: checkChar, getArrayNames, getColNames, getNames, getRowNames
+    '                   makeNames, setColNames, (+2 Overloads) setNames, setRowNames, (+2 Overloads) uniqueNames
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

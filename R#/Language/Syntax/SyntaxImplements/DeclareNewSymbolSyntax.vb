@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::03d68dc0ff0e764f765cc7d7ef91ad91, D:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/DeclareNewSymbolSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::03d68dc0ff0e764f765cc7d7ef91ad91, G:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/DeclareNewSymbolSyntax.vb"
 
     ' Author:
     ' 

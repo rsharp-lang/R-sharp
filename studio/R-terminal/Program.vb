@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::41a9a2ed4471acd9ff4ca26ecc02729b, D:/GCModeller/src/R-sharp/studio/R-terminal//Program.vb"
+﻿#Region "Microsoft.VisualBasic::c79c3f755638c01b3d173a8f11173d61, G:/GCModeller/src/R-sharp/studio/R-terminal//Program.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 280
-    '    Code Lines: 201
-    ' Comment Lines: 38
-    '   Blank Lines: 41
-    '     File Size: 11.32 KB
+    '   Total Lines: 290
+    '    Code Lines: 203
+    ' Comment Lines: 47
+    '   Blank Lines: 40
+    '     File Size: 11.82 KB
 
 
     ' Module Program

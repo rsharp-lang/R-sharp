@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5dda9b4c49d1a44a4fe1b909f5eaae5e, D:/GCModeller/src/R-sharp/R#//Runtime/Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::d8a8ccfcf096c8ab989915f58587c46e, G:/GCModeller/src/R-sharp/R#//Runtime/Extensions.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 232
-    '    Code Lines: 144
+    '   Total Lines: 239
+    '    Code Lines: 150
     ' Comment Lines: 56
-    '   Blank Lines: 32
-    '     File Size: 8.53 KB
+    '   Blank Lines: 33
+    '     File Size: 8.82 KB
 
 
     '     Module Extensions

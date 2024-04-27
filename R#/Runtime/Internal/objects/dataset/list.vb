@@ -1,61 +1,62 @@
-﻿#Region "Microsoft.VisualBasic::65dc22408441826f67bed892e7bce7bc, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/list.vb"
+﻿#Region "Microsoft.VisualBasic::11aab7d9c0bc641d9af55ccd31a17c37, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/list.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 477
-'    Code Lines: 287
-' Comment Lines: 124
-'   Blank Lines: 66
-'     File Size: 17.26 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class list
-' 
-'         Properties: data, length, slots
-' 
-'         Constructor: (+6 Overloads) Sub New
-' 
-'         Function: AsGeneric, checkTuple, ctypeInternal, empty, (+2 Overloads) getByIndex
-'                   (+2 Overloads) getByName, getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue
-'                   GetVector, hasName, namedValues, setByindex, setByIndex
-'                   (+2 Overloads) setByName, setNames, ToString
-' 
-'         Sub: add
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 591
+    '    Code Lines: 335
+    ' Comment Lines: 177
+    '   Blank Lines: 79
+    '     File Size: 21.70 KB
+
+
+    '     Class list
+    ' 
+    '         Properties: data, is_empty, length, slots
+    ' 
+    '         Constructor: (+10 Overloads) Sub New
+    ' 
+    '         Function: AsGeneric, checkTuple, ctypeInternal, empty, (+2 Overloads) getByIndex
+    '                   (+2 Overloads) getByName, getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue
+    '                   GetVector, hasName, hasNames, namedValues, setByindex
+    '                   setByIndex, (+2 Overloads) setByName, setNames, slotKeys, subset
+    '                   ToString
+    ' 
+    '         Sub: add
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

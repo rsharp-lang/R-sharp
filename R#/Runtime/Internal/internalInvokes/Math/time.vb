@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7cdfca4ea30bdfdefe7cf3c3121f5c1f, D:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Math/time.vb"
+﻿#Region "Microsoft.VisualBasic::e29cf5fa8b4a97449c119811d62020b3, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Math/time.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 17
-    '    Code Lines: 13
+    '   Total Lines: 19
+    '    Code Lines: 15
     ' Comment Lines: 0
     '   Blank Lines: 4
-    '     File Size: 450 B
+    '     File Size: 523 B
 
 
     '     Module time

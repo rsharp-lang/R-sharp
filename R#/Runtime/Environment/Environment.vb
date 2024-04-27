@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f223267a6174a6c1f11788f857e711ac, D:/GCModeller/src/R-sharp/R#//Runtime/Environment/Environment.vb"
+﻿#Region "Microsoft.VisualBasic::339b6ced7bb2e4e4598ed62e45f9fbdb, G:/GCModeller/src/R-sharp/R#//Runtime/Environment/Environment.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 846
-    '    Code Lines: 431
-    ' Comment Lines: 314
-    '   Blank Lines: 101
-    '     File Size: 36.78 KB
+    '   Total Lines: 858
+    '    Code Lines: 437
+    ' Comment Lines: 318
+    '   Blank Lines: 103
+    '     File Size: 37.29 KB
 
 
     '     Class Environment
@@ -53,7 +53,7 @@
     '                   GetSymbolsNames, GetValue, IEnumerable_GetEnumerator, Push, ToString
     '                   WriteLineHandler
     ' 
-    '         Sub: AddMessage, Clear, Delete, (+2 Overloads) Dispose, PushEnvironmentContext
+    '         Sub: (+2 Overloads) AddMessage, Clear, Delete, (+2 Overloads) Dispose, PushEnvironmentContext
     '              redirectError, redirectWarning, setStackInfo
     ' 
     ' 

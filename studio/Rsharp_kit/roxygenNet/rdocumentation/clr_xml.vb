@@ -1,4 +1,58 @@
-﻿Imports System.Reflection
+﻿#Region "Microsoft.VisualBasic::6403864eb09af00378758147790d9302, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//rdocumentation/clr_xml.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 253
+    '    Code Lines: 200
+    ' Comment Lines: 8
+    '   Blank Lines: 45
+    '     File Size: 8.70 KB
+
+
+    ' Class clr_xml
+    ' 
+    '     Function: HandlingTypeReferenceInDocs, isGeneralCollection, isGeneralTuple, ParsePropertyReference, ParseTypeReference
+    '               typeLink
+    ' 
+    '     Sub: push_clr
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports System.Reflection
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -251,3 +305,4 @@ Public Class clr_xml
     End Function
 
 End Class
+

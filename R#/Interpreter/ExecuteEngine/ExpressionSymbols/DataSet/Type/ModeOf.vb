@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2c725827920b3c2931dbe5ca557b2c17, D:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/Type/ModeOf.vb"
+﻿#Region "Microsoft.VisualBasic::86b013b715712b81451394c794112baf, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/Type/ModeOf.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 105
-    '    Code Lines: 75
+    '   Total Lines: 104
+    '    Code Lines: 74
     ' Comment Lines: 18
     '   Blank Lines: 12
-    '     File Size: 3.85 KB
+    '     File Size: 3.79 KB
 
 
     '     Class ModeOf

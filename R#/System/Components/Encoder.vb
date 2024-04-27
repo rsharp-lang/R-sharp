@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8e4a58c1b38a6724b788c5381aa664ae, D:/GCModeller/src/R-sharp/R#//System/Components/Encoder.vb"
+﻿#Region "Microsoft.VisualBasic::109c1ecc4a45619f30ad936c6db41d15, G:/GCModeller/src/R-sharp/R#//System/Components/Encoder.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 84
-    '    Code Lines: 60
-    ' Comment Lines: 13
-    '   Blank Lines: 11
-    '     File Size: 3.34 KB
+    '   Total Lines: 121
+    '    Code Lines: 81
+    ' Comment Lines: 24
+    '   Blank Lines: 16
+    '     File Size: 5.04 KB
 
 
-    '     Module Encoder
+    '     Class Encoder
     ' 
-    '         Function: DigestRSharpObject, GetObject, TryHandleNonVector
+    '         Properties: full_vector, row_names
+    ' 
+    '         Function: CreateEncoderWithOptions, DigestRSharpObject, GetObject, TryHandleNonVector
     ' 
     ' 
     ' /********************************************************************************/

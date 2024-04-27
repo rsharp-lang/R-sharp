@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d256cccaeff0f39def37f39654226f9a, D:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/machineLearning.vb"
+﻿#Region "Microsoft.VisualBasic::0e5a836cb927500dc39192d5fec0e9c1, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/machineLearning.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 377
     ' Comment Lines: 107
     '   Blank Lines: 59
-    '     File Size: 22.28 KB
+    '     File Size: 22.27 KB
 
 
     ' Module machineLearning

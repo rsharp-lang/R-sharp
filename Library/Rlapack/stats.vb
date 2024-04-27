@@ -1,82 +1,78 @@
-﻿#Region "Microsoft.VisualBasic::060bab263ecbb7435de35e47e1416dd2, D:/GCModeller/src/R-sharp/Library/Rlapack//stats.vb"
+﻿#Region "Microsoft.VisualBasic::bb75efe507f68fb417f7210d6ec3794d, G:/GCModeller/src/R-sharp/Library/Rlapack//stats.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 1274
-'    Code Lines: 716
-' Comment Lines: 423
-'   Blank Lines: 135
-'     File Size: 52.27 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module stats
-' 
-'     Constructor: (+1 Overloads) Sub New
-'     Function: matrixDataFrame, matrixDataFrame2, PCATable, printMatrix, printTtest
-'               printTwoSampleTTest
-'     Enum p_adjust_methods
-' 
-'         BH, bonferroni, BY, fdr, hochberg
-'         holm, hommel, none
-' 
-' 
-' 
-'     Class PCAcalls
-' 
-'         Properties: labels, pca
-' 
-'         Function: ECDF, p_adjust, prcomp, spline, tabulateMode
-' 
-'  
-' 
-'     Function: aov, asDist, ChiSquare, corr, corr_sign
-'               corrTest, dataframeRow, dist, dnorm, filterMissing
-'               fisher_test, gammaCDF, getMatrix, getQuantileLevels, mantel_test
-'               median, mul, (+2 Overloads) pow, quantile, ttest
-'               ttestBatch, ttestImpl, varTest, z_score, z_scoreByColumn
-'               z_scoreByRow
-' 
-' Enum SplineAlgorithms
-' 
-'     Bezier, BSpline, CatmullRom, CubiSpline
-' 
-'  
-' 
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 1652
+    '    Code Lines: 936
+    ' Comment Lines: 537
+    '   Blank Lines: 179
+    '     File Size: 69.11 KB
+
+
+    ' Module stats
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    '     Function: matrixDataFrame, matrixDataFrame2, printMatrix, printMvar, printTtest
+    '               printTwoSampleTTest
+    '     Enum p_adjust_methods
+    ' 
+    '         BH, bonferroni, BY, fdr, hochberg
+    '         holm, hommel, none
+    ' 
+    ' 
+    ' 
+    '  
+    ' 
+    '     Function: aov, asDist, ChiSquare, combin, corr
+    '               corr_sign, corrTest, dataframeRow, dist, dnorm
+    '               ECDF, ecdf0, filterMissing, fisher_test, gammaCDF
+    '               GetDataSetCommon, getMatrix, getQuantileLevels, Lowess, mantel_test
+    '               median, moran_test, mul, oplsr, p_adjust
+    '               plsda, pnorm_func, PoissonDiskGenerator_func, (+2 Overloads) pow, prcomp
+    '               quantile, spline, tabulateMode, ttest, ttestBatch
+    '               ttestImpl, varTest, z_score, z_scoreByColumn, z_scoreByRow
+    ' 
+    ' Enum SplineAlgorithms
+    ' 
+    '     Bezier, BSpline, CatmullRom, CubiSpline
+    ' 
+    '  
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

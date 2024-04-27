@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d09b5bd65be65fa8c9591491dbd682ef, D:/GCModeller/src/R-sharp/R#//System/Document/Document.vb"
+﻿#Region "Microsoft.VisualBasic::a95f969f5cf477c7f2f41f1dd7203461, G:/GCModeller/src/R-sharp/R#//System/Document/Document.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 63
-    '    Code Lines: 55
-    ' Comment Lines: 0
-    '   Blank Lines: 8
-    '     File Size: 2.41 KB
+    '   Total Lines: 76
+    '    Code Lines: 60
+    ' Comment Lines: 7
+    '   Blank Lines: 9
+    '     File Size: 2.78 KB
 
 
     '     Class Document
     ' 
     '         Properties: author, declares, description, details, examples
-    '                     keywords, parameters, returns, see_also, title
+    '                     keywords, parameters, returns, see_also, symbol_name
+    '                     title
     ' 
     '         Function: ToString, UnixMan
     ' 
