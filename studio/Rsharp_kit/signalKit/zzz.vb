@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3ab251901be1fd3d69dbc64037dc6441, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//zzz.vb"
+﻿#Region "Microsoft.VisualBasic::29dac60231efd2c020185d81929c3d41, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//zzz.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 8
     ' Comment Lines: 0
     '   Blank Lines: 3
-    '     File Size: 217 B
+    '     File Size: 215 B
 
 
     ' Class zzz
@@ -60,4 +60,3 @@ Public Class zzz
         Call signalProcessing.Main()
     End Sub
 End Class
-

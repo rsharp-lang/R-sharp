@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ca964c11b045e60f0cd41d20c9ad2503, G:/GCModeller/src/R-sharp/R#//Language/Syntax/Helper.vb"
+﻿#Region "Microsoft.VisualBasic::36383d53bbdcc3d6ed4f3c37d047c1bc, G:/GCModeller/src/R-sharp/R#//Language/Syntax/Helper.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 81
+    '   Total Lines: 80
     '    Code Lines: 55
     ' Comment Lines: 8
-    '   Blank Lines: 18
-    '     File Size: 3.03 KB
+    '   Blank Lines: 17
+    '     File Size: 3.02 KB
 
 
     '     Module Helper
@@ -49,7 +49,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection

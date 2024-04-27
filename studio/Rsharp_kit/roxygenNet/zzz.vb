@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b7aa0df3c6dd7b4a49756ba40ba8fef0, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//zzz.vb"
+﻿#Region "Microsoft.VisualBasic::10b2d694373c6fc4d038c239fc225c5b, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//zzz.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 6
     ' Comment Lines: 0
     '   Blank Lines: 3
-    '     File Size: 147 B
+    '     File Size: 145 B
 
 
     ' Class zzz
@@ -58,4 +58,3 @@ Public Class zzz
     Public Shared Sub onLoad()
     End Sub
 End Class
-

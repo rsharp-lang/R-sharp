@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d2bad0fe9efff3588ad467a0fef125b3, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/CNNFunction.vb"
+﻿#Region "Microsoft.VisualBasic::d42b2986657b02856672bcd8ed1bb8ac, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/CNNFunction.vb"
 
     ' Author:
     ' 
@@ -160,4 +160,3 @@ Public Class CNNFunction : Inherits RDefaultFunction
     End Function
 
 End Class
-

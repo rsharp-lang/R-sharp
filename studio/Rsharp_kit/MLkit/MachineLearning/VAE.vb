@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2029bc0c43432bdad73bf799cf35aadc, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/VAE.vb"
+﻿#Region "Microsoft.VisualBasic::c5277b79488fd1ed776d0193deafb9a6, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/VAE.vb"
 
     ' Author:
     ' 
@@ -114,4 +114,3 @@ Module VAE
     '    Return vae.autoencoder
     'End Function
 End Module
-

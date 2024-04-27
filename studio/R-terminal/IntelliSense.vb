@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::63e4d639006125cdf96153351a492040, G:/GCModeller/src/R-sharp/studio/R-terminal//IntelliSense.vb"
+﻿#Region "Microsoft.VisualBasic::d6e036694d1cd410158e1a26495fbb84, G:/GCModeller/src/R-sharp/studio/R-terminal//IntelliSense.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 102
     ' Comment Lines: 2
     '   Blank Lines: 21
-    '     File Size: 4.49 KB
+    '     File Size: 4.48 KB
 
 
     ' Class IntelliSense
@@ -175,4 +175,3 @@ Friend Class IntelliSense
         Return New Completion(prefix, ls)
     End Function
 End Class
-

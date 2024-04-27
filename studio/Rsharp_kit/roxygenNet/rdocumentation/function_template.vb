@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8f53a4cd238ec803712fafd742f9c51e, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//rdocumentation/function_template.vb"
+﻿#Region "Microsoft.VisualBasic::abc2a1d777bdd792a24f52d5f3b4dfcf, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//rdocumentation/function_template.vb"
 
     ' Author:
     ' 
@@ -218,4 +218,3 @@ Module function_template
                </html>
     End Function
 End Module
-

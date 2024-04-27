@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b605a81a013fd5163241786bf350d6e8, G:/GCModeller/src/R-sharp/studio/Rserver//Rserver.vb"
+﻿#Region "Microsoft.VisualBasic::d8aec9cc0e9d442693bfdf5fee801390, G:/GCModeller/src/R-sharp/studio/Rserver//Rserver.vb"
 
     ' Author:
     ' 
@@ -34,10 +34,10 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 245
+    '   Total Lines: 242
     '    Code Lines: 131
     ' Comment Lines: 88
-    '   Blank Lines: 26
+    '   Blank Lines: 23
     '     File Size: 10.50 KB
 
 
@@ -293,7 +293,3 @@ Return CLI.ToString()
 End Function
 End Class
 End Namespace
-
-
-
-

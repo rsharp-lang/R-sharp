@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::676cc59eb6f7271d942bf82605c7d895, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//LinearFunction.vb"
+﻿#Region "Microsoft.VisualBasic::1f07f0d97ae4e81cc27b18832e277376, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//LinearFunction.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 12
     ' Comment Lines: 0
     '   Blank Lines: 4
-    '     File Size: 526 B
+    '     File Size: 524 B
 
 
     ' Class LinearFunction
@@ -65,4 +65,3 @@ Public Class LinearFunction : Inherits RDefaultFunction
         Return y_vec
     End Function
 End Class
-

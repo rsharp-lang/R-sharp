@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c2d1da7497323fc4fb4ed7713623a97d, G:/GCModeller/src/R-sharp/studio/Rserver//Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::f79e5a4957284345b96f3c9726de7643, G:/GCModeller/src/R-sharp/studio/Rserver//Rscript.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 307
+    '   Total Lines: 304
     '    Code Lines: 169
     ' Comment Lines: 110
-    '   Blank Lines: 28
-    '     File Size: 13.88 KB
+    '   Blank Lines: 25
+    '     File Size: 13.87 KB
 
 
     ' Class Rscript
@@ -355,7 +355,3 @@ Return CLI.ToString()
 End Function
 End Class
 End Namespace
-
-
-
-

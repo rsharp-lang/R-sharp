@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fd637476a6cb8433f78f5aa5a037cc20, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/CNNLayerArguments.vb"
+﻿#Region "Microsoft.VisualBasic::62ea2046e4f8207e081043c7f06dc6d0, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/CNNLayerArguments.vb"
 
     ' Author:
     ' 
@@ -38,7 +38,7 @@
     '    Code Lines: 30
     ' Comment Lines: 0
     '   Blank Lines: 7
-    '     File Size: 1.81 KB
+    '     File Size: 1.80 KB
 
 
     ' Class CNNLayerArguments
@@ -88,4 +88,3 @@ Public Class CNNLayerArguments
     End Function
 
 End Class
-

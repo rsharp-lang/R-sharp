@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6403864eb09af00378758147790d9302, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//rdocumentation/clr_xml.vb"
+﻿#Region "Microsoft.VisualBasic::68824c0fe624aa44595d23d574dd6093, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//rdocumentation/clr_xml.vb"
 
     ' Author:
     ' 
@@ -305,4 +305,3 @@ Public Class clr_xml
     End Function
 
 End Class
-
