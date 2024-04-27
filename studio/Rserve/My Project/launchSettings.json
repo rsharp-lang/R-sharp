@@ -4,6 +4,11 @@
       "commandName": "Project",
       "commandLineArgs": "--start --port 80 --tcp 3838 --Rweb ../src/ --show_error --n_threads 2 --config ./settings.ini ---wwwroot \"../wwwroot\"",
       "workingDirectory": "E:\\biodeep\\novocell\\landscape_v2\\etc"
+    },
+    "test_in_home": {
+      "commandName": "Project",
+      "commandLineArgs": "--start --port 82 --tcp 3838 --Rweb ../src/ --show_error --n_threads 2 --config ./settings.ini --wwwroot \"../wwwroot\"",
+      "workingDirectory": "G:\\flavor-scape\\web\\etc"
     }
   }
 }

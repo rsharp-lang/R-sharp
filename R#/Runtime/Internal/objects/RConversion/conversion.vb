@@ -352,7 +352,8 @@ Namespace Runtime.Internal.Object.Converts
         <ExportAPI("as.data.frame")>
         <RApiReturn(GetType(dataframe))>
         Public Function asDataframe(<RRawVectorArgument> x As Object,
-                                    <RListObjectArgument> args As Object,
+                                    <RListObjectArgument>
+                                    Optional args As Object = Nothing,
                                     Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
                 Return x
@@ -372,7 +373,7 @@ Namespace Runtime.Internal.Object.Converts
             ElseIf x.GetType.IsArray AndAlso DirectCast(x, Array).Length = 0 Then
                 Return Nothing
             ElseIf TypeOf x Is list Then
-                Return DirectCast(x, list).slots.castListToDataframe(env)
+                Return DirectCast(x, list).slots.castListToDataframe(args, env)
 
             ElseIf TypeOf x Is list() OrElse (TypeOf x Is Object() AndAlso DirectCast(x, Object()).All(Function(xi) TypeOf xi Is list)) Then
                 Return DirectCast(x, Array).AsObjectEnumerator(Of list).castListRowsToDataframe(env)
@@ -510,7 +511,7 @@ RE0:
         ''' <returns></returns>
         ''' 
         <Extension>
-        Private Function castListMatrix(rows As KeyValuePair(Of String, Object)(), allNames As String(), env As Environment) As Object
+        Private Function castListMatrix(rows As KeyValuePair(Of String, Object)(), allNames As String(), env As Environment) As dataframe
             Dim table As New dataframe With {
                 .columns = New Dictionary(Of String, Array)
             }
@@ -549,7 +550,7 @@ RE0:
         Private Function castListRows(listData As Dictionary(Of String, Object),
                                       hasNames As Boolean,
                                       allnames As String(),
-                                      env As Environment) As Object
+                                      env As Environment) As dataframe
 
             Dim table As New dataframe With {
                 .columns = New Dictionary(Of String, Array),
@@ -606,7 +607,7 @@ RE0:
         ''' <param name="env"></param>
         ''' <returns></returns>
         <Extension>
-        Private Function castListToDataframe(listData As Dictionary(Of String, Object), env As Environment) As Object
+        Private Function castListToDataframe(listData As Dictionary(Of String, Object), args As list, env As Environment) As Object
             Dim hasNames As Boolean
             Dim allNames As String() = Nothing
 
@@ -620,6 +621,11 @@ RE0:
             ' all of the element key name is integer
             ' or integer index key name
             Dim t As Boolean = listData.Keys.All(Function(k) k.IsPattern("\d+") OrElse k.IsPattern("\[+\d+\]+"))
+            Dim rownames As String() = Nothing
+
+            If args.hasName("row.names") Then
+                rownames = CLRVector.asCharacter(args.getByName("row.names"))
+            End If
 
             If hasNames Then
                 Dim pullNames = checkNames(listData, env)
@@ -631,13 +637,25 @@ RE0:
                 End If
             End If
 
+            Dim df As dataframe
+
             If isListMatrix AndAlso t Then
-                Return listData _
+                df = listData _
                     .ToArray _
                     .castListMatrix(allNames, env)
             Else
-                Return listData.castListRows(hasNames, allNames, env)
+                df = listData.castListRows(hasNames, allNames, env)
             End If
+
+            If Not rownames.IsNullOrEmpty Then
+                If rownames.Length = df.nrows Then
+                    df.rownames = rownames
+                Else
+                    Return Internal.debug.stop($"the given row.names its length({rownames.Length}) from the as.data.frame function should matched with the dataframe row number({df.nrows})!", env)
+                End If
+            End If
+
+            Return df
         End Function
 
         <Extension>

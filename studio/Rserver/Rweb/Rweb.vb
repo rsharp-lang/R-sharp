@@ -65,6 +65,7 @@ Imports Flute.Http.Core.HttpStream
 Imports Flute.Http.Core.Message
 Imports Flute.Http.FileSystem
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
@@ -145,8 +146,31 @@ Public Class Rweb : Inherits HttpServer
         End Using
     End Function
 
+    Private Shared Function ParseJSON(json As String) As Dictionary(Of String, Object)
+        Dim raw As JsonElement = RJSON.ParseJSONinternal(json, raw:=True, strict_vector_syntax:=False, Nothing)
+
+        If raw Is Nothing Then
+            Return New Dictionary(Of String, Object)
+        End If
+
+        If TypeOf raw Is JsonObject Then
+            Dim obj As New Dictionary(Of String, Object)
+            Dim list As JsonObject = DirectCast(raw, JsonObject)
+
+            For Each name As String In list.ObjectKeys
+                Call obj.Add(name, list(name))
+            Next
+
+            Return obj
+        Else
+            Return New Dictionary(Of String, Object) From {
+                {"data", raw}
+            }
+        End If
+    End Function
+
     Public Overrides Sub handlePOSTRequest(p As HttpProcessor, inputData As String)
-        Dim request As New HttpPOSTRequest(p, inputData)
+        Dim request As New HttpPOSTRequest(p, inputData, parseJSON:=AddressOf ParseJSON)
 
         Select Case request.URL.path
             Case "callback"
