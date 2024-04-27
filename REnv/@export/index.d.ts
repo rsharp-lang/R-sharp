@@ -53,11 +53,11 @@ declare namespace REnv {
    /**
      * @param stat default value Is ``Call "list"("totalLines" <- [], "commentLines" <- [], "blankLines" <- [], "size" <- [], "lineOfCodes" <- [], "classes" <- [], "method" <- [], "operator" <- [], "functions" <- [], "property" <- [], "files" <- [], "projList" <- [])``.
    */
-   function process_project(vbproj: any, refer: any, stat?: any): object;
+   function process_project(vbproj: any, refer: any, banner: any, proj_folder: any, stat?: any): object;
    /**
      * @param stat default value Is ``Call "list"()``.
    */
-   function processSingle(refer: any, stat?: any): object;
+   function processSingle(refer: any, banner: any, proj_folder: any, stat?: any): object;
    /**
    */
    function queryWeb(url: any, graphquery: any): object;
