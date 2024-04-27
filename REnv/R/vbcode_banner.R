@@ -68,7 +68,7 @@ const process_project = function(vbproj, refer, stat = list(
     return(v);
 }
 
-const processSingle(refer, stat = list()) {
+const processSingle = function(refer, stat = list()) {
     let vbproj = read.vbproj(file = refer, legacy = FALSE);
 
     if (is.null(vbproj)) {
