@@ -234,6 +234,14 @@ Module datasetKit
         Return df
     End Function
 
+    ''' <summary>
+    ''' cast the clr dataframe object to R# dataframe runtime object
+    ''' </summary>
+    ''' <param name="features"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <RGenericOverloads("as.data.frame")>
     Private Function toDataframe(features As FeatureFrame, args As list, env As Environment) As Rdataframe
         Return MathDataSet.toDataframe(features, args, env)
     End Function
@@ -472,27 +480,16 @@ Module datasetKit
         Return matrix
     End Function
 
+    ''' <summary>
+    ''' helper function for cast the R# dataframe runtime object as the clr dataframe object
+    ''' </summary>
+    ''' <param name="x">should be a R# dataframe runtime object</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("toFeatureSet")>
     <RApiReturn(GetType(FeatureFrame))>
     Public Function toFeatureSet(x As Rdataframe, Optional env As Environment = Nothing) As Object
-        Dim featureSet As New Dictionary(Of String, FeatureVector)
-        Dim general As Array
-
-        For Each name As String In x.columns.Keys
-            general = x(columnName:=name)
-            general = TryCastGenericArray(general, env)
-
-            If Not FeatureVector.CheckSupports(general.GetType.GetElementType) Then
-                Return Internal.debug.stop($"Not supports '{name}'!", env)
-            End If
-
-            featureSet(name) = FeatureVector.FromGeneral(name, general)
-        Next
-
-        Return New FeatureFrame With {
-            .rownames = x.getRowNames,
-            .features = featureSet
-        }
+        Return MathDataSet.toFeatureSet(x, env)
     End Function
 
     ''' <summary>
@@ -534,6 +531,12 @@ Module datasetKit
         Return ds
     End Function
 
+    ''' <summary>
+    ''' get summary and descriptions about the given dataset
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("description")>
     Public Function dataDescription(x As Object, Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
