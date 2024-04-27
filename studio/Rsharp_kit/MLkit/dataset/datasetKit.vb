@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6d7aa6bc53f7e7ec55817b9b563e761a, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataset/datasetKit.vb"
+﻿#Region "Microsoft.VisualBasic::ce864b3a4015ed67d1387054b90226d7, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataset/datasetKit.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 975
-    '    Code Lines: 702
-    ' Comment Lines: 158
-    '   Blank Lines: 115
-    '     File Size: 40.97 KB
+    '   Total Lines: 978
+    '    Code Lines: 690
+    ' Comment Lines: 177
+    '   Blank Lines: 111
+    '     File Size: 41.13 KB
 
 
     ' Module datasetKit
