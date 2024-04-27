@@ -37,7 +37,7 @@ for (refer in projects) {
 	
 	# no matches, do banner updates
 	if (!test) {
-		stat <- processSingle(refer, stat);
+		stat <- processSingle(refer, banner, proj_folder, stat);
 	} else {
 		print("Skip of the target project updates due to its path value matched with the ignores list:");
 		print("[ignores] " & refer);

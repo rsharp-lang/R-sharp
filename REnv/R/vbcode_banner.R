@@ -28,7 +28,7 @@ const walkFiles = function(vbproj, refer, banner, proj_folder) {
     return(v);
 }
 
-const process_project = function(vbproj, refer, stat = list(
+const process_project = function(vbproj, refer, banner, proj_folder, stat = list(
         totalLines   = [],
         commentLines = [],
         blankLines   = [],
@@ -45,7 +45,7 @@ const process_project = function(vbproj, refer, stat = list(
         projList = []
     )) {
 
-    let v = walkFiles(vbproj, refer);
+    let v = walkFiles(vbproj, refer, banner, proj_folder);
 
     print(vbproj);
 
@@ -68,7 +68,7 @@ const process_project = function(vbproj, refer, stat = list(
     return(v);
 }
 
-const processSingle = function(refer, stat = list()) {
+const processSingle = function(refer, banner, proj_folder, stat = list()) {
     let vbproj = read.vbproj(file = refer, legacy = FALSE);
 
     if (is.null(vbproj)) {
@@ -77,7 +77,7 @@ const processSingle = function(refer, stat = list()) {
         print(`processing vbproj: ${refer}`);
 
         # run project processing...
-        let v = process_project(vbproj, refer);
+        let v = process_project(vbproj, refer, banner, proj_folder, stat);
 
         # append project summary
         stat$totalLines   = append(stat$totalLines, sum(v$totalLines));
