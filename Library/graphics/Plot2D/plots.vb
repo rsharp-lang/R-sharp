@@ -85,6 +85,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors.Scaler
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Math2D.MarchingSquares
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
@@ -521,11 +522,24 @@ Module plots
             Next
         End If
 
-        classinfo = classinfo _
-            .ToDictionary(Function(a) a.Key,
-                          Function(a)
-                              Return a.Value.TranslateColor.ToHtmlColor
-                          End Function)
+        If classinfo.Values.All(Function(str)
+                                    Return str.IsPattern("\d+") OrElse str.IsPattern("((class)|(cluster)|(group)).*\d+")
+                                End Function) Then
+            ' is class tag
+            ' assign color by the cluster tag
+            Dim colors As New CategoryColorProfile(classinfo.Values.Distinct, "paper")
+
+            For Each key As String In classinfo.Keys.ToArray
+                classinfo(key) = colors.GetColor(classinfo(key)).ToHtmlColor
+            Next
+        Else
+            classinfo = classinfo _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return a.Value.TranslateColor.ToHtmlColor
+                              End Function)
+        End If
+
         classes = classinfo.Values _
             .Distinct _
             .Select(Function(colorName, i)
