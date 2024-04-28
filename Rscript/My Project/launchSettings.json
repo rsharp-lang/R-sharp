@@ -2,7 +2,7 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--slave /exec \"G:/flavor-scape/web/src/run/regression.R\" /argvs \"H4sIAAAAAAAACqtWys1PSc2Jz0vMTVWyilYqLE3MyUyrjAeLKsXqKKVl5qTGZ6aA5AyVYmsBIGaxBjAAAAA=\" /request-id \"web_request__66286k0fdd\" /PORT \"13838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" /entry \"run\" /@set --internal_pipeline=FALSE",
+      "commandLineArgs": "--slave /exec \"G:/flavor-scape/web/src/run/hctree.R\" /argvs \"H4sIAAAAAAAACqtWykxRsopWMlSK1VFKK8rPBXFKcxMLQPyi1LSi1OIMkJCBnqmFgYGRsbmpsaGhhamFmbGOkYVSbC0AX/7XxEAAAAA=\" /request-id \"web_request__46822r61a9\" /PORT \"13838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" /entry \"run\" /@set --internal_pipeline=FALSE",
       "workingDirectory": "G:\\flavor-scape\\web\\etc"
     },
     "mzkit_debug": {

@@ -60,7 +60,7 @@ Module DataMiningDataSet
                 df.columns.Remove(class_col)
             End If
 
-            model = DirectCast(x, Rdataframe) _
+            model = df _
                 .forEachRow _
                 .Select(Function(r, index)
                             Return New EntityClusterModel With {
