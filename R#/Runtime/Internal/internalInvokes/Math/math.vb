@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d0f4a0267a466125868612f258692b39, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Math/math.vb"
+﻿#Region "Microsoft.VisualBasic::d0f4a0267a466125868612f258692b39, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Math/math.vb"
 
     ' Author:
     ' 

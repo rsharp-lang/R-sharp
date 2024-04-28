@@ -183,6 +183,7 @@ Module RJSON
                 .slots = New Dictionary(Of String, Object)
             }
             Dim obj As Object
+            Dim keyName As String
 
             For Each item As NamedValue(Of JsonElement) In DirectCast(json, JsonObject)
                 obj = item.Value.createRObj(
@@ -190,7 +191,8 @@ Module RJSON
                     strictSchemaCheck:=strictSchemaCheck,
                     decodeMetachar:=decodeMetachar
                 )
-                list.slots.Add(item.Name, obj)
+                keyName = JsonParser.StripString(item.Name, decodeMetaChar:=True)
+                list.slots.Add(keyName, obj)
             Next
 
             Return list

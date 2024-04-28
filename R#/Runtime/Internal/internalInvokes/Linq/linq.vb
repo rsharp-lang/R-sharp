@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::06cfe9aebf2fdccd731ce36e3003ab33, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/linq.vb"
+﻿#Region "Microsoft.VisualBasic::06cfe9aebf2fdccd731ce36e3003ab33, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/linq.vb"
 
     ' Author:
     ' 

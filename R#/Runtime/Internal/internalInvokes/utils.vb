@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fab01d2463b8e5cf36af828e85532c48, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/utils.vb"
+﻿#Region "Microsoft.VisualBasic::a8319899289c4f4d7ba248d3feb64fbb, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/utils.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1464
-    '    Code Lines: 774
+    '   Total Lines: 1470
+    '    Code Lines: 779
     ' Comment Lines: 554
-    '   Blank Lines: 136
-    '     File Size: 69.97 KB
+    '   Blank Lines: 137
+    '     File Size: 70.09 KB
 
 
     '     Module utils

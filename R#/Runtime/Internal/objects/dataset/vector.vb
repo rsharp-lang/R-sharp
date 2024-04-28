@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aba8de8d5fa605e6a4b26897babf8047, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/vector.vb"
+﻿#Region "Microsoft.VisualBasic::aba8de8d5fa605e6a4b26897babf8047, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/vector.vb"
 
     ' Author:
     ' 
@@ -65,6 +65,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Language.Vectorization
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
@@ -78,8 +79,9 @@ Namespace Runtime.Internal.Object
 
     Public Class vector : Inherits RsharpDataObject
         Implements RNames, RIndex
+        Implements IVectorReader
 
-        Public Property data As Array
+        Public Property data As Array Implements IVectorReader.vector
         ''' <summary>
         ''' do conversion from current vector to another scale.
         ''' </summary>
@@ -87,7 +89,7 @@ Namespace Runtime.Internal.Object
         Public Property unit As unit
         Public Property factor As factor
 
-        Public ReadOnly Property length As Integer Implements RIndex.length
+        Public ReadOnly Property length As Integer Implements RIndex.length, IVectorReader.length
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             <DebuggerStepThrough>
             Get

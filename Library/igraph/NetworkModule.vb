@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::30b8423a5de9b55a4f64fc1056407f08, G:/GCModeller/src/R-sharp/Library/igraph//NetworkModule.vb"
+﻿#Region "Microsoft.VisualBasic::30b8423a5de9b55a4f64fc1056407f08, E:/GCModeller/src/R-sharp/Library/igraph//NetworkModule.vb"
 
     ' Author:
     ' 
@@ -419,20 +419,13 @@ Public Module NetworkModule
         Return data
     End Function
 
-    ''' <summary>
-    ''' save the network graph
-    ''' </summary>
-    ''' <param name="g">the network graph object or [nodes, edges] table data.</param>
-    ''' <param name="file">a folder file path for save the network data.</param>
-    ''' <param name="properties">a list of property name for save in node table and edge table.</param>
-    ''' <returns></returns>
-    <ExportAPI("save.network")>
-    <RApiReturn(GetType(Boolean))>
-    Public Function SaveNetwork(g As Object, file$,
-                                <RRawVectorArgument(TypeCodes.string)>
-                                Optional properties As Object = "*",
-                                Optional meta As MetaData = Nothing,
-                                Optional env As Environment = Nothing) As Object
+    <ExportAPI("tabular_graph")>
+    <RApiReturn(GetType(NetworkTables))>
+    Public Function tabular_graph(g As Object,
+                                  <RRawVectorArgument(TypeCodes.string)>
+                                  Optional properties As Object = "*",
+                                  Optional meta As MetaData = Nothing,
+                                  Optional env As Environment = Nothing) As Object
 
         Dim tables As NetworkTables
 
@@ -452,7 +445,31 @@ Public Module NetworkModule
             Return Internal.debug.stop(New InvalidProgramException(g.GetType.FullName), env)
         End If
 
-        Return tables.Save(file)
+        Return tables
+    End Function
+
+    ''' <summary>
+    ''' save the network graph
+    ''' </summary>
+    ''' <param name="g">the network graph object or [nodes, edges] table data.</param>
+    ''' <param name="file">a folder file path for save the network data.</param>
+    ''' <param name="properties">a list of property name for save in node table and edge table.</param>
+    ''' <returns></returns>
+    <ExportAPI("save.network")>
+    <RApiReturn(GetType(Boolean))>
+    Public Function SaveNetwork(g As Object, file$,
+                                <RRawVectorArgument(TypeCodes.string)>
+                                Optional properties As Object = "*",
+                                Optional meta As MetaData = Nothing,
+                                Optional env As Environment = Nothing) As Object
+
+        Dim tables = tabular_graph(g, properties, meta, env)
+
+        If TypeOf tables Is Message Then
+            Return tables
+        Else
+            Return DirectCast(tables, NetworkTables).Save(file)
+        End If
     End Function
 
     ''' <summary>

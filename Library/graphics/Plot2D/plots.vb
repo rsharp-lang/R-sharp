@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5b8eb7978a2ecfceea4cd29d185f0004, G:/GCModeller/src/R-sharp/Library/graphics//Plot2D/plots.vb"
+﻿#Region "Microsoft.VisualBasic::5b8eb7978a2ecfceea4cd29d185f0004, E:/GCModeller/src/R-sharp/Library/graphics//Plot2D/plots.vb"
 
     ' Author:
     ' 
@@ -85,6 +85,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors.Scaler
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Math2D.MarchingSquares
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
@@ -503,6 +504,11 @@ Module plots
     End Function
 
     Private Sub TryGetClassData(list As Object, ByRef classes As ColorClass(), ByRef classinfo As Dictionary(Of String, String))
+        If list Is Nothing Then
+            classes = Nothing '
+            classinfo = Nothing
+        End If
+
         If TypeOf list Is list Then
             classinfo = DirectCast(list, list).slots _
                 .ToDictionary(Function(a) a.Key,
@@ -521,11 +527,24 @@ Module plots
             Next
         End If
 
-        classinfo = classinfo _
-            .ToDictionary(Function(a) a.Key,
-                          Function(a)
-                              Return a.Value.TranslateColor.ToHtmlColor
-                          End Function)
+        If classinfo.Values.All(Function(str)
+                                    Return str.IsPattern("\d+") OrElse str.IsPattern("((class)|(cluster)|(group)).*\d+")
+                                End Function) Then
+            ' is class tag
+            ' assign color by the cluster tag
+            Dim colors As New CategoryColorProfile(classinfo.Values.Distinct, "paper")
+
+            For Each key As String In classinfo.Keys.ToArray
+                classinfo(key) = colors.GetColor(classinfo(key)).ToHtmlColor
+            Next
+        Else
+            classinfo = classinfo _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return a.Value.TranslateColor.ToHtmlColor
+                              End Function)
+        End If
+
         classes = classinfo.Values _
             .Distinct _
             .Select(Function(colorName, i)

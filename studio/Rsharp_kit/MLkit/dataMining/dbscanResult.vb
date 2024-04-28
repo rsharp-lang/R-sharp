@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c36661ab574428034bae49f421919b99, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataMining/dbscanResult.vb"
+﻿#Region "Microsoft.VisualBasic::c36661ab574428034bae49f421919b99, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataMining/dbscanResult.vb"
 
     ' Author:
     ' 

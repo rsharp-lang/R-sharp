@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::62ea2046e4f8207e081043c7f06dc6d0, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/CNNLayerArguments.vb"
+﻿#Region "Microsoft.VisualBasic::62ea2046e4f8207e081043c7f06dc6d0, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/CNNLayerArguments.vb"
 
     ' Author:
     ' 
