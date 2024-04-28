@@ -496,8 +496,7 @@ Module clustering
     End Function
 
     ''' <summary>
-    ''' 
-    ''' 
+    ''' auto detects k centers for k-means and generates the initial center seeds.
     ''' </summary>
     ''' <param name="x"></param>
     ''' <param name="T1"></param>
@@ -876,7 +875,7 @@ Module clustering
     ''' </remarks>
     <ExportAPI("hclust")>
     <RApiReturn(GetType(Cluster))>
-    Public Function hclust(d As DistanceMatrix,
+    Public Function hclust(<RRawVectorArgument> d As Object,
                            Optional method$ = "complete",
                            Optional debug As Boolean = False,
                            Optional env As Environment = Nothing) As Object
@@ -885,11 +884,26 @@ Module clustering
             Return Internal.debug.stop(New NullReferenceException("the given distance matrix object can not be nothing!"), env)
         End If
 
-        Dim alg As ClusteringAlgorithm = New DefaultClusteringAlgorithm With {.debug = debug}
-        Dim matrix As Double()() = d.PopulateRows _
-            .Select(Function(a) a.ToArray) _
-            .ToArray
-        Dim cluster As Cluster = alg.performClustering(matrix, d.keys, New AverageLinkageStrategy)
+        Dim cluster As Cluster
+
+        If TypeOf d Is DistanceMatrix Then
+            Dim alg As ClusteringAlgorithm = New DefaultClusteringAlgorithm With {.debug = debug}
+            Dim matrix As Double()() = DirectCast(d, DistanceMatrix).PopulateRows _
+                .Select(Function(a) a.ToArray) _
+                .ToArray
+
+            cluster = alg.performClustering(matrix, DirectCast(d, DistanceMatrix).keys, New AverageLinkageStrategy)
+
+            Return cluster
+        Else
+            Dim model = DataMiningDataSet.getDataModel(d, env)
+
+            If model Like GetType(Message) Then
+                Return model.TryCast(Of Message)
+            Else
+                cluster = model.TryCast(Of EntityClusterModel()).RunCluster
+            End If
+        End If
 
         Return cluster
     End Function
