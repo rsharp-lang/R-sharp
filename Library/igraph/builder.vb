@@ -75,13 +75,13 @@ Module builder
     Public Function FromCorrelations(x As CorrelationMatrix,
                                      Optional threshold As Double = 0.65,
                                      Optional pvalue As Double = 1,
-                                     Optional [class] As list = Nothing,
+                                     Optional group As list = Nothing,
                                      Optional env As Environment = Nothing) As Object
 
         Dim g As NetworkGraph = x.BuildNetwork(threshold, pvalue).Item1
 
-        If Not [class] Is Nothing Then
-            Dim class_labels As Dictionary(Of String, String) = [class].AsGeneric(env, "no_class")
+        If Not group Is Nothing Then
+            Dim class_labels As Dictionary(Of String, String) = group.AsGeneric(env, "no_class")
 
             For Each v As Node In g.vertex
                 v.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = class_labels _
