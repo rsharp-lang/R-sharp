@@ -34,9 +34,6 @@ Module DataMiningDataSet
 #Enable Warning
         ElseIf TypeOf x Is Rdataframe Then
             Dim df = DirectCast(x, Rdataframe)
-            Dim colNames As String() = df.columns _
-                .Keys _
-                .ToArray
             Dim has_class As Boolean = False
             Dim class_col As String = Nothing
 
@@ -59,6 +56,9 @@ Module DataMiningDataSet
                 }
                 df.columns.Remove(class_col)
             End If
+
+            ' col names maybe has been updated
+            Dim colNames As String() = df.columns.Keys.ToArray
 
             model = df _
                 .forEachRow _
