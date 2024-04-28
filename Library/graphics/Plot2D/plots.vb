@@ -504,6 +504,11 @@ Module plots
     End Function
 
     Private Sub TryGetClassData(list As Object, ByRef classes As ColorClass(), ByRef classinfo As Dictionary(Of String, String))
+        If list Is Nothing Then
+            classes = Nothing '
+            classinfo = Nothing
+        End If
+
         If TypeOf list Is list Then
             classinfo = DirectCast(list, list).slots _
                 .ToDictionary(Function(a) a.Key,
