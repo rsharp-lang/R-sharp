@@ -167,7 +167,15 @@ Namespace Runtime.Internal.ConsolePrinter
             Dim format As String = $"{opts.f64Format}{opts.digits}"
 
             Return Function(d)
-                       Dim val As Double = CType(d, Double)
+                       Dim val As Double = 0
+
+                       If d Is Nothing Then
+                           val = 0
+                       ElseIf TypeOf d Is String Then
+                           val = Conversion.Val(d)
+                       Else
+                           val = CType(d, Double)
+                       End If
 
                        If val = 0.0 Then
                            ' 20201009
