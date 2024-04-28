@@ -361,7 +361,7 @@ Namespace Runtime.Vectorization
             If TypeOf x Is list Then
                 x = DirectCast(x, list).slots.Values.ToArray
             ElseIf TypeOf x Is String Then
-                Return New Double() {Double.Parse(CStr(x))}
+                Return New Double() {Val(x)}
             ElseIf TypeOf x Is TimeSpan Then
                 Return New Double() {DirectCast(x, TimeSpan).TotalMilliseconds}
             ElseIf TypeOf x Is Date Then
@@ -409,6 +409,8 @@ Namespace Runtime.Vectorization
                                     Return 0
                                 ElseIf d.GetType.IsArray Then
                                     Return CDbl(DirectCast(d, Array)(0))
+                                ElseIf TypeOf d Is String Then
+                                    Return Val(d)
                                 Else
                                     Return CDbl(d)
                                 End If
