@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::339b6ced7bb2e4e4598ed62e45f9fbdb, G:/GCModeller/src/R-sharp/R#//Runtime/Environment/Environment.vb"
+﻿#Region "Microsoft.VisualBasic::43e8d35775b4f83f3c57345d2fd26efe, E:/GCModeller/src/R-sharp/R#//Runtime/Environment/Environment.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 858
+    '   Total Lines: 864
     '    Code Lines: 437
-    ' Comment Lines: 318
+    ' Comment Lines: 324
     '   Blank Lines: 103
-    '     File Size: 37.29 KB
+    '     File Size: 37.40 KB
 
 
     '     Class Environment
@@ -86,8 +86,10 @@ Namespace Runtime
 
     ''' <summary>
     ''' A ``R#`` scripting runtime context.
-    ''' (在一个环境对象容器之中，所有的对象都是以变量来表示的)
     ''' </summary>
+    ''' <remarks>
+    ''' (在一个环境对象容器之中，所有的对象都是以变量来表示的)
+    ''' </remarks>
     Public Class Environment : Implements IEnumerable(Of Symbol)
         Implements IDisposable
 
@@ -169,9 +171,11 @@ Namespace Runtime
 
         ''' <summary>
         ''' It is the top level global environment?
-        ''' (当前的环境是否为最顶层的全局环境？)
         ''' </summary>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' (当前的环境是否为最顶层的全局环境？)
+        ''' </remarks>
         Public ReadOnly Property isGlobal As Boolean
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
@@ -188,7 +192,9 @@ Namespace Runtime
         ''' and the setter of this property is a wrapper of visit data table <see cref="symbols"/>.
         ''' </returns>
         ''' <remarks>
-        ''' If the current stack does not contains the target variable, then the program will try to find the variable in his parent
+        ''' If the current stack does not contains the target variable, then the program will try 
+        ''' to find the variable in his parent.
+        ''' 
         ''' if variable in format like [var], then it means a global or parent environment variable
         ''' </remarks>
         Default Public Overridable Property value(name As String) As Symbol

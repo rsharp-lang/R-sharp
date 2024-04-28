@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4cdad9c11866af73b327f4272a6e2384, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/Linq/NamespaceDoc.vb"
+﻿#Region "Microsoft.VisualBasic::4cdad9c11866af73b327f4272a6e2384, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/Linq/NamespaceDoc.vb"
 
     ' Author:
     ' 

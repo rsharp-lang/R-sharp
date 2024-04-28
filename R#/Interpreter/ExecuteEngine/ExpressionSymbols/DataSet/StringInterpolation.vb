@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::27b0d5e7e0250ac58c1affa057a26504, G:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/StringInterpolation.vb"
+﻿#Region "Microsoft.VisualBasic::27b0d5e7e0250ac58c1affa057a26504, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/StringInterpolation.vb"
 
     ' Author:
     ' 

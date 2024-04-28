@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8423804878788740fd896d4de0a4effd, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//wav.vb"
+﻿#Region "Microsoft.VisualBasic::8423804878788740fd896d4de0a4effd, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/signalKit//wav.vb"
 
     ' Author:
     ' 

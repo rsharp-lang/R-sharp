@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dd0c93135b041bd92f11a2ddc670ea66, G:/GCModeller/src/R-sharp/R#//System/Document/MetaTextParser.vb"
+﻿#Region "Microsoft.VisualBasic::dd0c93135b041bd92f11a2ddc670ea66, E:/GCModeller/src/R-sharp/R#//System/Document/MetaTextParser.vb"
 
     ' Author:
     ' 

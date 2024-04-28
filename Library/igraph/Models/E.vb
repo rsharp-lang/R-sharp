@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b6963a56456cea24cbfa642a0a90d85e, G:/GCModeller/src/R-sharp/Library/igraph//Models/E.vb"
+﻿#Region "Microsoft.VisualBasic::b6963a56456cea24cbfa642a0a90d85e, E:/GCModeller/src/R-sharp/Library/igraph//Models/E.vb"
 
     ' Author:
     ' 

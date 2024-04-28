@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::be113774eb31e0ab98b95c35af325dc5, G:/GCModeller/src/R-sharp/snowFall/test//My Project/AssemblyInfo.vb"
+﻿#Region "Microsoft.VisualBasic::be113774eb31e0ab98b95c35af325dc5, E:/GCModeller/src/R-sharp/snowFall/test//My Project/AssemblyInfo.vb"
 
     ' Author:
     ' 

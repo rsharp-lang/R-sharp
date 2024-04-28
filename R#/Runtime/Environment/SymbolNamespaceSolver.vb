@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d986f10c6e8e40d66b402d28353d32e1, G:/GCModeller/src/R-sharp/R#//Runtime/Environment/SymbolNamespaceSolver.vb"
+﻿#Region "Microsoft.VisualBasic::d986f10c6e8e40d66b402d28353d32e1, E:/GCModeller/src/R-sharp/R#//Runtime/Environment/SymbolNamespaceSolver.vb"
 
     ' Author:
     ' 

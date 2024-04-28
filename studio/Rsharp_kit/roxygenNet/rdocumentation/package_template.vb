@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3dbbcc5a9aea08066bef082679a78c9e, G:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//rdocumentation/package_template.vb"
+﻿#Region "Microsoft.VisualBasic::3dbbcc5a9aea08066bef082679a78c9e, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//rdocumentation/package_template.vb"
 
     ' Author:
     ' 

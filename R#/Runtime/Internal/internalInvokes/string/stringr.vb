@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ae07759098944ffde7baf9d13f7ddc50, G:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/stringr.vb"
+﻿#Region "Microsoft.VisualBasic::2f7636eaf49a56a833de56ecfaf209c4, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/stringr.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1229
-    '    Code Lines: 765
+    '   Total Lines: 1237
+    '    Code Lines: 771
     ' Comment Lines: 340
-    '   Blank Lines: 124
-    '     File Size: 51.06 KB
+    '   Blank Lines: 126
+    '     File Size: 51.29 KB
 
 
     '     Module stringr
@@ -79,6 +79,7 @@ Imports Microsoft.VisualBasic.Serialization.Bencoding
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Xml.Models
+Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -726,13 +727,20 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("sprintf")>
+        <RApiReturn(GetType(String))>
         Public Function Csprintf(format As Array,
                                  <RListObjectArgument>
                                  Optional arguments As Object = Nothing,
                                  Optional env As Environment = Nothing) As Object
 
             Dim sprintf As Func(Of String, Object(), String) = AddressOf CLangStringFormatProvider.sprintf
-            Dim listValues As Object() = DirectCast(base.Rlist(arguments, env), list).slots.Values.ToArray
+            Dim listdata As Object = base.Rlist(arguments, env)
+
+            If Program.isException(listdata) Then
+                Return listdata
+            End If
+
+            Dim listValues As Object() = DirectCast(listdata, list).slots.Values.ToArray
             Dim args As Array()
 
             If listValues.Length = 0 Then
