@@ -529,7 +529,7 @@ Module clustering
             Return Nothing
         End If
 
-        Dim model = DataMiningDataSet.getDataModel(x, env)
+        Dim model = DataMiningDataSet.getDataModel(x, False, env)
 
         If model Like GetType(Message) Then
             Return model.TryCast(Of Message)
@@ -570,7 +570,7 @@ Module clustering
             Return Nothing
         End If
 
-        Dim model = DataMiningDataSet.getDataModel(x, env)
+        Dim model = DataMiningDataSet.getDataModel(x, False, env)
 
         If model Like GetType(Message) Then
             Return model.TryCast(Of Message)
@@ -631,7 +631,7 @@ Module clustering
             Return Nothing
         End If
 
-        Dim model = DataMiningDataSet.getDataModel(x, env)
+        Dim model = DataMiningDataSet.getDataModel(x, False, env)
 
         If model Like GetType(Message) Then
             Return model.TryCast(Of Message)
@@ -688,7 +688,7 @@ Module clustering
             Return Nothing
         End If
 
-        Dim model = DataMiningDataSet.getDataModel(x, env)
+        Dim model = DataMiningDataSet.getDataModel(x, False, env)
 
         If model Like GetType(Message) Then
             Return model.TryCast(Of Message)
@@ -896,7 +896,7 @@ Module clustering
 
             Return cluster
         Else
-            Dim model = DataMiningDataSet.getDataModel(d, env)
+            Dim model = DataMiningDataSet.getDataModel(d, True, env)
 
             If model Like GetType(Message) Then
                 Return model.TryCast(Of Message)
