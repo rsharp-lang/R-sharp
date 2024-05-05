@@ -721,6 +721,29 @@ ReturnTable:
     End Function
 
     ''' <summary>
+    ''' load clr object from R# dataframe object
+    ''' </summary>
+    ''' <returns></returns>
+    ''' 
+    <ExportAPI("load.dataframe")>
+    Public Function loadDataframe(x As Rdataframe, type As Object, Optional env As Environment = Nothing) As Object
+        Dim typeinfo As Type = env.globalEnvironment.GetType([typeof]:=type)
+        Dim document = x.DataFrameRows(Nothing, formatNumber:=Nothing, env)
+
+        If document Like GetType(Message) Then
+            Return document.TryCast(Of Message)
+        End If
+
+        Dim rawdata As Idataframe = Idataframe.CreateObject(document.TryCast(Of csv))
+        Dim seq As Array = rawdata _
+            .LoadDataToObject(typeinfo, strict:=False, metaBlank:="", silent:=True) _
+            .ToArray
+        Dim generic As Array = REnv.TryCastGenericArray(seq, env)
+
+        Return generic
+    End Function
+
+    ''' <summary>
     ''' Read dataframe
     ''' </summary>
     ''' <param name="file">the csv file</param>
