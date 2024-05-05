@@ -992,7 +992,7 @@ Module stats
                                 env As Environment) As Object
 
         Dim symbols As String() = FormulaExpression.GetSymbols(t.formula)
-        Dim v As New Dictionary(Of String, Double())
+        Dim v As New List(Of NamedCollection(Of Double))
         Dim ref As Symbol
 
         For Each name As String In symbols
@@ -1015,7 +1015,9 @@ Module stats
 
         For i As Integer = 0 To table.nrows - 1
             idx = i
-            x = symbols.Select(Function(r) v(r)(idx)).ToArray
+            x = symbols _
+                .Select(Function(r, offset) v(offset)(idx)) _
+                .ToArray
             x = alternative.ttestImpl(x, y, mu, conf_level, var_equal)
 
             If Program.isException(x) Then
