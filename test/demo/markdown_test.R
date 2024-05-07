@@ -1,10 +1,12 @@
+imports "utils.docs" from "roxygenNet";
+
 let md = "
 
 _italic_
 
 
-> http://aaa.com/__xxx__/index.html
+> http://aaa.com/_xxx_/index.html
 
 ";
 
-print();
+print(markdown_transform(md));
