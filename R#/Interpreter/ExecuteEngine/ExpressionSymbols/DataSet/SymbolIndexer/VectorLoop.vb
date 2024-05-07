@@ -256,6 +256,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Private Shared Function getListVector(datalist As list, memberName As String, indexMode As TypeCodes, envir As Environment)
             Dim source As Object() = datalist.data.ToArray
 
+            ' 20240507 handling of the single list data
+            ' for make max compatibility with the vector feature
+            ' due to the reason of vector with just single element should still a vector
+            ' a single list that maybe one element inside a vector
+            If indexMode <> TypeCodes.integer AndAlso datalist.hasName(memberName) Then
+                Dim scalar As Object = datalist.getByName(memberName)
+
+                If TypeOf scalar IsNot list AndAlso TypeOf scalar IsNot dataframe Then
+                    Return scalar
+                End If
+            End If
+
             If indexMode = TypeCodes.integer Then
                 ' get by index
                 ' this index value is 1-based
