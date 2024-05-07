@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports Microsoft.VisualBasic.Text.Xml.Models
+Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Runtime
@@ -130,7 +131,6 @@ Module docs
         End If
     End Function
 
-    <ExportAPI("markdown_transform")>
     <Extension>
     Public Function MarkdownTransform(doc As Document) As Document
         Return New Document With {
@@ -153,5 +153,23 @@ Module docs
             .see_also = doc.see_also,
             .title = roxygen.markdown.Transform(doc.title)
         }
+    End Function
+
+    ''' <summary>
+    ''' transform the markdown document text to html document
+    ''' </summary>
+    ''' <param name="doc">
+    ''' the <see cref="Document"/> object for a R function or just a 
+    ''' character vector of the document text in markdown format.
+    ''' </param>
+    ''' <returns></returns>
+    <ExportAPI("markdown_transform")>
+    <RApiReturn(GetType(String), GetType(Document))>
+    Public Function MarkdownTransform(<RRawVectorArgument> doc As Object, Optional env As Environment = Nothing) As Object
+        If TypeOf doc Is Document Then
+            Return DirectCast(doc, Document).MarkdownTransform
+        Else
+            Return env.EvaluateFramework(Of String, String)(doc, Function(md) roxygen.markdown.Transform(md))
+        End If
     End Function
 End Module
