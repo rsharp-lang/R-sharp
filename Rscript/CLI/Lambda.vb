@@ -54,6 +54,7 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
@@ -64,6 +65,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports any = Microsoft.VisualBasic.Scripting
 
@@ -73,7 +75,7 @@ Partial Module CLI
 
     <ExportAPI("--lambda")>
     <Description("Execute R# function with parameters")>
-    <Usage("--lambda <delegate_name> [--request </path/to/del_func_parameters.json, default=""./.r_env/run.json""> --SetDllDirectory <dll_directory> --attach <pkg_directory>]")>
+    <Usage("--lambda <delegate_name> [--request </path/to/del_func_parameters.json, default=""./.r_env/run.json""> --SetDllDirectory <dll_directory> --attach <pkg_directory> --debug]")>
     Public Function execLambda(args As CommandLine) As Integer
         Dim SetDllDirectory As String = args("--SetDllDirectory")
         Dim renv As New RInterpreter
@@ -81,6 +83,7 @@ Partial Module CLI
         Dim request_argv As String = args("--request") Or "./.r_env/run.json".GetFullPath
         Dim options_argv As String = args("--options") Or "./.r_env/options.json".GetFullPath
         Dim attach As String = args("--attach")
+        Dim debugMode As Boolean = args.IsTrue("--debug")
 
         If Not SetDllDirectory.StringEmpty Then
             Call renv.globalEnvir.options.setOption("SetDllDirectory", SetDllDirectory)
@@ -152,7 +155,7 @@ Partial Module CLI
                 End If
             Next
 
-            result = renv.globalEnvir.invokeLambda(run, callable.value)
+            result = renv.globalEnvir.invokeLambda(run, callable.value, debugMode)
         End If
 
         Return handleResult(result, renv.globalEnvir)
@@ -187,9 +190,18 @@ Partial Module CLI
     End Function
 
     <Extension>
-    Private Function invokeLambda(env As Environment, argv As list, del_func As RFunction) As Object
+    Private Function invokeLambda(env As Environment, argv As list, del_func As RFunction, debugModel As Boolean) As Object
         Dim args As NamedValue(Of Expression)() = del_func.getArguments.ToArray
         Dim run As InvokeParameter() = New InvokeParameter(args.Length - 1) {}
+
+        If debugModel Then
+            Call base.print("(debug) get input parameter names:",, env)
+            Call base.print(argv.getNames,, env)
+            Call base.print("(debug) the target lambda function required parameters:",, env)
+            Call base.print(args.Keys,, env)
+            Call base.print("from lambda function:",, env)
+            Call base.print(del_func,, env)
+        End If
 
         For i As Integer = 0 To args.Length - 1
             Dim name As String = args(i).Name
