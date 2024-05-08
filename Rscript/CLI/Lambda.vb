@@ -54,6 +54,7 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
@@ -64,6 +65,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports any = Microsoft.VisualBasic.Scripting
 
@@ -73,7 +75,7 @@ Partial Module CLI
 
     <ExportAPI("--lambda")>
     <Description("Execute R# function with parameters")>
-    <Usage("--lambda <delegate_name> [--request </path/to/del_func_parameters.json, default=""./.r_env/run.json""> --SetDllDirectory <dll_directory> --attach <pkg_directory>]")>
+    <Usage("--lambda <delegate_name> [--request </path/to/del_func_parameters.json, default=""./.r_env/run.json""> --SetDllDirectory <dll_directory> --attach <pkg_directory> --debug]")>
     Public Function execLambda(args As CommandLine) As Integer
         Dim SetDllDirectory As String = args("--SetDllDirectory")
         Dim renv As New RInterpreter
@@ -81,6 +83,7 @@ Partial Module CLI
         Dim request_argv As String = args("--request") Or "./.r_env/run.json".GetFullPath
         Dim options_argv As String = args("--options") Or "./.r_env/options.json".GetFullPath
         Dim attach As String = args("--attach")
+        Dim debugMode As Boolean = args.IsTrue("--debug")
 
         If Not SetDllDirectory.StringEmpty Then
             Call renv.globalEnvir.options.setOption("SetDllDirectory", SetDllDirectory)
@@ -99,7 +102,7 @@ Partial Module CLI
         Call LoadLibrary(renv, ignoreMissingStartupPackages:=True, "base", "utils", "grDevices", "math", "stats")
 
         ' set options
-        Dim opts_val = renv.getLambdaArguments(file:=options_argv)
+        Dim opts_val = renv.getLambdaArguments(file:=options_argv, debugMode)
         Dim opts As list = TryCast(opts_val, list)
 
         If opts Is Nothing Then
@@ -123,10 +126,16 @@ Partial Module CLI
         If Not func.Name.StringEmpty Then
             Call renv.LoadLibrary(func.Name, silent:=False)
         End If
+        If debugMode Then
+            Call base.print("(debug) get argument file:",, renv.globalEnvir)
+            Call base.print(request_argv,, renv.globalEnvir)
+            Call base.print("(debug) get options file:",, renv.globalEnvir)
+            Call base.print(options_argv,, renv.globalEnvir)
+        End If
 
         Dim callable As Symbol = renv.globalEnvir.FindFunction(del_func)
         Dim result As Object
-        Dim run As Object = renv.getLambdaArguments(file:=request_argv)
+        Dim run As Object = renv.getLambdaArguments(file:=request_argv, debugMode)
 
         If callable Is Nothing OrElse callable.value Is Nothing Then
             result = Internal.debug.stop({
@@ -144,6 +153,7 @@ Partial Module CLI
         Else
             opts = DirectCast(run, list)
 
+            ' add commandline arguments to run symbol
             For Each arg As NamedValue(Of String) In args
                 Dim name As String = CommandLine.TrimNamePrefix(arg.Name)
 
@@ -152,7 +162,7 @@ Partial Module CLI
                 End If
             Next
 
-            result = renv.globalEnvir.invokeLambda(run, callable.value)
+            result = renv.globalEnvir.invokeLambda(opts, callable.value, debugMode)
         End If
 
         Return handleResult(result, renv.globalEnvir)
@@ -165,21 +175,33 @@ Partial Module CLI
     ''' <param name="file"></param>
     ''' <returns></returns>
     <Extension>
-    Private Function getLambdaArguments(renv As RInterpreter, file As String) As Object
+    Private Function getLambdaArguments(renv As RInterpreter, file As String, debugMode As Boolean) As Object
         Call renv.LoadLibrary("JSON", silent:=False)
 
         If Not file.FileExists Then
-            ' returns empty list, means the target function has no parameter inputs
-            Return New list With {.slots = New Dictionary(Of String, Object)}
+            ' returns empty list, means the target function
+            ' has no parameter inputs
+            If debugMode Then
+                Call base.print($"(debug) missing argument file: {file}",, renv.globalEnvir)
+            End If
+
+            Return list.empty
         Else
             Dim val As Object = renv.Evaluate($"JSON::json_decode(readText('{file}'));")
 
             If TypeOf val Is Message Then
                 Return val
+            ElseIf debugMode Then
+                Call base.print("(debug) view of the input parameter data:",, renv.globalEnvir)
+                Call base.str(val,, env:=renv.globalEnvir)
             End If
 
             If val Is Nothing OrElse Not TypeOf val Is list Then
-                Return New list With {.slots = New Dictionary(Of String, Object) From {{"$0", val}}}
+                Return New list With {
+                    .slots = New Dictionary(Of String, Object) From {
+                        {"$0", val}
+                    }
+                }
             Else
                 Return val
             End If
@@ -187,9 +209,18 @@ Partial Module CLI
     End Function
 
     <Extension>
-    Private Function invokeLambda(env As Environment, argv As list, del_func As RFunction) As Object
+    Private Function invokeLambda(env As Environment, argv As list, del_func As RFunction, debugModel As Boolean) As Object
         Dim args As NamedValue(Of Expression)() = del_func.getArguments.ToArray
         Dim run As InvokeParameter() = New InvokeParameter(args.Length - 1) {}
+
+        If debugModel Then
+            Call base.print("(debug) get input parameter names:",, env)
+            Call base.print(argv.getNames,, env)
+            Call base.print("(debug) the target lambda function required parameters:",, env)
+            Call base.print(args.Keys.ToArray,, env)
+            'Call base.print("from lambda function:",, env)
+            'Call base.print(del_func,, env)
+        End If
 
         For i As Integer = 0 To args.Length - 1
             Dim name As String = args(i).Name

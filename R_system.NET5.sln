@@ -219,7 +219,7 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "batch", "..\runtime\Darwini
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Flute.NET5", "..\runtime\httpd\src\Flute\Flute.NET5.vbproj", "{0C910C9B-D711-4B15-AA57-E9B9FF569E4D}"
 EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "FeatherFormat", "..\runtime\sciBASIC#\Data\BinaryData\Feather\FeatherFormat.vbproj", "{10A144FB-AFB2-4976-8A60-A0D4C4290839}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "FeatherFormat", "..\runtime\sciBASIC#\Data\BinaryData\Feather\FeatherFormat.vbproj", "{C15F004E-2287-450A-AC7C-C4DA9DFF674D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
