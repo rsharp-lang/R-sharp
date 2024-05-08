@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.DATA
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
+Imports Microsoft.VisualBasic.DataStorage
 Imports Microsoft.VisualBasic.DataStorage.FeatherFormat
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
@@ -195,13 +196,15 @@ Public Module utils
             Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
             Dim data As Array
             Dim type As Type
+            Dim value As FeatherFormat.Value
 
             For Each col As Column In untyped.AllColumns.AsEnumerable
                 type = RType.GetUnderlyingType(col.Type)
                 data = Array.CreateInstance(type, col.Length)
 
                 For i As Integer = 1 To col.Length
-                    Call data.SetValue(col(i), i - 1)
+                    value = col(i)
+                    data.SetValue(value.TryCast(type), i - 1)
                 Next
 
                 Call df.add(col.Name, data)
