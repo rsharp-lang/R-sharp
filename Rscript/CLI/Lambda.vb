@@ -173,7 +173,7 @@ Partial Module CLI
 
         If Not file.FileExists Then
             ' returns empty list, means the target function has no parameter inputs
-            Return New list With {.slots = New Dictionary(Of String, Object)}
+            Return list.empty
         Else
             Dim val As Object = renv.Evaluate($"JSON::json_decode(readText('{file}'));")
 
@@ -182,7 +182,11 @@ Partial Module CLI
             End If
 
             If val Is Nothing OrElse Not TypeOf val Is list Then
-                Return New list With {.slots = New Dictionary(Of String, Object) From {{"$0", val}}}
+                Return New list With {
+                    .slots = New Dictionary(Of String, Object) From {
+                        {"$0", val}
+                    }
+                }
             Else
                 Return val
             End If
@@ -198,9 +202,9 @@ Partial Module CLI
             Call base.print("(debug) get input parameter names:",, env)
             Call base.print(argv.getNames,, env)
             Call base.print("(debug) the target lambda function required parameters:",, env)
-            Call base.print(args.Keys,, env)
-            Call base.print("from lambda function:",, env)
-            Call base.print(del_func,, env)
+            Call base.print(args.Keys.ToArray,, env)
+            'Call base.print("from lambda function:",, env)
+            'Call base.print(del_func,, env)
         End If
 
         For i As Integer = 0 To args.Length - 1
