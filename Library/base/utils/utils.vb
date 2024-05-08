@@ -194,9 +194,11 @@ Public Module utils
         Using untyped = FeatherReader.ReadFromStream(s.TryCast(Of Stream), BasisType.One)
             Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
             Dim data As Array
+            Dim type As Type
 
             For Each col As Column In untyped.AllColumns.AsEnumerable
-                data = Array.CreateInstance(col.Type, col.Length)
+                type = RType.GetUnderlyingType(col.Type)
+                data = Array.CreateInstance(type, col.Length)
 
                 For i As Integer = 1 To col.Length
                     Call data.SetValue(col(i), i - 1)
