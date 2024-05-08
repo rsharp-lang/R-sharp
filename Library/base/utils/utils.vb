@@ -191,8 +191,21 @@ Public Module utils
             Return s.TryCast(Of Message)
         End If
 
-        Using untyped = FeatherReader.ReadFromFile(s.TryCast(Of Stream), BasisType.One)
+        Using untyped = FeatherReader.ReadFromStream(s.TryCast(Of Stream), BasisType.One)
+            Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+            Dim data As Array
 
+            For Each col As Column In untyped.AllColumns.AsEnumerable
+                data = Array.CreateInstance(col.Type, col.Length)
+
+                For i As Integer = 1 To col.Length
+                    Call data.SetValue(col(i), i - 1)
+                Next
+
+                Call df.add(col.Name, data)
+            Next
+
+            Return df
         End Using
     End Function
 
