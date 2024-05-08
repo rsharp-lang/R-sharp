@@ -210,12 +210,17 @@ Public Module utils
                     data.SetValue(value.TryCast(type), i - 1)
                 Next
 
-                Call df.add(col.Name, data)
+                If col.Name = "row.names" AndAlso type Is GetType(String) Then
+                    df.rownames = data
+                Else
+                    df.add(col.Name, data)
+                End If
             Next
         End Using
 
         If auto_close Then
             Try
+                Call s.TryCast(Of Stream).Close()
                 Call s.TryCast(Of Stream).Dispose()
             Catch ex As Exception
 
@@ -231,7 +236,7 @@ Public Module utils
                                   Optional env As Environment = Nothing) As Object
 
         Dim auto_close As Boolean = False
-        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env)
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env, is_filepath:=auto_close)
         Dim v As Array
 
         If s Like GetType(Message) Then
@@ -254,6 +259,8 @@ Public Module utils
 
         If auto_close Then
             Try
+                Call s.TryCast(Of Stream).Flush()
+                Call s.TryCast(Of Stream).Close()
                 Call s.TryCast(Of Stream).Dispose()
             Catch ex As Exception
 
