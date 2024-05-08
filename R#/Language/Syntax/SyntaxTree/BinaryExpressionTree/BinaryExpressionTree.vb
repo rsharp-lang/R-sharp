@@ -236,6 +236,15 @@ Namespace Language.Syntax.SyntaxParser
                                              <Out>
                                              ByRef buf As List(Of [Variant](Of SyntaxResult, String)),
                                              ByRef opts As SyntaxBuilderOptions) As SyntaxResult
+
+            Dim traceToken As Token = list.First
+
+            ' 20240508
+            '                list:  before   after(skip/take) 
+            '                         |       |
+            ' 1. has parameters: f  (xxx) -> xxx
+            ' 2. no parameters:  f  ()    -> <empty>
+            '
             list = list _
                 .Skip(1) _
                 .Take(list.Length - 2) _
@@ -250,13 +259,21 @@ Namespace Language.Syntax.SyntaxParser
                 ' example as x(...)
             ElseIf buf.Last.TryCast(Of SyntaxResult) Like GetType(SymbolReference) Then
                 Dim params As New List(Of Expression)
-                Dim trace = opts.GetStackTrace(list.First, buf.Last.ToString)
+                Dim trace As StackFrame = opts.GetStackTrace(traceToken, buf.Last.ToString)
                 Dim temp As SyntaxResult = Nothing
-                Dim subblocks = list _
-                    .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True) _
-                    .Split(Function(bi) bi.isComma) _
-                    .Select(Function(bi) bi.IteratesALL.ToArray) _
-                    .ToArray
+                Dim subblocks As Token()()
+
+                If list.Any Then
+                    ' has parameters
+                    subblocks = list _
+                        .SplitByTopLevelDelimiter(TokenType.comma, includeKeyword:=True) _
+                        .Split(Function(bi) bi.isComma) _
+                        .Select(Function(bi) bi.IteratesALL.ToArray) _
+                        .ToArray
+                Else
+                    ' no parameter
+                    subblocks = {}
+                End If
 
                 For Each par As Token() In subblocks
                     temp = opts.ParseExpression(par, opts)

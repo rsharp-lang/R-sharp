@@ -326,6 +326,7 @@ Module clustering
 
         If TypeOf x Is Mixture Then
             Return DirectCast(x, Mixture).data _
+                .AsEnumerable _
                 .Select(Function(di) di.max) _
                 .ToArray
         ElseIf TypeOf x Is GaussianMixtureModel Then
@@ -371,7 +372,7 @@ Module clustering
         If TypeOf x Is Mixture Then
             Dim mx As Mixture = DirectCast(x, Mixture)
             Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
-            Dim ds = mx.data.ToArray
+            Dim ds = mx.data.AsEnumerable.ToArray
 
             df.rownames = ds.Select(Function(di) di.dataId).ToArray
             df.add("max", ds.Select(Function(di) di.max))

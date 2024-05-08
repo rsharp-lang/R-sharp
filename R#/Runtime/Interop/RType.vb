@@ -237,15 +237,7 @@ Namespace Runtime.Interop
         Friend Shared ReadOnly Property closure As RType = GetRSharpType(GetType(RFunction))
 
         Private Sub New(raw As Type)
-            If raw.IsValueType AndAlso
-               raw.Namespace = "System" AndAlso
-               raw.GenericTypeArguments.Length = 1 AndAlso
-               raw.Name = GetType(Nullable(Of )).Name Then
-
-                raw = raw.GenericTypeArguments.First
-            End If
-
-            Me.raw = raw
+            Me.raw = GetUnderlyingType(raw)
             Me.names = populateNames _
                 .Distinct _
                 .ToArray
@@ -277,6 +269,18 @@ Namespace Runtime.Interop
                        End Function) _
                 .FirstOrDefault
         End Sub
+
+        Public Shared Function GetUnderlyingType(raw As Type) As Type
+            If raw.IsValueType AndAlso
+               raw.Namespace = "System" AndAlso
+               raw.GenericTypeArguments.Length = 1 AndAlso
+               raw.Name = GetType(Nullable(Of )).Name Then
+
+                raw = raw.GenericTypeArguments.First
+            End If
+
+            Return raw
+        End Function
 
         ''' <summary>
         ''' gets the array element type from current r# type <see cref="raw"/>

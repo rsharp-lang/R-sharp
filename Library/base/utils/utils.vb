@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::35691e3437fd63b2c8036b9feb5615cd, E:/GCModeller/src/R-sharp/Library/base//utils/utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 504
-    '    Code Lines: 332
-    ' Comment Lines: 128
-    '   Blank Lines: 44
-    '     File Size: 21.78 KB
+' Summaries:
 
 
-    ' Module utils
-    ' 
-    '     Function: ensureRowNames, loadCsv, MeasureGenericType, parseRData, printRawTable
-    '               read_csv, saveGeneric, saveTextFile, setRowNames, write_csv
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 504
+'    Code Lines: 332
+' Comment Lines: 128
+'   Blank Lines: 44
+'     File Size: 21.78 KB
+
+
+' Module utils
+' 
+'     Function: ensureRowNames, loadCsv, MeasureGenericType, parseRData, printRawTable
+'               read_csv, saveGeneric, saveTextFile, setRowNames, write_csv
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -62,10 +62,13 @@ Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.DATA
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
+Imports Microsoft.VisualBasic.DataStorage
+Imports Microsoft.VisualBasic.DataStorage.FeatherFormat
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.Model
+Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.XML.xl.worksheets
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.RDataSet
@@ -174,6 +177,97 @@ Public Module utils
         Dim generic As Array = REnv.TryCastGenericArray(seq, env)
 
         Return generic
+    End Function
+
+    ''' <summary>
+    ''' read the feather as dataframe
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("read.feather")>
+    Public Function read_feather(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
+        Dim auto_close As Boolean = False
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env, is_filepath:=auto_close)
+
+        If s Like GetType(Message) Then
+            Return s.TryCast(Of Message)
+        End If
+
+        Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+
+        Using untyped = FeatherReader.ReadFromStream(s.TryCast(Of Stream), BasisType.One)
+            Dim data As Array
+            Dim type As Type
+            Dim value As FeatherFormat.Value
+
+            For Each col As Column In untyped.AllColumns.AsEnumerable
+                type = RType.GetUnderlyingType(col.Type)
+                data = Array.CreateInstance(type, col.Length)
+
+                For i As Integer = 1 To col.Length
+                    value = col(i)
+                    data.SetValue(value.TryCast(type), i - 1)
+                Next
+
+                If col.Name = "row.names" AndAlso type Is GetType(String) Then
+                    df.rownames = data
+                Else
+                    df.add(col.Name, data)
+                End If
+            Next
+        End Using
+
+        If auto_close Then
+            Try
+                Call s.TryCast(Of Stream).Close()
+                Call s.TryCast(Of Stream).Dispose()
+            Catch ex As Exception
+
+            End Try
+        End If
+
+        Return df
+    End Function
+
+    <ExportAPI("write.feather")>
+    Public Function write_feather(x As Rdataframe, file As Object,
+                                  Optional row_names As Boolean = True,
+                                  Optional env As Environment = Nothing) As Object
+
+        Dim auto_close As Boolean = False
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env, is_filepath:=auto_close)
+        Dim v As Array
+
+        If s Like GetType(Message) Then
+            Return s.TryCast(Of Message)
+        ElseIf x Is Nothing Then
+            Return Internal.debug.stop("the required dataframe object should not be nothing!", env)
+        End If
+
+        Using writer As New FeatherWriter(s.TryCast(Of Stream), WriteMode.Eager)
+            If row_names Then
+                Call writer.AddColumn("row.names", x.getRowNames)
+            End If
+
+            For Each name As String In x.colnames
+                v = x.getVector(name, fullSize:=False)
+                v = REnv.UnsafeTryCastGenericArray(v)
+                writer.AddColumn(name, v)
+            Next
+        End Using
+
+        If auto_close Then
+            Try
+                Call s.TryCast(Of Stream).Flush()
+                Call s.TryCast(Of Stream).Close()
+                Call s.TryCast(Of Stream).Dispose()
+            Catch ex As Exception
+
+            End Try
+        End If
+
+        Return True
     End Function
 
     ''' <summary>
