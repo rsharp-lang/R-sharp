@@ -68,6 +68,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.Model
+Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.XML.xl.worksheets
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.RDataSet
@@ -212,6 +213,35 @@ Public Module utils
 
             Return df
         End Using
+    End Function
+
+    <ExportAPI("write.feather")>
+    Public Function write_feather(x As Rdataframe, file As Object,
+                                  Optional row_names As Boolean = True,
+                                  Optional env As Environment = Nothing) As Object
+
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env)
+        Dim v As Array
+
+        If s Like GetType(Message) Then
+            Return s.TryCast(Of Message)
+        ElseIf x Is Nothing Then
+            Return Internal.debug.stop("the required dataframe object should not be nothing!", env)
+        End If
+
+        Using writer As New FeatherWriter(s.TryCast(Of Stream), WriteMode.Eager)
+            If row_names Then
+                Call writer.AddColumn("row.names", x.getRowNames)
+            End If
+
+            For Each name As String In x.colnames
+                v = x.getVector(name, fullSize:=False)
+                v = REnv.UnsafeTryCastGenericArray(v)
+                writer.AddColumn(name, v)
+            Next
+        End Using
+
+        Return True
     End Function
 
     ''' <summary>
