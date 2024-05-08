@@ -187,14 +187,16 @@ Public Module utils
     ''' <returns></returns>
     <ExportAPI("read.feather")>
     Public Function read_feather(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
-        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
+        Dim auto_close As Boolean = False
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env, is_filepath:=auto_close)
 
         If s Like GetType(Message) Then
             Return s.TryCast(Of Message)
         End If
 
+        Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+
         Using untyped = FeatherReader.ReadFromStream(s.TryCast(Of Stream), BasisType.One)
-            Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
             Dim data As Array
             Dim type As Type
             Dim value As FeatherFormat.Value
@@ -210,9 +212,17 @@ Public Module utils
 
                 Call df.add(col.Name, data)
             Next
-
-            Return df
         End Using
+
+        If auto_close Then
+            Try
+                Call s.TryCast(Of Stream).Dispose()
+            Catch ex As Exception
+
+            End Try
+        End If
+
+        Return df
     End Function
 
     <ExportAPI("write.feather")>
@@ -220,6 +230,7 @@ Public Module utils
                                   Optional row_names As Boolean = True,
                                   Optional env As Environment = Nothing) As Object
 
+        Dim auto_close As Boolean = False
         Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env)
         Dim v As Array
 
@@ -240,6 +251,14 @@ Public Module utils
                 writer.AddColumn(name, v)
             Next
         End Using
+
+        If auto_close Then
+            Try
+                Call s.TryCast(Of Stream).Dispose()
+            Catch ex As Exception
+
+            End Try
+        End If
 
         Return True
     End Function
