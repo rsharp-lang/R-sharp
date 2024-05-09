@@ -109,6 +109,7 @@ Partial Module CLI
                     --debug 
                     --startups <packageNames, default="""">  
                     --attach <debug_pkg_dir>
+                    --std_in <input_type: opt/arg>
     ]")>
     <Description("Create a R# cluster node for run background or parallel task. 
                   This IPC command will run a R# script file that specified by the ``/exec`` argument,
@@ -136,6 +137,16 @@ Partial Module CLI
     <Argument("--startups", False, CLITypes.String,
               AcceptTypes:={GetType(String())},
               Description:="A list of package names for load during the current slave process startup.")>
+    <Argument("--std_in", True, CLITypes.String,
+              AcceptTypes:={GetType(String)},
+              Description:="Should this IPC slave node open the standard input for read the input data? 
+                            There are two kind of data operation: 
+
+                    opt - for use the std input data for ``options`` function set global options data; 
+                    arg - for use the std input data as the function parameter value.
+              
+              the standard input data is encoded in multipart form data.
+              ")>
     Public Function slaveMode(args As CommandLine) As Integer
         Dim script As String = args <= "/exec"
         Dim arguments As Dictionary(Of String, String()) = args("/argvs") _
