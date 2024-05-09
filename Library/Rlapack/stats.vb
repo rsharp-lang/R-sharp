@@ -978,7 +978,8 @@ Module stats
         If Not t Is Nothing AndAlso TypeOf x Is Rdataframe Then
             Return DirectCast(x, Rdataframe).ttestBatch(t, alternative, y, mu, conf_level, var_equal, env)
         Else
-            Return alternative.ttestImpl(x, y, mu, conf_level, var_equal)
+            ' t-test compare two vector
+            Return alternative.ttestImpl(x, y, mu, conf_level, var_equal, env)
         End If
     End Function
 
@@ -1018,7 +1019,7 @@ Module stats
             x = symbols _
                 .Select(Function(r, offset) v(offset)(idx)) _
                 .ToArray
-            x = alternative.ttestImpl(x, y, mu, conf_level, var_equal)
+            x = alternative.ttestImpl(x, y, mu, conf_level, var_equal, env)
 
             If Program.isException(x) Then
                 Return x
@@ -1030,15 +1031,27 @@ Module stats
         Return test
     End Function
 
+    ''' <summary>
+    ''' t-test compare two vector
+    ''' </summary>
+    ''' <param name="alternative"></param>
+    ''' <param name="x"></param>
+    ''' <param name="y"></param>
+    ''' <param name="mu"></param>
+    ''' <param name="conf_level"></param>
+    ''' <param name="var_equal"></param>
+    ''' <returns></returns>
     <Extension>
     Private Function ttestImpl(alternative As Hypothesis,
                                x As Object, y As Object,
                                mu As Double,
                                conf_level As Double,
-                               var_equal As Boolean) As Object
+                               var_equal As Boolean, env As Environment) As Object
         Dim test As Object
         Dim vx As Double() = CLRVector.asNumeric(x)
         Dim vy As Double()
+
+        vx = safeCheck(vx, env)
 
         If vx.Length > 0 Then
             vx(Scan0) += 0.00001
@@ -1048,6 +1061,8 @@ Module stats
             test = Statistics.Hypothesis.t.Test(vx, alternative, mu, alpha:=1 - conf_level)
         Else
             vy = CLRVector.asNumeric(y)
+            vy = safeCheck(vy, env)
+
             test = Statistics.Hypothesis.t.Test(
                 a:=vx,
                 b:=vy,
@@ -1059,6 +1074,37 @@ Module stats
         End If
 
         Return test
+    End Function
+
+    Private Function safeCheck(x As Double(), env As Environment) As Double()
+        Dim offset As List(Of Integer) = Nothing
+
+        For i As Integer = 0 To x.Length - 1
+            Dim xi As Double = x(i)
+
+            If xi.IsNaNImaginary Then
+                If offset Is Nothing Then
+                    offset = New List(Of Integer)
+                End If
+
+                Call offset.Add(i)
+            End If
+        Next
+
+        If offset.Any Then
+            Dim x_mean As Double = x.Where(Function(d) Not d.IsNaNImaginary).Average
+
+            For Each i As Integer In offset
+                x(i) = x_mean
+            Next
+
+            Call env.AddMessage({
+                $"invalid value was found in the input vector, NA or INF value has been replaced as vector mean: {x_mean}.",
+                $"offsets(NA or INF): {offset.JoinBy(", ")}."
+            })
+        End If
+
+        Return x
     End Function
 
     ''' <summary>
