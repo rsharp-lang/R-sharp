@@ -1051,17 +1051,17 @@ Module stats
         Dim vx As Double() = CLRVector.asNumeric(x)
         Dim vy As Double()
 
-        vx = safeCheck(vx, env)
+        vx = safeCheck(vx, "x", env)
 
         If vx.Length > 0 Then
-            vx(Scan0) += 0.00001
+            vx(Scan0) += 0.0000001
         End If
 
         If y Is Nothing Then
             test = Statistics.Hypothesis.t.Test(vx, alternative, mu, alpha:=1 - conf_level)
         Else
             vy = CLRVector.asNumeric(y)
-            vy = safeCheck(vy, env)
+            vy = safeCheck(vy, "y", env)
 
             test = Statistics.Hypothesis.t.Test(
                 a:=vx,
@@ -1076,7 +1076,7 @@ Module stats
         Return test
     End Function
 
-    Private Function safeCheck(x As Double(), env As Environment) As Double()
+    Private Function safeCheck(x As Double(), tag As String, env As Environment) As Double()
         Dim offset As List(Of Integer) = Nothing
 
         For i As Integer = 0 To x.Length - 1
@@ -1091,7 +1091,7 @@ Module stats
             End If
         Next
 
-        If offset.Any Then
+        If offset IsNot Nothing Then
             Dim x_mean As Double = x.Where(Function(d) Not d.IsNaNImaginary).Average
 
             For Each i As Integer In offset
@@ -1099,8 +1099,9 @@ Module stats
             Next
 
             Call env.AddMessage({
-                $"invalid value was found in the input vector, NA or INF value has been replaced as vector mean: {x_mean}.",
-                $"offsets(NA or INF): {offset.JoinBy(", ")}."
+                $"invalid value was found in the input '{tag}' vector, NA or INF value has been replaced as vector mean: {x_mean}.",
+                $"offsets(NA or INF): {offset.JoinBy(", ")}.",
+                $"vector source: {tag}"
             })
         End If
 
