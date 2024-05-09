@@ -8,7 +8,12 @@ t3 = [A,C,D]  ,
 t4 = [A,B,C,E],
 t5 = [A,C,E]  ,
 t6 = [B,D,E]  ,
-t7 = [A,B,C,D]
+t7 = [A,B,C,D],
+t71 = [A,B,C,D,E,H],
+t72 = [A,B,C,D,F],
+t73 = [A,B,C,D,G],
+t74 = [A,B,C,H]
+
 )
 ;
 
