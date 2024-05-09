@@ -15,6 +15,31 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 <Package("apriori")>
 Module aprioriRules
 
+    Sub Main()
+        Internal.Object.Converts.makeDataframe.addHandler(GetType(Output), AddressOf niceTable)
+    End Sub
+
+    <RGenericOverloads("as.data.frame")>
+    Public Function niceTable(out As Output, args As list, env As Environment) As dataframe
+        Dim df As New dataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim rules = out.StrongRules.ToArray
+
+        Call df.add("lhs", rules.Select(Function(r) r.X.ToString))
+        Call df.add("rhs", rules.Select(Function(r) r.Y.ToString))
+        Call df.add("support(XY)", rules.Select(Function(r) r.SupportXY))
+        Call df.add("support(X)", rules.Select(Function(r) r.SupportX))
+        Call df.add("support", rules.Select(Function(r) r.SupportXY / out.TransactionSize))
+        Call df.add("confidence", rules.Select(Function(r) r.Confidence))
+
+        Return df
+    End Function
+
+    ''' <summary>
+    ''' create the transaction data
+    ''' </summary>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("transactions")>
     <RApiReturn(GetType(Transaction))>
     Public Function load_transactions(<RListObjectArgument> <RLazyExpression> args As list, Optional env As Environment = Nothing) As Object
@@ -49,7 +74,13 @@ Module aprioriRules
     ''' <param name="env"></param>
     ''' <returns>Returns an object of class rules or itemsets.</returns>
     <ExportAPI("apriori")>
-    Public Function apriori(<RRawVectorArgument> data As Object, Optional env As Environment = Nothing) As Object
+    <RApiReturn(GetType(Output))>
+    Public Function apriori(<RRawVectorArgument> data As Object,
+                            Optional support As Double = 0.01,
+                            Optional confidence As Double = 0.01,
+                            Optional minlen As Integer = 2,
+                            Optional env As Environment = Nothing) As Object
+
         Dim trans As pipeline = pipeline.TryCreatePipeline(Of Transaction)(data, env)
 
         If trans.isError Then
@@ -57,9 +88,12 @@ Module aprioriRules
         End If
 
         Dim transList As Transaction() = trans.populates(Of Transaction)(env).ToArray
-        Dim rules = transList.AnalysisTransactions
+        Dim rules = transList.AnalysisTransactions(
+            minSupport:=support,
+            minConfidence:=confidence,
+            minlen:=minlen)
 
-
+        Return rules
     End Function
 
 End Module

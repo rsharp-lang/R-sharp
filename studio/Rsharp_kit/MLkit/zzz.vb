@@ -65,6 +65,7 @@ Public Class zzz
         Call clustering.Main()
         Call CNNTools.Main()
         Call NLP.Main()
+        Call aprioriRules.Main()
 
         Call Console.WriteLine()
     End Sub
