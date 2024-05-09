@@ -450,7 +450,7 @@ Public Module NetworkModule
 
     <ExportAPI("gephi_gml")>
     Public Function gephi_gml(g As NetworkGraph) As String
-
+        Return Gephi.GephiML.BuildGML(g).BuildGML
     End Function
 
     ''' <summary>
