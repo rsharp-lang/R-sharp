@@ -448,6 +448,11 @@ Public Module NetworkModule
         Return tables
     End Function
 
+    <ExportAPI("gephi_gml")>
+    Public Function gephi_gml(g As NetworkGraph) As String
+
+    End Function
+
     ''' <summary>
     ''' save the network graph
     ''' </summary>
