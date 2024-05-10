@@ -253,13 +253,13 @@ Module Manifold
         )
         Dim nEpochs As Integer
 
-        Call Console.WriteLine("Initialize fit..")
+        Call VBDebugger.EchoLine("Initialize fit..")
 
         nEpochs = umap.InitializeFit(matrix)
 
-        Console.WriteLine("- Done")
-        Console.WriteLine()
-        Console.WriteLine("Calculating..")
+        VBDebugger.EchoLine("- Done")
+        VBDebugger.EchoLine("")
+        VBDebugger.EchoLine("Calculating..")
 
         Call umap.Step(nEpochs)
 
