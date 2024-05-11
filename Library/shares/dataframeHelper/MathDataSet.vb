@@ -10,6 +10,13 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 Module MathDataSet
 
+    ''' <summary>
+    ''' cast the scibasic.net dataframe object to R# dataframe object
+    ''' </summary>
+    ''' <param name="features"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Friend Function toDataframe(features As FeatureFrame, args As list, env As Environment) As Rdataframe
         Return New Rdataframe With {
             .columns = features.features _
@@ -22,7 +29,7 @@ Module MathDataSet
     End Function
 
     ''' <summary>
-    ''' cast to <see cref="FeatureFrame"/>.
+    ''' cast the R# dataframe object to <see cref="FeatureFrame"/> type object in scibasic.net framework.
     ''' </summary>
     ''' <param name="x"></param>
     ''' <param name="env"></param>
