@@ -73,6 +73,11 @@ Namespace Runtime.Internal.Invokes
             Return TimeSpan.FromSeconds(s)
         End Function
 
+        ''' <summary>
+        ''' create time span from given days value.
+        ''' </summary>
+        ''' <param name="d"></param>
+        ''' <returns></returns>
         <ExportAPI("days")>
         Public Function days(d As Double) As TimeSpan
             Return TimeSpan.FromDays(d)
