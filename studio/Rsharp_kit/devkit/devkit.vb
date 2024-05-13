@@ -125,6 +125,13 @@ Module devkit
         Return file.LoadXml(Of LicenseInfo)
     End Function
 
+    ''' <summary>
+    ''' add source code banner to a given visualbasic source file
+    ''' </summary>
+    ''' <param name="file">the file path to the visualbasic source file</param>
+    ''' <param name="banner">the source code banner object, which could be read from a xml file via ``read.banner`` function.</param>
+    ''' <param name="rootDir">the parent directory of the vbproj file</param>
+    ''' <returns></returns>
     <ExportAPI("write.code_banner")>
     Public Function writeCodeBanner(file As String, banner As LicenseInfo, Optional rootDir As String = Nothing) As CodeStatics
         If rootDir.StringEmpty Then
