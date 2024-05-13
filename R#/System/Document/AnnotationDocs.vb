@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6e05466fa1d2125494af6d57dc7af03e, E:/GCModeller/src/R-sharp/R#//System/Document/AnnotationDocs.vb"
+﻿#Region "Microsoft.VisualBasic::6e05466fa1d2125494af6d57dc7af03e, R#\System\Document\AnnotationDocs.vb"
 
     ' Author:
     ' 

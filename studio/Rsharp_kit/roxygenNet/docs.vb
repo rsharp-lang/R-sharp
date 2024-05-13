@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0ecb17e12f39dd63ecbfb41d7b01cdb8, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//docs.vb"
+﻿#Region "Microsoft.VisualBasic::7c58f629277b1db303cd03fdd0541198, studio\Rsharp_kit\roxygenNet\docs.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 106
-    '    Code Lines: 83
-    ' Comment Lines: 13
-    '   Blank Lines: 10
-    '     File Size: 4.17 KB
+    '   Total Lines: 124
+    '    Code Lines: 92
+    ' Comment Lines: 21
+    '   Blank Lines: 11
+    '     File Size: 4.95 KB
 
 
     ' Module docs
     ' 
-    '     Function: makeHtmlDocs, makeMarkdownDocs, MarkdownTransform
+    '     Function: makeHtmlDocs, makeMarkdownDocs, (+2 Overloads) MarkdownTransform
     ' 
     ' /********************************************************************************/
 

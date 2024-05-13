@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e29cf5fa8b4a97449c119811d62020b3, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Math/time.vb"
+﻿#Region "Microsoft.VisualBasic::52ab88fe4a1d17ce885112e4ef693449, R#\Runtime\Internal\internalInvokes\Math\time.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 19
-    '    Code Lines: 15
-    ' Comment Lines: 0
-    '   Blank Lines: 4
-    '     File Size: 523 B
+    '   Total Lines: 51
+    '    Code Lines: 30
+    ' Comment Lines: 13
+    '   Blank Lines: 8
+    '     File Size: 1.69 KB
 
 
     '     Module time
     ' 
-    '         Function: hours, minutes
+    '         Function: days, hours, minutes, seconds, time_span
     ' 
     ' 
     ' /********************************************************************************/

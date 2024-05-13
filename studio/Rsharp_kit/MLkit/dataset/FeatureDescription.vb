@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::51b486c571d8784508a15430d9c4197c, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//dataset/FeatureDescription.vb"
+﻿#Region "Microsoft.VisualBasic::51b486c571d8784508a15430d9c4197c, studio\Rsharp_kit\MLkit\dataset\FeatureDescription.vb"
 
     ' Author:
     ' 

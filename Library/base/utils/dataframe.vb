@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::14c17f04f871413b73722f58ae00be90, E:/GCModeller/src/R-sharp/Library/base//utils/dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::3f79ebae3ce3222127f2c5ab1b46e8fd, Library\base\utils\dataframe.vb"
 
     ' Author:
     ' 
@@ -34,21 +34,21 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 743
-    '    Code Lines: 552
-    ' Comment Lines: 100
-    '   Blank Lines: 91
-    '     File Size: 28.55 KB
+    '   Total Lines: 766
+    '    Code Lines: 566
+    ' Comment Lines: 105
+    '   Blank Lines: 95
+    '     File Size: 29.45 KB
 
 
     ' Module dataframe
     ' 
     '     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
     '               colnames, column, createEntityRow, CreateRowObject, dataframeTable
-    '               deserialize, measureColumnVector, openCsv, parseDataframe, parseRow
-    '               printRowVector, printTable, project, rawToDataFrame, readCsvRaw
-    '               readDataSet, rows, rowToString, RowToString, stripCommentRows
-    '               transpose, vector
+    '               deserialize, loadDataframe, measureColumnVector, openCsv, parseDataframe
+    '               parseRow, printRowVector, printTable, project, rawToDataFrame
+    '               readCsvRaw, readDataSet, rows, rowToString, RowToString
+    '               stripCommentRows, transpose, vector
     ' 
     '     Sub: Main
     ' 

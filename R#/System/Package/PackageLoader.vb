@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7dfc3623edb396cffa6bd1a03e16441f, E:/GCModeller/src/R-sharp/R#//System/Package/PackageLoader.vb"
+﻿#Region "Microsoft.VisualBasic::7dfc3623edb396cffa6bd1a03e16441f, R#\System\Package\PackageLoader.vb"
 
     ' Author:
     ' 

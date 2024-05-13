@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1d5f540500846cd8a9126b58d9c92d7d, E:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxTree/BinaryExpressionTree/BinaryExpressionTree.vb"
+﻿#Region "Microsoft.VisualBasic::14a1c4a5c58e2dca447c4b9957182e61, R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 534
-    '    Code Lines: 397
-    ' Comment Lines: 61
-    '   Blank Lines: 76
-    '     File Size: 23.86 KB
+    '   Total Lines: 551
+    '    Code Lines: 403
+    ' Comment Lines: 69
+    '   Blank Lines: 79
+    '     File Size: 24.44 KB
 
 
     '     Module BinaryExpressionTree

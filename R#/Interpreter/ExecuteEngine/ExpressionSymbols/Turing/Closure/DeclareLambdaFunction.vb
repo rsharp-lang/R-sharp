@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d43de82fd099a80abec0b5de94da1f81, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Turing/Closure/DeclareLambdaFunction.vb"
+﻿#Region "Microsoft.VisualBasic::d43de82fd099a80abec0b5de94da1f81, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareLambdaFunction.vb"
 
     ' Author:
     ' 

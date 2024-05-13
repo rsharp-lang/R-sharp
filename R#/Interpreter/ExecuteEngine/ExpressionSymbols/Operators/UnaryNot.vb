@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::973236d507fa1f3bdc133a02f75072f8, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/UnaryNot.vb"
+﻿#Region "Microsoft.VisualBasic::973236d507fa1f3bdc133a02f75072f8, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNot.vb"
 
     ' Author:
     ' 

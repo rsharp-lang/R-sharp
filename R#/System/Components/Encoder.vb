@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::109c1ecc4a45619f30ad936c6db41d15, E:/GCModeller/src/R-sharp/R#//System/Components/Encoder.vb"
+﻿#Region "Microsoft.VisualBasic::109c1ecc4a45619f30ad936c6db41d15, R#\System\Components\Encoder.vb"
 
     ' Author:
     ' 

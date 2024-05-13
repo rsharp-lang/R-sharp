@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ad51d0dbc63a30a7410302f9154846bd, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/dev/rust.vb"
+﻿#Region "Microsoft.VisualBasic::ad51d0dbc63a30a7410302f9154846bd, R#\Runtime\Internal\internalInvokes\dev\rust.vb"
 
     ' Author:
     ' 

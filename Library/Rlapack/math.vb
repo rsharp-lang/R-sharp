@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d4ee503872c2b452c167d77c9e751f58, E:/GCModeller/src/R-sharp/Library/Rlapack//math.vb"
+﻿#Region "Microsoft.VisualBasic::d4ee503872c2b452c167d77c9e751f58, Library\Rlapack\math.vb"
 
     ' Author:
     ' 

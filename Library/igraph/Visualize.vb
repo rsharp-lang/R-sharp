@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2c4b9cab4dd654d082f192eaf1dd89a2, E:/GCModeller/src/R-sharp/Library/igraph//Visualize.vb"
+﻿#Region "Microsoft.VisualBasic::2c4b9cab4dd654d082f192eaf1dd89a2, Library\igraph\Visualize.vb"
 
     ' Author:
     ' 

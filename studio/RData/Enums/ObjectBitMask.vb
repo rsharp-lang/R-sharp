@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7ffd67ef553080387e65644dc4fd6518, E:/GCModeller/src/R-sharp/studio/RData//Enums/ObjectBitMask.vb"
+﻿#Region "Microsoft.VisualBasic::7ffd67ef553080387e65644dc4fd6518, studio\RData\Enums\ObjectBitMask.vb"
 
     ' Author:
     ' 

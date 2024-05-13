@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e760f172fb9703ea7dcdc6797daeb074, E:/GCModeller/src/R-sharp/Library/igraph//Layouts.vb"
+﻿#Region "Microsoft.VisualBasic::e760f172fb9703ea7dcdc6797daeb074, Library\igraph\Layouts.vb"
 
     ' Author:
     ' 

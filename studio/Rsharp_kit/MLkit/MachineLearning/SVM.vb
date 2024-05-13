@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1c163113f34848ec1167711294961705, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/SVM.vb"
+﻿#Region "Microsoft.VisualBasic::1c163113f34848ec1167711294961705, studio\Rsharp_kit\MLkit\MachineLearning\SVM.vb"
 
     ' Author:
     ' 

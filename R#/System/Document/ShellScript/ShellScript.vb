@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1fd6279b1972d8ffa4bb27d87a0db34c, E:/GCModeller/src/R-sharp/R#//System/Document/ShellScript/ShellScript.vb"
+﻿#Region "Microsoft.VisualBasic::1fd6279b1972d8ffa4bb27d87a0db34c, R#\System\Document\ShellScript\ShellScript.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aba8de8d5fa605e6a4b26897babf8047, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/dataset/vector.vb"
+﻿#Region "Microsoft.VisualBasic::03cdca1332db56b20b5b5f4ea5514be6, R#\Runtime\Internal\objects\dataset\vector.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 423
-    '    Code Lines: 308
+    '   Total Lines: 425
+    '    Code Lines: 310
     ' Comment Lines: 48
     '   Blank Lines: 67
-    '     File Size: 15.82 KB
+    '     File Size: 15.96 KB
 
 
     '     Class vector

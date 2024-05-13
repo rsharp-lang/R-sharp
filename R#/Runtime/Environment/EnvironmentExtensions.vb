@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::acf1538e0b7822e4a03165a34a1bcbf7, E:/GCModeller/src/R-sharp/R#//Runtime/Environment/EnvironmentExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::acf1538e0b7822e4a03165a34a1bcbf7, R#\Runtime\Environment\EnvironmentExtensions.vb"
 
     ' Author:
     ' 

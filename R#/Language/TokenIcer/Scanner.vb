@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d66e13da925a7628106f2b21b0dc025d, E:/GCModeller/src/R-sharp/R#//Language/TokenIcer/Scanner.vb"
+﻿#Region "Microsoft.VisualBasic::d66e13da925a7628106f2b21b0dc025d, R#\Language\TokenIcer\Scanner.vb"
 
     ' Author:
     ' 

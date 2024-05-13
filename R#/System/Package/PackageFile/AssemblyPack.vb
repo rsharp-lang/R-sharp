@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a12a5984d09a537aae447501f877797d, E:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/AssemblyPack.vb"
+﻿#Region "Microsoft.VisualBasic::a12a5984d09a537aae447501f877797d, R#\System\Package\PackageFile\AssemblyPack.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::eacc443e4adca3b7e57e0d44ab2a2e4d, E:/GCModeller/src/R-sharp/studio/RData//Convertor/RObjectSignature.vb"
+﻿#Region "Microsoft.VisualBasic::eacc443e4adca3b7e57e0d44ab2a2e4d, studio\RData\Convertor\RObjectSignature.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::75c64f427003d977fa7cfd48366c5853, E:/GCModeller/src/R-sharp/R#//System/Config/ConfigFile.vb"
+﻿#Region "Microsoft.VisualBasic::75c64f427003d977fa7cfd48366c5853, R#\System\Config\ConfigFile.vb"
 
     ' Author:
     ' 

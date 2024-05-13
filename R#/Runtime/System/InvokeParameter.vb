@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7d55900d1ded00986de79ee0ef0d10c7, E:/GCModeller/src/R-sharp/R#//Runtime/System/InvokeParameter.vb"
+﻿#Region "Microsoft.VisualBasic::7d55900d1ded00986de79ee0ef0d10c7, R#\Runtime\System\InvokeParameter.vb"
 
     ' Author:
     ' 

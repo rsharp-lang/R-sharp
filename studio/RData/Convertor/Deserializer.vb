@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6a2e42e1e2c8a01aeb0a7e8808a22e78, E:/GCModeller/src/R-sharp/studio/RData//Convertor/Deserializer.vb"
+﻿#Region "Microsoft.VisualBasic::6a2e42e1e2c8a01aeb0a7e8808a22e78, studio\RData\Convertor\Deserializer.vb"
 
     ' Author:
     ' 

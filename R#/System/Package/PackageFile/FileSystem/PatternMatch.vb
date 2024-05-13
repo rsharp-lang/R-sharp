@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a4bcf138c5573eaf6c7b48040858b036, E:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/FileSystem/PatternMatch.vb"
+﻿#Region "Microsoft.VisualBasic::a4bcf138c5573eaf6c7b48040858b036, R#\System\Package\PackageFile\FileSystem\PatternMatch.vb"
 
     ' Author:
     ' 

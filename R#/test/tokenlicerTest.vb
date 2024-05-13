@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e04a7a38dd9370f7aba3e6e3d3369d11, E:/GCModeller/src/R-sharp/R#/Test//tokenlicerTest.vb"
+﻿#Region "Microsoft.VisualBasic::e04a7a38dd9370f7aba3e6e3d3369d11, R#\Test\tokenlicerTest.vb"
 
     ' Author:
     ' 

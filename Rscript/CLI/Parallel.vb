@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::37c1cd1cc9e95667de0a17c4e71f5364, E:/GCModeller/src/R-sharp/Rscript//CLI/Parallel.vb"
+﻿#Region "Microsoft.VisualBasic::37c1cd1cc9e95667de0a17c4e71f5364, Rscript\CLI\Parallel.vb"
 
     ' Author:
     ' 

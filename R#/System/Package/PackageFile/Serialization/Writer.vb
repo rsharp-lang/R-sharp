@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0c66222b2ae1c8a1e97dbc37fe8a13c2, E:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Serialization/Writer.vb"
+﻿#Region "Microsoft.VisualBasic::0c66222b2ae1c8a1e97dbc37fe8a13c2, R#\System\Package\PackageFile\Serialization\Writer.vb"
 
     ' Author:
     ' 

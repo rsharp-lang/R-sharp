@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::be17fb6e78bcd9e7ef7b1444bcdcc8ce, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//github.vb"
+﻿#Region "Microsoft.VisualBasic::be17fb6e78bcd9e7ef7b1444bcdcc8ce, studio\Rsharp_kit\devkit\github.vb"
 
     ' Author:
     ' 

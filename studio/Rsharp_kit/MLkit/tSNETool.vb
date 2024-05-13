@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::58ed561d61c04af5aaf79ffb0d70d0d1, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//tSNETool.vb"
+﻿#Region "Microsoft.VisualBasic::58ed561d61c04af5aaf79ffb0d70d0d1, studio\Rsharp_kit\MLkit\tSNETool.vb"
 
     ' Author:
     ' 

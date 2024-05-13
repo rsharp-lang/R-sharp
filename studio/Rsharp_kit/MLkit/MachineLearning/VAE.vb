@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c5277b79488fd1ed776d0193deafb9a6, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//MachineLearning/VAE.vb"
+﻿#Region "Microsoft.VisualBasic::c5277b79488fd1ed776d0193deafb9a6, studio\Rsharp_kit\MLkit\MachineLearning\VAE.vb"
 
     ' Author:
     ' 

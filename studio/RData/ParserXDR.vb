@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cdad396281c9283c4b0e30ee0374243c, E:/GCModeller/src/R-sharp/studio/RData//ParserXDR.vb"
+﻿#Region "Microsoft.VisualBasic::cdad396281c9283c4b0e30ee0374243c, studio\RData\ParserXDR.vb"
 
     ' Author:
     ' 

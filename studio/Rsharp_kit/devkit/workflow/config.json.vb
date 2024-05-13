@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::94470f4b757342ca110bf3bc6c0930b9, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//workflow/config.json.vb"
+﻿#Region "Microsoft.VisualBasic::94470f4b757342ca110bf3bc6c0930b9, studio\Rsharp_kit\devkit\workflow\config.json.vb"
 
     ' Author:
     ' 

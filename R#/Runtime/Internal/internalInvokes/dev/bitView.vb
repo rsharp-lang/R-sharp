@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::426824fd4204e414064bec235c35207d, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/dev/bitView.vb"
+﻿#Region "Microsoft.VisualBasic::426824fd4204e414064bec235c35207d, R#\Runtime\Internal\internalInvokes\dev\bitView.vb"
 
     ' Author:
     ' 

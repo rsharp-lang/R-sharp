@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e20bd13ffaf6df9e2bee2bfcf8204de8, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/UnaryNumeric.vb"
+﻿#Region "Microsoft.VisualBasic::e20bd13ffaf6df9e2bee2bfcf8204de8, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\UnaryNumeric.vb"
 
     ' Author:
     ' 

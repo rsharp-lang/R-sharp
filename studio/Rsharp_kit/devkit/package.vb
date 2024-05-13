@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fbb0074c21dd5151d02ed39b074d2e0d, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//package.vb"
+﻿#Region "Microsoft.VisualBasic::fbb0074c21dd5151d02ed39b074d2e0d, studio\Rsharp_kit\devkit\package.vb"
 
     ' Author:
     ' 

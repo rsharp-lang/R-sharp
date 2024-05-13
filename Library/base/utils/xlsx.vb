@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::451d8e7b08a65ab06a207bf01d69869b, E:/GCModeller/src/R-sharp/Library/base//utils/xlsx.vb"
+﻿#Region "Microsoft.VisualBasic::451d8e7b08a65ab06a207bf01d69869b, Library\base\utils\xlsx.vb"
 
     ' Author:
     ' 

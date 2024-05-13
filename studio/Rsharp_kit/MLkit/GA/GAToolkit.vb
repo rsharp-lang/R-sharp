@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fb55b25fec99aa2d56edea1a819425a1, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//GA/GAToolkit.vb"
+﻿#Region "Microsoft.VisualBasic::fb55b25fec99aa2d56edea1a819425a1, studio\Rsharp_kit\MLkit\GA\GAToolkit.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e488bf38f3e813498dead3ec6939b06d, E:/GCModeller/src/R-sharp/R#/Test//test_vector_constructor.vb"
+﻿#Region "Microsoft.VisualBasic::e488bf38f3e813498dead3ec6939b06d, R#\Test\test_vector_constructor.vb"
 
     ' Author:
     ' 

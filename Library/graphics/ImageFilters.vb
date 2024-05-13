@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4c0ff4c73f875158699188ccf5cec53c, E:/GCModeller/src/R-sharp/Library/graphics//ImageFilters.vb"
+﻿#Region "Microsoft.VisualBasic::4c0ff4c73f875158699188ccf5cec53c, Library\graphics\ImageFilters.vb"
 
     ' Author:
     ' 

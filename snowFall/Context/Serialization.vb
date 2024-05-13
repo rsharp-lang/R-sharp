@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b6f3bb5651dd84372a76007cc383f4cb, E:/GCModeller/src/R-sharp/snowFall//Context/Serialization.vb"
+﻿#Region "Microsoft.VisualBasic::b6f3bb5651dd84372a76007cc383f4cb, snowFall\Context\Serialization.vb"
 
     ' Author:
     ' 

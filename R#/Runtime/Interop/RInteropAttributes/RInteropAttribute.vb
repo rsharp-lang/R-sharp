@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dd8add571e71ecc9c8b82466351f6fef, E:/GCModeller/src/R-sharp/R#//Runtime/Interop/RInteropAttributes/RInteropAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::dd8add571e71ecc9c8b82466351f6fef, R#\Runtime\Interop\RInteropAttributes\RInteropAttribute.vb"
 
     ' Author:
     ' 

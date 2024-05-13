@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c9933aa0576f8c44c0c43040a9f13513, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/graphics/graphicsDevice.vb"
+﻿#Region "Microsoft.VisualBasic::c9933aa0576f8c44c0c43040a9f13513, R#\Runtime\Internal\internalInvokes\graphics\graphicsDevice.vb"
 
     ' Author:
     ' 

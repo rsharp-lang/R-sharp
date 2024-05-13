@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d93f5a0e34022cc7cdc085ce05e16a0c, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/invoke.vb"
+﻿#Region "Microsoft.VisualBasic::f8506756fd79f5f0fc368e13f2f5391c, R#\Runtime\Internal\invoke.vb"
 
     ' Author:
     ' 
@@ -35,10 +35,10 @@
     ' Code Statistics:
 
     '   Total Lines: 185
-    '    Code Lines: 133
+    '    Code Lines: 132
     ' Comment Lines: 35
-    '   Blank Lines: 17
-    '     File Size: 7.78 KB
+    '   Blank Lines: 18
+    '     File Size: 7.86 KB
 
 
     '     Class invoke

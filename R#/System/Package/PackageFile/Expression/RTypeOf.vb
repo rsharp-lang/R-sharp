@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::38b72604ac28cd720416e611ad6895e1, E:/GCModeller/src/R-sharp/R#//System/Package/PackageFile/Expression/RTypeOf.vb"
+﻿#Region "Microsoft.VisualBasic::38b72604ac28cd720416e611ad6895e1, R#\System\Package\PackageFile\Expression\RTypeOf.vb"
 
     ' Author:
     ' 

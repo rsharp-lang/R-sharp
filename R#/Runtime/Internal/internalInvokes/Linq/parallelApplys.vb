@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d243c8ac00ec86f242f6d6a96430bd86, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/Linq/parallelApplys.vb"
+﻿#Region "Microsoft.VisualBasic::d243c8ac00ec86f242f6d6a96430bd86, R#\Runtime\Internal\internalInvokes\Linq\parallelApplys.vb"
 
     ' Author:
     ' 

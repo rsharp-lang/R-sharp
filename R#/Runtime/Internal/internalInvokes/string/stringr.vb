@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2f7636eaf49a56a833de56ecfaf209c4, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/string/stringr.vb"
+﻿#Region "Microsoft.VisualBasic::2f7636eaf49a56a833de56ecfaf209c4, R#\Runtime\Internal\internalInvokes\string\stringr.vb"
 
     ' Author:
     ' 

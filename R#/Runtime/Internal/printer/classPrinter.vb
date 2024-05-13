@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::24c394486468b25f7a57c7ca66044fc8, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/printer/classPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::24c394486468b25f7a57c7ca66044fc8, R#\Runtime\Internal\printer\classPrinter.vb"
 
     ' Author:
     ' 

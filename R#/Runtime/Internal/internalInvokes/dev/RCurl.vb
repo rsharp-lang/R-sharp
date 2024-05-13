@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::881a9f481416f4abcc5904d9d1b19c86, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/dev/RCurl.vb"
+﻿#Region "Microsoft.VisualBasic::881a9f481416f4abcc5904d9d1b19c86, R#\Runtime\Internal\internalInvokes\dev\RCurl.vb"
 
     ' Author:
     ' 

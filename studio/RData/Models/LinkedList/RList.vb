@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::193bc16348b11d86bdb81cab0688a120, E:/GCModeller/src/R-sharp/studio/RData//Models/LinkedList/RList.vb"
+﻿#Region "Microsoft.VisualBasic::193bc16348b11d86bdb81cab0688a120, studio\RData\Models\LinkedList\RList.vb"
 
     ' Author:
     ' 

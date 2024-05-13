@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d7801329434d48be16b8039993ec60ff, E:/GCModeller/src/R-sharp/R#//Runtime/Serialize/bufferObjects/listBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::d7801329434d48be16b8039993ec60ff, R#\Runtime\Serialize\bufferObjects\listBuffer.vb"
 
     ' Author:
     ' 

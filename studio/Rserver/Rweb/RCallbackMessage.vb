@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::103aa5c5be1d41b0b4f04ad5c093a0a6, E:/GCModeller/src/R-sharp/studio/Rserver//Rweb/RCallbackMessage.vb"
+﻿#Region "Microsoft.VisualBasic::103aa5c5be1d41b0b4f04ad5c093a0a6, studio\Rserver\Rweb\RCallbackMessage.vb"
 
     ' Author:
     ' 

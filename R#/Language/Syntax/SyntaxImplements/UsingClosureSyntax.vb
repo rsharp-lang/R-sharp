@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4bdeded76b888a76e90d87cb41358947, E:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/UsingClosureSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::4bdeded76b888a76e90d87cb41358947, R#\Language\Syntax\SyntaxImplements\UsingClosureSyntax.vb"
 
     ' Author:
     ' 

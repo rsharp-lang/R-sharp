@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::30b8423a5de9b55a4f64fc1056407f08, E:/GCModeller/src/R-sharp/Library/igraph//NetworkModule.vb"
+﻿#Region "Microsoft.VisualBasic::70e7937bea6ce699f4ebdd6b37ff10f9, Library\igraph\NetworkModule.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1286
-    '    Code Lines: 843
+    '   Total Lines: 1308
+    '    Code Lines: 861
     ' Comment Lines: 281
-    '   Blank Lines: 162
-    '     File Size: 49.79 KB
+    '   Blank Lines: 166
+    '     File Size: 50.62 KB
 
 
     ' Module NetworkModule
@@ -46,12 +46,13 @@
     '     Function: addEdge, addEdges, addNode, addNodeData, addNodes
     '               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
     '               degree, deleteNode, E, edgeAttributes, emptyNetwork
-    '               eval, extractAdjacenciesSubNetwork, extractSubGraph, getByGroup, getClass
-    '               getEdges, getEdgeTable, getElementByID, getNodes, getNodeTable
-    '               graph, hasEdge, LoadNetwork, LouvainCluster, metaData
-    '               nodeAttributes, nodeClass, nodeMass, nodeNames, printGraph
-    '               printNode, SaveNetwork, setAttributes, summaryNodes, trimEdges
-    '               typeGroupOfNodes, V, weights, xref
+    '               eval, extractAdjacenciesSubNetwork, extractSubGraph, gephi_gml, getByGroup
+    '               getClass, getEdges, getEdgeTable, getElementByID, getNodes
+    '               getNodeTable, graph, hasEdge, LoadNetwork, LouvainCluster
+    '               metaData, nodeAttributes, nodeClass, nodeMass, nodeNames
+    '               printGraph, printNode, SaveNetwork, setAttributes, summaryNodes
+    '               tabular_graph, trimEdges, typeGroupOfNodes, V, weights
+    '               xref
     ' 
     '     Sub: Main
     ' 

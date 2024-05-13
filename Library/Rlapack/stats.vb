@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bb75efe507f68fb417f7210d6ec3794d, E:/GCModeller/src/R-sharp/Library/Rlapack//stats.vb"
+﻿#Region "Microsoft.VisualBasic::87fb82872ae618fa001465c768589cf6, Library\Rlapack\stats.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1652
-    '    Code Lines: 936
-    ' Comment Lines: 537
-    '   Blank Lines: 179
-    '     File Size: 69.11 KB
+    '   Total Lines: 1701
+    '    Code Lines: 964
+    ' Comment Lines: 548
+    '   Blank Lines: 189
+    '     File Size: 70.69 KB
 
 
     ' Module stats
@@ -61,8 +61,9 @@
     '               GetDataSetCommon, getMatrix, getQuantileLevels, Lowess, mantel_test
     '               median, moran_test, mul, oplsr, p_adjust
     '               plsda, pnorm_func, PoissonDiskGenerator_func, (+2 Overloads) pow, prcomp
-    '               quantile, spline, tabulateMode, ttest, ttestBatch
-    '               ttestImpl, varTest, z_score, z_scoreByColumn, z_scoreByRow
+    '               quantile, safeCheck, spline, tabulateMode, ttest
+    '               ttestBatch, ttestImpl, varTest, z_score, z_scoreByColumn
+    '               z_scoreByRow
     ' 
     ' Enum SplineAlgorithms
     ' 

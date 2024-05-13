@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f293a4fc77894bf0815d9c19db933753, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/MLkit//validation.vb"
+﻿#Region "Microsoft.VisualBasic::f293a4fc77894bf0815d9c19db933753, studio\Rsharp_kit\MLkit\validation.vb"
 
     ' Author:
     ' 

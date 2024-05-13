@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0cc867cabb3501aa5d2d31338ddb6e33, E:/GCModeller/src/R-sharp/R#//Language/Syntax/SyntaxImplements/FunctionInvokeSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::0cc867cabb3501aa5d2d31338ddb6e33, R#\Language\Syntax\SyntaxImplements\FunctionInvokeSyntax.vb"
 
     ' Author:
     ' 

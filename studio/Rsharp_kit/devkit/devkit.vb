@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a225b6a496bf6f1e0e81d4c1b761c2d5, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/devkit//devkit.vb"
+﻿#Region "Microsoft.VisualBasic::1287c5cf5325af51440860584ecfd551, studio\Rsharp_kit\devkit\devkit.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 151
+    '   Total Lines: 158
     '    Code Lines: 105
-    ' Comment Lines: 26
+    ' Comment Lines: 33
     '   Blank Lines: 20
-    '     File Size: 5.64 KB
+    '     File Size: 6.07 KB
 
 
     ' Module devkit

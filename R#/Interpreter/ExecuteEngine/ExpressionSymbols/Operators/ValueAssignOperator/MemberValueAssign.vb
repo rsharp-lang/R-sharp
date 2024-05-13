@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ab965e89f0de088d7bcf8ac154ead917, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/ValueAssignOperator/MemberValueAssign.vb"
+﻿#Region "Microsoft.VisualBasic::ab965e89f0de088d7bcf8ac154ead917, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\MemberValueAssign.vb"
 
     ' Author:
     ' 

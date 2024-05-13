@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::88f0b923168ae324a6abc400b4353c99, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/Literal/Literal.vb"
+﻿#Region "Microsoft.VisualBasic::88f0b923168ae324a6abc400b4353c99, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\Literal.vb"
 
     ' Author:
     ' 

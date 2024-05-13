@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d2b4d1198136ae5b815e6423ceff0ba4, E:/GCModeller/src/R-sharp/studio/RData//Reader.vb"
+﻿#Region "Microsoft.VisualBasic::d2b4d1198136ae5b815e6423ceff0ba4, studio\RData\Reader.vb"
 
     ' Author:
     ' 

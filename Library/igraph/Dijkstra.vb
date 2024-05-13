@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0663b298ed51d8ee55fedf2eaada05dd, E:/GCModeller/src/R-sharp/Library/igraph//Dijkstra.vb"
+﻿#Region "Microsoft.VisualBasic::0663b298ed51d8ee55fedf2eaada05dd, Library\igraph\Dijkstra.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8f28a86ef7247c1446a1766babda8923, E:/GCModeller/src/R-sharp/R#//System/Document/CodeAnalysis/@Export/TypeWriter.vb"
+﻿#Region "Microsoft.VisualBasic::8f28a86ef7247c1446a1766babda8923, R#\System\Document\CodeAnalysis\@Export\TypeWriter.vb"
 
     ' Author:
     ' 

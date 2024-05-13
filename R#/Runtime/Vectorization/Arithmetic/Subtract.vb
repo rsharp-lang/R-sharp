@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::abd120220b78e77154d2aa1a9d73619e, E:/GCModeller/src/R-sharp/R#//Runtime/Vectorization/Arithmetic/Subtract.vb"
+﻿#Region "Microsoft.VisualBasic::abd120220b78e77154d2aa1a9d73619e, R#\Runtime\Vectorization\Arithmetic\Subtract.vb"
 
     ' Author:
     ' 

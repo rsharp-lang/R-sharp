@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::84b63fb96d5c37818cc851f6442e2638, E:/GCModeller/src/R-sharp/R#//System/Package/ImportsPackage.vb"
+﻿#Region "Microsoft.VisualBasic::84b63fb96d5c37818cc851f6442e2638, R#\System\Package\ImportsPackage.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a8319899289c4f4d7ba248d3feb64fbb, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/internalInvokes/utils.vb"
+﻿#Region "Microsoft.VisualBasic::a8319899289c4f4d7ba248d3feb64fbb, R#\Runtime\Internal\internalInvokes\utils.vb"
 
     ' Author:
     ' 

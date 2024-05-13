@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::388b1cf86832c2143e7d9147a984bfae, E:/GCModeller/src/R-sharp/studio/RData//Encoder/ByteEncoder.vb"
+﻿#Region "Microsoft.VisualBasic::388b1cf86832c2143e7d9147a984bfae, studio\RData\Encoder\ByteEncoder.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::61b90349fb6889f0a6a588d2c144afa3, E:/GCModeller/src/R-sharp/R#//System/Package/NuGet/web/Search.vb"
+﻿#Region "Microsoft.VisualBasic::61b90349fb6889f0a6a588d2c144afa3, R#\System\Package\NuGet\web\Search.vb"
 
     ' Author:
     ' 

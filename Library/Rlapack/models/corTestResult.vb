@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::, E:/GCModeller/src/R-sharp/Library/Rlapack//models/corTestResult.vb"
+﻿#Region "Microsoft.VisualBasic::, Library\Rlapack\models\corTestResult.vb"
 
     ' Author:
     ' 

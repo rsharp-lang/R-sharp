@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::86b013b715712b81451394c794112baf, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/DataSet/Type/ModeOf.vb"
+﻿#Region "Microsoft.VisualBasic::86b013b715712b81451394c794112baf, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Type\ModeOf.vb"
 
     ' Author:
     ' 

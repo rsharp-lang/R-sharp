@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::642e1ea68b74bf33a41e530376d73659, E:/GCModeller/src/R-sharp/studio/R-terminal//CLI/Run.vb"
+﻿#Region "Microsoft.VisualBasic::642e1ea68b74bf33a41e530376d73659, studio\R-terminal\CLI\Run.vb"
 
     ' Author:
     ' 

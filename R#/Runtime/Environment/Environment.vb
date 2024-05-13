@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::43e8d35775b4f83f3c57345d2fd26efe, E:/GCModeller/src/R-sharp/R#//Runtime/Environment/Environment.vb"
+﻿#Region "Microsoft.VisualBasic::43e8d35775b4f83f3c57345d2fd26efe, R#\Runtime\Environment\Environment.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0dad2d3969f2d5a0e2b3ba5b0c67fb6d, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/Linq/DataframeGroup.vb"
+﻿#Region "Microsoft.VisualBasic::0dad2d3969f2d5a0e2b3ba5b0c67fb6d, R#\Runtime\Internal\objects\Linq\DataframeGroup.vb"
 
     ' Author:
     ' 

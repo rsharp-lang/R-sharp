@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::88866724af55290d1f10e3e272ec491b, E:/GCModeller/src/R-sharp/studio/Rsharp_kit/roxygenNet//Rd/PlainTextParser.vb"
+﻿#Region "Microsoft.VisualBasic::88866724af55290d1f10e3e272ec491b, studio\Rsharp_kit\roxygenNet\Rd\PlainTextParser.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2a5c5ed0c1e8181dcbaabb0ac26fc5c9, E:/GCModeller/src/R-sharp/R#//Interpreter/ExecuteEngine/ExpressionSymbols/Operators/DotNetObject.vb"
+﻿#Region "Microsoft.VisualBasic::2a5c5ed0c1e8181dcbaabb0ac26fc5c9, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DotNetObject.vb"
 
     ' Author:
     ' 

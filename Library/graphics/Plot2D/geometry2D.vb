@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9b5a0bd20dc4419d216dd6edfcfb26ee, E:/GCModeller/src/R-sharp/Library/graphics//Plot2D/geometry2D.vb"
+﻿#Region "Microsoft.VisualBasic::9b5a0bd20dc4419d216dd6edfcfb26ee, Library\graphics\Plot2D\geometry2D.vb"
 
     ' Author:
     ' 

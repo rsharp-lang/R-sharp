@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::04dd12e76fd9d378dd63e5ce6610d580, E:/GCModeller/src/R-sharp/studio/Rstudio//gtk.vb"
+﻿#Region "Microsoft.VisualBasic::04dd12e76fd9d378dd63e5ce6610d580, studio\Rstudio\gtk.vb"
 
     ' Author:
     ' 

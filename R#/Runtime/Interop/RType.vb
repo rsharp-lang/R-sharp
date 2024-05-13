@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b1ae65f84be9503719657248690c9d96, E:/GCModeller/src/R-sharp/R#//Runtime/Interop/RType.vb"
+﻿#Region "Microsoft.VisualBasic::3e50219017905a84953bbcec746af6ba, R#\Runtime\Interop\RType.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 408
-    '    Code Lines: 249
+    '   Total Lines: 412
+    '    Code Lines: 252
     ' Comment Lines: 114
-    '   Blank Lines: 45
-    '     File Size: 15.59 KB
+    '   Blank Lines: 46
+    '     File Size: 15.73 KB
 
 
     '     Interface IRType
@@ -54,7 +54,7 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     '         Function: (+3 Overloads) [GetType], [TypeOf], getNames, GetRawElementType, GetRSharpType
-    '                   populateNames, ToString
+    '                   GetUnderlyingType, populateNames, ToString
     '         Operators: (+4 Overloads) Like
     ' 
     ' 

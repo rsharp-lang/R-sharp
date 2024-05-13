@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d3520dc67cae28bf07470959156dc142, E:/GCModeller/src/R-sharp/R#//Runtime/Internal/objects/doApply.vb"
+﻿#Region "Microsoft.VisualBasic::d3520dc67cae28bf07470959156dc142, R#\Runtime\Internal\objects\doApply.vb"
 
     ' Author:
     ' 

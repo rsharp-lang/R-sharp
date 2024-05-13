@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4a6834ed9351ba3a67fe6d3552802d04, E:/GCModeller/src/R-sharp/R#//Runtime/System/TryError.vb"
+﻿#Region "Microsoft.VisualBasic::4a6834ed9351ba3a67fe6d3552802d04, R#\Runtime\System\TryError.vb"
 
     ' Author:
     ' 
