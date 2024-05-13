@@ -67,5 +67,24 @@ Namespace Runtime.Internal.Invokes
         Public Function minutes(m As Double) As TimeSpan
             Return TimeSpan.FromMinutes(m)
         End Function
+
+        <ExportAPI("seconds")>
+        Public Function seconds(s As Double) As TimeSpan
+            Return TimeSpan.FromSeconds(s)
+        End Function
+
+        <ExportAPI("days")>
+        Public Function days(d As Double) As TimeSpan
+            Return TimeSpan.FromDays(d)
+        End Function
+
+        <ExportAPI("time_span")>
+        Public Function time_span(Optional seconds As Double = 0,
+                                  Optional minutes As Double = 0,
+                                  Optional hours As Double = 0,
+                                  Optional days As Double = 0) As TimeSpan
+
+            Return New TimeSpan(days, hours, minutes, seconds)
+        End Function
     End Module
 End Namespace
