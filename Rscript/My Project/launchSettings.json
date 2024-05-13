@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--slave /exec \"G:\\flavor-scape\\web\\src\\run\\training.R\" /argvs \"H4sIAAAAAAAAA42SvU7DMBDHXyXynErYcb66QREMMMBcR+gUAorIR+U4Q1TxAIxILEidGPoAZeN9Kshb1LENyFWKyPD/nS9n/+8sL1ED5aLIbiooswZN5+j4CE8wchWJoWdIDX3DQHJ2gZUSpZ5SqtRXOtRcz7BSotRDiYsEh7w6BQGD55Ihxto4ilOJiISEoakzZyhmyHUYijTMKhxLehpEg2r4VhIfQOJq91S5+xkExt1sDyxbaiUDq4nRdm0ccg99vOcejw39j9mJlaQWov3t37PLb3CnoWfc8diZozc4OnT0R7vxz9Ulj8NLKIE/ZFy/vWYBXOSpA2l+K9/KVcfr+6IVUILI5JpOoMyr2jlpRcd/y854m4q6GSrOizbV0WXX5JVKQQH6tzS7G0Jt1r+tvp42sqDfrLYfaxl8vpigX79un99VfV5k0kOWY9nuDszN3K4uAwAA\" /request-id \"web_request__7834568960\" /PORT \"13838\" /timeout \"1000\" /retry \"5\" /master \"localhost\" /entry \"run\" /@set --internal_pipeline=FALSE",
-      "workingDirectory": "G:\\flavor-scape\\web\\etc"
+      "commandLineArgs": "--build /src ../ /save ../graphQL.zip --skip-src-build",
+      "workingDirectory": "E:\\graphQL\\.pkg"
     },
     "mzkit_debug": {
       "commandName": "Project",

@@ -12,6 +12,13 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 ''' <summary>
 ''' apriori: Mining Associations with the Apriori Algorithm
 ''' </summary>
+''' <remarks>
+''' In data mining, Apriori is a classic algorithm for learning association rules. 
+''' Apriori Is designed To operate On databases containing transactions 
+''' (for example, collections of items bought by customers, Or details of a website frequentation).
+''' Other algorithms are designed For finding association rules In data having no transactions 
+''' (Winepi And Minepi), Or having no timestamps (DNA sequencing).
+''' </remarks>
 <Package("apriori")>
 Module aprioriRules
 

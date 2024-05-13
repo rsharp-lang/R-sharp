@@ -78,7 +78,15 @@ Namespace Runtime.Internal.Invokes
             Return TimeSpan.FromDays(d)
         End Function
 
-        <ExportAPI("time_span")>
+        ''' <summary>
+        ''' create timespan value
+        ''' </summary>
+        ''' <param name="seconds"></param>
+        ''' <param name="minutes"></param>
+        ''' <param name="hours"></param>
+        ''' <param name="days"></param>
+        ''' <returns></returns>
+        <ExportAPI("time_spanval")>
         Public Function time_span(Optional seconds As Double = 0,
                                   Optional minutes As Double = 0,
                                   Optional hours As Double = 0,
