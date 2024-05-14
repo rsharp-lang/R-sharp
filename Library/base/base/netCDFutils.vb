@@ -324,7 +324,8 @@ Module netCDFutils
                 cdf.GlobalAttributes("row.names", True)
             End If
 
-            cdf.GlobalAttributes("ncols", ncols)
+            Call cdf.GlobalAttributes("ncols", ncols)
+            Call cdf.GlobalAttributes("nrows", nrows)
 
             For Each name As String In df.colnames
                 v = df.columns(name)
