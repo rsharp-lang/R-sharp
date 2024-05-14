@@ -129,12 +129,16 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <param name="by">the field name that used for join two data table, if the field name that 
         ''' specific by this parameter is existsed in both <paramref name="left"/> and 
         ''' <paramref name="right"/>.</param>
+        ''' <param name="grep">
+        ''' text grep expression for the index key string value, see ``text_grep``.
+        ''' </param>
         ''' <returns></returns>
         <ExportAPI("left_join")>
         Public Function left_join(left As dataframe, right As dataframe,
                                   Optional by_x As String = Nothing,
                                   Optional by_y As String = Nothing,
                                   Optional [by] As String = Nothing,
+                                  Optional grep As Object = Nothing,
                                   Optional env As Environment = Nothing) As Object
 
             If left Is Nothing Then
@@ -157,6 +161,21 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Else
                 keyX = left.getColumnVector(by_x)
                 keyY = right.getColumnVector(by_y)
+            End If
+
+            If Not grep Is Nothing Then
+                If TypeOf grep Is String Then
+                    grep = stringr.text_grep(grep)
+                End If
+                If TypeOf grep Is Message Then
+                    Return grep
+                End If
+                If Not TypeOf grep Is TextGrepLambda Then
+                    Return Message.InCompatibleType(GetType(TextGrepLambda), grep.GetType, env)
+                Else
+                    keyX = DirectCast(grep, TextGrepLambda).TextGrep(keyX)
+                    keyY = DirectCast(grep, TextGrepLambda).TextGrep(keyY)
+                End If
             End If
 
             ' 20221207

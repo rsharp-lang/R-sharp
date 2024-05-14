@@ -75,9 +75,11 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Serialization
 Imports Microsoft.VisualBasic.Serialization.Bencoding
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.Text.Parser
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -1271,6 +1273,15 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
         End Function
 
+        ''' <summary>
+        ''' check of the text equals between two character vector.
+        ''' </summary>
+        ''' <param name="x">should be a character vector</param>
+        ''' <param name="y">another character vector</param>
+        ''' <param name="null_equals">null string value as equals? example as NULL is equals to NULL, or NULL is equals to empty string</param>
+        ''' <param name="empty_equals">empty factor string value as equals? example as NA is equals to n/a, or NA is equals to NULL, etc.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("text_equals")>
         Public Function text_equals(<RRawVectorArgument> x As Object,
                                     <RRawVectorArgument> y As Object,
@@ -1292,5 +1303,113 @@ Namespace Runtime.Internal.Invokes
                 Return Core.BinaryCoreInternal(Of String, String, Boolean)(v1, v2, op, env)
             End If
         End Function
+
+        ''' <summary>
+        ''' apply for batch text grep/trimming/strip
+        ''' </summary>
+        ''' <param name="grep_regexp">a regular expression value for produce new text value.</param>
+        ''' <param name="x">should be a character vector for apply such operation. omit this parameter value will create a lambda function for grep text.</param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <example>
+        ''' let names = ["258_Herniarin_[M+H2O+H]+" "993_Geranyl acetate_[M+H2O+H]+" "3229_Glycerol_[M+NH4]+" "398587_Cytidine_[M+H]+" "398007_Adenosine_[M+H]+"];
+        ''' let grep = "$(\d+)_$(\[\d*M.*\]\d*[+-])";
+        ''' 
+        ''' print(text_grep(grep, names));
+        ''' # [1] "258_[M+H2O+H]+" "993_[M+H2O+H]+" "3229_[M+NH4]+" "398587_[M+H]+" "398007_[M+H]+"
+        ''' </example>
+        <ExportAPI("text_grep")>
+        Public Function text_grep(grep_regexp As String,
+                                  <RRawVectorArgument>
+                                  Optional x As Object = Nothing,
+                                  Optional env As Environment = Nothing) As Object
+
+            Dim grep As New TextGrepLambda(grep_regexp)
+
+            If x Is Nothing Then
+                ' just create lambda function
+                Return grep
+            Else
+                Return grep.TextGrep(CLRVector.asCharacter(x))
+            End If
+        End Function
+
     End Module
+
+    Public Class TextGrepLambda
+
+        ReadOnly tokens As IToString(Of String)()
+
+        Sub New(exp As String)
+            tokens = GetTokens(exp).ToArray
+        End Sub
+
+        Private Shared Iterator Function GetTokens(exp As String) As IEnumerable(Of IToString(Of String))
+            Dim stack As New Stack(Of Char)
+            Dim buf As New CharBuffer
+
+            For Each c As Char In exp
+                If c = "$"c Then
+                    If stack.Count = 0 Then
+                        If buf > 0 Then
+                            Dim s_temp As New String(buf.PopAllChars)
+                            Yield Function(o) s_temp
+                        End If
+
+                        buf.Add(c)
+                    Else
+                        buf.Add(c)
+                    End If
+                ElseIf c = "("c Then
+                    If stack.Count = 0 Then
+                        If buf = "$"c Then
+                            stack.Push(c)
+                        Else
+                            buf.Add(c)
+                        End If
+                    Else
+                        ' an regular string
+                        buf.Add(c)
+                    End If
+                ElseIf c = ")"c Then
+                    If stack.Count > 0 Then
+                        ' pop a (
+                        stack.Pop()
+
+                        If stack.Count = 0 Then
+                            ' end of a regexp token
+                            Dim token_r As New String(buf.PopAllChars)
+                            Dim r As New Regex(token_r, RegexOptions.Compiled)
+
+                            Yield Function(str) r.Match(str).Value
+                        Else
+                            ' still inside a regexp token
+                            buf.Add(c)
+                        End If
+                    Else
+                        ' inside an regular string
+                        buf.Add(c)
+                    End If
+                End If
+            Next
+
+            If buf > 0 Then
+                Dim s_temp As New String(buf.PopAllChars)
+                Yield Function(any) s_temp
+            End If
+        End Function
+
+        Public Function TextGrep(text As String()) As String()
+            Return text _
+                .SafeQuery _
+                .Select(Function(si)
+                            Dim t As String() = tokens _
+                                .Select(Function(r) r(si)) _
+                                .ToArray
+                            Dim s_new As String = String.Join(si, "")
+                            Return s_new
+                        End Function) _
+                .ToArray
+        End Function
+    End Class
 End Namespace
