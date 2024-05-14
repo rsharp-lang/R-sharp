@@ -1318,7 +1318,17 @@ Namespace Runtime.Internal.Invokes
         ''' print(text_grep(grep, names));
         ''' # [1] "258_[M+H2O+H]+" "993_[M+H2O+H]+" "3229_[M+NH4]+" "398587_[M+H]+" "398007_[M+H]+"
         ''' </example>
+        ''' <remarks>
+        ''' the text grep regexp pattern token should be wrapped inside a bracket: ``$(regexp_token)``, 
+        ''' any text outside this bracket will be treated as an regular string.
+        ''' 
+        ''' example as the token parser string: ``$(\d+)_$(\[\d*M.*\]\d*[+-])`` will be split into
+        ''' 3 tokens: ``$(\d+)`` for matches integer string token, ``_`` will always produce a regular string token ``_``,
+        ''' ``$(\[\d*M.*\]\d*[+-])`` for matches another string token that wrapped with bracket [] and 
+        ''' ends with signed integer number as suffix.
+        ''' </remarks>
         <ExportAPI("text_grep")>
+        <RApiReturn(GetType(String), GetType(TextGrepLambda))>
         Public Function text_grep(grep_regexp As String,
                                   <RRawVectorArgument>
                                   Optional x As Object = Nothing,
