@@ -179,11 +179,14 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             right = rightSubset.TryCast(Of dataframe)
             left = New dataframe(left)
 
+            ' finally do column combine of two dataset
             For Each colName As String In right.colnames
                 If left.hasName(colName) Then
-                    left.columns.Add($"{colName}.1", right(colName))
+                    ' renames the colname from right dataset if the column name
+                    ' is already existed inside the left dataset.
+                    Call left.columns.Add($"{colName}.1", right(colName))
                 Else
-                    left.columns.Add(colName, right(colName))
+                    Call left.columns.Add(colName, right(colName))
                 End If
             Next
 
