@@ -698,7 +698,7 @@ Namespace Runtime.Internal.Object
                 .ToArray
             Dim subsetData As New Dictionary(Of String, Array)
 
-            For Each col In columns
+            For Each col As KeyValuePair(Of String, Array) In columns
                 Dim v = subsetColData(col.Value, index, env)
 
                 If TypeOf v Is Message Then
@@ -717,18 +717,19 @@ Namespace Runtime.Internal.Object
         ''' <summary>
         ''' 索引编号，应该是以零为底的
         ''' </summary>
-        ''' <param name="c"></param>
+        ''' <param name="c">the column data, length of this array data maybe 1 or nrows</param>
         ''' <param name="index">
         ''' 索引编号，应该是以零为底的。-1的元素返回空值
         ''' </param>
         ''' <returns></returns>
         Private Function subsetColData(c As Array, index As Integer(), env As Environment) As Object
             Dim type As Type = MeasureRealElementType(c, defaultType:=GetType(Object))
-            Dim V As Array = Array.CreateInstance(type, index.Length)
+            Dim is_scalar As Boolean = c.Length = 1
+            Dim V As Array = Array.CreateInstance(type, If(is_scalar, 1, index.Length))
 
             If index.Length = 0 Then
                 Return V
-            ElseIf c.Length = 1 Then
+            ElseIf is_scalar Then
                 ' single value
                 Call V.SetValue(c.GetValue(Scan0), Scan0)
                 Return V

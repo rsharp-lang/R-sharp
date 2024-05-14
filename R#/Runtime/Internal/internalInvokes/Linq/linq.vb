@@ -126,7 +126,9 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' </summary>
         ''' <param name="left"></param>
         ''' <param name="right"></param>
-        ''' <param name="by">the field name that used for join two data table</param>
+        ''' <param name="by">the field name that used for join two data table, if the field name that 
+        ''' specific by this parameter is existsed in both <paramref name="left"/> and 
+        ''' <paramref name="right"/>.</param>
         ''' <returns></returns>
         <ExportAPI("left_join")>
         Public Function left_join(left As dataframe, right As dataframe,
@@ -148,7 +150,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 keyX = left.getColumnVector(by)
                 keyY = right.getColumnVector(by)
             ElseIf by_x Is Nothing OrElse by_y Is Nothing Then
-                Return Internal.debug.stop("missing primary key for join two dataframe!", env)
+                Return Internal.debug.stop({
+                    "missing primary key for join two dataframe!",
+                    "you should set parameter 'by' for specific field name that bot existed in two given dataset, or by.x and by.y if the index field its field name is different between two dataset."
+                }, env)
             Else
                 keyX = left.getColumnVector(by_x)
                 keyY = right.getColumnVector(by_y)
@@ -156,9 +161,14 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             ' 20221207
             ' index i is zero-based
+            ' indexing of the right dataset
             Dim idx As Dictionary(Of String, Integer) = Index(Of String).Indexing(keyY)
             Dim i As Integer() = keyX _
-                .Select(Function(key) idx.TryGetValue(key, [default]:=-1)) _
+                .Select(Function(key)
+                            ' due to the reason of left join some data may be missing in the right dataset
+                            ' so index -1 maybe generates at here.
+                            Return idx.TryGetValue(key, [default]:=-1)
+                        End Function) _
                 .ToArray
             Dim rightSubset = right.GetByRowIndex(i, env) ' checked
 
