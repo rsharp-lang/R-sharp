@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::cdd9e6923c1b9f8d90e425d9f03991b9, Library\base\base\netCDFutils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 241
-    '    Code Lines: 179
-    ' Comment Lines: 28
-    '   Blank Lines: 34
-    '     File Size: 9.64 KB
+' Summaries:
 
 
-    ' Module netCDFutils
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: attributeData, dataframe, dimensions, getAttributes, getDataVariable
-    '               getValue, globalAttributes, openCDF, printVar, variableNames
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 241
+'    Code Lines: 179
+' Comment Lines: 28
+'   Blank Lines: 34
+'     File Size: 9.64 KB
+
+
+' Module netCDFutils
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: attributeData, dataframe, dimensions, getAttributes, getDataVariable
+'               getValue, globalAttributes, openCDF, printVar, variableNames
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -62,15 +62,17 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports renv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' netCDF toolkit
 ''' </summary>
-<Package("netCDF.utils")>
+<Package("netCDF")>
 Module netCDFutils
 
     Sub New()
@@ -290,5 +292,76 @@ Module netCDFutils
             .ToArray
 
         Return table
+    End Function
+
+    ''' <summary>
+    ''' save dataframe as netcdf file
+    ''' </summary>
+    ''' <param name="df">target dataframe object for save as netcdf file</param>
+    ''' <param name="file">the file resource or the file path for export the netcdf file data</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("save_dataframe")>
+    Public Function save_dataframe(df As Rdataframe, file As Object, Optional env As Environment = Nothing) As Object
+        Dim auto_close As Boolean = False
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env, is_filepath:=auto_close)
+
+        If s Like GetType(Message) Then
+            Return s.TryCast(Of Message)
+        End If
+
+        ' a unify dimension size value
+        ' for non-scalar columns
+        Dim nrows As Integer = df.nrows
+        Dim ncols As Integer = df.ncols
+        Dim v As Array
+        Dim ints As New Dimension("integers", nrows)
+        Dim nums As New Dimension("doubles", nrows)
+
+        Using cdf As New CDFWriter(s.TryCast(Of Stream))
+            If Not df.rownames Is Nothing Then
+                cdf.AddVector("row.names", df.rownames, "rownames")
+                cdf.GlobalAttributes("row.names", True)
+            End If
+
+            cdf.GlobalAttributes("ncols", ncols)
+
+            For Each name As String In df.colnames
+                v = df.columns(name)
+                v = renv.UnsafeTryCastGenericArray(v)
+
+                Select Case v.GetType.GetElementType
+                    Case GetType(String)
+                        cdf.AddVector(name, DirectCast(v, String()), $"dimLen_{name}")
+                    Case GetType(Char)
+                        cdf.AddVector(name, DirectCast(v, Char()), ints)
+                    Case GetType(Integer)
+                        cdf.AddVector(name, DirectCast(v, Integer()), ints)
+                    Case GetType(Double)
+                        cdf.AddVector(name, DirectCast(v, Double()), nums)
+                    Case GetType(Single)
+                        cdf.AddVector(name, DirectCast(v, Single()), nums)
+                    Case GetType(Long)
+                        Throw New NotImplementedException(v.GetType.GetElementType.FullName)
+                    Case GetType(Boolean)
+                        Throw New NotImplementedException(v.GetType.GetElementType.FullName)
+                    Case GetType(Byte)
+                        Throw New NotImplementedException(v.GetType.GetElementType.FullName)
+                    Case Else
+                        Throw New NotImplementedException(v.GetType.GetElementType.FullName)
+                End Select
+            Next
+        End Using
+
+        If auto_close Then
+            Try
+                Call s.TryCast(Of Stream).Flush()
+                Call s.TryCast(Of Stream).Close()
+            Catch ex As Exception
+
+            End Try
+        End If
+
+        Return True
     End Function
 End Module
