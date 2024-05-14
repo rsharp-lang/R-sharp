@@ -1364,6 +1364,7 @@ Namespace Runtime.Internal.Invokes
                     If stack.Count = 0 Then
                         If buf = "$"c Then
                             stack.Push(c)
+                            buf.Pop()
                         Else
                             buf.Add(c)
                         End If
@@ -1390,6 +1391,8 @@ Namespace Runtime.Internal.Invokes
                         ' inside an regular string
                         buf.Add(c)
                     End If
+                Else
+                    buf.Add(c)
                 End If
             Next
 
@@ -1406,7 +1409,7 @@ Namespace Runtime.Internal.Invokes
                             Dim t As String() = tokens _
                                 .Select(Function(r) r(si)) _
                                 .ToArray
-                            Dim s_new As String = String.Join(si, "")
+                            Dim s_new As String = String.Join("", t)
                             Return s_new
                         End Function) _
                 .ToArray
