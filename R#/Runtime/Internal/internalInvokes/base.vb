@@ -1103,7 +1103,7 @@ Namespace Runtime.Internal.Invokes
             ElseIf TypeOf col Is dataframe Then
                 Dim append As dataframe = DirectCast(col, dataframe)
 
-                If Not strict Then
+                If strict Then
                     Dim colnames = d.columns.Keys.ToArray
                     Dim oldColNames = append.columns.Keys.ToArray
                     Dim newNames = colnames.JoinIterates(oldColNames).uniqueNames
