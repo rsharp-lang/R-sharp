@@ -154,7 +154,7 @@ Public Module grDevices
         If buffer Like GetType(Message) Then
             Return buffer.TryCast(Of Message)
         Else
-            Dim dpiXY = 300
+            Dim dpiXY = 100
             Dim svgImage As New GraphicsSVG(size, dpiXY, dpiXY)
 
             Call svgImage.Clear(fill)
@@ -168,6 +168,12 @@ Public Module grDevices
         Return Nothing
     End Function
 
+    ''' <summary>
+    ''' generates the error message for non svg image object
+    ''' </summary>
+    ''' <param name="image"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Private Function requireSvgData(image As Object, env As Environment) As Message
         Dim message_str As String = "The given type is incompatible with the required type!"
 
@@ -179,6 +185,14 @@ Public Module grDevices
         Return Message.InCompatibleType(GetType(SVGData), image.GetType, env, message_str)
     End Function
 
+    ''' <summary>
+    ''' due to the reason of svg is not a raster image, no needs for high dpi
+    ''' </summary>
+    ''' <param name="image"></param>
+    ''' <param name="file"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Private Function saveSvgStream(image As Object, file As textBuffer, args As list, env As Environment) As Object
         If Not TypeOf image Is SVGData Then
             If image.GetType.IsInheritsFrom(GetType(Plot)) Then
@@ -186,11 +200,14 @@ Public Module grDevices
                 Dim arg2 = env.GetAcceptorArguments
                 Dim size = graphicsPipeline.getSize(If(arg1.CheckSizeArgument, arg1, arg2), env, New SizeF(3300, 2700))
                 Dim wh As String = $"{size.Width},{size.Height}"
-                Dim dpi As Integer = graphicsPipeline.getDpi(If(arg1.CheckDpiArgument, arg1, arg2), env, 300)
+                ' set default dpi to 100 for svg
+                Dim dpi As Integer = graphicsPipeline.getDpi(
+                    If(arg1.CheckDpiArgument, arg1, arg2), env, [default]:=100)
 
                 file.mime = "image/svg+xml"
                 file.text = DirectCast(image, Plot).Plot(wh, dpi, driver:=Drivers.SVG).AsSVG.GetSVGXml
             Else
+                ' throw error from this error message helper function
                 Return requireSvgData(image, env)
             End If
         Else
@@ -222,7 +239,7 @@ Public Module grDevices
                 Dim arg2 = env.GetAcceptorArguments
                 Dim size = graphicsPipeline.getSize(If(arg1.CheckSizeArgument, arg1, arg2), env, New SizeF(3300, 2700))
                 Dim wh As String = $"{size.Width},{size.Height}"
-                Dim dpi As Integer = graphicsPipeline.getDpi(If(arg1.CheckDpiArgument, arg1, arg2), env, 300)
+                Dim dpi As Integer = graphicsPipeline.getDpi(If(arg1.CheckDpiArgument, arg1, arg2), env, 100)
 
                 Call DirectCast(image, Plot).Plot(wh, dpi, driver:=Drivers.SVG).Save(stream)
             Else
@@ -263,10 +280,12 @@ Public Module grDevices
                         Optional env As Environment = Nothing) As Object
 
         If image Is Nothing Then
+            ' svg(file=...);
             Return openSvgDevice(file, args, env)
         ElseIf TypeOf file Is textBuffer Then
             Return saveSvgStream(image, file, args, env)
         Else
+            ' svg(file=...) {...};
             Return saveSvgFile(image, file, args, env)
         End If
     End Function
