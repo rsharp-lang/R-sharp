@@ -270,7 +270,7 @@ Public Class RProcessor
     End Sub
 
     ''' <summary>
-    ''' 
+    ''' helper function for call rscript slave process
     ''' </summary>
     ''' <param name="Rscript">the file path of the target R# script file</param>
     ''' <param name="args">script arguments</param>
@@ -307,6 +307,12 @@ Public Class RProcessor
         Rslave.SetDotNetCoreDll()
 
         Dim task As RunSlavePipeline = Rslave.CreateSlave(arguments, workdir:=App.HOME)
+        Dim http_context As New MultipartForm
+
+        Call http_context.Add("cookies", request.GetCookies.ToJSON)
+        Call http_context.Add("configs", request.HttpRequest.GetSettings.GetJson(maskReadonly:=True))
+
+        task.std_input = http_context.ToBase64
 
         ' view commandline
         Call VBDebugger.EchoLine(arguments.TrimNewLine.Trim.StringReplace("\s{2,}", " "))
