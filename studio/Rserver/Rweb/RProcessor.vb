@@ -312,7 +312,7 @@ Public Class RProcessor
         Call http_context.Add("cookies", request.GetCookies.ToJSON)
         Call http_context.Add("configs", request.HttpRequest.GetSettings.GetJson(maskReadonly:=True))
 
-        task.std_input = http_context.ToBase64
+        task.std_input = http_context.boundary & vbLf & http_context.ToBase64
 
         ' view commandline
         Call VBDebugger.EchoLine(arguments.TrimNewLine.Trim.StringReplace("\s{2,}", " "))
