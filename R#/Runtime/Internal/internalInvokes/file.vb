@@ -1314,7 +1314,8 @@ Namespace Runtime.Internal.Invokes
                                 Optional endian As endianness = endianness.big,
                                 Optional env As Environment = Nothing) As Object
 
-            Dim buf = GetFileStream(con, FileAccess.Read, env)
+            Dim is_path As Boolean = False
+            Dim buf = GetFileStream(con, FileAccess.Read, env, is_filepath:=is_path)
 
             If buf Like GetType(Message) Then
                 Return buf.TryCast(Of Message)
@@ -1332,6 +1333,8 @@ Namespace Runtime.Internal.Invokes
 
                 Throw New NotImplementedException
             ElseIf TypeOf what Is String Then
+                ' invoke generic function for parse
+                ' binary file as R#/clr object
                 Dim fname As String = $"readBin.{what}"
                 Dim f As GenericFunction = generic.get(fname, GetType(Stream))
 
@@ -1339,9 +1342,19 @@ Namespace Runtime.Internal.Invokes
                     Return generic.missingGenericSymbol(fname, env)
                 End If
 
-                Dim out = f(buf.TryCast(Of Stream), list.empty, env)
+                Dim out As Object
 
-                If TypeOf con Is String Then
+                Try
+                    out = f(buf.TryCast(Of Stream), list.empty, env)
+                Catch ex As Exception
+                    If is_path Then
+                        Throw New Exception($"error_file: {CLRVector.asCharacter(con).First}", ex)
+                    Else
+                        Throw
+                    End If
+                End Try
+
+                If is_path Then
                     Call buf.TryCast(Of Stream).Dispose()
                 End If
 
