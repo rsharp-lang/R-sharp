@@ -308,8 +308,14 @@ Public Class RProcessor
 
         Dim task As RunSlavePipeline = Rslave.CreateSlave(arguments, workdir:=App.HOME)
         Dim http_context As New MultipartForm
+        Dim cookies As Cookies = request.GetCookies
 
-        Call http_context.Add("cookies", request.GetCookies.ToJSON)
+        If Not cookies.CheckCookie("session_id") Then
+            Call cookies.SetValue("session_id", (Now.ToString & arguments).MD5)
+            Call response.SetCookies("session_id", cookies.GetCookie("session_id"))
+        End If
+
+        Call http_context.Add("cookies", cookies.ToJSON)
         Call http_context.Add("configs", request.HttpRequest.GetSettings.GetJson(maskReadonly:=True))
 
         task.std_input = http_context.boundary & vbLf & http_context.ToBase64
