@@ -59,6 +59,7 @@
 #End Region
 
 Imports System.Collections.Specialized
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Flute.Http.Core
 Imports Flute.Http.Core.Message
@@ -151,7 +152,7 @@ Public Class RProcessor
         If Not request.POSTData.files.IsNullOrEmpty Then
             For Each file In request.POSTData.files
                 args(file.Key) = file.Value _
-                    .Select(Function(f) f.GetJson) _
+                    .Select(Function(f) f.GetJSON) _
                     .ToArray
             Next
         End If
@@ -306,7 +307,14 @@ Public Class RProcessor
         Rslave.dotnetcoreApp = True
         Rslave.SetDotNetCoreDll()
 
-        Dim task As RunSlavePipeline = Rslave.CreateSlave(arguments, workdir:=App.HOME)
+        Dim task As Process = Process.Start(New ProcessStartInfo With {
+            .Arguments = Rslave.GetDotnetCoreCommandLine(arguments),
+            .WorkingDirectory = App.HOME,
+            .CreateNoWindow = True,
+            .FileName = "dotnet",
+            .UseShellExecute = False,
+            .RedirectStandardInput = True
+        })
         Dim http_context As New MultipartForm
         Dim cookies As Cookies = request.GetCookies
 
@@ -317,14 +325,20 @@ Public Class RProcessor
 
         Call http_context.Add("cookies", cookies.ToJSON)
         Call http_context.Add("configs", request.HttpRequest.GetSettings.GetJson(maskReadonly:=True))
+        Call task.Start()
 
-        task.std_input = http_context.boundary & vbLf & http_context.ToBase64
+        Using std_in As StreamWriter = task.StandardInput
+            Call std_in.WriteLine(http_context.boundary)
+            Call std_in.WriteLine(http_context.ToBase64)
+            Call std_in.Flush()
+        End Using
 
         ' view commandline
         Call VBDebugger.EchoLine(arguments.TrimNewLine.Trim.StringReplace("\s{2,}", " "))
+        Call VBDebugger.EchoLine(http_context.boundary)
+        Call VBDebugger.EchoLine(http_context.ToBase64)
 
-        task.Shell = True
-        task.Run()
+        Call task.WaitForExit()
 
         If Not is_background Then
             Call pushBackResult(request_id, request, response)
