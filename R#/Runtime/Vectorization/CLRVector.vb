@@ -131,6 +131,8 @@ Namespace Runtime.Vectorization
                                 ElseIf s = "NaN" OrElse s = "NA" Then
                                     Call "NA or NaN value was found when cast input as integer".Warning
                                     Return 0
+                                ElseIf s.IndexOf("."c) > -1 Then
+                                    Return CLng(Val(s))
                                 Else
                                     Return Long.Parse(s)
                                 End If
