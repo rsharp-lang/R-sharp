@@ -81,6 +81,11 @@ Namespace Runtime.Vectorization
             End If
             If x.GetType.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
+
+                If DirectCast(x, Array).Length = 0 Then
+                    ' empty aray will be object()
+                    Return {}
+                End If
             End If
 
             If TypeOf x Is Date() Then
@@ -113,6 +118,11 @@ Namespace Runtime.Vectorization
 
             If x.GetType.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
+
+                If DirectCast(x, Array).Length = 0 Then
+                    ' empty aray will be object()
+                    Return {}
+                End If
             End If
             If TypeOf x Is String Then
                 Try
@@ -194,7 +204,13 @@ Namespace Runtime.Vectorization
 
             If typeof_x.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
-                typeof_x = x.GetType
+
+                If DirectCast(x, Array).Length = 0 Then
+                    ' empty aray will be object()
+                    Return {}
+                Else
+                    typeof_x = x.GetType
+                End If
             End If
 
             If TypeOf x Is String Then
@@ -268,6 +284,11 @@ Namespace Runtime.Vectorization
 
             x = REnv.UnsafeTryCastGenericArray(x)
 
+            If DirectCast(x, Array).Length = 0 Then
+                ' empty aray will be object()
+                Return {}
+            End If
+
             If TypeOf x Is Byte() Then
                 Return DirectCast(x, Byte())
             End If
@@ -299,6 +320,11 @@ Namespace Runtime.Vectorization
 
             If x.GetType.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
+
+                If DirectCast(x, Array).Length = 0 Then
+                    ' empty aray will be object()
+                    Return {}
+                End If
             End If
 
             If TypeOf x Is Integer() Then
@@ -341,6 +367,11 @@ Namespace Runtime.Vectorization
 
             If x.GetType.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
+
+                If DirectCast(x, Array).Length = 0 Then
+                    ' empty aray will be object()
+                    Return {}
+                End If
             ElseIf x.GetType.ImplementInterface(GetType(ICTypeVector)) Then
                 Return DirectCast(x, ICTypeVector).ToFloat
             End If
@@ -397,6 +428,11 @@ Namespace Runtime.Vectorization
 
             If x.GetType.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
+
+                If DirectCast(x, Array).Length = 0 Then
+                    ' empty aray will be object()
+                    Return {}
+                End If
             End If
 
             If TypeOf x Is Double() Then
