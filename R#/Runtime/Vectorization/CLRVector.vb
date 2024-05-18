@@ -123,7 +123,19 @@ Namespace Runtime.Vectorization
             ElseIf TypeOf x Is Boolean Then
                 Return New Long() {If(CBool(x), 1, 0)}
             ElseIf REnv.isVector(Of String)(x) Then
-                Return asCharacter(x).Select(AddressOf Long.Parse).ToArray
+                Return asCharacter(x) _
+                    .Select(Function(s)
+                                ' safe empty?
+                                If s = "" Then
+                                    Return 0
+                                ElseIf s = "NaN" OrElse s = "NA" Then
+                                    Call "NA or NaN value was found when cast input as integer".Warning
+                                    Return 0
+                                Else
+                                    Return Long.Parse(s)
+                                End If
+                            End Function) _
+                    .ToArray
             End If
 
             If TypeOf x Is Long() Then
@@ -225,7 +237,18 @@ Namespace Runtime.Vectorization
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Function fromObjectCollection(objs As IEnumerable(Of Object)) As String()
             Return objs _
-                .Select(Function(a) any.ToString(a)) _
+                .Select(Function(a)
+                            If a Is Nothing Then
+                                Return ""
+                            End If
+
+                            If a Is GetType(Void) Then
+                                ' NA
+                                Return "NA"
+                            Else
+                                Return any.ToString(a)
+                            End If
+                        End Function) _
                 .ToArray
         End Function
 
