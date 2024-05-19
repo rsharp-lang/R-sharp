@@ -64,7 +64,6 @@ Imports System.Runtime.CompilerServices
 Imports Flute.Http.Core
 Imports Flute.Http.Core.Message
 Imports Flute.Http.FileSystem
-Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Net.HTTP
@@ -78,6 +77,9 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 ''' </summary>
 Public Class RProcessor
 
+    ''' <summary>
+    ''' APP_PATH, the directory path of the rscript folder for the slave rscript process.
+    ''' </summary>
     Dim Rweb As String
     Dim showError As Boolean
     Dim requestPostback As New Dictionary(Of String, BufferObject)
@@ -88,8 +90,17 @@ Public Class RProcessor
     Dim startups As String
     Dim debug As Boolean
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="Rserver"></param>
+    ''' <param name="RwebDir">
+    ''' the directory path of the rscript folder for the slave rscript process.
+    ''' </param>
+    ''' <param name="show_error"></param>
+    ''' <param name="debug"></param>
     Sub New(Rserver As Rweb, RwebDir As String, show_error As Boolean, debug As Boolean)
-        Me.Rweb = RwebDir
+        Me.Rweb = RwebDir.GetDirectoryFullPath
         Me.showError = show_error
         Me.localRServer = Rserver
         Me.debug = debug
@@ -198,7 +209,8 @@ Public Class RProcessor
                     .host = Me,
                     .query = request.URL.query,
                     .request = request,
-                    .response = response
+                    .response = response,
+                    .app_path = Rweb
                 }
 
                 Call $"task '{request_id}' will be running in background.".__DEBUG_ECHO
@@ -218,6 +230,7 @@ Public Class RProcessor
         Public request As HttpRequest
         Public response As HttpResponse
         Public host As RProcessor
+        Public app_path As String
 
         Public Async Function CommitTask() As Task(Of Boolean)
             Return Await Task.Run(AddressOf callInternal)
@@ -317,6 +330,8 @@ Public Class RProcessor
         })
         Dim http_context As New MultipartForm
         Dim cookies As Cookies = request.GetCookies
+
+        task.StartInfo.EnvironmentVariables("APP_PATH") = Rweb
 
         If Not cookies.CheckCookie("session_id") Then
             Call cookies.SetValue("session_id", (Now.ToString & arguments).MD5)
