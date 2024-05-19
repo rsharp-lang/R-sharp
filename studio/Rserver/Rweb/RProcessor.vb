@@ -303,7 +303,7 @@ Public Class RProcessor
         Dim entry As String = "run"
         Dim Rslave = RscriptCommandLine.Rscript.FromEnvironment(directory:=App.HOME)
 
-        Static empty_args As String = "[]".Base64String(gzip:=True)
+        Static empty_args As String = "{}".Base64String(gzip:=True)
 
         ' Call rawjson.__DEBUG_ECHO
 
