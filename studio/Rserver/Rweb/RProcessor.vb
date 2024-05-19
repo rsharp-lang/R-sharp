@@ -296,19 +296,21 @@ Public Class RProcessor
                         response As HttpResponse,
                         is_background As Boolean)
 
-        Dim rawjson As String = JsonContract.GetJson(args)
-        Dim argsText As String = rawjson.Base64String(gzip:=True)
+        ' Dim rawjson As String = JsonContract.GetJson(args)
+        ' Dim argsText As String = rawjson.Base64String(gzip:=True)
         Dim port As Integer = localRServer.TcpPort
         Dim master As String = "localhost"
         Dim entry As String = "run"
         Dim Rslave = RscriptCommandLine.Rscript.FromEnvironment(directory:=App.HOME)
 
-        Call rawjson.__DEBUG_ECHO
+        Static empty_args As String = "[]".Base64String(gzip:=True)
+
+        ' Call rawjson.__DEBUG_ECHO
 
         ' --slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [/MASTER=<ip, default=localhost> /entry=<function_name, default=NULL>]
         Dim arguments As String = Rslave.GetslaveModeCommandLine(
             exec:=Rscript.GetFullPath,
-            argvs:=argsText,
+            argvs:=empty_args,
             request_id:=request_id,
             PORT:=port,
             master:=master,
@@ -326,33 +328,27 @@ Public Class RProcessor
             .CreateNoWindow = True,
             .FileName = "dotnet",
             .UseShellExecute = False,
-            .RedirectStandardInput = True
+            .RedirectStandardInput = False
         })
-        Dim http_context As New MultipartForm
         Dim cookies As Cookies = request.GetCookies
-
-        task.StartInfo.EnvironmentVariables("APP_PATH") = Rweb
+        Dim http_context As StringDictionary = task.StartInfo.EnvironmentVariables
 
         If Not cookies.CheckCookie("session_id") Then
             Call cookies.SetValue("session_id", (Now.ToString & arguments).MD5)
             Call response.SetCookies("session_id", cookies.GetCookie("session_id"))
         End If
 
-        Call http_context.Add("cookies", cookies.ToJSON)
-        Call http_context.Add("configs", request.HttpRequest.GetSettings.GetJson(maskReadonly:=True))
-        Call task.Start()
+        http_context("APP_PATH") = Rweb
+        http_context("cookies") = cookies.ToJSON
+        http_context("configs") = request.HttpRequest.GetSettings.GetJson(maskReadonly:=True)
 
-        Using std_in As StreamWriter = task.StandardInput
-            Call std_in.WriteLine(http_context.boundary)
-            Call std_in.WriteLine(http_context.ToBase64)
-            Call std_in.Flush()
-        End Using
+        For Each arg In args
+            http_context(arg.Key) = JsonContract.GetJson(arg.Value)
+        Next
 
         ' view commandline
         Call VBDebugger.EchoLine(arguments.TrimNewLine.Trim.StringReplace("\s{2,}", " "))
-        Call VBDebugger.EchoLine(http_context.boundary)
-        Call VBDebugger.EchoLine(http_context.ToBase64)
-
+        Call task.Start()
         Call task.WaitForExit()
 
         If Not is_background Then
