@@ -341,6 +341,7 @@ Public Class RProcessor
         http_context("APP_PATH") = Rweb
         http_context("cookies") = cookies.ToJSON
         http_context("configs") = request.HttpRequest.GetSettings.GetJson(maskReadonly:=True)
+        http_context("get") = JsonContract.GetJson(args.Keys.ToArray)
 
         For Each arg In args
             http_context(arg.Key) = JsonContract.GetJson(arg.Value)
