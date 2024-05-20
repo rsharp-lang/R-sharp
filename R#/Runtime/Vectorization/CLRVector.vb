@@ -170,6 +170,23 @@ Namespace Runtime.Vectorization
                     .ToArray
             End If
 
+            If TypeOf x Is Object() Then
+                Return DirectCast(x, Object()) _
+                    .Select(Function(xi)
+                                If xi Is Nothing Then
+                                    Return 0&
+                                End If
+                                If TypeOf xi Is Date Then
+                                    Return CLng(DirectCast(xi, Date).UnixTimeStamp)
+                                ElseIf TypeOf xi Is String Then
+                                    Return CLng(Val(xi))
+                                Else
+                                    Return Conversion.CTypeDynamic(Of Long)(xi)
+                                End If
+                            End Function) _
+                    .ToArray
+            End If
+
             Throw New NotImplementedException(x.GetType.FullName)
         End Function
 
