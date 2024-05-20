@@ -74,9 +74,12 @@ Namespace Runtime.Internal.Object.Linq
         ''' </summary>
         ''' <param name="data"></param>
         ''' <param name="key"></param>
+        ''' <param name="safe">
+        ''' will cast null to empty string if this parameter value is set to TRUE
+        ''' </param>
         ''' <returns></returns>
         <Extension>
-        Public Function groupBy(data As dataframe, key As String) As Dictionary(Of String, dataframe)
+        Public Function groupBy(data As dataframe, key As String, safe As Boolean) As Dictionary(Of String, dataframe)
             Dim values As vector = CLRVector.asCharacter(data.getColumnVector(columnName:=key)) _
                 .DoCall(Function(v)
                             If v Is Nothing Then
@@ -85,7 +88,17 @@ Namespace Runtime.Internal.Object.Linq
 
                             Return vector.asVector(Of String)(v)
                         End Function)
-            Dim factors As String() = DirectCast(values.data, String()).Distinct.ToArray
+            Dim factors As String() = DirectCast(values.data, String()) _
+                .Select(Function(factor)
+                            ' cast to safe key for null
+                            If factor Is Nothing AndAlso safe Then
+                                Return ""
+                            Else
+                                Return factor
+                            End If
+                        End Function) _
+                .Distinct _
+                .ToArray
             Dim groups As New Dictionary(Of String, dataframe)
             Dim env As New Environment
 
@@ -93,6 +106,7 @@ Namespace Runtime.Internal.Object.Linq
                 Dim i As Boolean() = (values = factor).asLogical
                 Dim partRows As dataframe = data.sliceByRow(i, env)
 
+                ' null will case the error
                 Call groups.Add(factor, partRows)
             Next
 

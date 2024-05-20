@@ -945,7 +945,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         End Function
 
         <Extension>
-        Private Function groupDataframeRows(table As dataframe, getKey As Object, env As Environment) As Object
+        Private Function groupDataframeRows(table As dataframe, getKey As Object, safe As Boolean, env As Environment) As Object
             Dim colName As String = CLRVector.asCharacter(getKey).FirstOrDefault
 
             If colName Is Nothing Then
@@ -954,7 +954,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             Return New list(GetType(dataframe)) With {
                 .slots = table _
-                    .groupBy(colName) _
+                    .groupBy(colName, safe) _
                     .ToDictionary(Function(d) d.Key,
                                   Function(d)
                                       Return CObj(d.Value)
@@ -978,10 +978,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         Private Function groupBy(<RRawVectorArgument>
                                  sequence As Object,
                                  Optional getKey As Object = Nothing,
+                                 Optional safe As Boolean = False,
                                  Optional env As Environment = Nothing) As Object
 
             If TypeOf sequence Is dataframe Then
-                Return DirectCast(sequence, dataframe).groupDataframeRows(getKey, env)
+                Return DirectCast(sequence, dataframe).groupDataframeRows(getKey, safe, env)
             ElseIf TypeOf sequence Is Group Then
                 sequence = DirectCast(sequence, Group).group
             End If

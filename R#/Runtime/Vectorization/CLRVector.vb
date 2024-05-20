@@ -81,6 +81,11 @@ Namespace Runtime.Vectorization
             End If
             If x.GetType.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
+
+                If DirectCast(x, Array).Length = 0 Then
+                    ' empty aray will be object()
+                    Return {}
+                End If
             End If
 
             If TypeOf x Is Date() Then
@@ -113,6 +118,11 @@ Namespace Runtime.Vectorization
 
             If x.GetType.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
+
+                If DirectCast(x, Array).Length = 0 Then
+                    ' empty aray will be object()
+                    Return {}
+                End If
             End If
             If TypeOf x Is String Then
                 Try
@@ -123,7 +133,21 @@ Namespace Runtime.Vectorization
             ElseIf TypeOf x Is Boolean Then
                 Return New Long() {If(CBool(x), 1, 0)}
             ElseIf REnv.isVector(Of String)(x) Then
-                Return asCharacter(x).Select(AddressOf Long.Parse).ToArray
+                Return asCharacter(x) _
+                    .Select(Function(s)
+                                ' safe empty?
+                                If s = "" Then
+                                    Return 0
+                                ElseIf s = "NaN" OrElse s = "NA" Then
+                                    Call "NA or NaN value was found when cast input as integer".Warning
+                                    Return 0
+                                ElseIf s.IndexOf("."c) > -1 Then
+                                    Return CLng(Val(s))
+                                Else
+                                    Return Long.Parse(s)
+                                End If
+                            End Function) _
+                    .ToArray
             End If
 
             If TypeOf x Is Long() Then
@@ -143,6 +167,23 @@ Namespace Runtime.Vectorization
             ElseIf TypeOf x Is Integer() OrElse TypeOf x Is List(Of Integer) Then
                 Return DirectCast(x, IEnumerable(Of Integer)) _
                     .Select(Function(i) CLng(i)) _
+                    .ToArray
+            End If
+
+            If TypeOf x Is Object() Then
+                Return DirectCast(x, Object()) _
+                    .Select(Function(xi)
+                                If xi Is Nothing Then
+                                    Return 0&
+                                End If
+                                If TypeOf xi Is Date Then
+                                    Return CLng(DirectCast(xi, Date).UnixTimeStamp)
+                                ElseIf TypeOf xi Is String Then
+                                    Return CLng(Val(xi))
+                                Else
+                                    Return Conversion.CTypeDynamic(Of Long)(xi)
+                                End If
+                            End Function) _
                     .ToArray
             End If
 
@@ -180,7 +221,13 @@ Namespace Runtime.Vectorization
 
             If typeof_x.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
-                typeof_x = x.GetType
+
+                If DirectCast(x, Array).Length = 0 Then
+                    ' empty aray will be object()
+                    Return {}
+                Else
+                    typeof_x = x.GetType
+                End If
             End If
 
             If TypeOf x Is String Then
@@ -225,7 +272,18 @@ Namespace Runtime.Vectorization
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Function fromObjectCollection(objs As IEnumerable(Of Object)) As String()
             Return objs _
-                .Select(Function(a) any.ToString(a)) _
+                .Select(Function(a)
+                            If a Is Nothing Then
+                                Return ""
+                            End If
+
+                            If a Is GetType(Void) Then
+                                ' NA
+                                Return "NA"
+                            Else
+                                Return any.ToString(a)
+                            End If
+                        End Function) _
                 .ToArray
         End Function
 
@@ -242,6 +300,11 @@ Namespace Runtime.Vectorization
             End If
 
             x = REnv.UnsafeTryCastGenericArray(x)
+
+            If DirectCast(x, Array).Length = 0 Then
+                ' empty aray will be object()
+                Return {}
+            End If
 
             If TypeOf x Is Byte() Then
                 Return DirectCast(x, Byte())
@@ -274,6 +337,11 @@ Namespace Runtime.Vectorization
 
             If x.GetType.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
+
+                If DirectCast(x, Array).Length = 0 Then
+                    ' empty aray will be object()
+                    Return {}
+                End If
             End If
 
             If TypeOf x Is Integer() Then
@@ -316,6 +384,11 @@ Namespace Runtime.Vectorization
 
             If x.GetType.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
+
+                If DirectCast(x, Array).Length = 0 Then
+                    ' empty aray will be object()
+                    Return {}
+                End If
             ElseIf x.GetType.ImplementInterface(GetType(ICTypeVector)) Then
                 Return DirectCast(x, ICTypeVector).ToFloat
             End If
@@ -372,6 +445,11 @@ Namespace Runtime.Vectorization
 
             If x.GetType.IsArray Then
                 x = REnv.UnsafeTryCastGenericArray(x)
+
+                If DirectCast(x, Array).Length = 0 Then
+                    ' empty aray will be object()
+                    Return {}
+                End If
             End If
 
             If TypeOf x Is Double() Then
