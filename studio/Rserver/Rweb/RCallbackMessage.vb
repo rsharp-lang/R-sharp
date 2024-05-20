@@ -82,7 +82,7 @@ Module RCallbackMessage
         If showError Then
             Call response.WriteHTML(err)
         Else
-            Call response.WriteError(500, err)
+            Call response.WriteError(HTTP_RFC.RFC_INTERNAL_SERVER_ERROR, err)
         End If
     End Sub
 
