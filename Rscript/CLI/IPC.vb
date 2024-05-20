@@ -90,6 +90,20 @@ Partial Module CLI
         End Try
     End Function
 
+    <Extension>
+    Private Function fetch_arguments(str As DefaultString) As Dictionary(Of String, String())
+        Dim input = str _
+            .Base64Decode(ungzip:=True) _
+            .tryHandleJSON
+        Dim gets As String() = System.Environment.GetEnvironmentVariable("get").LoadJSON(Of String())
+
+        For Each var As String In gets
+            input(var) = System.Environment.GetEnvironmentVariable(var).LoadJSON(Of String())
+        Next
+
+        Return input
+    End Function
+
     ''' <summary>
     ''' R web server run a slave task
     ''' </summary>
@@ -149,9 +163,7 @@ Partial Module CLI
               ")>
     Public Function slaveMode(args As CommandLine) As Integer
         Dim script As String = args <= "/exec"
-        Dim arguments As Dictionary(Of String, String()) = args("/argvs") _
-            .Base64Decode(ungzip:=True) _
-            .tryHandleJSON
+        Dim arguments As Dictionary(Of String, String()) = args("/argvs").fetch_arguments
         Dim port As Integer = CInt(Val(args <= "/PORT"))
         Dim master As String = args("/MASTER") Or "localhost"
         Dim entry As String = args("/entry") Or "run"

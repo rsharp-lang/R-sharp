@@ -59,11 +59,11 @@
 #End Region
 
 Imports System.Collections.Specialized
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Flute.Http.Core
 Imports Flute.Http.Core.Message
 Imports Flute.Http.FileSystem
-Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Net.HTTP
@@ -77,6 +77,9 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 ''' </summary>
 Public Class RProcessor
 
+    ''' <summary>
+    ''' APP_PATH, the directory path of the rscript folder for the slave rscript process.
+    ''' </summary>
     Dim Rweb As String
     Dim showError As Boolean
     Dim requestPostback As New Dictionary(Of String, BufferObject)
@@ -87,8 +90,17 @@ Public Class RProcessor
     Dim startups As String
     Dim debug As Boolean
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="Rserver"></param>
+    ''' <param name="RwebDir">
+    ''' the directory path of the rscript folder for the slave rscript process.
+    ''' </param>
+    ''' <param name="show_error"></param>
+    ''' <param name="debug"></param>
     Sub New(Rserver As Rweb, RwebDir As String, show_error As Boolean, debug As Boolean)
-        Me.Rweb = RwebDir
+        Me.Rweb = RwebDir.GetDirectoryFullPath
         Me.showError = show_error
         Me.localRServer = Rserver
         Me.debug = debug
@@ -151,7 +163,7 @@ Public Class RProcessor
         If Not request.POSTData.files.IsNullOrEmpty Then
             For Each file In request.POSTData.files
                 args(file.Key) = file.Value _
-                    .Select(Function(f) f.GetJson) _
+                    .Select(Function(f) f.GetJSON) _
                     .ToArray
             Next
         End If
@@ -197,7 +209,8 @@ Public Class RProcessor
                     .host = Me,
                     .query = request.URL.query,
                     .request = request,
-                    .response = response
+                    .response = response,
+                    .app_path = Rweb
                 }
 
                 Call $"task '{request_id}' will be running in background.".__DEBUG_ECHO
@@ -217,6 +230,7 @@ Public Class RProcessor
         Public request As HttpRequest
         Public response As HttpResponse
         Public host As RProcessor
+        Public app_path As String
 
         Public Async Function CommitTask() As Task(Of Boolean)
             Return Await Task.Run(AddressOf callInternal)
@@ -282,19 +296,21 @@ Public Class RProcessor
                         response As HttpResponse,
                         is_background As Boolean)
 
-        Dim rawjson As String = JsonContract.GetJson(args)
-        Dim argsText As String = rawjson.Base64String(gzip:=True)
+        ' Dim rawjson As String = JsonContract.GetJson(args)
+        ' Dim argsText As String = rawjson.Base64String(gzip:=True)
         Dim port As Integer = localRServer.TcpPort
         Dim master As String = "localhost"
         Dim entry As String = "run"
         Dim Rslave = RscriptCommandLine.Rscript.FromEnvironment(directory:=App.HOME)
 
-        Call rawjson.__DEBUG_ECHO
+        Static empty_args As String = "{}".Base64String(gzip:=True)
+
+        ' Call rawjson.__DEBUG_ECHO
 
         ' --slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [/MASTER=<ip, default=localhost> /entry=<function_name, default=NULL>]
         Dim arguments As String = Rslave.GetslaveModeCommandLine(
             exec:=Rscript.GetFullPath,
-            argvs:=argsText,
+            argvs:=empty_args,
             request_id:=request_id,
             PORT:=port,
             master:=master,
@@ -306,25 +322,35 @@ Public Class RProcessor
         Rslave.dotnetcoreApp = True
         Rslave.SetDotNetCoreDll()
 
-        Dim task As RunSlavePipeline = Rslave.CreateSlave(arguments, workdir:=App.HOME)
-        Dim http_context As New MultipartForm
+        Dim task As Process = Process.Start(New ProcessStartInfo With {
+            .Arguments = Rslave.GetDotnetCoreCommandLine(arguments),
+            .WorkingDirectory = App.HOME,
+            .CreateNoWindow = True,
+            .FileName = "dotnet",
+            .UseShellExecute = False,
+            .RedirectStandardInput = False
+        })
         Dim cookies As Cookies = request.GetCookies
+        Dim http_context As StringDictionary = task.StartInfo.EnvironmentVariables
 
         If Not cookies.CheckCookie("session_id") Then
             Call cookies.SetValue("session_id", (Now.ToString & arguments).MD5)
             Call response.SetCookies("session_id", cookies.GetCookie("session_id"))
         End If
 
-        Call http_context.Add("cookies", cookies.ToJSON)
-        Call http_context.Add("configs", request.HttpRequest.GetSettings.GetJson(maskReadonly:=True))
+        http_context("APP_PATH") = Rweb
+        http_context("cookies") = cookies.ToJSON
+        http_context("configs") = request.HttpRequest.GetSettings.GetJson(maskReadonly:=True)
+        http_context("get") = JsonContract.GetJson(args.Keys.ToArray)
 
-        task.std_input = http_context.boundary & vbLf & http_context.ToBase64
+        For Each arg In args
+            http_context(arg.Key) = JsonContract.GetJson(arg.Value)
+        Next
 
         ' view commandline
         Call VBDebugger.EchoLine(arguments.TrimNewLine.Trim.StringReplace("\s{2,}", " "))
-
-        task.Shell = True
-        task.Run()
+        Call task.Start()
+        Call task.WaitForExit()
 
         If Not is_background Then
             Call pushBackResult(request_id, request, response)
