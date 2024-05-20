@@ -222,7 +222,7 @@ Module Program
         )
         Dim silent As Boolean = args("--silent")
         Dim verbose As Boolean = args("--verbose")
-        Dim workdir As String = args("--WORKDIR")
+        Dim workdir As String = args("--WORKDIR") Or args.EnvironmentVariables.TryGetValue("workdir")
         Dim strict As Boolean = args.ContainsParameter("--strict") And args("--strict")
         Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
         Dim SetDllDirectory As String = args("--SetDllDirectory")
