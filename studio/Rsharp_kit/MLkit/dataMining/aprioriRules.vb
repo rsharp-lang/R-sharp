@@ -54,6 +54,8 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.DataMining.AprioriRules
 Imports Microsoft.VisualBasic.DataMining.AprioriRules.Entities
+Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -61,6 +63,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 ''' <summary>
 ''' apriori: Mining Associations with the Apriori Algorithm
@@ -92,6 +95,25 @@ Module aprioriRules
         Call df.add("confidence", rules.Select(Function(r) r.Confidence))
 
         Return df
+    End Function
+
+    <ExportAPI("parse_transactions")>
+    <RApiReturn(GetType(Transaction))>
+    Public Function parse_transactions(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Dim trans As New List(Of Transaction)
+        Dim id As i32 = 1
+
+        For Each line As String In CLRVector.asCharacter(x).SafeQuery
+            Call trans.Add(New Transaction With {
+                .Name = ++id,
+                .Items = line _
+                    .StringSplit("; ", True) _
+                    .Where(Function(s) s.Length > 0) _
+                    .ToArray
+            })
+        Next
+
+        Return trans.ToArray
     End Function
 
     ''' <summary>
