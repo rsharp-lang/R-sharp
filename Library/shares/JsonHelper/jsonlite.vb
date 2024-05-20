@@ -77,13 +77,15 @@ Module jsonlite
                            Optional indent As Boolean = False,
                            Optional enumToStr As Boolean = True,
                            Optional unixTimestamp As Boolean = True,
+                           Optional unicode_escape As Boolean = True,
                            Optional args As list = Nothing) As Object
 
         Dim opts As New JSONSerializerOptions With {
             .indent = indent,
             .maskReadonly = maskReadonly,
             .enumToString = enumToStr,
-            .unixTimestamp = unixTimestamp
+            .unixTimestamp = unixTimestamp,
+            .unicodeEscape = unicode_escape
         }
         Dim encoder As Encoder = Encoder.CreateEncoderWithOptions(args, env)
 

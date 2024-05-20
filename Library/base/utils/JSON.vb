@@ -195,12 +195,14 @@ Module JSON
                                 Optional indent As Boolean = False,
                                 Optional enumToStr As Boolean = True,
                                 Optional unixTimestamp As Boolean = True,
+                                Optional unicode_escape As Boolean = True,
                                 <RListObjectArgument>
                                 Optional args As list = Nothing,
                                 Optional env As Environment = Nothing) As Object
 
         Return jsonlite.toJSON(x, env,
                                maskReadonly, indent, enumToStr, unixTimestamp,
+                               unicode_escape:=unicode_escape,
                                args:=args)
     End Function
 
