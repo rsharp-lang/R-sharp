@@ -29,6 +29,8 @@ Public Class AccessController
     Public Function CheckAccess(url As URL, ssid As String, config As Configuration) As Boolean
         If url.path Like m_ignoreIndex Then
             Return True
+        ElseIf Not url.path.ExtensionSuffix("html", "htm") Then
+            Return True
         End If
 
         Dim session As SessionFile = Flute.SessionManager.Open(ssid, config)
