@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
 Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Net
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Parallel
 Imports Rserver
 
@@ -148,6 +149,7 @@ Module Program
                      --startups <packageNames, default=""""> 
                      --show_error 
                      --n_threads <max_threads, default=8> 
+                     --access_rule <access_control.json>
                      --config <config_file, default=null>
                      --parent <parent_pid, default="""">]")>
     <Argument("--Rweb", True, CLITypes.File, AcceptTypes:={GetType(String)},
@@ -179,9 +181,14 @@ Module Program
         Dim fs As FileSystem = Nothing
         Dim inifile As String = args("--config")
         Dim config As Configuration = Configuration.Load(inifile)
+        Dim rule_json As String = args("--access_rule")
+        Dim access_rule As AccessController = Nothing
 
         If Not wwwroot.StringEmpty Then
             fs = New FileSystem(wwwroot)
+        End If
+        If rule_json.FileExists Then
+            access_rule = rule_json.ReadAllText.LoadJSON(Of AccessController)
         End If
 
         If fs Is Nothing Then
@@ -198,6 +205,7 @@ Module Program
 
             Call http.Processor.WithStartups(startups)
             Call http.SetFileSystem(fs)
+            Call http.SetAccessControl(access_rule)
 
             Call BackgroundTaskUtils.BindToMaster(parent, http)
 

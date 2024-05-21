@@ -10,6 +10,7 @@ Public Class AccessController
     ''' </summary>
     ''' <returns></returns>
     Public Property status_key As String
+    Public Property redirect As String
 
     Public Property ignores As String()
         Get
@@ -21,6 +22,9 @@ Public Class AccessController
     End Property
 
     Dim m_ignoreIndex As Index(Of String)
+
+    Sub New()
+    End Sub
 
     Public Function CheckAccess(url As URL, ssid As String, config As Configuration) As Boolean
         If url.path Like m_ignoreIndex Then

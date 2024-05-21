@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::a61b92224f73ffddfbfb0fb48bdb63bf, studio\Rserver\Rweb\RProcessor.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 261
-    '    Code Lines: 192
-    ' Comment Lines: 32
-    '   Blank Lines: 37
-    '     File Size: 9.74 KB
+' Summaries:
 
 
-    ' Class RProcessor
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: RscriptRouter, WithStartups
-    ' 
-    '     Sub: pushBackResult, RscriptHttpGet, RscriptHttpPost, runRweb, SaveResponse
-    '     Class WebTask
-    ' 
-    '         Function: callInternal, ToString
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 261
+'    Code Lines: 192
+' Comment Lines: 32
+'   Blank Lines: 37
+'     File Size: 9.74 KB
+
+
+' Class RProcessor
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: RscriptRouter, WithStartups
+' 
+'     Sub: pushBackResult, RscriptHttpGet, RscriptHttpPost, runRweb, SaveResponse
+'     Class WebTask
+' 
+'         Function: callInternal, ToString
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -71,6 +71,7 @@ Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 
 ''' <summary>
 ''' 
@@ -200,6 +201,16 @@ Public Class RProcessor
                 If localRServer.fs Is Nothing Then
                     Call p.writeFailure(HTTP_RFC.RFC_NOT_FOUND, "file not found!")
                 Else
+                    Dim url As URL = request.URL
+                    Dim ssid As String = session_id(request.GetCookies, response)
+
+                    If Not localRServer.access Is Nothing Then
+                        If Not localRServer.access.CheckAccess(url, ssid, localRServer.config) Then
+                            Call response.Redirect(If(localRServer.access.redirect, "/"))
+                            Return
+                        End If
+                    End If
+
                     Call WebFileSystemListener.HostStaticFile(localRServer.fs, request, response)
                 End If
             ElseIf is_background Then
@@ -288,6 +299,15 @@ Public Class RProcessor
         Call RCallbackMessage.SendHttpResponseMessage(result, request, response, debug, showErr:=showError)
     End Sub
 
+    Private Function session_id(cookies As Cookies, ByRef response As HttpResponse) As String
+        If Not cookies.CheckCookie("session_id") Then
+            Call cookies.SetValue("session_id", (Now.ToString & randf.NextDouble.ToString).MD5)
+            Call response.SetCookies("session_id", cookies.GetCookie("session_id"))
+        End If
+
+        Return cookies.GetCookie("session_id")
+    End Function
+
     ''' <summary>
     ''' helper function for call rscript slave process
     ''' </summary>
@@ -337,11 +357,7 @@ Public Class RProcessor
         })
         Dim cookies As Cookies = request.GetCookies
         Dim http_context As StringDictionary = task.StartInfo.EnvironmentVariables
-
-        If Not cookies.CheckCookie("session_id") Then
-            Call cookies.SetValue("session_id", (Now.ToString & arguments).MD5)
-            Call response.SetCookies("session_id", cookies.GetCookie("session_id"))
-        End If
+        Dim ssid As String = session_id(cookies, response)
 
         http_context("APP_PATH") = Rweb
         http_context("cookies") = cookies.ToJSON

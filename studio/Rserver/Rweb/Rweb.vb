@@ -85,7 +85,15 @@ Public Class Rweb : Inherits HttpServer
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property fs As FileSystem
+    Public ReadOnly Property access As AccessController
+
     Public ReadOnly Property Processor As RProcessor
+
+    Public ReadOnly Property config As Configuration
+        Get
+            Return _settings
+        End Get
+    End Property
 
     ''' <summary>
     ''' next unique request id
@@ -123,6 +131,10 @@ Public Class Rweb : Inherits HttpServer
 
     Public Sub SetFileSystem(fs As FileSystem)
         _fs = fs
+    End Sub
+
+    Public Sub SetAccessControl(access As AccessController)
+        _access = access
     End Sub
 
     Public Overrides Function Run() As Integer
