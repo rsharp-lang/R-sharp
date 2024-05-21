@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fdbaaac684e6a88a136d6e429cca4ea6, Rscript\CLI\IPC.vb"
+﻿#Region "Microsoft.VisualBasic::4c9ddaba9070422e9312c1c817f4541a, Rscript\CLI\IPC.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 311
-    '    Code Lines: 247
+    '   Total Lines: 323
+    '    Code Lines: 256
     ' Comment Lines: 23
-    '   Blank Lines: 41
-    '     File Size: 13.07 KB
+    '   Blank Lines: 44
+    '     File Size: 13.52 KB
 
 
     ' Module CLI
     ' 
-    '     Function: postResult, slaveMode, tryHandleJSON
+    '     Function: fetch_arguments, postResult, slaveMode, tryHandleJSON
     ' 
     ' /********************************************************************************/
 

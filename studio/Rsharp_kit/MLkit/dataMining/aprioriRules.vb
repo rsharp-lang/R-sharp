@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e10aaa052c62529835a91c00db51d501, studio\Rsharp_kit\MLkit\dataMining\aprioriRules.vb"
+﻿#Region "Microsoft.VisualBasic::76890bfcc15efcca8182ada571828ba5, studio\Rsharp_kit\MLkit\dataMining\aprioriRules.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,16 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 106
-    '    Code Lines: 65
+    '   Total Lines: 128
+    '    Code Lines: 84
     ' Comment Lines: 26
-    '   Blank Lines: 15
-    '     File Size: 4.57 KB
+    '   Blank Lines: 18
+    '     File Size: 5.37 KB
 
 
     ' Module aprioriRules
     ' 
-    '     Function: apriori, load_transactions, niceTable
+    '     Function: apriori, load_transactions, niceTable, parse_transactions
     ' 
     '     Sub: Main
     ' 
@@ -179,4 +179,3 @@ Module aprioriRules
     End Function
 
 End Module
-

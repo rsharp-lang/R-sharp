@@ -1,4 +1,58 @@
-﻿Imports Flute.Http.Configurations
+﻿#Region "Microsoft.VisualBasic::893042118bf6d4cdb9069093f936990f, studio\Rserver\Rweb\AccessController.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 42
+    '    Code Lines: 29
+    ' Comment Lines: 4
+    '   Blank Lines: 9
+    '     File Size: 1.21 KB
+
+
+    ' Class AccessController
+    ' 
+    '     Properties: ignores, redirect, status_key
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    '     Function: CheckAccess
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports Flute.Http.Configurations
 Imports Flute.SessionManager
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Net.HTTP
@@ -40,3 +94,4 @@ Public Class AccessController
     End Function
 
 End Class
+

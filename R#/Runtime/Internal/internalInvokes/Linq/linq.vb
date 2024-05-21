@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::06cfe9aebf2fdccd731ce36e3003ab33, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
+﻿#Region "Microsoft.VisualBasic::d0661b750f68187209e6310ae4db9e64, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1637
-    '    Code Lines: 926
-    ' Comment Lines: 527
-    '   Blank Lines: 184
-    '     File Size: 73.02 KB
+    '   Total Lines: 1670
+    '    Code Lines: 947
+    ' Comment Lines: 538
+    '   Blank Lines: 185
+    '     File Size: 74.88 KB
 
 
     '     Module linq

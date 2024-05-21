@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f702901b1bc26249ffed69a88509d68f, studio\Rserver\Rweb\Rweb.vb"
+﻿#Region "Microsoft.VisualBasic::90da4289367998ca63ae3275de5d16d8, studio\Rserver\Rweb\Rweb.vb"
 
     ' Author:
     ' 
@@ -34,22 +34,23 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 159
-    '    Code Lines: 119
+    '   Total Lines: 171
+    '    Code Lines: 128
     ' Comment Lines: 15
-    '   Blank Lines: 25
-    '     File Size: 5.74 KB
+    '   Blank Lines: 28
+    '     File Size: 6.03 KB
 
 
     ' Class Rweb
     ' 
-    '     Properties: fs, NextRequestId, Processor, TcpPort
+    '     Properties: access, config, fs, NextRequestId, Processor
+    '                 TcpPort
     ' 
     '     Constructor: (+1 Overloads) Sub New
     ' 
     '     Function: callback, getHttpProcessor, ParseJSON, Run
     ' 
-    '     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest, SetFileSystem
+    '     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest, SetAccessControl, SetFileSystem
     ' 
     ' /********************************************************************************/
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7c9df2056ed37e2f5afca181915a1fdf, R#\Runtime\Vectorization\CLRVector.vb"
+﻿#Region "Microsoft.VisualBasic::d11a029156026534ee312ef90effb926, R#\Runtime\Vectorization\CLRVector.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 490
-    '    Code Lines: 392
-    ' Comment Lines: 49
-    '   Blank Lines: 49
-    '     File Size: 20.12 KB
+    '   Total Lines: 568
+    '    Code Lines: 452
+    ' Comment Lines: 58
+    '   Blank Lines: 58
+    '     File Size: 23.20 KB
 
 
     '     Module CLRVector

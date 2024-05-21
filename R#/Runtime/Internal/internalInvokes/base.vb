@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::26ab219253c2bf21704ac0f06b77fbcb, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::fece74800b34b02204bbf9679ec7bf61, R#\Runtime\Internal\internalInvokes\base.vb"
 
     ' Author:
     ' 
@@ -34,33 +34,33 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 3508
-    '    Code Lines: 1614
-    ' Comment Lines: 1593
-    '   Blank Lines: 301
-    '     File Size: 157.26 KB
+    '   Total Lines: 3330
+    '    Code Lines: 1468
+    ' Comment Lines: 1585
+    '   Blank Lines: 277
+    '     File Size: 149.52 KB
 
 
     '     Module base
     ' 
     '         Function: __empty, [date], [stop], allocate, append
     '                   appendFinal, appendOfList, appendOfVector, (+3 Overloads) argumentList, attachPackageFile
-    '                   autoDispose, c, cat, (+2 Overloads) cbind, character
-    '                   checkDimensionsAgree, colnames, columnCombine01, columnCombine11, columnVector
-    '                   commandArgs, doPrintInternal, dQuote, factor, factors
-    '                   getOption, getPosition, ifelse, ifelseScalar, ifelseVector
-    '                   ints, invisible, isDataframe, isEmpty, isEmptyArray
-    '                   isFALSE, isFunction, isList, isNA, isNull
-    '                   isRVector, isTRUE, length, library, logical
-    '                   makeNames, names, ncol, neg, nrow
-    '                   numeric, objectAddInvoke, options, options_flush, print
-    '                   range, raws, rbind, Rdataframe, rep
-    '                   rep_int, rep_len, replace, Rlist, Robj_dimension
-    '                   rownames, seq, sink, source, sQuote
-    '                   str, strictColumnAppend, summary, t, uniqueNames
-    '                   unitOfT, ValueAt, warning, year
+    '                   autoDispose, c, cat, cbind, character
+    '                   checkDimensionsAgree, colnames, columnVector, commandArgs, doPrintInternal
+    '                   dQuote, factor, factors, getOption, getPosition
+    '                   ifelse, ifelseScalar, ifelseVector, ints, invisible
+    '                   isDataframe, isEmpty, isEmptyArray, isFALSE, isFunction
+    '                   isList, isNA, isNull, isRVector, isTRUE
+    '                   length, library, logical, makeNames, names
+    '                   ncol, neg, nrow, numeric, objectAddInvoke
+    '                   options, options_flush, print, range, raws
+    '                   rbind, Rdataframe, rep, rep_int, rep_len
+    '                   replace, Rlist, Robj_dimension, rownames, seq
+    '                   sink, source, sQuote, str, summary
+    '                   t, uniqueNames, unitOfT, ValueAt, warning
+    '                   year
     ' 
-    '         Sub: println_message, safeAddColumn, warnings
+    '         Sub: println_message, warnings
     '         Class PrinterOptions
     ' 
     '             Properties: fields, maxPrint, maxWidth, quot

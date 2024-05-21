@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::41acc6b42a37bbad3697234060bc45a8, Library\base\utils\JSON.vb"
+﻿#Region "Microsoft.VisualBasic::ca90ebe24aae32e1dedd7b65ccd0bfe4, Library\base\utils\JSON.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 301
-    '    Code Lines: 190
+    '   Total Lines: 303
+    '    Code Lines: 192
     ' Comment Lines: 80
     '   Blank Lines: 31
-    '     File Size: 12.10 KB
+    '     File Size: 12.24 KB
 
 
     ' Module JSON

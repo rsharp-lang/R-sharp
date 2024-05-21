@@ -1,53 +1,54 @@
-﻿#Region "Microsoft.VisualBasic::cdd9e6923c1b9f8d90e425d9f03991b9, Library\base\base\netCDFutils.vb"
+﻿#Region "Microsoft.VisualBasic::1da430227341ebc3ffd4ca880df370a5, Library\base\base\netCDFutils.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 241
-'    Code Lines: 179
-' Comment Lines: 28
-'   Blank Lines: 34
-'     File Size: 9.64 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module netCDFutils
-' 
-'     Constructor: (+1 Overloads) Sub New
-'     Function: attributeData, dataframe, dimensions, getAttributes, getDataVariable
-'               getValue, globalAttributes, openCDF, printVar, variableNames
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 315
+    '    Code Lines: 234
+    ' Comment Lines: 37
+    '   Blank Lines: 44
+    '     File Size: 12.76 KB
+
+
+    ' Module netCDFutils
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    '     Function: attributeData, dataframe, dimensions, getAttributes, getDataVariable
+    '               getValue, globalAttributes, openCDF, printVar, save_dataframe
+    '               variableNames
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

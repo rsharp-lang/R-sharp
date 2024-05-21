@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b1bfe0151e284f05065ee9250752bfcc, Library\graphics\grDevices.vb"
+﻿#Region "Microsoft.VisualBasic::e791d593c438ed1f25a50a1062651afb, Library\graphics\grDevices.vb"
 
     ' Author:
     ' 
@@ -34,11 +34,11 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 582
-    '    Code Lines: 383
-    ' Comment Lines: 139
+    '   Total Lines: 601
+    '    Code Lines: 384
+    ' Comment Lines: 157
     '   Blank Lines: 60
-    '     File Size: 25.03 KB
+    '     File Size: 25.75 KB
 
 
     ' Module grDevices
