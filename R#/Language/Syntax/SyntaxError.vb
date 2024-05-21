@@ -37,7 +37,7 @@
     '   Total Lines: 71
     '    Code Lines: 57 (80.28%)
     ' Comment Lines: 0 (0.00%)
-    '    - Xml Docs: NaN%
+    '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 14 (19.72%)
     '     File Size: 3.03 KB

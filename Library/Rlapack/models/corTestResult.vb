@@ -37,7 +37,7 @@
     '   Total Lines: 0
     '    Code Lines: 0 (NaN%)
     ' Comment Lines: 0 (NaN%)
-    '    - Xml Docs: NaN%
+    '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 0 (NaN%)
     '     File Size: 0 B
