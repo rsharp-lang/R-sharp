@@ -127,12 +127,21 @@ Module Program
 
     <ExportAPI("/make.config")>
     <Description("export the default configuration file for the http server core.")>
-    <Usage("/make.config --export <file_path_to_save.ini>")>
+    <Usage("/make.config --export <dir_path_to_save settings.ini>")>
     Public Function makeconfig(args As CommandLine) As Integer
-        Dim configfile As String = args("--export")
+        Dim export_dir As String = args("--export")
         Dim defaultSettings As Configuration = Configuration.Default
+        Dim configfile As String = $"{export_dir}/settings.ini"
+        Dim access As New AccessController With {
+            .ignores = {},
+            .redirect = "/",
+            .status_key = "user"
+        }
 
-        Return Configuration.Save(defaultSettings, configfile).CLICode
+        Call Configuration.Save(defaultSettings, configfile)
+        Call access.GetJson.SaveTo($"{export_dir}/access.json")
+
+        Return 0
     End Function
 
     ''' <summary>
