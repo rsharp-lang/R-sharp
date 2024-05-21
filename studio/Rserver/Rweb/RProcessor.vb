@@ -254,6 +254,11 @@ Public Class RProcessor
         End Function
     End Class
 
+    ''' <summary>
+    ''' local rscript file path resolver for url
+    ''' </summary>
+    ''' <param name="request"></param>
+    ''' <returns></returns>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function RscriptRouter(request As HttpRequest) As String
         Dim url As URL = request.URL
