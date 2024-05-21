@@ -951,6 +951,10 @@ Namespace Runtime.Internal.Invokes
             ElseIf row Is Nothing Then
                 Return d
             ElseIf TypeOf row Is dataframe Then
+                If DirectCast(row, dataframe).empty Then
+                    Return d
+                End If
+
                 ' row bind of two dataframe object
                 If safe Then
                     Return rbindOp.safeRowBindDataFrame(d, row, env)
