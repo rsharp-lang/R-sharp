@@ -1735,6 +1735,9 @@ RE0:
 
             Dim type As Type = x.GetType
 
+            If type Is GetType(dataframe) Then
+                Return DirectCast(x, dataframe).empty
+            End If
             If type Is GetType(String) Then
                 Return DirectCast(x, String).StringEmpty(False)
             ElseIf type Is GetType(String()) Then
