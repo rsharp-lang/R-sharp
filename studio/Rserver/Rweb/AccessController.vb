@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::893042118bf6d4cdb9069093f936990f, studio\Rserver\Rweb\AccessController.vb"
+﻿#Region "Microsoft.VisualBasic::4441b8bb979a368fdaa3b9184ff93527, studio\Rserver\Rweb\AccessController.vb"
 
     ' Author:
     ' 
@@ -35,10 +35,12 @@
     ' Code Statistics:
 
     '   Total Lines: 42
-    '    Code Lines: 29
-    ' Comment Lines: 4
-    '   Blank Lines: 9
-    '     File Size: 1.21 KB
+    '    Code Lines: 29 (69.05%)
+    ' Comment Lines: 4 (9.52%)
+    '    - Xml Docs: 100.00%
+    ' 
+    '   Blank Lines: 9 (21.43%)
+    '     File Size: 1.20 KB
 
 
     ' Class AccessController
@@ -94,4 +96,3 @@ Public Class AccessController
     End Function
 
 End Class
-

@@ -35,9 +35,11 @@
     ' Code Statistics:
 
     '   Total Lines: 0
-    '    Code Lines: 0
-    ' Comment Lines: 0
-    '   Blank Lines: 0
+    '    Code Lines: 0 (NaN%)
+    ' Comment Lines: 0 (NaN%)
+    '    - Xml Docs: NaN%
+    ' 
+    '   Blank Lines: 0 (NaN%)
     '     File Size: 0 B
 
 
