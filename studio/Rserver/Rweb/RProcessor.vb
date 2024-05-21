@@ -206,7 +206,7 @@ Public Class RProcessor
 
                     If Not localRServer.access Is Nothing Then
                         If Not localRServer.access.CheckAccess(url, ssid, localRServer.config) Then
-                            Call response.Redirect(If(localRServer.access.redirect, "/") & $"?back={request.URL.Url.UrlEncode}")
+                            Call response.Redirect(If(localRServer.access.redirect, "/") & $"?back={request.URL.ToString(addHostName:=False).UrlEncode}")
                             Return
                         End If
                     End If
