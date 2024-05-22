@@ -953,6 +953,10 @@ Namespace Runtime.Internal.Invokes
             ElseIf row Is Nothing Then
                 Return d
             ElseIf TypeOf row Is dataframe Then
+                If DirectCast(row, dataframe).empty Then
+                    Return d
+                End If
+
                 ' row bind of two dataframe object
                 If safe Then
                     Return rbindOp.safeRowBindDataFrame(d, row, env)
@@ -1733,6 +1737,9 @@ RE0:
 
             Dim type As Type = x.GetType
 
+            If type Is GetType(dataframe) Then
+                Return DirectCast(x, dataframe).empty
+            End If
             If type Is GetType(String) Then
                 Return DirectCast(x, String).StringEmpty(False)
             ElseIf type Is GetType(String()) Then
