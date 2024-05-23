@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::dab7f0eeb51715c69f4e828d9bcc364e, studio\Rsharp_kit\MLkit\Manifold.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 258
-    '    Code Lines: 170 (65.89%)
-    ' Comment Lines: 59 (22.87%)
-    '    - Xml Docs: 94.92%
-    ' 
-    '   Blank Lines: 29 (11.24%)
-    '     File Size: 10.74 KB
+' Summaries:
 
 
-    ' Module Manifold
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asGraph, exportUmapTable, umapProjection
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 258
+'    Code Lines: 170 (65.89%)
+' Comment Lines: 59 (22.87%)
+'    - Xml Docs: 94.92%
+' 
+'   Blank Lines: 29 (11.24%)
+'     File Size: 10.74 KB
+
+
+' Module Manifold
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asGraph, exportUmapTable, umapProjection
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.visualize
+Imports Microsoft.VisualBasic.Data.visualize.Network.Analysis
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.DataMining.UMAP
@@ -274,12 +275,20 @@ Module Manifold
     End Function
 
     ''' <summary>
-    ''' Extract the umap graph
+    ''' Extract the umap abstract graph
     ''' </summary>
     ''' <param name="umap"></param>
     ''' <param name="labels"></param>
-    ''' <param name="groups"></param>
-    ''' <param name="threshold"></param>
+    ''' <param name="groups">
+    ''' set the graph vertex class label via this parameter manually by 
+    ''' pass a character vector which its dimension size is equals to the
+    ''' input entity dataset size, 
+    ''' or leaves this parameter omit(nothing) for auto clustering the
+    ''' nodes via Louvain clustering method.
+    ''' </param>
+    ''' <param name="threshold">
+    ''' threshold value for create the edges from the umap manifolds result matrix.
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("as.graph")>
@@ -305,7 +314,11 @@ Module Manifold
             For i As Integer = 0 To uniqueLabels.Length - 1
                 g.GetElementByID(uniqueLabels(i)).data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = labelList(i)
             Next
+        Else
+            g = Communities.Analysis(g, 0.01)
         End If
+
+        g = PAGA.Abstraction(manifolds:=g)
 
         Return g
     End Function
