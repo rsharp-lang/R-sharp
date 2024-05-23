@@ -90,6 +90,24 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
+        ''' <example>
+        ''' # create data frame
+        ''' df &lt;- data.frame(team     = c('A', 'A', 'A', 'B', 'B', 'B'),
+        '''                     position = c('G', 'G', 'F', 'G', 'F', 'F'),
+        '''                     points   = c(99, 90, 86, 88, 95, 99),
+        '''                     assists  = c(33, 28, 31, 39, 34, 23),
+        '''                     rebounds = c(30, 28, 24, 24, 28, 33));
+        ''' 
+        ''' # view data frame
+        ''' print(df);
+        ''' 
+        ''' # find mean points by team
+        ''' aggregate(df$points, by=list(df$team), FUN=mean);
+        ''' 
+        '''   Group.1        x
+        ''' 1       A 91.66667
+        ''' 2       B 94.00000
+        ''' </example>
         <ExportAPI("aggregate")>
         Public Function aggregate_eval(<RRawVectorArgument> Optional x As Object = Nothing,
                                        <RRawVectorArgument> Optional [by] As Object = Nothing,
