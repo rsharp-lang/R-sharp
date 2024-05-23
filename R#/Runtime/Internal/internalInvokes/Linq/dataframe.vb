@@ -1,61 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::def13cd2f7d5e32521a3173267fdb522, R#\Runtime\Internal\internalInvokes\Linq\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 206
-    '    Code Lines: 131 (63.59%)
-    ' Comment Lines: 49 (23.79%)
-    '    - Xml Docs: 77.55%
-    ' 
-    '   Blank Lines: 26 (12.62%)
-    '     File Size: 8.60 KB
+' Summaries:
 
 
-    '     Module dataframe_methods
-    ' 
-    '         Function: colMeans, colSums, eval, rank_unique, rename
-    '                   rowMeans, rowSums
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 206
+'    Code Lines: 131 (63.59%)
+' Comment Lines: 49 (23.79%)
+'    - Xml Docs: 77.55%
+' 
+'   Blank Lines: 26 (12.62%)
+'     File Size: 8.60 KB
+
+
+'     Module dataframe_methods
+' 
+'         Function: colMeans, colSums, eval, rank_unique, rename
+'                   rowMeans, rowSums
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Scripting.Expressions
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -130,15 +133,87 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                                        Optional FUN As Object = Nothing,
                                        Optional env As Environment = Nothing) As Object
 
-            If x Is Nothing AndAlso by Is Nothing Then
-                If FUN Is Nothing Then
-                    Return Internal.debug.stop("all of the required aggregate element is nothing!", env)
-                Else
-                    ' get a function object for do aggregate
-                End If
+            If FUN Is Nothing Then
+                Return Internal.debug.stop("all of the required aggregate element is nothing!", env)
             End If
 
-            Throw New NotImplementedException
+            ' get a function object for do aggregate
+            Dim fx As Func(Of IEnumerable(Of Double), Double) = aggregate_func(FUN)
+
+            If x Is Nothing AndAlso by Is Nothing Then
+                Return fx
+            End If
+
+            If TypeOf x Is dataframe Then
+                Throw New NotImplementedException
+            Else
+                Dim vx As Double() = CLRVector.asNumeric(x)
+                Dim factors As String() = combineFactors(by, Nothing)
+                Dim groups = factors.Select(Function(fstr, i) (fstr, vx(i))).GroupBy(Function(f) f.fstr).ToArray
+                Dim result As New dataframe With {
+                    .columns = New Dictionary(Of String, Array),
+                    .rownames = groups.Select(Function(g) g.Key).ToArray
+                }
+
+                result.add("Group", result.rownames)
+                result.add("x", groups.Select(Function(g) fx(g.Select(Function(i) i.Item2))))
+
+                Return result
+            End If
+        End Function
+
+        Private Function aggregate_func(fun As Object) As Func(Of IEnumerable(Of Double), Double)
+            Dim assign As ValueAssignExpression = fun
+            Dim value As Expression = assign.value
+            Dim name As String = ValueAssignExpression.GetSymbol(value)
+            Dim flag As Aggregates = anys.Expressions.ParseFlag(name)
+
+            If flag = Aggregates.Invalid Then
+                Throw New NotImplementedException
+            Else
+                Return anys.Expressions.GetAggregateFunction(flag)
+            End If
+        End Function
+
+        Private Function combineFactors(by As Object, source_df As dataframe) As String()
+            If TypeOf by Is list Then
+                ' combine with multiple factor
+                Dim factors As New List(Of String())
+
+                For Each col In DirectCast(by, list).data
+                    factors.Add(CLRVector.asCharacter(col))
+                Next
+
+                Return factors.combineFactors(nsize:=factors(0).Length)
+            Else
+                Dim factors As String() = CLRVector.asCharacter(by)
+
+                If source_df Is Nothing Then
+                    Return factors
+                Else
+                    ' should be the col names
+                    Dim factorList As New List(Of String())
+
+                    For Each name As String In factors
+                        factorList.Add(CLRVector.asCharacter(source_df(name)))
+                    Next
+
+                    Return factorList.combineFactors(nsize:=source_df.nrows)
+                End If
+            End If
+        End Function
+
+        <Extension>
+        Private Function combineFactors(factors As List(Of String()), nsize As Integer) As String()
+            Dim group_factors As String() = Enumerable.Range(0, nsize) _
+                .Select(Function(i)
+                            Return factors _
+                                .Select(Function(f) f(i)) _
+                                .JoinBy(" / ")
+                        End Function) _
+                .ToArray
+
+            Return group_factors
         End Function
 
         ''' <summary>
