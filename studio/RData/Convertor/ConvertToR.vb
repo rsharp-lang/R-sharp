@@ -56,6 +56,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.RDataSet.Flags
 Imports SMRUCC.Rsharp.RDataSet.Struct

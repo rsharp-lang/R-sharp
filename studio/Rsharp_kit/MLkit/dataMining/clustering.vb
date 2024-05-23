@@ -1,68 +1,68 @@
 ﻿#Region "Microsoft.VisualBasic::10c443e9436be78484a65cfc2f887988, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1523
-    '    Code Lines: 1007 (66.12%)
-    ' Comment Lines: 317 (20.81%)
-    '    - Xml Docs: 90.54%
-    ' 
-    '   Blank Lines: 199 (13.07%)
-    '     File Size: 62.23 KB
+' Summaries:
 
 
-    ' Module clustering
-    ' 
-    '     Function: AffinityPropagationClustering, btreeClusterFUN, calinski_harabasz, Canopy, clusterGroups
-    '               clusterResultDataFrame, clusters, clustersDf1, clusterSummary, cmeansSummary
-    '               dataSetCommon, dbscan, dbscan_objects, densityA, ensureNotIsDistance
-    '               fuzzyCMeans, getTraceback, gmm_components, gmm_predict, gmm_predict_proba
-    '               gmmf, hclust, hdbscan_exec, hleaf, hnode
-    '               Kmeans_func, knn, Lloyds, showHclust, silhouette_score
-    '               ToHClust, treeDf
-    ' 
-    '     Sub: Main
-    '     Class point2DReader
-    ' 
-    '         Function: activate, getByDimension, GetDimensions, metric, nodeIs
-    ' 
-    '         Sub: setByDimensin
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1523
+'    Code Lines: 1007 (66.12%)
+' Comment Lines: 317 (20.81%)
+'    - Xml Docs: 90.54%
+' 
+'   Blank Lines: 199 (13.07%)
+'     File Size: 62.23 KB
+
+
+' Module clustering
+' 
+'     Function: AffinityPropagationClustering, btreeClusterFUN, calinski_harabasz, Canopy, clusterGroups
+'               clusterResultDataFrame, clusters, clustersDf1, clusterSummary, cmeansSummary
+'               dataSetCommon, dbscan, dbscan_objects, densityA, ensureNotIsDistance
+'               fuzzyCMeans, getTraceback, gmm_components, gmm_predict, gmm_predict_proba
+'               gmmf, hclust, hdbscan_exec, hleaf, hnode
+'               Kmeans_func, knn, Lloyds, showHclust, silhouette_score
+'               ToHClust, treeDf
+' 
+'     Sub: Main
+'     Class point2DReader
+' 
+'         Function: activate, getByDimension, GetDimensions, metric, nodeIs
+' 
+'         Sub: setByDimensin
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -71,6 +71,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
@@ -779,7 +780,7 @@ Module clustering
         End If
 
         If traceback Is Nothing Then
-            Return pull.TryCast(Of IEnumerable(Of ClusterEntity)).calinskiharabasz
+            Return pull.TryCast(Of IEnumerable(Of ClusterEntity)).CalinskiHarabasz
         Else
             Dim itr As New TraceBackIterator(traceback.data)
             Dim data = pull.TryCast(Of IEnumerable(Of ClusterEntity)).ToArray
@@ -1248,7 +1249,7 @@ Module clustering
 
         Dim uniqueId As String() = pixels _
             .Select(Function(d) d.ID) _
-            .uniqueNames
+            .UniqueNames
 
         For i As Integer = 0 To uniqueId.Length - 1
             pixels(i).ID = uniqueId(i)

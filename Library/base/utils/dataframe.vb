@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::3f79ebae3ce3222127f2c5ab1b46e8fd, Library\base\utils\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 766
-    '    Code Lines: 566 (73.89%)
-    ' Comment Lines: 105 (13.71%)
-    '    - Xml Docs: 88.57%
-    ' 
-    '   Blank Lines: 95 (12.40%)
-    '     File Size: 29.45 KB
+' Summaries:
 
 
-    ' Module dataframe
-    ' 
-    '     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
-    '               colnames, column, createEntityRow, CreateRowObject, dataframeTable
-    '               deserialize, loadDataframe, measureColumnVector, openCsv, parseDataframe
-    '               parseRow, printRowVector, printTable, project, rawToDataFrame
-    '               readCsvRaw, readDataSet, rows, rowToString, RowToString
-    '               stripCommentRows, transpose, vector
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 766
+'    Code Lines: 566 (73.89%)
+' Comment Lines: 105 (13.71%)
+'    - Xml Docs: 88.57%
+' 
+'   Blank Lines: 95 (12.40%)
+'     File Size: 29.45 KB
+
+
+' Module dataframe
+' 
+'     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
+'               colnames, column, createEntityRow, CreateRowObject, dataframeTable
+'               deserialize, loadDataframe, measureColumnVector, openCsv, parseDataframe
+'               parseRow, printRowVector, printTable, project, rawToDataFrame
+'               readCsvRaw, readDataSet, rows, rowToString, RowToString
+'               stripCommentRows, transpose, vector
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -66,6 +66,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
@@ -334,7 +335,7 @@ Module dataframe
             ' the underlying base type is dictionary
             ' for columns, this required of the column
             ' name as dictionary key should be unique!
-            colNames = colNames.uniqueNames
+            colNames = colNames.UniqueNames
         End If
 
         Dim dataframe As New Rdataframe() With {
