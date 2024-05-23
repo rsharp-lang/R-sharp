@@ -263,7 +263,9 @@ Namespace Runtime.Internal
                                            Optional suppress As Boolean = False) As [Variant](Of Message, GenericFunction)
 
             If Not generics.ContainsKey(funcName) Then
-                Return Internal.debug.stop($"no function named '{funcName}'", env, suppress_log:=True)
+                Return Internal.debug.stop($"no function named '{funcName}'", env,
+                                           suppress:=suppress,
+                                           suppress_log:=True)
             End If
             If type Is GetType(vbObject) AndAlso Not generics(funcName).ContainsKey(type) Then
                 x = DirectCast(x, vbObject).target
