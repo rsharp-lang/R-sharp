@@ -38,7 +38,7 @@ bitmap(file = `./MNIST-LabelledVectorArray-20000x100.umap_graph.png`) {
     # run network graph rendering
     |> render(
         canvasSize        = [3840, 2160],
-        padding           = "padding:100px 100px 100px 100px;",
+        padding           = "padding:200px 200px 200px 200px;",
         labelerIterations = -1,
         minNodeSize       = 30,
         minLinkWidth      = 0.5,
