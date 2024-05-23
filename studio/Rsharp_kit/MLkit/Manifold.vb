@@ -84,11 +84,19 @@ Module Manifold
     Sub Main()
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Umap), AddressOf exportUmapTable)
 
-        Call Internal.generic.add("writeBin", GetType(UMAPProject), AddressOf saveUMAP)
+        Call Internal.generic.add("writeBin", GetType(Umap), AddressOf saveUMAP)
+        Call Internal.generic.add("writeBin", GetType(UMAPProject), AddressOf saveUMAP_1)
         Call Internal.generic.add("readBin.umap", GetType(Stream), AddressOf loadUMAP)
 
         Call Internal.generic.add("plot", GetType(Umap), AddressOf datasetKit.EmbeddingRender)
     End Sub
+
+    Private Function saveUMAP_1(umap As UMAPProject, args As list, env As Environment) As Object
+        Dim con As Stream = args!con
+        Call UMAPProject.WriteFile(umap, con)
+        Call con.Flush()
+        Return True
+    End Function
 
     Private Function saveUMAP(umap As Umap, args As list, env As Environment) As Object
         Dim con As Stream = args!con
