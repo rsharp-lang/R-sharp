@@ -364,7 +364,7 @@ Module Manifold
             g = Communities.Analysis(g, 0.01)
         End If
 
-        g = PAGA.Abstraction(manifolds:=g)
+        g = PAGA.Abstraction(manifolds:=g, threshold:=0.1)
 
         Return g
     End Function
