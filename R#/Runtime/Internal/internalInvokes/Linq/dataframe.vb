@@ -60,12 +60,29 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Scripting.Expressions
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Linq
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports anys = Microsoft.VisualBasic.Scripting
+
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Development.CodeAnalysis
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Language.Syntax
+Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
+Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
@@ -159,21 +176,39 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
 
             If TypeOf x Is dataframe Then
-                Throw New NotImplementedException
+                If Not TypeOf by Is FormulaExpression Then
+                    Throw New NotImplementedException
+                End If
+
+                Dim formula As FormulaExpression = by
+                Dim vx_name As String = formula.var
+                Dim symbols = SymbolAnalysis _
+                    .GetSymbolReferenceList(formula.formula) _
+                    .Select(Function(fi) fi.Name) _
+                    .ToArray
+                Dim factors As String() = combineFactors(symbols, x)
+                Dim vx As Double() = CLRVector.asNumeric(DirectCast(x, dataframe)(vx_name))
+
+                Return aggregate_run(vx, factors, fx)
             Else
                 Dim vx As Double() = CLRVector.asNumeric(x)
                 Dim factors As String() = combineFactors(by, Nothing)
-                Dim groups = factors.Select(Function(fstr, i) (fstr, vx(i))).GroupBy(Function(f) f.fstr).ToArray
-                Dim result As New dataframe With {
-                    .columns = New Dictionary(Of String, Array),
-                    .rownames = groups.Select(Function(g) g.Key).ToArray
-                }
 
-                result.add("Group", result.rownames)
-                result.add("x", groups.Select(Function(g) fx(g.Select(Function(i) i.Item2))))
-
-                Return result
+                Return aggregate_run(vx, factors, fx)
             End If
+        End Function
+
+        Private Function aggregate_run(vx As Double(), factors As String(), fx As Func(Of IEnumerable(Of Double), Double)) As Object
+            Dim groups = factors.Select(Function(fstr, i) (fstr, vx(i))).GroupBy(Function(f) f.fstr).ToArray
+            Dim result As New dataframe With {
+                .columns = New Dictionary(Of String, Array),
+                .rownames = groups.Select(Function(g) g.Key).ToArray
+            }
+
+            Call result.add("Group", result.rownames)
+            Call result.add("x", groups.Select(Function(g) fx(g.Select(Function(i) i.Item2))))
+
+            Return result
         End Function
 
         Private Function aggregate_func(fun As Object) As Func(Of IEnumerable(Of Double), Double)

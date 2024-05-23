@@ -210,6 +210,13 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <param name="name"></param>
         ''' <param name="value"></param>
+        ''' <remarks>
+        ''' this function has different behaviours when compares with
+        ''' the <see cref="setByName(String, Object, Environment)"/>:
+        ''' 
+        ''' 1. this function just add slot value directly even if the given value is nothing
+        ''' 2. ``setByName`` function will removes slot if the value is nothing
+        ''' </remarks>
         Public Sub add(name As String, value As Object)
             If slots Is Nothing Then
                 slots = New Dictionary(Of String, Object)
@@ -639,8 +646,24 @@ Namespace Runtime.Internal.Object
             Return names.All(AddressOf hasName)
         End Function
 
-        Public Shared Function empty() As Object
+        Public Shared Function empty() As list
             Return New list With {.slots = New Dictionary(Of String, Object)}
+        End Function
+
+        ''' <summary>
+        ''' create a list with given slot names, but the 
+        ''' corresponding slot value is nothing
+        ''' </summary>
+        ''' <param name="slot_names"></param>
+        ''' <returns></returns>
+        Public Shared Function set_empty(slot_names As IEnumerable(Of String)) As list
+            Dim empty As list = list.empty
+
+            For Each name As String In slot_names
+                empty.add(name, Nothing)
+            Next
+
+            Return empty
         End Function
 
         ''' <summary>
