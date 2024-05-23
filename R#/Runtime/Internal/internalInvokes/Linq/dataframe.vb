@@ -107,6 +107,13 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         '''   Group.1        x
         ''' 1       A 91.66667
         ''' 2       B 94.00000
+        ''' 
+        ''' # or 
+        ''' aggregate(df, by = points ~ team, FUN = mean);
+        ''' 
+        '''   Group.1        x
+        ''' 1       A 91.66667
+        ''' 2       B 94.00000
         ''' </example>
         <ExportAPI("aggregate")>
         Public Function aggregate_eval(<RRawVectorArgument> Optional x As Object = Nothing,
