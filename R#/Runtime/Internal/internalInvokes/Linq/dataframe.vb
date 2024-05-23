@@ -56,7 +56,6 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -64,7 +63,6 @@ Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Linq
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports anys = Microsoft.VisualBasic.Scripting
-Imports expr = SMRUCC.Rsharp.Interpreter.ExecuteEngine.Expression
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
@@ -82,11 +80,31 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <param name="x">an R object. For the formula method a formula, such as y ~ x or cbind(y1, y2) ~ x1 + x2,
         ''' where the y variables are numeric data to be split into groups according to the grouping 
         ''' x variables (usually factors).</param>
-        ''' <param name="expr"></param>
+        ''' <param name="by">
+        ''' a list of grouping elements, each as long as the variables in the data frame x. 
+        ''' The elements are coerced to factors before use.
+        ''' </param>
+        ''' <param name="FUN">
+        ''' a function to compute the summary statistics which can be applied to 
+        ''' all data subsets.
+        ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("aggregate")>
-        Public Function aggregate_eval(x As dataframe, <RLazyExpression> expr As expr, Optional env As Environment = Nothing) As Object
+        Public Function aggregate_eval(<RRawVectorArgument> Optional x As Object = Nothing,
+                                       <RRawVectorArgument> Optional [by] As Object = Nothing,
+                                       <RLazyExpression>
+                                       Optional FUN As Object = Nothing,
+                                       Optional env As Environment = Nothing) As Object
+
+            If x Is Nothing AndAlso by Is Nothing Then
+                If FUN Is Nothing Then
+                    Return Internal.debug.stop("all of the required aggregate element is nothing!", env)
+                Else
+                    ' get a function object for do aggregate
+                End If
+            End If
+
 
         End Function
 
