@@ -104,19 +104,33 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' # view data frame
         ''' print(df);
         ''' 
+        ''' #            team position    points   assists  rebounds
+        ''' # -------------------------------------------------------
+        ''' # &lt;mode> &lt;string> &lt;string> &lt;integer> &lt;integer> &lt;integer>
+        ''' # [1, ]       "A"      "G"        99        33        30
+        ''' # [2, ]       "A"      "G"        90        28        28
+        ''' # [3, ]       "A"      "F"        86        31        24
+        ''' # [4, ]       "B"      "G"        88        39        24
+        ''' # [5, ]       "B"      "F"        95        34        28
+        ''' # [6, ]       "B"      "F"        99        23        33
+        ''' 
         ''' # find mean points by team
         ''' aggregate(df$points, by=list(df$team), FUN=mean);
         ''' 
-        '''   Group.1        x
-        ''' 1       A 91.66667
-        ''' 2       B 94.00000
+        ''' #           Group        x
+        ''' # ------------------------
+        ''' # &lt;mode> &lt;string> &lt;double>
+        ''' # A           "A"  91.6667
+        ''' # B           "B"       94
         ''' 
         ''' # or 
         ''' aggregate(df, by = points ~ team, FUN = mean);
         ''' 
-        '''   Group.1        x
-        ''' 1       A 91.66667
-        ''' 2       B 94.00000
+        ''' #           Group        x
+        ''' # ------------------------
+        ''' # &lt;mode> &lt;string> &lt;double>
+        ''' # A           "A"  91.6667
+        ''' # B           "B"       94
         ''' 
         ''' # get aggregate function demo
         ''' #
