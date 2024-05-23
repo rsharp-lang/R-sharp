@@ -56,6 +56,7 @@ Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.visualize
 Imports Microsoft.VisualBasic.Data.visualize.Network.Analysis
@@ -321,7 +322,7 @@ Module Manifold
                             Optional env As Environment = Nothing) As Object
 
         Dim labelList As String() = CLRVector.asCharacter(labels)
-        Dim uniqueLabels As String() = labelList.makeNames(unique:=True)
+        Dim uniqueLabels As String()
         Dim g As NetworkGraph
 
         If umap Is Nothing Then
@@ -330,9 +331,14 @@ Module Manifold
         End If
 
         If TypeOf umap Is Umap Then
+            uniqueLabels = labelList.makeNames(unique:=True)
             g = DirectCast(umap, Umap).CreateGraph(uniqueLabels, labelList, threshold:=threshold)
         ElseIf TypeOf umap Is UMAPProject Then
-
+            With DirectCast(umap, UMAPProject)
+                uniqueLabels = .labels.UniqueNames
+                labelList = .labels
+                g = .CreateGraph(threshold)
+            End With
         Else
             Return Message.InCompatibleType(GetType(Umap), umap.GetType, env)
         End If
