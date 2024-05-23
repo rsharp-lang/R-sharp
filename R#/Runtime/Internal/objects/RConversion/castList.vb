@@ -1,61 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::151be00673411cff77c547736b2df0ee, R#\Runtime\Internal\objects\RConversion\castList.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 315
-    '    Code Lines: 241 (76.51%)
-    ' Comment Lines: 24 (7.62%)
-    '    - Xml Docs: 70.83%
-    ' 
-    '   Blank Lines: 50 (15.87%)
-    '     File Size: 12.74 KB
+' Summaries:
 
 
-    '     Module castList
-    ' 
-    '         Function: CTypeList, dataframe_castList, dictionaryToRList, isEnumType, listElementNames
-    '                   listInternal, objCastList, vector_castList
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 315
+'    Code Lines: 241 (76.51%)
+' Comment Lines: 24 (7.62%)
+'    - Xml Docs: 70.83%
+' 
+'   Blank Lines: 50 (15.87%)
+'     File Size: 12.74 KB
+
+
+'     Module castList
+' 
+'         Function: CTypeList, dataframe_castList, dictionaryToRList, isEnumType, listElementNames
+'                   listInternal, objCastList, vector_castList
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.SchemaMaps
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
@@ -100,7 +101,7 @@ Namespace Runtime.Internal.Object.Converts
                     .Select(Function(i) $"X_{i}") _
                     .ToArray
             Else
-                Return names.uniqueNames
+                Return names.UniqueNames
             End If
         End Function
 

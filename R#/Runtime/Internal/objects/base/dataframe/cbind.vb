@@ -1,66 +1,66 @@
 ﻿#Region "Microsoft.VisualBasic::ba91bbe22dae017bcaf2e53f0bd4cfb3, R#\Runtime\Internal\objects\base\dataframe\cbind.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 235
-    '    Code Lines: 166 (70.64%)
-    ' Comment Lines: 38 (16.17%)
-    '    - Xml Docs: 63.16%
-    ' 
-    '   Blank Lines: 31 (13.19%)
-    '     File Size: 9.86 KB
+' Summaries:
 
 
-    '     Module cbindOp
-    ' 
-    '         Function: castPartData, (+2 Overloads) cbind, columnCombine, dataframeJoinListAsColumns, strictColumnAppend
-    ' 
-    '         Sub: safeAddColumn
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 235
+'    Code Lines: 166 (70.64%)
+' Comment Lines: 38 (16.17%)
+'    - Xml Docs: 63.16%
+' 
+'   Blank Lines: 31 (13.19%)
+'     File Size: 9.86 KB
+
+
+'     Module cbindOp
+' 
+'         Function: castPartData, (+2 Overloads) cbind, columnCombine, dataframeJoinListAsColumns, strictColumnAppend
+' 
+'         Sub: safeAddColumn
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object].baseOp.dataframeOp
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -175,7 +175,7 @@ Namespace Runtime.Internal.Object.baseOp.dataframeOp
                 ' handling of the possible duplicated names
                 Dim newNames As String() = colnames _
                     .JoinIterates(oldColNames) _
-                    .uniqueNames
+                    .UniqueNames
 
                 ' dataframe will be merged directly
                 ' this needs the row order between the 
@@ -197,7 +197,7 @@ Namespace Runtime.Internal.Object.baseOp.dataframeOp
 
             Dim df_names = df.colnames
             Dim y_names = y.colnames
-            Dim union_names = df_names.JoinIterates(y_names).uniqueNames.ToArray
+            Dim union_names = df_names.JoinIterates(y_names).UniqueNames.ToArray
             Dim df_rows = df.forEachRow(df_names).ToDictionary
             Dim y_rows = y.forEachRow(y_names).ToArray
 
