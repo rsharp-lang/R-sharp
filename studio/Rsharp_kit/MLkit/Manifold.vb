@@ -66,6 +66,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -295,7 +296,7 @@ Module Manifold
     ''' <summary>
     ''' Extract the umap abstract graph
     ''' </summary>
-    ''' <param name="umap"></param>
+    ''' <param name="umap">the <see cref="Umap"/> object or <see cref="UMAPProject"/> data file object.</param>
     ''' <param name="labels"></param>
     ''' <param name="groups">
     ''' set the graph vertex class label via this parameter manually by 
@@ -311,9 +312,9 @@ Module Manifold
     ''' <returns></returns>
     <ExportAPI("as.graph")>
     <RApiReturn(GetType(NetworkGraph))>
-    Public Function asGraph(umap As Umap,
+    Public Function asGraph(umap As Object,
                             <RRawVectorArgument>
-                            labels As Object,
+                            Optional labels As Object = Nothing,
                             <RRawVectorArgument>
                             Optional groups As Object = Nothing,
                             Optional threshold As Double = 0,
@@ -321,7 +322,20 @@ Module Manifold
 
         Dim labelList As String() = CLRVector.asCharacter(labels)
         Dim uniqueLabels As String() = labelList.makeNames(unique:=True)
-        Dim g As NetworkGraph = umap.CreateGraph(uniqueLabels, labelList, threshold:=threshold)
+        Dim g As NetworkGraph
+
+        If umap Is Nothing Then
+            Call env.AddMessage("the given umap object is nothing, empty network graph object will returns.")
+            Return Nothing
+        End If
+
+        If TypeOf umap Is Umap Then
+            g = DirectCast(umap, Umap).CreateGraph(uniqueLabels, labelList, threshold:=threshold)
+        ElseIf TypeOf umap Is UMAPProject Then
+
+        Else
+            Return Message.InCompatibleType(GetType(Umap), umap.GetType, env)
+        End If
 
         If Not groups Is Nothing Then
             labelList = CLRVector.asCharacter(groups)
