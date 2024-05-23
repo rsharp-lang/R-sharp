@@ -82,34 +82,40 @@ Namespace Runtime.Internal.Object.Linq
         ''' <returns></returns>
         <Extension>
         Public Function groupBy(data As dataframe, key As String, safe As Boolean) As Dictionary(Of String, dataframe)
-            Dim values As vector = CLRVector.asCharacter(data.getColumnVector(columnName:=key)) _
+            Dim values As String() = CLRVector.asCharacter(data.getColumnVector(columnName:=key)) _
                 .DoCall(Function(v)
                             If v Is Nothing Then
                                 Throw New MissingPrimaryKeyException($"missing the field name '{key}' inside your dataframe for may data table group by field, please check of the dataframe field names or file encoding if the dataframe is read from csv file which contains non-ascii characters(example as zh-CN characters).")
                             End If
 
-                            Return vector.asVector(Of String)(v)
+                            Return v
                         End Function)
-            Dim factors As String() = DirectCast(values.data, String()) _
-                .Select(Function(factor)
+            Dim rows_groups = data.forEachRow _
+                .Select(Function(r, i)
+                            Dim factor As String = values(i)
+
                             ' cast to safe key for null
                             If factor Is Nothing AndAlso safe Then
-                                Return ""
-                            Else
-                                Return factor
+                                factor = ""
                             End If
+
+                            Return (r, tag:=factor)
                         End Function) _
-                .Distinct _
-                .ToArray
+                .GroupBy(Function(r)
+                             Return r.tag
+                         End Function)
+
             Dim groups As New Dictionary(Of String, dataframe)
             Dim env As New Environment
 
-            For Each factor As String In factors
-                Dim i As Boolean() = (values = factor).asLogical
-                Dim partRows As dataframe = data.sliceByRow(i, env)
+            For Each factor_group In rows_groups
+                Dim rowSet = factor_group.Select(Function(r) r.r).ToArray
+                Dim partRows = dataframe.CreateDataFrame(
+                    rows:=rowSet, colNames:=data.colnames
+                )
 
                 ' null will case the error
-                Call groups.Add(factor, partRows)
+                Call groups.Add(factor_group.Key, partRows)
             Next
 
             Return groups
