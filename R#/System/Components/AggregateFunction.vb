@@ -4,9 +4,19 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Development.Components
 
+    ''' <summary>
+    ''' create via the ``aggregate`` function, example as: 
+    ''' 
+    ''' ```r
+    ''' let fx = aggregate(FUN = "max");
+    ''' 
+    ''' print(fx([1,2,3,4,5]));
+    ''' # [1] 5
+    ''' ```
+    ''' </summary>
     Public Class AggregateFunction : Inherits RDefaultFunction
 
-        ReadOnly aggregate As Func(Of IEnumerable(Of Double), Double)
+        Public ReadOnly aggregate As Func(Of IEnumerable(Of Double), Double)
 
         Default Public ReadOnly Property eval_vec(x As IEnumerable(Of Double)) As Double
             Get
