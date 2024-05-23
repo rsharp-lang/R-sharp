@@ -1383,6 +1383,8 @@ Namespace Runtime.Internal.Invokes
                                  Optional size As Integer = NA_integer_,
                                  Optional endian As endianness = endianness.big,
                                  Optional useBytes As Boolean = False,
+                                 <RListObjectArgument>
+                                 Optional args As list = Nothing,
                                  Optional env As Environment = Nothing) As Object
 
             Dim buf = GetFileStream(con, FileAccess.Write, env)
@@ -1403,13 +1405,13 @@ Namespace Runtime.Internal.Invokes
 
             If f Is Nothing Then
                 Return generic.missingGenericSymbol("writeBin", env)
+            ElseIf args Is Nothing Then
+                args = New list(slot("con") = buf.TryCast(Of Stream))
+            Else
+                args.slots("con") = buf.TryCast(Of Stream)
             End If
 
-            Dim out = f([object], New list With {
-               .slots = New Dictionary(Of String, Object) From {
-                  {"con", buf.TryCast(Of Stream)}
-               }
-            }, env)
+            Dim out = f([object], args, env)
 
             If TypeOf con Is String Then
                 Call buf.TryCast(Of Stream).Dispose()
