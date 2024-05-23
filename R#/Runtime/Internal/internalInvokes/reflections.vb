@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Language.Syntax
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
@@ -322,17 +323,39 @@ Namespace Runtime.Internal.Invokes
         ''' functions And environments (which are returned unchanged).
         ''' </remarks>
         <ExportAPI("eval")>
-        Public Function eval(<RRawVectorArgument> expr As Object, Optional env As Environment = Nothing) As Object
-            Dim exprList As pipeline = pipeline.TryCreatePipeline(Of Expression)(expr, env)
+        Public Function eval(<RRawVectorArgument> <RLazyExpression> expr As Object,
+                             Optional x As dataframe = Nothing,
+                             Optional env As Environment = Nothing) As Object
+
             Dim result As Object = Nothing
 
-            If exprList.isError Then
-                Return exprList.getError
-            End If
+            If x IsNot Nothing Then
+                Dim symbols = SymbolAnalysis _
+                    .GetSymbolReferenceList(expr) _
+                    .ToArray
 
-            For Each expression As Expression In exprList.populates(Of Expression)(env)
-                result = expression.Evaluate(env)
-            Next
+                For Each ref As NamedValue(Of PropertyAccess) In symbols
+                    If x.hasName(ref.Name) Then
+                        Call env.AssignSymbol(ref.Name, x(ref.Name))
+                    End If
+                Next
+
+                result = expr.Evaluate(env)
+            Else
+                Dim exprList As pipeline = pipeline.TryCreatePipeline(Of Expression)(expr, env)
+
+                If exprList.isError Then
+                    Return exprList.getError
+                End If
+
+                For Each expression As Expression In exprList.populates(Of Expression)(env)
+                    result = expression.Evaluate(env)
+
+                    If TypeOf result Is Message Then
+                        Return result
+                    End If
+                Next
+            End If
 
             Return result
         End Function

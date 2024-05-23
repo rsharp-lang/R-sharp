@@ -87,16 +87,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <returns></returns>
         <ExportAPI("aggregate")>
         Public Function aggregate_eval(x As dataframe, <RLazyExpression> expr As expr, Optional env As Environment = Nothing) As Object
-            Dim symbols = SymbolAnalysis.GetSymbolReferenceList(expr).ToArray
 
-            For Each ref As NamedValue(Of PropertyAccess) In symbols
-                If x.hasName(ref.Name) Then
-                    Call env.AssignSymbol(ref.Name, x(ref.Name))
-                End If
-            Next
-
-            Dim result As Object = expr.Evaluate(env)
-            Return result
         End Function
 
         ''' <summary>
