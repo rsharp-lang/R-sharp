@@ -68,6 +68,7 @@ Public Class zzz
         Call CNNTools.Main()
         Call NLP.Main()
         Call aprioriRules.Main()
+        Call Manifold.Main()
 
         Call Console.WriteLine()
     End Sub

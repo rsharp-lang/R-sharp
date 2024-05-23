@@ -52,6 +52,7 @@
 
 #End Region
 
+Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -75,12 +76,29 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 ''' UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction
 ''' </summary>
 <Package("umap")>
+<RTypeExport("umap", GetType(UMAPProject))>
 Module Manifold
 
-    Sub New()
+    Sub Main()
         Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Umap), AddressOf exportUmapTable)
+
+        Call Internal.generic.add("writeBin", GetType(UMAPProject), AddressOf saveUMAP)
+        Call Internal.generic.add("readBin.umap", GetType(Stream), AddressOf loadUMAP)
+
         Call Internal.generic.add("plot", GetType(Umap), AddressOf datasetKit.EmbeddingRender)
     End Sub
+
+    Private Function saveUMAP(umap As Umap, args As list, env As Environment) As Object
+        Dim con As Stream = args!con
+        Dim proj As UMAPProject = UMAPProject.CreateProjection(umap).SetLabels(CLRVector.asCharacter(args.getByName("labels")))
+        Call UMAPProject.WriteFile(proj, con)
+        Call con.Flush()
+        Return True
+    End Function
+
+    Private Function loadUMAP(file As Stream, args As list, env As Environment) As Object
+        Return UMAPProject.ReadFile(file)
+    End Function
 
     <RGenericOverloads("as.data.frame")>
     Private Function exportUmapTable(umap As Umap, args As list, env As Environment) As Rdataframe
