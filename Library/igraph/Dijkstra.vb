@@ -65,7 +65,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime.Internal
 ''' <summary>
 ''' Graph router
 ''' </summary>
-<Package("igraph.dijkstra")>
+<Package("dijkstra")>
 Module Dijkstra
 
     Sub New()

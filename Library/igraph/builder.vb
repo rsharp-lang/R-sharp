@@ -61,6 +61,9 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
+''' <summary>
+''' helper module for convert datasets to network graph object
+''' </summary>
 <Package("igraph.builder")>
 Module builder
 

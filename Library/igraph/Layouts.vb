@@ -58,7 +58,6 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Data.visualize.Network.Layouts
 Imports Microsoft.VisualBasic.Data.visualize.Network.Layouts.ForceDirected
 Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop

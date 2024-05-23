@@ -1,64 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::70e7937bea6ce699f4ebdd6b37ff10f9, Library\igraph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1308
-    '    Code Lines: 861 (65.83%)
-    ' Comment Lines: 281 (21.48%)
-    '    - Xml Docs: 93.95%
-    ' 
-    '   Blank Lines: 166 (12.69%)
-    '     File Size: 50.62 KB
+' Summaries:
 
 
-    ' Module NetworkModule
-    ' 
-    '     Function: addEdge, addEdges, addNode, addNodeData, addNodes
-    '               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
-    '               degree, deleteNode, E, edgeAttributes, emptyNetwork
-    '               eval, extractAdjacenciesSubNetwork, extractSubGraph, gephi_gml, getByGroup
-    '               getClass, getEdges, getEdgeTable, getElementByID, getNodes
-    '               getNodeTable, graph, hasEdge, LoadNetwork, LouvainCluster
-    '               metaData, nodeAttributes, nodeClass, nodeMass, nodeNames
-    '               printGraph, printNode, SaveNetwork, setAttributes, summaryNodes
-    '               tabular_graph, trimEdges, typeGroupOfNodes, V, weights
-    '               xref
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1308
+'    Code Lines: 861 (65.83%)
+' Comment Lines: 281 (21.48%)
+'    - Xml Docs: 93.95%
+' 
+'   Blank Lines: 166 (12.69%)
+'     File Size: 50.62 KB
+
+
+' Module NetworkModule
+' 
+'     Function: addEdge, addEdges, addNode, addNodeData, addNodes
+'               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
+'               degree, deleteNode, E, edgeAttributes, emptyNetwork
+'               eval, extractAdjacenciesSubNetwork, extractSubGraph, gephi_gml, getByGroup
+'               getClass, getEdges, getEdgeTable, getElementByID, getNodes
+'               getNodeTable, graph, hasEdge, LoadNetwork, LouvainCluster
+'               metaData, nodeAttributes, nodeClass, nodeMass, nodeNames
+'               printGraph, printNode, SaveNetwork, setAttributes, summaryNodes
+'               tabular_graph, trimEdges, typeGroupOfNodes, V, weights
+'               xref
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -70,6 +70,8 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.TypeCast
 Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Data.GraphTheory
+Imports Microsoft.VisualBasic.Data.GraphTheory.MinimumSpanningTree
 Imports Microsoft.VisualBasic.Data.GraphTheory.Network
 Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.Data.visualize.Network.Analysis
@@ -111,7 +113,24 @@ Public Module NetworkModule
 
         REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(V), AddressOf getNodeTable)
         REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(E), AddressOf getEdgeTable)
+        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(VertexEdge()), AddressOf getEdgeTable2)
     End Sub
+
+    <RGenericOverloads("as.data.frame")>
+    Private Function getEdgeTable2(edges As VertexEdge(), args As list, env As Environment) As rDataframe
+        Dim df As New rDataframe With {
+            .columns = New Dictionary(Of String, Array),
+            .rownames = edges.Select(Function(e) e.ID).ToArray
+        }
+
+        Call df.add("u", From e In edges Select e.U.ID)
+        Call df.add("u.label", From e In edges Select e.U.label)
+        Call df.add("v", From e In edges Select e.V.ID)
+        Call df.add("v.label", From e In edges Select e.V.label)
+        Call df.add("weight", From e In edges Select e.weight)
+
+        Return df
+    End Function
 
     Private Function getEdgeTable(e As E, args As list, env As Environment) As rDataframe
         Dim table = e.edges.CreateGraphTable(e.getNames, is2Dlayout:=True)
@@ -1368,5 +1387,27 @@ Public Module NetworkModule
                                    Optional prefix As String = Nothing) As NetworkGraph
 
         Return Communities.Analysis(g, eps:=eps, prefix:=prefix)
+    End Function
+
+    ''' <summary>
+    ''' Find MST via Kruskal algorithm
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <returns></returns>
+    <ExportAPI("MST")>
+    <RApiReturn(GetType(VertexEdge))>
+    Public Function MST(g As NetworkGraph) As Object
+        Dim edges As VertexEdge() = g.graphEdges _
+            .Select(Function(e)
+                        Return New VertexEdge With {
+                            .ID = e.ID,
+                            .weight = e.weight,
+                            .U = e.U,
+                            .V = e.V
+                        }
+                    End Function) _
+            .ToArray
+        Dim mstree As VertexEdge() = New Kruskal(edges).findMinTree.ToArray
+        Return mstree
     End Function
 End Module
