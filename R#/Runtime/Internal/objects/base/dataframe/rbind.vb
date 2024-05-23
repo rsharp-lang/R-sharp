@@ -1,64 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::aeb7b9dc21c8d2e53670d6f36da4df14, R#\Runtime\Internal\objects\base\dataframe\rbind.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 150
-    '    Code Lines: 102 (68.00%)
-    ' Comment Lines: 26 (17.33%)
-    '    - Xml Docs: 80.77%
-    ' 
-    '   Blank Lines: 22 (14.67%)
-    '     File Size: 5.86 KB
+' Summaries:
 
 
-    '     Module rbindOp
-    ' 
-    '         Function: rowBindDataFrame, safeRowBindDataFrame
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 150
+'    Code Lines: 102 (68.00%)
+' Comment Lines: 26 (17.33%)
+'    - Xml Docs: 80.77%
+' 
+'   Blank Lines: 22 (14.67%)
+'     File Size: 5.86 KB
+
+
+'     Module rbindOp
+' 
+'         Function: rowBindDataFrame, safeRowBindDataFrame
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
-
 
 Namespace Runtime.Internal.Object.baseOp.dataframeOp
 
@@ -85,7 +85,7 @@ Namespace Runtime.Internal.Object.baseOp.dataframeOp
                 .columns = New Dictionary(Of String, Array),
                 .rownames = d.getRowNames _
                     .JoinIterates(row.getRowNames) _
-                    .uniqueNames _
+                    .UniqueNames _
                     .ToArray
             }
             Dim totalSize As Integer = d.nrows + row.nrows
@@ -194,7 +194,7 @@ Namespace Runtime.Internal.Object.baseOp.dataframeOp
 
             copy.rownames = oldRownames _
                 .JoinIterates(copy2.getRowNames) _
-                .uniqueNames _
+                .UniqueNames _
                 .ToArray
 
             Return copy

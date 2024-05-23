@@ -1,58 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::be37b612e4cdb96ebb2579b8f238b3d4, R#\Runtime\Internal\objects\RConversion\makeList.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 96
-    '    Code Lines: 75 (78.12%)
-    ' Comment Lines: 7 (7.29%)
-    '    - Xml Docs: 100.00%
-    ' 
-    '   Blank Lines: 14 (14.58%)
-    '     File Size: 3.50 KB
+' Summaries:
 
 
-    '     Module makeList
-    ' 
-    '         Function: listByColumns, (+2 Overloads) listByRows
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 96
+'    Code Lines: 75 (78.12%)
+' Comment Lines: 7 (7.29%)
+'    - Xml Docs: 100.00%
+' 
+'   Blank Lines: 14 (14.58%)
+'     File Size: 3.50 KB
+
+
+'     Module makeList
+' 
+'         Function: listByColumns, (+2 Overloads) listByRows
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -101,7 +102,7 @@ Namespace Runtime.Internal.Object.Converts
             Dim rownames As String() = If(
                 data.rownames.IsNullOrEmpty,
                 data.nrows.Sequence(offset:=1).Select(Function(i) $"[[{i}]]").ToArray,
-                data.rownames.uniqueNames
+                data.rownames.UniqueNames
             )
 
             For i As Integer = 0 To data.nrows - 1
@@ -122,7 +123,7 @@ Namespace Runtime.Internal.Object.Converts
             If Not names.StringEmpty Then
                 If df.hasName(names) Then
                     nameVec = CLRVector.asCharacter(df.columns(names))
-                    nameVec = nameVec.uniqueNames
+                    nameVec = nameVec.UniqueNames
                     obj = list.setNames(nameVec, env)
 
                     If TypeOf obj Is Message Then
@@ -136,7 +137,7 @@ Namespace Runtime.Internal.Object.Converts
                 End If
             ElseIf Not df.rownames.IsNullOrEmpty Then
                 nameVec = df.rownames
-                nameVec = nameVec.uniqueNames
+                nameVec = nameVec.UniqueNames
                 obj = list.setNames(nameVec, env)
 
                 If TypeOf obj Is Message Then
