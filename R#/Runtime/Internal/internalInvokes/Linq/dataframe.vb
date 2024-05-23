@@ -114,6 +114,14 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         '''   Group.1        x
         ''' 1       A 91.66667
         ''' 2       B 94.00000
+        ''' 
+        ''' # get aggregate function demo
+        ''' #
+        ''' let f = aggregate(FUN = "mean");
+        ''' 
+        ''' # is equalient as the expression mean
+        ''' f([1,2,3,4,5]);
+        ''' mean([1,2,3,4,5]);
         ''' </example>
         <ExportAPI("aggregate")>
         Public Function aggregate_eval(<RRawVectorArgument> Optional x As Object = Nothing,
@@ -130,7 +138,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 End If
             End If
 
-
+            Throw New NotImplementedException
         End Function
 
         ''' <summary>
