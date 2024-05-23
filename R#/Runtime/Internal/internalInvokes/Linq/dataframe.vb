@@ -73,8 +73,20 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
     ''' </summary>
     Module dataframe_methods
 
+        ''' <summary>
+        ''' ### Compute Summary Statistics of Data Subsets
+        ''' 
+        ''' Splits the data into subsets, computes summary statistics for each, 
+        ''' and returns the result in a convenient form.
+        ''' </summary>
+        ''' <param name="x">an R object. For the formula method a formula, such as y ~ x or cbind(y1, y2) ~ x1 + x2,
+        ''' where the y variables are numeric data to be split into groups according to the grouping 
+        ''' x variables (usually factors).</param>
+        ''' <param name="expr"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("aggregate")>
-        Public Function eval(x As dataframe, <RLazyExpression> expr As expr, Optional env As Environment = Nothing) As Object
+        Public Function aggregate_eval(x As dataframe, <RLazyExpression> expr As expr, Optional env As Environment = Nothing) As Object
             Dim symbols = SymbolAnalysis.GetSymbolReferenceList(expr).ToArray
 
             For Each ref As NamedValue(Of PropertyAccess) In symbols
