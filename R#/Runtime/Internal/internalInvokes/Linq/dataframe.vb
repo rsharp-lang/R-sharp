@@ -57,7 +57,10 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.Expressions
+Imports SMRUCC.Rsharp.Development.CodeAnalysis
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -67,22 +70,6 @@ Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Linq
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports anys = Microsoft.VisualBasic.Scripting
-
-Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
-Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Emit.Delegates
-Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports SMRUCC.Rsharp.Development.CodeAnalysis
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
-Imports SMRUCC.Rsharp.Language.Syntax
-Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
-Imports SMRUCC.Rsharp.Language.TokenIcer
-Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes.LinqPipeline
 
@@ -172,7 +159,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim fx As Func(Of IEnumerable(Of Double), Double) = aggregate_func(FUN)
 
             If x Is Nothing AndAlso by Is Nothing Then
-                Return fx
+                Return New AggregateFunction(fx)
             End If
 
             If TypeOf x Is dataframe Then
