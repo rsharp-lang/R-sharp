@@ -13103,8 +13103,8 @@ Global
 		{C15F004E-2287-450A-AC7C-C4DA9DFF674D}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
 		{C15F004E-2287-450A-AC7C-C4DA9DFF674D}.Rsharp_app_release|ARM32.ActiveCfg = Release|Any CPU
 		{C15F004E-2287-450A-AC7C-C4DA9DFF674D}.Rsharp_app_release|ARM32.Build.0 = Release|Any CPU
-		{C15F004E-2287-450A-AC7C-C4DA9DFF674D}.Rsharp_app_release|x64.ActiveCfg = Release|x64
-		{C15F004E-2287-450A-AC7C-C4DA9DFF674D}.Rsharp_app_release|x64.Build.0 = Release|x64
+		{C15F004E-2287-450A-AC7C-C4DA9DFF674D}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
+		{C15F004E-2287-450A-AC7C-C4DA9DFF674D}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 		{C15F004E-2287-450A-AC7C-C4DA9DFF674D}.Rsharp_app_release|x86.ActiveCfg = Release|Any CPU
 		{C15F004E-2287-450A-AC7C-C4DA9DFF674D}.Rsharp_app_release|x86.Build.0 = Release|Any CPU
 		{C15F004E-2287-450A-AC7C-C4DA9DFF674D}.RsharpDev|Any CPU.ActiveCfg = Release|Any CPU
