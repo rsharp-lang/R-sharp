@@ -98,7 +98,7 @@ Namespace Development
                     .DoCall(AddressOf Strings.Trim) _
                     .Trim(" "c, "#"c, "-"c) _
                     .stylingMarkdownElements,
-                .index = New Index With {
+                .index = New ManIndex With {
                     .category = package.Category,
                     .index = package.Namespace,
                     .[date] = info.BuiltTime,

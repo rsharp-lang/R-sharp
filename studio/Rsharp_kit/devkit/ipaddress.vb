@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+﻿Imports System.Text
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
@@ -8,6 +9,27 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 ''' 
 <Package("ipaddress")>
 Module ipaddress
+
+    Private Function print_string(ip As IPv4) As String
+        Dim sb As New StringBuilder
+
+        sb.AppendLine($"{ip.CIDR}      Quads      Hex                           Binary    Integer")
+        sb.AppendLine($"------------- ------------")
+        sb.AppendLine($"IP Address:   {ip.IPAddress}")
+        sb.AppendLine($"Subnet Mask:   {ip.Netmask} ")
+        sb.AppendLine($"Network Portion: {ip.WildcardMask}")
+        sb.AppendLine($"Host Portion:   ")
+        sb.AppendLine()
+        sb.AppendLine($"Number of IP Addresses: {ip.numberOfHosts}")
+        sb.AppendLine($"Number of Addressable Hosts: {ip.numberOfHosts}")
+        sb.AppendLine($"IP Address Range: {ip.hostAddressRange}")
+        sb.AppendLine($"Broadcast Address:   {ip.BroadcastAddress} ")
+        sb.AppendLine($"Min Host:  ")
+        sb.AppendLine($"Max Host:   ")
+        sb.AppendLine($"IPv4 ARPA Domain:    ")
+
+        Return sb.ToString
+    End Function
 
     ''' <summary>
     ''' Network calculator for subnet mask and other classless (CIDR) network information.
