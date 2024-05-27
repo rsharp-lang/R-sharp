@@ -64,6 +64,7 @@
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -126,6 +127,7 @@ Namespace Runtime.Interop
         ''' <see cref="MethodInfo"/>
         ''' </summary>
         ReadOnly api As MethodInvoke
+        ReadOnly argNames As Index(Of String)
 
         ''' <summary>
         ''' the location of the ``...`` list parameter
@@ -149,6 +151,7 @@ Namespace Runtime.Interop
             Me.parameters = parseParameters(closure.Method, is_lambda:=True)
             Me.listObjectMargin = RArgumentList.objectListArgumentMargin(Me)
             Me.elementType = RType.any
+            Me.argNames = setArgumentIndex(parameters)
 
             Call setRuntimeTraceback()
         End Sub
@@ -187,9 +190,14 @@ Namespace Runtime.Interop
             Me.invisible = RSuppressPrintAttribute.IsPrintInvisible(closure)
             Me.listObjectMargin = RArgumentList.objectListArgumentMargin(Me)
             Me.elementType = RType.any
+            Me.argNames = setArgumentIndex(parameters)
 
             Call setRuntimeTraceback()
         End Sub
+
+        Private Shared Function setArgumentIndex(args As IEnumerable(Of RMethodArgument)) As Index(Of String)
+            Return args.Select(Function(a) a.name).Indexing
+        End Function
 
         Private Sub setRuntimeTraceback()
             Dim asm As Assembly = GetNetCoreCLRDeclaration.DeclaringType.Assembly
@@ -213,6 +221,10 @@ Namespace Runtime.Interop
                     .Value = If(arg.isOptional, New RuntimeValueLiteral(arg.default), Nothing)
                 }
             Next
+        End Function
+
+        Public Function GetArgumentOrdinal(name As String) As Integer
+            Return argNames(name)
         End Function
 
         ''' <summary>

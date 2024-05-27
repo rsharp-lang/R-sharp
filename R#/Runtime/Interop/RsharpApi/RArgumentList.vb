@@ -475,7 +475,15 @@ Namespace Runtime.Interop
             If params.Length > 0 AndAlso params(Scan0).isAcceptor Then
                 For Each par As InvokeParameter In params.Skip(1)
                     If par.isSymbolAssign Then
-                        env.acceptorArguments(par.name) = par.value
+                        If [declare].GetArgumentOrdinal(par.name) = -1 Then
+                            Dim eval As Object = par.value.Evaluate(env)
+
+                            If TypeOf eval Is Message Then
+                                Return {eval}
+                            End If
+
+                            env.acceptorArguments(par.name) = eval
+                        End If
                     End If
                 Next
             End If
