@@ -5,10 +5,27 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
     ''' <summary>
+    ''' The nullish coalescing (??) operator is a logical operator that returns
+    ''' its right-hand side operand when its left-hand side operand is null 
+    ''' or undefined, and otherwise returns its left-hand side operand.
+    ''' 
     ''' ```
     ''' x ?? default
     ''' ```
     ''' </summary>
+    ''' <remarks>
+    ''' The nullish coalescing operator can be seen as a special case of the logical OR (||) 
+    ''' operator. The latter returns the right-hand side operand if the left operand is any 
+    ''' falsy value, not only null or undefined. In other words, if you use || to provide 
+    ''' some default value to another variable foo, you may encounter unexpected behaviors 
+    ''' if you consider some falsy values as usable (e.g., '' or 0). 
+    ''' 
+    ''' The nullish coalescing Operator has the fifth-lowest Operator precedence, directly lower 
+    ''' than || And directly higher than the conditional (ternary) Operator.
+    ''' 
+    ''' It Is Not possible to combine both the And (&amp;&amp;) And Or operators (||) directly 
+    ''' with ??. A syntax error will be thrown in such cases.
+    ''' </remarks>
     Public Class NullishCoalescing : Inherits Expression
         Implements IBinaryExpression
 
