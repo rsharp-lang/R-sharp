@@ -113,7 +113,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Dim valExpr As Object
 
             For Each arg In arguments
-                valExpr = DirectCast(arg.Value, Expression).Evaluate(envir)
+                If TypeOf arg.Value Is ValueAssignExpression Then
+                    valExpr = DirectCast(arg.Value, ValueAssignExpression).value.Evaluate(envir)
+                ElseIf TypeOf arg.Value Is Expression Then
+                    valExpr = DirectCast(arg.Value, Expression).Evaluate(envir)
+                Else
+                    valExpr = arg.Value
+                End If
 
                 If TypeOf valExpr Is Message Then
                     Return valExpr
