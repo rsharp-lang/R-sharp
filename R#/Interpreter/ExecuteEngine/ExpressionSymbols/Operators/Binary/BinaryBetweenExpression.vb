@@ -64,6 +64,13 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
+    ''' <summary>
+    ''' x between inside a range?
+    ''' 
+    ''' ```
+    ''' x between [min, max]
+    ''' ```
+    ''' </summary>
     Public Class BinaryBetweenExpression : Inherits Expression
         Implements IBinaryExpression
 
