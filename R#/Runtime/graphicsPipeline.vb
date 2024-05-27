@@ -122,10 +122,14 @@ Namespace Runtime
             End If
 
             If TypeOf raw Is InvokeParameter Then
-                Return REnv.single(CLRVector.asInteger(eval(raw, env)))
-            Else
-                Return REnv.single(CLRVector.asInteger(raw))
+                raw = eval(raw, env)
             End If
+
+            If TypeOf raw Is Message Then
+                Call DirectCast(raw, Message).ThrowCLRError()
+            End If
+
+            Return REnv.single(CLRVector.asInteger(raw))
         End Function
 
         Private Sub getSize(width As Object, height As Object, env As Environment, ByRef w As Double, ByRef h As Double)
@@ -241,6 +245,10 @@ Namespace Runtime
                     End With
                 Case Else
                     Call $"invalid data type for get [width,height]: {sizeType.FullName}".Warning
+
+                    If TypeOf size Is Message Then
+                        Call env.AddMessage(DirectCast(size, Message).message)
+                    End If
 
                     Return [default]
             End Select
