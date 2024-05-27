@@ -98,6 +98,8 @@ Namespace Development.Package.File.Expressions
                 Return DirectCast(x, BinaryExpression).left
             ElseIf TypeOf x Is TypeOfCheck Then
                 Return DirectCast(x, TypeOfCheck).target
+            ElseIf TypeOf x Is NullishCoalescing Then
+                Return DirectCast(x, NullishCoalescing).value
             Else
                 Throw New NotImplementedException(x.GetType.FullName)
             End If
@@ -114,6 +116,8 @@ Namespace Development.Package.File.Expressions
                 Return DirectCast(x, BinaryExpression).right
             ElseIf TypeOf x Is TypeOfCheck Then
                 Return DirectCast(x, TypeOfCheck).typeName
+            ElseIf TypeOf x Is NullishCoalescing Then
+                Return DirectCast(x, NullishCoalescing).default
             Else
                 Throw New NotImplementedException(x.GetType.FullName)
             End If
@@ -132,6 +136,8 @@ Namespace Development.Package.File.Expressions
                 Return DirectCast(x, BinaryExpression).operator
             ElseIf TypeOf x Is TypeOfCheck Then
                 Return CheckType
+            ElseIf TypeOf x Is NullishCoalescing Then
+                Return "??"
             Else
                 Throw New NotImplementedException(x.GetType.FullName)
             End If
@@ -150,6 +156,7 @@ Namespace Development.Package.File.Expressions
                     Case "between" : Return New BinaryBetweenExpression(left, right)
                     Case "in" : Return New BinaryInExpression(left, right)
                     Case "||" : Return New BinaryOrExpression(left, right)
+                    Case "??" : Return New NullishCoalescing(left, right)
                     Case CheckType : Return New TypeOfCheck(left, right)
                     Case Else
                         Return New BinaryExpression(left, right, op)

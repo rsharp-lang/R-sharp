@@ -181,7 +181,8 @@ Namespace Development.Package.File
                      GetType(BinaryInExpression),
                      GetType(AppendOperator),
                      GetType(BinaryExpression),
-                     GetType(TypeOfCheck)
+                     GetType(TypeOfCheck),
+                     GetType(NullishCoalescing)
 
                     Return RBinary.GetBuffer(x)
 
