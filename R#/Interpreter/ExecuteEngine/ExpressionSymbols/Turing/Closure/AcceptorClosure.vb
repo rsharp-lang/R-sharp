@@ -110,25 +110,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
             Dim lastClosureCopy As New FunctionInvoke(lastFunc)
             Dim accepts As New List(Of Expression)
-            Dim valExpr As Object
+            Dim valExpr As Expression
 
             For Each arg In arguments
-                If TypeOf arg.Value Is ValueAssignExpression Then
-                    valExpr = DirectCast(arg.Value, ValueAssignExpression).value.Evaluate(envir)
-                ElseIf TypeOf arg.Value Is Expression Then
-                    valExpr = DirectCast(arg.Value, Expression).Evaluate(envir)
-                Else
-                    valExpr = arg.Value
-                End If
+                valExpr = New RuntimeValueLiteral(arg.Value)
 
-                If TypeOf valExpr Is Message Then
-                    Return valExpr
-                Else
-                    Call accepts.Add(New ValueAssignExpression(
-                        symbol:=arg.Key,
-                        value:=New RuntimeValueLiteral(valExpr))
-                    )
-                End If
+                Call accepts.Add(New ValueAssignExpression(
+                    symbol:=arg.Key,
+                    value:=valExpr)
+                )
             Next
 
             lastClosureCopy.parameters = lastClosureCopy.parameters _
