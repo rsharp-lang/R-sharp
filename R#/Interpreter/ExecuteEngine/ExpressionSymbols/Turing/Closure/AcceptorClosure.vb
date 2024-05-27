@@ -63,6 +63,20 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
+    ''' <summary>
+    ''' ```
+    ''' func(yyy) {
+    '''     func2(xxx);
+    ''' }
+    ''' 
+    ''' # will accept the closure as the first parameter
+    ''' # which is equals to the function invoke expression
+    ''' 
+    ''' func({
+    '''     func2(xxx);
+    ''' }, yyy);
+    ''' ```
+    ''' </summary>
     Public Class AcceptorClosure : Inherits ClosureExpression
 
         Public Overrides ReadOnly Property expressionName As ExpressionTypes
