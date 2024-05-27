@@ -140,6 +140,12 @@ Namespace Runtime
                 height = eval(height, env)
             End If
 
+            If TypeOf width Is Message Then
+                Call DirectCast(width, Message).ThrowCLRError()
+            ElseIf TypeOf height Is Message Then
+                Call DirectCast(height, Message).ThrowCLRError()
+            End If
+
             w = REnv.single(CLRVector.asNumeric(width))
             h = REnv.single(CLRVector.asNumeric(height))
         End Sub
