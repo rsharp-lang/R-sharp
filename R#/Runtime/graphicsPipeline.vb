@@ -168,8 +168,8 @@ Namespace Runtime
 
         <Extension>
         Public Function getSize(args As Dictionary(Of String, Object), env As Environment, [default] As SizeF) As SizeF
-            Dim w# = 1920
-            Dim h# = 1600
+            Dim w# = [default].Width
+            Dim h# = [default].Height
 
             If {"w", "h"}.All(AddressOf args.ContainsKey) Then
                 Call getSize(args("w"), args("h"), env, w, h)
