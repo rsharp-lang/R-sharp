@@ -180,10 +180,21 @@ Namespace Runtime.Internal.Object
         Implements RNames
 
         ''' <summary>
-        ''' 长度为1或者长度为n
+        ''' the field vectors inside current data frame object, the vector 
+        ''' dimension size of the fields could be a scalar value with just
+        ''' one element or vector dimension should equals to the dimension
+        ''' size of <see cref="rownames"/>.
         ''' </summary>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' 长度为1或者长度为n
+        ''' </remarks>
         Public Property columns As Dictionary(Of String, Array)
+
+        ''' <summary>
+        ''' the dataframe rownames
+        ''' </summary>
+        ''' <returns></returns>
         Public Property rownames As String()
 
         ''' <summary>
@@ -210,6 +221,10 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        ''' <summary>
+        ''' the number of the features in current dataframe object
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property ncols As Integer
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
@@ -331,7 +346,9 @@ Namespace Runtime.Internal.Object
         Public Function getVector(Of T)(ParamArray synonym As String()) As T()
             For Each name As String In synonym
                 If columns.ContainsKey(name) Then
+#Disable Warning
                     Return REnv.asVector(Of T)(getVector(name, fullSize:=True))
+#Enable Warning
                 End If
             Next
 
