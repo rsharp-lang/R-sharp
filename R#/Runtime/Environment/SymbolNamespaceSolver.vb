@@ -103,6 +103,31 @@ Namespace Runtime
             Me.env = env
         End Sub
 
+        ''' <summary>
+        ''' find all namespace that contains the given symbol
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <returns></returns>
+        Public Iterator Function FindNamespace(name As String) As IEnumerable(Of String)
+            If funcOverloads.ContainsKey(name) Then
+                For Each ns_str As String In funcOverloads(name).Keys
+                    Yield ns_str
+                Next
+            Else
+                For Each ns_str As String In attachedNamespace.Keys
+                    If attachedNamespace(ns_str).FindSymbol(name, [inherits]:=False) IsNot Nothing Then
+                        Yield ns_str
+                    End If
+                Next
+            End If
+        End Function
+
+        ''' <summary>
+        ''' check of the given package <paramref name="pkgName"/> has already
+        ''' been attached into the global environment or not?
+        ''' </summary>
+        ''' <param name="pkgName"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function hasNamespace(pkgName As String) As Boolean
             Return attachedNamespace.ContainsKey(pkgName)
@@ -156,6 +181,12 @@ Namespace Runtime
             Return pkg
         End Function
 
+        ''' <summary>
+        ''' find a symbol by its name and under the specific namespace
+        ''' </summary>
+        ''' <param name="namespace">the package namespace</param>
+        ''' <param name="symbolName">the target symbol its name</param>
+        ''' <returns></returns>
         Public Function FindSymbol(namespace$, symbolName$) As RFunction
             If Not attachedNamespace.ContainsKey([namespace]) Then
                 Return Nothing

@@ -1206,7 +1206,7 @@ Namespace Runtime.Internal.Invokes
         ''' they are not assigned.
         ''' </returns>
         <ExportAPI("invisible")>
-        Public Function invisible(x As Object) As Object
+        Public Function __invisible(x As Object) As invisible
             Return New invisible With {.value = x}
         End Function
 

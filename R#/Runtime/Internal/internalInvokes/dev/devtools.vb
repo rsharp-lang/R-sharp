@@ -256,7 +256,7 @@ Namespace Runtime.Internal.Invokes
                 Call env.doCall(".onLoad")
             End If
 
-            Return New invisible()
+            Return invisible.NULL
         End Function
 
         ''' <summary>

@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::a4c5df63b64b516c23f6b9bb01222089, studio\R-terminal\Terminal.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 265
-    '    Code Lines: 160 (60.38%)
-    ' Comment Lines: 68 (25.66%)
-    '    - Xml Docs: 76.47%
-    ' 
-    '   Blank Lines: 37 (13.96%)
-    '     File Size: 9.41 KB
+' Summaries:
 
 
-    ' Module Terminal
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: example, RunTerminal
-    ' 
-    '     Sub: [exit], doRunScriptWithSpecialCommandSync, q, quit
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 265
+'    Code Lines: 160 (60.38%)
+' Comment Lines: 68 (25.66%)
+'    - Xml Docs: 76.47%
+' 
+'   Blank Lines: 37 (13.96%)
+'     File Size: 9.41 KB
+
+
+' Module Terminal
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: example, RunTerminal
+' 
+'     Sub: [exit], doRunScriptWithSpecialCommandSync, q, quit
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.LineEdit
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development
@@ -69,6 +70,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>
@@ -205,6 +207,50 @@ RE0:
             Call ConsoleSyntaxHighlightPrinter.PrintCode(code_str, env.globalEnvironment.stdout)
             Return code_str
         End If
+    End Function
+
+    ''' <summary>
+    ''' open the help document file
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' this function open the html help document file on windows and
+    ''' open the unix man page file on linux system.
+    ''' </remarks>
+    <ExportAPI("help")>
+    Public Function help(x As Object, Optional env As Environment = Nothing) As Object
+        Dim f As RFunction
+        Dim globalPkg As SymbolNamespaceSolver = env.globalEnvironment.attachedNamespace
+
+        If x Is Nothing Then
+            Return invisible.NULL
+        ElseIf Not x.GetType.ImplementInterface(Of RFunction) Then
+            Return Message.InCompatibleType(GetType(RFunction), x.GetType, env)
+        Else
+            f = x
+        End If
+
+        If Platform = PlatformID.Unix Then
+            Dim ns_str As String = globalPkg.FindNamespace(f.name).FirstOrDefault
+            Dim manfile As String
+
+            If ns_str.StringEmpty Then
+                Return invisible.NULL
+            Else
+                manfile = $"/etc/r_env/library/{ns_str}/package/man/{f.name}.1"
+            End If
+
+            If Not manfile.FileExists Then
+                Return invisible.NULL
+            Else
+                Call Interaction.Shell($"man {manfile}", AppWinStyle.MaximizedFocus, Wait:=True)
+            End If
+        Else
+
+        End If
+
+        Return invisible.NULL
     End Function
 #End Region
 
