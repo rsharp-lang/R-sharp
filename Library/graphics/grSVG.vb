@@ -111,6 +111,7 @@ Module grSVG
                                 text As Object,
                                 Optional color As Object = Nothing,
                                 Optional strong As Boolean? = Nothing,
+                                Optional font_size As String = Nothing,
                                 Optional env As Environment = Nothing) As Object
 
         Dim pull As pipeline = pipeline.TryCreatePipeline(Of SvgText)(text, env)
@@ -130,6 +131,9 @@ Module grSVG
             End If
             If Not strong Is Nothing Then
                 textElem.SetStyle("font-weight", If(CBool(strong), "bolder", "normal"))
+            End If
+            If Not font_size Is Nothing Then
+                textElem.SetStyle("font-size", font_size)
             End If
         Next
 
