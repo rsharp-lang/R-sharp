@@ -129,6 +129,12 @@ Namespace Language.TokenIcer
             End Get
         End Property
 
+        ''' <summary>
+        ''' construct a r language token scanner
+        ''' </summary>
+        ''' <param name="source"></param>
+        ''' <param name="tokenStringMode"></param>
+        ''' <param name="keepsDelimiter"></param>
         <DebuggerStepThrough>
         Sub New(source As [Variant](Of String, CharPtr),
                 Optional tokenStringMode As Boolean = False,

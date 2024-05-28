@@ -1,64 +1,84 @@
 ﻿#Region "Microsoft.VisualBasic::c019eff45cf5711d5665c9ed40d6214d, R#\Language\Code.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 52
-    '    Code Lines: 38 (73.08%)
-    ' Comment Lines: 6 (11.54%)
-    '    - Xml Docs: 83.33%
-    ' 
-    '   Blank Lines: 8 (15.38%)
-    '     File Size: 1.79 KB
+' Summaries:
 
 
-    '     Module Code
-    ' 
-    '         Function: GetCodeSpan, isLINQKeyword, joinNext, ParseScript
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 52
+'    Code Lines: 38 (73.08%)
+' Comment Lines: 6 (11.54%)
+'    - Xml Docs: 83.33%
+' 
+'   Blank Lines: 8 (15.38%)
+'     File Size: 1.79 KB
+
+
+'     Module Code
+' 
+'         Function: GetCodeSpan, isLINQKeyword, joinNext, ParseScript
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
+Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Language
 
     Module Code
+
+        Public Function ParseVector(expr As String) As VectorLiteral
+            Dim tokens As Token() = ParseScript(expr)
+            Dim opt As New SyntaxBuilderOptions(AddressOf Expression.CreateExpression, Function(c, s) New Scanner(c, s)) With {
+                .debug = False,
+                .source = Rscript.FromText(expr)
+            }
+            Dim vec As SyntaxResult = VectorLiteralSyntax.VectorLiteral(tokens, opt)
+
+            If vec.isException Then
+                Throw New InvalidExpressionException(vec.error.ToString)
+            Else
+                Return vec.expression
+            End If
+        End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>

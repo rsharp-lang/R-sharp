@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
 Namespace Development
 
@@ -111,26 +112,58 @@ Namespace Development
             End If
         End Function
 
+        ''' <summary>
+        ''' rendering the color for the default value
+        ''' </summary>
+        ''' <param name="a"></param>
+        ''' <returns></returns>
         Private Shared Function RenderValueColor(a As NamedValue) As String
             Dim valHtml As String = a.text
+            valHtml = RenderValueColor(valHtml)
+            Return $"    <i>{a.name}</i> = {valHtml}"
+        End Function
 
-            If Not valHtml.StringEmpty Then
-                If (valHtml.First = """"c AndAlso valHtml.Last = """"c) OrElse
-                   (valHtml.First = "`"c AndAlso valHtml.Last = "`"c) OrElse
-                   (valHtml.First = "'"c AndAlso valHtml.Last = "'"c) Then
+        Private Shared Function RenderDefaultValueColor(valHtml As String) As String
+            ' the given string is in string literal value
+            ' check for html color string or 
+            ' just a simple string literal
+            If (valHtml.First = """"c AndAlso valHtml.Last = """"c) OrElse
+               (valHtml.First = "`"c AndAlso valHtml.Last = "`"c) OrElse
+               (valHtml.First = "'"c AndAlso valHtml.Last = "'"c) Then
 
-                    Dim isColor As Boolean = False
-                    Dim color As Color = valHtml.Trim(""""c, "'"c, "`"c).TranslateColor(throwEx:=False, success:=isColor)
+                Dim isColor As Boolean = False
+                Dim color As Color = valHtml.Trim(""""c, "'"c, "`"c).TranslateColor(throwEx:=False, success:=isColor)
 
-                    If isColor Then
-                        ' current string value is color literal
-                        valHtml = $"<span style='color: {color.ToHtmlColor};'><strong>{valHtml}</strong></span>"
-                    Else
-                        valHtml = $"<span style='color: brown;'><strong>{valHtml}</strong></span>"
-                    End If
-                ElseIf valHtml.IsNumeric(True, True) Then
-                    valHtml = $"<span style='color: green;'>{valHtml}</span>"
+                If isColor Then
+                    ' current string value is color literal string
+                    ' rendering color as its literal value
+                    valHtml = $"<span style='color: {color.ToHtmlColor};'><strong>{valHtml}</strong></span>"
+                Else
+                    ' just a string
+                    ' rendering color in brown
+                    valHtml = $"<span style='color: brown;'><strong>{valHtml}</strong></span>"
                 End If
+            ElseIf valHtml.IsNumeric(True, True) Then
+                ' current default value is a number
+                ' render color in green
+                valHtml = $"<span style='color: green;'>{valHtml}</span>"
+            Else
+                ' may be other data type
+                ' vector literal?
+                ' list literal?
+                ' dataframe literal?
+                If valHtml.StartsWith("[") Then
+                    ' is a vector
+                    Dim vector As VectorLiteral = 
+                End If
+            End If
+
+            Return valHtml
+        End Function
+
+        Private Shared Function RenderValueColor(valHtml As String) As String
+            If Not valHtml.StringEmpty Then
+                valHtml = RenderDefaultValueColor(valHtml)
             Else
                 valHtml = "NULL"
             End If
@@ -141,7 +174,7 @@ Namespace Development
                 valHtml = $"<span style='color: blue !important;'>{valHtml}</span>"
             End If
 
-            Return $"    <i>{a.name}</i> = {valHtml}"
+            Return valHtml
         End Function
 
         Public Shared Function GetArgument(arg As DeclareNewSymbol) As NamedValue
