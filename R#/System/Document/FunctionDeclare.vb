@@ -55,6 +55,7 @@
 #End Region
 
 Imports System.Drawing
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Imaging
@@ -62,6 +63,7 @@ Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Language
 
 Namespace Development
 
@@ -154,7 +156,32 @@ Namespace Development
                 ' dataframe literal?
                 If valHtml.StartsWith("[") Then
                     ' is a vector
-                    Dim vector As VectorLiteral = 
+                    Dim vector As VectorLiteral = Code.ParseVector(valHtml)
+                    Dim sb As New StringBuilder
+                    Dim max_width As Integer = 9
+                    Dim i As Integer = 0
+
+                    Call sb.Append("[")
+
+                    If vector.length > 0 Then
+                        Call sb.Append(RenderDefaultValueColor(valueText(vector.First)))
+
+                        For Each val As Expression In vector.Skip(1)
+                            Call sb.Append(", ")
+                            Call sb.Append(RenderDefaultValueColor(valueText(val)))
+
+                            If i > max_width Then
+                                i = 0
+                                sb.AppendLine()
+                            Else
+                                i += 1
+                            End If
+                        Next
+                    End If
+
+                    Call sb.AppendLine("]")
+
+                    valHtml = sb.ToString
                 End If
             End If
 

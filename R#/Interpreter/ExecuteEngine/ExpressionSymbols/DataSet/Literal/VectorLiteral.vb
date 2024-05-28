@@ -79,6 +79,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
     ''' [x, ...y, ...z]
     ''' ```
     ''' </summary>
+    ''' <remarks>
+    ''' this object model implements the interface of a collection of the value <see cref="Expression"/>.
+    ''' </remarks>
     Public Class VectorLiteral : Inherits Expression
         Implements IEnumerable(Of Expression)
 
