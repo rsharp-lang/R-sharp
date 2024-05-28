@@ -164,11 +164,9 @@ Namespace Development
                     Call sb.Append("[")
 
                     If vector.length > 0 Then
-                        Call sb.Append(RenderDefaultValueColor(valueText(vector.First)))
-
                         For Each val As Expression In vector.Skip(1)
-                            Call sb.Append(", ")
                             Call sb.Append(RenderDefaultValueColor(valueText(val)))
+                            Call sb.Append(",")
 
                             If i > max_width Then
                                 i = 0
@@ -179,9 +177,7 @@ Namespace Development
                         Next
                     End If
 
-                    Call sb.AppendLine("]")
-
-                    valHtml = sb.ToString
+                    valHtml = sb.ToString.TrimEnd(","c) & "]"
                 End If
             End If
 

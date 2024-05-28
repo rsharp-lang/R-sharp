@@ -2,8 +2,8 @@
   "profiles": {
     "Rscript.NET5": {
       "commandName": "Project",
-      "commandLineArgs": "--build /src ../ /save ../graphQL.zip --skip-src-build",
-      "workingDirectory": "E:\\graphQL\\.pkg"
+      "commandLineArgs": "--build /src ../ /save ./ggplot.zip --skip-src-build  --github-page \"https://rdocumentation.rsharp.net/assets/R_syntax.js\"",
+      "workingDirectory": "E:\\GCModeller\\src\\runtime\\ggplot\\.pkg"
     },
     "mzkit_debug": {
       "commandName": "Project",
