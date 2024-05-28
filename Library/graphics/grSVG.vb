@@ -110,6 +110,7 @@ Module grSVG
     Public Function text_styles(<RRawVectorArgument>
                                 text As Object,
                                 Optional color As Object = Nothing,
+                                Optional strong As Boolean? = Nothing,
                                 Optional env As Environment = Nothing) As Object
 
         Dim pull As pipeline = pipeline.TryCreatePipeline(Of SvgText)(text, env)
@@ -126,6 +127,9 @@ Module grSVG
         For Each textElem As SvgText In pull.populates(Of SvgText)(env)
             If Not color_str Is Nothing Then
                 textElem.Fill = color_str
+            End If
+            If Not strong Is Nothing Then
+                textElem.SetStyle("font-weight", If(CBool(strong), "bolder", "normal"))
             End If
         Next
 
