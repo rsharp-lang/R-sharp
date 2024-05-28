@@ -1014,6 +1014,26 @@ Namespace Runtime.Internal.Invokes
                 con = p.filepath
             End If
 
+            If text.GetType().ImplementInterface(Of ISaveHandle) Then
+                Dim saveFile As ISaveHandle = text
+
+                If fs Is Nothing Then
+                    If TypeOf con Is String Then
+                        Return saveFile.Save(CStr(con), encoding)
+                    Else
+                        Return saveFile.Save(DirectCast(con, Stream), encoding.CodePage)
+                    End If
+                Else
+                    Dim s As Stream = fs.OpenFile(CStr(con), FileMode.OpenOrCreate, FileAccess.Write)
+                    Dim flag As Boolean = saveFile.Save(s, encoding.CodePage)
+
+                    Call s.Flush()
+                    Call fs.Flush()
+
+                    Return flag
+                End If
+            End If
+
             If TypeOf text Is pipeline Then
                 Return DirectCast(text, pipeline) _
                     .populates(Of String)(env) _
