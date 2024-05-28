@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ce6de19f4230cc57662b9b5f724395bf, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\VectorLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::9b339de01109efe7f4a5263dff050ab0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\VectorLiteral.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 129
-    '    Code Lines: 90 (69.77%)
-    ' Comment Lines: 15 (11.63%)
-    '    - Xml Docs: 66.67%
+    '   Total Lines: 132
+    '    Code Lines: 90 (68.18%)
+    ' Comment Lines: 18 (13.64%)
+    '    - Xml Docs: 72.22%
     ' 
-    '   Blank Lines: 24 (18.60%)
-    '     File Size: 4.49 KB
+    '   Blank Lines: 24 (18.18%)
+    '     File Size: 4.64 KB
 
 
     '     Class VectorLiteral

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d43a9ca3c4ea2f2e004390f74fb1a08d, R#\Runtime\Internal\internalInvokes\reflections.vb"
+﻿#Region "Microsoft.VisualBasic::a74effb0b87a1072d918fda2b268caf0, R#\Runtime\Internal\internalInvokes\reflections.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 337
-    '    Code Lines: 137 (40.65%)
-    ' Comment Lines: 171 (50.74%)
+    '   Total Lines: 360
+    '    Code Lines: 155 (43.06%)
+    ' Comment Lines: 171 (47.50%)
     '    - Xml Docs: 84.21%
     ' 
-    '   Blank Lines: 29 (8.61%)
-    '     File Size: 15.67 KB
+    '   Blank Lines: 34 (9.44%)
+    '     File Size: 16.48 KB
 
 
     '     Module reflections

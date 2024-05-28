@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e760f172fb9703ea7dcdc6797daeb074, Library\igraph\Layouts.vb"
+﻿#Region "Microsoft.VisualBasic::5c0bb834cbff1b4fa2e2ddf4fa2352d4, Library\igraph\Layouts.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 246
-    '    Code Lines: 194 (78.86%)
-    ' Comment Lines: 29 (11.79%)
+    '   Total Lines: 245
+    '    Code Lines: 193 (78.78%)
+    ' Comment Lines: 29 (11.84%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 23 (9.35%)
-    '     File Size: 10.66 KB
+    '   Blank Lines: 23 (9.39%)
+    '     File Size: 10.62 KB
 
 
     ' Module Layouts

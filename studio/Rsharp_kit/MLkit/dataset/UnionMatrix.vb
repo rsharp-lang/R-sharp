@@ -1,55 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::308214b41345c8d67703b5fe4efc9201, studio\Rsharp_kit\MLkit\dataset\UnionMatrix.vb"
+﻿#Region "Microsoft.VisualBasic::f8b1a32b1c54a54fcb8338dcb4083ca1, studio\Rsharp_kit\MLkit\dataset\UnionMatrix.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 93
-'    Code Lines: 61 (65.59%)
-' Comment Lines: 19 (20.43%)
-'    - Xml Docs: 94.74%
-' 
-'   Blank Lines: 13 (13.98%)
-'     File Size: 3.31 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Class UnionMatrix
-' 
-'     Function: colnames, CreateClrMatrix, CreateMatrix
-' 
-'     Sub: Add
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 94
+    '    Code Lines: 62 (65.96%)
+    ' Comment Lines: 19 (20.21%)
+    '    - Xml Docs: 94.74%
+    ' 
+    '   Blank Lines: 13 (13.83%)
+    '     File Size: 3.38 KB
+
+
+    ' Class UnionMatrix
+    ' 
+    '     Function: colnames, CreateClrMatrix, CreateMatrix
+    ' 
+    '     Sub: Add
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

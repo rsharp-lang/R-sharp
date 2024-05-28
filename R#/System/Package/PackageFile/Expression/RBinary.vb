@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7aff32807ffdb20f9407f9704b803c03, R#\System\Package\PackageFile\Expression\RBinary.vb"
+﻿#Region "Microsoft.VisualBasic::6dc412fb363b72c769d613b0be89bb9b, R#\System\Package\PackageFile\Expression\RBinary.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 102
-    '    Code Lines: 90 (88.24%)
+    '   Total Lines: 109
+    '    Code Lines: 97 (88.99%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 12 (11.76%)
-    '     File Size: 4.58 KB
+    '   Blank Lines: 12 (11.01%)
+    '     File Size: 4.97 KB
 
 
     '     Class RBinary

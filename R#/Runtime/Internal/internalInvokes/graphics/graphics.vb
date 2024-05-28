@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5403fa7b3af0f56f218dc4b49c4215fa, R#\Runtime\Internal\internalInvokes\graphics\graphics.vb"
+﻿#Region "Microsoft.VisualBasic::78b6f8b252657bb16149117ac9119903, R#\Runtime\Internal\internalInvokes\graphics\graphics.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 666
-    '    Code Lines: 414 (62.16%)
-    ' Comment Lines: 174 (26.13%)
-    '    - Xml Docs: 89.08%
+    '   Total Lines: 683
+    '    Code Lines: 414 (60.61%)
+    ' Comment Lines: 189 (27.67%)
+    '    - Xml Docs: 89.95%
     ' 
-    '   Blank Lines: 78 (11.71%)
-    '     File Size: 29.53 KB
+    '   Blank Lines: 80 (11.71%)
+    '     File Size: 29.80 KB
 
 
     '     Module graphics

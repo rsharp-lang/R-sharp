@@ -1,54 +1,56 @@
-﻿#Region "Microsoft.VisualBasic::dab7f0eeb51715c69f4e828d9bcc364e, studio\Rsharp_kit\MLkit\Manifold.vb"
+﻿#Region "Microsoft.VisualBasic::cdddcbaa2ad05365c35adfda06a8c11d, studio\Rsharp_kit\MLkit\Manifold.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 258
-'    Code Lines: 170 (65.89%)
-' Comment Lines: 59 (22.87%)
-'    - Xml Docs: 94.92%
-' 
-'   Blank Lines: 29 (11.24%)
-'     File Size: 10.74 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module Manifold
-' 
-'     Constructor: (+1 Overloads) Sub New
-'     Function: asGraph, exportUmapTable, umapProjection
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 317
+    '    Code Lines: 213 (67.19%)
+    ' Comment Lines: 67 (21.14%)
+    '    - Xml Docs: 95.52%
+    ' 
+    '   Blank Lines: 37 (11.67%)
+    '     File Size: 13.31 KB
+
+
+    ' Module Manifold
+    ' 
+    '     Function: asGraph, exportUmapTable, loadUMAP, saveUMAP, saveUMAP_1
+    '               umapProjection
+    ' 
+    '     Sub: Main
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

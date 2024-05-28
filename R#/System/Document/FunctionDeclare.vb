@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3a458f84b850182b580889bbd4b035fb, R#\System\Document\FunctionDeclare.vb"
+﻿#Region "Microsoft.VisualBasic::e6bcc0829366b4af451dedaff3d3546c, R#\System\Document\FunctionDeclare.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 109
-    '    Code Lines: 89 (81.65%)
-    ' Comment Lines: 1 (0.92%)
-    '    - Xml Docs: 0.00%
+    '   Total Lines: 165
+    '    Code Lines: 121 (73.33%)
+    ' Comment Lines: 19 (11.52%)
+    '    - Xml Docs: 26.32%
     ' 
-    '   Blank Lines: 19 (17.43%)
-    '     File Size: 4.26 KB
+    '   Blank Lines: 25 (15.15%)
+    '     File Size: 6.45 KB
 
 
     '     Class FunctionDeclare
     ' 
     '         Properties: name, parameters, sourceMap
     ' 
-    '         Function: GetArgument, RenderValueColor, (+2 Overloads) ToString, valueText
+    '         Function: GetArgument, RenderDefaultValueColor, (+2 Overloads) RenderValueColor, (+2 Overloads) ToString, valueText
     ' 
     ' 
     ' /********************************************************************************/

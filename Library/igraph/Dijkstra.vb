@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0663b298ed51d8ee55fedf2eaada05dd, Library\igraph\Dijkstra.vb"
+﻿#Region "Microsoft.VisualBasic::ccddf221a9898b0f0578fc6f195287d8, Library\igraph\Dijkstra.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 100.00%
     ' 
     '   Blank Lines: 13 (17.81%)
-    '     File Size: 2.76 KB
+    '     File Size: 2.75 KB
 
 
     ' Module Dijkstra

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::79ed15f4b52aa2d68a81803eb5957246, R#\Runtime\Internal\internalInvokes\dev\devtools.vb"
+﻿#Region "Microsoft.VisualBasic::3ecf5e342166085ebd81e4e204e6d1b2, R#\Runtime\Internal\internalInvokes\dev\devtools.vb"
 
     ' Author:
     ' 

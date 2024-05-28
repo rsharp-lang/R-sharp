@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c35e03c182d2c14e0fe818a6eaf34122, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\BinaryBetweenExpression.vb"
+﻿#Region "Microsoft.VisualBasic::5df32a4da52af2c19b0b0a19c84a7916, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\Binary\BinaryBetweenExpression.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 138
-    '    Code Lines: 112 (81.16%)
-    ' Comment Lines: 6 (4.35%)
-    '    - Xml Docs: 100.00%
+    '   Total Lines: 145
+    '    Code Lines: 112 (77.24%)
+    ' Comment Lines: 13 (8.97%)
+    '    - Xml Docs: 92.31%
     ' 
-    '   Blank Lines: 20 (14.49%)
-    '     File Size: 5.57 KB
+    '   Blank Lines: 20 (13.79%)
+    '     File Size: 5.71 KB
 
 
     '     Class BinaryBetweenExpression

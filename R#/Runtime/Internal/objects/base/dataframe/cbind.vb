@@ -1,56 +1,56 @@
-﻿#Region "Microsoft.VisualBasic::ba91bbe22dae017bcaf2e53f0bd4cfb3, R#\Runtime\Internal\objects\base\dataframe\cbind.vb"
+﻿#Region "Microsoft.VisualBasic::564c4f40b4b66a299616a73c4fbca0e7, R#\Runtime\Internal\objects\base\dataframe\cbind.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 235
-'    Code Lines: 166 (70.64%)
-' Comment Lines: 38 (16.17%)
-'    - Xml Docs: 63.16%
-' 
-'   Blank Lines: 31 (13.19%)
-'     File Size: 9.86 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module cbindOp
-' 
-'         Function: castPartData, (+2 Overloads) cbind, columnCombine, dataframeJoinListAsColumns, strictColumnAppend
-' 
-'         Sub: safeAddColumn
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 235
+    '    Code Lines: 166 (70.64%)
+    ' Comment Lines: 38 (16.17%)
+    '    - Xml Docs: 63.16%
+    ' 
+    '   Blank Lines: 31 (13.19%)
+    '     File Size: 9.88 KB
+
+
+    '     Module cbindOp
+    ' 
+    '         Function: castPartData, (+2 Overloads) cbind, columnCombine, dataframeJoinListAsColumns, strictColumnAppend
+    ' 
+    '         Sub: safeAddColumn
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

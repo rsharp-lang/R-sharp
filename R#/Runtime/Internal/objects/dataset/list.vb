@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::11aab7d9c0bc641d9af55ccd31a17c37, R#\Runtime\Internal\objects\dataset\list.vb"
+﻿#Region "Microsoft.VisualBasic::aa9c3e5324baaabff591dba3337ecdb1, R#\Runtime\Internal\objects\dataset\list.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 591
-    '    Code Lines: 335 (56.68%)
-    ' Comment Lines: 177 (29.95%)
-    '    - Xml Docs: 89.83%
+    '   Total Lines: 614
+    '    Code Lines: 342 (55.70%)
+    ' Comment Lines: 190 (30.94%)
+    '    - Xml Docs: 90.00%
     ' 
-    '   Blank Lines: 79 (13.37%)
-    '     File Size: 21.70 KB
+    '   Blank Lines: 82 (13.36%)
+    '     File Size: 22.61 KB
 
 
     '     Class list
@@ -51,9 +51,9 @@
     ' 
     '         Function: AsGeneric, checkTuple, ctypeInternal, empty, (+2 Overloads) getByIndex
     '                   (+2 Overloads) getByName, getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue
-    '                   GetVector, hasName, hasNames, namedValues, setByindex
-    '                   setByIndex, (+2 Overloads) setByName, setNames, slotKeys, subset
-    '                   ToString
+    '                   GetVector, hasName, hasNames, namedValues, set_empty
+    '                   setByindex, setByIndex, (+2 Overloads) setByName, setNames, slotKeys
+    '                   subset, ToString
     ' 
     '         Sub: add
     ' 

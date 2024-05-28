@@ -1,55 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::def13cd2f7d5e32521a3173267fdb522, R#\Runtime\Internal\internalInvokes\Linq\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::ffcbbd2b8942fc5a810829b0dfe5fa6f, R#\Runtime\Internal\internalInvokes\Linq\dataframe.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 206
-'    Code Lines: 131 (63.59%)
-' Comment Lines: 49 (23.79%)
-'    - Xml Docs: 77.55%
-' 
-'   Blank Lines: 26 (12.62%)
-'     File Size: 8.60 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module dataframe_methods
-' 
-'         Function: colMeans, colSums, eval, rank_unique, rename
-'                   rowMeans, rowSums
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 371
+    '    Code Lines: 209 (56.33%)
+    ' Comment Lines: 118 (31.81%)
+    '    - Xml Docs: 80.51%
+    ' 
+    '   Blank Lines: 44 (11.86%)
+    '     File Size: 15.96 KB
+
+
+    '     Module dataframe_methods
+    ' 
+    '         Function: aggregate_eval, aggregate_func, aggregate_run, colMeans, colSums
+    '                   (+2 Overloads) combineFactors, rank_unique, rename, rowMeans, rowSums
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

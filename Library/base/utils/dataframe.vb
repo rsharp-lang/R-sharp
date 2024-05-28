@@ -1,60 +1,60 @@
-﻿#Region "Microsoft.VisualBasic::3f79ebae3ce3222127f2c5ab1b46e8fd, Library\base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::f8a9b9a27807d67f9c622d9cb953136a, Library\base\utils\dataframe.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 766
-'    Code Lines: 566 (73.89%)
-' Comment Lines: 105 (13.71%)
-'    - Xml Docs: 88.57%
-' 
-'   Blank Lines: 95 (12.40%)
-'     File Size: 29.45 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module dataframe
-' 
-'     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
-'               colnames, column, createEntityRow, CreateRowObject, dataframeTable
-'               deserialize, loadDataframe, measureColumnVector, openCsv, parseDataframe
-'               parseRow, printRowVector, printTable, project, rawToDataFrame
-'               readCsvRaw, readDataSet, rows, rowToString, RowToString
-'               stripCommentRows, transpose, vector
-' 
-'     Sub: Main
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 767
+    '    Code Lines: 567 (73.92%)
+    ' Comment Lines: 105 (13.69%)
+    '    - Xml Docs: 88.57%
+    ' 
+    '   Blank Lines: 95 (12.39%)
+    '     File Size: 29.52 KB
+
+
+    ' Module dataframe
+    ' 
+    '     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
+    '               colnames, column, createEntityRow, CreateRowObject, dataframeTable
+    '               deserialize, loadDataframe, measureColumnVector, openCsv, parseDataframe
+    '               parseRow, printRowVector, printTable, project, rawToDataFrame
+    '               readCsvRaw, readDataSet, rows, rowToString, RowToString
+    '               stripCommentRows, transpose, vector
+    ' 
+    '     Sub: Main
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d986f10c6e8e40d66b402d28353d32e1, R#\Runtime\Environment\SymbolNamespaceSolver.vb"
+﻿#Region "Microsoft.VisualBasic::466510a2bf37ab52eafae7e42cdb38d3, R#\Runtime\Environment\SymbolNamespaceSolver.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 202
-    '    Code Lines: 126 (62.38%)
-    ' Comment Lines: 46 (22.77%)
-    '    - Xml Docs: 89.13%
+    '   Total Lines: 233
+    '    Code Lines: 139 (59.66%)
+    ' Comment Lines: 63 (27.04%)
+    '    - Xml Docs: 92.06%
     ' 
-    '   Blank Lines: 30 (14.85%)
-    '     File Size: 8.73 KB
+    '   Blank Lines: 31 (13.30%)
+    '     File Size: 10.07 KB
 
 
     '     Class SymbolNamespaceSolver
@@ -48,8 +48,8 @@
     '         Properties: attachedNamespace, env, packageNames
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: (+2 Overloads) Add, FindPackageSymbol, FindSymbol, GetDllDirectories, GetEnumerator
-    '                   hasNamespace, IEnumerable_GetEnumerator, ToString
+    '         Function: (+2 Overloads) Add, FindNamespace, FindPackageSymbol, FindSymbol, GetDllDirectories
+    '                   GetEnumerator, hasNamespace, IEnumerable_GetEnumerator, ToString
     ' 
     ' 
     ' /********************************************************************************/

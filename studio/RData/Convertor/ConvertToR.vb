@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::71caa27d970c44cae49079a854d5ea36, studio\RData\Convertor\ConvertToR.vb"
+﻿#Region "Microsoft.VisualBasic::8a6a4745415bd04291e828c043ae6a64, studio\RData\Convertor\ConvertToR.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 353
-    '    Code Lines: 260 (73.65%)
-    ' Comment Lines: 39 (11.05%)
+    '   Total Lines: 354
+    '    Code Lines: 261 (73.73%)
+    ' Comment Lines: 39 (11.02%)
     '    - Xml Docs: 46.15%
     ' 
-    '   Blank Lines: 54 (15.30%)
-    '     File Size: 13.30 KB
+    '   Blank Lines: 54 (15.25%)
+    '     File Size: 13.37 KB
 
 
     '     Module ConvertToR

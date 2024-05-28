@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aab7dc686e4054f44ceb95a4c3c831b7, R#\Runtime\Interop\RsharpApi\RMethodInfo.vb"
+﻿#Region "Microsoft.VisualBasic::a0f38fbf83e53948c9ea55dda32c7df4, R#\Runtime\Interop\RsharpApi\RMethodInfo.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 508
-    '    Code Lines: 325 (63.98%)
-    ' Comment Lines: 122 (24.02%)
+    '   Total Lines: 520
+    '    Code Lines: 335 (64.42%)
+    ' Comment Lines: 122 (23.46%)
     '    - Xml Docs: 82.79%
     ' 
-    '   Blank Lines: 61 (12.01%)
-    '     File Size: 21.29 KB
+    '   Blank Lines: 63 (12.12%)
+    '     File Size: 21.83 KB
 
 
     '     Class RMethodInfo
@@ -50,9 +50,10 @@
     ' 
     '         Constructor: (+4 Overloads) Sub New
     ' 
-    '         Function: createNormalArguments, CreateParameterArrayFromListArgument, getArguments, GetNetCoreCLRDeclaration, GetPackageInfo
-    '                   GetPrintContent, GetRApiReturns, getReturns, GetUnionTypes, getValue
-    '                   (+2 Overloads) Invoke, missingParameter, parseParameters, ToString
+    '         Function: createNormalArguments, CreateParameterArrayFromListArgument, GetArgumentOrdinal, getArguments, GetNetCoreCLRDeclaration
+    '                   GetPackageInfo, GetPrintContent, GetRApiReturns, getReturns, GetUnionTypes
+    '                   getValue, (+2 Overloads) Invoke, missingParameter, parseParameters, setArgumentIndex
+    '                   ToString
     ' 
     '         Sub: setRuntimeTraceback
     ' 

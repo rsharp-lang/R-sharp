@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6ecce1e1b4a355ec22163371e42cedde, R#\Runtime\Internal\objects\Linq\DataframeGroup.vb"
+﻿#Region "Microsoft.VisualBasic::48526a9addd9c97c48c71f25d7c3c718, R#\Runtime\Internal\objects\Linq\DataframeGroup.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 100
-    '    Code Lines: 73 (73.00%)
-    ' Comment Lines: 11 (11.00%)
+    '   Total Lines: 106
+    '    Code Lines: 76 (71.70%)
+    ' Comment Lines: 11 (10.38%)
     '    - Xml Docs: 81.82%
     ' 
-    '   Blank Lines: 16 (16.00%)
-    '     File Size: 4.00 KB
+    '   Blank Lines: 19 (17.92%)
+    '     File Size: 4.14 KB
 
 
     '     Module DataframeGroup

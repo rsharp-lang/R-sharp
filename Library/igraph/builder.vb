@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::597ef14382a24ac2f430a1e0bd7f5df7, Library\igraph\builder.vb"
+﻿#Region "Microsoft.VisualBasic::48bcb23e52378e62615b9897dee908b1, Library\igraph\builder.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 43
-    '    Code Lines: 29 (67.44%)
-    ' Comment Lines: 8 (18.60%)
+    '   Total Lines: 46
+    '    Code Lines: 29 (63.04%)
+    ' Comment Lines: 11 (23.91%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 6 (13.95%)
-    '     File Size: 1.78 KB
+    '   Blank Lines: 6 (13.04%)
+    '     File Size: 1.88 KB
 
 
     ' Module builder

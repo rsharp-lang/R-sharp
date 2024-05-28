@@ -1,55 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::d2d4ddbf5db7b5ae4d9ef957e5450b25, R#\Runtime\Internal\objects\names.vb"
+﻿#Region "Microsoft.VisualBasic::fae186dd876f2a5277fda4b08c2aca83, R#\Runtime\Internal\objects\names.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 295
-'    Code Lines: 230 (77.97%)
-' Comment Lines: 22 (7.46%)
-'    - Xml Docs: 77.27%
-' 
-'   Blank Lines: 43 (14.58%)
-'     File Size: 11.89 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module names
-' 
-'         Function: checkChar, getArrayNames, getColNames, getNames, getRowNames
-'                   makeNames, setColNames, (+2 Overloads) setNames, setRowNames, (+2 Overloads) uniqueNames
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 262
+    '    Code Lines: 207 (79.01%)
+    ' Comment Lines: 17 (6.49%)
+    '    - Xml Docs: 70.59%
+    ' 
+    '   Blank Lines: 38 (14.50%)
+    '     File Size: 10.74 KB
+
+
+    '     Module names
+    ' 
+    '         Function: checkChar, getArrayNames, getColNames, getNames, getRowNames
+    '                   makeNames, setColNames, (+2 Overloads) setNames, setRowNames, uniqueNames
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
