@@ -58,6 +58,7 @@ Imports System.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
@@ -476,7 +477,8 @@ Namespace Runtime.Interop
                 For Each par As InvokeParameter In params.Skip(1)
                     If par.isSymbolAssign Then
                         If [declare].GetArgumentOrdinal(par.name) = -1 Then
-                            Dim eval As Object = par.value.Evaluate(env)
+                            Dim assign As ValueAssignExpression = par.value
+                            Dim eval As Object = assign.value.Evaluate(env)
 
                             If TypeOf eval Is Message Then
                                 Return {eval}

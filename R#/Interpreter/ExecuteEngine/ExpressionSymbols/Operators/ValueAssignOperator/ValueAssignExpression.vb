@@ -78,6 +78,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
     ''' <summary>
     ''' Set variable or tuple
     ''' </summary>
+    ''' <remarks>
+    ''' supports tuple disconstruct syntax for assign value to multiuple symbols.
+    ''' </remarks>
     Public Class ValueAssignExpression : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
@@ -97,6 +100,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         ''' 所以应该是多个变量名称
         ''' </summary>
         Public ReadOnly Property targetSymbols As Expression()
+
+        ''' <summary>
+        ''' the value data expression for assigned to the <see cref="targetSymbols"/>
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property value As Expression
 
         Friend isByRef As Boolean
