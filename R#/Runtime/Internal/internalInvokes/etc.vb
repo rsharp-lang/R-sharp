@@ -109,7 +109,7 @@ Namespace Runtime.Internal.Invokes
                 Return Nothing
             End If
 
-            Dim xmldocs = env.globalEnvironment.packages.packageDocs
+            Dim xmldocs As AnnotationDocs = env.globalEnvironment.packages.packageDocs
             Dim docs = xmldocs.GetAnnotations(DirectCast(symbol, RMethodInfo).GetNetCoreCLRDeclaration)
             Dim help As UnixManPage = UnixManPagePrinter.CreateManPage(symbol, docs)
 

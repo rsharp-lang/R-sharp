@@ -79,7 +79,7 @@ Namespace Development
         Public Sub printManPage(api As RMethodInfo, docs As ProjectMember, markdown As RContentOutput)
             Dim man As UnixManPage = api.CreateManPage(docs)
 
-            Call markdown.Write(UnixManPage.ToString(man, ""))
+            Call markdown.Write(UnixManPage.ToString(man))
             Call markdown.Flush()
         End Sub
 
