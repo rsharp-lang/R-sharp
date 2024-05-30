@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::684ce8b0ff610d96330d6148cedc1d27, Library\graphics\Plot2D\graphics2D.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 688
-    '    Code Lines: 498 (72.38%)
-    ' Comment Lines: 109 (15.84%)
-    '    - Xml Docs: 95.41%
-    ' 
-    '   Blank Lines: 81 (11.77%)
-    '     File Size: 28.24 KB
+' Summaries:
 
 
-    ' Module graphics2DTools
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asciiArt, axisTicks, colorMapLegend, contourPolygon, contourTracing
-    '               DrawCircle, drawLegends, DrawRectangle, DrawTriangle, layout_grid
-    '               legend, line2D, measureString, offset2D, paddingString
-    '               paddingVector, plotColorMap, point2D, pointsVector, rasterHeatmap
-    '               (+2 Overloads) rectangle, scale, size, sizeVector
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 688
+'    Code Lines: 498 (72.38%)
+' Comment Lines: 109 (15.84%)
+'    - Xml Docs: 95.41%
+' 
+'   Blank Lines: 81 (11.77%)
+'     File Size: 28.24 KB
+
+
+' Module graphics2DTools
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asciiArt, axisTicks, colorMapLegend, contourPolygon, contourTracing
+'               DrawCircle, drawLegends, DrawRectangle, DrawTriangle, layout_grid
+'               legend, line2D, measureString, offset2D, paddingString
+'               paddingVector, plotColorMap, point2D, pointsVector, rasterHeatmap
+'               (+2 Overloads) rectangle, scale, size, sizeVector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -76,6 +76,7 @@ Imports Microsoft.VisualBasic.Imaging.Math2D
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Html
 Imports Microsoft.VisualBasic.MIME.Html.CSS
+Imports Microsoft.VisualBasic.MIME.Html.Render
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
@@ -261,11 +262,13 @@ Module graphics2DTools
                                    Optional titleFont As Object = CSSFont.PlotSmallTitle,
                                    Optional unmapColor As Object = Nothing,
                                    Optional foreColor As Object = "black",
+                                   Optional ppi As Integer = 300,
                                    Optional env As Environment = Nothing) As ColorMapLegend
 
         Dim colorName As String = RColorPalette.getColorSet(colors)
         Dim foreColorEx As Color = RColorPalette.getColor(foreColor, [default]:="black").TranslateColor
         Dim ticks_vec As Double() = CLRVector.asNumeric(ticks)
+        Dim css As CSSEnvirnment = CSSEnvirnment.Empty(ppi)
 
         Return New ColorMapLegend(colorName, mapLevels) With {
             .format = format,
@@ -273,10 +276,10 @@ Module graphics2DTools
             .noblank = False,
             .ruleOffset = 5,
             .tickAxisStroke = Stroke.TryParse(tickAxisStroke).GDIObject,
-            .tickFont = CSSFont.TryParse(tickFont).GDIObject(300),
+            .tickFont = css.GetFont(CSSFont.TryParse(tickFont)),
             .ticks = ticks_vec,
             .title = title,
-            .titleFont = CSSFont.TryParse(titleFont).GDIObject(300),
+            .titleFont = css.GetFont(CSSFont.TryParse(titleFont)),
             .unmapColor = RColorPalette.getColor(unmapColor, [default]:=Nothing),
             .foreColor = foreColorEx
         }
@@ -317,7 +320,9 @@ Module graphics2DTools
         If TypeOf font Is Font Then
             fontStyle = font
         Else
-            fontStyle = CSSFont.TryParse(InteropArgumentHelper.getFontCSS(font)).GDIObject(canvas.Dpi)
+            With canvas.LoadEnvironment
+                fontStyle = .GetFont(CSSFont.TryParse(InteropArgumentHelper.getFontCSS(font)))
+            End With
         End If
 
         Dim size As SizeF = canvas.MeasureString(str, fontStyle)
