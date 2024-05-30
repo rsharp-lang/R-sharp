@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::8a347cbfac8019f2e60337ddd5f83340, R#\System\Document\Printer\UnixManPagePrinter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 89
-    '    Code Lines: 78 (87.64%)
-    ' Comment Lines: 0 (0.00%)
-    '    - Xml Docs: 0.00%
-    ' 
-    '   Blank Lines: 11 (12.36%)
-    '     File Size: 3.70 KB
+' Summaries:
 
 
-    '     Module UnixManPagePrinter
-    ' 
-    '         Function: CreateManPage, stylingMarkdownElements
-    ' 
-    '         Sub: printManPage
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 89
+'    Code Lines: 78 (87.64%)
+' Comment Lines: 0 (0.00%)
+'    - Xml Docs: 0.00%
+' 
+'   Blank Lines: 11 (12.36%)
+'     File Size: 3.70 KB
+
+
+'     Module UnixManPagePrinter
+' 
+'         Function: CreateManPage, stylingMarkdownElements
+' 
+'         Sub: printManPage
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -70,6 +70,12 @@ Namespace Development
 
     Public Module UnixManPagePrinter
 
+        ''' <summary>
+        ''' print the help information on the console
+        ''' </summary>
+        ''' <param name="api"></param>
+        ''' <param name="docs"></param>
+        ''' <param name="markdown"></param>
         Public Sub printManPage(api As RMethodInfo, docs As ProjectMember, markdown As RContentOutput)
             Dim man As UnixManPage = api.CreateManPage(docs)
 
@@ -77,6 +83,12 @@ Namespace Development
             Call markdown.Flush()
         End Sub
 
+        ''' <summary>
+        ''' extract the help document data from the clr xml documentation file
+        ''' </summary>
+        ''' <param name="api"></param>
+        ''' <param name="docs"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function CreateManPage(api As RMethodInfo, docs As ProjectMember) As UnixManPage
             Dim targetModule As Type = api.GetNetCoreCLRDeclaration.DeclaringType
@@ -124,7 +136,8 @@ Namespace Development
                                 Return New NamedValue(Of String)(a.name, a.text.stylingMarkdownElements)
                             End Function) _
                     .ToArray,
-                .VALUE = docs.Returns.stylingMarkdownElements
+                .VALUE = docs.Returns.stylingMarkdownElements,
+                .EXAMPLES = docs.example
             }
 
             Return man
