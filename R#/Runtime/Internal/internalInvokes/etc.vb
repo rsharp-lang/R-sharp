@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ec5c7a2b57820be855d14e5c2d2473f6, R#\Runtime\Internal\internalInvokes\etc.vb"
+﻿#Region "Microsoft.VisualBasic::58bd64586caaf0cee3d71a8400251c4e, R#\Runtime\Internal\internalInvokes\etc.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 91.43%
     ' 
     '   Blank Lines: 23 (7.96%)
-    '     File Size: 12.47 KB
+    '     File Size: 12.49 KB
 
 
     '     Module etc
