@@ -56,6 +56,7 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Data.Repository
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Net.Tcp
@@ -161,6 +162,14 @@ Public Module Parallel
 
         Return value.value
 #Enable Warning
+    End Function
+
+    <ExportAPI("snowflake_id_generator")>
+    Public Function SnowflakeIdGenerator_func(machine_id As Long,
+                                              Optional epoch As Long = SnowflakeIdGenerator.DefaultEpoch,
+                                              Optional sequence_id As Long = 0L) As SnowflakeIdFunction
+
+        Return New SnowflakeIdFunction(config:=New SnowflakeIdGenerator(machine_id, epoch, sequence_id))
     End Function
 
     ''' <summary>
