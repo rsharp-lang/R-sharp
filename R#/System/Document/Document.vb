@@ -118,7 +118,7 @@ Namespace Development
                 .FILES = declares.sourceMap.ToString,
                 .SEE_ALSO = see_also,
                 .SYNOPSIS = declares.ToString,
-                .index = New Index With {
+                .index = New ManIndex With {
                     .category = 1,
                     .keyword = keywords.JoinBy(", "),
                     .index = declares.name,
