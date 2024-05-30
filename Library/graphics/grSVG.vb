@@ -1,53 +1,53 @@
-﻿#Region "Microsoft.VisualBasic::ce8f1e71ef68375de4304b5e94416d2f, Library\graphics\grSVG.vb"
+﻿#Region "Microsoft.VisualBasic::730a26b61c2544c9b4c45c4c1ecb60bb, Library\graphics\grSVG.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 47
-'    Code Lines: 33 (70.21%)
-' Comment Lines: 7 (14.89%)
-'    - Xml Docs: 100.00%
-' 
-'   Blank Lines: 7 (14.89%)
-'     File Size: 1.83 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module grSVG
-' 
-'     Function: styleByclass
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 126
+    '    Code Lines: 81 (64.29%)
+    ' Comment Lines: 26 (20.63%)
+    '    - Xml Docs: 100.00%
+    ' 
+    '   Blank Lines: 19 (15.08%)
+    '     File Size: 4.62 KB
+
+
+    ' Module grSVG
+    ' 
+    '     Function: findText, parse, styleByclass, text_styles
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
