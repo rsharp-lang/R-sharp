@@ -6,13 +6,13 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 ''' </summary>
 Public Class SnowflakeIdFunction : Inherits RDefaultFunction
 
-    ReadOnly snowflakeId As SnowflakeIdgenerator
+    ReadOnly snowflakeId As SnowflakeIdGenerator
 
-    Sub New(config As SnowflakeIdgenerator)
+    Sub New(config As SnowflakeIdGenerator)
         snowflakeId = config
     End Sub
 
-    <RDefaultFunction>
+    <RDefaultFunctionAttribute>
     Public Function nextId() As Long
         Return snowflakeId.GenerateId
     End Function
