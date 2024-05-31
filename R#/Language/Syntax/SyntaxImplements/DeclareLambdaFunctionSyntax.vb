@@ -116,7 +116,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
         End Function
 
         Public Function DeclareLambdaFunction(name As String, body As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
-
+            Throw New NotImplementedException
         End Function
 
         ''' <summary>
