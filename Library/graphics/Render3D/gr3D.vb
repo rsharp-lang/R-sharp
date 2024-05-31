@@ -55,8 +55,7 @@
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Drawing3D.Models
-Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.MIME.HTML.CSS
+Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
@@ -88,10 +87,13 @@ Module gr3D
 
     <ExportAPI("line3D")>
     Public Function line3D(<RRawVectorArgument> a As Object, <RRawVectorArgument> b As Object, Optional pen As Object = Stroke.AxisStroke) As Line3D
+        Dim stroke_css As String = InteropArgumentHelper.getStrokePenCSS(pen)
+        Dim env As CSSEnvirnment = CSSEnvirnment.Empty()
+
         Return New Line3D With {
             .a = InteropArgumentHelper.getVector3D(a),
             .b = InteropArgumentHelper.getVector3D(b),
-            .pen = InteropArgumentHelper.getStrokePenCSS(pen).DoCall(AddressOf Stroke.TryParse)
+            .pen = env.GetPen(Stroke.TryParse(stroke_css))
         }
     End Function
 
