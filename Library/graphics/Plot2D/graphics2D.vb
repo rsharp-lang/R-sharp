@@ -74,7 +74,6 @@ Imports Microsoft.VisualBasic.Imaging.Drawing2D.Text.ASCIIArt
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Imaging.Math2D
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.MIME.Html
 Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.MIME.Html.Render
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -275,7 +274,7 @@ Module graphics2DTools
             .legendOffsetLeft = 0,
             .noblank = False,
             .ruleOffset = 5,
-            .tickAxisStroke = Stroke.TryParse(tickAxisStroke).GDIObject,
+            .tickAxisStroke = css.GetPen(Stroke.TryParse(tickAxisStroke)),
             .tickFont = css.GetFont(CSSFont.TryParse(tickFont)),
             .ticks = ticks_vec,
             .title = title,
@@ -480,8 +479,9 @@ Module graphics2DTools
         Dim p1 As PointF = InteropArgumentHelper.getVector2D(a)
         Dim p2 As PointF = InteropArgumentHelper.getVector2D(b)
         Dim penCSS As String = InteropArgumentHelper.getStrokePenCSS(stroke)
+        Dim css As CSSEnvirnment = CSSEnvirnment.Empty(100)
 
-        Return New Shapes.Line(p1, p2, CSS.Stroke.TryParse(penCSS).GDIObject)
+        Return New Shapes.Line(p1, p2, css.GetPen(penCSS))
     End Function
 
     ''' <summary>
