@@ -55,7 +55,6 @@
 Imports System.ComponentModel
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
-Imports System.Runtime.ConstrainedExecution
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.CommandLine.Reflection

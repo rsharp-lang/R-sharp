@@ -370,6 +370,11 @@ Public Class RProcessor
             http_context(arg.Key) = JsonContract.GetJson(arg.Value)
         Next
 
+        ' debug view
+        For Each name As String In http_context.Keys
+            Call Console.WriteLine($"{name} = {http_context(name)}")
+        Next
+
         ' view commandline
         Call VBDebugger.EchoLine(arguments.TrimNewLine.Trim.StringReplace("\s{2,}", " "))
         Call task.Start()
