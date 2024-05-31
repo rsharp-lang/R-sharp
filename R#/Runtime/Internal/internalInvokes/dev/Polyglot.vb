@@ -62,13 +62,13 @@ Namespace Runtime.Internal.Invokes
 
         <ExportAPI("register")>
         Public Function register(<RRawVectorArgument> file_types As Object, assembly As Assembly, Optional env As Environment = Nothing) As Object
-
+            Throw New NotImplementedException
         End Function
 
         <ExportAPI("assembly")>
         <RApiReturn(GetType(Assembly))>
         Public Function assembly(filename As String, Optional env As Environment = Nothing) As Object
-
+            Throw New NotImplementedException
         End Function
     End Module
 End Namespace
