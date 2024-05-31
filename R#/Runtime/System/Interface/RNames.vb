@@ -96,7 +96,7 @@ Namespace Runtime.Components.Interface
         ReadOnly Property length As Integer
 
         ''' <summary>
-        ''' 
+        ''' get element by index(base from 1)
         ''' </summary>
         ''' <param name="i">index i should be start from base 1</param>
         ''' <returns></returns>

@@ -555,7 +555,6 @@ Namespace Runtime.Internal.Invokes
             Dim value As Object
             Dim keyName As [Variant](Of String, Message)
             Dim list As New Dictionary(Of String, Object)
-            Dim idx As i32 = 1
 
             For i As Integer = 1 To size
                 d = vec.getByIndex(i)
@@ -564,7 +563,8 @@ Namespace Runtime.Internal.Invokes
                 If keyName Like GetType(Message) Then
                     Return keyName.TryCast(Of Message)
                 Else
-                    value = apply.Invoke(env, invokeArgument(d, i - 1))
+                    ' index start from base 1
+                    value = apply.Invoke(env, invokeArgument(d, i))
                 End If
 
                 If TypeOf value Is ReturnValue Then
@@ -629,7 +629,8 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="FUN">
         ''' the Function to be applied To Each element Of X: see 'Details’. 
         ''' In the case of functions like +, %*%, the function name must be 
-        ''' backquoted or quoted.
+        ''' backquoted or quoted. and optional index of function secondary 
+        ''' parameter, start from base 1.
         ''' </param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
