@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ec5932bec6839e17de7070d40e97e2fe, snowFall\SnowflakeIdFunction.vb"
+﻿#Region "Microsoft.VisualBasic::208356d14e5a1a5aae1b90813282df41, snowFall\SnowflakeIdFunction.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 100.00%
     ' 
     '   Blank Lines: 4 (21.05%)
-    '     File Size: 530 B
+    '     File Size: 528 B
 
 
     ' Class SnowflakeIdFunction
@@ -71,4 +71,3 @@ Public Class SnowflakeIdFunction : Inherits RDefaultFunction
         Return snowflakeId.GenerateId
     End Function
 End Class
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ad2657bdf76cdb827611be31934a5705, Library\graphics\Render3D\gr3D.vb"
+﻿#Region "Microsoft.VisualBasic::4a40cb68d919a9f50c488eaf41d74c44, Library\graphics\Render3D\gr3D.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 67
-    '    Code Lines: 46 (68.66%)
-    ' Comment Lines: 15 (22.39%)
+    '   Total Lines: 69
+    '    Code Lines: 47 (68.12%)
+    ' Comment Lines: 15 (21.74%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 6 (8.96%)
-    '     File Size: 2.50 KB
+    '   Blank Lines: 7 (10.14%)
+    '     File Size: 2.57 KB
 
 
     ' Module gr3D

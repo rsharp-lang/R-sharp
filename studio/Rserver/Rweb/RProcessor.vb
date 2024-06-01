@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e67e2248c8a20c129ab49170fd5e9e43, studio\Rserver\Rweb\RProcessor.vb"
+﻿#Region "Microsoft.VisualBasic::f400911434846b4785ae900497b8c99a, studio\Rserver\Rweb\RProcessor.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 320
-    '    Code Lines: 225 (70.31%)
-    ' Comment Lines: 52 (16.25%)
-    '    - Xml Docs: 76.92%
+    '   Total Lines: 325
+    '    Code Lines: 228 (70.15%)
+    ' Comment Lines: 53 (16.31%)
+    '    - Xml Docs: 75.47%
     ' 
-    '   Blank Lines: 43 (13.44%)
-    '     File Size: 12.38 KB
+    '   Blank Lines: 44 (13.54%)
+    '     File Size: 12.54 KB
 
 
     ' Class RProcessor

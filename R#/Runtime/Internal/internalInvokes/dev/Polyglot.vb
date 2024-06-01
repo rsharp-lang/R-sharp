@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6ae55442628dae5c8172d2798f1c197f, R#\Runtime\Internal\internalInvokes\dev\Polyglot.vb"
+﻿#Region "Microsoft.VisualBasic::674290e23cc5876abf9eec0493144741, R#\Runtime\Internal\internalInvokes\dev\Polyglot.vb"
 
     ' Author:
     ' 
@@ -35,12 +35,12 @@
     ' Code Statistics:
 
     '   Total Lines: 20
-    '    Code Lines: 14 (70.00%)
+    '    Code Lines: 16 (80.00%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 6 (30.00%)
-    '     File Size: 620 B
+    '   Blank Lines: 4 (20.00%)
+    '     File Size: 710 B
 
 
     '     Module Polyglot
