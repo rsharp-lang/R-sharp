@@ -2088,7 +2088,10 @@ RE0:
         ''' <param name="type"></param>
         ''' <returns></returns>
         <ExportAPI("sink.number")>
-        Public Function sink_number(<RRawVectorArgument(TypeCodes.string)> Optional type As Object = "output|message", Optional env As Environment = Nothing) As Integer
+        Public Function sink_number(<RRawVectorArgument(TypeCodes.string)>
+                                    Optional type As Object = "output|message",
+                                    Optional env As Environment = Nothing) As Integer
+
             Dim stdout As RContentOutput = env.globalEnvironment.stdout
 
             If stdout.isLogOpen Then
