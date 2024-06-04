@@ -111,8 +111,15 @@ Public Module utils
     ''' <param name="file"></param>
     ''' <returns></returns>
     <ExportAPI("readRData")>
-    Public Function parseRData(file As String) As Object
-        Using buffer As Stream = file.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+    Public Function parseRData(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
+        Dim is_filepath As Boolean = False
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env, is_filepath:=is_filepath)
+
+        If s Like GetType(Message) Then
+            Return s.TryCast(Of Message)
+        End If
+
+        Using buffer As Stream = s.TryCast(Of Stream)
             Dim obj As Struct.RData = Reader.ParseData(buffer)
             Dim symbols As list = ConvertToR.ToRObject(obj.object)
 
