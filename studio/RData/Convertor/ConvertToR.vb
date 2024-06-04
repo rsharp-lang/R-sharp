@@ -175,6 +175,10 @@ Namespace Convertor
             Dim nodeType As ListNodeType = value.nodeType
 
             If nodeType = ListNodeType.NA Then
+                If rdata.info.type = RObjectType.S4 Then
+                    Return PullRObject(rdata.attributes, list)
+                End If
+
                 Return Nothing
             ElseIf nodeType = ListNodeType.Vector Then
                 ' 已经没有数据了，结束递归
@@ -263,10 +267,13 @@ Namespace Convertor
             Dim list As New list
             Dim obj As Object
             Dim name As String
+            Dim load As Dictionary(Of String, Object)
 
             For i As Integer = 0 To names.Length - 1
                 name = names(i)
-                obj = ConvertToR.PullRObject(elements(i), New Dictionary(Of String, Object))
+                load = New Dictionary(Of String, Object)
+                obj = ConvertToR.PullRObject(elements(i), load)
+                obj = If(obj, CObj(load))
 
                 Call list.add(name, obj)
             Next
@@ -334,8 +341,24 @@ Namespace Convertor
 
         <Extension>
         Private Function extractMatrixDimNames(robj As RObject) As (rownames As String(), colnames As String())
-            Dim value = robj.value.CAR.value.data
+            Dim source = robj.value.CAR
+            Dim value As Array
 
+            If robj.symbolName <> "dimnames" Then
+                source = robj.value.CDR
+            End If
+
+            If source Is Nothing Then
+                Return Nothing
+            Else
+                Dim vec = source.value
+
+                If vec.data.IsNullOrEmpty AndAlso vec.nodeType = ListNodeType.LinkedList Then
+                    value = vec.CAR.value.data
+                Else
+                    value = source.value.data
+                End If
+            End If
             If value.IsNullOrEmpty Then
                 Return Nothing
             End If

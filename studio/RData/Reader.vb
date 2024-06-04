@@ -342,8 +342,7 @@ Public MustInherit Class Reader
             ' Index is 1-based
             referenced_object = reference_list(info.reference - 1)
         Else
-            ' Throw New NotImplementedException($"Type {info.type} not implemented")
-            Call $"Type {info.type} not implemented".Warning
+            Call $"Type {info.type.ToString}({info.type.Description}) not implemented".Warning
             value = Nothing
         End If
 
