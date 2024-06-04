@@ -164,14 +164,14 @@ Namespace Runtime.Internal.Object
 
         <Extension>
         Private Function printSlots(sb As StringBuilder, keyValues As List(Of (key$, value$)), truncated$) As String
-            Dim maxPrefixSize As Integer = keyValues _
-                .Select(Function(s) s.key) _
-                .MaxLengthString _
-                .Length
+            If Not keyValues.IsNullOrEmpty Then
+                Dim maxPrefix As String = keyValues.Select(Function(s) s.key).MaxLengthString
+                Dim maxPrefixSize As Integer = maxPrefix.Length
 
-            For Each slot As (key$, value$) In keyValues
-                Call sb.AppendLine($"{slot.key}{New String(" "c, maxPrefixSize - slot.key.Length)} : {slot.value}")
-            Next
+                For Each slot As (key$, value$) In keyValues
+                    Call sb.AppendLine($"{slot.key}{New String(" "c, maxPrefixSize - slot.key.Length)} : {slot.value}")
+                Next
+            End If
 
             If Not truncated.StringEmpty Then
                 Call sb.AppendLine(truncated)
