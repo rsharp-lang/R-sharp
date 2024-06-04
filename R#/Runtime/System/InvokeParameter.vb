@@ -144,6 +144,16 @@ Namespace Runtime.Components
             End Get
         End Property
 
+        Public ReadOnly Property isErr As Boolean
+            Get
+                If TypeOf value Is RuntimeValueLiteral Then
+                    Return TypeOf DirectCast(value, RuntimeValueLiteral).value Is Message
+                End If
+
+                Return False
+            End Get
+        End Property
+
         Friend Sub New()
         End Sub
 
@@ -309,7 +319,12 @@ Namespace Runtime.Components
 
                 If Not acceptor Is Nothing Then
                     If arg.value.isSymbolAssign Then
-                        Call env.acceptorArguments.Add(keyName, argVal)
+                        Dim assign As ValueAssignExpression = arg.value.value
+                        Dim assignVal = assign.value.Evaluate(env)
+
+                        Call env _
+                            .acceptorArguments _
+                            .Add(keyName, assignVal)
                     End If
                 End If
                 ' End If
@@ -318,6 +333,11 @@ Namespace Runtime.Components
             If Not dotdotdot Is Nothing Then
                 ' join the parameters from ... symbol
                 Dim dotVals As Object = dotdotdot.Evaluate(env)
+
+                If TypeOf dotVals Is Message Then
+                    ' returns the error message
+                    Return New Dictionary(Of String, InvokeParameter) From {{"...", New InvokeParameter(dotVals)}}
+                End If
 
                 For Each par As KeyValuePair(Of String, Object) In PopulateDotDotDot(dotVals)
                     If Not argVals.ContainsKey(par.Key) Then
