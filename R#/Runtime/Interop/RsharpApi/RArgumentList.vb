@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3a26a36551af9f0ebf4240ec046a6bc5, R#\Runtime\Interop\RsharpApi\RArgumentList.vb"
+﻿#Region "Microsoft.VisualBasic::fe7265fdfc15d57d17c8b198e1e02f26, R#\Runtime\Interop\RsharpApi\RArgumentList.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 442
-    '    Code Lines: 296 (66.97%)
-    ' Comment Lines: 92 (20.81%)
+    '   Total Lines: 444
+    '    Code Lines: 298 (67.12%)
+    ' Comment Lines: 92 (20.72%)
     '    - Xml Docs: 56.52%
     ' 
-    '   Blank Lines: 54 (12.22%)
-    '     File Size: 19.21 KB
+    '   Blank Lines: 54 (12.16%)
+    '     File Size: 19.37 KB
 
 
     '     Class RArgumentList

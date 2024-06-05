@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d2b4d1198136ae5b815e6423ceff0ba4, studio\RData\Reader.vb"
+﻿#Region "Microsoft.VisualBasic::421dcce7a0acc7a87150e3b0b6734d3e, studio\RData\Reader.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 384
-    '    Code Lines: 262 (68.23%)
-    ' Comment Lines: 67 (17.45%)
-    '    - Xml Docs: 85.07%
+    '   Total Lines: 383
+    '    Code Lines: 262 (68.41%)
+    ' Comment Lines: 66 (17.23%)
+    '    - Xml Docs: 86.36%
     ' 
-    '   Blank Lines: 55 (14.32%)
-    '     File Size: 14.01 KB
+    '   Blank Lines: 55 (14.36%)
+    '     File Size: 13.95 KB
 
 
     ' Delegate Function

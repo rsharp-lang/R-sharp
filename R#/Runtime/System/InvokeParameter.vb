@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7d55900d1ded00986de79ee0ef0d10c7, R#\Runtime\System\InvokeParameter.vb"
+﻿#Region "Microsoft.VisualBasic::f92821737030318c443eb96d3d3961b3, R#\Runtime\System\InvokeParameter.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 301
-    '    Code Lines: 204 (67.77%)
-    ' Comment Lines: 61 (20.27%)
-    '    - Xml Docs: 85.25%
+    '   Total Lines: 321
+    '    Code Lines: 219 (68.22%)
+    ' Comment Lines: 62 (19.31%)
+    '    - Xml Docs: 83.87%
     ' 
-    '   Blank Lines: 36 (11.96%)
-    '     File Size: 11.77 KB
+    '   Blank Lines: 40 (12.46%)
+    '     File Size: 12.55 KB
 
 
     '     Class InvokeParameter
     ' 
-    '         Properties: haveSymbolName, index, isAcceptor, isFormula, isProbablyVectorNameTuple
-    '                     isSymbolAssign, name, value
+    '         Properties: haveSymbolName, index, isAcceptor, isErr, isFormula
+    '                     isProbablyVectorNameTuple, isSymbolAssign, name, value
     ' 
     '         Constructor: (+3 Overloads) Sub New
     '         Function: Create, CreateArguments, CreateLiterals, Evaluate, GetLazyEvaluateExpression

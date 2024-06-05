@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f7def91c28b121561f0438c56ca2fafb, R#\Runtime\Internal\objects\reflector.vb"
+﻿#Region "Microsoft.VisualBasic::d4d020e5b1c027d3887483ab345f2eef, R#\Runtime\Internal\objects\reflector.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 90.91%
     ' 
     '   Blank Lines: 40 (18.10%)
-    '     File Size: 8.37 KB
+    '     File Size: 8.45 KB
 
 
     '     Module reflector
