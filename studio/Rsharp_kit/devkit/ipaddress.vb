@@ -41,8 +41,9 @@ Module ipaddress
     <ExportAPI("CIDR")>
     Public Function cidr(network As String) As IPv4
         Dim token As String() = network.Split("/"c)
-        Dim netmask As Integer = Integer.Parse(token(1))
-        Dim subnet As New IPv4(token(0), IPv4.NumericNetmaskToSymbolic(netmask))
+        Dim prefix As Integer = Integer.Parse(token(1))
+        Dim netmaskSymbolic = IPUtils.GetSubnetMaskFromPrefixLength(prefix)
+        Dim subnet As New IPv4(token(0), netmaskSymbolic.ToString)
         Return subnet
     End Function
 
