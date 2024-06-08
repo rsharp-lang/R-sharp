@@ -759,6 +759,9 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="files">
         ''' character vectors, containing file names or paths.
         ''' </param>
+        ''' <param name="fs">
+        ''' a virtual filesystem object
+        ''' </param>
         ''' <returns>
         ''' this function returns FALSE if the given files value is NULL
         ''' </returns>
@@ -766,16 +769,19 @@ Namespace Runtime.Internal.Invokes
         <RApiReturn(GetType(Boolean))>
         Public Function exists(<RRawVectorArgument> files As Object,
                                Optional ZERO_Nonexists As Boolean = False,
+                               Optional fs As IFileSystemEnvironment = Nothing,
                                Optional env As Environment = Nothing) As Object
 
             If files Is Nothing Then
                 Return False
             ElseIf TypeOf files Is FileReference Then
                 Dim p As FileReference = files
-                Dim fs As IFileSystemEnvironment = p.fs
-                Dim check As Boolean = fs.FileExists(p.filepath, ZERO_Nonexists)
+                Dim vfs As IFileSystemEnvironment = p.fs
+                Dim check As Boolean = vfs.FileExists(p.filepath, ZERO_Nonexists)
 
                 Return check
+            ElseIf Not fs Is Nothing Then
+                Return env.EvaluateFramework(Of String, Boolean)(files, Function(path) fs.FileExists(path, ZERO_Nonexists))
             End If
 
             Return env.EvaluateFramework(Of String, Boolean)(files, Function(path) path.FileExists(ZERO_Nonexists))
