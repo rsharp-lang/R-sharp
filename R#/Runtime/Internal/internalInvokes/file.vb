@@ -1,73 +1,73 @@
 ﻿#Region "Microsoft.VisualBasic::e07f694c6ec6e4220c8b504eae9a314e, R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1772
-    '    Code Lines: 1020 (57.56%)
-    ' Comment Lines: 569 (32.11%)
-    '    - Xml Docs: 91.04%
-    ' 
-    '   Blank Lines: 183 (10.33%)
-    '     File Size: 79.34 KB
+' Summaries:
 
 
-    '     Enum endianness
-    ' 
-    '         big, little
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    '     Module file
-    ' 
-    '         Function: [erase], basename, buffer, bytes, close
-    '                   dataUri, dir_exists, dirCopy, dirCreate, dirname
-    '                   exists, file, file_allocate, file_ext, filecopy
-    '                   fileExt, fileinfo, fileInfoByFile, filepath, filesize
-    '                   getRelativePath, GetSha1Hash, getwd, handleWriteLargeTextStream, handleWriteTextArray
-    '                   isSystemDir, listDirs, listFiles, loadListInternal, NextTempToken
-    '                   normalizeFileName, normalizePath, openDir, openGzip, openZip
-    '                   readBin, readFromFile, readFromStream, readLines, readList
-    '                   readText, Rhome, saveList, scanZipFiles, setwd
-    '                   tempdir, tempfile, writeBin, writeLines
-    ' 
-    '         Sub: fileRemove, fileRename, unlinks
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1772
+'    Code Lines: 1020 (57.56%)
+' Comment Lines: 569 (32.11%)
+'    - Xml Docs: 91.04%
+' 
+'   Blank Lines: 183 (10.33%)
+'     File Size: 79.34 KB
+
+
+'     Enum endianness
+' 
+'         big, little
+' 
+'  
+' 
+' 
+' 
+'     Module file
+' 
+'         Function: [erase], basename, buffer, bytes, close
+'                   dataUri, dir_exists, dirCopy, dirCreate, dirname
+'                   exists, file, file_allocate, file_ext, filecopy
+'                   fileExt, fileinfo, fileInfoByFile, filepath, filesize
+'                   getRelativePath, GetSha1Hash, getwd, handleWriteLargeTextStream, handleWriteTextArray
+'                   isSystemDir, listDirs, listFiles, loadListInternal, NextTempToken
+'                   normalizeFileName, normalizePath, openDir, openGzip, openZip
+'                   readBin, readFromFile, readFromStream, readLines, readList
+'                   readText, Rhome, saveList, scanZipFiles, setwd
+'                   tempdir, tempfile, writeBin, writeLines
+' 
+'         Sub: fileRemove, fileRename, unlinks
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -1039,11 +1039,27 @@ Namespace Runtime.Internal.Invokes
                     .populates(Of String)(env) _
                     .handleWriteLargeTextStream(con, sep, encoding.CodePage, fs, env)
             ElseIf TypeOf text Is String Then
-                Return DirectCast(text, String).handleWriteTextArray(con, encoding.CodePage, fs, env)
+                Return {DirectCast(text, String)}.handleWriteLargeTextStream(con, sep, encoding.CodePage, fs, env)
             Else
-                Return CLRVector.asCharacter(text) _
-                    .JoinBy(sep) _
-                    .handleWriteTextArray(con, encoding.CodePage, fs, env)
+                ' 20240610 output memory error maybe happends when do string join
+                '
+                '  Error in <globalEnvironment> -> InitializeEnvironment -> "writeLines"("con" <- "./cfmid4.sh"...) -> writeLines
+                '   1. OutOfMemoryException: Exception of type 'System.OutOfMemoryException' was thrown.
+                '   2. stackFrames:
+                '    at System.String.JoinCore(ReadOnlySpan`1 separator, ReadOnlySpan`1 values)
+                '    at System.String.Join(String separator, String[] value)
+                '    at Microsoft.VisualBasic.Extensions.JoinBy(IEnumerable`1 tokens, String delimiter) in E:\GCModeller\src\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Extensions\Extensions.vb:line 478
+                '    at SMRUCC.Rsharp.Runtime.Internal.Invokes.file.writeLines(Object text, Object con, String sep, IFileSystemEnvironment fs, Encodings encoding, Environment env) in E:\GCModeller\src\R-sharp\R#\Runtime\Internal\internalInvokes\file.vb:line 1044
+
+                '    Call "writeLines"(&cmdl, "con" <- "./cfmid4.sh")
+                '    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                ' file.R#_clr_interop::.writeLines at [REnv, Version=2.33.856.6961, Culture=neutral, PublicKeyToken=null]:line &Hx0c4972403
+                ' SMRUCC/R#.call_function."writeLines"("con" <- "./cfmid4.sh"...) at export_task.R:line 46
+                ' SMRUCC/R#.n/a.InitializeEnvironment at export_task.R:line 0
+                ' SMRUCC/R#.global.<globalEnvironment> at <globalEnvironment>:line n/a
+
+                Return CLRVector.asCharacter(text).handleWriteLargeTextStream(con, sep, encoding.CodePage, fs, env)
             End If
 
             Return Nothing
@@ -1071,11 +1087,23 @@ Namespace Runtime.Internal.Invokes
                 Next
             ElseIf TypeOf con Is String Then
                 If fs Is Nothing Then
-                    Call text.SaveTo(CStr(con), encoding)
+                    ' save to local filesystem
+                    Call text.SaveTo(CStr(con), encoding, newLine:=sep)
                 Else
-                    Call fs.WriteText(text.JoinBy(vbCr), CStr(con))
+                    ' save to a virtual filesystem
+                    Dim s As Stream = fs.OpenFile(CStr(con), access:=FileAccess.ReadWrite)
+                    Dim wr As New StreamWriter(s, encoding) With {.NewLine = sep}
+
+                    For Each line As String In text
+                        Call wr.WriteLine(line)
+                    Next
+
+                    Call wr.Flush()
+                    Call wr.Close()
+                    Call wr.Dispose()
                 End If
             ElseIf TypeOf con Is textBuffer Then
+                ' save to a http stream
                 DirectCast(con, textBuffer).text = text.JoinBy(sep)
                 Return con
             ElseIf TypeOf con Is ITextWriter OrElse con.GetType.IsInheritsFrom(GetType(ITextWriter)) Then
@@ -1085,47 +1113,6 @@ Namespace Runtime.Internal.Invokes
                     Call dev.WriteLine(line)
                 Next
 
-                Return con
-            Else
-                Return Internal.debug.stop(New NotSupportedException($"invalid buffer type: {con.GetType.FullName}!"), env)
-            End If
-
-            Return Nothing
-        End Function
-
-        <Extension>
-        Private Function handleWriteTextArray(text As String,
-                                              con As Object,
-                                              encoding As Encoding,
-                                              fs As IFileSystemEnvironment,
-                                              env As Environment) As Object
-
-            If con Is Nothing OrElse (TypeOf con Is String AndAlso DirectCast(con, String).StringEmpty) Then
-                Dim stdOut As Action(Of String)
-
-                If env.globalEnvironment.stdout Is Nothing Then
-                    stdOut = AddressOf Console.WriteLine
-                Else
-                    stdOut = AddressOf env.globalEnvironment.stdout.WriteLine
-                End If
-
-                Call stdOut(text)
-            ElseIf TypeOf con Is String Then
-                If fs Is Nothing Then
-                    Call text.SaveTo(con, encoding)
-                Else
-                    Call fs.WriteText(text, con)
-                    Call fs.Flush()
-                End If
-            ElseIf TypeOf con Is Stream Then
-                Dim writer As New StreamWriter(DirectCast(con, Stream), encoding)
-                Call writer.WriteLine(text)
-                Call writer.Flush()
-            ElseIf TypeOf con Is textBuffer Then
-                DirectCast(con, textBuffer).text = text
-                Return con
-            ElseIf TypeOf con Is ITextWriter OrElse con.GetType.IsInheritsFrom(GetType(ITextWriter)) Then
-                DirectCast(con, ITextWriter).WriteLine(text)
                 Return con
             Else
                 Return Internal.debug.stop(New NotSupportedException($"invalid buffer type: {con.GetType.FullName}!"), env)
