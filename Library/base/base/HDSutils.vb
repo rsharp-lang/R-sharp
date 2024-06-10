@@ -66,6 +66,7 @@ Imports Microsoft.VisualBasic.DataStorage.HDSPack
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -348,9 +349,15 @@ Module HDSutils
     <ExportAPI("writeText")>
     Public Function writeText(pack As StreamPack, fileName As String,
                               <RRawVectorArgument>
-                              text As Object) As Boolean
-        pack.Delete(fileName)
-        Return pack.WriteText(CLRVector.asCharacter(text), fileName)
+                              text As Object,
+                              Optional encoding As Encodings = Encodings.UTF8,
+                              Optional allocate As Boolean = True) As Boolean
+
+        Call pack.Delete(fileName)
+
+        Return pack.WriteText(CLRVector.asCharacter(text), fileName,
+                              encoding:=encoding,
+                              allocate:=allocate)
     End Function
 
     ''' <summary>
