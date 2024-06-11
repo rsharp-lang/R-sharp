@@ -81,6 +81,7 @@
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\mime\text%html\html_netcore5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\mime\text%markdown\markdown.NET5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\vs_solutions\dev\VisualStudio\VisualStudio.NET5.vbproj" />
+    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\network-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\R#\Rsharp-netcore5.vbproj" />
     <ProjectReference Include="..\..\RData\RData.NET5.vbproj" />
     <ProjectReference Include="..\roxygenNet\roxygenNet-netcore5.vbproj" />

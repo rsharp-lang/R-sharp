@@ -66,6 +66,7 @@ Imports Microsoft.VisualBasic.DataStorage.HDSPack
 Imports Microsoft.VisualBasic.DataStorage.HDSPack.FileSystem
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -115,8 +116,8 @@ Module HDSutils
     ''' <summary>
     ''' Extract the files inside the HDS pack to a specific filesystem environment
     ''' </summary>
-    ''' <param name="pack"></param>
-    ''' <param name="fs"></param>
+    ''' <param name="pack">a HDS stream package archive file</param>
+    ''' <param name="fs">the target file system to unpack the package. value could be a character vector of the local directory path.</param>
     ''' <returns></returns>
     <ExportAPI("extract_files")>
     Public Function ExtractFiles(pack As StreamPack, fs As Object, Optional env As Environment = Nothing) As Object
@@ -338,12 +339,25 @@ Module HDSutils
         End If
     End Function
 
+    ''' <summary>
+    ''' save the text data into archive file
+    ''' </summary>
+    ''' <param name="pack"></param>
+    ''' <param name="fileName"></param>
+    ''' <param name="text"></param>
+    ''' <returns></returns>
     <ExportAPI("writeText")>
     Public Function writeText(pack As StreamPack, fileName As String,
                               <RRawVectorArgument>
-                              text As Object) As Boolean
-        pack.Delete(fileName)
-        Return pack.WriteText(CLRVector.asCharacter(text), fileName)
+                              text As Object,
+                              Optional encoding As Encodings = Encodings.UTF8,
+                              Optional allocate As Boolean = True) As Boolean
+
+        Call pack.Delete(fileName)
+
+        Return pack.WriteText(CLRVector.asCharacter(text), fileName,
+                              encoding:=encoding,
+                              allocate:=allocate)
     End Function
 
     ''' <summary>
@@ -371,6 +385,10 @@ Module HDSutils
         Return True
     End Function
 
+    ''' <summary>
+    ''' do stream flush to local filesystem.
+    ''' </summary>
+    ''' <param name="hds"></param>
     <ExportAPI("flush")>
     Public Sub flush(hds As StreamPack)
         Call DirectCast(hds, IFileSystemEnvironment).Flush()
