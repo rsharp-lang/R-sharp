@@ -67,6 +67,7 @@ Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -944,6 +945,30 @@ Namespace Runtime.Internal.Object
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function getNames() As String() Implements IReflector.getNames
             Return columns.Keys.ToArray
+        End Function
+
+        Public Shared Function Create(ParamArray columns As ArgumentReference()) As dataframe
+            Dim fields As New Dictionary(Of String, Array)
+            Dim colnames As String() = columns.Select(Function(c) c.Name).UniqueNames
+            Dim val As Object
+
+            For i As Integer = 0 To colnames.Length - 1
+                val = columns(i).Value
+
+                If Not val Is Nothing Then
+                    If TypeOf val Is vector Then
+                        val = DirectCast(val, vector).data
+                    ElseIf TypeOf val Is list Then
+                        val = DirectCast(val, list).data.ToArray
+                    ElseIf Not val.GetType.IsArray Then
+                        val = {val}
+                    End If
+                End If
+
+                Call fields.Add(colnames(i), val)
+            Next
+
+            Return New dataframe With {.columns = fields}
         End Function
     End Class
 End Namespace
