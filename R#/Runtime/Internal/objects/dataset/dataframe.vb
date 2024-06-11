@@ -947,6 +947,12 @@ Namespace Runtime.Internal.Object
             Return columns.Keys.ToArray
         End Function
 
+        Public Shared Function Create(rownames As IEnumerable(Of String), ParamArray columns As ArgumentReference()) As dataframe
+            Dim df As dataframe = Create(columns)
+            df.rownames = rownames.SafeQuery.ToArray
+            Return df
+        End Function
+
         Public Shared Function Create(ParamArray columns As ArgumentReference()) As dataframe
             Dim fields As New Dictionary(Of String, Array)
             Dim colnames As String() = columns.Select(Function(c) c.Name).UniqueNames
