@@ -496,4 +496,69 @@ Module RMatrix
             End If
         End If
     End Sub
+
+    <ROperator(".*")>
+    Public Function dot(a As NumericMatrix, b As NumericMatrix) As NumericMatrix
+        Return a.DotProduct(b)
+    End Function
+
+    <ROperator("*")>
+    Public Function multiply(a As NumericMatrix, b As NumericMatrix) As NumericMatrix
+        Return a * b
+    End Function
+
+    <ROperator("/")>
+    Public Function division(a As NumericMatrix, b As NumericMatrix) As NumericMatrix
+        Return a / b
+    End Function
+
+    <ROperator("+")>
+    Public Function add(a As NumericMatrix, b As NumericMatrix) As NumericMatrix
+        Return a + b
+    End Function
+
+    <ROperator("-")>
+    Public Function substract(a As NumericMatrix, b As NumericMatrix) As NumericMatrix
+        Return a - b
+    End Function
+
+    <ROperator("*")>
+    Public Function multiply(a As NumericMatrix, b As Double) As NumericMatrix
+        Return a * b
+    End Function
+
+    <ROperator("/")>
+    Public Function division(a As NumericMatrix, b As Double) As NumericMatrix
+        Return a / b
+    End Function
+
+    <ROperator("+")>
+    Public Function add(a As NumericMatrix, b As Double) As NumericMatrix
+        Return a + b
+    End Function
+
+    <ROperator("-")>
+    Public Function substract(a As NumericMatrix, b As Double) As NumericMatrix
+        Return a - b
+    End Function
+
+    <ROperator("*")>
+    Public Function multiply(a As Double, b As NumericMatrix) As NumericMatrix
+        Return a * b
+    End Function
+
+    <ROperator("/")>
+    Public Function division(a As Double, b As NumericMatrix) As NumericMatrix
+        Return a / b
+    End Function
+
+    <ROperator("+")>
+    Public Function add(a As Double, b As NumericMatrix) As NumericMatrix
+        Return a + b
+    End Function
+
+    <ROperator("-")>
+    Public Function substract(a As Double, b As NumericMatrix) As NumericMatrix
+        Return a - b
+    End Function
 End Module
