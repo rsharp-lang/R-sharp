@@ -525,6 +525,7 @@ Module RMatrix
     End Sub
 
     <ROperator(".*")>
+    <ExportAPI("dot")>
     Public Function dot(a As NumericMatrix, b As NumericMatrix) As NumericMatrix
         Return a.DotProduct(b)
     End Function
