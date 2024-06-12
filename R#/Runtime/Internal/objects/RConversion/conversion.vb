@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::cff514effaecb0afbe8958da47bf2db6, R#\Runtime\Internal\objects\RConversion\conversion.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1398
-    '    Code Lines: 827 (59.16%)
-    ' Comment Lines: 433 (30.97%)
-    '    - Xml Docs: 78.06%
-    ' 
-    '   Blank Lines: 138 (9.87%)
-    '     File Size: 63.16 KB
+' Summaries:
 
 
-    '     Module RConversion
-    ' 
-    '         Function: asCharacters, asDataframe, asDate, asDate2, asDouble
-    '                   asInteger, asList, asLogicals, asNumeric, asObject
-    '                   asPipeline, asRaw, asVector, castArrayOfGeneric, castArrayOfObject
-    '                   castListMatrix, castListRows, castListRowsToDataframe, castListToDataframe, castType
-    '                   checkList, checkNames, handleListFeatureProjections, handleUnsure, isCharacter
-    '                   isDateTime, isLogical, populateNumeric, tryUnlistArray, unlist
-    '                   unlistOfRList, unlistRecursive
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1398
+'    Code Lines: 827 (59.16%)
+' Comment Lines: 433 (30.97%)
+'    - Xml Docs: 78.06%
+' 
+'   Blank Lines: 138 (9.87%)
+'     File Size: 63.16 KB
+
+
+'     Module RConversion
+' 
+'         Function: asCharacters, asDataframe, asDate, asDate2, asDouble
+'                   asInteger, asList, asLogicals, asNumeric, asObject
+'                   asPipeline, asRaw, asVector, castArrayOfGeneric, castArrayOfObject
+'                   castListMatrix, castListRows, castListRowsToDataframe, castListToDataframe, castType
+'                   checkList, checkNames, handleListFeatureProjections, handleUnsure, isCharacter
+'                   isDateTime, isLogical, populateNumeric, tryUnlistArray, unlist
+'                   unlistOfRList, unlistRecursive
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -1182,6 +1182,10 @@ RE0:
                     Return data _
                         .Select(Function(obj) CStr(obj).ParseDouble) _
                         .ToArray
+                ElseIf type.ImplementInterface(Of Value(Of Double).IValueOf) Then
+                    Return data _
+                        .Select(Function(d) DirectCast(d, Value(Of Double).IValueOf).Value) _
+                        .ToArray
                 Else
                     Dim dbls As New List(Of Double)
                     Dim i As Integer = 0
@@ -1226,6 +1230,8 @@ RE0:
                         Yield .Width
                         Yield .Height
                     End With
+                ElseIf item.GetType.ImplementInterface(GetType(Value(Of Double).IValueOf)) Then
+                    Yield DirectCast(item, Value(Of Double).IValueOf).Value
                 Else
                     Yield RCType.CTypeDynamic(item, GetType(Double), env)
                 End If
