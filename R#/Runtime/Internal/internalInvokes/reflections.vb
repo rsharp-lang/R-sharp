@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -427,7 +428,19 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("sys.calls")>
         <RApiReturn(TypeCodes.list)>
         Public Function sys_calls(Optional env As Environment = Nothing) As Object
+            Dim stack As StackFrame() = env.stackTrace
+            Dim f_calls As StackFrame() = stack _
+               .Where(Function(si) si.Method.Module = "call_function") _
+               .Skip(1) _
+               .ToArray
+            Dim f_names As New list
+            Dim names As String() = f_calls.Select(Function(si) si.Method.Method.GetStackValue("""", """")).UniqueNames
 
+            For i As Integer = 0 To names.Length - 1
+                Call f_names.add(names(i), f_calls(i).Method.Method)
+            Next
+
+            Return f_names
         End Function
 
         ''' <summary>
