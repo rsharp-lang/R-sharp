@@ -1,58 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::a74effb0b87a1072d918fda2b268caf0, R#\Runtime\Internal\internalInvokes\reflections.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 360
-    '    Code Lines: 155 (43.06%)
-    ' Comment Lines: 171 (47.50%)
-    '    - Xml Docs: 84.21%
-    ' 
-    '   Blank Lines: 34 (9.44%)
-    '     File Size: 16.48 KB
+' Summaries:
 
 
-    '     Module reflections
-    ' 
-    '         Function: attr, attributes, eval, formals, getClass
-    '                   parse
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 360
+'    Code Lines: 155 (43.06%)
+' Comment Lines: 171 (47.50%)
+'    - Xml Docs: 84.21%
+' 
+'   Blank Lines: 34 (9.44%)
+'     File Size: 16.48 KB
+
+
+'     Module reflections
+' 
+'         Function: attr, attributes, eval, formals, getClass
+'                   parse
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -409,6 +410,59 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.debug.stop(opts.error, env)
             Else
                 Return result.FirstOrDefault
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Functions to Access the Function Call Stack
+        ''' 
+        ''' These functions provide access to environments (‘frames’ in S terminology) 
+        ''' associated with functions further up the calling stack.
+        ''' </summary>
+        ''' <returns>
+        ''' sys.calls and sys.frames give a pairlist of all the active calls and 
+        ''' frames, respectively, and sys.parents returns an integer vector of 
+        ''' indices of the parent frames of each of those frames.
+        ''' </returns>
+        <ExportAPI("sys.calls")>
+        <RApiReturn(TypeCodes.list)>
+        Public Function sys_calls(Optional env As Environment = Nothing) As Object
+
+        End Function
+
+        ''' <summary>
+        ''' Functions to Access the Function Call Stack
+        ''' 
+        ''' These functions provide access to environments (‘frames’ in S terminology) 
+        ''' associated with functions further up the calling stack.
+        ''' </summary>
+        ''' <param name="which">	
+        ''' the frame number If non-negative, the number Of frames To go back If negative.
+        ''' </param>
+        ''' <returns>
+        ''' sys.call, sys.function and sys.frame accept integer values for the 
+        ''' argument which. Non-negative values of which are frame numbers starting 
+        ''' from .GlobalEnv whereas negative values are counted back from the frame 
+        ''' number of the current evaluation.
+        ''' </returns>
+        <ExportAPI("sys.call")>
+        <RApiReturn(TypeCodes.string)>
+        Public Function sys_call(Optional which As Integer = 0, Optional env As Environment = Nothing) As String
+            ' 0 - current caller
+            ' -1 - caller of the caller
+            Dim stack As StackFrame() = env.stackTrace
+            Dim f_calls As StackFrame() = stack _
+                .Where(Function(si) si.Method.Module = "call_function") _
+                .Skip(1) _
+                .ToArray
+            Dim frame As StackFrame = f_calls.ElementAtOrNull(-which)
+
+            If frame Is Nothing Then
+                Return Nothing
+            Else
+                Dim f_name As String = frame.Method.Method
+                f_name = f_name.GetStackValue("""", """")
+                Return f_name
             End If
         End Function
     End Module
