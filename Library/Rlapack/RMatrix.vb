@@ -195,6 +195,16 @@ Module RMatrix
     ''' The function allows for different update rules and initialization 
     ''' methods, and can fit different NMF variants.
     ''' </summary>
+    ''' <param name="x">
+    ''' target data to fit, i.e. a matrix-like objec
+    ''' </param>
+    ''' <param name="rank">
+    '''  specification of the factorization rank. It is usually a single numeric value, but
+    ''' other type Of values are possible (e.g. matrix), For which specific methods are
+    ''' implemented. See for example methods nmf,matrix,matrix,ANY.
+    ''' If rank Is a numeric vector With more than one element, e.g. a range Of ranks,
+    ''' then nmf performs the estimation procedure described in nmfEstimateRank.
+    ''' </param>
     ''' <returns></returns>
     ''' 
     <ExportAPI("nmf")>
