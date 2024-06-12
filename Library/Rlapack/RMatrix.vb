@@ -233,6 +233,23 @@ Module RMatrix
         Return result
     End Function
 
+    ''' <summary>
+    ''' as.matrix attempts to turn its argument into a matrix.
+    ''' </summary>
+    ''' <param name="x">an R Object.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("as.matrix")>
+    Public Function asMatrix(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Dim m = matrix_extractor(x, env)
+
+        If m Like GetType(Message) Then
+            Return m.TryCast(Of Message)
+        Else
+            Return m.TryCast(Of NumericMatrix)
+        End If
+    End Function
+
     Private Function matrix_extractor(x As Object, env As Environment) As [Variant](Of NumericMatrix, Message)
         Dim data As NumericMatrix
 
