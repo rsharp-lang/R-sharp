@@ -187,6 +187,62 @@ Module RMatrix
     End Function
 
     ''' <summary>
+    ''' ### NMF Model fitting function
+    ''' 
+    ''' Fit a non-negative matrix factorization model to a given target matrix. 
+    ''' The function allows for different update rules and initialization 
+    ''' methods, and can fit different NMF variants.
+    ''' </summary>
+    ''' <returns></returns>
+    ''' 
+    <ExportAPI("nmf")>
+    Public Function nmf_matrix(<RRawVectorArgument> x As Object, rank As Integer,
+                               Optional max_iterations As Integer = 1000,
+                               Optional tolerance As Double = 0.001,
+                               Optional epsilon As Double = 0.0001,
+                               Optional env As Environment = Nothing) As Object
+
+        Dim m = matrix_extractor(x, env)
+        Dim data As NumericMatrix
+
+        If m Like GetType(Message) Then
+            Return m.TryCast(Of Message)
+        Else
+            data = m.TryCast(Of NumericMatrix)
+        End If
+
+        Dim nmf_result As NMF = NMF.Factorisation(data, rank, max_iterations, tolerance, epsilon)
+        Dim result As New list(
+            slot("W") = nmf_result.W,
+            slot("H") = nmf_result.H,
+            slot("errors") = nmf_result.errors
+        )
+
+        Return result
+    End Function
+
+    Private Function matrix_extractor(x As Object, env As Environment) As [Variant](Of NumericMatrix, Message)
+        Dim data As NumericMatrix
+
+        If TypeOf x Is dataframe Then
+            Dim cols As New List(Of Double())
+            Dim df As dataframe = DirectCast(x, dataframe)
+
+            For Each name As String In df.colnames
+                cols.Add(CLRVector.asNumeric(df.getColumnVector(name)))
+            Next
+
+            data = New NumericMatrix(cols)
+        ElseIf x.GetType.ImplementInterface(Of GeneralMatrix) Then
+            data = New NumericMatrix(DirectCast(x, GeneralMatrix).RowVectors)
+        Else
+            Return Internal.debug.stop("input data should be a dataframe or matrix object", env)
+        End If
+
+        Return data
+    End Function
+
+    ''' <summary>
     ''' ### Spectral Decomposition of a Matrix
     ''' 
     ''' Computes eigenvalues and eigenvectors of numeric 
@@ -264,27 +320,19 @@ Module RMatrix
     ''' (up to numerical fuzz), where Lmbd = diag(lam).
     ''' </returns>
     <ExportAPI("eigen")>
-    Public Function eigen(x As Object,
+    Public Function eigen(<RRawVectorArgument> x As Object,
                           Optional symmetric As Boolean = Nothing,
                           Optional only_values As Boolean = False,
                           Optional EISPACK As Boolean = False,
                           Optional env As Environment = Nothing) As Object
 
+        Dim m = matrix_extractor(x, env)
         Dim data As NumericMatrix
 
-        If TypeOf x Is dataframe Then
-            Dim cols As New List(Of Double())
-            Dim df As dataframe = DirectCast(x, dataframe)
-
-            For Each name As String In df.colnames
-                cols.Add(CLRVector.asNumeric(df.getColumnVector(name)))
-            Next
-
-            data = New NumericMatrix(cols)
-        ElseIf x.GetType.ImplementInterface(Of GeneralMatrix) Then
-            data = New NumericMatrix(DirectCast(x, GeneralMatrix).RowVectors)
+        If m Like GetType(Message) Then
+            Return m.TryCast(Of Message)
         Else
-            Return Internal.debug.stop("input data should be a dataframe or matrix object", env)
+            data = m.TryCast(Of NumericMatrix)
         End If
 
         Dim result = New EigenvalueDecomposition(data)
