@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::90e7582c8f62ff90e4dd53cc94228cef, Library\Rlapack\RMatrix.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 372
-    '    Code Lines: 177 (47.58%)
-    ' Comment Lines: 156 (41.94%)
-    '    - Xml Docs: 86.54%
-    ' 
-    '   Blank Lines: 39 (10.48%)
-    '     File Size: 15.71 KB
+' Summaries:
 
 
-    ' Module RMatrix
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: createTable, eigen, gauss_solve, Matrix
-    ' 
-    '     Sub: extractVector
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 372
+'    Code Lines: 177 (47.58%)
+' Comment Lines: 156 (41.94%)
+'    - Xml Docs: 86.54%
+' 
+'   Blank Lines: 39 (10.48%)
+'     File Size: 15.71 KB
+
+
+' Module RMatrix
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: createTable, eigen, gauss_solve, Matrix
+' 
+'     Sub: extractVector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,9 +61,11 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Solvers
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
@@ -236,6 +238,26 @@ Module RMatrix
         ElseIf x.GetType.ImplementInterface(Of GeneralMatrix) Then
             data = New NumericMatrix(DirectCast(x, GeneralMatrix).RowVectors)
         Else
+            If TypeOf x Is vector Then
+                x = DirectCast(x, vector).data
+            End If
+
+            ' is array of array?
+            If x.GetType.IsArray AndAlso DirectCast(x, Array) _
+                .AsObjectEnumerator _
+                .All(Function(v)
+                         Return v IsNot Nothing AndAlso (v.GetType.IsArray OrElse TypeOf v Is vector)
+                     End Function) Then
+
+                Dim rows As New List(Of Double())
+
+                For Each r As Object In DirectCast(x, Array)
+                    Call rows.Add(CLRVector.asNumeric(r))
+                Next
+
+                Return New NumericMatrix(rows)
+            End If
+
             Return Internal.debug.stop("input data should be a dataframe or matrix object", env)
         End If
 
