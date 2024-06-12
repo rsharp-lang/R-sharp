@@ -211,7 +211,7 @@ Module RMatrix
     Public Function nmf_matrix(<RRawVectorArgument> x As Object, rank As Integer,
                                Optional max_iterations As Integer = 1000,
                                Optional tolerance As Double = 0.001,
-                               Optional epsilon As Double = 0.0001,
+                               Optional epsilon As Double = 1.0E-20,
                                Optional env As Environment = Nothing) As Object
 
         Dim m = matrix_extractor(x, env)
@@ -227,7 +227,7 @@ Module RMatrix
         Dim result As New list(
             slot("W") = nmf_result.W,
             slot("H") = nmf_result.H,
-            slot("errors") = nmf_result.errors
+            slot("cost") = nmf_result.errors
         )
 
         Return result
