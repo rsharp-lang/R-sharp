@@ -434,7 +434,7 @@ Namespace Runtime.Internal.Invokes
                .Skip(1) _
                .ToArray
             Dim f_names As New list
-            Dim names As String() = f_calls.Select(Function(si) si.Method.Method.GetStackValue("""", """")).UniqueNames
+            Dim names As String() = f_calls.Select(Function(si) si.Method.Method.GetBetween("""", """")).UniqueNames
 
             For i As Integer = 0 To names.Length - 1
                 Call f_names.add(names(i), f_calls(i).Method.Method)
@@ -474,7 +474,7 @@ Namespace Runtime.Internal.Invokes
                 Return Nothing
             Else
                 Dim f_name As String = frame.Method.Method
-                f_name = f_name.GetStackValue("""", """")
+                f_name = f_name.GetBetween("""", """")
                 Return f_name
             End If
         End Function
