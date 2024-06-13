@@ -73,11 +73,66 @@ Namespace Runtime.Internal.Invokes
     <Package("strings")>
     Module strings
 
+        ''' <summary>
+        ''' get string between two stack string
+        ''' </summary>
+        ''' <param name="str"></param>
+        ''' <param name="left">the stack string on the left</param>
+        ''' <param name="right">the stack string on the right</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' this function will get max length string between left and right stack string
+        ''' </remarks>
+        ''' <example>
+        ''' # get tag value string in html
+        ''' let html_str  = "&lt;title>this is title string&lt;/title>";
+        ''' let title_str = html_str |> stack_str(">", "&lt;");
+        ''' 
+        ''' # [1] this is title string
+        ''' print(title_str);
+        ''' 
+        ''' html_str = "&lt;title>this is &lt; title string&lt;/title>";
+        ''' title_str = html_str |> stack_str(">", "&lt;");
+        ''' 
+        ''' # [1] this is &lt; title string
+        ''' print(title_str);
+        ''' </example>
         <ExportAPI("stack_str")>
         Public Function GetStackValue(<RRawVectorArgument> str As Object, left$, right$) As String()
             Return CLRVector.asCharacter(str) _
                 .Select(Function(s)
                             Return s.GetStackValue(left, right)
+                        End Function) _
+                .ToArray
+        End Function
+
+        ''' <summary>
+        ''' get between string function is similar to the ``stack_str`` function, 
+        ''' but this function will get the min length string between two flag
+        ''' </summary>
+        ''' <param name="str"></param>
+        ''' <param name="left"></param>
+        ''' <param name="right"></param>
+        ''' <returns></returns>
+        ''' <example>
+        ''' # get tag value string in html
+        ''' let html_str  = "&lt;title>this is title string&lt;/title>";
+        ''' let title_str = html_str |> between_str(">", "&lt;");
+        ''' 
+        ''' # [1] this is title string
+        ''' print(title_str);
+        ''' 
+        ''' html_str = "&lt;title>this is &lt; title string&lt;/title>";
+        ''' title_str = html_str |> between_str(">", "&lt;");
+        ''' 
+        ''' # [1] this is
+        ''' print(title_str);
+        ''' </example>
+        <ExportAPI("between_str")>
+        Public Function getBetweenString(<RRawVectorArgument> str As Object, left$, right$) As String()
+            Return CLRVector.asCharacter(str) _
+                .Select(Function(s)
+                            Return s.GetBetween(left, right)
                         End Function) _
                 .ToArray
         End Function
