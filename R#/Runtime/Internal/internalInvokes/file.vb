@@ -1120,6 +1120,14 @@ Namespace Runtime.Internal.Invokes
                 Next
 
                 Return con
+            ElseIf TypeOf con Is Stream Then
+                Dim dev As New StreamWriter(DirectCast(con, Stream))
+
+                For Each line As String In text
+                    Call dev.WriteLine(line)
+                Next
+
+                Call dev.Flush()
             Else
                 Return Internal.debug.stop(New NotSupportedException($"invalid buffer type: {con.GetType.FullName}!"), env)
             End If
