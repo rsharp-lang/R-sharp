@@ -714,6 +714,7 @@ Module graphics2DTools
                                    Optional smooth As Single = -1,
                                    Optional resolution As Integer = 10,
                                    Optional cubic As Boolean = False,
+                                   Optional q As Double = 0.1,
                                    Optional env As Environment = Nothing) As GeneralPath
 
         Dim xi As Double() = CLRVector.asNumeric(x)
@@ -721,9 +722,9 @@ Module graphics2DTools
         Dim shape = ContourLayer.GetOutline(xi, yi, fill_dots)
 
         If cubic AndAlso resolution > 0 Then
-            shape = shape.Cubic(resolution * 100)
+            shape = shape.Cubic(resolution * 100).FilterSmallPolygon(q)
         ElseIf smooth > 0 Then
-            shape = shape.Bspline(degree:=smooth, resolution)
+            shape = shape.Bspline(degree:=smooth, resolution).FilterSmallPolygon(q)
         End If
 
         Return shape
