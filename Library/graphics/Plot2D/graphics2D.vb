@@ -704,19 +704,29 @@ Module graphics2DTools
     ''' </summary>
     ''' <param name="x"></param>
     ''' <param name="y"></param>
-    ''' <param name="fillDots"></param>
+    ''' <param name="fill_dots"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("contour_tracing")>
     Public Function contourTracing(<RRawVectorArgument> x As Object,
                                    <RRawVectorArgument> y As Object,
-                                   Optional fillDots As Integer = 1,
+                                   Optional fill_dots As Integer = 1,
+                                   Optional smooth As Single = -1,
+                                   Optional resolution As Integer = 10,
+                                   Optional cubic As Boolean = False,
                                    Optional env As Environment = Nothing) As GeneralPath
 
         Dim xi As Double() = CLRVector.asNumeric(x)
         Dim yi As Double() = CLRVector.asNumeric(y)
+        Dim shape = ContourLayer.GetOutline(xi, yi, fill_dots)
 
-        Return ContourLayer.GetOutline(xi, yi, fillDots)
+        If cubic AndAlso resolution > 0 Then
+            shape = shape.Cubic(resolution * 100)
+        ElseIf smooth > 0 Then
+            shape = shape.Bspline(degree:=smooth, resolution)
+        End If
+
+        Return shape
     End Function
 
     ''' <summary>

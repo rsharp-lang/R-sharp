@@ -2,11 +2,11 @@ require(graphics2D);
 
 setwd(@dir);
 
-const outline as function(data) {
+const outline = function(data) {
 	const x = data[, "X"];
 	const y = data[, "Y"];
 	
-	contour_tracing(x, y, 5);
+	contour_tracing(x, y, 5, smooth = 20, resolution =100 );
 }
 
 const a = read.csv("./region_11.csv", row.names = NULL) |> outline;
