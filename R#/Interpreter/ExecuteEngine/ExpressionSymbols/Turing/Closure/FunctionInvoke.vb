@@ -99,7 +99,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Property
 
         ''' <summary>
-        ''' The namespace reference
+        ''' The namespace reference of the target <see cref="funcName"/>.
         ''' </summary>
         ''' <returns></returns>
         Public Property [namespace] As String

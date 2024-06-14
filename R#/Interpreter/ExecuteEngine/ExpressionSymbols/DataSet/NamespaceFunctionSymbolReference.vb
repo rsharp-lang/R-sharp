@@ -103,6 +103,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Return getPackageApiImpl(envir, [namespace], symbol)
         End Function
 
+        ''' <summary>
+        ''' this function returns the name of target function symbol to invoke or an error 
+        ''' message if the expression type is invalid.
+        ''' </summary>
+        ''' <param name="funcNameSymbol"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Friend Shared Function getFuncNameSymbolText(funcNameSymbol As Expression, env As Environment) As Object
             Select Case funcNameSymbol.GetType
                 Case GetType(Literal)
