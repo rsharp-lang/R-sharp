@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cebaf2934ba831af7ff184a8abf1987a, Library\base\base\HDSutils.vb"
+﻿#Region "Microsoft.VisualBasic::2ac3ff10242769d877aa2989edf28d1c, Library\base\base\HDSutils.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 320
-    '    Code Lines: 217 (67.81%)
-    ' Comment Lines: 56 (17.50%)
-    '    - Xml Docs: 98.21%
+    '   Total Lines: 338
+    '    Code Lines: 222 (65.68%)
+    ' Comment Lines: 67 (19.82%)
+    '    - Xml Docs: 98.51%
     ' 
-    '   Blank Lines: 47 (14.69%)
-    '     File Size: 12.37 KB
+    '   Blank Lines: 49 (14.50%)
+    '     File Size: 13.15 KB
 
 
     ' Module HDSutils

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::849b30097fddb9e30735d5eb8df08af1, R#\Runtime\Internal\objects\dataset\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::eb32a08d32728f4734acd2fa49982eb7, R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 884
-    '    Code Lines: 441 (49.89%)
-    ' Comment Lines: 350 (39.59%)
+    '   Total Lines: 915
+    '    Code Lines: 466 (50.93%)
+    ' Comment Lines: 350 (38.25%)
     '    - Xml Docs: 89.14%
     ' 
-    '   Blank Lines: 93 (10.52%)
-    '     File Size: 35.55 KB
+    '   Blank Lines: 99 (10.82%)
+    '     File Size: 36.85 KB
 
 
     '     Interface IdataframeReader
@@ -53,10 +53,11 @@
     '                     rownames
     ' 
     '         Constructor: (+2 Overloads) Sub New
-    '         Function: (+3 Overloads) add, checkColumnNames, (+3 Overloads) CreateDataFrame, FilterByRowIndex, forEachRow
-    '                   GetByRowIndex, getBySynonym, getKeyByIndex, getNames, getRowIndex
-    '                   getRowList, getRowNames, GetRowNumbers, (+2 Overloads) getVector, hasName
-    '                   projectByColumn, setNames, (+2 Overloads) sliceByRow, subsetColData, ToString
+    '         Function: (+3 Overloads) add, checkColumnNames, (+2 Overloads) Create, (+3 Overloads) CreateDataFrame, FilterByRowIndex
+    '                   forEachRow, GetByRowIndex, getBySynonym, getKeyByIndex, getNames
+    '                   getRowIndex, getRowList, getRowNames, GetRowNumbers, (+2 Overloads) getVector
+    '                   hasName, projectByColumn, setNames, (+2 Overloads) sliceByRow, subsetColData
+    '                   ToString
     ' 
     ' 
     ' /********************************************************************************/
