@@ -174,16 +174,6 @@ RE0:
     End Sub
 
     ''' <summary>
-    ''' force quit of current R# session without confirm
-    ''' </summary>
-    ''' <param name="status"></param>
-    ''' 
-    <ExportAPI("exit")>
-    Public Sub [exit](status As Integer)
-        Call App.Exit(status)
-    End Sub
-
-    ''' <summary>
     ''' get example usage of the specific function
     ''' </summary>
     ''' <param name="x">should be a R# function</param>

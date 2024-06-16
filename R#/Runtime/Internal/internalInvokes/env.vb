@@ -85,6 +85,16 @@ Namespace Runtime.Internal.Invokes
     Module env
 
         ''' <summary>
+        ''' break and force quit of current R# session without confirm
+        ''' </summary>
+        ''' <param name="status"></param>
+        ''' 
+        <ExportAPI("exit")>
+        Public Sub [exit](status As Integer)
+            Call App.Exit(status)
+        End Sub
+
+        ''' <summary>
         ''' ## Is an Object Defined?
         ''' 
         ''' Look for an R object of the given name and possibly return it
