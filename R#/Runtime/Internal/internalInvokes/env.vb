@@ -665,7 +665,7 @@ Namespace Runtime.Internal.Invokes
                            Optional [inherits] As Boolean = False,
                            Optional envir As Environment = Nothing) As Object
 
-            For Each name As String In CLRVector.asCharacter(list)
+            For Each name As String In CLRVector.asCharacter(list).SafeQuery
                 Call envir.Delete(name, seekParent:=[inherits])
             Next
 
