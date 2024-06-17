@@ -737,7 +737,8 @@ Module plots
         If d3 Then
             If camera Is Nothing Then
                 camera = New Camera With {
-                    .screen = InteropArgumentHelper.getSize(size, env).SizeParser
+                    .screen = InteropArgumentHelper.getSize(size, env).SizeParser,
+                    .viewDistance = 10000
                 }
             End If
 
