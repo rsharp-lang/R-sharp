@@ -250,7 +250,10 @@ Namespace Runtime.Interop.Operator
         ''' imports user defined operator
         ''' </summary>
         ''' <param name="package"></param>
-        ''' <param name="env"></param>
+        ''' <param name="env">
+        ''' the environment object is apply for generates the error message if the operator 
+        ''' is already existed, could be nothing to omit it.
+        ''' </param>
         Public Sub ImportsOperators(package As Type, env As Environment)
             Dim methods As MethodInfo() = package.GetMethods _
                 .Where(Function(m) m.IsStatic) _

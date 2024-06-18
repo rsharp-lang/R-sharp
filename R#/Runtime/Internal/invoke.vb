@@ -71,6 +71,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Interop.Operator
 
 <Assembly: InternalsVisibleTo("snowFall")>
 <Assembly: InternalsVisibleTo("R#")>
@@ -147,6 +148,10 @@ Namespace Runtime.Internal
         Private Sub New()
         End Sub
 
+        ''' <summary>
+        ''' load an internal package module
+        ''' </summary>
+        ''' <param name="baseModule"></param>
         Public Shared Sub pushEnvir(baseModule As Type)
             Call ImportsPackage _
                .GetAllApi(baseModule, includesInternal:=True) _
@@ -167,6 +172,8 @@ Namespace Runtime.Internal
             If Not main Is Nothing Then
                 Call main.Invoke(Nothing, {})
             End If
+
+            Call BinaryOperatorEngine.ImportsOperators(baseModule, Nothing)
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
