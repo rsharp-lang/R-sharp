@@ -683,5 +683,15 @@ type_err:
         Public Function set_intersect(a As collectionSet, b As collectionSet) As collectionSet
             Return a And b
         End Function
+
+        <ROperator("==")>
+        Public Function set_equals(a As collectionSet, b As collectionSet) As Boolean
+            Return a = b
+        End Function
+
+        <ExportAPI("!=")>
+        Public Function set_not_equals(a As collectionSet, b As collectionSet) As Boolean
+            Return Not (a = b)
+        End Function
     End Module
 End Namespace
