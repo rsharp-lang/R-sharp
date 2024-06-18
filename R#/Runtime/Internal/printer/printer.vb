@@ -83,6 +83,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.math
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
+Imports collectionSet = Microsoft.VisualBasic.ComponentModel.DataStructures.Set
 Imports complex = System.Numerics.Complex
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -124,6 +125,7 @@ Namespace Runtime.Internal.ConsolePrinter
             RtoString(GetType(NoInspector)) = Function(o) o.ToString
             RtoString(GetType(SymbolTypeDefine)) = Function(o) o.ToString
             RtoString(GetType(FileReference)) = Function(o) o.ToString
+            RtoString(GetType(collectionSet)) = Function(o) o.ToString
 
             ' Rscript expression to string
             RtoString(GetType(Literal)) = Function(o) DirectCast(o, Literal).ToString
