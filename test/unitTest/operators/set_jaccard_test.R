@@ -14,3 +14,8 @@ print(c == c);
 print(a - c);
 print(a + c);
 print(a & c);
+
+let jaccard1 = (a & b) / (a + b);
+let jaccard2 = (a & c) / (a + c);
+
+print([jaccard1 jaccard2]);

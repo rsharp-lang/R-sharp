@@ -693,5 +693,16 @@ type_err:
         Public Function set_not_equals(a As collectionSet, b As collectionSet) As Boolean
             Return Not (a = b)
         End Function
+
+        ''' <summary>
+        ''' equivalent to: length(a) / length(b)
+        ''' </summary>
+        ''' <param name="a"></param>
+        ''' <param name="b"></param>
+        ''' <returns></returns>
+        <ROperator("/")>
+        Public Function set_ratio(a As collectionSet, b As collectionSet) As Double
+            Return a.Length / b.Length
+        End Function
     End Module
 End Namespace
