@@ -110,7 +110,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Me.operator = op
 
             If op = "||" Then
-                Throw New InvalidProgramException("Please create BinaryOrExpression for ``||`` operator!")
+                Throw New InvalidProgramException($"Please create {GetType(BinaryOrExpression).Name} for ``||`` operator!")
             End If
         End Sub
 
