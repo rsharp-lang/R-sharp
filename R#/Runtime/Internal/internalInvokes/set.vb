@@ -1,62 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::b9ced4492f93d738e27cbfb273a96b9f, R#\Runtime\Internal\internalInvokes\set.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 589
-    '    Code Lines: 325 (55.18%)
-    ' Comment Lines: 189 (32.09%)
-    '    - Xml Docs: 89.42%
-    ' 
-    '   Blank Lines: 75 (12.73%)
-    '     File Size: 25.12 KB
+' Summaries:
 
 
-    '     Module [set]
-    ' 
-    '         Function: combn, count, createLoop, crossing, duplicated
-    '                   indexOf, intersect, jaccard, match_val_against, rev
-    '                   setdiff, table, union, unset
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 589
+'    Code Lines: 325 (55.18%)
+' Comment Lines: 189 (32.09%)
+'    - Xml Docs: 89.42%
+' 
+'   Blank Lines: 75 (12.73%)
+'     File Size: 25.12 KB
+
+
+'     Module [set]
+' 
+'         Function: combn, count, createLoop, crossing, duplicated
+'                   indexOf, intersect, jaccard, match_val_against, rev
+'                   setdiff, table, union, unset
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.Algorithm.base
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataStructures
@@ -70,6 +69,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports collectionSet = Microsoft.VisualBasic.ComponentModel.DataStructures.Set
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Invokes
@@ -633,13 +633,55 @@ type_err:
 
                 Return intersect.Length / union.Length
             Else
-                Dim set1 As New DataStructures.Set(x.AsObjectEnumerator)
-                Dim set2 As New DataStructures.Set(y.AsObjectEnumerator)
+                Dim set1 As New collectionSet(x.AsObjectEnumerator)
+                Dim set2 As New collectionSet(y.AsObjectEnumerator)
                 Dim intersect As Integer = (set1 And set2).Length
                 Dim union As Integer = (set1 Or set2).Length
 
                 Return intersect / union
             End If
+        End Function
+
+        ''' <summary>
+        ''' create a collection set based on a given vector or tuple list
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="mode"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("as.set")>
+        Public Function createSet(<RRawVectorArgument>
+                                  x As Object,
+                                  <RRawVectorArgument(TypeCodes.string)>
+                                  Optional mode As Object = "any|character|integer|number|raw",
+                                  Optional env As Environment = Nothing) As Object
+
+            Dim modes As String() = CLRVector.asCharacter(mode)
+            Dim mode_flag As String = modes.ElementAtOrDefault(0, [default]:="any")
+
+            Select Case LCase(mode_flag)
+                Case "character" : Return New collectionSet(CLRVector.asCharacter(x), Function(a, b) CStr(a) = CStr(b))
+                Case "integer" : Return New collectionSet(CLRVector.asInteger(x), Function(a, b) CInt(a) = CInt(b))
+                Case "number" : Return New collectionSet(CLRVector.asNumeric(x), Function(a, b) CDbl(a) = CDbl(b))
+                Case "raw" : Return New collectionSet(CLRVector.asRawByte(x), Function(a, b) CByte(a) = CByte(b))
+                Case Else
+                    Return New collectionSet(CLRVector.asObject(x))
+            End Select
+        End Function
+
+        <ROperator("+")>
+        Public Function set_union(a As collectionSet, b As collectionSet) As collectionSet
+            Return a Or b
+        End Function
+
+        <ROperator("-")>
+        Public Function set_diff(a As collectionSet, b As collectionSet) As collectionSet
+            Return a - b
+        End Function
+
+        <ROperator("&")>
+        Public Function set_intersect(a As collectionSet, b As collectionSet) As collectionSet
+            Return a And b
         End Function
     End Module
 End Namespace

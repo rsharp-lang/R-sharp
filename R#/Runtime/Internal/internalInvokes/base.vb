@@ -113,6 +113,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
+Imports collectionSet = Microsoft.VisualBasic.ComponentModel.DataStructures.Set
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 Imports std = System.Math
@@ -2131,22 +2132,24 @@ RE0:
         Public Function length(<RRawVectorArgument> x As Object, <RByRefValueAssign> Optional newSize As Integer = -1) As Integer
             If x Is Nothing Then
                 Return 0
-            Else
-                Dim type As Type = x.GetType
+            End If
 
-                If type.IsArray Then
-                    Return DirectCast(x, Array).Length
-                ElseIf type.ImplementInterface(GetType(RIndex)) Then
-                    Return DirectCast(x, RIndex).length
-                ElseIf type.ImplementInterface(GetType(IDictionary)) Then
-                    Return DirectCast(x, IDictionary).Count
-                ElseIf type Is GetType(dataframe) Then
-                    Return DirectCast(x, dataframe).ncols
-                ElseIf type Is GetType(Group) Then
-                    Return DirectCast(x, Group).length
-                Else
-                    Return 1
-                End If
+            Dim type As Type = x.GetType
+
+            If type.IsArray Then
+                Return DirectCast(x, Array).Length
+            ElseIf type.ImplementInterface(GetType(RIndex)) Then
+                Return DirectCast(x, RIndex).length
+            ElseIf type.ImplementInterface(GetType(IDictionary)) Then
+                Return DirectCast(x, IDictionary).Count
+            ElseIf type Is GetType(dataframe) Then
+                Return DirectCast(x, dataframe).ncols
+            ElseIf type Is GetType(Group) Then
+                Return DirectCast(x, Group).length
+            ElseIf type Is GetType(collectionSet) Then
+                Return DirectCast(x, collectionSet).Length
+            Else
+                Return 1
             End If
         End Function
 
