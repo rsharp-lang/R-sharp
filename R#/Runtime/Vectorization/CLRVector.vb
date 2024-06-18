@@ -63,6 +63,7 @@ Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports any = Microsoft.VisualBasic.Scripting
+Imports collectionSet = Microsoft.VisualBasic.ComponentModel.DataStructures.Set
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Vectorization
@@ -77,6 +78,9 @@ Namespace Runtime.Vectorization
                 Return Nothing
             ElseIf TypeOf x Is list Then
                 x = DirectCast(x, list).data.ToArray
+            End If
+            If TypeOf x Is collectionSet Then
+                x = DirectCast(x, collectionSet).ToArray
             End If
             If TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
@@ -113,6 +117,9 @@ Namespace Runtime.Vectorization
 
             If TypeOf x Is list Then
                 x = DirectCast(x, list).slots.Values.ToArray
+            End If
+            If TypeOf x Is collectionSet Then
+                x = DirectCast(x, collectionSet).ToArray
             End If
             If TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
@@ -215,6 +222,9 @@ Namespace Runtime.Vectorization
             If TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
             End If
+            If TypeOf x Is collectionSet Then
+                x = DirectCast(x, collectionSet).ToArray
+            End If
             If TypeOf x Is list Then
                 x = DirectCast(x, list).slots.Values.ToArray
             End If
@@ -297,6 +307,9 @@ Namespace Runtime.Vectorization
             If TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
             End If
+            If TypeOf x Is collectionSet Then
+                x = DirectCast(x, collectionSet).ToArray
+            End If
             If TypeOf x Is Byte Then
                 Return New Byte() {DirectCast(x, Byte)}
             End If
@@ -332,6 +345,9 @@ Namespace Runtime.Vectorization
             End If
             If TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
+            End If
+            If TypeOf x Is collectionSet Then
+                x = DirectCast(x, collectionSet).ToArray
             End If
             If TypeOf x Is list Then
                 x = DirectCast(x, list).slots.Values.ToArray
@@ -382,6 +398,8 @@ Namespace Runtime.Vectorization
                 Return New Single() {DirectCast(x, Date).UnixTimeStamp}
             ElseIf TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
+            ElseIf TypeOf x Is collectionSet Then
+                x = DirectCast(x, collectionSet).ToArray
             End If
 
             If x.GetType.IsArray Then
@@ -443,6 +461,8 @@ Namespace Runtime.Vectorization
                 Return New Double() {DirectCast(x, Date).UnixTimeStamp}
             ElseIf TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
+            ElseIf TypeOf x Is collectionSet Then
+                x = DirectCast(x, collectionSet).ToArray
             End If
 
             If x.GetType.IsArray Then
@@ -529,6 +549,9 @@ Namespace Runtime.Vectorization
 
             If TypeOf x Is list Then
                 x = DirectCast(x, list).slots.Values.ToArray
+            End If
+            If TypeOf x Is collectionSet Then
+                x = DirectCast(x, collectionSet).ToArray
             End If
 
             Dim vector As Array

@@ -19,3 +19,6 @@ let jaccard1 = (a & b) / (a + b);
 let jaccard2 = (a & c) / (a + c);
 
 print([jaccard1 jaccard2]);
+
+print(jaccard(as.integer(a), as.integer(b)));
+print(jaccard(as.integer(a), as.integer(c)));
