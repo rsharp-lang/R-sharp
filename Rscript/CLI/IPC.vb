@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::4c9ddaba9070422e9312c1c817f4541a, Rscript\CLI\IPC.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 323
-    '    Code Lines: 256 (79.26%)
-    ' Comment Lines: 23 (7.12%)
-    '    - Xml Docs: 69.57%
-    ' 
-    '   Blank Lines: 44 (13.62%)
-    '     File Size: 13.52 KB
+' Summaries:
 
 
-    ' Module CLI
-    ' 
-    '     Function: fetch_arguments, postResult, slaveMode, tryHandleJSON
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 323
+'    Code Lines: 256 (79.26%)
+' Comment Lines: 23 (7.12%)
+'    - Xml Docs: 69.57%
+' 
+'   Blank Lines: 44 (13.62%)
+'     File Size: 13.52 KB
+
+
+' Module CLI
+' 
+'     Function: fetch_arguments, postResult, slaveMode, tryHandleJSON
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development
@@ -348,7 +349,7 @@ Partial Module CLI
         For i As Integer = 0 To retryTimes
             Call $"push callback data '{buffer.code.Description}' to [{master}] [{packageData.Length} bytes]".__INFO_ECHO
 
-            data = New Tcp.TcpRequest(master).SetTimeOut(TimeSpan.FromMilliseconds(timeoutMS)).SendMessage(request)
+            data = New TcpRequest(master).SetTimeOut(TimeSpan.FromMilliseconds(timeoutMS)).SendMessage(request)
 
             If data.ProtocolCategory < 0 AndAlso data.Protocol = 500 Then
                 Call data.GetUTF8String.Warning
