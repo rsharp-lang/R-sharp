@@ -52,8 +52,8 @@
 #End Region
 
 Imports System.Text
-Imports Darwinism.IPC.Networking
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
 ''' <summary>
