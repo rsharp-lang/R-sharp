@@ -1,66 +1,68 @@
 ﻿#Region "Microsoft.VisualBasic::90da4289367998ca63ae3275de5d16d8, studio\Rserver\Rweb\Rweb.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 171
-    '    Code Lines: 128 (74.85%)
-    ' Comment Lines: 15 (8.77%)
-    '    - Xml Docs: 80.00%
-    ' 
-    '   Blank Lines: 28 (16.37%)
-    '     File Size: 6.03 KB
+' Summaries:
 
 
-    ' Class Rweb
-    ' 
-    '     Properties: access, config, fs, NextRequestId, Processor
-    '                 TcpPort
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: callback, getHttpProcessor, ParseJSON, Run
-    ' 
-    '     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest, SetAccessControl, SetFileSystem
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 171
+'    Code Lines: 128 (74.85%)
+' Comment Lines: 15 (8.77%)
+'    - Xml Docs: 80.00%
+' 
+'   Blank Lines: 28 (16.37%)
+'     File Size: 6.03 KB
+
+
+' Class Rweb
+' 
+'     Properties: access, config, fs, NextRequestId, Processor
+'                 TcpPort
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: callback, getHttpProcessor, ParseJSON, Run
+' 
+'     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest, SetAccessControl, SetFileSystem
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
 Imports System.Net.Sockets
 Imports System.Runtime.CompilerServices
+Imports Darwinism.IPC.Networking.HTTP
+Imports Darwinism.IPC.Networking.Tcp
 Imports Flute.Http
 Imports Flute.Http.Configurations
 Imports Flute.Http.Core
@@ -69,8 +71,6 @@ Imports Flute.Http.Core.Message
 Imports Flute.Http.FileSystem
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
-Imports Microsoft.VisualBasic.Net.HTTP
-Imports Microsoft.VisualBasic.Net.Tcp
 Imports Microsoft.VisualBasic.Parallel
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Runtime.Serialize
