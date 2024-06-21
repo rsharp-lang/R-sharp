@@ -31,8 +31,10 @@ bitmap(file = `./plot_mnist.png`, size = [6000,4000]) {
 		class       = rownames(manifold), 
 		labels      = rownames(manifold),
 		show_bubble = FALSE,
-		point_size  = 50,
+		point_size  = 25,
 		legendlabel = "font-style: normal; font-size: 24; font-family: Bookman Old Style;",
-		padding     = "padding:150px 150px 350px 350px;"
+		padding     = "padding:150px 150px 350px 350px;",
+        background  = "white",
+        colors      = "paper"
 	);
 }
