@@ -8,7 +8,7 @@ setwd(@dir);
 const MNIST_LabelledVectorArray as string = "./MNIST-LabelledVectorArray-60000x100.msgpack";
 
 let manifold = MNIST_LabelledVectorArray 
-|> read.MNIST(subset = 60000, dataset = "dataframe")
+|> read.MNIST(subset = 30000, dataset = "dataframe")
 |> umap(
 	dimension         = 3, 
 	numberOfNeighbors = 32,

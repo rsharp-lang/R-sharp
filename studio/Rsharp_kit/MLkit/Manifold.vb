@@ -286,15 +286,20 @@ Module Manifold
         )
         Dim nEpochs As Integer
 
-        Call VBDebugger.EchoLine("Initialize fit..")
+        Call VBDebugger.EchoLine("")
+        Call VBDebugger.EchoLine(" - Initialize fit..")
+        Call VBDebugger.EchoLine("")
 
         nEpochs = umap.InitializeFit(matrix)
 
-        VBDebugger.EchoLine("- Done")
+        VBDebugger.EchoLine("")
+        VBDebugger.EchoLine(" - Done")
         VBDebugger.EchoLine("")
         VBDebugger.EchoLine("Calculating..")
 
         Call umap.Step(nEpochs)
+
+        Call VBDebugger.EchoLine("")
 
         Return New list With {
             .slots = New Dictionary(Of String, Object) From {
