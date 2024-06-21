@@ -10,7 +10,7 @@ const MNIST_LabelledVectorArray as string = "./MNIST-LabelledVectorArray-60000x1
 options(n_threads = 24);
 
 let manifold = MNIST_LabelledVectorArray 
-|> read.MNIST(subset = 60000, dataset = "dataframe")
+|> read.MNIST(subset = 30000, dataset = "dataframe")
 |> umap(
 	dimension         = 3, 
 	numberOfNeighbors = 32,
