@@ -58,16 +58,19 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Development.Package.File
-Imports any = Microsoft.VisualBasic.Scripting
-Imports SMRUCC.Rsharp.Language.TokenIcer
-Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
+    ''' <summary>
+    ''' the literal value expression in R# 
+    ''' </summary>
     Public Class Literal : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
