@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cbf94149f569ea76aba7bc53127cc33d, R#\Runtime\Internal\internalInvokes\env.vb"
+﻿#Region "Microsoft.VisualBasic::fc75da7d25a92863293a277e60d66d09, R#\Runtime\Internal\internalInvokes\env.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 623
-    '    Code Lines: 306 (49.12%)
-    ' Comment Lines: 261 (41.89%)
-    '    - Xml Docs: 87.36%
+    '   Total Lines: 633
+    '    Code Lines: 310 (48.97%)
+    ' Comment Lines: 266 (42.02%)
+    '    - Xml Docs: 87.22%
     ' 
-    '   Blank Lines: 56 (8.99%)
-    '     File Size: 28.60 KB
+    '   Blank Lines: 57 (9.00%)
+    '     File Size: 28.92 KB
 
 
     '     Module env
@@ -50,6 +50,8 @@
     '                   getCallLambda, getCurrentTrace, getOutputDevice, globalenv, listOptionItems
     '                   lockBinding, ls, objects, objectSize, rm
     '                   traceback, unlockBinding
+    ' 
+    '         Sub: [exit]
     ' 
     ' 
     ' /********************************************************************************/
