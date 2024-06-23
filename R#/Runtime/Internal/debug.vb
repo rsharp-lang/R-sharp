@@ -381,6 +381,7 @@ Namespace Runtime.Internal
                 Console.ForegroundColor = message.DoCall(AddressOf getMessageColor)
             End If
 
+            dev.WriteLine()
             dev.WriteLine($" {message.DoCall(AddressOf getMessagePrefix)} in {execRoutine}")
 
             For Each msg As String In message.AsEnumerable
