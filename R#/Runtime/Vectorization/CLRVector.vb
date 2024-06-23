@@ -205,6 +205,10 @@ Namespace Runtime.Vectorization
                     .ToArray
             End If
 
+            If x.GetType.IsEnum Then
+                Return {CLng(x)}
+            End If
+
             Throw New NotImplementedException(x.GetType.FullName)
         End Function
 
@@ -394,6 +398,10 @@ Namespace Runtime.Vectorization
                     .AsObjectEnumerator _
                     .Select(Function(e) CInt(e)) _
                     .ToArray
+            End If
+
+            If x.GetType.IsEnum Then
+                Return {CInt(x)}
             End If
 
             Throw New NotImplementedException(x.GetType.FullName)
