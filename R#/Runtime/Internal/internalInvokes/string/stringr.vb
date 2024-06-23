@@ -941,7 +941,7 @@ Namespace Runtime.Internal.Invokes
 
             sep = sprintf(If(sep, ""))
 
-            For Each xi In x.slots
+            For Each xi As KeyValuePair(Of String, Object) In x.slots
                 If Not xi.Key Like args Then
                     Dim si As String() = CLRVector.asCharacter(xi.Value)
 
