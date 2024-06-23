@@ -189,10 +189,19 @@ Namespace Runtime.Vectorization
                                     Return CLng(DirectCast(xi, Date).UnixTimeStamp)
                                 ElseIf TypeOf xi Is String Then
                                     Return CLng(Val(xi))
+                                ElseIf xi.GetType.IsEnum Then
+                                    Return CLng(xi)
                                 Else
                                     Return Conversion.CTypeDynamic(Of Long)(xi)
                                 End If
                             End Function) _
+                    .ToArray
+            End If
+
+            If x.GetType.IsArray AndAlso x.GetType.GetElementType.IsEnum Then
+                Return DirectCast(x, Array) _
+                    .AsObjectEnumerator _
+                    .Select(Function(e) CLng(e)) _
                     .ToArray
             End If
 
@@ -377,6 +386,13 @@ Namespace Runtime.Vectorization
             ElseIf TypeOf x Is String() Then
                 Return DirectCast(x, String()) _
                     .Select(Function(str) CInt(Val(str))) _
+                    .ToArray
+            End If
+
+            If x.GetType.IsArray AndAlso x.GetType.GetElementType.IsEnum Then
+                Return DirectCast(x, Array) _
+                    .AsObjectEnumerator _
+                    .Select(Function(e) CInt(e)) _
                     .ToArray
             End If
 
