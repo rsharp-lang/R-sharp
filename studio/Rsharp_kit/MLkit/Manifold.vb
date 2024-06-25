@@ -242,9 +242,14 @@ Module Manifold
                 .ToArray
         ElseIf data.GetType.ImplementInterface(Of INumericMatrix) Then
             matrix = DirectCast(data, INumericMatrix).ArrayPack
-            labels = matrix _
-                .Select(Function(r, i) i.ToString) _
-                .ToArray
+
+            If data.GetType.ImplementInterface(Of ILabeledMatrix) Then
+                labels = DirectCast(data, ILabeledMatrix).GetLabels.ToArray
+            Else
+                labels = matrix _
+                    .Select(Function(r, i) i.ToString) _
+                    .ToArray
+            End If
         Else
             Dim raw As pipeline = pipeline.TryCreatePipeline(Of DataSet)(data, env)
 
