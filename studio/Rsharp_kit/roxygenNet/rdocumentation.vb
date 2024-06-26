@@ -115,7 +115,11 @@ Public Module rdocumentation
         Dim html As New StringBuilder
 
         For Each word In [function].keywords
-            Dim links = word.Value.Select(Function(f) $"<a href=""./{f.namespace}/{f.name}.html"">{f.name}</a>").ToArray
+            Dim links = (From f As RMethodInfo
+                         In word.Value
+                         Let clr_pkg As Type = f.GetNetCoreCLRDeclaration.DeclaringType
+                         Let dllname As String = clr_pkg.Assembly.Location.BaseName
+                         Select $"<a href=""./{dllname}/{f.namespace}/{f.name}.html"">{f.name}</a>").ToArray
 
             Call html.AppendLine($"<h2>{word.Key}</h2>")
             Call html.AppendLine($"<p>{links.JoinBy(", ")}</p>")
