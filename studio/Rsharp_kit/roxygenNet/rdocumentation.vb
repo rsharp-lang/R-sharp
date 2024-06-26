@@ -110,6 +110,21 @@ Public Module rdocumentation
         End If
     End Function
 
+    <ExportAPI("keyword_index")>
+    Public Function get_keywordIndex(Optional env As Environment = Nothing) As String
+        Dim html As New StringBuilder
+
+        For Each word In [function].keywords
+            Dim links = word.Value.Select(Function(f) $"<a href=""./{f.namespace}/{f.name}.html"">{f.name}</a>").ToArray
+
+            Call html.AppendLine($"<h2>{word.Key}</h2>")
+            Call html.AppendLine($"<p>{links.JoinBy(", ")}</p>")
+            Call html.AppendLine()
+        Next
+
+        Return html.ToString
+    End Function
+
     <ExportAPI("get_keywords")>
     Public Function get_keywords() As list
         Return New list With {
