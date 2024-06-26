@@ -92,9 +92,9 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="status"></param>
         ''' 
         <ExportAPI("exit")>
-        Public Sub [exit](status As Integer)
-            Call App.Exit(status)
-        End Sub
+        Public Function [exit](status As Integer) As RExit
+            Return New RExit(status)
+        End Function
 
         ''' <summary>
         ''' ## Is an Object Defined?
