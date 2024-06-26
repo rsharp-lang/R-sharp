@@ -201,6 +201,7 @@ Module Manifold
     ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
+    ''' <keywords>embedding</keywords>
     <ExportAPI("umap")>
     <RApiReturn("labels", "umap")>
     Public Function umapProjection(<RRawVectorArgument> data As Object,
