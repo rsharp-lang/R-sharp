@@ -356,6 +356,8 @@ Namespace Development.Package.File
             Call dllIndex.AppendLine($"<pre>{$"{package_dir}/DESCRIPTION".ReadAllText.Replace("&", "&amp;").Replace("<", "&lt;")}</pre>")
             Call dllIndex.AppendLine("<br />")
 
+            Call dllIndex.AppendLine("<a href=""./keywords.html"">View package by keywords.</a>")
+
             Call dllIndex.AppendLine("<h2>R Package Symbols</h2>")
             Call dllIndex.AppendLine("<ul>")
 
