@@ -59,7 +59,6 @@ Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -104,7 +103,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Dim lastFunc As FunctionInvoke = program.Last
             Dim value As Object = newProgram.Execute(envir)
 
-            If Program.isException(value) Then
+            If Program.isException(value) OrElse TypeOf value Is RExit Then
                 Return value
             End If
 

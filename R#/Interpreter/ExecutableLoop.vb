@@ -170,7 +170,7 @@ Namespace Interpreter
         End Sub
 
         Private Sub configException(env As Environment, last As Object, expression As Expression)
-            If Not last Is Nothing AndAlso Program.isException(last) Then
+            If Program.isException(last) Then
                 Dim err As Message = last
 
                 If err.source Is Nothing Then
@@ -207,7 +207,7 @@ Namespace Interpreter
                 ' so we needs wrap the last value with 
                 ' return keyword.
                 last = New ReturnValue(New RuntimeValueLiteral(last))
-            ElseIf Not last Is Nothing AndAlso last.GetType Is GetType(ReturnValue) Then
+            ElseIf Not last Is Nothing Then
                 ' the internal closure invoke a returns keyword
                 ' so break the current loop
                 '
@@ -225,7 +225,14 @@ Namespace Interpreter
                 '
                 ' Do not break the returns keyword popout chain 
                 '
-                breakLoop = True
+                Dim check_last As Type = last.GetType
+
+                If check_last Is GetType(ReturnValue) Then
+                    breakLoop = True
+                ElseIf check_last Is GetType(RExit) Then
+                    breakLoop = True
+                    Return last
+                End If
             End If
 
             breakLoop = breakLoop OrElse isBreakSignal(expression)
@@ -269,6 +276,11 @@ Namespace Interpreter
             Return last
         End Function
 
+        ''' <summary>
+        ''' break current loop via the R# language keyword
+        ''' </summary>
+        ''' <param name="last"></param>
+        ''' <returns></returns>
         Private Shared Function isBreakSignal(last As Object) As Boolean
             If last Is Nothing Then
                 Return False

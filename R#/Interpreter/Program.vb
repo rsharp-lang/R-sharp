@@ -156,7 +156,9 @@ Namespace Interpreter
         ''' <param name="result"></param>
         ''' <param name="envir"></param>
         ''' <param name="isDotNETException"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' false for input <paramref name="result"/> is nothing, true if the <paramref name="result"/> value is message or clr exception.
+        ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function isException(ByRef result As Object, Optional envir As Environment = Nothing, ByRef Optional isDotNETException As Boolean = False) As Boolean
             If result Is Nothing Then
