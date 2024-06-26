@@ -444,21 +444,29 @@ Namespace Development.Package.File
 
             If Program.isException(err) Then
                 Return err
-            Else
-                Call Console.WriteLine("        " & "[*] Loading unix man page index...")
-
-                For Each unixMan As String In ls - l - r - "*.1" <= $"{package_dir}/man"
-                    Call file.unixman.Add(unixMan)
-                    Call Console.WriteLine("        " & unixMan.BaseName)
-                Next
-
-                Call Console.WriteLine("        " & "[*] Loading html vignettes index...")
-
-                For Each htmlHelp As String In ls - l - r - "*.html" <= $"{package_dir}/vignettes"
-                    Call file.vignettes.Add(htmlHelp)
-                    Call Console.WriteLine("        " & htmlHelp.BaseName)
-                Next
             End If
+
+            err = REngine.Invoke("keyword_index", REngine.globalEnvir)
+
+            If Program.isException(err) Then
+                Return err
+            End If
+
+            Call CLRVector.asCharacter(err).SaveTo(path:=$"{package_dir}/vignettes/keywords.html")
+
+            Call Console.WriteLine("        " & "[*] Loading unix man page index...")
+
+            For Each unixMan As String In ls - l - r - "*.1" <= $"{package_dir}/man"
+                Call file.unixman.Add(unixMan)
+                Call Console.WriteLine("        " & unixMan.BaseName)
+            Next
+
+            Call Console.WriteLine("        " & "[*] Loading html vignettes index...")
+
+            For Each htmlHelp As String In ls - l - r - "*.html" <= $"{package_dir}/vignettes"
+                Call file.vignettes.Add(htmlHelp)
+                Call Console.WriteLine("        " & htmlHelp.BaseName)
+            Next
 
             Return Nothing
         End Function
