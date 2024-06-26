@@ -103,7 +103,7 @@ Module Terminal
     ''' <param name="runLast">
     ''' should ``.Last()`` be executed?
     ''' </param>
-    ''' 
+    ''' <keywords>terminal,interactive</keywords>
     <ExportAPI("quit")>
     Public Sub quit(Optional save$ = "default",
                     Optional status% = 0,
