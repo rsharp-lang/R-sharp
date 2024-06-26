@@ -110,6 +110,17 @@ Public Module rdocumentation
         End If
     End Function
 
+    <ExportAPI("get_keywords")>
+    Public Function get_keywords() As list
+        Return New list With {
+            .slots = [function].keywords _
+                .ToDictionary(Function(w) w.Key,
+                              Function(w)
+                                  Return CObj(w.Value.ToArray)
+                              End Function)
+        }
+    End Function
+
     ''' <summary>
     ''' pull all clr type in the cache and then clear up the cache
     ''' </summary>
@@ -341,7 +352,7 @@ Public Module rdocumentation
     End Function
 
     ''' <summary>
-    ''' 
+    ''' get a set of the clr functions from the given package <see cref="Type"/>.
     ''' </summary>
     ''' <param name="package">
     ''' the ``R#`` package module name or the module object itself.

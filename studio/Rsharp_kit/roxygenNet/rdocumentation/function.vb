@@ -1,57 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::904e8a2254c65863500ea2066667f869, studio\Rsharp_kit\roxygenNet\rdocumentation\function.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 244
-    '    Code Lines: 205 (84.02%)
-    ' Comment Lines: 7 (2.87%)
-    '    - Xml Docs: 71.43%
-    ' 
-    '   Blank Lines: 32 (13.11%)
-    '     File Size: 9.42 KB
+' Summaries:
 
 
-    ' Class [function]
-    ' 
-    '     Function: (+2 Overloads) argument, (+4 Overloads) createHtml
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 244
+'    Code Lines: 205 (84.02%)
+' Comment Lines: 7 (2.87%)
+'    - Xml Docs: 71.43%
+' 
+'   Blank Lines: 32 (13.11%)
+'     File Size: 9.42 KB
+
+
+' Class [function]
+' 
+'     Function: (+2 Overloads) argument, (+4 Overloads) createHtml
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Serialization
@@ -70,6 +69,8 @@ Imports RPackage = SMRUCC.Rsharp.Development.Package.Package
 
 Public Class [function]
 
+    Public Shared ReadOnly keywords As New Dictionary(Of String, List(Of RMethodInfo))
+
     Public Function createHtml(api As RFunction, env As Environment) As String
         If TypeOf api Is RMethodInfo Then
             Return createHtml(DirectCast(api, RMethodInfo), env)
@@ -78,11 +79,15 @@ Public Class [function]
         End If
     End Function
 
-    Public Function createHtml(api As RMethodInfo, template As String, env As Environment) As String
-        Dim xml As ProjectMember = env.globalEnvironment _
+    Public Shared Function GetAssemblyXmlDocument(env As Environment, api As RMethodInfo) As ProjectMember
+        Return env.globalEnvironment _
             .packages _
             .packageDocs _
             .GetAnnotations(api.GetNetCoreCLRDeclaration)
+    End Function
+
+    Public Function createHtml(api As RMethodInfo, template As String, env As Environment) As String
+        Dim xml As ProjectMember = GetAssemblyXmlDocument(env, api)
         Dim func As New FunctionDeclare With {
             .name = api.name,
             .parameters = api.parameters _
@@ -116,6 +121,21 @@ Public Class [function]
             docs.details = markdown.Transform(xml.Remarks)
             docs.examples = " " & xml.example
             docs.author = {markdown.Transform(xml.author)}
+
+            If Not xml.Keywords.StringEmpty(, True) Then
+                For Each keyword As String In xml.Keywords _
+                    .StringSplit("[,;]") _
+                    .Select(AddressOf Strings.Trim)
+
+                    If keyword = "" Then
+                        Continue For
+                    ElseIf Not keywords.ContainsKey(keyword.ToLower) Then
+                        keywords.Add(keyword.ToLower, New List(Of RMethodInfo))
+                    End If
+
+                    Call keywords(keyword.ToLower).Add(api)
+                Next
+            End If
         End If
 
         Dim unions_type As Type() = api.GetUnionTypes.ToArray

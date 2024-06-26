@@ -18,6 +18,8 @@ const __RSymbolDocumentation = function(symbols, package, outputdir = "./") {
 	invisible(NULL);
 }
 
+#' try to get the html document template
+#' 
 const __template = function() {
 	const R_syntax_js = getOption("r_syntax.js", default = "../../_assets/R_syntax.js");
     const css_ref = `${dirname(R_syntax_js, fullpath = FALSE)}/page.css`;
