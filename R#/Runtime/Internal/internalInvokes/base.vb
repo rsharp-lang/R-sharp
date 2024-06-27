@@ -1236,7 +1236,19 @@ Namespace Runtime.Internal.Invokes
                 .ToArray
 
             For Each tuple As IGrouping(Of String, KeyValuePair(Of String, Object)) In joins
-                Call union.add(tuple.Key, tuple.Values)
+                Dim vals As Object() = tuple.Values
+
+                If vals.Length = 1 Then
+                    Call union.add(tuple.Key, vals(0))
+                Else
+                    Dim append = base.append(vals(0), vals(1), env)
+
+                    If TypeOf append Is Message Then
+                        Return append
+                    Else
+                        Call union.add(tuple.Key, append)
+                    End If
+                End If
             Next
 
             Return union
