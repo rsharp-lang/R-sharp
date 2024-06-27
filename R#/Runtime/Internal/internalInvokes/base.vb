@@ -1227,6 +1227,21 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <ExportAPI("join")>
+        Public Function join_data(x As list, b As list, Optional env As Environment = Nothing) As Object
+            Dim union As New list
+            Dim joins = x.slots _
+                .JoinIterates(b.slots) _
+                .GroupBy(Function(a) a.Key) _
+                .ToArray
+
+            For Each tuple As IGrouping(Of String, KeyValuePair(Of String, Object)) In joins
+                Call union.add(tuple.Key, tuple.Values)
+            Next
+
+            Return union
+        End Function
+
         ''' <summary>
         ''' ### Vector Merging
         ''' 
@@ -1239,6 +1254,34 @@ Namespace Runtime.Internal.Invokes
         ''' A vector containing the values in x with the elements of values 
         ''' appended after the specified element of x.
         ''' </returns>
+        ''' <remarks>
+        ''' for append one tuple list into another tuple list, element value may be overrides 
+        ''' if there is duplicated name between the two list. ``join`` function could be used 
+        ''' for union the element value.
+        ''' 
+        ''' </remarks>
+        ''' <example>
+        ''' let a = list(a = 1, b = 2);
+        ''' let b = list(a = 333, c = 5);
+        ''' 
+        ''' str(append(a,b));
+        ''' # tuple key ``a`` in list a has been overrided by the 
+        ''' # tuple key ``a`` from the list b
+        ''' 
+        ''' # List of 3
+        ''' #  $ a : int 333
+        ''' #  $ b : int 2
+        ''' #  $ c : int 5
+        ''' 
+        ''' str(join(a, b));
+        ''' # tuple value of ``a`` will be union in join function
+        ''' 
+        ''' # List of 3
+        ''' #  $ a : int 1 333
+        ''' #  $ b : int 2
+        ''' #  $ c : int 5
+        ''' 
+        ''' </example>
         <ExportAPI("append")>
         Public Function append(<RRawVectorArgument> x As Object,
                                <RRawVectorArgument> values As Object,
