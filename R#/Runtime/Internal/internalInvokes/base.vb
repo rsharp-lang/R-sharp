@@ -1289,7 +1289,7 @@ Namespace Runtime.Internal.Invokes
         ''' # tuple value of ``a`` will be union in join function
         ''' 
         ''' # List of 3
-        ''' #  $ a : int 1 333
+        ''' #  $ a : int [1:2] 1 333
         ''' #  $ b : int 2
         ''' #  $ c : int 5
         ''' 
