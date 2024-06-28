@@ -294,7 +294,7 @@ Module dataframe
     ''' convert the raw csv table object to R dataframe object.
     ''' </summary>
     ''' <param name="raw"></param>
-    ''' <returns></returns>
+    ''' <returns>this function will returns nothing if the target csv data input is nothing or contains no rows data.</returns>
     <ExportAPI("rawToDataFrame")>
     <Extension>
     <RApiReturn(GetType(Rdataframe))>
@@ -311,13 +311,20 @@ Module dataframe
         Dim cols() = raw _
             .DoCall(Function(table)
                         If skip_rows > 0 Then
-                            Return New csv(table.Skip(skip_rows))
+                            Return New csv(table.SafeQuery.Skip(skip_rows))
                         Else
                             Return table
                         End If
                     End Function) _
             .stripCommentRows(comment_char).Columns _
             .ToArray
+
+        If cols.IsNullOrEmpty Then
+            ' file is empty
+            Call env.AddMessage("empty table file contents!")
+            Return Nothing
+        End If
+
         ' get first row as the column headers
         Dim colNames As String() = cols _
             .Select(Function(col) col(Scan0)) _
