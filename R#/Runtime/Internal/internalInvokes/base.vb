@@ -921,8 +921,9 @@ Namespace Runtime.Internal.Invokes
                               Optional env As Environment = Nothing) As Object
 
             If d Is Nothing OrElse d.empty Then
-                ' deal with the situation when target is null or empty
-                If TypeOf row Is dataframe Then
+                ' deal with the situation when
+                ' target is null or empty
+                If row Is Nothing OrElse TypeOf row Is dataframe Then
                     Return row
                 ElseIf Not TypeOf row Is list Then
                     Dim tbl As New dataframe With {
