@@ -347,7 +347,17 @@ printSingleElement:
         ''' <returns></returns>
         <Extension>
         Public Function ValueToString(x As Object, env As GlobalEnvironment) As String
-            Return printer.ToString(x.GetType, env, True)(x)
+            If x Is Nothing Then
+                Return "NULL"
+            Else
+                Dim to_str = printer.ToString(x.GetType, env, True)
+
+                If to_str Is Nothing Then
+                    Return any.ToString(x, "<invalid>")
+                Else
+                    Return to_str(x)
+                End If
+            End If
         End Function
 
         Private Function toStringArray(o As Object) As String
