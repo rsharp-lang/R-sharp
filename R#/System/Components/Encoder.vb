@@ -87,6 +87,19 @@ Namespace Development.Components
             If vec.Length = 1 Then
                 Return GetObject(vec.GetValue(Scan0))
             Else
+                Dim elType As Type = vec.GetType.GetElementType
+
+                If elType IsNot Nothing AndAlso elType IsNot GetType(Object) Then
+                    ' is generic array
+                    If elType IsNot GetType(list) AndAlso
+                        elType IsNot GetType(dataframe) AndAlso
+                        elType IsNot GetType(vector) Then
+
+                        Return vec
+                    End If
+                End If
+
+                ' deal with object()
                 Dim array As New List(Of Object)
 
                 For Each x As Object In vec
