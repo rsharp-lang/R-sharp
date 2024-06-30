@@ -444,10 +444,12 @@ Namespace Runtime.Internal.Invokes
                              Optional args As list = Nothing,
                              Optional env As Environment = Nothing) As Object
 
+            Dim is_general As Boolean = False
+
             If x Is Nothing Then
                 Return "null"
             Else
-                x = encoder.CreateEncoderWithOptions(args, env).GetObject(x)
+                x = encoder.CreateEncoderWithOptions(args, env).GetObject(x, is_general)
             End If
 
             Dim type As Type = x.GetType
@@ -477,7 +479,13 @@ Namespace Runtime.Internal.Invokes
             }
 
             Try
-                Return JsonContract.GetObjectJson(type, x, indent:=Not compress, knownTypes:=genericTypes)
+                Dim known As Type() = genericTypes
+
+                If Not is_general Then
+                    known = Nothing
+                End If
+
+                Return JsonContract.GetObjectJson(type, x, indent:=Not compress, knownTypes:=known)
             Catch ex As Exception
                 Return debug.stop(ex, env)
             End Try
