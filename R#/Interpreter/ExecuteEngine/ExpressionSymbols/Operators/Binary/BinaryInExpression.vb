@@ -122,7 +122,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim sequence As Object = right.Evaluate(envir)
-            Dim testLeft As Array = getIndex(left.Evaluate(envir))
+            Dim testLeft_obj As Object = getIndex(left.Evaluate(envir))
+
+            If TypeOf testLeft_obj Is Message Then
+                Return testLeft_obj
+            End If
+
+            Dim testLeft As Array = testLeft_obj
 
             If sequence Is Nothing Then
                 Return {}
