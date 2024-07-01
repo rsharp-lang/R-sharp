@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::70160cfc06f5cf3a25565627e55943dd, studio\Rsharp_kit\MLkit\Manifold.vb"
+﻿#Region "Microsoft.VisualBasic::58a03e18eb39f54bbc66094ac3d7e26b, studio\Rsharp_kit\MLkit\Manifold.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 322
-    '    Code Lines: 217 (67.39%)
-    ' Comment Lines: 67 (20.81%)
-    '    - Xml Docs: 95.52%
+    '   Total Lines: 328
+    '    Code Lines: 221 (67.38%)
+    ' Comment Lines: 68 (20.73%)
+    '    - Xml Docs: 95.59%
     ' 
-    '   Blank Lines: 38 (11.80%)
-    '     File Size: 13.46 KB
+    '   Blank Lines: 39 (11.89%)
+    '     File Size: 13.70 KB
 
 
     ' Module Manifold

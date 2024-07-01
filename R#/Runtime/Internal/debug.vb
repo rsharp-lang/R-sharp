@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::68777ebe1db0cd018470635cd56c5c59, R#\Runtime\Internal\debug.vb"
+﻿#Region "Microsoft.VisualBasic::2923431892f07c22eec9cc166d96a6d1, R#\Runtime\Internal\debug.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 388
-    '    Code Lines: 224 (57.73%)
-    ' Comment Lines: 108 (27.84%)
+    '   Total Lines: 389
+    '    Code Lines: 225 (57.84%)
+    ' Comment Lines: 108 (27.76%)
     '    - Xml Docs: 96.30%
     ' 
-    '   Blank Lines: 56 (14.43%)
-    '     File Size: 15.44 KB
+    '   Blank Lines: 56 (14.40%)
+    '     File Size: 15.46 KB
 
 
     '     Class debug

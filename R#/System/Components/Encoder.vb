@@ -1,56 +1,56 @@
-﻿#Region "Microsoft.VisualBasic::109c1ecc4a45619f30ad936c6db41d15, R#\System\Components\Encoder.vb"
+﻿#Region "Microsoft.VisualBasic::5d3dc568925bf4181df2727d4a675dad, R#\System\Components\Encoder.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 121
-'    Code Lines: 81 (66.94%)
-' Comment Lines: 24 (19.83%)
-'    - Xml Docs: 100.00%
-' 
-'   Blank Lines: 16 (13.22%)
-'     File Size: 5.04 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class Encoder
-' 
-'         Properties: full_vector, row_names
-' 
-'         Function: CreateEncoderWithOptions, DigestRSharpObject, GetObject, TryHandleNonVector
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 136
+    '    Code Lines: 90 (66.18%)
+    ' Comment Lines: 26 (19.12%)
+    '    - Xml Docs: 92.31%
+    ' 
+    '   Blank Lines: 20 (14.71%)
+    '     File Size: 5.69 KB
+
+
+    '     Class Encoder
+    ' 
+    '         Properties: full_vector, row_names
+    ' 
+    '         Function: CreateEncoderWithOptions, DigestRSharpObject, GetObject, TryHandleNonVector
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

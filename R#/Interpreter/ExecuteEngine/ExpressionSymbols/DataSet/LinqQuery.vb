@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0ada36d199e52bda611f4fe89f5a30e4, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\LinqQuery.vb"
+﻿#Region "Microsoft.VisualBasic::f144410a8a9d72e21ac84fd5d62f236e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\LinqQuery.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 122
-    '    Code Lines: 96 (78.69%)
-    ' Comment Lines: 4 (3.28%)
+    '   Total Lines: 124
+    '    Code Lines: 98 (79.03%)
+    ' Comment Lines: 4 (3.23%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 22 (18.03%)
-    '     File Size: 4.60 KB
+    '   Blank Lines: 22 (17.74%)
+    '     File Size: 4.69 KB
 
 
     '     Class LinqQuery

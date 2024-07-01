@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::438de5976367c44422dd366b4b428318, Library\graphics\Plot2D\graphics2D.vb"
+﻿#Region "Microsoft.VisualBasic::3b4164973d6552bc96e44468eddd96af, Library\graphics\Plot2D\graphics2D.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 95.41%
     ' 
     '   Blank Lines: 82 (11.65%)
-    '     File Size: 29.03 KB
+    '     File Size: 29.02 KB
 
 
     ' Module graphics2DTools

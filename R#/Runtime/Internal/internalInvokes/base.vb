@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::940e38df92013ea3a8f4784aa5d3d2fe, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::0655a80cb7e4f3562b4780016e69a3f7, R#\Runtime\Internal\internalInvokes\base.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 3361
-    '    Code Lines: 1489 (44.30%)
-    ' Comment Lines: 1590 (47.31%)
-    '    - Xml Docs: 84.53%
+    '   Total Lines: 3417
+    '    Code Lines: 1511 (44.22%)
+    ' Comment Lines: 1619 (47.38%)
+    '    - Xml Docs: 84.37%
     ' 
-    '   Blank Lines: 282 (8.39%)
-    '     File Size: 150.74 KB
+    '   Blank Lines: 287 (8.40%)
+    '     File Size: 152.71 KB
 
 
     '     Module base
@@ -53,14 +53,14 @@
     '                   getPosition, ifelse, ifelseScalar, ifelseVector, ints
     '                   isDataframe, isEmpty, isEmptyArray, isFALSE, isFunction
     '                   isList, isNA, isNull, isRVector, isTRUE
-    '                   length, library, logical, makeNames, names
-    '                   ncol, neg, nrow, numeric, objectAddInvoke
-    '                   options, options_flush, print, range, raws
-    '                   rbind, Rdataframe, rep, rep_int, rep_len
-    '                   replace, Rlist, Robj_dimension, rownames, seq
-    '                   sink, sink_number, source, sQuote, str
-    '                   summary, t, uniqueNames, unitOfT, ValueAt
-    '                   warning, year
+    '                   join_data, length, library, logical, makeNames
+    '                   names, ncol, neg, nrow, numeric
+    '                   objectAddInvoke, options, options_flush, print, range
+    '                   raws, rbind, Rdataframe, rep, rep_int
+    '                   rep_len, replace, Rlist, Robj_dimension, rownames
+    '                   seq, sink, sink_number, source, sQuote
+    '                   str, summary, t, uniqueNames, unitOfT
+    '                   ValueAt, warning, year
     ' 
     '         Sub: println_message, warnings
     '         Class PrinterOptions

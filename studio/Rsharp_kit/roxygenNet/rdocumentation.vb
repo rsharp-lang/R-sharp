@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::21d401d1fcdbcb0fa9073dac98ec139f, studio\Rsharp_kit\roxygenNet\rdocumentation.vb"
+﻿#Region "Microsoft.VisualBasic::94c5d5a8e430ec2d48414c5081990674, studio\Rsharp_kit\roxygenNet\rdocumentation.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 375
-    '    Code Lines: 271 (72.27%)
-    ' Comment Lines: 53 (14.13%)
-    '    - Xml Docs: 86.79%
+    '   Total Lines: 405
+    '    Code Lines: 296 (73.09%)
+    ' Comment Lines: 53 (13.09%)
+    '    - Xml Docs: 88.68%
     ' 
-    '   Blank Lines: 51 (13.60%)
-    '     File Size: 14.18 KB
+    '   Blank Lines: 56 (13.83%)
+    '     File Size: 15.44 KB
 
 
     ' Module rdocumentation
     ' 
-    '     Function: clr_docs, getFunctions, getOverloads, getPkg, getPkgApisList
-    '               hasBaseClass, pull_clr_types, rdocumentation, ts_code
+    '     Function: clr_docs, get_keywordIndex, get_keywords, getFunctions, getOverloads
+    '               getPkg, getPkgApisList, hasBaseClass, pull_clr_types, rdocumentation
+    '               ts_code
     ' 
     ' /********************************************************************************/
 

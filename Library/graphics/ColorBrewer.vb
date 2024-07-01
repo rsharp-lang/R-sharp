@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7ead17f1a894e01af2d02faa8d98b4e1, Library\graphics\ColorBrewer.vb"
+﻿#Region "Microsoft.VisualBasic::d8b7adadbcddecf0a3ec77c28ba3f88c, Library\graphics\ColorBrewer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 228
-    '    Code Lines: 136 (59.65%)
-    ' Comment Lines: 51 (22.37%)
+    '   Total Lines: 226
+    '    Code Lines: 134 (59.29%)
+    ' Comment Lines: 51 (22.57%)
     '    - Xml Docs: 80.39%
     ' 
-    '   Blank Lines: 41 (17.98%)
-    '     File Size: 7.75 KB
+    '   Blank Lines: 41 (18.14%)
+    '     File Size: 7.66 KB
 
 
     ' Module ColorBrewerSystem
