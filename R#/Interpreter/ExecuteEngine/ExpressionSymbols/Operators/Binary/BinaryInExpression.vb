@@ -122,7 +122,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim sequence As Object = right.Evaluate(envir)
-            Dim testLeft As Array = getIndex(left.Evaluate(envir))
+            Dim testLeft_obj As Object = getIndex(left.Evaluate(envir))
+
+            If TypeOf testLeft_obj Is Message Then
+                Return testLeft_obj
+            End If
+
+            Dim testLeft As Array = testLeft_obj
 
             If sequence Is Nothing Then
                 Return {}
@@ -166,9 +172,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     Return op.TryCast(Of BinaryIndex).Evaluate(testLeft, sequence, Me.ToString, envir)
                 Else
                     Dim err As Exception = Nothing
+                    Dim index_raw As Object = getIndex(sequence)
+
+                    If TypeOf index_raw Is Message Then
+                        Return index_raw
+                    End If
 
                     ' and then try index hash
-                    flags = testVectorIndexOf(getIndex(sequence).AsObjectEnumerator.Indexing, testLeft, err)
+                    flags = testVectorIndexOf(DirectCast(index_raw, Array).AsObjectEnumerator.Indexing, testLeft, err)
 
                     If Not err Is Nothing Then
                         Return Internal.debug.stop(err, envir)
@@ -268,9 +279,20 @@ Generic:
             End If
         End Function
 
-        Private Shared Function getIndex(src As Object) As Array
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="src"></param>
+        ''' <returns>
+        ''' array data or error message
+        ''' </returns>
+        Private Shared Function getIndex(src As Object) As Object
             Dim isList As Boolean = False
             Dim seq = LinqQuery.produceSequenceVector(src, isList)
+
+            If TypeOf seq Is Message Then
+                Return seq
+            End If
 
             If isList Then
                 Return DirectCast(seq, KeyValuePair(Of String, Object)()) _

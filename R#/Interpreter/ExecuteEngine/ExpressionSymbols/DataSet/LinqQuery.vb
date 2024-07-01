@@ -152,6 +152,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Return New Object() {}
             ElseIf sequence.GetType Is GetType(list) Then
                 sequence = DirectCast(sequence, list).slots
+            ElseIf TypeOf sequence Is Message Then
+                Return sequence
             End If
 
             If sequence.GetType Is GetType(Dictionary(Of String, Object)) Then
