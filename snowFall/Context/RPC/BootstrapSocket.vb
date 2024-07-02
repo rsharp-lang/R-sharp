@@ -130,7 +130,7 @@ Namespace Context.RPC
 
             ' loop until the socket run success?
             tcpPort = If(debugPort > 0, debugPort, IPCSocket.GetFirstAvailablePort)
-            socket = New TcpServicesSocket(tcpPort)
+            socket = New TcpServicesSocket(tcpPort) With {.KeepsAlive = False}
             socket.ResponseHandler = protocol
 
             Call New Thread(AddressOf startAsync).Start()

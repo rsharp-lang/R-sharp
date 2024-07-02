@@ -128,7 +128,8 @@ Public Class Rweb : Inherits HttpServer
 
         Me.Processor = New RProcessor(Me, Rweb, show_error, debug)
         Me.socket = New TcpServicesSocket(tcp) With {
-            .ResponseHandler = AddressOf callback
+            .ResponseHandler = AddressOf callback,
+            .KeepsAlive = False
         }
     End Sub
 
