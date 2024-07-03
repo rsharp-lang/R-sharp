@@ -14,11 +14,11 @@ const raw = images_set
 format = "mnist", 
 dataset = "vector", 
 labelfile = "../mnist_dataset/train-labels-idx1-ubyte",
-subset = 100
+subset = 10000
 );
 
-let labels = names(raw);
-let embedding = nmf(raw, rank = 10);  # VAE::embedding(raw,max_iteration= 2, batch_size = 150);
+let labels = `N_${names(raw)}`;
+let embedding = nmf(raw, rank = 10,  max_iterations = 100);  # VAE::embedding(raw,max_iteration= 2, batch_size = 150);
 
 # str(embedding);
 
