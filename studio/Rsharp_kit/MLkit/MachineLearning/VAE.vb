@@ -145,46 +145,7 @@ Module VAE
 
         Dim dataset As SampleData()
 
-        If x Is Nothing Then
-            Return Internal.debug.stop("the required sample data x should not be nothing!", env)
-        End If
 
-        If TypeOf x Is dataframe Then
-            Dim rows = DirectCast(x, dataframe).forEachRow.ToArray
-
-            dataset = rows _
-                .Select(Function(a)
-                            Dim v As Double() = CLRVector.asNumeric(a.value)
-
-                            Return New SampleData With {
-                                .id = a.name,
-                                .features = v,
-                                .labels = v
-                            }
-                        End Function) _
-                .ToArray
-        ElseIf x.GetType.ImplementInterface(Of INumericMatrix) Then
-            Dim rows = DirectCast(x, INumericMatrix).ArrayPack
-            Dim labels As String()
-
-            If x.GetType.ImplementInterface(Of ILabeledMatrix) Then
-                labels = DirectCast(x, ILabeledMatrix).GetLabels.ToArray
-            Else
-                labels = rows.Select(Function(r, i) $"r_{i + 1}").ToArray
-            End If
-
-            dataset = rows _
-                .Select(Function(r, i)
-                            Return New SampleData With {
-                                .id = labels(i),
-                                .labels = r,
-                                .features = r
-                            }
-                        End Function) _
-                .ToArray
-        Else
-            Return Message.InCompatibleType(GetType(dataframe), x.GetType, env)
-        End If
 
         Dim model As ConvolutionalNN
 
