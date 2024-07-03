@@ -4,8 +4,10 @@ let data = read.csv("./embedding.csv", row.names = 1, check.names = FALSE);
 let class_id = rownames(data);
 
 class_id = strsplit(class_id, "-", fixed = TRUE);
+class_id = class_id@{1};
+class_id = `class_${class_id}`;
 
-data[, "class"] = class_id@{1};
+data[, "class"] = class_id;
 
 print(data);
 
