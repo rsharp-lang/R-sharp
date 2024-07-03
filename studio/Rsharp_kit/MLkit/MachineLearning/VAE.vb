@@ -52,7 +52,9 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.MachineLearning.CNN
+Imports Microsoft.VisualBasic.MachineLearning.CNN.layers
 Imports Microsoft.VisualBasic.MachineLearning.CNN.trainers
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -132,12 +134,12 @@ Module VAE
     ''' input training data is the output result
     ''' </remarks>
     <ExportAPI("embedding")>
-    Public Function embedding(<RRawVectorArgument> x As Object,
-                              Optional dims As Integer = 9,
-                              Optional batch_size As Integer = 100,
-                              Optional max_iteration As Integer = 1000,
-                              Optional verbose As Boolean? = Nothing,
-                              Optional env As Environment = Nothing) As Object
+    Public Function embedding_vae(<RRawVectorArgument> x As Object,
+                                  Optional dims As Integer = 9,
+                                  Optional batch_size As Integer = 100,
+                                  Optional max_iteration As Integer = 1000,
+                                  Optional verbose As Boolean? = Nothing,
+                                  Optional env As Environment = Nothing) As Object
 
         Dim dataset = SampledataParser.ConvertVAE(x, env)
 
@@ -150,7 +152,7 @@ Module VAE
         Dim layers = New LayerBuilder() + CNNTools.input_layer({1, 1}, input_width, 1) +
             CNNTools.full_connected_layer(input_width / 2) +
             CNNTools.full_connected_layer(input_width / 5) +
-            CNNTools.full_connected_layer(dims) +
+            CNNTools.full_connected_layer(dims) +  ' embedding layer
             CNNTools.full_connected_layer(input_width / 3) +
             CNNTools.full_connected_layer(input_width) +
             CNNTools.regression_layer()
@@ -162,6 +164,14 @@ Module VAE
                               verbose:=If(verbose Is Nothing, env.verboseOption(False), CBool(verbose))) _
             .train(matrix, max_iteration)
 
+        ' make embedding
+        ' get embedding result from the embedding layer
+        Dim embedding_layer As ConvolutionalNN = model.take(3)
+        Dim rows As New List(Of NamedCollection(Of Double))
+        Dim embedding As Double()
 
+        For Each sample As SampleData In matrix
+            embedding = embedding_layer.predict(sample.features)
+        Next
     End Function
 End Module
