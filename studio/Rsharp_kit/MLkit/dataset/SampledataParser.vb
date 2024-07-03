@@ -1,20 +1,10 @@
-﻿Imports Microsoft.VisualBasic.Language
+﻿Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
+Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Emit.Delegates
-Imports Microsoft.VisualBasic.MachineLearning.CNN
-Imports Microsoft.VisualBasic.MachineLearning.CNN.trainers
-Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
-Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
-Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
-Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
-Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Module SampledataParser
