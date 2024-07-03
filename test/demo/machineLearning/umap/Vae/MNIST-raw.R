@@ -16,6 +16,6 @@ dataset = "vector",
 labelfile = "../mnist_dataset/train-labels-idx1-ubyte",
 subset = 1000
 );
-const embedding = VAE::embedding(raw,max_iteration= 10);
+const embedding = VAE::embedding(raw,max_iteration= 10, batch_size = 30);
 
 print(embedding);
