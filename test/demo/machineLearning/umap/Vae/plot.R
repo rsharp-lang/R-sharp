@@ -15,3 +15,5 @@ bitmap(file = "./embedding.png") {
     plot(as.numeric(data$dim_1), as.numeric(data$dim_2), 
         colors = "paper", class = class_id);
 }
+
+write.csv(data, file = "./embedding_class.csv");
