@@ -154,12 +154,12 @@ Module VAE
 
         Dim matrix As SampleData() = SampleData.TransformDataset(dataset, is_generative:=True, is_training:=True).ToArray
         Dim input_width As Integer = matrix.First.features.Length
-        Dim layers = New LayerBuilder() + CNNTools.input_layer({1, 1}, input_width, 1) +
-            CNNTools.full_connected_layer(input_width / 2) +
-            CNNTools.relu_layer +
-            CNNTools.full_connected_layer(input_width / 5) +
-            CNNTools.relu_layer +
-            CNNTools.full_connected_layer(dims) +  ' embedding layer
+        Dim layers = New LayerBuilder() + CNNTools.input_layer({1, 1}, input_width, 1) +  ' 1
+            CNNTools.full_connected_layer(input_width / 2) +   ' 2
+            CNNTools.relu_layer +   ' 3
+            CNNTools.full_connected_layer(input_width / 5) + ' 4
+            CNNTools.relu_layer +   ' 5 
+            CNNTools.full_connected_layer(dims) +  ' 6: embedding layer
             CNNTools.relu_layer +
             CNNTools.full_connected_layer(input_width / 3) +
             CNNTools.relu_layer +
