@@ -52,18 +52,14 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.MachineLearning.CNN
 Imports Microsoft.VisualBasic.MachineLearning.CNN.trainers
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
-Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
-Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 ''' <summary>
 ''' VAE embedding method implements
@@ -149,15 +145,22 @@ Module VAE
             Return dataset.TryCast(Of Message)
         End If
 
-        Dim model As ConvolutionalNN
+        Dim matrix As SampleData() = SampleData.TransformDataset(dataset, is_generative:=True, is_training:=True).ToArray
+        Dim input_width As Integer = matrix.First.features.Length
+        Dim layers = New LayerBuilder() + CNNTools.input_layer({1, 1}, input_width, 1) +
+            CNNTools.full_connected_layer(input_width / 2) +
+            CNNTools.full_connected_layer(input_width / 5) +
+            CNNTools.full_connected_layer(dims) +
+            CNNTools.full_connected_layer(input_width / 3) +
+            CNNTools.full_connected_layer(input_width) +
+            CNNTools.regression_layer()
 
-
-
+        Dim model As New ConvolutionalNN(layers)
         Dim alg As New AdaGradTrainer(batch_size, 0.001F)
         Dim cnn_val = New Trainer(alg:=alg.SetKernel(model),
                               log:=Sub(s) base.print(s,, env),
                               verbose:=If(verbose Is Nothing, env.verboseOption(False), CBool(verbose))) _
-            .train(dataset, max_iteration)
+            .train(matrix, max_iteration)
 
 
     End Function
