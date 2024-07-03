@@ -266,6 +266,12 @@ Module RMatrix
             data = New NumericMatrix(cols)
         ElseIf x.GetType.ImplementInterface(Of GeneralMatrix) Then
             data = New NumericMatrix(DirectCast(x, GeneralMatrix).RowVectors)
+        ElseIf TypeOf x Is list Then
+            data = New NumericMatrix(rows:=
+                From row
+                In DirectCast(x, list).slots
+                Select CLRVector.asNumeric(row.Value)
+            )
         Else
             If TypeOf x Is vector Then
                 x = DirectCast(x, vector).data
