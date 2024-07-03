@@ -583,18 +583,17 @@ Module CNNTools
 
     <ExportAPI("auto_encoder")>
     <RApiReturn(GetType(CNNFunction))>
-    Public Function auto_encoder(cnn As Object, dataset As SampleData(),
+    Public Function auto_encoder(cnn As Object, <RRawVectorArgument> x As Object,
                                  Optional max_loops As Integer = 100,
                                  Optional algorithm As TrainerAlgorithm = Nothing,
                                  Optional action As RFunction = Nothing,
                                  Optional env As Environment = Nothing) As Object
-        dataset = dataset _
-            .Select(Function(si)
-                        Return New SampleData(si.features, si.features) With {
-                            .id = si.id
-                        }
-                    End Function) _
-            .ToArray
+
+        Dim dataset As Microsoft.VisualBasic.Language.[Variant](Of Message, SampleData()) = SampledataParser.ConvertVAE(x, env)
+
+        If dataset Like GetType(Message) Then
+            Return dataset.TryCast(Of Message)
+        End If
 
         Return CNNTools.training(
             cnn:=cnn,
