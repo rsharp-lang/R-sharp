@@ -143,9 +143,11 @@ Module VAE
                               Optional verbose As Boolean? = Nothing,
                               Optional env As Environment = Nothing) As Object
 
-        Dim dataset As SampleData()
+        Dim dataset = SampledataParser.ConvertVAE(x, env)
 
-
+        If dataset Like GetType(Message) Then
+            Return dataset.TryCast(Of Message)
+        End If
 
         Dim model As ConvolutionalNN
 
