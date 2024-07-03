@@ -8,11 +8,11 @@ setwd(@dir);
 options(n_threads = 24);
 
 let umap_process = function(x, export_dir) {
-	let embedding = umap(x, dimension         = 3,numberOfNeighbors = 32);
-	embedding = as.data.frame(embedding, labels = rownames(x),
+	let embedding = umap(x, dimension         = 3,numberOfNeighbors = 16);
+	embedding = as.data.frame(embedding$umap, labels = rownames(x),
 		dimension = ["x", "y", "z"]);
 
-	embedding[, "class"] = $"N_\d+"(rownames(x));
+	embedding[, "class"] = unlist( $"N_\d+"(rownames(x)));
 
 	print(embedding, max.print = 6);
 	write.csv(embedding, file = file.path(export_dir, "umap.csv"));
