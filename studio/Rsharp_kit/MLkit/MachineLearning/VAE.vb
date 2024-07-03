@@ -176,7 +176,7 @@ Module VAE
 
         ' make embedding
         ' get embedding result from the embedding layer
-        Dim embedding_layer As ConvolutionalNN = model.take(5)
+        Dim embedding_layer As ConvolutionalNN = model.take(6)
         Dim rows As New List(Of NamedCollection(Of Double))
         Dim embedding As Double()
         Dim input As New DataBlock(model.input.dims.x, model.input.dims.y, model.input.out_depth, 0)
