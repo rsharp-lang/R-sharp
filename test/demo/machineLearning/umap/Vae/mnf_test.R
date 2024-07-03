@@ -17,9 +17,25 @@ labelfile = "../mnist_dataset/train-labels-idx1-ubyte",
 subset = 100
 );
 
-const embedding = nmf(raw, rank = 10);  # VAE::embedding(raw,max_iteration= 2, batch_size = 150);
+let labels = names(raw);
+let embedding = nmf(raw, rank = 10);  # VAE::embedding(raw,max_iteration= 2, batch_size = 150);
 
-print(embedding);
+# str(embedding);
 
+let w = as.data.frame(embedding$W);
+rownames(w) = labels;
+
+print(w);
+
+let h = as.data.frame(embedding$H);
+
+rownames(h) = `x${1:ncol(w)}`;
+
+print(h);
+
+write.csv(w, file = "./nmf_class.csv");
+write.csv(h, file = "./nmf_deconv.csv");
+
+writeLines(embedding$cost, con = "./nmf_errors.txt");
 # write.csv(embedding, file = "./embedding.csv", row.names = TRUE);
 
