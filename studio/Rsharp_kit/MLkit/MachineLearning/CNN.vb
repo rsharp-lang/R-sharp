@@ -637,7 +637,7 @@ Module CNNTools
         If TypeOf cnn Is ConvolutionalNN Then
             cnn_val = cnn
         ElseIf TypeOf cnn Is LayerBuilder Then
-            cnn_val = New ConvolutionalNN(cnn)
+            cnn_val = New ConvolutionalNN(DirectCast(cnn, LayerBuilder))
         Else
             Return Message.InCompatibleType(GetType(ConvolutionalNN), cnn.GetType, env)
         End If
