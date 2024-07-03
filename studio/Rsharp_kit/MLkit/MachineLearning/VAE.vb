@@ -52,15 +52,17 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.MachineLearning.CNN
-Imports Microsoft.VisualBasic.MachineLearning.CNN.layers
+Imports Microsoft.VisualBasic.MachineLearning.CNN.data
 Imports Microsoft.VisualBasic.MachineLearning.CNN.trainers
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>
@@ -169,9 +171,26 @@ Module VAE
         Dim embedding_layer As ConvolutionalNN = model.take(3)
         Dim rows As New List(Of NamedCollection(Of Double))
         Dim embedding As Double()
+        Dim input As New DataBlock(model.input.dims.x, model.input.dims.y, model.input.out_depth, 0)
 
         For Each sample As SampleData In matrix
-            embedding = embedding_layer.predict(sample.features)
+            input.addImageData(sample.features, 1)
+            embedding = embedding_layer.predict(input)
+            rows.Add(New NamedCollection(Of Double)(sample.id, embedding))
         Next
+
+        Dim df As New dataframe With {
+            .columns = New Dictionary(Of String, Array),
+            .rownames = rows.Keys
+        }
+        Dim offset As Integer = 0
+
+        For i As Integer = 0 To dims - 1
+            offset = i
+            embedding = rows.Select(Function(r) r(offset)).ToArray
+            df.add($"dim_{i + 1}", embedding)
+        Next
+
+        Return df
     End Function
 End Module
