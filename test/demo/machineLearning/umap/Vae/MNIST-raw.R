@@ -14,8 +14,8 @@ const raw = images_set
 format = "mnist", 
 dataset = "vector", 
 labelfile = "../mnist_dataset/train-labels-idx1-ubyte",
-subset = 10
+subset = 1000
 );
-const embedding = VAE::embedding(raw);
+const embedding = VAE::embedding(raw,max_iteration= 10);
 
 print(embedding);

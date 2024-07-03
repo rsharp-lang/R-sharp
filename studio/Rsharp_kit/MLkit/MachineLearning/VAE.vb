@@ -141,22 +141,30 @@ Module VAE
                                   Optional batch_size As Integer = 100,
                                   Optional max_iteration As Integer = 1000,
                                   Optional verbose As Boolean? = Nothing,
+                                  Optional n_threads As Integer = 8,
                                   Optional env As Environment = Nothing) As Object
 
         Dim dataset = SampledataParser.ConvertVAE(x, env)
 
         If dataset Like GetType(Message) Then
             Return dataset.TryCast(Of Message)
+        Else
+            ConvolutionalNN.SetThreads(n_threads)
         End If
 
         Dim matrix As SampleData() = SampleData.TransformDataset(dataset, is_generative:=True, is_training:=True).ToArray
         Dim input_width As Integer = matrix.First.features.Length
         Dim layers = New LayerBuilder() + CNNTools.input_layer({1, 1}, input_width, 1) +
             CNNTools.full_connected_layer(input_width / 2) +
+            CNNTools.relu_layer +
             CNNTools.full_connected_layer(input_width / 5) +
+            CNNTools.relu_layer +
             CNNTools.full_connected_layer(dims) +  ' embedding layer
+            CNNTools.relu_layer +
             CNNTools.full_connected_layer(input_width / 3) +
+            CNNTools.relu_layer +
             CNNTools.full_connected_layer(input_width) +
+            CNNTools.relu_layer +
             CNNTools.regression_layer()
 
         Dim model As New ConvolutionalNN(layers)
@@ -168,7 +176,7 @@ Module VAE
 
         ' make embedding
         ' get embedding result from the embedding layer
-        Dim embedding_layer As ConvolutionalNN = model.take(3)
+        Dim embedding_layer As ConvolutionalNN = model.take(5)
         Dim rows As New List(Of NamedCollection(Of Double))
         Dim embedding As Double()
         Dim input As New DataBlock(model.input.dims.x, model.input.dims.y, model.input.out_depth, 0)
