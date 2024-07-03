@@ -489,3 +489,5 @@ test/demo/machineLearning/umap/umap_mnist.dat
 Rscript/My Project/launchSettings.json
 test/demo/machineLearning/umap/Vae/nmf_class.csv
 test/demo/machineLearning/umap/Vae/nmf_deconv.csv
+test/demo/machineLearning/umap/Vae/old/nmf_class.csv
+test/demo/machineLearning/umap/Vae/old/nmf_deconv.csv
