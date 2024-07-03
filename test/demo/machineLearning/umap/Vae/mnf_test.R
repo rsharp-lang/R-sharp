@@ -13,8 +13,7 @@ const raw = images_set
 |> read.MNIST( 
 format = "mnist", 
 dataset = "vector", 
-labelfile = "../mnist_dataset/train-labels-idx1-ubyte",
-subset = 10000
+labelfile = "../mnist_dataset/train-labels-idx1-ubyte" # , subset = 10000
 );
 
 let labels = `N_${names(raw)}`;
