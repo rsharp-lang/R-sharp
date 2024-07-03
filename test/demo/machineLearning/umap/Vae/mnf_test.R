@@ -5,6 +5,7 @@ require(Matrix);
 require(graphics);
 
 options(SIMD = "legacy");
+options(n_threads = 8);
 
 setwd(@dir);
 
