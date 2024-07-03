@@ -52,18 +52,18 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.MachineLearning.CNN
+Imports Microsoft.VisualBasic.MachineLearning.CNN.trainers
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
-Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder
+Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports stdvec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
-Imports Microsoft.VisualBasic.MachineLearning.CNN.trainers
 
 ''' <summary>
 ''' VAE embedding method implements
@@ -132,20 +132,70 @@ Module VAE
     ''' <returns>
     ''' a dataframe object contains the embedding result.
     ''' </returns>
+    ''' <remarks>
+    ''' input training data is the output result
+    ''' </remarks>
     <ExportAPI("embedding")>
-    Public Function embedding(<RRawVectorArgument> x As Object, model As ConvolutionalNN,
+    Public Function embedding(<RRawVectorArgument> x As Object,
                               Optional dims As Integer = 9,
                               Optional batch_size As Integer = 100,
                               Optional max_iteration As Integer = 1000,
                               Optional verbose As Boolean? = Nothing,
                               Optional env As Environment = Nothing) As Object
 
+        Dim dataset As SampleData()
+
+        If x Is Nothing Then
+            Return Internal.debug.stop("the required sample data x should not be nothing!", env)
+        End If
+
+        If TypeOf x Is dataframe Then
+            Dim rows = DirectCast(x, dataframe).forEachRow.ToArray
+
+            dataset = rows _
+                .Select(Function(a)
+                            Dim v As Double() = CLRVector.asNumeric(a.value)
+
+                            Return New SampleData With {
+                                .id = a.name,
+                                .features = v,
+                                .labels = v
+                            }
+                        End Function) _
+                .ToArray
+        ElseIf x.GetType.ImplementInterface(Of INumericMatrix) Then
+            Dim rows = DirectCast(x, INumericMatrix).ArrayPack
+            Dim labels As String()
+
+            If x.GetType.ImplementInterface(Of ILabeledMatrix) Then
+                labels = DirectCast(x, ILabeledMatrix).GetLabels.ToArray
+            Else
+                labels = rows.Select(Function(r, i) $"r_{i + 1}").ToArray
+            End If
+
+            dataset = rows _
+                .Select(Function(r, i)
+                            Return New SampleData With {
+                                .id = labels(i),
+                                .labels = r,
+                                .features = r
+                            }
+                        End Function) _
+                .ToArray
+        Else
+            Return Message.InCompatibleType(GetType(dataframe), x.GetType, env)
+        End If
+
+        Dim model As ConvolutionalNN
+
+
+
         Dim alg As New AdaGradTrainer(batch_size, 0.001F)
         Dim cnn_val = New Trainer(alg:=alg.SetKernel(model),
                               log:=Sub(s) base.print(s,, env),
                               verbose:=If(verbose Is Nothing, env.verboseOption(False), CBool(verbose))) _
-            .train(cnn_val, DataSet, max_loops)
+            .train(dataset, max_iteration)
 
-        Return New CNNFunction With {.cnn = cnn_val}
+
     End Function
 End Module

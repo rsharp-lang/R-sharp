@@ -653,7 +653,7 @@ Module CNNTools
         cnn_val = New Trainer(alg:=alg,
                               log:=Sub(s) base.print(s,, env),
                               verbose:=verbose, action:=callback) _
-            .train(cnn_val, dataset, max_loops)
+            .train(dataset, max_loops)
 
         Return New CNNFunction With {.cnn = cnn_val}
     End Function
