@@ -55,6 +55,18 @@ Module SampledataParser
                             }
                         End Function) _
                 .ToArray
+        ElseIf TypeOf x Is list Then
+            Return DirectCast(x, list).slots _
+                .Select(Function(r)
+                            Dim v As Double() = CLRVector.asNumeric(r.Value)
+
+                            Return New SampleData With {
+                                .id = r.Key,
+                                .features = v,
+                                .labels = v
+                            }
+                        End Function) _
+                .ToArray
         Else
             Return Message.InCompatibleType(GetType(dataframe), x.GetType, env)
         End If
