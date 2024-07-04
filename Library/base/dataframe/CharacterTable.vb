@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.IO.HDF5.struct
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -14,11 +15,27 @@ Public Class CharacterTable : Implements IdataframeReader
     ReadOnly rows As EntityObject()
 
     Sub New(rows As IEnumerable(Of EntityObject))
-
+        Me.rows = rows.SafeQuery.ToArray
     End Sub
 
     Public Function getColumn(index As Object, env As Environment) As Object Implements IdataframeReader.getColumn
-        Throw New NotImplementedException()
+        Dim names As String() = CLRVector.asCharacter(index)
+        Dim project As EntityObject() = New EntityObject(rows.Length - 1) {}
+        Dim r As EntityObject
+
+        For i As Integer = 0 To project.Length - 1
+            r = rows(i)
+            project(i) = New EntityObject With {
+                .ID = r.ID,
+                .Properties = names _
+                    .ToDictionary(Function(v) v,
+                                  Function(v)
+                                      Return r(v)
+                                  End Function)
+            }
+        Next
+
+        Return New CharacterTable(project)
     End Function
 
     Public Function getRow(index As Object, env As Environment) As Object Implements IdataframeReader.getRow
