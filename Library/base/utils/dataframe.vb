@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::dcbb9126f20af7c189cfc3c479a7d26e, Library\base\utils\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 774
-    '    Code Lines: 571 (73.77%)
-    ' Comment Lines: 106 (13.70%)
-    '    - Xml Docs: 87.74%
-    ' 
-    '   Blank Lines: 97 (12.53%)
-    '     File Size: 29.81 KB
+' Summaries:
 
 
-    ' Module dataframe
-    ' 
-    '     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
-    '               colnames, column, createEntityRow, CreateRowObject, dataframeTable
-    '               deserialize, loadDataframe, measureColumnVector, openCsv, parseDataframe
-    '               parseRow, printRowVector, printTable, project, rawToDataFrame
-    '               readCsvRaw, readDataSet, rows, rowToString, RowToString
-    '               stripCommentRows, transpose, vector
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 774
+'    Code Lines: 571 (73.77%)
+' Comment Lines: 106 (13.70%)
+'    - Xml Docs: 87.74%
+' 
+'   Blank Lines: 97 (12.53%)
+'     File Size: 29.81 KB
+
+
+' Module dataframe
+' 
+'     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
+'               colnames, column, createEntityRow, CreateRowObject, dataframeTable
+'               deserialize, loadDataframe, measureColumnVector, openCsv, parseDataframe
+'               parseRow, printRowVector, printTable, project, rawToDataFrame
+'               readCsvRaw, readDataSet, rows, rowToString, RowToString
+'               stripCommentRows, transpose, vector
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -106,6 +106,7 @@ Module dataframe
 
         Call makeDataframe.addHandler(GetType(DataSet()), AddressOf dataframeTable(Of Double, DataSet))
         Call makeDataframe.addHandler(GetType(EntityObject()), AddressOf dataframeTable(Of String, EntityObject))
+        Call makeDataframe.addHandler(GetType(CharacterTable), AddressOf to_dataframe)
     End Sub
 
     Private Function printRowVector(r As RowObject) As String
@@ -121,6 +122,12 @@ Module dataframe
         End If
 
         Return $"row, char [1:{r.NumbersOfColumn}] {cellsDataPreviews}"
+    End Function
+
+    <RGenericOverloads("as.data.frame")>
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Private Function to_dataframe(chars As CharacterTable, args As list, env As Environment) As Rdataframe
+        Return dataframeTable(Of String, EntityObject)(chars.AsEnumerable, args, env)
     End Function
 
     Private Function dataframeTable(Of T, DataSet As {INamedValue, DynamicPropertyBase(Of T)})(data As DataSet(), args As list, env As Environment) As Rdataframe
