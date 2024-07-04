@@ -127,7 +127,7 @@ Module dataframe
     <RGenericOverloads("as.data.frame")>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function to_dataframe(chars As CharacterTable, args As list, env As Environment) As Rdataframe
-        Return dataframeTable(Of String, EntityObject)(chars.AsEnumerable, args, env)
+        Return dataframeTable(Of String, EntityObject)(chars.AsEnumerable.ToArray, args, env)
     End Function
 
     Private Function dataframeTable(Of T, DataSet As {INamedValue, DynamicPropertyBase(Of T)})(data As DataSet(), args As list, env As Environment) As Rdataframe
