@@ -10,6 +10,9 @@ Imports renv = SMRUCC.Rsharp.Runtime
 ''' <summary>
 ''' a collection of the <see cref="EntityObject"/>.
 ''' </summary>
+''' <remarks>
+''' a dataframe liked object that store data in rows
+''' </remarks>
 Public Class CharacterTable : Implements IdataframeReader, Enumeration(Of EntityObject)
 
     ReadOnly rows As EntityObject()
