@@ -667,6 +667,11 @@ ReturnTable:
         Return New CharacterTable(pull.populates(Of EntityObject)(env))
     End Function
 
+    <ExportAPI("field_vector")>
+    Public Function field_vector(x As CharacterTable, colname As String) As String()
+        Return x(colname)
+    End Function
+
     ''' <summary>
     ''' Subset of the given dataframe by columns
     ''' </summary>

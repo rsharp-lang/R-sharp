@@ -17,6 +17,12 @@ Public Class CharacterTable : Implements IdataframeReader, Enumeration(Of Entity
 
     ReadOnly rows As EntityObject()
 
+    Default Public ReadOnly Property GetVector(field As String) As String()
+        Get
+            Return rows.Select(Function(r) r(field)).ToArray
+        End Get
+    End Property
+
     Sub New(rows As IEnumerable(Of EntityObject))
         Me.rows = rows.SafeQuery.ToArray
     End Sub
