@@ -10,7 +10,7 @@ Imports renv = SMRUCC.Rsharp.Runtime
 ''' <summary>
 ''' a collection of the <see cref="EntityObject"/>.
 ''' </summary>
-Public Class CharacterTable : Implements IdataframeReader
+Public Class CharacterTable : Implements IdataframeReader, Enumeration(Of EntityObject)
 
     ReadOnly rows As EntityObject()
 
@@ -85,5 +85,11 @@ Public Class CharacterTable : Implements IdataframeReader
 
     Public Function getRowNames() As String() Implements IdataframeReader.getRowNames
         Return rows.Keys
+    End Function
+
+    Public Iterator Function GenericEnumerator() As IEnumerator(Of EntityObject) Implements Enumeration(Of EntityObject).GenericEnumerator
+        For Each row As EntityObject In rows
+            Yield row
+        Next
     End Function
 End Class

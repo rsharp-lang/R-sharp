@@ -648,6 +648,18 @@ ReturnTable:
         Return vectors.ToArray
     End Function
 
+    <ExportAPI("as.table_frame")>
+    <RApiReturn(GetType(CharacterTable))>
+    Public Function create_tableFrame(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Dim pull As pipeline = pipeline.TryCreatePipeline(Of EntityObject)(x, env)
+
+        If pull.isError Then
+            Return pull.getError
+        End If
+
+        Return New CharacterTable(pull.populates(Of EntityObject)(env))
+    End Function
+
     ''' <summary>
     ''' Subset of the given dataframe by columns
     ''' </summary>
