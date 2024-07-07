@@ -51,10 +51,47 @@ Namespace Development.CodeAnalysis
                 Case GetType(FunctionInvoke) : Return GetFunctionInvoke(line, env)
                 Case GetType(SymbolReference) : Return GetSymbol(line, env)
                 Case GetType(ValueAssignExpression) : Return GetAssignValue(line, env)
+                Case GetType(DeclareNewSymbol) : Return AssignNewSymbol(line, env)
+                Case GetType(VectorLiteral) : Return Vector(line, env)
+                Case GetType(Literal) : Return Literal(line, env)
 
                 Case Else
                     Throw New NotImplementedException(line.GetType.FullName)
             End Select
+        End Function
+
+        Private Function Literal(val As Literal, env As Environment) As String
+            Dim value As Object = val.Evaluate(env)
+
+            If value Is Nothing Then
+                Return "NULL"
+            Else
+                If TypeOf value Is String Then
+                    Return $"'{value}'"
+                ElseIf TypeOf value Is Boolean Then
+                    Return value.ToString.ToUpper
+                Else
+                    Return value.ToString
+                End If
+            End If
+        End Function
+
+        Private Function Vector(vec As VectorLiteral, env As Environment) As String
+            Dim vals As String() = vec.Select(Function(e) GetScript(e, env)).ToArray
+            Dim vec_code As String = Literal(vals)
+
+            Return vec_code
+        End Function
+
+        Private Function AssignNewSymbol(create As DeclareNewSymbol, env As Environment) As String
+            Dim value As String = GetScript(create.value, env)
+            Dim symbols As String() = create.names.ToArray
+
+            If symbols.Length > 1 Then
+                Throw New NotImplementedException("tuple deconstructor is not implements in R language.")
+            End If
+
+            Return $"{symbols(0)} = {value}"
         End Function
 
         Private Function GetAssignValue(assign As ValueAssignExpression, env As Environment) As String
