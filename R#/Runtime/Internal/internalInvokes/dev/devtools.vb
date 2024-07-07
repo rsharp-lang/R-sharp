@@ -68,6 +68,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.Repository
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.ValueTypes
+Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Interpreter
@@ -160,6 +161,11 @@ Namespace Runtime.Internal.Invokes
             frames.columns("line") = data.profiles.Select(Function(f) f.stackframe.Line).ToArray
 
             Return frames
+        End Function
+
+        <ExportAPI("translate_to_rlang")>
+        Public Function translate_to_rlang(<RLazyExpression> code As ClosureExpression, Optional env As Environment = Nothing) As Object
+            Return New RlangTranslator(code).GetScript(env)
         End Function
 
         <ExportAPI("symbol_value")>
