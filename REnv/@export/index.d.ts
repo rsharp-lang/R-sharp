@@ -9,9 +9,15 @@ declare namespace REnv {
       function onLoad(): object;
    }
    /**
+   */
+   function __codescript(code: any): object;
+   /**
      * @param outputdir default value Is ``./``.
    */
    function __RSymbolDocumentation(symbols: any, package: any, outputdir?: any): object;
+   /**
+   */
+   function __sourcescript(source: any): object;
    /**
    */
    function __template(): object;
@@ -69,6 +75,10 @@ declare namespace REnv {
      * @param package default value Is ``null``.
    */
    function Rdocuments(pkgName: any, outputdir?: any, package?: any): object;
+   /**
+     * @param source default value Is ``null``.
+   */
+   function rlang_interop(code: any, source?: any): object;
    /**
    */
    function sacurine(): object;
