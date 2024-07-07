@@ -94,7 +94,7 @@ Namespace Development.CodeAnalysis
             If symbols.Length > 1 Then
                 Throw New NotImplementedException("tuple deconstructor is not implements in R language.")
             Else
-                Call symbols.Add(symbols(0), CreateSymbol)
+                Call Me.symbols.Add(symbols(0), CreateSymbol)
             End If
 
             Return $"{symbols(0)} = {value}"
