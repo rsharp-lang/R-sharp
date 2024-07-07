@@ -7,7 +7,7 @@
 const rlang_interop = function(code, source = NULL, debug = FALSE) {
     let code_save = tempfile(fileext = ".R");
     let load_deps = __sourcescript(source);
-    let program   = .Internal::translate_to_rlang(code);
+    let program   = translate_to_rlang(code);
 
     code <- paste([load_deps, program], sep = "\n\n");
 

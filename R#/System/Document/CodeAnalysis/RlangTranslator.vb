@@ -17,6 +17,8 @@ Namespace Development.CodeAnalysis
         ReadOnly lines As Expression()
         ReadOnly symbols As New Dictionary(Of String, String)
 
+        Const CreateSymbol As String = "<create_new_symbol>;"
+
         Sub New(closure As ClosureExpression)
             lines = closure.program.ToArray
         End Sub
@@ -42,7 +44,9 @@ Namespace Development.CodeAnalysis
 
         Private Iterator Function CreateSymbols() As IEnumerable(Of String)
             For Each symbol In symbols
-                Yield $"{symbol.Key} <- {symbol.Value};"
+                If symbol.Value <> CreateSymbol Then
+                    Yield $"{symbol.Key} <- {symbol.Value};"
+                End If
             Next
         End Function
 
@@ -89,6 +93,8 @@ Namespace Development.CodeAnalysis
 
             If symbols.Length > 1 Then
                 Throw New NotImplementedException("tuple deconstructor is not implements in R language.")
+            Else
+                Call symbols.Add(symbols(0), CreateSymbol)
             End If
 
             Return $"{symbols(0)} = {value}"
