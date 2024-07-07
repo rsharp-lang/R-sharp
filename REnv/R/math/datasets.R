@@ -35,3 +35,16 @@ const classify_cancer = function() {
 const sacurine = function() {
     utils::readRData(file = system.file("data/sacurine.rds", package = "REnv"));
 }
+
+const coerce_dataframe = function(x) {
+    if (is.character(x)) {
+        read.csv(x, row.names = 1, check.names = FALSE, 
+            tsv = any(file.ext(x) == ["txt" "tsv"]));
+    } else {
+        if (is.data.frame(x)) {
+            x;
+        } else {
+            stop("the input data x must be a dataframe object!");
+        }
+    }
+}
