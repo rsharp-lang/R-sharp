@@ -127,8 +127,17 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Dim bytes As Byte() = New Byte(max_offset - 1) {}
-            s.Read(bytes, Scan0, max_offset)
-            bytes = bytes.TakeWhile(Function(b) b < 128 AndAlso Not ASCII.IsNonPrinting(b)).ToArray
+
+            Call s.Read(bytes, Scan0, max_offset)
+            Call s.Close()
+            Call s.Dispose()
+
+            bytes = bytes _
+                .TakeWhile(Function(b)
+                               Return b < 128 AndAlso Not ASCII.IsNonPrinting(b)
+                           End Function) _
+                .ToArray
+
             Dim str As String = Encoding.ASCII.GetString(bytes)
 
             Return str
