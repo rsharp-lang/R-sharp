@@ -1,6 +1,7 @@
 ﻿
 Imports System.Drawing
 Imports System.IO
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal.ProgressBar
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -46,7 +47,7 @@ Module bitmap_func
         Dim loc_str = InteropArgumentHelper.getSize(pos, env, Nothing)
         Dim size_str = InteropArgumentHelper.getSize(size, env, Nothing)
 
-        If loc_str.StringEmpty(, True) OrElse loc_str = "0,0" Then
+        If loc_str.StringEmpty(, True) Then
             Return Internal.debug.stop("the required location should not be empty!", env)
         End If
         If size_str.StringEmpty(, True) OrElse size_str = "0,0" Then
@@ -57,11 +58,17 @@ Module bitmap_func
         Dim sizeVal As Size = size_str.SizeParser
         Dim copy As New Bitmap(sizeVal.Width, sizeVal.Height)
         Dim c As Color
+        Dim px, py As Integer
+        Dim bar As Tqdm.ProgressBar = Nothing
 
-        For x As Integer = loc.X To loc.X + sizeVal.Width
-            For y As Integer = loc.Y To loc.Y + sizeVal.Height
+        For Each x As Integer In Tqdm.Range(loc.X, loc.X + sizeVal.Width, bar:=bar)
+            bar.SetLabel($"processing (x={x})...")
+
+            For y As Integer = loc.Y To loc.Y + sizeVal.Height - 1
                 c = bmp.GetPixelColor(y, x)
-                copy.SetPixel(x - loc.X, y - loc.Y, c)
+                px = x - loc.X
+                py = y - loc.Y
+                copy.SetPixel(px, py, c)
             Next
         Next
 
