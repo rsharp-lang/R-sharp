@@ -1,7 +1,7 @@
 imports "validation" from "MLkit";
 
-let pos = runif(200, 0.6, 1);
-let neg = runif(200, 0, 0.75);
+let pos = runif(800, 0.55, 1);
+let neg = runif(200, 0, 0.7);
 
 let data = data.frame(
     score = append(pos, neg), 
@@ -13,7 +13,7 @@ let data = data.frame(
 
 print(data);
 
-let roc = prediction(data$score, labels = data$label == 1, resolution= 10);
+let roc = prediction(data$score, labels = data$label == 1, resolution= 1000);
 
 print(AUC(roc));
 
