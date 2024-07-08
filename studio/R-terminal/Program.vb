@@ -138,8 +138,12 @@ Module Program
         Else
             Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
             Dim [error] As String = Nothing
+            Dim test_str = args.Name
+            Dim check_filepath = test_str.isFilePath(includeWindowsFs:=True)
+            Dim check_splash = test_str.Contains("/"c) OrElse test_str.Contains("\"c)
+            Dim check_bracket = test_str.GetStackValue("(", ")").StringEmpty
 
-            If args.Name.isFilePath(includeWindowsFs:=True) AndAlso (args.Name.Contains("/"c) OrElse args.Name.Contains("\"c)) Then
+            If check_filepath AndAlso check_splash AndAlso check_bracket Then
                 ' is file path but the file is missing
                 Call Message.Error($"The given script file '{args.Name.GetFullPath}'({args.Name}) is missing on your file system!", R.globalEnvir.stackFrame) _
                     .DoCall(Sub(ex)
