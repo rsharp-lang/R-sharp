@@ -22,6 +22,22 @@ Module bitmap_func
             Return buf.TryCast(Of Message)
         End If
 
-        Return New BtimapReader(buf.TryCast(Of Stream))
+        Return New BitmapReader(buf.TryCast(Of Stream))
+    End Function
+
+    ''' <summary>
+    ''' reader test for the pixels
+    ''' </summary>
+    ''' <param name="bmp"></param>
+    ''' <param name="pos"></param>
+    ''' <param name="size"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("corp_rectangle")>
+    Public Function corp_rectangle(bmp As BitmapReader,
+                                   <RRawVectorArgument> pos As Object,
+                                   <RRawVectorArgument> size As Object,
+                                   Optional env As Environment = Nothing) As Object
+
     End Function
 End Module
