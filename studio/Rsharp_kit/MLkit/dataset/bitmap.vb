@@ -84,12 +84,17 @@ Module bitmap_func
     ''' <param name="bmp"></param>
     ''' <param name="pos"></param>
     ''' <param name="size"></param>
+    ''' <param name="threshold">
+    ''' angle threshold value, value in range (0,90).
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("scan_peaks")>
     Public Function scan_rowpeaks(bmp As BitmapReader,
                                   <RRawVectorArgument> pos As Object,
                                   <RRawVectorArgument> size As Object,
+                                  Optional noise As Double = 0.65,
+                                  Optional threshold As Double = 30,
                                   Optional env As Environment = Nothing) As Object
 
         Dim loc_str = InteropArgumentHelper.getSize(pos, env, Nothing)
@@ -117,13 +122,13 @@ Module bitmap_func
             For x As Integer = loc.X To loc.X + sizeVal.Width - 1
                 c = bmp.GetPixelColor(y, x)
                 tx.Add(x - loc.X)
-                data.Add(BitmapScale.GrayScaleF(c.R, c.G, c.B))
+                data.Add(BitmapScale.GrayScaleF(255 - c.R, 255 - c.G, 255 - c.B))
             Next
 
             Call rows.Add(New GeneralSignal(tx.ToArray, data.ToArray))
         Next
 
-        Dim peak_detection As New ElevationAlgorithm(30, 0.5)
+        Dim peak_detection As New ElevationAlgorithm(threshold, noise)
         Dim boundaries = (x:=New List(Of Integer), y:=New List(Of Integer))
         Dim yi As Integer = 0
 
