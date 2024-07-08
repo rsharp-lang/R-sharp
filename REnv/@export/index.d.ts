@@ -14,6 +14,9 @@ declare namespace REnv {
    function __RSymbolDocumentation(symbols: any, package: any, outputdir?: any): object;
    /**
    */
+   function __sourcescript(source: any): object;
+   /**
+   */
    function __template(): object;
    /**
    */
@@ -21,6 +24,9 @@ declare namespace REnv {
    /**
    */
    function code_stats(stats: any, proj_folder: any, save: any): object;
+   /**
+   */
+   function coerce_dataframe(x: any): object;
    /**
      * @param k default value Is ``6``.
      * @param qcut default value Is ``0.1``.
@@ -66,6 +72,11 @@ declare namespace REnv {
      * @param package default value Is ``null``.
    */
    function Rdocuments(pkgName: any, outputdir?: any, package?: any): object;
+   /**
+     * @param source default value Is ``null``.
+     * @param debug default value Is ``false``.
+   */
+   function rlang_interop(code: any, source?: any, debug?: any): object;
    /**
    */
    function sacurine(): object;
