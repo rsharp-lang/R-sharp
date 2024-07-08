@@ -246,10 +246,10 @@ Public Module InteropArgumentHelper
         End Select
     End Function
 
-    Public Function getRasterImage(raster As Object) As Bitmap
+    Public Function getRasterImage(raster As Object) As Drawing.Bitmap
         If raster Is Nothing Then
             Return Nothing
-        ElseIf TypeOf raster Is Bitmap Then
+        ElseIf TypeOf raster Is Drawing.Bitmap Then
             Return raster
         ElseIf TypeOf raster Is Image Then
             Return DirectCast(raster, Image)

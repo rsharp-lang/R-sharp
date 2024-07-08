@@ -779,7 +779,7 @@ Module CNNTools
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("detectObject")>
-    Public Function detectObject(model As CeNiN, target As Bitmap, Optional env As Environment = Nothing) As dataframe
+    Public Function detectObject(model As CeNiN, target As Drawing.Bitmap, Optional env As Environment = Nothing) As dataframe
         Dim result As NamedValue(Of Double)() = model.DetectObject(target, dev:=env.globalEnvironment.stdout)
         Dim classes As String() = result.Select(Function(v) v.Name).ToArray
         Dim probs As Double() = result.Select(Function(v) v.Value).ToArray
