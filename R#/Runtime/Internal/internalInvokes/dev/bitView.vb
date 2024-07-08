@@ -55,8 +55,12 @@
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes
 
@@ -95,6 +99,39 @@ Namespace Runtime.Internal.Invokes
                 .Where(Function(b) b.Length = sizeof) _
                 .Select(Function(byts) load(byts, Scan0)) _
                 .ToArray
+        End Function
+
+        ''' <summary>
+        ''' try to get the magic number of the given binary file
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="max_offset"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("magic_number")>
+        <RApiReturn(TypeCodes.string)>
+        Public Function magicNumber(<RRawVectorArgument> file As Object,
+                                    Optional max_offset As Integer = 128,
+                                    Optional env As Environment = Nothing) As Object
+
+            Dim buf = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
+
+            If buf Like GetType(Message) Then
+                Return buf.TryCast(Of Message)
+            End If
+
+            Dim s As Stream = buf.TryCast(Of Stream)
+
+            If max_offset > s.Length Then
+                max_offset = s.Length
+            End If
+
+            Dim bytes As Byte() = New Byte(max_offset - 1) {}
+            s.Read(bytes, Scan0, max_offset)
+            bytes = bytes.TakeWhile(Function(b) b < 128 AndAlso Not ASCII.IsNonPrinting(b)).ToArray
+            Dim str As String = Encoding.ASCII.GetString(bytes)
+
+            Return str
         End Function
 
     End Module
