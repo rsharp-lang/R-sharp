@@ -601,7 +601,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
                 Dim predicate As Predicate(Of Object) = filter.TryCast(Of Predicate(Of Object))
 
-                For Each name As String In list.getNames
+                For Each name As String In list.slotKeys
                     Dim testFlag As Boolean = predicate(list.getByName(name))
 
                     If testFlag Then
