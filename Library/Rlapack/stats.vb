@@ -493,7 +493,7 @@ Module stats
     End Function
 
     ''' <summary>
-    ''' 
+    ''' Average by removes outliers
     ''' </summary>
     ''' <param name="x"></param>
     ''' <returns></returns>
@@ -501,7 +501,7 @@ Module stats
     Public Function tabulateMode(<RRawVectorArgument> x As Object) As Double
         Return CLRVector.asNumeric(x) _
             .DoCall(Function(vec)
-                        Return Bootstraping.TabulateMode(DirectCast(vec, Double()))
+                        Return Bootstraping.TabulateMode(vec)
                     End Function)
     End Function
 
