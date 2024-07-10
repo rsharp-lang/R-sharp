@@ -498,10 +498,14 @@ Module stats
     ''' <param name="x"></param>
     ''' <returns></returns>
     <ExportAPI("tabulate.mode")>
-    Public Function tabulateMode(<RRawVectorArgument> x As Object) As Double
+    Public Function tabulateMode(<RRawVectorArgument>
+                                 x As Object,
+                                 Optional top_bin As Boolean = False,
+                                 Optional bags As Integer = 5) As Double
+
         Return CLRVector.asNumeric(x) _
             .DoCall(Function(vec)
-                        Return Bootstraping.TabulateMode(vec)
+                        Return Bootstraping.TabulateMode(vec, top_bin, bags)
                     End Function)
     End Function
 
