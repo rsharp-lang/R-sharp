@@ -495,7 +495,10 @@ Module stats
     ''' <summary>
     ''' Average by removes outliers
     ''' </summary>
-    ''' <param name="x"></param>
+    ''' <param name="x">should be a numeric vector</param>
+    ''' <param name="bags">
+    ''' the number of histogram box of the input numeric data.
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("tabulate.mode")>
     Public Function tabulateMode(<RRawVectorArgument>
