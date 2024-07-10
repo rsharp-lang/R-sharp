@@ -633,6 +633,39 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### Weighted Arithmetic Mean
+        ''' 
+        ''' Compute a weighted mean.
+        ''' </summary>
+        ''' <param name="x">
+        ''' an object containing the values whose weighted mean is to be computed.
+        ''' </param>
+        ''' <param name="w">
+        ''' a numerical vector of weights the same length as x giving the weights to use for elements of x.
+        ''' </param>
+        ''' <returns>For the default method, a length-one numeric vector.</returns>
+        ''' <remarks>
+        ''' This is a generic function and methods can be defined for the first
+        ''' argument x: apart from the default methods there are methods for the
+        ''' date-time classes "POSIXct", "POSIXlt", "difftime" and "Date". The 
+        ''' default method will work for any numeric-like object for which [,
+        ''' multiplication, division and sum have suitable methods, including 
+        ''' complex vectors.
+        ''' 
+        ''' If w is missing then all elements of x are given the same weight, otherwise 
+        ''' the weights are normalized to sum to one (if possible: if their sum
+        ''' is zero or infinite the value is likely to be NaN).
+        ''' 
+        ''' Missing values in w are not handled specially and so give a missing value as 
+        ''' the result. However, zero weights are handled specially and the 
+        ''' corresponding x values are omitted from the sum.
+        ''' </remarks>
+        <ExportAPI("weighted.mean")>
+        Public Function weighted_mean(<RRawVectorArgument> x As Object, <RRawVectorArgument> w As Object) As Double
+            Return CLRVector.asNumeric(x).WeighedAverage(CLRVector.asNumeric(w))
+        End Function
+
+        ''' <summary>
         ''' ### Median Value
         ''' 
         ''' Compute the sample median.
