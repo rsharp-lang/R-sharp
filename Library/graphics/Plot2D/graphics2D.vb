@@ -489,7 +489,9 @@ Module graphics2DTools
     ''' </summary>
     ''' <param name="x"></param>
     ''' <param name="region"></param>
-    ''' <param name="dimSize"></param>
+    ''' <param name="dimSize">
+    ''' the dimension size of the heatmap image rendering, if missing then the dimension size will be evaluated from the given heatmap data automaticaLLY.
+    ''' </param>
     ''' <param name="colorName"></param>
     ''' <param name="gauss"></param>
     ''' <param name="env"></param>
