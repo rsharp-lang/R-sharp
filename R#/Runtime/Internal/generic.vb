@@ -303,7 +303,9 @@ Namespace Runtime.Internal
                     $"missing loader entry for generic function '{funcName}'!",
                     $"missing implementation for overloads type: {type.FullName}!",
                     $"consider load required package at first!"
-                }, env, suppress_log:=True)
+                }, env,
+                   suppress:=suppress,
+                   suppress_log:=True)
             Else
                 Return generics(funcName)(type)
             End If

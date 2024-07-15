@@ -156,7 +156,7 @@ Namespace Runtime.Internal.Invokes
             End If
 
             If Internal.generic.exists("toString") Then
-                Dim func = Internal.generic.getGenericCallable(x, x.GetType, "toString", env)
+                Dim func = Internal.generic.getGenericCallable(x, x.GetType, "toString", env, suppress:=True)
 
                 If Not func Like GetType(Message) Then
                     Return func.TryCast(Of GenericFunction)()(x, args, env)
