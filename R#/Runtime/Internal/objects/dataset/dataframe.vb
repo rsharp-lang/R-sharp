@@ -320,6 +320,14 @@ Namespace Runtime.Internal.Object
             Return Me
         End Function
 
+        Public Function delete(ParamArray keys As String()) As dataframe
+            For Each key As String In keys.SafeQuery
+                Call columns.Remove(key)
+            Next
+
+            Return Me
+        End Function
+
         ''' <summary>
         ''' 将列索引号转换为列名称
         ''' </summary>
