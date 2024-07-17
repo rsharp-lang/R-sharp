@@ -226,6 +226,22 @@ Namespace Runtime.Internal.Object
         End Sub
 
         ''' <summary>
+        ''' cast the given collection as array and then add into current tuple list
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="name"></param>
+        ''' <param name="collection"></param>
+        Public Sub add(Of T)(name As String, collection As IEnumerable(Of T))
+            If collection Is Nothing Then
+                Call add(name, Nothing)
+            ElseIf collection.GetType.IsArray Then
+                Call add(name, CObj(collection))
+            Else
+                Call add(name, CObj(collection.ToArray))
+            End If
+        End Sub
+
+        ''' <summary>
         ''' does <see cref="slots"/> has the specific <paramref name="name"/>?
         ''' </summary>
         ''' <param name="name"></param>

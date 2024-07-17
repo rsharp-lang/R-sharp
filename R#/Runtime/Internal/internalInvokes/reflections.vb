@@ -218,7 +218,7 @@ Namespace Runtime.Internal.Invokes
                 Dim attrs As New list With {.slots = New Dictionary(Of String, Object)}
 
                 For Each name As String In symbol.GetAttributeNames
-                    Call attrs.add(name, symbol.GetAttributeValue(name).ToArray)
+                    Call attrs.add(name, symbol.GetAttributeValue(name))
                 Next
 
                 Return attrs
