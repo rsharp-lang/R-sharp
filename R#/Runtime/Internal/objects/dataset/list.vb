@@ -651,6 +651,15 @@ Namespace Runtime.Internal.Object
         End Function
 
         ''' <summary>
+        ''' check of the given tuple list object is null or empty?
+        ''' </summary>
+        ''' <param name="list"></param>
+        ''' <returns></returns>
+        Public Shared Function empty(list As list) As Boolean
+            Return list Is Nothing OrElse list.length = 0
+        End Function
+
+        ''' <summary>
         ''' create a list with given slot names, but the 
         ''' corresponding slot value is nothing
         ''' </summary>
