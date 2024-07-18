@@ -226,6 +226,22 @@ Namespace Runtime.Internal.Object
         End Sub
 
         ''' <summary>
+        ''' add a string value
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="str"></param>
+        ''' <remarks>
+        ''' due to the reason of string is kind of a char collection
+        ''' so that the overlaod of the generic collection add method
+        ''' may caused the incorrect method reference.
+        ''' 
+        ''' create this function for deal with the string value overloads bug.
+        ''' </remarks>
+        Public Sub add(name As String, str As String)
+            Call add(name, value:=CObj(str))
+        End Sub
+
+        ''' <summary>
         ''' cast the given collection as array and then add into current tuple list
         ''' </summary>
         ''' <typeparam name="T"></typeparam>

@@ -995,10 +995,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 If DataFramework.IsNumericType(keyType) OrElse DataFramework.IsNumericCollection(keyType) Then
                     Dim tolerance As Double = CLRVector.asNumeric(getKey).First
                     Dim data As Double() = CLRVector.asNumeric(sequence)
-                    Dim groups1D As New list With {.slots = New Dictionary(Of String, Object)}
+                    Dim groups1D As New list With {
+                        .slots = New Dictionary(Of String, Object)
+                    }
 
                     For Each bin As NamedCollection(Of Double) In data.GroupBy(tolerance)
-                        Call groups1D.add(bin.name, bin.ToArray)
+                        Call groups1D.add(bin.name, bin)
                     Next
 
                     Return groups1D
