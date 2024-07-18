@@ -350,7 +350,7 @@ Public Module utils
                                          If tsv Then
                                              Return IO.File.LoadTsv(file, encoding:=textEncoding)
                                          Else
-                                             Return IO.File.Load(file, encoding:=textEncoding)
+                                             Return IO.File.Load(file, encoding:=textEncoding, mute:=Not env.verboseOption)
                                          End If
                                      End Function,
                           debug:=env.globalEnvironment.debugMode
