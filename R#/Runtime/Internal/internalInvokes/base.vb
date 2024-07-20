@@ -579,19 +579,27 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="str">
         ''' this parameter also can accept the unix timestamp.
         ''' </param>
+        ''' <param name="format">
+        ''' specific the date string parser format, example as ``yyyyMMdd`` will be 
+        ''' used for parse the given string ``20220101`` as ``#2022-01-01#``.
+        ''' </param>
         ''' <returns>
         ''' Returns a character string of the current system date and time.
         ''' </returns>
         <ExportAPI("date")>
         <RApiReturn(GetType(Date))>
-        Public Function [date](Optional str As String() = Nothing) As Object
+        Public Function [date](Optional str As String() = Nothing, Optional format As String = Nothing) As Object
             If str.IsNullOrEmpty Then
                 Return DateTime.Now
             Else
+                Dim has_format As String = Not format.StringEmpty(, True)
+
                 Return str _
                     .Select(Function(s)
                                 If s.IsSimpleNumber Then
                                     Return DateTimeHelper.FromUnixTimeStamp(Val(s))
+                                ElseIf has_format Then
+                                    Return DateTime.ParseExact(s, format, Globalization.CultureInfo.InvariantCulture)
                                 Else
                                     Return Date.Parse(s)
                                 End If
