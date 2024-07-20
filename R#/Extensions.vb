@@ -198,11 +198,23 @@ Public Module Extensions
         Return cols
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
+    ''' <typeparam name="TOut"></typeparam>
+    ''' <param name="x"></param>
+    ''' <param name="eval"></param>
+    ''' <param name="parallel"></param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' variant type of <typeparamref name="TOut"/> or a tuple list result
+    ''' </returns>
     <Extension>
     Private Function evaluateList(Of T, TOut)(x As list,
                                               eval As Func(Of T, TOut),
                                               parallel As Boolean,
-                                              env As Environment) As Object
+                                              env As Environment) As Object ' [Variant](Of TOut, list)
 
         Dim seq = x.AsGeneric(Of T)(env).AsList
         Dim eval2 = Function(xi As KeyValuePair(Of String, T)) As TOut
@@ -234,8 +246,12 @@ Public Module Extensions
     ''' (输入的数据源)
     ''' </param>
     ''' <param name="eval">求值函数</param>
-    ''' <returns>this function returns nothing if the parameter input <paramref name="x"/> has 
-    ''' no value, and also may returns an error <see cref="Message"/> if error happends!
+    ''' <returns>this function returns value of:
+    ''' 
+    ''' + nothing if the parameter input <paramref name="x"/> has no value, 
+    ''' + vector for input is a collection or array
+    ''' + list for input is a list
+    ''' + and also may returns an error <see cref="Message"/> if error happends!
     ''' </returns>
     <Extension>
     Public Function EvaluateFramework(Of T, TOut)(env As Environment,
@@ -245,8 +261,10 @@ Public Module Extensions
         If x Is Nothing Then
             Return Nothing
         ElseIf TypeOf x Is list Then
+            ' returns variant of TOut or list
             Return DirectCast(x, list).evaluateList(eval, parallel, env)
         ElseIf TypeOf x Is vector Then
+            ' returns variant of Tout or vector
             With DirectCast(x, vector)
                 Dim list As New List(Of TOut)
 
@@ -272,6 +290,7 @@ Public Module Extensions
                 )
             End With
         ElseIf x.GetType.IsArray Then
+            ' returns variant of Tout or vector
             Dim cast As New List(Of T)
 
             For Each item As Object In DirectCast(x, Array).AsObjectEnumerator
@@ -286,6 +305,7 @@ Public Module Extensions
 
             Return cast.CastSequence(eval, parallel).Value
         ElseIf TypeOf x Is T Then
+            ' returns Tout
             Return eval(DirectCast(x, T))
         ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of T)) Then
             Return DirectCast(x, IEnumerable(Of T)) _
@@ -305,7 +325,9 @@ Public Module Extensions
     ''' <param name="cast"></param>
     ''' <param name="eval"></param>
     ''' <param name="parallel"></param>
-    ''' <returns></returns>
+    ''' <returns>
+    ''' variant of vector or <typeparamref name="TOut"/> value
+    ''' </returns>
     <Extension>
     Private Function CastSequence(Of T, TOut)(cast As List(Of T),
                                               eval As Func(Of T, TOut),
