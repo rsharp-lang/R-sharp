@@ -251,6 +251,7 @@ Public Module Extensions
     ''' + nothing if the parameter input <paramref name="x"/> has no value, 
     ''' + vector for input is a collection or array
     ''' + list for input is a list
+    ''' + Tout value object if the given x is a <typeparamref name="T"/> scalar object
     ''' + and also may returns an error <see cref="Message"/> if error happends!
     ''' </returns>
     <Extension>

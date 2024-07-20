@@ -453,6 +453,11 @@ Namespace Runtime.Internal.Object
             }
         End Function
 
+        ''' <summary>
+        ''' create a vector from a scalar value
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
         Public Shared Function fromScalar(x As Object) As vector
             Dim array As Array = Array.CreateInstance(x.GetType, 1)
             Call array.SetValue(x, Scan0)
