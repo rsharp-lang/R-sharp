@@ -596,7 +596,7 @@ Namespace Runtime.Internal.Invokes
             If str.IsNullOrEmpty Then
                 Return DateTime.Now
             Else
-                Dim has_format As String = Not format.StringEmpty(, True)
+                Dim has_format = Not format.StringEmpty(, True)
 
                 Return str _
                     .Select(Function(s)
