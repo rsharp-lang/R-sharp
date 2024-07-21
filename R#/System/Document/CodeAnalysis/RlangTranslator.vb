@@ -66,10 +66,17 @@ Namespace Development.CodeAnalysis
                     .Select(Function(si) indent & si) _
                     .JoinBy(vbCrLf)
 
-                If appendTerminator Then
-                    Call script.Add(line_translate & ";")
+                If TypeOf line Is ElseBranch OrElse TypeOf line Is ElseIfBranch Then
+                    ' else should append after {
+                    ' not in new line
+                    ' or syntax error in R langhage
+                    script(script.Count - 1) = script.Last & line_translate
                 Else
-                    Call script.Add(line_translate)
+                    If appendTerminator Then
+                        Call script.Add(line_translate & ";")
+                    Else
+                        Call script.Add(line_translate)
+                    End If
                 End If
             Next
 
