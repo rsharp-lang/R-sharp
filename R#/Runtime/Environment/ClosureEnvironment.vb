@@ -124,10 +124,11 @@ Namespace Runtime
             End If
             ' at last, found symbol in global
             If symbol Is Nothing Then
-                Dim findInParent As Boolean = False
+                Dim findInParent As Boolean = [inherits]
 
                 ' 20221217 make an exception for the parallel task progress report
-                findInParent = findInParent OrElse name = parallelApplys.ParallelTaskWorkerSymbol
+                findInParent = findInParent OrElse
+                    name = parallelApplys.ParallelTaskWorkerSymbol
                 ' make another exceptions?
                 ' ...
 
