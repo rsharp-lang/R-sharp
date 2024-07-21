@@ -162,15 +162,27 @@ Namespace Development.CodeAnalysis
         Private Function GetFunctionInvoke(calls As FunctionInvoke, env As Environment) As String
             Dim pars = calls.parameters
             Dim parList As New List(Of String)
-
-            For Each par As Expression In pars
-                Call parList.Add(GetScript(par, env))
-            Next
-
             Dim f As String = ValueAssignExpression.GetSymbol(calls.funcName)
 
             If Not calls.namespace.StringEmpty(, True) Then
                 f = $"{calls.namespace}::{f}"
+            End If
+
+            If f = "require" OrElse f = "library" Then
+                ' load packages
+                For Each par As Expression In pars
+                    If TypeOf par Is Literal Then
+                        Call parList.Add(GetScript(par, env))
+                    ElseIf TypeOf par Is SymbolReference Then
+                        Call parList.Add(ValueAssignExpression.GetSymbol(par))
+                    Else
+                        Throw New NotImplementedException($"can not extract package name from expression of type: {par.GetType.FullName}")
+                    End If
+                Next
+            Else
+                For Each par As Expression In pars
+                    Call parList.Add(GetScript(par, env))
+                Next
             End If
 
             Return $"{f}({parList.JoinBy(", ")})"
