@@ -30,7 +30,7 @@ Namespace Development.CodeAnalysis
         End Sub
 
         Private Sub New(closure As ClosureExpression, symbols As Dictionary(Of String, String))
-            Me.symbols = symbols
+            Me.symbols = New Dictionary(Of String, String)(symbols)
             Me.lines = closure.program.ToArray
             Me.filters = symbols.Keys.Indexing
 
