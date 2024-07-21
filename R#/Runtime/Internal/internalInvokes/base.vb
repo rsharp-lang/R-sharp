@@ -592,7 +592,10 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("date")>
         <RApiReturn(GetType(Date))>
-        Public Function [date](Optional str As String() = Nothing, Optional format As String = Nothing) As Object
+        Public Function [date](Optional str As String() = Nothing,
+                               Optional format As String = Nothing,
+                               Optional safe As Boolean = True) As Object
+
             If str.IsNullOrEmpty Then
                 Return DateTime.Now
             Else
@@ -603,7 +606,24 @@ Namespace Runtime.Internal.Invokes
                                 If s.IsSimpleNumber AndAlso Not has_format Then
                                     Return DateTimeHelper.FromUnixTimeStamp(Val(s))
                                 ElseIf has_format Then
-                                    Return DateTime.ParseExact(s, format, Globalization.CultureInfo.InvariantCulture)
+                                    Dim pull As Date = Nothing
+                                    Dim check = DateTime.TryParseExact(s, format,
+                                                                       Globalization.CultureInfo.InvariantCulture,
+                                                                       Globalization.DateTimeStyles.None, pull)
+
+                                    If Not check Then
+                                        Dim msg = $"string '{s}' was not recognized as a valid DateTime."
+
+                                        If safe Then
+                                            pull = Nothing
+                                        Else
+                                            Throw New InvalidDataException(msg)
+                                        End If
+
+                                        Call msg.Warning
+                                    End If
+
+                                    Return pull
                                 Else
                                     Return Date.Parse(s)
                                 End If
