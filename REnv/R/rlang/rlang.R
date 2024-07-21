@@ -30,6 +30,8 @@ const rlang_interop = function(code, source = NULL, debug = FALSE, workdir = NUL
 
         print("run script at workspace:");
         print(getwd());
+        print(code_save);
+        print(`Rscript "${code_save}"`);
 
         writeLines(script_code, con = code_save);
         system(`Rscript "${code_save}"`);
