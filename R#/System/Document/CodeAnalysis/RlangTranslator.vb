@@ -23,6 +23,7 @@ Namespace Development.CodeAnalysis
         ''' filtering of the parent symbols
         ''' </summary>
         ReadOnly filters As New Index(Of String)
+        ReadOnly indent As Integer = 0
 
         Const CreateSymbol As String = "<create_new_symbol>;"
 
@@ -30,9 +31,10 @@ Namespace Development.CodeAnalysis
             lines = closure.program.ToArray
         End Sub
 
-        Private Sub New(closure As ClosureExpression, symbols As Dictionary(Of String, String))
+        Private Sub New(closure As ClosureExpression, symbols As Dictionary(Of String, String), indent As Integer)
             Me.symbols = New Dictionary(Of String, String)(symbols)
             Me.lines = closure.program.ToArray
+            Me.indent = indent
             Me.filters = symbols.Keys.Indexing
 
             If lines.Length = 1 AndAlso TypeOf lines(0) Is ClosureExpression Then
@@ -49,6 +51,7 @@ Namespace Development.CodeAnalysis
         ''' <returns></returns>
         Public Function GetScript(env As Environment) As String
             Dim script As New List(Of String)
+            Dim indent As String = New String(" "c, Me.indent)
 
             For Each line As Expression In lines
                 Dim appendTerminator As Boolean = Not (
@@ -57,6 +60,11 @@ Namespace Development.CodeAnalysis
                     TypeOf line Is ForLoop
                 )
                 Dim line_translate As String = GetScript(line, env)
+
+                line_translate = line_translate _
+                    .LineTokens _
+                    .Select(Function(si) indent & si) _
+                    .JoinBy(vbCrLf)
 
                 If appendTerminator Then
                     Call script.Add(line_translate & ";")
@@ -145,7 +153,7 @@ Namespace Development.CodeAnalysis
         End Function
 
         Private Function GetElse(else_branch As ElseBranch, env As Environment) As String
-            Dim closure As String = New RlangTranslator(else_branch.closure.body, symbols).GetScript(env)
+            Dim closure As String = New RlangTranslator(else_branch.closure.body, symbols, indent + 3).GetScript(env)
 
             Return $"else {{
 {closure}
@@ -154,7 +162,7 @@ Namespace Development.CodeAnalysis
 
         Private Function GetIf(if_branch As IfBranch, env As Environment) As String
             Dim test As String = GetScript(if_branch.ifTest, env)
-            Dim closure As String = New RlangTranslator(if_branch.trueClosure.body, symbols).GetScript(env)
+            Dim closure As String = New RlangTranslator(if_branch.trueClosure.body, symbols, indent + 3).GetScript(env)
 
             Return $"if( {test} ) {{
 {closure}
