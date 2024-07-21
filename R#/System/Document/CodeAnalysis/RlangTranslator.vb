@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -21,6 +22,15 @@ Namespace Development.CodeAnalysis
 
         Sub New(closure As ClosureExpression)
             lines = closure.program.ToArray
+        End Sub
+
+        Private Sub New(closure As ClosureExpression, symbols As Dictionary(Of String, String))
+            Me.symbols = symbols
+            Me.lines = closure.program.ToArray
+
+            If lines.Length = 1 AndAlso TypeOf lines(0) Is ClosureExpression Then
+                lines = DirectCast(lines(0), ClosureExpression).program.ToArray
+            End If
         End Sub
 
         ''' <summary>
@@ -58,10 +68,29 @@ Namespace Development.CodeAnalysis
                 Case GetType(DeclareNewSymbol) : Return AssignNewSymbol(line, env)
                 Case GetType(VectorLiteral) : Return Vector(line, env)
                 Case GetType(Literal) : Return Literal(line, env)
+                Case GetType(IfBranch) : Return GetIf(line, env)
+                Case GetType(BinaryExpression) : Return GetBinaryOp(line, env)
 
                 Case Else
                     Throw New NotImplementedException(line.GetType.FullName)
             End Select
+        End Function
+
+        Private Function GetBinaryOp(bin As BinaryExpression, env As Environment) As String
+            Dim left = GetScript(bin.left, env)
+            Dim right = GetScript(bin.right, env)
+            Dim script As String = $"{left} {bin.operator} {right}"
+
+            Return script
+        End Function
+
+        Private Function GetIf(if_branch As IfBranch, env As Environment) As String
+            Dim test As String = GetScript(if_branch.ifTest, env)
+            Dim closure As String = New RlangTranslator(if_branch.trueClosure.body, symbols).GetScript(env)
+
+            Return $"if( {test} ) {{
+{closure}
+}}"
         End Function
 
         Private Function Literal(val As Literal, env As Environment) As String
