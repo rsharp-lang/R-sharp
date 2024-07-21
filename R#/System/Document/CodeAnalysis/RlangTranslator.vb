@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -78,17 +79,49 @@ Namespace Development.CodeAnalysis
                 Case GetType(Literal) : Return Literal(line, env)
                 Case GetType(IfBranch) : Return GetIf(line, env)
                 Case GetType(ElseBranch) : Return GetElse(line, env)
-                Case GetType(BinaryExpression) : Return GetBinaryOp(line, env)
+                Case GetType(BinaryExpression), GetType(BinaryInExpression)
+                    Return GetBinaryOp(line, env)
+                Case GetType(SymbolIndexer) : Return GetSymbolIndexSubset(line, env)
+                Case GetType(Operators.UnaryNot) : Return GetUnaryNot(line, env)
 
                 Case Else
                     Throw New NotImplementedException(line.GetType.FullName)
             End Select
         End Function
 
-        Private Function GetBinaryOp(bin As BinaryExpression, env As Environment) As String
+        Private Function GetUnaryNot(unary_not As Operators.UnaryNot, env As Environment) As String
+            Dim script As String = GetScript(unary_not.logical, env)
+            script = $"!({script})"
+            Return script
+        End Function
+
+        Private Function GetSymbolIndexSubset(line As SymbolIndexer, env As Environment) As String
+            Dim indexer = GetScript(line.index, env)
+            Dim symbol = ValueAssignExpression.GetSymbol(line.symbol)
+            Dim script As String
+
+            Select Case line.indexType
+                Case SymbolIndexers.dataframeColumns : script = $"{symbol}[, {indexer}]"
+                Case SymbolIndexers.dataframeRows : script = $"{symbol}[{indexer}, ]"
+                Case SymbolIndexers.nameIndex : script = $"{symbol}[[{indexer}]]"
+                Case SymbolIndexers.vectorIndex : script = $"{symbol}[{indexer}]"
+                Case Else
+                    Throw New NotImplementedException(line.indexType.ToString)
+            End Select
+
+            Return script
+        End Function
+
+        Private Function GetBinaryOp(bin As IBinaryExpression, env As Environment) As String
             Dim left = GetScript(bin.left, env)
             Dim right = GetScript(bin.right, env)
-            Dim script As String = $"{left} {bin.operator} {right}"
+            Dim op As String = bin.operator
+
+            If op = "in" Then
+                op = "%in%"
+            End If
+
+            Dim script As String = $"{left} {op} {right}"
 
             Return script
         End Function
