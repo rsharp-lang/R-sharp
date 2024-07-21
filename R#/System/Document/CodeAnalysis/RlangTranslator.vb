@@ -83,10 +83,17 @@ Namespace Development.CodeAnalysis
                     Return GetBinaryOp(line, env)
                 Case GetType(SymbolIndexer) : Return GetSymbolIndexSubset(line, env)
                 Case GetType(Operators.UnaryNot) : Return GetUnaryNot(line, env)
+                Case GetType(ByRefFunctionCall) : Return getByref(line, env)
 
                 Case Else
                     Throw New NotImplementedException(line.GetType.FullName)
             End Select
+        End Function
+
+        Private Function getByref(line As ByRefFunctionCall, env As Environment) As String
+            Dim byref_call As String = GetScript(line.ConstructByrefCall, env)
+            Dim value As String = GetScript(line.value, env)
+            Return $"{byref_call} <- {value}"
         End Function
 
         Private Function GetUnaryNot(unary_not As Operators.UnaryNot, env As Environment) As String

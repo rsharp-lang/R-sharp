@@ -100,6 +100,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Me.stackFrame = stackFrame
         End Sub
 
+        ''' <summary>
+        ''' get target symbol union with addtional byref function parameters
+        ''' </summary>
+        ''' <returns></returns>
         Public Iterator Function GetUnionParameters() As IEnumerable(Of Expression)
             Yield target
 
@@ -136,6 +140,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
                 Return api.Invoke(envir, parameters)
             End If
+        End Function
+
+        Friend Function ConstructByrefCall() As FunctionInvoke
+            Dim all = GetUnionParameters.ToArray
+            Dim shift = all.Take(all.Length - 1).ToArray
+
+            Return New FunctionInvoke(funcRef, stackFrame, shift)
         End Function
 
         Private Function getTargetFunction(env As Environment) As Object
