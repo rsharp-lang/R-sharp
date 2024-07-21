@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Linq
+﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
@@ -17,6 +18,10 @@ Namespace Development.CodeAnalysis
 
         ReadOnly lines As Expression()
         ReadOnly symbols As New Dictionary(Of String, String)
+        ''' <summary>
+        ''' filtering of the parent symbols
+        ''' </summary>
+        ReadOnly filters As New Index(Of String)
 
         Const CreateSymbol As String = "<create_new_symbol>;"
 
@@ -27,6 +32,7 @@ Namespace Development.CodeAnalysis
         Private Sub New(closure As ClosureExpression, symbols As Dictionary(Of String, String))
             Me.symbols = symbols
             Me.lines = closure.program.ToArray
+            Me.filters = symbols.Keys.Indexing
 
             If lines.Length = 1 AndAlso TypeOf lines(0) Is ClosureExpression Then
                 lines = DirectCast(lines(0), ClosureExpression).program.ToArray
@@ -55,7 +61,9 @@ Namespace Development.CodeAnalysis
         Private Iterator Function CreateSymbols() As IEnumerable(Of String)
             For Each symbol In symbols
                 If symbol.Value <> CreateSymbol Then
-                    Yield $"{symbol.Key} <- {symbol.Value};"
+                    If Not symbol.Key Like filters Then
+                        Yield $"{symbol.Key} <- {symbol.Value};"
+                    End If
                 End If
             Next
         End Function
@@ -69,6 +77,7 @@ Namespace Development.CodeAnalysis
                 Case GetType(VectorLiteral) : Return Vector(line, env)
                 Case GetType(Literal) : Return Literal(line, env)
                 Case GetType(IfBranch) : Return GetIf(line, env)
+                Case GetType(ElseBranch) : Return GetElse(line, env)
                 Case GetType(BinaryExpression) : Return GetBinaryOp(line, env)
 
                 Case Else
@@ -82,6 +91,14 @@ Namespace Development.CodeAnalysis
             Dim script As String = $"{left} {bin.operator} {right}"
 
             Return script
+        End Function
+
+        Private Function GetElse(else_branch As ElseBranch, env As Environment) As String
+            Dim closure As String = New RlangTranslator(else_branch.closure.body, symbols).GetScript(env)
+
+            Return $"else {{
+{closure}
+}}"
         End Function
 
         Private Function GetIf(if_branch As IfBranch, env As Environment) As String
