@@ -9,7 +9,7 @@ const rlang_interop = function(code, source = NULL, debug = FALSE, workdir = NUL
     let load_deps = __sourcescript(source);
     let program   = translate_to_rlang(code);
     let script_code <- paste([
-        "sink(file = 'rlang_interop.log');",
+        "sink(file = 'rlang_interop.log', split = TRUE);",
         load_deps, 
         "# --------end of load deps----------", 
         program,
