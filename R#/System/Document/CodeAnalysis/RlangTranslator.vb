@@ -51,7 +51,18 @@ Namespace Development.CodeAnalysis
             Dim script As New List(Of String)
 
             For Each line As Expression In lines
-                Call script.Add(GetScript(line, env) & ";")
+                Dim appendTerminator As Boolean = Not (
+                    TypeOf line Is IfBranch OrElse
+                    TypeOf line Is ElseBranch OrElse
+                    TypeOf line Is ForLoop
+                )
+                Dim line_translate As String = GetScript(line, env)
+
+                If appendTerminator Then
+                    Call script.Add(line_translate & ";")
+                Else
+                    Call script.Add(line_translate)
+                End If
             Next
 
             Return CreateSymbols _
