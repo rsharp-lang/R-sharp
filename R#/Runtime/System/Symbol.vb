@@ -69,6 +69,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -229,6 +230,17 @@ Namespace Runtime.Components
             Me.name = name
             Me.m_val = value
         End Sub
+
+        Public Function TryGetValueType() As TypeCodes
+            If value Is Nothing Then
+                Return TypeCodes.generic
+            End If
+            If TypeOf value Is vector Then
+                Return DirectCast(value, vector).elementType.mode
+            Else
+                Return RType.TypeOf(value).mode
+            End If
+        End Function
 
         ''' <summary>
         ''' 

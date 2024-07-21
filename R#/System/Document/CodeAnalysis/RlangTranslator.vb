@@ -126,18 +126,16 @@ Namespace Development.CodeAnalysis
                         symbols.Add(name, "NULL")
                     Else
                         Dim descriptor As String
+                        Dim castError As Boolean
 
-                        Select Case val.typeCode
-                            Case TypeCodes.boolean
-                                descriptor = Literal(CLRVector.asLogical(val.value).Select(Function(b) b.ToString.ToUpper))
-                            Case TypeCodes.double, TypeCodes.integer, TypeCodes.raw
-                                descriptor = Literal(CLRVector.asNumeric(val.value))
-                            Case TypeCodes.string
-                                descriptor = Literal(CLRVector.asCharacter(val.value).Select(Function(str) $"'{str}'"))
+                        descriptor = castLiteral(val, val.typeCode, castError)
 
-                            Case Else
-                                Throw New NotImplementedException(val.typeCode.ToString)
-                        End Select
+                        If castError Then
+                            descriptor = castLiteral(val, val.TryGetValueType, castError)
+                        End If
+                        If castError Then
+                            Throw New NotImplementedException(val.typeCode.ToString)
+                        End If
 
                         Call symbols.Add(name, descriptor)
                     End If
@@ -145,6 +143,24 @@ Namespace Development.CodeAnalysis
             End If
 
             Return name
+        End Function
+
+        Private Shared Function castLiteral(val As Symbol, code As TypeCodes, ByRef castError As Boolean) As String
+            castError = False
+
+            Select Case code
+                Case TypeCodes.boolean
+                    Return Literal(CLRVector.asLogical(val.value).Select(Function(b) b.ToString.ToUpper))
+                Case TypeCodes.double, TypeCodes.integer, TypeCodes.raw
+                    Return Literal(CLRVector.asNumeric(val.value))
+                Case TypeCodes.string
+                    Return Literal(CLRVector.asCharacter(val.value).Select(Function(str) $"'{str}'"))
+
+                Case Else
+                    castError = True
+            End Select
+
+            Return Nothing
         End Function
 
         Private Shared Function Literal(vals As IEnumerable(Of String)) As String
