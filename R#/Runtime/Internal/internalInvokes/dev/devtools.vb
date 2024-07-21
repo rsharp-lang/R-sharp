@@ -163,8 +163,32 @@ Namespace Runtime.Internal.Invokes
             Return frames
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="code">
+        ''' the expression code that will be run inside R language, the expression type could be:
+        ''' 
+        ''' 1. <see cref="ClosureExpression"/>
+        ''' 2. <see cref="DeclareNewFunction"/>
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <ExportAPI("translate_to_rlang")>
-        Public Function translate_to_rlang(code As ClosureExpression, Optional env As Environment = Nothing) As Object
+        Public Function translate_to_rlang(code As Expression, Optional env As Environment = Nothing) As Object
+            If code Is Nothing Then
+                Call "the given closure expression is nothing!".Warning
+                Return Nothing
+            End If
+
+            If Not TypeOf code Is ClosureExpression Then
+                If TypeOf code Is DeclareNewFunction Then
+                    code = DirectCast(code, DeclareNewFunction).body
+                Else
+                    Return Message.InCompatibleType(GetType(ClosureExpression), code.GetType, env)
+                End If
+            End If
+
             Return New RlangTranslator(code).GetScript(env)
         End Function
 
