@@ -181,7 +181,7 @@ Namespace Development.CodeAnalysis
                 Case TypeCodes.boolean
                     Return Literal(CLRVector.asLogical(val.value).Select(Function(b) b.ToString.ToUpper))
                 Case TypeCodes.double, TypeCodes.integer, TypeCodes.raw
-                    Return Literal(CLRVector.asNumeric(val.value))
+                    Return Literal(CLRVector.asNumeric(val.value).SafeQuery.Select(Function(n) n.ToString))
                 Case TypeCodes.string
                     Return Literal(CLRVector.asCharacter(val.value).Select(Function(str) $"'{str}'"))
 
