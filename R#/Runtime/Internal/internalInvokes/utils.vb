@@ -111,8 +111,32 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Namespace Runtime.Internal.Invokes
 
+    ''' <summary>
+    ''' helper tools for the R# programming
+    ''' </summary>
     <Package("utils")>
     Public Module utils
+
+        ''' <summary>
+        ''' Create a progress bar helper function
+        ''' </summary>
+        ''' <param name="total"></param>
+        ''' <param name="width"></param>
+        ''' <param name="interval">
+        ''' the progress display internal, should be value in range [1,100].
+        ''' </param>
+        ''' <returns></returns>
+        ''' <example>
+        ''' let bar = progress_bar(total = 10);
+        ''' 
+        ''' bar("test 1");
+        ''' bar("test 2");
+        ''' bar("test 3");
+        ''' </example>
+        <ExportAPI("progress_bar")>
+        Public Function progress_bar(total As Integer, Optional width As Integer = 45, Optional interval As Integer = 5) As ProgressBarFunction
+            Return New ProgressBarFunction(total, interval, width)
+        End Function
 
         ''' <summary>
         ''' Wraps a collection with a progress bar for iteration, providing visual feedback on progress.
@@ -140,7 +164,7 @@ Namespace Runtime.Internal.Invokes
                 '        .list = New list(DirectCast(x, IDictionary))
                 '    }
             Else
-                Dim pull As Object() = REnv.asVector(Of Object)(x)
+                Dim pull As Object() = CLRVector.asObject(x)
 
                 ' 20240215 avoid ArgumentOutOfRangeException: Count cannot be less than zero. (Parameter 'count')
                 If pull.IsNullOrEmpty Then

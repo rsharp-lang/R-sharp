@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9b484824cf93708decd6f244c5c6fd6a, R#\Runtime\Environment\ClosureEnvironment.vb"
+#Region "Microsoft.VisualBasic::9b484824cf93708decd6f244c5c6fd6a, R#\Runtime\Environment\ClosureEnvironment.vb"
 
     ' Author:
     ' 
@@ -124,6 +124,9 @@ Namespace Runtime
             End If
             ' at last, found symbol in global
             If symbol Is Nothing Then
+                ' 20240722
+                ' set this value to [inherits] parameter?
+                ' questionable?
                 Dim findInParent As Boolean = [inherits]
 
                 ' 20221217 make an exception for the parallel task progress report
