@@ -197,7 +197,7 @@ Public Module Parallel
         Call VBDebugger.EchoLine($"{current_taskName}[slave_task] master_host={localMaster}")
         Call VBDebugger.EchoLine($"{current_taskName}[bootstrapping] bootstrap_port={port}!")
 
-        resp = New TcpRequest(hostName:=localMaster, remotePort:=CInt(port)).SendMessage(req)
+        resp = New TcpRequest(hostName:=localMaster, remotePort:=CInt(port)).SetVerbose(False).SendMessage(req)
 
         Dim uuid As Integer = BitConverter.ToInt32(resp.ChunkBuffer, Scan0)
         Dim masterPort As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 4)
@@ -271,8 +271,8 @@ Public Module Parallel
         End If
 
         ' sync work on tcp request
-        Call New TcpRequest(localMaster, masterPort).SendMessage(req)
-        Call New TcpRequest(localMaster, port).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
+        Call New TcpRequest(localMaster, masterPort).SetVerbose(False).SendMessage(req)
+        Call New TcpRequest(localMaster, port).SetVerbose(False).SendMessage(New RequestStream(MasterContext.Protocol, RPC.Protocols.Stop))
 
         If TypeOf result.value Is Message Then
             Call VBDebugger.EchoLine($"{current_taskName}exit with task error.")
