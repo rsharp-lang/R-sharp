@@ -15,6 +15,7 @@ Namespace Development.Components
         ''' </summary>
         ReadOnly d As Integer
         ReadOnly width As Integer
+        ReadOnly t0 As Date = Now
 
         ''' <summary>
         ''' 
@@ -37,13 +38,16 @@ Namespace Development.Components
                 Dim walk_chars As Integer = (i / n) * width
                 ' print progress
                 Dim walk As New String(Tqdm.ProgressBar.FullChar, walk_chars)
-                Dim blank As New String("-"c, width - walk_chars)
+                Dim blank As New String("_"c, width - walk_chars)
                 Dim bar As New StringBuilder("|")
+                Dim span As TimeSpan = Now - t0
+                Dim speed As Double = i / span.TotalSeconds
+                Dim elapsed As String = StringFormats.ReadableElapsedTime(span)
 
                 Call bar.Append(walk)
                 Call bar.Append(blank)
                 Call bar.Append("|")
-                Call bar.Append($" [{(i / n * 100).ToString("F1")}%] ")
+                Call bar.Append($" [{(i / n * 100).ToString("F1")}% ~ {speed.ToString("F2")}itr/s, Elapsed:{elapsed}] ")
                 Call bar.Append(setLabel)
 
                 Call VBDebugger.EchoLine(bar.ToString)
