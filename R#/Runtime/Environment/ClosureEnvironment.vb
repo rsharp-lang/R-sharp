@@ -124,6 +124,9 @@ Namespace Runtime
             End If
             ' at last, found symbol in global
             If symbol Is Nothing Then
+                ' 20240722
+                ' set this value to [inherits] parameter?
+                ' questionable?
                 Dim findInParent As Boolean = False
 
                 ' 20221217 make an exception for the parallel task progress report
