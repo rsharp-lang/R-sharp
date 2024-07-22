@@ -630,6 +630,9 @@ RE0:
             Dim t As Boolean = listData.Keys.All(Function(k) k.IsPattern("\d+") OrElse k.IsPattern("\[+\d+\]+"))
             Dim rownames As String() = Nothing
 
+            If CLRVector.asLogical(args.getByName("t")).DefaultFirst(False) Then
+                t = True
+            End If
             If args.hasName("row.names") Then
                 rownames = CLRVector.asCharacter(args.getByName("row.names"))
             End If

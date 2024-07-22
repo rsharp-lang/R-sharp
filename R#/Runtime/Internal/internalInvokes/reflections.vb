@@ -123,7 +123,7 @@ Namespace Runtime.Internal.Invokes
                              Optional value As Object = Nothing,
                              Optional env As Environment = Nothing) As Object
 
-            If Not TypeOf x Is RsharpDataObject Then
+            If x Is Nothing OrElse Not TypeOf x Is RsharpDataObject Then
                 Return Nothing
             End If
 

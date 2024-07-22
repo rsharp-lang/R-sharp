@@ -1,5 +1,8 @@
-﻿Imports Microsoft.VisualBasic.Linq
+﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -16,11 +19,27 @@ Namespace Development.CodeAnalysis
 
         ReadOnly lines As Expression()
         ReadOnly symbols As New Dictionary(Of String, String)
+        ''' <summary>
+        ''' filtering of the parent symbols
+        ''' </summary>
+        ReadOnly filters As New Index(Of String)
+        ReadOnly indent As Integer = 0
 
         Const CreateSymbol As String = "<create_new_symbol>;"
 
         Sub New(closure As ClosureExpression)
             lines = closure.program.ToArray
+        End Sub
+
+        Private Sub New(closure As ClosureExpression, symbols As Dictionary(Of String, String), indent As Integer)
+            Me.symbols = New Dictionary(Of String, String)(symbols)
+            Me.lines = closure.program.ToArray
+            Me.indent = indent
+            Me.filters = symbols.Keys.Indexing
+
+            If lines.Length = 1 AndAlso TypeOf lines(0) Is ClosureExpression Then
+                lines = DirectCast(lines(0), ClosureExpression).program.ToArray
+            End If
         End Sub
 
         ''' <summary>
@@ -32,9 +51,33 @@ Namespace Development.CodeAnalysis
         ''' <returns></returns>
         Public Function GetScript(env As Environment) As String
             Dim script As New List(Of String)
+            Dim indent As String = New String(" "c, Me.indent)
 
             For Each line As Expression In lines
-                Call script.Add(GetScript(line, env) & ";")
+                Dim appendTerminator As Boolean = Not (
+                    TypeOf line Is IfBranch OrElse
+                    TypeOf line Is ElseBranch OrElse
+                    TypeOf line Is ForLoop
+                )
+                Dim line_translate As String = GetScript(line, env)
+
+                line_translate = line_translate _
+                    .LineTokens _
+                    .Select(Function(si) indent & si) _
+                    .JoinBy(vbCrLf)
+
+                If TypeOf line Is ElseBranch OrElse TypeOf line Is ElseIfBranch Then
+                    ' else should append after {
+                    ' not in new line
+                    ' or syntax error in R langhage
+                    script(script.Count - 1) = script.Last & line_translate
+                Else
+                    If appendTerminator Then
+                        Call script.Add(line_translate & ";")
+                    Else
+                        Call script.Add(line_translate)
+                    End If
+                End If
             Next
 
             Return CreateSymbols _
@@ -45,7 +88,9 @@ Namespace Development.CodeAnalysis
         Private Iterator Function CreateSymbols() As IEnumerable(Of String)
             For Each symbol In symbols
                 If symbol.Value <> CreateSymbol Then
-                    Yield $"{symbol.Key} <- {symbol.Value};"
+                    If Not symbol.Key Like filters Then
+                        Yield $"{symbol.Key} <- {symbol.Value};"
+                    End If
                 End If
             Next
         End Function
@@ -58,10 +103,77 @@ Namespace Development.CodeAnalysis
                 Case GetType(DeclareNewSymbol) : Return AssignNewSymbol(line, env)
                 Case GetType(VectorLiteral) : Return Vector(line, env)
                 Case GetType(Literal) : Return Literal(line, env)
+                Case GetType(IfBranch) : Return GetIf(line, env)
+                Case GetType(ElseBranch) : Return GetElse(line, env)
+                Case GetType(BinaryExpression), GetType(BinaryInExpression)
+                    Return GetBinaryOp(line, env)
+                Case GetType(SymbolIndexer) : Return GetSymbolIndexSubset(line, env)
+                Case GetType(Operators.UnaryNot) : Return GetUnaryNot(line, env)
+                Case GetType(ByRefFunctionCall) : Return getByref(line, env)
 
                 Case Else
                     Throw New NotImplementedException(line.GetType.FullName)
             End Select
+        End Function
+
+        Private Function getByref(line As ByRefFunctionCall, env As Environment) As String
+            Dim byref_call As String = GetScript(line.ConstructByrefCall, env)
+            Dim value As String = GetScript(line.value, env)
+            Return $"{byref_call} <- {value}"
+        End Function
+
+        Private Function GetUnaryNot(unary_not As Operators.UnaryNot, env As Environment) As String
+            Dim script As String = GetScript(unary_not.logical, env)
+            script = $"!({script})"
+            Return script
+        End Function
+
+        Private Function GetSymbolIndexSubset(line As SymbolIndexer, env As Environment) As String
+            Dim indexer = GetScript(line.index, env)
+            Dim symbol = ValueAssignExpression.GetSymbol(line.symbol)
+            Dim script As String
+
+            Select Case line.indexType
+                Case SymbolIndexers.dataframeColumns : script = $"{symbol}[, {indexer}]"
+                Case SymbolIndexers.dataframeRows : script = $"{symbol}[{indexer}, ]"
+                Case SymbolIndexers.nameIndex : script = $"{symbol}[[{indexer}]]"
+                Case SymbolIndexers.vectorIndex : script = $"{symbol}[{indexer}]"
+                Case Else
+                    Throw New NotImplementedException(line.indexType.ToString)
+            End Select
+
+            Return script
+        End Function
+
+        Private Function GetBinaryOp(bin As IBinaryExpression, env As Environment) As String
+            Dim left = GetScript(bin.left, env)
+            Dim right = GetScript(bin.right, env)
+            Dim op As String = bin.operator
+
+            If op = "in" Then
+                op = "%in%"
+            End If
+
+            Dim script As String = $"{left} {op} {right}"
+
+            Return script
+        End Function
+
+        Private Function GetElse(else_branch As ElseBranch, env As Environment) As String
+            Dim closure As String = New RlangTranslator(else_branch.closure.body, symbols, indent + 3).GetScript(env)
+
+            Return $"else {{
+{closure}
+}}"
+        End Function
+
+        Private Function GetIf(if_branch As IfBranch, env As Environment) As String
+            Dim test As String = GetScript(if_branch.ifTest, env)
+            Dim closure As String = New RlangTranslator(if_branch.trueClosure.body, symbols, indent + 3).GetScript(env)
+
+            Return $"if( {test} ) {{
+{closure}
+}}"
         End Function
 
         Private Function Literal(val As Literal, env As Environment) As String
@@ -126,18 +238,16 @@ Namespace Development.CodeAnalysis
                         symbols.Add(name, "NULL")
                     Else
                         Dim descriptor As String
+                        Dim castError As Boolean
 
-                        Select Case val.typeCode
-                            Case TypeCodes.boolean
-                                descriptor = Literal(CLRVector.asLogical(val.value).Select(Function(b) b.ToString.ToUpper))
-                            Case TypeCodes.double, TypeCodes.integer, TypeCodes.raw
-                                descriptor = Literal(CLRVector.asNumeric(val.value))
-                            Case TypeCodes.string
-                                descriptor = Literal(CLRVector.asCharacter(val.value).Select(Function(str) $"'{str}'"))
+                        descriptor = castLiteral(val, val.typeCode, castError)
 
-                            Case Else
-                                Throw New NotImplementedException(val.typeCode.ToString)
-                        End Select
+                        If castError Then
+                            descriptor = castLiteral(val, val.TryGetValueType, castError)
+                        End If
+                        If castError Then
+                            Throw New NotImplementedException(val.typeCode.ToString)
+                        End If
 
                         Call symbols.Add(name, descriptor)
                     End If
@@ -145,6 +255,24 @@ Namespace Development.CodeAnalysis
             End If
 
             Return name
+        End Function
+
+        Private Shared Function castLiteral(val As Symbol, code As TypeCodes, ByRef castError As Boolean) As String
+            castError = False
+
+            Select Case code
+                Case TypeCodes.boolean
+                    Return Literal(CLRVector.asLogical(val.value).Select(Function(b) b.ToString.ToUpper))
+                Case TypeCodes.double, TypeCodes.integer, TypeCodes.raw
+                    Return Literal(CLRVector.asNumeric(val.value).SafeQuery.Select(Function(n) n.ToString))
+                Case TypeCodes.string
+                    Return Literal(CLRVector.asCharacter(val.value).Select(Function(str) $"'{str}'"))
+
+                Case Else
+                    castError = True
+            End Select
+
+            Return Nothing
         End Function
 
         Private Shared Function Literal(vals As IEnumerable(Of String)) As String
@@ -162,15 +290,27 @@ Namespace Development.CodeAnalysis
         Private Function GetFunctionInvoke(calls As FunctionInvoke, env As Environment) As String
             Dim pars = calls.parameters
             Dim parList As New List(Of String)
-
-            For Each par As Expression In pars
-                Call parList.Add(GetScript(par, env))
-            Next
-
             Dim f As String = ValueAssignExpression.GetSymbol(calls.funcName)
 
             If Not calls.namespace.StringEmpty(, True) Then
                 f = $"{calls.namespace}::{f}"
+            End If
+
+            If f = "require" OrElse f = "library" Then
+                ' load packages
+                For Each par As Expression In pars
+                    If TypeOf par Is Literal Then
+                        Call parList.Add(GetScript(par, env))
+                    ElseIf TypeOf par Is SymbolReference Then
+                        Call parList.Add(ValueAssignExpression.GetSymbol(par))
+                    Else
+                        Throw New NotImplementedException($"can not extract package name from expression of type: {par.GetType.FullName}")
+                    End If
+                Next
+            Else
+                For Each par As Expression In pars
+                    Call parList.Add(GetScript(par, env))
+                Next
             End If
 
             Return $"{f}({parList.JoinBy(", ")})"

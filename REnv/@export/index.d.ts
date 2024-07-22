@@ -75,8 +75,9 @@ declare namespace REnv {
    /**
      * @param source default value Is ``null``.
      * @param debug default value Is ``false``.
+     * @param workdir default value Is ``null``.
    */
-   function rlang_interop(code: any, source?: any, debug?: any): object;
+   function rlang_interop(code: any, source?: any, debug?: any, workdir?: any): object;
    /**
    */
    function sacurine(): object;

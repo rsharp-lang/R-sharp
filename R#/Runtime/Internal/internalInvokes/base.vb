@@ -1,76 +1,76 @@
 ﻿#Region "Microsoft.VisualBasic::0655a80cb7e4f3562b4780016e69a3f7, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 3417
-    '    Code Lines: 1511 (44.22%)
-    ' Comment Lines: 1619 (47.38%)
-    '    - Xml Docs: 84.37%
-    ' 
-    '   Blank Lines: 287 (8.40%)
-    '     File Size: 152.71 KB
+' Summaries:
 
 
-    '     Module base
-    ' 
-    '         Function: __empty, __invisible, [date], [stop], allocate
-    '                   append, appendFinal, appendOfList, appendOfVector, (+3 Overloads) argumentList
-    '                   attachPackageFile, autoDispose, c, cat, cbind
-    '                   character, checkDimensionsAgree, colnames, columnVector, commandArgs
-    '                   doPrintInternal, dQuote, factor, factors, getOption
-    '                   getPosition, ifelse, ifelseScalar, ifelseVector, ints
-    '                   isDataframe, isEmpty, isEmptyArray, isFALSE, isFunction
-    '                   isList, isNA, isNull, isRVector, isTRUE
-    '                   join_data, length, library, logical, makeNames
-    '                   names, ncol, neg, nrow, numeric
-    '                   objectAddInvoke, options, options_flush, print, range
-    '                   raws, rbind, Rdataframe, rep, rep_int
-    '                   rep_len, replace, Rlist, Robj_dimension, rownames
-    '                   seq, sink, sink_number, source, sQuote
-    '                   str, summary, t, uniqueNames, unitOfT
-    '                   ValueAt, warning, year
-    ' 
-    '         Sub: println_message, warnings
-    '         Class PrinterOptions
-    ' 
-    '             Properties: fields, maxPrint, maxWidth, quot
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 3417
+'    Code Lines: 1511 (44.22%)
+' Comment Lines: 1619 (47.38%)
+'    - Xml Docs: 84.37%
+' 
+'   Blank Lines: 287 (8.40%)
+'     File Size: 152.71 KB
+
+
+'     Module base
+' 
+'         Function: __empty, __invisible, [date], [stop], allocate
+'                   append, appendFinal, appendOfList, appendOfVector, (+3 Overloads) argumentList
+'                   attachPackageFile, autoDispose, c, cat, cbind
+'                   character, checkDimensionsAgree, colnames, columnVector, commandArgs
+'                   doPrintInternal, dQuote, factor, factors, getOption
+'                   getPosition, ifelse, ifelseScalar, ifelseVector, ints
+'                   isDataframe, isEmpty, isEmptyArray, isFALSE, isFunction
+'                   isList, isNA, isNull, isRVector, isTRUE
+'                   join_data, length, library, logical, makeNames
+'                   names, ncol, neg, nrow, numeric
+'                   objectAddInvoke, options, options_flush, print, range
+'                   raws, rbind, Rdataframe, rep, rep_int
+'                   rep_len, replace, Rlist, Robj_dimension, rownames
+'                   seq, sink, sink_number, source, sQuote
+'                   str, summary, t, uniqueNames, unitOfT
+'                   ValueAt, warning, year
+' 
+'         Sub: println_message, warnings
+'         Class PrinterOptions
+' 
+'             Properties: fields, maxPrint, maxWidth, quot
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -579,19 +579,51 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="str">
         ''' this parameter also can accept the unix timestamp.
         ''' </param>
+        ''' <param name="format">
+        ''' specific the date string parser format, example as ``yyyyMMdd`` will be 
+        ''' used for parse the given string ``20220101`` as ``#2022-01-01#``.
+        ''' </param>
         ''' <returns>
         ''' Returns a character string of the current system date and time.
         ''' </returns>
+        ''' <remarks>
+        ''' the given number string will not be treated as unix timestamp
+        ''' if the format string has been specific.
+        ''' </remarks>
         <ExportAPI("date")>
         <RApiReturn(GetType(Date))>
-        Public Function [date](Optional str As String() = Nothing) As Object
+        Public Function [date](Optional str As String() = Nothing,
+                               Optional format As String = Nothing,
+                               Optional safe As Boolean = True) As Object
+
             If str.IsNullOrEmpty Then
                 Return DateTime.Now
             Else
+                Dim has_format = Not format.StringEmpty(, True)
+
                 Return str _
                     .Select(Function(s)
-                                If s.IsSimpleNumber Then
+                                If s.IsSimpleNumber AndAlso Not has_format Then
                                     Return DateTimeHelper.FromUnixTimeStamp(Val(s))
+                                ElseIf has_format Then
+                                    Dim pull As Date = Nothing
+                                    Dim check = DateTime.TryParseExact(s, format,
+                                                                       Globalization.CultureInfo.InvariantCulture,
+                                                                       Globalization.DateTimeStyles.None, pull)
+
+                                    If Not check Then
+                                        Dim msg = $"string '{s}' was not recognized as a valid DateTime."
+
+                                        If safe Then
+                                            pull = Nothing
+                                        Else
+                                            Throw New InvalidDataException(msg)
+                                        End If
+
+                                        Call msg.Warning
+                                    End If
+
+                                    Return pull
                                 Else
                                     Return Date.Parse(s)
                                 End If

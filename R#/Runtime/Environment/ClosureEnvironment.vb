@@ -1,4 +1,4 @@
-ï»¿#Region "Microsoft.VisualBasic::9b484824cf93708decd6f244c5c6fd6a, R#\Runtime\Environment\ClosureEnvironment.vb"
+ï»?#Region "Microsoft.VisualBasic::9b484824cf93708decd6f244c5c6fd6a, R#\Runtime\Environment\ClosureEnvironment.vb"
 
     ' Author:
     ' 
@@ -127,10 +127,11 @@ Namespace Runtime
                 ' 20240722
                 ' set this value to [inherits] parameter?
                 ' questionable?
-                Dim findInParent As Boolean = False
+                Dim findInParent As Boolean = [inherits]
 
                 ' 20221217 make an exception for the parallel task progress report
-                findInParent = findInParent OrElse name = parallelApplys.ParallelTaskWorkerSymbol
+                findInParent = findInParent OrElse
+                    name = parallelApplys.ParallelTaskWorkerSymbol
                 ' make another exceptions?
                 ' ...
 
