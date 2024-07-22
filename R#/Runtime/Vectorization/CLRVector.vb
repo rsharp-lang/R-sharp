@@ -660,6 +660,9 @@ Namespace Runtime.Vectorization
         ''' </summary>
         ''' <param name="x"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' a wrapper function of <see cref="REnv.asVector(Of Object)"/>.
+        ''' </remarks>
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function asObject(x As Object) As Object()

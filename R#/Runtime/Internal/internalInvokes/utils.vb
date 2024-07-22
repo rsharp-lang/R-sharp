@@ -157,7 +157,7 @@ Namespace Runtime.Internal.Invokes
                 '        .list = New list(DirectCast(x, IDictionary))
                 '    }
             Else
-                Dim pull As Object() = REnv.asVector(Of Object)(x)
+                Dim pull As Object() = CLRVector.asObject(x)
 
                 ' 20240215 avoid ArgumentOutOfRangeException: Count cannot be less than zero. (Parameter 'count')
                 If pull.IsNullOrEmpty Then
