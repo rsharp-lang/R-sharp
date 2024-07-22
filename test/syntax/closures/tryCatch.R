@@ -8,6 +8,7 @@ const catch = try(ex -> stop(123)) {
 	23333;
 }
 
+print("catch result:");
 print(catch);
 
 # get try-error
