@@ -111,6 +111,9 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 Namespace Runtime.Internal.Invokes
 
+    ''' <summary>
+    ''' helper tools for the R# programming
+    ''' </summary>
     <Package("utils")>
     Public Module utils
 
