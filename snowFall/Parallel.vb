@@ -100,7 +100,7 @@ Public Module Parallel
                              Optional master As String = "localhost",
                              Optional env As Environment = Nothing) As Object
 
-        Return New TaskBuilder(port, master).Run
+        Return New TaskBuilder(port, master, verbose:=env.verboseOption).Run
     End Function
 
     ''' <summary>
