@@ -118,7 +118,7 @@ Namespace Runtime.Internal.Invokes
     Public Module utils
 
         ''' <summary>
-        ''' 
+        ''' Create a progress bar helper function
         ''' </summary>
         ''' <param name="total"></param>
         ''' <param name="width"></param>
@@ -126,6 +126,13 @@ Namespace Runtime.Internal.Invokes
         ''' the progress display internal, should be value in range [1,100].
         ''' </param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' let bar = progress_bar(total = 10);
+        ''' 
+        ''' bar("test 1");
+        ''' bar("test 2");
+        ''' bar("test 3");
+        ''' </remarks>
         <ExportAPI("progress_bar")>
         Public Function progress_bar(total As Integer, Optional width As Integer = 45, Optional interval As Integer = 5) As ProgressBarFunction
             Return New ProgressBarFunction(total, interval, width)
