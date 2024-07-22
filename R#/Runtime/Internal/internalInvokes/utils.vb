@@ -114,6 +114,10 @@ Namespace Runtime.Internal.Invokes
     <Package("utils")>
     Public Module utils
 
+        Public Function progress_bar(total As Integer, Optional width As Integer = 45)
+
+        End Function
+
         ''' <summary>
         ''' Wraps a collection with a progress bar for iteration, providing visual feedback on progress.
         ''' </summary>

@@ -230,6 +230,16 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' range ``[0,100]`` if the progress function is invoked in a parallel 
         ''' stack environment.
         ''' </remarks>
+        ''' <example>
+        ''' # just used for display the progress
+        ''' progress(20);
+        ''' # [SET_PROGRESS] 20% Pipeline progress report
+        ''' 
+        ''' x 
+        ''' |> progress("display progress info")
+        ''' |> blablabla()
+        ''' ;
+        ''' </example>
         <ExportAPI("progress")>
         Public Function progress(<RRawVectorArgument>
                                  x As Object,
