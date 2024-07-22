@@ -114,8 +114,18 @@ Namespace Runtime.Internal.Invokes
     <Package("utils")>
     Public Module utils
 
-        Public Function progress_bar(total As Integer, Optional width As Integer = 45)
-
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="total"></param>
+        ''' <param name="width"></param>
+        ''' <param name="interval">
+        ''' the progress display internal, should be value in range [1,100].
+        ''' </param>
+        ''' <returns></returns>
+        <ExportAPI("progress_bar")>
+        Public Function progress_bar(total As Integer, Optional width As Integer = 45, Optional interval As Integer = 5) As ProgressBarFunction
+            Return New ProgressBarFunction(total, interval, width)
         End Function
 
         ''' <summary>
