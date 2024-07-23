@@ -58,6 +58,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             Dim get_id As Func(Of dataframe, String())
 
+            If x.hasName(".id") AndAlso Not TypeOf x.getByName(".id") Is dataframe Then
+                _id = x.getByName(".id")
+                x.setByName(".id", Nothing, env)
+            End If
+
             If _id Is Nothing Then
                 get_id = Function(df) Nothing
             Else
