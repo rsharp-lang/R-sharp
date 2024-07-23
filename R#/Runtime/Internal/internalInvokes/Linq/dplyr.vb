@@ -69,9 +69,9 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Dim type As RType = RType.TypeOf(_id)
 
                 If type.mode.IsNumeric Then
-                    get_id = Function(df) df(df.colnames(CLRVector.asInteger(_id).First))
+                    get_id = Function(df) CLRVector.asCharacter(df(df.colnames(CLRVector.asInteger(_id).First)))
                 Else
-                    get_id = Function(df) df(CLRVector.asCharacter(_id).First)
+                    get_id = Function(df) CLRVector.asCharacter(df(CLRVector.asCharacter(_id).First))
                 End If
             End If
 
@@ -93,7 +93,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                         columns(col.Key) = Replicate(Of Object)(Nothing, nrows).AsList
                     End If
 
-                    columns(col.Key).AddRange(col.Value.AsObjectEnumerator)
+                    columns(col.Key).AddRange(df(col.Key).AsObjectEnumerator)
                 Next
 
                 nrows += df.nrows
