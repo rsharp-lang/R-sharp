@@ -96,6 +96,11 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
                 Dim df As dataframe = df_obj
 
+                ' empty dataframe also treated as null
+                If df.empty Then
+                    Continue For
+                End If
+
                 For Each col In df.columns
                     If Not columns.ContainsKey(col.Key) Then
                         columns(col.Key) = Replicate(Of Object)(Nothing, nrows).AsList
