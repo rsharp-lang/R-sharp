@@ -117,7 +117,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Dim num_rows As Integer = df.nrows
 
                 For Each col As String In allcols
-                    If Not columns.ContainsKey(col) Then
+                    If Not df.hasName(col) Then
                         columns(col).AddRange(Replicate(Of Object)(Nothing, num_rows))
                     Else
                         columns(col).AddRange(df(col).AsObjectEnumerator)
