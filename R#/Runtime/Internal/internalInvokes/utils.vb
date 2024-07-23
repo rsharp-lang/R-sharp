@@ -153,6 +153,11 @@ Namespace Runtime.Internal.Invokes
                                   Optional use_color As Boolean = False,
                                   Optional env As Environment = Nothing) As Object
 
+            ' null mean empty collection
+            If x Is Nothing Then
+                Return Nothing
+            End If
+
             If TypeOf x Is list Then
                 Return New tqdmList With {.list = x}
             ElseIf x.GetType.ImplementInterface(Of IDictionary(Of String, Object)) Then
