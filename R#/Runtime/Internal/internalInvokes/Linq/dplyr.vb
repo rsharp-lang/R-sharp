@@ -63,6 +63,14 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 x.setByName(".id", Nothing, env)
             End If
 
+            If x.length = 1 Then
+                If TypeOf x.data.First Is list Then
+                    x = x.data.First
+                Else
+                    Throw New InvalidCastException("invalid data type for the required input dataframe list!")
+                End If
+            End If
+
             If _id Is Nothing Then
                 get_id = Function(df) Nothing
             Else
