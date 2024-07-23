@@ -1067,11 +1067,21 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' test of the give character vector is empty string or not
         ''' </summary>
-        ''' <param name="[string]"></param>
-        ''' <returns></returns>
+        ''' <param name="x">a character vector that contains multiple string for do the test</param>
+        ''' <returns>
+        ''' a logical vector of the test result. TRUE means the given string
+        ''' is asserted as an empty factor.
+        ''' </returns>
         <ExportAPI("str_empty")>
-        Public Function str_empty([string] As String()) As Boolean()
-            Return [string].Select(AddressOf StringEmpty).ToArray
+        Public Function str_empty(x As String(),
+                                  Optional whitespace_empty As Boolean = True,
+                                  Optional test_empty_factor As Boolean = False) As Boolean()
+
+            Return (From si As String
+                    In x
+                    Select si.StringEmpty(
+                        whitespaceAsEmpty:=whitespace_empty,
+                        testEmptyFactor:=test_empty_factor)).ToArray
         End Function
 
         ''' <summary>
