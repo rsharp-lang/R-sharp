@@ -83,8 +83,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 End If
             End If
 
-            Dim columns As New Dictionary(Of String, List(Of Object))
-            Dim nrows As Integer = 0
+            Dim all_dfs As New List(Of dataframe)
 
             For Each df_obj As Object In x.data
                 If df_obj Is Nothing Then
@@ -94,19 +93,35 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     Return Message.InCompatibleType(GetType(dataframe), df_obj.GetType, env)
                 End If
 
-                Dim df As dataframe = df_obj
-
                 ' empty dataframe also treated as null
-                If df.empty Then
+                If DirectCast(df_obj, dataframe).empty Then
                     Continue For
                 End If
 
-                For Each col In df.columns
-                    If Not columns.ContainsKey(col.Key) Then
-                        columns(col.Key) = Replicate(Of Object)(Nothing, nrows).AsList
-                    End If
+                Call all_dfs.Add(df_obj)
+            Next
 
-                    columns(col.Key).AddRange(df(col.Key).AsObjectEnumerator)
+            Dim columns As New Dictionary(Of String, List(Of Object))
+            Dim nrows As Integer = 0
+            Dim allcols As String() = all_dfs _
+                .Select(Function(d) d.colnames) _
+                .IteratesALL _
+                .Distinct _
+                .ToArray
+
+            For Each col As String In allcols
+                Call columns.Add(col, New List(Of Object))
+            Next
+
+            For Each df As dataframe In all_dfs
+                Dim num_rows As Integer = df.nrows
+
+                For Each col As String In allcols
+                    If Not columns.ContainsKey(col) Then
+                        columns(col).AddRange(Replicate(Of Object)(Nothing, num_rows))
+                    Else
+                        columns(col).AddRange(df(col).AsObjectEnumerator)
+                    End If
                 Next
 
                 nrows += df.nrows
