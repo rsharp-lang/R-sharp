@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -79,6 +80,9 @@ Partial Module CLI
         Dim source_dir As String = args.Parameters _
             .ElementAtOrDefault(0, "./") _
             .GetDirectoryFullPath
+        Dim src$ = RPackage.sourceHelper(source_dir)
+        Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{src}/DESCRIPTION")
+
 
     End Function
 
