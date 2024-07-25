@@ -1360,7 +1360,7 @@ Namespace Runtime.Internal.Invokes
                     Case "raw"
                         Dim bytes As Byte() = New Byte(n - 1) {}
                         buf.TryCast(Of Stream).Read(bytes, Scan0, n)
-                        Return buf
+                        Return bytes
                     Case Else
                         ' invoke generic function overloads
                         Return readBinOverloads(buf.TryCast(Of Stream), CStr(what), con, is_path, env)
