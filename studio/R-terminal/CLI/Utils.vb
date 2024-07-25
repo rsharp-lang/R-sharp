@@ -68,6 +68,20 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Partial Module CLI
 
+    ''' <summary>
+    ''' install package from a given R# source folder
+    ''' </summary>
+    ''' <param name="args"></param>
+    ''' <returns></returns>
+    <ExportAPI("--install.source")>
+    <Usage("--install.source <package_source_dir, default='./'>")>
+    Public Function Install_source(args As CommandLine) As Integer
+        Dim source_dir As String = args.Parameters _
+            .ElementAtOrDefault(0, "./") _
+            .GetDirectoryFullPath
+
+    End Function
+
     <ExportAPI("--install.packages")>
     <Description("Install new packages.")>
     <Usage("--install.packages /module <*.dll/*.zip> [--verbose]")>
