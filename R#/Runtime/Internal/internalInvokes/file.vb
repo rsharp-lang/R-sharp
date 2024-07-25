@@ -1356,35 +1356,47 @@ Namespace Runtime.Internal.Invokes
 
                 Throw New NotImplementedException
             ElseIf TypeOf what Is String Then
-                ' invoke generic function for parse
-                ' binary file as R#/clr object
-                Dim fname As String = $"readBin.{what}"
-                Dim f As GenericFunction = generic.get(fname, GetType(Stream))
-
-                If f Is Nothing Then
-                    Return generic.missingGenericSymbol(fname, env)
-                End If
-
-                Dim out As Object
-
-                Try
-                    out = f(buf.TryCast(Of Stream), list.empty, env)
-                Catch ex As Exception
-                    If is_path Then
-                        Throw New Exception($"error_file: {CLRVector.asCharacter(con).First}", ex)
-                    Else
-                        Throw
-                    End If
-                End Try
-
-                If is_path Then
-                    Call buf.TryCast(Of Stream).Dispose()
-                End If
-
-                Return out
+                Select Case CStr(what).ToLower
+                    Case "raw"
+                        Dim bytes As Byte() = New Byte(n - 1) {}
+                        buf.TryCast(Of Stream).Read(bytes, Scan0, n)
+                        Return buf
+                    Case Else
+                        ' invoke generic function overloads
+                        Return readBinOverloads(buf.TryCast(Of Stream), CStr(what), con, is_path, env)
+                End Select
             Else
                 Return Message.InCompatibleType(GetType(What), what.GetType, env)
             End If
+        End Function
+
+        Private Function readBinOverloads(s As Stream, what As String, con As Object, is_path As Boolean, env As Environment) As Object
+            ' invoke generic function for parse
+            ' binary file as R#/clr object
+            Dim fname As String = $"readBin.{what}"
+            Dim f As GenericFunction = generic.get(fname, GetType(Stream))
+
+            If f Is Nothing Then
+                Return generic.missingGenericSymbol(fname, env)
+            End If
+
+            Dim out As Object
+
+            Try
+                out = f(s, list.empty, env)
+            Catch ex As Exception
+                If is_path Then
+                    Throw New Exception($"error_file: {CLRVector.asCharacter(con).First}", ex)
+                Else
+                    Throw
+                End If
+            End Try
+
+            If is_path Then
+                Call s.Dispose()
+            End If
+
+            Return out
         End Function
 
         Const NA_integer_ = Integer.MinValue
