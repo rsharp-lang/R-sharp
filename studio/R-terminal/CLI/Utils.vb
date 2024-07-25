@@ -85,7 +85,7 @@ Partial Module CLI
         Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{src}/DESCRIPTION")
         Dim pkg_stream As New MemoryStream
 
-        If meta.Compile(src, pkg_stream) <> 0 Then
+        If meta.Compile(src, pkg_stream, auto_fileclose:=False) <> 0 Then
             Return 500
         End If
 

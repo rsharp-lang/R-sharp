@@ -115,10 +115,14 @@ Namespace Development.Package.File
         ''' <remarks>
         ''' generate nuget package format zip archive file.
         ''' </remarks>
-        Public Sub Flush(outfile As Stream, assets As Dictionary(Of String, String))
-            Using zip As New ZipArchive(outfile, ZipArchiveMode.Create)
-                Call New NuGetZip(zip, Me).CreateNuGetPackage(assets)
-            End Using
+        Public Sub Flush(outfile As Stream, assets As Dictionary(Of String, String), Optional auto_file_close As Boolean = True)
+            If auto_file_close Then
+                Using zip As New ZipArchive(outfile, ZipArchiveMode.Create)
+                    Call New NuGetZip(zip, Me).CreateNuGetPackage(assets)
+                End Using
+            Else
+                Call New NuGetZip(New ZipArchive(outfile, ZipArchiveMode.Create), Me).CreateNuGetPackage(assets)
+            End If
         End Sub
 
     End Class

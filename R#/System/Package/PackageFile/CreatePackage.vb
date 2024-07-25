@@ -175,7 +175,9 @@ Namespace Development.Package.File
         ''' <returns></returns>
         ''' 
         <Extension>
-        Public Function Build(desc As DESCRIPTION, target As String, outfile As Stream, Optional assemblyFilters As Index(Of String) = Nothing) As Message
+        Public Function Build(desc As DESCRIPTION, target As String, outfile As Stream,
+                              Optional assemblyFilters As Index(Of String) = Nothing,
+                              Optional file_close As Boolean = True) As Message
             ' R build output
             '
             ' * checking for file '../mzkit/DESCRIPTION' ... OK
@@ -246,7 +248,11 @@ Namespace Development.Package.File
             file.loading = loading.loadingDependency.ToArray
 
             Call Console.WriteLine($"     write binary zip package...")
-            file.Flush(outfile, createAssetList(resource, baseDir:=target.GetDirectoryFullPath))
+
+            ' create zip package file
+            file.Flush(outfile,
+                       assets:=createAssetList(resource, baseDir:=target.GetDirectoryFullPath),
+                       auto_file_close:=file_close)
 
             Call Console.WriteLine("* done!")
 

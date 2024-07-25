@@ -47,13 +47,13 @@ Module RPackage
     End Function
 
     <Extension>
-    Public Function Compile(meta As DESCRIPTION, src As String, outputFile As Stream) As Integer
+    Public Function Compile(meta As DESCRIPTION, src As String, outputFile As Stream, Optional auto_fileclose As Boolean = True) As Integer
         ' framework dll module ignores
         Dim assemblyFilters As Index(Of String) = {
             "Rscript.exe", "R#.exe", "Rscript.dll", "R#.dll", "REnv.dll", "RData.dll",
             "Microsoft.VisualBasic.Runtime.dll"
         }
-        Dim err As Message = meta.Build(src, outputFile, assemblyFilters)
+        Dim err As Message = meta.Build(src, outputFile, assemblyFilters, file_close:=auto_fileclose)
         Dim save_file As String
 
         If TypeOf outputFile Is FileStream Then
