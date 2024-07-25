@@ -90,7 +90,6 @@ Partial Module CLI
         End If
 
         Call pkg_stream.Seek(0, SeekOrigin.Begin)
-        Call pkg_stream.Flush()
 
         ' unzip to package library directory
         Dim localConfigs As String = getConfig(args)
