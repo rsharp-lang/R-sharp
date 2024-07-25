@@ -78,17 +78,8 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         Dim save$ = args("/save") Or $"{src}/../{meta.Package}_{meta.Version}.zip"
         Dim skipSourceBuild As Boolean = args("--skip-src-build")
         Dim r_syntax As String = args("--github-page") Or "../../_assets/R_syntax.js"
-        Dim pkg_stream As New MemoryStream
 
-        If meta.Compile(src, pkg_stream) <> 0 Then
-            Return 500
-        End If
-
-        Call pkg_stream.Seek(0, SeekOrigin.Begin)
-        Call pkg_stream.Flush()
-
-        ' unzip to package library directory
-
+        Return meta.Compile(src, save, skipSourceBuild, r_syntax)
     End Function
 
     <ExportAPI("--check")>

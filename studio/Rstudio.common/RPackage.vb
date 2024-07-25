@@ -59,7 +59,7 @@ Module RPackage
         If TypeOf outputFile Is FileStream Then
             save_file = DirectCast(outputFile, FileStream).Name
         Else
-            save_file = $"in_memory://&H_0X<{outputFile.GetHashCode.ToHexString}>"
+            save_file = $"in_memory://&H_0x<{outputFile.GetHashCode.ToHexString}>"
         End If
 
         If RProgram.isException(err) Then

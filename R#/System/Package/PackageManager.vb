@@ -75,6 +75,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports fs = System.IO.Directory
 Imports Directory = Microsoft.VisualBasic.FileIO.Directory
+Imports System.IO
 
 Namespace Development.Package
 
@@ -196,11 +197,28 @@ Namespace Development.Package
         End Function
 
         ''' <summary>
+        ''' Install a compiled zip package file
+        ''' </summary>
+        ''' <param name="zip_stream"></param>
+        ''' <param name="err"></param>
+        ''' <returns></returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function InstallLocals(zip_stream As Stream, ByRef err As Exception) As String()
+            Return installZip(zip_stream, $"in_memory://&H_0x{zip_stream.GetHashCode.ToHexString}", err)
+        End Function
+
+        Private Function installZip(zipFile As String, ByRef err As Exception) As String()
+            Using s As Stream = zipFile.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+                Return installZip(s, zipFile.GetFullPath, err)
+            End Using
+        End Function
+
+        ''' <summary>
         ''' 
         ''' </summary>
-        ''' <param name="zipFile"></param>
+        ''' <param name="zipFile">a stream of the package zip file</param>
         ''' <returns>returns the symbol names in target zip package file.</returns>
-        Private Function installZip(zipFile As String, ByRef err As Exception) As String()
+        Private Function installZip(zipFile As Stream, pkg_file As String, ByRef err As Exception) As String()
             Dim pkginfo As DESCRIPTION = PackageLoader2.GetPackageIndex(zipFile)
             Dim libDir As String
             Dim libDirOld As String
@@ -250,7 +268,7 @@ Namespace Development.Package
             ' Exited with status 1.
 
             If pkginfo Is Nothing OrElse pkginfo.Package.StringEmpty Then
-                Throw New InvalidProgramException($"the given package file '{zipFile}' is not a valid R# package!")
+                Throw New InvalidProgramException($"the given package file '{pkg_file}' is not a valid R# package!")
             Else
                 Call Console.WriteLine($"* installing to library '{config.lib_loc.GetDirectoryFullPath}'")
                 Call Console.WriteLine($"* installing *source* package '{pkginfo.Package}' ...")

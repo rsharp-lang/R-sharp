@@ -1,58 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::d5155d836a1ab107dcad7070dc688257, studio\R-terminal\CLI\Utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 274
-    '    Code Lines: 226 (82.48%)
-    ' Comment Lines: 5 (1.82%)
-    '    - Xml Docs: 100.00%
-    ' 
-    '   Blank Lines: 43 (15.69%)
-    '     File Size: 10.72 KB
+' Summaries:
 
 
-    ' Module CLI
-    ' 
-    '     Function: configJSON, configREnv, ConfigStartups, getConfig, InitializeEnvironment
-    '               Install, reset, View
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 274
+'    Code Lines: 226 (82.48%)
+' Comment Lines: 5 (1.82%)
+'    - Xml Docs: 100.00%
+' 
+'   Blank Lines: 43 (15.69%)
+'     File Size: 10.72 KB
+
+
+' Module CLI
+' 
+'     Function: configJSON, configREnv, ConfigStartups, getConfig, InitializeEnvironment
+'               Install, reset, View
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.ComponentModel
+Imports System.IO
 Imports System.Reflection
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -82,8 +83,30 @@ Partial Module CLI
             .GetDirectoryFullPath
         Dim src$ = RPackage.sourceHelper(source_dir)
         Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{src}/DESCRIPTION")
+        Dim pkg_stream As New MemoryStream
 
+        If meta.Compile(src, pkg_stream) <> 0 Then
+            Return 500
+        End If
 
+        Call pkg_stream.Seek(0, SeekOrigin.Begin)
+        Call pkg_stream.Flush()
+
+        ' unzip to package library directory
+        Dim localConfigs As String = getConfig(args)
+        Dim config As New Options(localConfigs, saveConfig:=False)
+        Dim err As Exception = Nothing
+
+        Using pkgMgr As New PackageManager(config)
+            Call pkgMgr.InstallLocals(pkg_stream, err:=err)
+
+            If Not err Is Nothing Then
+                Call App.LogException(err)
+                Return 500
+            Else
+                Return 0
+            End If
+        End Using
     End Function
 
     <ExportAPI("--install.packages")>
@@ -121,6 +144,7 @@ Partial Module CLI
                     Return 500
                 End If
             Else
+                ' scan=<directory>
                 For Each file As String In ls - l - "*.dll" <= [module].GetTagValue("=", trim:=True).Value
                     Try
                         Dim assm As Assembly = Assembly.LoadFrom(file.GetFullPath)

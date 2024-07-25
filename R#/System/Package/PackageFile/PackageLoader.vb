@@ -146,20 +146,26 @@ Namespace Development.Package.File
             End If
         End Function
 
+        Public Function GetPackageIndex(zipFile As Stream) As DESCRIPTION
+            Dim zip As New ZipArchive(zipFile, ZipArchiveMode.Read)
+
+            If zip.GetEntry("package/index.json") Is Nothing Then
+                Return Nothing
+            Else
+                Using file As Stream = zip.GetEntry("package/index.json").Open, fs As New StreamReader(file)
+                    Return fs.ReadToEnd.LoadJSON(Of DESCRIPTION)
+                End Using
+            End If
+        End Function
+
         Public Function GetPackageIndex(zipFile As String) As DESCRIPTION
             If Not zipFile.FileExists Then
                 Return Nothing
+            Else
+                Using s As Stream = zipFile.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+                    Return GetPackageIndex(s)
+                End Using
             End If
-
-            Using zip As New ZipArchive(zipFile.Open(FileMode.Open, doClear:=False, [readOnly]:=True), ZipArchiveMode.Read)
-                If zip.GetEntry("package/index.json") Is Nothing Then
-                    Return Nothing
-                Else
-                    Using file As Stream = zip.GetEntry("package/index.json").Open, fs As New StreamReader(file)
-                        Return fs.ReadToEnd.LoadJSON(Of DESCRIPTION)
-                    End Using
-                End If
-            End Using
         End Function
 
         Private Function FindAllDllFiles(projDir As String) As Dictionary(Of String, String)
