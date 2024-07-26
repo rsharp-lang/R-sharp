@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5fca2789f5b6de23fd2744a43e2d1693, R#\System\Package\PackageManager.vb"
+﻿#Region "Microsoft.VisualBasic::4c1666d7811ad6f3c805050e925fd8b0, R#\System\Package\PackageManager.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 406
-    '    Code Lines: 207 (50.99%)
-    ' Comment Lines: 137 (33.74%)
-    '    - Xml Docs: 37.23%
+    '   Total Lines: 424
+    '    Code Lines: 217 (51.18%)
+    ' Comment Lines: 143 (33.73%)
+    '    - Xml Docs: 39.86%
     ' 
-    '   Blank Lines: 62 (15.27%)
-    '     File Size: 19.68 KB
+    '   Blank Lines: 64 (15.09%)
+    '     File Size: 20.56 KB
 
 
     '     Class PackageManager
@@ -50,8 +50,8 @@
     '         Constructor: (+2 Overloads) Sub New
     ' 
     '         Function: EnumerateAttachedPackages, FindPackage, GenericEnumerator, getEmpty, getPackageDir
-    '                   GetPackageDocuments, hasLibFile, hasLibPackage, installDll, InstallLocals
-    '                   installZip
+    '                   GetPackageDocuments, hasLibFile, hasLibPackage, installDll, (+2 Overloads) InstallLocals
+    '                   (+2 Overloads) installZip
     ' 
     '         Sub: addAttached, (+2 Overloads) Dispose, Flush
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ac6f35d149aed92ef93b280bbba90a34, R#\System\Package\PackageFile\CreatePackage.vb"
+﻿#Region "Microsoft.VisualBasic::09404eba098186717ca22c7afb6d431a, R#\System\Package\PackageFile\CreatePackage.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 609
-    '    Code Lines: 433 (71.10%)
-    ' Comment Lines: 80 (13.14%)
-    '    - Xml Docs: 65.00%
+    '   Total Lines: 615
+    '    Code Lines: 437 (71.06%)
+    ' Comment Lines: 81 (13.17%)
+    '    - Xml Docs: 64.20%
     ' 
-    '   Blank Lines: 96 (15.76%)
-    '     File Size: 25.88 KB
+    '   Blank Lines: 97 (15.77%)
+    '     File Size: 26.11 KB
 
 
     '     Module CreatePackage

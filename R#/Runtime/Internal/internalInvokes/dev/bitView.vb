@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::426824fd4204e414064bec235c35207d, R#\Runtime\Internal\internalInvokes\dev\bitView.vb"
+﻿#Region "Microsoft.VisualBasic::2d7510448cedb8656cdfbad920690ea5, R#\Runtime\Internal\internalInvokes\dev\bitView.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 46
-    '    Code Lines: 37 (80.43%)
-    ' Comment Lines: 0 (0.00%)
-    '    - Xml Docs: 0.00%
+    '   Total Lines: 92
+    '    Code Lines: 66 (71.74%)
+    ' Comment Lines: 7 (7.61%)
+    '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 9 (19.57%)
-    '     File Size: 1.70 KB
+    '   Blank Lines: 19 (20.65%)
+    '     File Size: 3.29 KB
 
 
     '     Module bitView
     ' 
     '         Function: bitConvert, doubles, floats, int64, integers
-    '                   shorts
+    '                   magicNumber, shorts
     ' 
     ' 
     ' /********************************************************************************/

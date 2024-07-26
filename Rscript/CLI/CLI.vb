@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::010f8cac04a625d518a459a744be7689, Rscript\CLI\CLI.vb"
+﻿#Region "Microsoft.VisualBasic::63c44f75b2fb5284ef3053155b1856ff, Rscript\CLI\CLI.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 157
-    '    Code Lines: 130 (82.80%)
-    ' Comment Lines: 5 (3.18%)
+    '   Total Lines: 89
+    '    Code Lines: 75 (84.27%)
+    ' Comment Lines: 2 (2.25%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 22 (14.01%)
-    '     File Size: 6.42 KB
+    '   Blank Lines: 12 (13.48%)
+    '     File Size: 4.00 KB
 
 
     ' Module CLI
     ' 
-    '     Function: Check, Compile, runMSBuild, sourceHelper
+    '     Function: Check, Compile
     ' 
     ' /********************************************************************************/
 

@@ -1,55 +1,56 @@
-﻿#Region "Microsoft.VisualBasic::62ea2046e4f8207e081043c7f06dc6d0, studio\Rsharp_kit\MLkit\MachineLearning\CNNLayerArguments.vb"
+﻿#Region "Microsoft.VisualBasic::faa8c385312ff788c0dabc4c9aa792aa, studio\Rsharp_kit\MLkit\MachineLearning\CNNLayerArguments.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 37
-'    Code Lines: 30 (81.08%)
-' Comment Lines: 0 (0.00%)
-'    - Xml Docs: 0.00%
-' 
-'   Blank Lines: 7 (18.92%)
-'     File Size: 1.80 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Class CNNLayerArguments
-' 
-'     Properties: args, type
-' 
-'     Function: CreateLayer, ToString
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 43
+    '    Code Lines: 35 (81.40%)
+    ' Comment Lines: 0 (0.00%)
+    '    - Xml Docs: 0.00%
+    ' 
+    '   Blank Lines: 8 (18.60%)
+    '     File Size: 2.05 KB
+
+
+    ' Class CNNLayerArguments
+    ' 
+    '     Properties: args, type
+    ' 
+    '     Function: CreateLayer, ToString
+    '     Operators: +
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

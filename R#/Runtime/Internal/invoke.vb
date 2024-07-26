@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1c82eda559c9c35cfb8799b7039ba867, R#\Runtime\Internal\invoke.vb"
+﻿#Region "Microsoft.VisualBasic::230422ab3d660098895cb5d8ffa1eb02, R#\Runtime\Internal\invoke.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 192
-    '    Code Lines: 134 (69.79%)
-    ' Comment Lines: 39 (20.31%)
+    '   Total Lines: 193
+    '    Code Lines: 135 (69.95%)
+    ' Comment Lines: 39 (20.21%)
     '    - Xml Docs: 94.87%
     ' 
-    '   Blank Lines: 19 (9.90%)
-    '     File Size: 8.12 KB
+    '   Blank Lines: 19 (9.84%)
+    '     File Size: 8.18 KB
 
 
     '     Class invoke

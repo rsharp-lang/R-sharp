@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::52f593ee3bf01d8774e665e1ba6bbe32, studio\Rsharp_kit\MLkit\ROC.vb"
+﻿#Region "Microsoft.VisualBasic::ce38a95c04821335e43255e81d53f72d, studio\Rsharp_kit\MLkit\ROC.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 100.00%
     ' 
     '   Blank Lines: 7 (11.29%)
-    '     File Size: 2.25 KB
+    '     File Size: 2.26 KB
 
 
     ' Class ROC

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cb2ef20582f0e4f24aad505958441151, R#\Runtime\System\Symbol.vb"
+﻿#Region "Microsoft.VisualBasic::08c078a2ea56918740a3fe868dc04225, R#\Runtime\System\Symbol.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 258
-    '    Code Lines: 159 (61.63%)
-    ' Comment Lines: 65 (25.19%)
+    '   Total Lines: 270
+    '    Code Lines: 170 (62.96%)
+    ' Comment Lines: 65 (24.07%)
     '    - Xml Docs: 92.31%
     ' 
-    '   Blank Lines: 34 (13.18%)
-    '     File Size: 9.25 KB
+    '   Blank Lines: 35 (12.96%)
+    '     File Size: 9.68 KB
 
 
     '     Class Symbol
@@ -51,7 +51,7 @@
     ' 
     '         Constructor: (+4 Overloads) Sub New
     ' 
-    '         Function: GetValueViewString, setValue, ToString, ToVector
+    '         Function: GetValueViewString, setValue, ToString, ToVector, TryGetValueType
     ' 
     '         Sub: setMutable
     ' 

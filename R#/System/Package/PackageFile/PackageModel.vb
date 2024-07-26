@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::806d575402c88c4a2dc7ac7bb3d10b3c, R#\System\Package\PackageFile\PackageModel.vb"
+﻿#Region "Microsoft.VisualBasic::26dee4071f3af6b0580e52a073225bdf, R#\System\Package\PackageFile\PackageModel.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 66
-    '    Code Lines: 34 (51.52%)
-    ' Comment Lines: 24 (36.36%)
+    '   Total Lines: 70
+    '    Code Lines: 38 (54.29%)
+    ' Comment Lines: 24 (34.29%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 8 (12.12%)
-    '     File Size: 2.39 KB
+    '   Blank Lines: 8 (11.43%)
+    '     File Size: 2.63 KB
 
 
     '     Class PackageModel

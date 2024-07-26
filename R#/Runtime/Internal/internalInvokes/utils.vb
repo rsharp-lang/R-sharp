@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a8319899289c4f4d7ba248d3feb64fbb, R#\Runtime\Internal\internalInvokes\utils.vb"
+﻿#Region "Microsoft.VisualBasic::725d0bbaec01e316e59e7e9ed5476a45, R#\Runtime\Internal\internalInvokes\utils.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1470
-    '    Code Lines: 779 (52.99%)
-    ' Comment Lines: 554 (37.69%)
-    '    - Xml Docs: 88.99%
+    '   Total Lines: 1535
+    '    Code Lines: 804 (52.38%)
+    ' Comment Lines: 588 (38.31%)
+    '    - Xml Docs: 88.78%
     ' 
-    '   Blank Lines: 137 (9.32%)
-    '     File Size: 70.09 KB
+    '   Blank Lines: 143 (9.32%)
+    '     File Size: 72.29 KB
 
 
     '     Module utils
@@ -48,8 +48,9 @@
     '         Function: castTS, createAlternativeName, createCommandLine, createTimespan, data
     '                   dataSearchByPackageDir, debugTool, description, FindSystemFile, GetInstalledPackages
     '                   (+2 Overloads) getPackageSystemFile, head, installPackages, keyGroups, loadByName
-    '                   md5, memorySize, now, readFile, system
-    '                   systemFile, tqdm_wrap, wget, workdir
+    '                   md5, memorySize, now, progress_bar, readFile
+    '                   setTqdmProgressBarlabel, system, systemFile, tqdm_wrap, wget
+    '                   workdir
     ' 
     '         Sub: cls, pause, sleep
     '         Enum TimeSpanUnits

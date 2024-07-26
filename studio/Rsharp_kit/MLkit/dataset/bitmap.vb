@@ -1,4 +1,57 @@
-﻿
+﻿#Region "Microsoft.VisualBasic::d32c4a1f696ed4a1775443a31ee284e6, studio\Rsharp_kit\MLkit\dataset\bitmap.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 155
+    '    Code Lines: 106 (68.39%)
+    ' Comment Lines: 23 (14.84%)
+    '    - Xml Docs: 95.65%
+    ' 
+    '   Blank Lines: 26 (16.77%)
+    '     File Size: 5.87 KB
+
+
+    ' Module bitmap_func
+    ' 
+    '     Function: corp_rectangle, open, scan_rowpeaks
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+
 Imports System.Drawing
 Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.ProgressBar
@@ -153,3 +206,4 @@ Module bitmap_func
         Return scan_out
     End Function
 End Module
+

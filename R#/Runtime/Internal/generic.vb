@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::32c98d47a579c155d169d77596eb1b34, R#\Runtime\Internal\generic.vb"
+﻿#Region "Microsoft.VisualBasic::b83f0803f0e637c43634792797e3ee8a, R#\Runtime\Internal\generic.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 262
-    '    Code Lines: 148 (56.49%)
-    ' Comment Lines: 80 (30.53%)
+    '   Total Lines: 264
+    '    Code Lines: 150 (56.82%)
+    ' Comment Lines: 80 (30.30%)
     '    - Xml Docs: 91.25%
     ' 
-    '   Blank Lines: 34 (12.98%)
-    '     File Size: 10.46 KB
+    '   Blank Lines: 34 (12.88%)
+    '     File Size: 10.52 KB
 
 
     '     Delegate Function

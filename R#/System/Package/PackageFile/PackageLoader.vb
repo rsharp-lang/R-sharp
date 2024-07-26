@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0d138321709364f5db7ead7f46f1b869, R#\System\Package\PackageFile\PackageLoader.vb"
+﻿#Region "Microsoft.VisualBasic::a273ad76f8a1f7bd1d45640cd7f60314, R#\System\Package\PackageFile\PackageLoader.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 369
-    '    Code Lines: 231 (62.60%)
-    ' Comment Lines: 85 (23.04%)
+    '   Total Lines: 375
+    '    Code Lines: 236 (62.93%)
+    ' Comment Lines: 85 (22.67%)
     '    - Xml Docs: 62.35%
     ' 
-    '   Blank Lines: 53 (14.36%)
-    '     File Size: 15.28 KB
+    '   Blank Lines: 54 (14.40%)
+    '     File Size: 15.47 KB
 
 
     '     Module PackageLoader2
     ' 
-    '         Function: callOnLoad, CheckPackage, FindAllDllFiles, GetPackageDirectory, GetPackageIndex
+    '         Function: callOnLoad, CheckPackage, FindAllDllFiles, GetPackageDirectory, (+2 Overloads) GetPackageIndex
     '                   GetPackageName, Hotload, loadDependency, LoadPackage
     ' 
     ' 

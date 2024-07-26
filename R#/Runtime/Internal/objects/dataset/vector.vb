@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::03cdca1332db56b20b5b5f4ea5514be6, R#\Runtime\Internal\objects\dataset\vector.vb"
+﻿#Region "Microsoft.VisualBasic::072d0f6cf46b05a786d37b7eb8a43bb5, R#\Runtime\Internal\objects\dataset\vector.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 425
-    '    Code Lines: 310 (72.94%)
-    ' Comment Lines: 48 (11.29%)
-    '    - Xml Docs: 93.75%
+    '   Total Lines: 430
+    '    Code Lines: 310 (72.09%)
+    ' Comment Lines: 53 (12.33%)
+    '    - Xml Docs: 94.34%
     ' 
-    '   Blank Lines: 67 (15.76%)
-    '     File Size: 15.96 KB
+    '   Blank Lines: 67 (15.58%)
+    '     File Size: 16.13 KB
 
 
     '     Class vector
