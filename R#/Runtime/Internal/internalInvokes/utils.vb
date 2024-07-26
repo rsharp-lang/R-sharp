@@ -138,6 +138,31 @@ Namespace Runtime.Internal.Invokes
             Return New ProgressBarFunction(total, interval, width)
         End Function
 
+        Dim tqdm_bar As Tqdm.ProgressBar = Nothing
+
+        ''' <summary>
+        ''' set progress task for current used tqdm wrapped progressbar in for loop
+        ''' </summary>
+        ''' <param name="label"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' this function is thread unsafe
+        ''' </remarks>
+        <ExportAPI("tqdm_label")>
+        Public Function setTqdmProgressBarlabel(label As String) As Object
+            If Not tqdm_bar Is Nothing Then
+                Try
+                    Call tqdm_bar.SetLabel(label)
+                Catch ex As Exception
+                    ' do nothing
+                    ' just ignores this error
+                    ' it doesn't matter
+                End Try
+            End If
+
+            Return Nothing
+        End Function
+
         ''' <summary>
         ''' Wraps a collection with a progress bar for iteration, providing visual feedback on progress.
         ''' </summary>
@@ -146,6 +171,9 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="prints_perSecond">The update frequency of the progress bar.</param>
         ''' <param name="use_color">Indicates whether to use colored output for the progress bar.</param>
         ''' <returns>An enumerable that iterates over the collection with progress tracking.</returns> 
+        ''' <remarks>
+        ''' this function is thread unsafe
+        ''' </remarks>
         <ExportAPI("tqdm")>
         Public Function tqdm_wrap(<RRawVectorArgument> x As Object,
                                   Optional width As Integer = 40,
@@ -174,10 +202,18 @@ Namespace Runtime.Internal.Invokes
                 ' 20240215 avoid ArgumentOutOfRangeException: Count cannot be less than zero. (Parameter 'count')
                 If pull.IsNullOrEmpty Then
                     Return Nothing
+                Else
+                    tqdm_bar = Nothing
                 End If
 
-                Dim bar = Tqdm.Wrap(pull, width:=width, printsPerSecond:=prints_perSecond, useColor:=use_color)
-                Dim pip As pipeline = pipeline.CreateFromPopulator(bar)
+                Dim bar As IEnumerable(Of Object) = Tqdm.Wrap(pull,
+                    width:=width,
+                    printsPerSecond:=prints_perSecond,
+                    bar:=tqdm_bar,
+                    useColor:=use_color
+                )
+                Dim pip As pipeline = pipeline.CreateFromPopulator(bar, finalize:=Sub() tqdm_bar = Nothing)
+
                 Return pip
             End If
         End Function
