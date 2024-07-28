@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a3944392c9ec29e55a7cb00db68d1774, studio\Rserver\Rweb\Rweb.vb"
+﻿#Region "Microsoft.VisualBasic::07087abc44d38fb13aec697f0c32e602, studio\Rserver\Rweb\Rweb.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 171
-    '    Code Lines: 128 (74.85%)
-    ' Comment Lines: 15 (8.77%)
+    '   Total Lines: 172
+    '    Code Lines: 129 (75.00%)
+    ' Comment Lines: 15 (8.72%)
     '    - Xml Docs: 80.00%
     ' 
-    '   Blank Lines: 28 (16.37%)
-    '     File Size: 6.03 KB
+    '   Blank Lines: 28 (16.28%)
+    '     File Size: 6.06 KB
 
 
     ' Class Rweb

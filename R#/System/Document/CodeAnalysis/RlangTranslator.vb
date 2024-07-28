@@ -1,4 +1,61 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.Collection
+﻿#Region "Microsoft.VisualBasic::50ba2a7c5d70f5f2f035ae87791daa50, R#\System\Document\CodeAnalysis\RlangTranslator.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 320
+    '    Code Lines: 247 (77.19%)
+    ' Comment Lines: 17 (5.31%)
+    '    - Xml Docs: 76.47%
+    ' 
+    '   Blank Lines: 56 (17.50%)
+    '     File Size: 13.24 KB
+
+
+    '     Class RlangTranslator
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: AssignNewSymbol, castLiteral, CreateSymbols, GetAssignValue, GetBinaryOp
+    '                   getByref, GetElse, GetFunctionInvoke, GetIf, (+2 Overloads) GetScript
+    '                   GetSymbol, GetSymbolIndexSubset, GetUnaryNot, (+2 Overloads) Literal, Vector
+    ' 
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols

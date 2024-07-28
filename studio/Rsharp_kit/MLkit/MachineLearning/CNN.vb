@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c14edf9d976528cd772e07f0bf105ab6, studio\Rsharp_kit\MLkit\MachineLearning\CNN.vb"
+﻿#Region "Microsoft.VisualBasic::fbd75a2ee003a9e0e8275ecd98a1df34, studio\Rsharp_kit\MLkit\MachineLearning\CNN.vb"
 
     ' Author:
     ' 
@@ -34,12 +34,12 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 769
-    '    Code Lines: 490 (63.72%)
-    ' Comment Lines: 194 (25.23%)
+    '   Total Lines: 768
+    '    Code Lines: 487 (63.41%)
+    ' Comment Lines: 194 (25.26%)
     '    - Xml Docs: 96.39%
     ' 
-    '   Blank Lines: 85 (11.05%)
+    '   Blank Lines: 87 (11.33%)
     '     File Size: 31.51 KB
 
 

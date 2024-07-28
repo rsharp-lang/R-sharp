@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6af31055f2fb3ef5493f183296e3a1b5, snowFall\Context\RPC\BootstrapSocket.vb"
+﻿#Region "Microsoft.VisualBasic::bd2f8b90f28f2c1716ad7e91792eca56, snowFall\Context\RPC\BootstrapSocket.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 54.41%
     ' 
     '   Blank Lines: 43 (16.04%)
-    '     File Size: 9.50 KB
+    '     File Size: 9.53 KB
 
 
     '     Class BootstrapSocket

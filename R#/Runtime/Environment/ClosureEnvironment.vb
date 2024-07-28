@@ -1,4 +1,4 @@
-#Region "Microsoft.VisualBasic::9b484824cf93708decd6f244c5c6fd6a, R#\Runtime\Environment\ClosureEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::5dee16f4d16ca8aee50c01f3dc270680, R#\Runtime\Environment\ClosureEnvironment.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 85
-    '    Code Lines: 49 (57.65%)
-    ' Comment Lines: 22 (25.88%)
-    '    - Xml Docs: 59.09%
+    '   Total Lines: 89
+    '    Code Lines: 50 (56.18%)
+    ' Comment Lines: 25 (28.09%)
+    '    - Xml Docs: 52.00%
     ' 
-    '   Blank Lines: 14 (16.47%)
-    '     File Size: 3.25 KB
+    '   Blank Lines: 14 (15.73%)
+    '     File Size: 3.39 KB
 
 
     '     Class ClosureEnvironment

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5fca2789f5b6de23fd2744a43e2d1693, R#\System\Package\PackageManager.vb"
+﻿#Region "Microsoft.VisualBasic::4c1666d7811ad6f3c805050e925fd8b0, R#\System\Package\PackageManager.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 406
-    '    Code Lines: 207 (50.99%)
-    ' Comment Lines: 137 (33.74%)
-    '    - Xml Docs: 37.23%
+    '   Total Lines: 424
+    '    Code Lines: 217 (51.18%)
+    ' Comment Lines: 143 (33.73%)
+    '    - Xml Docs: 39.86%
     ' 
-    '   Blank Lines: 62 (15.27%)
-    '     File Size: 19.68 KB
+    '   Blank Lines: 64 (15.09%)
+    '     File Size: 20.56 KB
 
 
     '     Class PackageManager
@@ -50,8 +50,8 @@
     '         Constructor: (+2 Overloads) Sub New
     ' 
     '         Function: EnumerateAttachedPackages, FindPackage, GenericEnumerator, getEmpty, getPackageDir
-    '                   GetPackageDocuments, hasLibFile, hasLibPackage, installDll, InstallLocals
-    '                   installZip
+    '                   GetPackageDocuments, hasLibFile, hasLibPackage, installDll, (+2 Overloads) InstallLocals
+    '                   (+2 Overloads) installZip
     ' 
     '         Sub: addAttached, (+2 Overloads) Dispose, Flush
     ' 
@@ -75,6 +75,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports fs = System.IO.Directory
 Imports Directory = Microsoft.VisualBasic.FileIO.Directory
+Imports System.IO
 
 Namespace Development.Package
 
@@ -196,11 +197,28 @@ Namespace Development.Package
         End Function
 
         ''' <summary>
+        ''' Install a compiled zip package file
+        ''' </summary>
+        ''' <param name="zip_stream"></param>
+        ''' <param name="err"></param>
+        ''' <returns></returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function InstallLocals(zip_stream As Stream, ByRef err As Exception) As String()
+            Return installZip(zip_stream, $"in_memory://&H_0x{zip_stream.GetHashCode.ToHexString}", err)
+        End Function
+
+        Private Function installZip(zipFile As String, ByRef err As Exception) As String()
+            Using s As Stream = zipFile.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+                Return installZip(s, zipFile.GetFullPath, err)
+            End Using
+        End Function
+
+        ''' <summary>
         ''' 
         ''' </summary>
-        ''' <param name="zipFile"></param>
+        ''' <param name="zipFile">a stream of the package zip file</param>
         ''' <returns>returns the symbol names in target zip package file.</returns>
-        Private Function installZip(zipFile As String, ByRef err As Exception) As String()
+        Private Function installZip(zipFile As Stream, pkg_file As String, ByRef err As Exception) As String()
             Dim pkginfo As DESCRIPTION = PackageLoader2.GetPackageIndex(zipFile)
             Dim libDir As String
             Dim libDirOld As String
@@ -250,7 +268,7 @@ Namespace Development.Package
             ' Exited with status 1.
 
             If pkginfo Is Nothing OrElse pkginfo.Package.StringEmpty Then
-                Throw New InvalidProgramException($"the given package file '{zipFile}' is not a valid R# package!")
+                Throw New InvalidProgramException($"the given package file '{pkg_file}' is not a valid R# package!")
             Else
                 Call Console.WriteLine($"* installing to library '{config.lib_loc.GetDirectoryFullPath}'")
                 Call Console.WriteLine($"* installing *source* package '{pkginfo.Package}' ...")

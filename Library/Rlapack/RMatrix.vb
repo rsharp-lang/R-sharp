@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::50659bb7e6447c54c4d70ee93287123f, Library\Rlapack\RMatrix.vb"
+﻿#Region "Microsoft.VisualBasic::15bcfea84a1a0a0fa835e0c60c4cca5b, Library\Rlapack\RMatrix.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 535
-    '    Code Lines: 286 (53.46%)
-    ' Comment Lines: 182 (34.02%)
+    '   Total Lines: 541
+    '    Code Lines: 292 (53.97%)
+    ' Comment Lines: 182 (33.64%)
     '    - Xml Docs: 86.81%
     ' 
-    '   Blank Lines: 67 (12.52%)
-    '     File Size: 21.26 KB
+    '   Blank Lines: 67 (12.38%)
+    '     File Size: 21.48 KB
 
 
     ' Module RMatrix

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d5155d836a1ab107dcad7070dc688257, studio\R-terminal\CLI\Utils.vb"
+﻿#Region "Microsoft.VisualBasic::60b8dd302c5bc777ea622a1b249745cf, studio\R-terminal\CLI\Utils.vb"
 
     ' Author:
     ' 
@@ -34,25 +34,26 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 274
-    '    Code Lines: 226 (82.48%)
-    ' Comment Lines: 5 (1.82%)
-    '    - Xml Docs: 100.00%
+    '   Total Lines: 315
+    '    Code Lines: 254 (80.63%)
+    ' Comment Lines: 12 (3.81%)
+    '    - Xml Docs: 83.33%
     ' 
-    '   Blank Lines: 43 (15.69%)
-    '     File Size: 10.72 KB
+    '   Blank Lines: 49 (15.56%)
+    '     File Size: 12.18 KB
 
 
     ' Module CLI
     ' 
     '     Function: configJSON, configREnv, ConfigStartups, getConfig, InitializeEnvironment
-    '               Install, reset, View
+    '               Install, Install_source, reset, View
     ' 
     ' /********************************************************************************/
 
 #End Region
 
 Imports System.ComponentModel
+Imports System.IO
 Imports System.Reflection
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -62,11 +63,50 @@ Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Partial Module CLI
+
+    ''' <summary>
+    ''' install package from a given R# source folder
+    ''' </summary>
+    ''' <param name="args"></param>
+    ''' <returns></returns>
+    <ExportAPI("--install.source")>
+    <Usage("--install.source <package_source_dir, default='./'>")>
+    Public Function Install_source(args As CommandLine) As Integer
+        Dim source_dir As String = args.Parameters _
+            .ElementAtOrDefault(0, "./") _
+            .GetDirectoryFullPath
+        Dim src$ = RPackage.sourceHelper(source_dir)
+        Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{src}/DESCRIPTION")
+        Dim pkg_stream As New MemoryStream
+
+        If meta.Compile(src, pkg_stream, auto_fileclose:=False) <> 0 Then
+            Return 500
+        End If
+
+        Call pkg_stream.Seek(0, SeekOrigin.Begin)
+
+        ' unzip to package library directory
+        Dim localConfigs As String = getConfig(args)
+        Dim config As New Options(localConfigs, saveConfig:=False)
+        Dim err As Exception = Nothing
+
+        Using pkgMgr As New PackageManager(config)
+            Call pkgMgr.InstallLocals(pkg_stream, err:=err)
+
+            If Not err Is Nothing Then
+                Call App.LogException(err)
+                Return 500
+            Else
+                Return 0
+            End If
+        End Using
+    End Function
 
     <ExportAPI("--install.packages")>
     <Description("Install new packages.")>
@@ -103,6 +143,7 @@ Partial Module CLI
                     Return 500
                 End If
             Else
+                ' scan=<directory>
                 For Each file As String In ls - l - "*.dll" <= [module].GetTagValue("=", trim:=True).Value
                     Try
                         Dim assm As Assembly = Assembly.LoadFrom(file.GetFullPath)

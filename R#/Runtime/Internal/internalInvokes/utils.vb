@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a8319899289c4f4d7ba248d3feb64fbb, R#\Runtime\Internal\internalInvokes\utils.vb"
+﻿#Region "Microsoft.VisualBasic::725d0bbaec01e316e59e7e9ed5476a45, R#\Runtime\Internal\internalInvokes\utils.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1470
-    '    Code Lines: 779 (52.99%)
-    ' Comment Lines: 554 (37.69%)
-    '    - Xml Docs: 88.99%
+    '   Total Lines: 1535
+    '    Code Lines: 804 (52.38%)
+    ' Comment Lines: 588 (38.31%)
+    '    - Xml Docs: 88.78%
     ' 
-    '   Blank Lines: 137 (9.32%)
-    '     File Size: 70.09 KB
+    '   Blank Lines: 143 (9.32%)
+    '     File Size: 72.29 KB
 
 
     '     Module utils
@@ -48,8 +48,9 @@
     '         Function: castTS, createAlternativeName, createCommandLine, createTimespan, data
     '                   dataSearchByPackageDir, debugTool, description, FindSystemFile, GetInstalledPackages
     '                   (+2 Overloads) getPackageSystemFile, head, installPackages, keyGroups, loadByName
-    '                   md5, memorySize, now, readFile, system
-    '                   systemFile, tqdm_wrap, wget, workdir
+    '                   md5, memorySize, now, progress_bar, readFile
+    '                   setTqdmProgressBarlabel, system, systemFile, tqdm_wrap, wget
+    '                   workdir
     ' 
     '         Sub: cls, pause, sleep
     '         Enum TimeSpanUnits
@@ -138,6 +139,31 @@ Namespace Runtime.Internal.Invokes
             Return New ProgressBarFunction(total, interval, width)
         End Function
 
+        Dim tqdm_bar As Tqdm.ProgressBar = Nothing
+
+        ''' <summary>
+        ''' set progress task for current used tqdm wrapped progressbar in for loop
+        ''' </summary>
+        ''' <param name="label"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' this function is thread unsafe
+        ''' </remarks>
+        <ExportAPI("tqdm_label")>
+        Public Function setTqdmProgressBarlabel(label As String) As Object
+            If Not tqdm_bar Is Nothing Then
+                Try
+                    Call tqdm_bar.SetLabel(label)
+                Catch ex As Exception
+                    ' do nothing
+                    ' just ignores this error
+                    ' it doesn't matter
+                End Try
+            End If
+
+            Return Nothing
+        End Function
+
         ''' <summary>
         ''' Wraps a collection with a progress bar for iteration, providing visual feedback on progress.
         ''' </summary>
@@ -146,6 +172,9 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="prints_perSecond">The update frequency of the progress bar.</param>
         ''' <param name="use_color">Indicates whether to use colored output for the progress bar.</param>
         ''' <returns>An enumerable that iterates over the collection with progress tracking.</returns> 
+        ''' <remarks>
+        ''' this function is thread unsafe
+        ''' </remarks>
         <ExportAPI("tqdm")>
         Public Function tqdm_wrap(<RRawVectorArgument> x As Object,
                                   Optional width As Integer = 40,
@@ -174,10 +203,18 @@ Namespace Runtime.Internal.Invokes
                 ' 20240215 avoid ArgumentOutOfRangeException: Count cannot be less than zero. (Parameter 'count')
                 If pull.IsNullOrEmpty Then
                     Return Nothing
+                Else
+                    tqdm_bar = Nothing
                 End If
 
-                Dim bar = Tqdm.Wrap(pull, width:=width, printsPerSecond:=prints_perSecond, useColor:=use_color)
-                Dim pip As pipeline = pipeline.CreateFromPopulator(bar)
+                Dim bar As IEnumerable(Of Object) = Tqdm.Wrap(pull,
+                    width:=width,
+                    printsPerSecond:=prints_perSecond,
+                    bar:=tqdm_bar,
+                    useColor:=use_color
+                )
+                Dim pip As pipeline = pipeline.CreateFromPopulator(bar, finalize:=Sub() tqdm_bar = Nothing)
+
                 Return pip
             End If
         End Function

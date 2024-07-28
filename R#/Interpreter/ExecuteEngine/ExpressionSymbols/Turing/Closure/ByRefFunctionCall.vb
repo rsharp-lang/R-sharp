@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f5518d5038a07ee527c9fc724e552977, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ByRefFunctionCall.vb"
+﻿#Region "Microsoft.VisualBasic::d3dbd2c17ef10cb74a088a14b1fa6180, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ByRefFunctionCall.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 100
-    '    Code Lines: 74 (74.00%)
-    ' Comment Lines: 6 (6.00%)
-    '    - Xml Docs: 50.00%
+    '   Total Lines: 111
+    '    Code Lines: 79 (71.17%)
+    ' Comment Lines: 10 (9.01%)
+    '    - Xml Docs: 70.00%
     ' 
-    '   Blank Lines: 20 (20.00%)
-    '     File Size: 3.87 KB
+    '   Blank Lines: 22 (19.82%)
+    '     File Size: 4.29 KB
 
 
     '     Class ByRefFunctionCall
@@ -48,7 +48,7 @@
     '         Properties: expressionName, stackFrame, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, getTargetFunction, GetUnionParameters, ToString
+    '         Function: ConstructByrefCall, Evaluate, getTargetFunction, GetUnionParameters, ToString
     ' 
     ' 
     ' /********************************************************************************/

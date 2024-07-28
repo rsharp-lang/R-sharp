@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::effe55652736188beacef83421b1e08b, snowFall\Context\RPC\MasterContext.vb"
+﻿#Region "Microsoft.VisualBasic::06b4b7b0e256ce2f3539aab659213459, snowFall\Context\RPC\MasterContext.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 62.75%
     ' 
     '   Blank Lines: 40 (16.06%)
-    '     File Size: 9.44 KB
+    '     File Size: 9.47 KB
 
 
     '     Class MasterContext
