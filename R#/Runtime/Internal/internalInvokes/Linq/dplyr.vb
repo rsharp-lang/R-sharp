@@ -143,7 +143,18 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 If df_obj Is Nothing Then
                     Continue For
                 End If
-                If Not TypeOf df_obj Is dataframe Then
+
+                If TypeOf df_obj Is list Then
+                    ' is a row?
+                    ' cast to a dataframe with only one row
+                    Dim row As New dataframe With {.columns = New Dictionary(Of String, Array)}
+
+                    For Each col In DirectCast(df_obj, list).slots
+                        Call row.add(col.Key, CLRVector.asCharacter(col.Value))
+                    Next
+
+                    df_obj = row
+                ElseIf Not TypeOf df_obj Is dataframe Then
                     Return Message.InCompatibleType(GetType(dataframe), df_obj.GetType, env)
                 End If
 
