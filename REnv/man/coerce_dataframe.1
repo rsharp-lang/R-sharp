@@ -1,15 +1,20 @@
-﻿.TH COERCE_DATAFRAME 1 2024-Jul "" "coerce_dataframe"
+﻿.TH COERCE_DATAFRAME 1 2024-Jul "" "ensure the export of this function is a dataframe"
 .SH NAME
-coerce_dataframe \- coerce_dataframe(x)
+coerce_dataframe \- coerce_dataframe(x,
+    <i>row.names</i> = <span style='color: blue !important;'>TRUE</span>)
 .SH SYNOPSIS
-\fIcoerce_dataframe(x)\fR
+\fIcoerce_dataframe(x,
+    <i>row.names</i> = <span style='color: blue !important;'>TRUE</span>)\fR
 .SH OPTIONS
 .PP
-\fBx\fB \fR\- . 
+\fBx\fB \fR\- . the dataframe source, could be: 1. a file path to the dataframe source, file format could be tsv or csv 2. a dataframe object
+.PP
+.PP
+\fBrow.names\fB \fR\- TRUE. 
 .PP
 .SH FILES
 .PP
-SMRUCC/R#.declare_function.coerce_dataframe at datasets.R:line 39
+SMRUCC/R#.declare_function.coerce_dataframe at datasets.R:line 46
 .PP
 .SH COPYRIGHT
 Copyright © xieguigang <xie.guigang@gcmodeller.org>, MIT Licensed 2024

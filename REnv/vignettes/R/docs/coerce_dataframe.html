@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title><p>coerce_dataframe</p></title>
+    <title><p>ensure the export of this function is a dataframe</p></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <link rel="stylesheet" type="text/css" href="../../_assets/page.css">
@@ -18,7 +18,7 @@
             </tr>
         </table>
 
-        <h2><p>coerce_dataframe</p></h2>
+        <h2><p>ensure the export of this function is a dataframe</p></h2>
 
         <h3>Description</h3>
 
@@ -27,13 +27,17 @@
         <h3>Usage</h3>
 
         <div style="width: 100%; padding-left: 3%; color: black;">
-            <pre><code class='language-R' style="color: black; font-weight:normal;"><strong>coerce_dataframe</strong>(<i>x</i>);</code></pre>
+            <pre><code class='language-R' style="color: black; font-weight:normal;"><strong>coerce_dataframe</strong>(<i>x</i>,
+    <i>row.names</i> = <span style='color: blue !important;'>TRUE</span>);</code></pre>
         </div>
 
         <h3>Arguments</h3>
 
         <table>
             
+<dt>x</dt>
+<dd><p><p>the dataframe source, could be: 1. a file path to the dataframe source, file format could be tsv or csv 2. a dataframe object</p></p></dd>
+
         </table>
 
 

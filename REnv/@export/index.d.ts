@@ -25,8 +25,9 @@ declare namespace REnv {
    */
    function code_stats(stats: any, proj_folder: any, save: any): object;
    /**
+     * @param row.names default value Is ``true``.
    */
-   function coerce_dataframe(x: any): object;
+   function coerce_dataframe(x: any, row.names?: any): object;
    /**
      * @param k default value Is ``6``.
      * @param qcut default value Is ``0.1``.

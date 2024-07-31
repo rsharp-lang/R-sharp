@@ -36,9 +36,16 @@ const sacurine = function() {
     utils::readRData(file = system.file("data/sacurine.rds", package = "REnv"));
 }
 
-const coerce_dataframe = function(x) {
+#' ensure the export of this function is a dataframe
+#' 
+#' @param x the dataframe source, could be:
+#' 
+#'   1. a file path to the dataframe source, file format could be tsv or csv
+#'   2. a dataframe object
+#' 
+const coerce_dataframe = function(x, row.names = TRUE) {
     if (is.character(x)) {
-        read.csv(x, row.names = 1, check.names = FALSE, 
+        read.csv(x, row.names = ifelse(row.names, 1, NULL), check.names = FALSE, 
             tsv = any(file.ext(x) == ["txt" "tsv"]));
     } else {
         if (is.data.frame(x)) {
