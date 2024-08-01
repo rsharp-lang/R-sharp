@@ -96,4 +96,10 @@ Module builder
 
         Return g
     End Function
+
+    <ExportAPI("similarity_graph")>
+    <RApiReturn(GetType(NetworkGraph))>
+    Public Function SimilarityGraph(x As DistanceMatrix, Optional cutoff As Double = 0.6) As Object
+        Return x.BuildNetwork(cutoff)
+    End Function
 End Module
