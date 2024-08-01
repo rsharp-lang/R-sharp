@@ -114,6 +114,11 @@ Namespace Runtime.Interop
         Public Property [overloads] As Type()
         Public Property func As RMethodInfo
 
+        ''' <summary>
+        ''' get generic overloads methods
+        ''' </summary>
+        ''' <param name="pkg"></param>
+        ''' <returns></returns>
         Public Shared Iterator Function GetOverloads(pkg As Type) As IEnumerable(Of RGenericOverloads)
             Dim methods As MethodInfo() = pkg.GetMethods(bindingAttr:=BindingFlags.Static)
             Dim flag As RGenericOverloadsAttribute
