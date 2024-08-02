@@ -276,7 +276,7 @@ Namespace Runtime.Internal.Object
             End If
 
             If upstream Is Nothing Then
-                Return Internal.debug.stop("the upstream data can not be nothing!", env, suppress_log:=suppress)
+                Return Internal.debug.stop($"the upstream data(of {GetType(T).FullName}) can not be nothing!", env, suppress_log:=suppress)
             End If
 
             Dim upstream_type As Type = upstream.GetType
