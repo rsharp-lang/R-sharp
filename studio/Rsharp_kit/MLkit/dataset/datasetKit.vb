@@ -316,6 +316,11 @@ Module datasetKit
         )
     End Function
 
+    <ExportAPI("fit_embedding")>
+    Public Function fit_embedding(sgt As SequenceGraphTransform, seq As String) As Double()
+        Return sgt.fitVector(seq)
+    End Function
+
     <ExportAPI("split_training_test")>
     <RApiReturn("training", "test")>
     Public Function split_training_test(ds As SampleData(), Optional ratio As Double = 0.7) As Object
