@@ -15,4 +15,4 @@ for(let file in ["./cluster1.txt" "./cluster2.txt" "./cluster3.txt"]) {
 
 write.csv(seqs, file = file.path(@dir, "seqs.csv"));
 
-let sgt = SGT();
+let sgt = SGT(alphabets = );
