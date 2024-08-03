@@ -2036,6 +2036,20 @@ RE0:
         End Function
 
         ''' <summary>
+        ''' Check of the given object is clr array or not
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("is.array")>
+        Public Function is_array(<RRawVectorArgument> x As Object) As Boolean
+            If x Is Nothing Then
+                Return False
+            Else
+                Return x.GetType.IsArray
+            End If
+        End Function
+
+        ''' <summary>
         ''' ### ‘Not Available’ / Missing Values
         ''' 
         ''' NA is a logical constant of length 1 which contains a missing value indicator. 
