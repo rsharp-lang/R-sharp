@@ -176,29 +176,35 @@ Namespace Runtime.Internal.Object
             For Each obj As Object In pipeline
                 If TypeOf obj Is Message Then
                     populatorFirstErr = DirectCast(obj, Message)
-                Else
-                    Try
-                        If (Not objWrapper) AndAlso TypeOf obj Is vbObject Then
-                            obj = DirectCast(obj, vbObject).target
-                        End If
-
-                        cast = Nothing
-                        cast = DirectCast(obj, T)
-                    Catch ex As Exception
-                        Dim warnings As String() = {
-                            "the given pipeline is early stop due to an unexpected error message was generated from upstream."
-                        }.JoinIterates(populatorFirstErr?.message.SafeQuery.Select(Function(msg) $"Err: " & msg)) _
-                         .JoinIterates(ex.ToString) _
-                         .ToArray
-
-                        populatorFirstErr = Internal.debug.stop(ex, env)
-                        env.AddMessage(warnings, MSG_TYPES.WRN)
-
-                        Exit For
-                    End Try
-
-                    Yield cast
+                    env.AddMessage(populatorFirstErr.message, MSG_TYPES.WRN)
+                    Exit For
+                ElseIf TypeOf obj Is IEnumerable(Of T) Then
+                    For Each out As T In DirectCast(obj, IEnumerable(Of T))
+                        Yield out
+                    Next
                 End If
+
+                Try
+                    If (Not objWrapper) AndAlso TypeOf obj Is vbObject Then
+                        obj = DirectCast(obj, vbObject).target
+                    End If
+
+                    cast = Nothing
+                    cast = DirectCast(obj, T)
+                Catch ex As Exception
+                    Dim warnings As String() = {
+                        "the given pipeline is early stop due to an unexpected error message was generated from upstream."
+                    }.JoinIterates(populatorFirstErr?.message.SafeQuery.Select(Function(msg) $"Err: " & msg)) _
+                        .JoinIterates(ex.ToString) _
+                        .ToArray
+
+                    populatorFirstErr = Internal.debug.stop(ex, env)
+                    env.AddMessage(warnings, MSG_TYPES.WRN)
+
+                    Exit For
+                End Try
+
+                Yield cast
             Next
 
             If Not _pipeFinalize Is Nothing Then
