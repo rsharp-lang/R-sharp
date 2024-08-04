@@ -1093,10 +1093,12 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("tagvalue")>
+        <RApiReturn(TypeCodes.string)>
         Public Function tagvalue([string] As String(),
                                  Optional delimiter$ = " ",
                                  Optional trim_value As Boolean = True,
                                  Optional as_list As Boolean = False,
+                                 Optional union_list As Boolean = False,
                                  Optional env As Environment = Nothing) As Object
 
             Dim values As NamedValue(Of String)() = [string] _
@@ -1110,13 +1112,22 @@ Namespace Runtime.Internal.Invokes
                 Dim vec As New list With {
                     .slots = New Dictionary(Of String, Object)
                 }
-                Dim names As String() = values _
-                    .Select(Function(a) a.Name) _
-                    .UniqueNames
 
-                For i As Integer = 0 To values.Length - 1
-                    Call vec.add(names(i), values(i).Value)
-                Next
+                If union_list Then
+                    Dim union_vals = values.GroupBy(Function(t) t.Name).ToArray
+
+                    For Each val As IGrouping(Of String, NamedValue(Of String)) In union_vals
+                        Call vec.add(val.Key, From vi In val Select vi.Value)
+                    Next
+                Else
+                    Dim names As String() = values _
+                        .Select(Function(a) a.Name) _
+                        .UniqueNames
+
+                    For i As Integer = 0 To values.Length - 1
+                        Call vec.add(names(i), values(i).Value)
+                    Next
+                End If
 
                 Return vec
             Else
