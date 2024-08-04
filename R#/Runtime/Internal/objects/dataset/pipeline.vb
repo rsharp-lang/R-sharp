@@ -187,7 +187,8 @@ Namespace Runtime.Internal.Object
                     Catch ex As Exception
                         Dim warnings As String() = {
                             "the given pipeline is early stop due to an unexpected error message was generated from upstream."
-                        }.JoinIterates(populatorFirstErr.message.Select(Function(msg) $"Err: " & msg)) _
+                        }.JoinIterates(populatorFirstErr?.message.SafeQuery.Select(Function(msg) $"Err: " & msg)) _
+                         .JoinIterates(ex.ToString) _
                          .ToArray
 
                         populatorFirstErr = Internal.debug.stop(ex, env)
