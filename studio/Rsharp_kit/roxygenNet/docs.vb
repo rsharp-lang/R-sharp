@@ -133,6 +133,14 @@ Module docs
         End If
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="doc"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' 20240805 no needs for make markdown transform for the title string
+    ''' </remarks>
     <Extension>
     Public Function MarkdownTransform(doc As Document) As Document
         Return New Document With {
@@ -153,7 +161,7 @@ Module docs
                 .ToArray,
             .returns = roxygen.markdown.Transform(doc.returns),
             .see_also = doc.see_also,
-            .title = roxygen.markdown.Transform(doc.title)
+            .title = doc.title  ' roxygen.markdown.Transform(doc.title)
         }
     End Function
 

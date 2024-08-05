@@ -1,5 +1,10 @@
 
-#' try to get the html document template
+#' An internal helper function for try to get the html document template
+#' 
+#' @return a tuple list that contains two template elements:
+#' 
+#'   + template: the html document template for the R# runtime symbols which is defined inside the R source script files.
+#'   + clr_template: the html document template for the clr object which is exported from the .NET dll assembly files.
 #' 
 const __template = function() {
 	const R_syntax_js = getOption("r_syntax.js", default = "../../_assets/R_syntax.js");

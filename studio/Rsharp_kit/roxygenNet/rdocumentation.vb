@@ -100,6 +100,7 @@ Public Module rdocumentation
                                    Optional env As Environment = Nothing) As Object
 
         If TypeOf func Is RFunction Then
+            ' clr function
             Return New [function]().createHtml(DirectCast(func, RFunction), template, env)
         ElseIf TypeOf func Is Document Then
             Dim docs As Document = DirectCast(func, Document).MarkdownTransform

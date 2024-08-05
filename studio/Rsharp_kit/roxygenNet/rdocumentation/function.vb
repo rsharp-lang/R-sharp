@@ -86,6 +86,13 @@ Public Class [function]
             .GetAnnotations(api.GetNetCoreCLRDeclaration)
     End Function
 
+    ''' <summary>
+    ''' Create documents for the clr function
+    ''' </summary>
+    ''' <param name="api"></param>
+    ''' <param name="template"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Public Function createHtml(api As RMethodInfo, template As String, env As Environment) As String
         Dim xml As ProjectMember = GetAssemblyXmlDocument(env, api)
         Dim func As New FunctionDeclare With {
