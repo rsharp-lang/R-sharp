@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d4fc79d41584af82b653fe74772efd16, studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
+﻿#Region "Microsoft.VisualBasic::578b18c9e084f7b752b8dbb734404b9b, studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 977
-    '    Code Lines: 689 (70.52%)
-    ' Comment Lines: 177 (18.12%)
+    '   Total Lines: 982
+    '    Code Lines: 693 (70.57%)
+    ' Comment Lines: 177 (18.02%)
     '    - Xml Docs: 96.05%
     ' 
-    '   Blank Lines: 111 (11.36%)
-    '     File Size: 41.08 KB
+    '   Blank Lines: 112 (11.41%)
+    '     File Size: 41.26 KB
 
 
     ' Module datasetKit
@@ -48,12 +48,12 @@
     '     Constructor: (+1 Overloads) Sub New
     '     Function: addRow, binEncoder, boolEncoder, CreateMLdataset, dataDescription
     '               demoMatrix, dimensionRange, EmbeddingRender, Encoding, estimate_alphabets
-    '               factorEncoder, fitSgt, get_feature, getDataSetDimension, getMNISTImageSize
-    '               getMNISTRawDataset, getNormalizeMatrix, mapEncoder, mapLambda, project_features
-    '               q_factors, readMNISTLabelledVector, readModelDataset, readSampleSet, sample_id
-    '               sampledataDataSet, SampleList, SGT, sort_samples, sortById
-    '               split_training_test, Tabular, TakeSubset, toDataframe, toFeatureSet
-    '               toMatrix, writeMLDataset, writeSampleSet
+    '               factorEncoder, fit_embedding, fitSgt, get_feature, getDataSetDimension
+    '               getMNISTImageSize, getMNISTRawDataset, getNormalizeMatrix, mapEncoder, mapLambda
+    '               project_features, q_factors, readMNISTLabelledVector, readModelDataset, readSampleSet
+    '               sample_id, sampledataDataSet, SampleList, SGT, sort_samples
+    '               sortById, split_training_test, Tabular, TakeSubset, toDataframe
+    '               toFeatureSet, toMatrix, writeMLDataset, writeSampleSet
     ' 
     ' /********************************************************************************/
 

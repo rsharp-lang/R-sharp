@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c0bd5be920ca926d20d168d4601c5a5c, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::6b2efb84bcb1be0819e545f7e62d935f, R#\Runtime\Internal\internalInvokes\base.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 3449
-    '    Code Lines: 1529 (44.33%)
-    ' Comment Lines: 1627 (47.17%)
-    '    - Xml Docs: 84.45%
+    '   Total Lines: 3463
+    '    Code Lines: 1537 (44.38%)
+    ' Comment Lines: 1632 (47.13%)
+    '    - Xml Docs: 84.50%
     ' 
-    '   Blank Lines: 293 (8.50%)
-    '     File Size: 154.38 KB
+    '   Blank Lines: 294 (8.49%)
+    '     File Size: 154.83 KB
 
 
     '     Module base
@@ -51,16 +51,16 @@
     '                   character, checkDimensionsAgree, colnames, columnVector, commandArgs
     '                   doPrintInternal, dQuote, factor, factors, getOption
     '                   getPosition, ifelse, ifelseScalar, ifelseVector, ints
-    '                   isDataframe, isEmpty, isEmptyArray, isFALSE, isFunction
-    '                   isList, isNA, isNull, isRVector, isTRUE
-    '                   join_data, length, library, logical, makeNames
-    '                   names, ncol, neg, nrow, numeric
-    '                   objectAddInvoke, options, options_flush, print, range
-    '                   raws, rbind, Rdataframe, rep, rep_int
-    '                   rep_len, replace, Rlist, Robj_dimension, rownames
-    '                   seq, sink, sink_number, source, sQuote
-    '                   str, summary, t, uniqueNames, unitOfT
-    '                   ValueAt, warning, year
+    '                   is_array, isDataframe, isEmpty, isEmptyArray, isFALSE
+    '                   isFunction, isList, isNA, isNull, isRVector
+    '                   isTRUE, join_data, length, library, logical
+    '                   makeNames, names, ncol, neg, nrow
+    '                   numeric, objectAddInvoke, options, options_flush, print
+    '                   range, raws, rbind, Rdataframe, rep
+    '                   rep_int, rep_len, replace, Rlist, Robj_dimension
+    '                   rownames, seq, sink, sink_number, source
+    '                   sQuote, str, summary, t, uniqueNames
+    '                   unitOfT, ValueAt, warning, year
     ' 
     '         Sub: println_message, warnings
     '         Class PrinterOptions

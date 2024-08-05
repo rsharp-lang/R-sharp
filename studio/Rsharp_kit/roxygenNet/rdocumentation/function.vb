@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::389cf648846957371177f553cc0591bd, studio\Rsharp_kit\roxygenNet\rdocumentation\function.vb"
+﻿#Region "Microsoft.VisualBasic::7274615560a604eecace5eb3fcac5705, studio\Rsharp_kit\roxygenNet\rdocumentation\function.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 264
-    '    Code Lines: 220 (83.33%)
-    ' Comment Lines: 7 (2.65%)
-    '    - Xml Docs: 71.43%
+    '   Total Lines: 271
+    '    Code Lines: 220 (81.18%)
+    ' Comment Lines: 14 (5.17%)
+    '    - Xml Docs: 85.71%
     ' 
-    '   Blank Lines: 37 (14.02%)
-    '     File Size: 10.25 KB
+    '   Blank Lines: 37 (13.65%)
+    '     File Size: 10.48 KB
 
 
     ' Class [function]

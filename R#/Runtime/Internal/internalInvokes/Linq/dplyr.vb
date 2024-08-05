@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9c926745a478133fe19d2486ee668617, R#\Runtime\Internal\internalInvokes\Linq\dplyr.vb"
+﻿#Region "Microsoft.VisualBasic::02862148e644c7a56ea4e7d95a5232bf, R#\Runtime\Internal\internalInvokes\Linq\dplyr.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 147
-    '    Code Lines: 87 (59.18%)
-    ' Comment Lines: 38 (25.85%)
-    '    - Xml Docs: 86.84%
+    '   Total Lines: 158
+    '    Code Lines: 93 (58.86%)
+    ' Comment Lines: 40 (25.32%)
+    '    - Xml Docs: 82.50%
     ' 
-    '   Blank Lines: 22 (14.97%)
-    '     File Size: 5.65 KB
+    '   Blank Lines: 25 (15.82%)
+    '     File Size: 6.11 KB
 
 
     '     Module dplyr

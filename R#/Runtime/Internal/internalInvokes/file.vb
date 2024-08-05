@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c06165954652a9d9d121e2573f69a003, R#\Runtime\Internal\internalInvokes\file.vb"
+﻿#Region "Microsoft.VisualBasic::56e2fa5c5d3aba7135c960d49d2e6309, R#\Runtime\Internal\internalInvokes\file.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1773
-    '    Code Lines: 998 (56.29%)
-    ' Comment Lines: 590 (33.28%)
-    '    - Xml Docs: 88.31%
+    '   Total Lines: 1785
+    '    Code Lines: 1008 (56.47%)
+    ' Comment Lines: 591 (33.11%)
+    '    - Xml Docs: 88.16%
     ' 
-    '   Blank Lines: 185 (10.43%)
-    '     File Size: 80.17 KB
+    '   Blank Lines: 186 (10.42%)
+    '     File Size: 80.68 KB
 
 
     '     Enum endianness
@@ -60,9 +60,9 @@
     '                   getRelativePath, GetSha1Hash, getwd, handleWriteLargeTextStream, isSystemDir
     '                   listDirs, listFiles, loadListInternal, NextTempToken, normalizeFileName
     '                   normalizePath, openDir, openGzip, openZip, readBin
-    '                   readFromFile, readFromStream, readLines, readList, readText
-    '                   Rhome, saveList, scanZipFiles, setwd, tempdir
-    '                   tempfile, writeBin, writeLines
+    '                   readBinOverloads, readFromFile, readFromStream, readLines, readList
+    '                   readText, Rhome, saveList, scanZipFiles, setwd
+    '                   tempdir, tempfile, writeBin, writeLines
     ' 
     '         Sub: fileRemove, fileRename, unlinks
     ' 

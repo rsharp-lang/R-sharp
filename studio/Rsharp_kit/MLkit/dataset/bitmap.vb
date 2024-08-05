@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d32c4a1f696ed4a1775443a31ee284e6, studio\Rsharp_kit\MLkit\dataset\bitmap.vb"
+﻿#Region "Microsoft.VisualBasic::7617533216b1a7b98f00eb1075da22e5, studio\Rsharp_kit\MLkit\dataset\bitmap.vb"
 
     ' Author:
     ' 
@@ -34,12 +34,12 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 155
-    '    Code Lines: 106 (68.39%)
-    ' Comment Lines: 23 (14.84%)
+    '   Total Lines: 154
+    '    Code Lines: 106 (68.83%)
+    ' Comment Lines: 23 (14.94%)
     '    - Xml Docs: 95.65%
     ' 
-    '   Blank Lines: 26 (16.77%)
+    '   Blank Lines: 25 (16.23%)
     '     File Size: 5.87 KB
 
 
@@ -50,7 +50,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports System.Drawing
 Imports System.IO
@@ -206,4 +205,3 @@ Module bitmap_func
         Return scan_out
     End Function
 End Module
-

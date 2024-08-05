@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9f85f2b3cd7e0b176cbe26147fd0e404, Library\base\VB6.0.vb"
+﻿#Region "Microsoft.VisualBasic::a8170745286b6c6d41d8042ca2b6747a, Library\base\VB6.0.vb"
 
     ' Author:
     ' 
@@ -83,4 +83,3 @@ Module VB6
     End Function
 
 End Module
-

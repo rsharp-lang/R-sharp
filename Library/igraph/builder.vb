@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::48bcb23e52378e62615b9897dee908b1, Library\igraph\builder.vb"
+﻿#Region "Microsoft.VisualBasic::e7f9a42d3ad81b2a21f4770a5fcb2d62, Library\igraph\builder.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 46
-    '    Code Lines: 29 (63.04%)
-    ' Comment Lines: 11 (23.91%)
+    '   Total Lines: 52
+    '    Code Lines: 34 (65.38%)
+    ' Comment Lines: 11 (21.15%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 6 (13.04%)
-    '     File Size: 1.88 KB
+    '   Blank Lines: 7 (13.46%)
+    '     File Size: 2.12 KB
 
 
     ' Module builder
     ' 
-    '     Function: FromCorrelations
+    '     Function: FromCorrelations, SimilarityGraph
     ' 
     ' /********************************************************************************/
 

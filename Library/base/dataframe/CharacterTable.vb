@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::860031860dcf0020eddfa849808252cb, Library\base\dataframe\CharacterTable.vb"
+﻿#Region "Microsoft.VisualBasic::e10784feb4a7e548c3ee0dda6dfd3b7d, Library\base\dataframe\CharacterTable.vb"
 
     ' Author:
     ' 
@@ -156,4 +156,3 @@ Public Class CharacterTable : Implements IdataframeReader, Enumeration(Of Entity
         Next
     End Function
 End Class
-
