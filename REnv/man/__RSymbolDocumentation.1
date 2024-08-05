@@ -1,4 +1,4 @@
-﻿.TH __RSYMBOLDOCUMENTATION 1 2024-Aug "" "__RSymbolDocumentation"
+﻿.TH __RSYMBOLDOCUMENTATION 1 2024-Aug "" "An internal helper function for generates html document for R# runtime symbols"
 .SH NAME
 __RSymbolDocumentation \- __RSymbolDocumentation(symbols, package,
     <i>outputdir</i> = <span style='color: brown;'><strong>'./'</strong></span>)
@@ -7,17 +7,17 @@ __RSymbolDocumentation \- __RSymbolDocumentation(symbols, package,
     <i>outputdir</i> = <span style='color: brown;'><strong>'./'</strong></span>)\fR
 .SH OPTIONS
 .PP
-\fBsymbols\fB \fR\- . 
+\fBsymbols\fB \fR\- . a set of R# runtime symbols that defined from the R source script. element data type of this parameter could be function, lambda function, character symbols or something else which has symbol names.
 .PP
 .PP
 \fBpackage\fB \fR\- . 
 .PP
 .PP
-\fBoutputdir\fB \fR\- './'. 
+\fBoutputdir\fB \fR\- './'. the directory path for export the help document for the R# runtime symbols usually be the location of ``{package_dir}/vignettes/R``.
 .PP
 .SH FILES
 .PP
-SMRUCC/R#.declare_function.__RSymbolDocumentation at rdocumentation.R:line 4
+SMRUCC/R#.declare_function.__RSymbolDocumentation at RSymbolDocumentation.R:line 10
 .PP
 .SH COPYRIGHT
 Copyright © xieguigang <xie.guigang@gcmodeller.org>, MIT Licensed 2024
