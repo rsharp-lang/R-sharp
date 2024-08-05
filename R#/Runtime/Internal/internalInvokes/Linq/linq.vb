@@ -447,6 +447,16 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     .DoCall(Function(seq)
                                 Return New pipeline(seq, DirectCast(sequence, pipeline).elementType)
                             End Function)
+            ElseIf TypeOf sequence Is list Then
+                Dim list As list = sequence
+                Dim names As String() = list.slotKeys.Skip(n).ToArray
+                Dim pull As list = list.empty
+
+                For Each name As String In names
+                    pull.slots(name) = list.slots(name)
+                Next
+
+                Return pull
             Else
                 Return ObjectSet.GetObjectSet(sequence, env).Skip(n).ToArray
             End If
