@@ -121,7 +121,7 @@ Public Module rdocumentation
                          In word.Value
                          Let clr_pkg As Type = f.GetNetCoreCLRDeclaration.DeclaringType
                          Let dllname As String = clr_pkg.Assembly.Location.BaseName
-                         Select $"<a href=""./{dllname}/{f.namespace}/{f.name}.html"">{f.name}</a>").ToArray
+                         Select $"<a href=""./{dllname}/{f.namespace}/{f.name}.html"">{f.namespace}::{f.name}</a>").ToArray
 
             Call html.AppendLine($"<h2>{word.Key}</h2>")
             Call html.AppendLine($"<p>{links.JoinBy(", ")}</p>")
