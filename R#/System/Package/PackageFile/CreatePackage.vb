@@ -365,6 +365,8 @@ Namespace Development.Package.File
 
             Call dllIndex.AppendLine("<body>")
 
+            Call dllIndex.AppendLine($"<h1>{file.info.Title}</h1>")
+
             Call dllIndex.AppendLine($"<pre>{$"{package_dir}/DESCRIPTION".ReadAllText.Replace("&", "&amp;").Replace("<", "&lt;")}</pre>")
             Call dllIndex.AppendLine("<br />")
 
