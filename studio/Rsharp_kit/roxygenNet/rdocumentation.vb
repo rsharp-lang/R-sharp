@@ -116,6 +116,9 @@ Public Module rdocumentation
     Public Function get_keywordIndex(Optional env As Environment = Nothing) As String
         Dim html As New StringBuilder
 
+        Call html.AppendLine("<h1>Keyword and Topics</h1>")
+        Call html.AppendLine("<p>Symbols that has the relationship of share the same keywords and topics.</p>")
+
         For Each word In [function].keywords
             Dim links = (From f As RMethodInfo
                          In word.Value

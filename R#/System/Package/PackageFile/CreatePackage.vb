@@ -359,6 +359,12 @@ Namespace Development.Package.File
 
             Dim dllIndex As New StringBuilder
 
+            Call dllIndex.AppendLine("<head>")
+            Call dllIndex.AppendLine($"<title>{file.info.Title}</title>")
+            Call dllIndex.AppendLine("</head>")
+
+            Call dllIndex.AppendLine("<body>")
+
             Call dllIndex.AppendLine($"<pre>{$"{package_dir}/DESCRIPTION".ReadAllText.Replace("&", "&amp;").Replace("<", "&lt;")}</pre>")
             Call dllIndex.AppendLine("<br />")
 
@@ -439,6 +445,8 @@ Namespace Development.Package.File
 
                 Call dllIndex.AppendLine("</ul>")
             Next
+
+            Call dllIndex.AppendLine("</body>")
 
             Call dllIndex.SaveTo(path:=$"{package_dir}/vignettes/index.html")
 
