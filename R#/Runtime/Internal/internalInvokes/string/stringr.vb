@@ -1073,9 +1073,14 @@ Namespace Runtime.Internal.Invokes
         ''' is asserted as an empty factor.
         ''' </returns>
         <ExportAPI("str_empty")>
+        <RApiReturn(TypeCodes.boolean)>
         Public Function str_empty(x As String(),
                                   Optional whitespace_empty As Boolean = True,
-                                  Optional test_empty_factor As Boolean = False) As Boolean()
+                                  Optional test_empty_factor As Boolean = False) As Object
+
+            If x Is Nothing Then
+                Return True
+            End If
 
             Return (From si As String
                     In x
