@@ -58,11 +58,9 @@ Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.MIME
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLS.MsHtml
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.Writer
-Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.XML.xl.worksheets
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Runtime
@@ -78,6 +76,7 @@ Imports msXlsx = Microsoft.VisualBasic.MIME.Office.Excel.XLSX.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports Rsharp = SMRUCC.Rsharp
+Imports Worksheet = Microsoft.VisualBasic.MIME.Office.Excel.XLSX.Writer.Worksheet
 
 ''' <summary>
 ''' Xlsx file toolkit
@@ -163,8 +162,8 @@ Module xlsx
     End Function
 
     <ExportAPI("open.xlsx")>
-    Public Function openXlsx(file As String) As msXlsx
-        Return msXlsx.Open(file)
+    Public Function openXlsx(file As String) As Workbook
+        Return New Workbook(file)
     End Function
 
     <ExportAPI("sheetNames")>
@@ -308,7 +307,7 @@ Module xlsx
     ''' <returns></returns>
     <ExportAPI("createSheet")>
     Public Function createSheet(wb As msXlsx, Optional sheetName$ = "Sheet1") As Worksheet
-        Return wb.AddSheetTable(sheetName)
+
     End Function
 
 End Module
