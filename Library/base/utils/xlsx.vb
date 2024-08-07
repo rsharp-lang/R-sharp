@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLS.MsHtml
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.FileIO
+Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.Writer
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.XML.xl.worksheets
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
@@ -166,6 +167,11 @@ Module xlsx
         Return msXlsx.Open(file)
     End Function
 
+    ''' <summary>
+    ''' get all sheet names
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <returns></returns>
     <ExportAPI("sheetNames")>
     Public Function getSheetNames(file As msXlsx) As vector
         Return file.SheetNames.DoCall(AddressOf Internal.[Object].vector.asVector)
@@ -287,20 +293,39 @@ Module xlsx
         End If
     End Function
 
+    ''' <summary>
+    ''' ## Functions to manipulate Excel 2007 workbooks.
+    ''' 
+    ''' createWorkbook creates an empty workbook object.
+    ''' </summary>
+    ''' <returns></returns>
     <ExportAPI("createWorkbook")>
-    Public Function createWorkbook() As msXlsx
-        Throw New NotImplementedException
+    Public Function createWorkbook() As Workbook
+        Return New Workbook
     End Function
 
     ''' <summary>
-    ''' create a new worksheet for a given xlsx file 
+    ''' ## Functions to manipulate worksheets.
+    ''' 
+    ''' Functions to manipulate worksheets. Create a new worksheet for a given xlsx file 
     ''' </summary>
-    ''' <param name="wb"></param>
-    ''' <param name="sheetName$"></param>
+    ''' <param name="wb">
+    ''' a workbook object as returned by createWorksheet or loadWorksheet.
+    ''' </param>
+    ''' <param name="sheetName">
+    ''' a character specifying the name of the worksheet to create, or remove.
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("createSheet")>
-    Public Function createSheet(wb As msXlsx, Optional sheetName$ = "Sheet1") As worksheet
-        Return wb.AddSheetTable(sheetName)
+    Public Function createSheet(wb As Workbook, Optional sheetName$ = "Sheet1") As Worksheet
+        Call wb.AddWorksheet(sheetName)
+        Return wb.CurrentWorksheet
     End Function
 
+    <ExportAPI("createRow")>
+    Public Function createRow(sheet As Worksheet,
+                              <RRawVectorArgument(TypeCodes.integer)>
+                              Optional rowIndex As Object = "1,2,3,4,5")
+
+    End Function
 End Module
