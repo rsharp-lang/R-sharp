@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::451d8e7b08a65ab06a207bf01d69869b, Library\base\utils\xlsx.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 252
-    '    Code Lines: 187 (74.21%)
-    ' Comment Lines: 42 (16.67%)
-    '    - Xml Docs: 88.10%
-    ' 
-    '   Blank Lines: 23 (9.13%)
-    '     File Size: 10.41 KB
+' Summaries:
 
 
-    ' Module xlsx
-    ' 
-    '     Function: coercesDataTable, createSheet, createWorkbook, getSheetNames, openXlsx
-    '               readXlsx, writeXlsx
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 252
+'    Code Lines: 187 (74.21%)
+' Comment Lines: 42 (16.67%)
+'    - Xml Docs: 88.10%
+' 
+'   Blank Lines: 23 (9.13%)
+'     File Size: 10.41 KB
+
+
+' Module xlsx
+' 
+'     Function: coercesDataTable, createSheet, createWorkbook, getSheetNames, openXlsx
+'               readXlsx, writeXlsx
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -60,7 +60,8 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLS.MsHtml
-Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.FileIO
+Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX
+Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.Writer
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.XML.xl.worksheets
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
@@ -196,8 +197,10 @@ Module xlsx
         Dim table As csv
 
         If x.GetType Is GetType(list) AndAlso file.ExtensionSuffix("xlsx") Then
-            Dim zip = Office.Excel.XLSX.CreateNew
             Dim tables As list = DirectCast(x, list)
+            Dim sanitizeSheetName As Boolean = True
+            ' Create New workbook
+            Dim workbook As New Workbook(file, Nothing)
 
             ' save multiple sheet table
             For Each name As String In tables.getNames
@@ -208,11 +211,15 @@ Module xlsx
                 ElseIf temp Is Nothing Then
                     Return Message.InCompatibleType(GetType(csv), x.GetType, env)
                 Else
-                    zip.WriteSheetTable(temp, sheetName:=name)
+                    workbook.AddWorksheet(name, sanitizeSheetName)
+                    sanitizeSheetName = False
+                    workbook.WriteSheetTable(temp.TryCast(Of csv))
                 End If
             Next
 
-            Return zip.SaveTo(file)
+            Call workbook.Save()
+
+            Return True
         Else
             Dim temp As [Variant](Of Message, csv) = coercesDataTable(x, row_names, formatNumber, env)
 
@@ -231,9 +238,10 @@ Module xlsx
                 .SaveTo(file, encoding.CodePage, append:=False)
         Else
             ' save xlsx zip package
-            Dim zip = Office.Excel.XLSX.CreateNew
-            zip.WriteSheetTable(table, sheetName)
-            Return zip.SaveTo(file)
+            Dim workbook As New Workbook(file, sheetName)
+            workbook.WriteSheetTable(table)
+            workbook.Save()
+            Return True
         End If
     End Function
 
@@ -299,7 +307,7 @@ Module xlsx
     ''' <param name="sheetName$"></param>
     ''' <returns></returns>
     <ExportAPI("createSheet")>
-    Public Function createSheet(wb As msXlsx, Optional sheetName$ = "Sheet1") As worksheet
+    Public Function createSheet(wb As msXlsx, Optional sheetName$ = "Sheet1") As Worksheet
         Return wb.AddSheetTable(sheetName)
     End Function
 
