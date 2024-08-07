@@ -1,5 +1,7 @@
 require(dataframe);
 
+# create table by row by row
+
 table = [];
 
 table = append(table, [entityRow("asasdas", dfd= "sdsdf", s55= 8988,ddd =TRUE )]);
