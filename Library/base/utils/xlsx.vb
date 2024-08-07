@@ -59,9 +59,6 @@ Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLS.MsHtml
-Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.FileIO
-Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.Writer
-Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.XML.xl.worksheets
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.Writer
 Imports Microsoft.VisualBasic.Scripting.MetaData
