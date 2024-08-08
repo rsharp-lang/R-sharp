@@ -185,8 +185,7 @@ Module plots
         Dim xlab As String = args.getValue("xlab", env, "X")
         Dim ylab As String = args.getValue("ylab", env, "Y")
 
-        Return fit.Plot(
-            size:=size,
+        Return RegressionPlot.Plot(fit, size:=size,
             gridFill:=gridFill,
             showLegend:=showLegend,
             showYFitPoints:=showYFit,
