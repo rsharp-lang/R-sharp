@@ -1335,6 +1335,8 @@ Namespace Runtime.Internal.Invokes
                                 Optional size As Integer = NA_integer_,
                                 Optional signed As Boolean = True,
                                 Optional endian As endianness = endianness.big,
+                                <RListObjectArgument>
+                                Optional args As list = Nothing,
                                 Optional env As Environment = Nothing) As Object
 
             Dim is_path As Boolean = False
@@ -1363,14 +1365,14 @@ Namespace Runtime.Internal.Invokes
                         Return bytes
                     Case Else
                         ' invoke generic function overloads
-                        Return readBinOverloads(buf.TryCast(Of Stream), CStr(what), con, is_path, env)
+                        Return readBinOverloads(buf.TryCast(Of Stream), CStr(what), con, is_path, args, env)
                 End Select
             Else
                 Return Message.InCompatibleType(GetType(What), what.GetType, env)
             End If
         End Function
 
-        Private Function readBinOverloads(s As Stream, what As String, con As Object, is_path As Boolean, env As Environment) As Object
+        Private Function readBinOverloads(s As Stream, what As String, con As Object, is_path As Boolean, args As list, env As Environment) As Object
             ' invoke generic function for parse
             ' binary file as R#/clr object
             Dim fname As String = $"readBin.{what}"
@@ -1383,7 +1385,7 @@ Namespace Runtime.Internal.Invokes
             Dim out As Object
 
             Try
-                out = f(s, list.empty, env)
+                out = f(s, args, env)
             Catch ex As Exception
                 If is_path Then
                     Throw New Exception($"error_file: {CLRVector.asCharacter(con).First}", ex)
