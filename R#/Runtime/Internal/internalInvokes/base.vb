@@ -2050,6 +2050,16 @@ RE0:
         End Function
 
         ''' <summary>
+        ''' cast any R object collection as a generic type clr array
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("as.array")>
+        Public Function as_array(<RRawVectorArgument> x As Object) As Object
+            Return REnv.UnsafeTryCastGenericArray(CLRVector.asObject(x))
+        End Function
+
+        ''' <summary>
         ''' ### ‘Not Available’ / Missing Values
         ''' 
         ''' NA is a logical constant of length 1 which contains a missing value indicator. 
