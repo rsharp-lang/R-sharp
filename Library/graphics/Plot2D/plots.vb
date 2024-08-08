@@ -188,6 +188,8 @@ Module plots
         Dim ReferenceLabel As String = args.getValue("reference_lab", env, "Standard Reference")
         Dim LinearLabel As String = args.getValue("linear_lab", env, "Linear")
         Dim SamplesLabel As String = args.getValue("samples_lab", env, "Samples")
+        Dim tickX As String = args.getValue("xtick", env, "F0")
+        Dim tickY As String = args.getValue("ytick", env, "G2")
 
         Return RegressionPlot.Plot(fit, size:=size,
             gridFill:=gridFill,
@@ -197,8 +199,8 @@ Module plots
             title:=args.getValue(Of String)("main", env, Nothing),
             margin:=padding,
             factorFormat:="G4",
-            xAxisTickFormat:="F0",
-            yAxisTickFormat:="G2",
+            xAxisTickFormat:=tickX,
+            yAxisTickFormat:=tickY,
             xLabel:=xlab,
             yLabel:=ylab,
             pointLabelFontCSS:=CSSFont.Win10Normal,
