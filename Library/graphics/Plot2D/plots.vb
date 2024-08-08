@@ -190,6 +190,7 @@ Module plots
         Dim SamplesLabel As String = args.getValue("samples_lab", env, "Samples")
         Dim tickX As String = args.getValue("xtick", env, "F0")
         Dim tickY As String = args.getValue("ytick", env, "G2")
+        Dim absolute_positive As Boolean = args.getValue("absolute_positive", env, False)
 
         Return RegressionPlot.Plot(fit, size:=size,
             gridFill:=gridFill,
@@ -207,7 +208,8 @@ Module plots
             PredictsLabel:=PredictsLabel,
             ReferenceLabel:=ReferenceLabel,
             LinearLabel:=LinearLabel,
-            SamplesLabel:=SamplesLabel
+            SamplesLabel:=SamplesLabel,
+            absolute_positive:=absolute_positive
         )
     End Function
 
