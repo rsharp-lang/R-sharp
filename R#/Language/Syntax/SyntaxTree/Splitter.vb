@@ -62,6 +62,20 @@ Namespace Language.Syntax.SyntaxParser
 
     Module Splitter
 
+        Public Function CheckOfStackOpenClosePair(open As Token, close As Token) As Boolean
+            If Not (open.name = TokenType.open AndAlso close.name = TokenType.close) Then
+                Return False
+            End If
+
+            Select Case open.text
+                Case "(" : Return close.text = ")"
+                Case "{" : Return close.text = "}"
+                Case "[" : Return close.text = "]"
+                Case Else
+                    Return False
+            End Select
+        End Function
+
         <Extension>
         Friend Function SplitByTopLevelDelimiter(tokens As IEnumerable(Of Token), delimiter As TokenType, ' <Out> ByRef [error] As Exception,
                                                  Optional includeKeyword As Boolean = False,
