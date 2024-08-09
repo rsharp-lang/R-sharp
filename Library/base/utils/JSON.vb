@@ -279,6 +279,7 @@ Module JSON
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("object")>
+    <Extension>
     Public Function buildObject(json As JsonElement, schema As Object,
                                 Optional decodeMetachar As Boolean = True,
                                 Optional env As Environment = Nothing) As Object
