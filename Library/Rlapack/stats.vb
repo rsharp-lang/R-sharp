@@ -1206,7 +1206,7 @@ Module stats
 
         If TypeOf x Is Rdataframe Then
             Dim df As Rdataframe = x
-            Dim rows = df.forEachRow.Select(Function(r) CLRVector.asNumeric(r.value)).ToArray
+            Dim rows = df.columns.Select(Function(r) CLRVector.asNumeric(r.Value)).ToArray
 
             observed = rows
         ElseIf TypeOf x Is NumericMatrix Then
