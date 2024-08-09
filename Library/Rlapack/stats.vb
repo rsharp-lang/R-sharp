@@ -1215,11 +1215,20 @@ Module stats
             Return Internal.debug.stop("the required observed ``x`` should be a numeric matrix!", env)
         End If
 
+        Dim chisq As ChiSquareTest
+
         If expected Is Nothing Then
-            Return ChiSquareTest.Test(observed)
+            chisq = ChiSquareTest.Test(observed)
         Else
-            Return ChiSquareTest.Test(observed, expected)
+            chisq = ChiSquareTest.Test(observed, expected)
         End If
+
+        Return New list(
+            slot("statistic") = chisq.chi_square,
+            slot("p.value") = chisq.pvalue,
+            slot("observed") = chisq.observed.IteratesALL.ToArray,
+            slot("expected") = chisq.expected.IteratesALL.ToArray
+        )
     End Function
 
     ''' <summary>
