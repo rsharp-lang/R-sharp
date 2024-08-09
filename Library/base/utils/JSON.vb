@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::ca90ebe24aae32e1dedd7b65ccd0bfe4, Library\base\utils\JSON.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 303
-    '    Code Lines: 192 (63.37%)
-    ' Comment Lines: 80 (26.40%)
-    '    - Xml Docs: 93.75%
-    ' 
-    '   Blank Lines: 31 (10.23%)
-    '     File Size: 12.24 KB
+' Summaries:
 
 
-    ' Module JSON
-    ' 
-    '     Function: buildObject, fromJSON, json_decode, json_encode, loadClrObjectFromJson
-    '               parseBSON, unescape, writeBSON
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 303
+'    Code Lines: 192 (63.37%)
+' Comment Lines: 80 (26.40%)
+'    - Xml Docs: 93.75%
+' 
+'   Blank Lines: 31 (10.23%)
+'     File Size: 12.24 KB
+
+
+' Module JSON
+' 
+'     Function: buildObject, fromJSON, json_decode, json_encode, loadClrObjectFromJson
+'               parseBSON, unescape, writeBSON
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,6 +57,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
@@ -68,6 +69,8 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports renv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' JSON (JavaScript Object Notation) is a lightweight data-interchange format. 
@@ -353,5 +356,66 @@ Module JSON
 
             Return Nothing
         End If
+    End Function
+
+    ''' <summary>
+    ''' read json list as dataframe
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("read.jsonl")>
+    Public Function read_jsonl(<RRawVectorArgument> file As Object, cols As String(),
+                               Optional row_names As String = Nothing,
+                               Optional env As Environment = Nothing) As Object
+
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
+
+        If s Like GetType(Message) Then
+            Return s.TryCast(Of Message)
+        End If
+
+        Dim read As New StreamReader(s.TryCast(Of Stream))
+        Dim line As Value(Of String) = ""
+        Dim fields As New Dictionary(Of String, List(Of Object))
+        Dim labels As New List(Of String)
+        Dim has_rowNames As Boolean = Not row_names.StringEmpty(, True)
+
+        For Each name As String In cols
+            Call fields.Add(name, New List(Of Object))
+        Next
+
+        Do While (line = read.ReadLine) IsNot Nothing
+            Dim x As Object = CStr(line).ParseJSONinternal(raw:=False, strict_vector_syntax:=False, env)
+
+            If TypeOf x Is Message Then
+                Return x
+            End If
+
+            If Not TypeOf x Is list Then
+                Return Internal.debug.stop("read dataframe from jsonl only enable when each line is a tuple list object!", env)
+            End If
+
+            Dim row As list = DirectCast(x, list)
+
+            For Each name As String In cols
+                Call fields(name).Add(row.getByName(name))
+            Next
+
+            If has_rowNames Then
+                Call labels.Add(row.getValue(Of String)(row_names, env, ""))
+            End If
+        Loop
+
+        Dim df As New rdataframe With {
+            .rownames = If(has_rowNames, labels.ToArray, Nothing),
+            .columns = New Dictionary(Of String, Array)
+        }
+
+        For Each col As String In cols
+            Call df.add(col, renv.TryCastGenericArray(fields(col).ToArray, env))
+        Next
+
+        Return df
     End Function
 End Module
