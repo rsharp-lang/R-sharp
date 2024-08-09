@@ -1,18 +1,31 @@
-﻿Imports SMRUCC.Rsharp.Language.TokenIcer
+﻿Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Language.TokenIcer
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Language.Syntax
 
     ''' <summary>
     ''' Helper for R shell terminal multiple line editing
     ''' </summary>
-    Public NotInheritable Class IncompleteExpression
+    Public NotInheritable Class IncompleteExpression : Inherits RDefaultFunction
 
         Dim lines As New List(Of String)
 
-        Private Sub New()
+        Public ReadOnly Property Check() As Boolean
+            Get
+                Dim script As String = lines.JoinBy(vbCrLf)
+                Dim tokens As Token() = Language.ParseScript(script)
+
+                Return CheckTokenSequence(tokens)
+            End Get
+        End Property
+
+        Sub New()
         End Sub
 
+        <RDefaultFunction>
         Public Function Append(line As String) As IncompleteExpression
             Call lines.Add(line)
             Return Me
@@ -20,6 +33,14 @@ Namespace Language.Syntax
 
         Public Function GetRScript() As Rscript
             Return Rscript.AutoHandleScript(lines.JoinBy(vbCrLf))
+        End Function
+
+        Public Function eval(env As Environment) As Object
+            If Check() Then
+                Return Internal.debug.stop("in-complete expression to evaluate.", env)
+            End If
+
+            Return Program.CreateProgram(GetRScript,,).Execute(env)
         End Function
 
         ''' <summary>

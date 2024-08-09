@@ -75,6 +75,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports SMRUCC.Rsharp.Language.Syntax
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -190,6 +191,11 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Return New RlangTranslator(code).GetScript(env)
+        End Function
+
+        <ExportAPI("incomplete_expression")>
+        Public Function incomplete_expression() As IncompleteExpression
+            Return New IncompleteExpression
         End Function
 
         <ExportAPI("symbol_value")>
