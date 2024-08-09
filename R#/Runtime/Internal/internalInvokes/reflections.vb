@@ -330,6 +330,11 @@ Namespace Runtime.Internal.Invokes
                              Optional env As Environment = Nothing) As Object
 
             Dim result As Object = Nothing
+            Dim exprList As pipeline = pipeline.TryCreatePipeline(Of Expression)(expr, env)
+
+            If exprList.isError Then
+                Return exprList.getError
+            End If
 
             If x IsNot Nothing Then
                 Dim symbols = SymbolAnalysis _
@@ -342,16 +347,19 @@ Namespace Runtime.Internal.Invokes
                     End If
                 Next
 
-                result = expr.Evaluate(env)
+                result = exprList _
+                    .populates(Of Expression)(env) _
+                    .First _
+                    .Evaluate(env)
+            ElseIf TypeOf expr Is IncompleteExpression Then
+                Return DirectCast(expr, IncompleteExpression).eval(env)
             Else
-                Dim exprList As pipeline = pipeline.TryCreatePipeline(Of Expression)(expr, env)
-
-                If exprList.isError Then
-                    Return exprList.getError
-                End If
-
                 For Each expression As Expression In exprList.populates(Of Expression)(env)
                     result = expression.Evaluate(env)
+
+                    If TypeOf result Is IncompleteExpression Then
+                        result = DirectCast(result, IncompleteExpression).eval(env)
+                    End If
 
                     If TypeOf result Is Message Then
                         Return result
