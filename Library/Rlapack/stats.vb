@@ -1,81 +1,81 @@
 ﻿#Region "Microsoft.VisualBasic::ca65f0ac8f08734b53406d579ccf3342, Library\Rlapack\stats.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1708
-    '    Code Lines: 967 (56.62%)
-    ' Comment Lines: 551 (32.26%)
-    '    - Xml Docs: 91.83%
-    ' 
-    '   Blank Lines: 190 (11.12%)
-    '     File Size: 71.02 KB
+' Summaries:
 
 
-    ' Module stats
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: matrixDataFrame, matrixDataFrame2, printMatrix, printMvar, printTtest
-    '               printTwoSampleTTest
-    '     Enum p_adjust_methods
-    ' 
-    '         BH, bonferroni, BY, fdr, hochberg
-    '         holm, hommel, none
-    ' 
-    ' 
-    ' 
-    '  
-    ' 
-    '     Function: aov, asDist, ChiSquare, combin, corr
-    '               corr_sign, corrTest, dataframeRow, dist, dnorm
-    '               ECDF, ecdf0, filterMissing, fisher_test, gammaCDF
-    '               GetDataSetCommon, getMatrix, getQuantileLevels, Lowess, mantel_test
-    '               median, moran_test, mul, oplsr, p_adjust
-    '               plsda, pnorm_func, PoissonDiskGenerator_func, (+2 Overloads) pow, prcomp
-    '               quantile, safeCheck, spline, tabulateMode, ttest
-    '               ttestBatch, ttestImpl, varTest, z_score, z_scoreByColumn
-    '               z_scoreByRow
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1708
+'    Code Lines: 967 (56.62%)
+' Comment Lines: 551 (32.26%)
+'    - Xml Docs: 91.83%
+' 
+'   Blank Lines: 190 (11.12%)
+'     File Size: 71.02 KB
+
+
+' Module stats
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: matrixDataFrame, matrixDataFrame2, printMatrix, printMvar, printTtest
+'               printTwoSampleTTest
+'     Enum p_adjust_methods
+' 
+'         BH, bonferroni, BY, fdr, hochberg
+'         holm, hommel, none
+' 
+' 
+' 
+'  
+' 
+'     Function: aov, asDist, ChiSquare, combin, corr
+'               corr_sign, corrTest, dataframeRow, dist, dnorm
+'               ECDF, ecdf0, filterMissing, fisher_test, gammaCDF
+'               GetDataSetCommon, getMatrix, getQuantileLevels, Lowess, mantel_test
+'               median, moran_test, mul, oplsr, p_adjust
+'               plsda, pnorm_func, PoissonDiskGenerator_func, (+2 Overloads) pow, prcomp
+'               quantile, safeCheck, spline, tabulateMode, ttest
+'               ttestBatch, ttestImpl, varTest, z_score, z_scoreByColumn
+'               z_scoreByRow
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -1132,6 +1132,64 @@ Module stats
     <ExportAPI("fisher.test")>
     Public Function fisher_test(a%, b%, c%, d%) As FishersExactPvalues
         Return FishersExactTest.FishersExact(a, b, c, d)
+    End Function
+
+    ''' <summary>
+    ''' ### Pearson's Chi-squared Test for Count Data
+    ''' 
+    ''' chisq.test performs chi-squared contingency table tests and goodness-of-fit tests.
+    ''' </summary>
+    ''' <param name="x">a numeric vector Or matrix. x And y can also both be factors.</param>
+    ''' <param name="y">a numeric vector; ignored if x is a matrix. If x is a factor, y should be a factor of the same length.</param>
+    ''' <param name="correct">a logical indicating whether to apply continuity correction when computing the test statistic for 2 by 2 tables: 
+    ''' one half is subtracted from all ||O-E|| differences; however, the correction will Not be bigger than the differences themselves. 
+    ''' No correction Is done if simulate.p.value = TRUE.</param>
+    ''' <param name="p">a vector of probabilities of the same length as x. An error is given if any entry of p is negative.</param>
+    ''' <param name="rescale_p">a logical scalar; if TRUE then p is rescaled (if necessary) to sum to 1. If rescale.p is FALSE, 
+    ''' and p does not sum to 1, an error is given.</param>
+    ''' <param name="simulate_p_value">a logical indicating whether to compute p-values by Monte Carlo simulation.</param>
+    ''' <param name="B">an integer specifying the number of replicates used in the Monte Carlo test.</param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' If x is a matrix with one row or column, or if x is a vector and y is not given, then a goodness-of-fit
+    ''' test is performed (x is treated as a one-dimensional contingency table). The entries of x must be 
+    ''' non-negative integers. In this case, the hypothesis tested is whether the population probabilities
+    ''' equal those in p, or are all equal if p is not given.
+    '''
+    ''' If x is a matrix with at least two rows and columns, it is taken as a two-dimensional contingency table:
+    ''' the entries of x must be non-negative integers. Otherwise, x and y must be vectors or factors of the
+    ''' same length; cases with missing values are removed, the objects are coerced to factors, and the contingency
+    ''' table is computed from these. Then Pearson's chi-squared test is performed of the null hypothesis that 
+    ''' the joint distribution of the cell counts in a 2-dimensional contingency table is the product of the 
+    ''' row and column marginals.
+    '''
+    ''' If simulate.p.value is FALSE, the p-value is computed from the asymptotic chi-squared distribution of the
+    ''' test statistic; continuity correction is only used in the 2-by-2 case (if correct is TRUE, the default). 
+    ''' Otherwise the p-value is computed for a Monte Carlo test (Hope, 1968) with B replicates. The default 
+    ''' B = 2000 implies a minimum p-value of about 0.0005 (1 / (B + 1)).
+    '''
+    ''' In the contingency table case, simulation is done by random sampling from the set of all contingency tables
+    ''' with given marginals, and works only if the marginals are strictly positive. Continuity correction is never 
+    ''' used, and the statistic is quoted without it. Note that this is not the usual sampling situation assumed
+    ''' for the chi-squared test but rather that for Fisher's exact test.
+    '''
+    ''' In the goodness-of-fit case simulation is done by random sampling from the discrete distribution specified 
+    ''' by p, each sample being of size ``n = sum(x)``. This simulation is done in R and may be slow.
+    ''' </remarks>
+    <ExportAPI("chisq.test")>
+    Public Function chisq_test(<RRawVectorArgument> x As Object,
+                               <RRawVectorArgument>
+                               Optional y As Object = Nothing,
+                               Optional correct As Boolean = True,
+                               Optional p As Object = "~rep(1/length(x), length(x))",
+                               Optional rescale_p As Boolean = False,
+                               Optional simulate_p_value As Boolean = False,
+                               Optional B As Integer = 2000) As Object
+
+        If TypeOf x Is Rdataframe Then
+
+        End If
+
     End Function
 
     ''' <summary>
