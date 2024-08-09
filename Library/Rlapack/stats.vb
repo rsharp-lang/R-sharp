@@ -97,6 +97,7 @@ Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
+Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.Math.Statistics
 Imports Microsoft.VisualBasic.Math.Statistics.Distributions
@@ -1176,6 +1177,15 @@ Module stats
     ''' In the goodness-of-fit case simulation is done by random sampling from the discrete distribution specified 
     ''' by p, each sample being of size ``n = sum(x)``. This simulation is done in R and may be slow.
     ''' </remarks>
+    ''' <example>
+    ''' table &lt;- matrix(c(30, 50, 20, 10), nrow = 2)
+    ''' rownames(table) &lt;- c("Group1", "Group2")
+    ''' colnames(table) &lt;- c("Yes", "No")
+    ''' 
+    ''' result &lt;- chisq.test(table)
+    ''' 
+    ''' print(result)
+    ''' </example>
     <ExportAPI("chisq.test")>
     Public Function chisq_test(<RRawVectorArgument> x As Object,
                                <RRawVectorArgument>
@@ -1190,11 +1200,17 @@ Module stats
         Dim observed As Double()()
         Dim expected As Double()() = Nothing
 
+        If x Is Nothing Then
+            Return Internal.debug.stop("the required observed ``x`` ", env)
+        End If
+
         If TypeOf x Is Rdataframe Then
             Dim df As Rdataframe = x
             Dim rows = df.forEachRow.Select(Function(r) CLRVector.asNumeric(r.value)).ToArray
 
             observed = rows
+        ElseIf TypeOf x Is NumericMatrix Then
+            observed = DirectCast(x, NumericMatrix).ToArray
         Else
             Return Internal.debug.stop("the required observed ``x`` should be a numeric matrix!", env)
         End If
