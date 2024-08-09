@@ -14,6 +14,12 @@ Namespace Language.Syntax
 
         Dim lines As New List(Of String)
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <returns>
+        ''' true means the script expression is in-complete
+        ''' </returns>
         Public ReadOnly Property Check() As Boolean
             Get
                 Dim script As String = lines.JoinBy(vbCrLf)
@@ -30,6 +36,20 @@ Namespace Language.Syntax
         Public Function Append(line As String) As IncompleteExpression
             Call lines.Add(line)
             Return Me
+        End Function
+
+        Public Sub Clear()
+            Call lines.Clear()
+        End Sub
+
+        Public Function GetRScriptText() As String
+            Return lines.JoinBy(vbCrLf)
+        End Function
+
+        Public Function PopRScriptText() As String
+            Dim script As String = GetRScriptText()
+            Call Clear()
+            Return script
         End Function
 
         Public Function GetRScript() As Rscript
@@ -84,6 +104,13 @@ Namespace Language.Syntax
             Return False
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="tokens"></param>
+        ''' <returns>
+        ''' returns true means the stack is opened
+        ''' </returns>
         Private Shared Function scanStackOpen(tokens As Token()) As Boolean
             Dim stack As New Stack(Of Token)
 

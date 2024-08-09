@@ -68,6 +68,7 @@ Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Language.Syntax
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -82,8 +83,13 @@ Module Terminal
     Dim R As RInterpreter
     Dim Rtask As Task
     Dim exec As Boolean = False
+    Dim expr As New IncompleteExpression
+    Dim shell As Shell
 
     Friend cts As CancellationTokenSource
+
+    ReadOnly ps1_ready As New PS1("> ")
+    ReadOnly ps1_incomplete As New PS1("+ ")
 
 #Region "enable quit the R# environment in the terminal console mode"
 
@@ -278,7 +284,7 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
     ''' </remarks>
     Public Function RunTerminal() As Integer
         Dim engineConfig As String = System.Environment.GetEnvironmentVariable("R_LIBS_USER")
-        Dim R_exec As Action(Of String) = AddressOf doRunScriptWithSpecialCommandSync
+        Dim R_exec As Action(Of String) = AddressOf evalWithSpecialCommandSync
         Dim editor As New LineEditor("Rscript", 5000) With {
             .HeuristicsMode = True,
             .TabAtStartCompletes = False,
@@ -321,22 +327,38 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
                 cts.Cancel()
             End Sub
 
-        Call New Shell(New PS1("> "), R_exec, dev:=New LineReader(editor)) With {
+        shell = New Shell(ps1_ready, R_exec, dev:=New LineReader(editor)) With {
             .Quite = "!.R#::quit" & Rnd()
-        }.Run()
+        }
 
-        Return 0
+        Return shell.Run()
     End Function
 
-    Private Sub doRunScriptWithSpecialCommandSync(script As String)
-        Call doRunScriptWithSpecialCommand(script)
+    Private Sub evalWithSpecialCommandSync(script As String)
+        ' check of script is in-complete or not?
+        Call expr.Append(script)
 
-        Do While exec
-            Call Thread.Sleep(10)
-        Loop
+        If expr.Check Then
+            ' expression script is in-complete
+            ' update ps1 to in-complete status
+            shell.ps1 = ps1_incomplete
+        Else
+            Call evaluateWithSpecialCommand(expr.PopRScriptText)
+
+            ' wait for the async script executation complete...
+            Do While exec
+                Call Thread.Sleep(10)
+            Loop
+
+            shell.ps1 = ps1_ready
+        End If
     End Sub
 
-    Private Async Sub doRunScriptWithSpecialCommand(script As String)
+    ''' <summary>
+    ''' evaluate the given script expression
+    ''' </summary>
+    ''' <param name="script"></param>
+    Private Async Sub evaluateWithSpecialCommand(script As String)
         cts = New CancellationTokenSource
         exec = True
 
