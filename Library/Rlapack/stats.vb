@@ -1184,12 +1184,26 @@ Module stats
                                Optional p As Object = "~rep(1/length(x), length(x))",
                                Optional rescale_p As Boolean = False,
                                Optional simulate_p_value As Boolean = False,
-                               Optional B As Integer = 2000) As Object
+                               Optional B As Integer = 2000,
+                               Optional env As Environment = Nothing) As Object
+
+        Dim observed As Double()()
+        Dim expected As Double()() = Nothing
 
         If TypeOf x Is Rdataframe Then
+            Dim df As Rdataframe = x
+            Dim rows = df.forEachRow.Select(Function(r) CLRVector.asNumeric(r.value)).ToArray
 
+            observed = rows
+        Else
+            Return Internal.debug.stop("the required observed ``x`` should be a numeric matrix!", env)
         End If
 
+        If expected Is Nothing Then
+            Return ChiSquareTest.Test(observed)
+        Else
+            Return ChiSquareTest.Test(observed, expected)
+        End If
     End Function
 
     ''' <summary>
