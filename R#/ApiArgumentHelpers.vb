@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::97315af78fb2c2387e60300c863475df, R#\ApiArgumentHelpers.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 261
-    '    Code Lines: 184 (70.50%)
-    ' Comment Lines: 49 (18.77%)
-    '    - Xml Docs: 91.84%
-    ' 
-    '   Blank Lines: 28 (10.73%)
-    '     File Size: 10.37 KB
+' Summaries:
 
 
-    ' Module ApiArgumentHelpers
-    ' 
-    '     Function: FileStreamWriter, GetDoubleRange, GetFileStream, GetNamedValueTuple, rangeFromVector
-    '               slot
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 261
+'    Code Lines: 184 (70.50%)
+' Comment Lines: 49 (18.77%)
+'    - Xml Docs: 91.84%
+' 
+'   Blank Lines: 28 (10.73%)
+'     File Size: 10.37 KB
+
+
+' Module ApiArgumentHelpers
+' 
+'     Function: FileStreamWriter, GetDoubleRange, GetFileStream, GetNamedValueTuple, rangeFromVector
+'               slot
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -255,7 +255,8 @@ Public Module ApiArgumentHelpers
                                   env As Environment,
                                   Optional suppress As Boolean = False,
                                   <Out>
-                                  Optional ByRef is_filepath As Boolean = False) As [Variant](Of Stream, Message)
+                                  Optional ByRef is_filepath As Boolean = False,
+                                  Optional lazy As Boolean = False) As [Variant](Of Stream, Message)
 
         If TypeOf file Is vector Then
             file = DirectCast(file, vector).data
@@ -286,7 +287,11 @@ Public Module ApiArgumentHelpers
 
             ' from a local file
             If mode = FileAccess.Read Then
-                Return DirectCast(file, String).Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+                Return DirectCast(file, String).Open(
+                    If(lazy,
+                    FileMode.OpenOrCreate,  ' not load into memoty at once(lazy)
+                    FileMode.Open           ' read all data into memory at once
+                    ), doClear:=False, [readOnly]:=True)
             ElseIf mode = FileAccess.Write Then
                 Return DirectCast(file, String).Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
             Else
