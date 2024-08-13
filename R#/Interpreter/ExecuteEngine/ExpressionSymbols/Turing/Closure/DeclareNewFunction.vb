@@ -483,8 +483,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
-            Dim par_indent As String = ",
-                "
+            Dim name_index As New String(" "c, funcName.Length + 1 + 2 + 1)
+            Dim par_indent As String = "," & vbLf & "                 " & name_index
+
+            If parameters.TryCount < 4 Then
+                par_indent = ", "
+            End If
 
             Return $"
 declare function '${funcName}'({parameters.Select(AddressOf DeclareNewSymbol.getParameterView).JoinBy(par_indent)}) {{

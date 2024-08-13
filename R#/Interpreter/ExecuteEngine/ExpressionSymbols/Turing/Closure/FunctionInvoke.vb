@@ -167,10 +167,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         End Function
 
         Public Overrides Function ToString() As String
+            Dim par_indent As String = ", "
+
+            If parameters.TryCount > 3 Then
+                par_indent = "," & vbLf & "      "
+            End If
+
             If [namespace].StringEmpty OrElse [namespace] = "n/a" Then
-                Return $"Call {funcName}({parameters.JoinBy(", ")})"
+                Return $"Call {funcName}({parameters.JoinBy(par_indent)})"
             Else
-                Return $"Call {[namespace]}::{funcName}({parameters.JoinBy(", ")})"
+                Return $"Call {[namespace]}::{funcName}({parameters.JoinBy(par_indent)})"
             End If
         End Function
 
