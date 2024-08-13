@@ -57,6 +57,7 @@
 
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -114,7 +115,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
         Public Overrides Function ToString() As String
             Dim memberStrings As String() = members _
-                .Select(Function(m) $"""{m.Name}"": {m.Value.ToString}") _
+                .Select(Function(m) $"  ""{m.Name}"": {m.Value.Indent}") _
                 .ToArray
 
             Return $"{{

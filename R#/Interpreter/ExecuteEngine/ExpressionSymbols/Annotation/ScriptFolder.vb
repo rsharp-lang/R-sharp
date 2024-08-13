@@ -88,7 +88,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
         End Function
 
         Public Overrides Function ToString() As String
-            Return "@dir"
+            Return $"@dir"
         End Function
     End Class
 End Namespace

@@ -67,6 +67,7 @@ Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -167,7 +168,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
         Public Overrides Function ToString() As String
             Return $"for (let {variables.GetJson} in {sequence}) {If(parallel, "%dopar%", "%do%")} {{
     # forloop_internal
-    {body.body}
+{body.body.Indent}
 }}"
         End Function
 

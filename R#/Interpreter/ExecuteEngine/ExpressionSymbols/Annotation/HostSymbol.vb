@@ -81,5 +81,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
         Public Overrides Function Evaluate(envir As Runtime.Environment) As Object
             Return App.ExecutablePath
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"@HOST('{App.ExecutablePath}')"
+        End Function
     End Class
 End Namespace

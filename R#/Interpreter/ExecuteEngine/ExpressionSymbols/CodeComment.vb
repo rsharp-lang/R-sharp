@@ -154,7 +154,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Function
 
         Public Overrides Function ToString() As String
-            Return "// " & comment
+            Return "# " & comment
         End Function
     End Class
 End Namespace

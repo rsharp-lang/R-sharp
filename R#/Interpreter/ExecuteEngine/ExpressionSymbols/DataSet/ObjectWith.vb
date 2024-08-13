@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -114,6 +115,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim result As Object = closure.Evaluate(envir:=objEnv)
 
             Return result
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"with({target}) {{
+{closure.Indent}
+}}"
         End Function
     End Class
 End Namespace

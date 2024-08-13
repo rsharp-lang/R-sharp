@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Language
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -104,6 +105,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             End Using
 
             Return value
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return $"repeat {{
+{closure.Indent}
+}}"
         End Function
     End Class
 End Namespace

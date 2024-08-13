@@ -149,7 +149,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
         End Sub
 
         Public Overrides Function ToString() As String
-            Return cli.ToString
+            Return $"CALL ""{cli.ToString}"""
         End Function
 
         Public Sub SetAttribute(data As NamedValue(Of String))

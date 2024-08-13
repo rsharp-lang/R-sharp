@@ -79,7 +79,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
         End Function
 
         Public Overrides Function ToString() As String
-            Return "[R#.debugger.breakpoint]"
+            Return "# [R#.debugger.breakpoint]"
         End Function
     End Class
 End Namespace

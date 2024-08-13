@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports System.Runtime.CompilerServices
+Imports SMRUCC.Rsharp.Language
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -153,7 +154,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         Public Overrides Function ToString() As String
             Return $"using {params} {{
     # using closure internal
-    {closure}
+{closure.Indent}
 }}"
         End Function
     End Class

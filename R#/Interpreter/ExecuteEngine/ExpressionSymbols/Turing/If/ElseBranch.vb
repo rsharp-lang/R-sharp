@@ -61,6 +61,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Language
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
@@ -128,7 +129,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
         Public Overrides Function ToString() As String
             Return $"else {{
-    {closure}
+{closure.Indent}
 }}"
         End Function
     End Class

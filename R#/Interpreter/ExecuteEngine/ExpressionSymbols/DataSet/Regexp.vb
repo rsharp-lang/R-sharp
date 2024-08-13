@@ -103,7 +103,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"/{pattern}/"
+            Return $"/{pattern}/ig"
         End Function
 
         ''' <summary>

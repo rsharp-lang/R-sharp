@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports SMRUCC.Rsharp.Language
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
@@ -120,7 +121,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
         Public Overrides Function ToString() As String
             Return $"do while ({test}){{
-    {loopBody}
+{loopBody.Indent}
 }}"
         End Function
     End Class

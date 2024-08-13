@@ -68,6 +68,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -474,11 +475,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
         Public Overrides Function ToString() As String
             If symbolSize > 1 Then
-                Return $"Dim [{names.JoinBy(", ")}] As {type.Description} = {any.ToString(value, "NULL")}"
+                Return $"let [{names.JoinBy(", ")}] as {type.Description} = {If(value Is Nothing, "NULL", value.Indent)};"
             ElseIf symbolSize = 0 Then
-                Return "Syntax Error!"
+                Return "# syntax_error!!!"
             Else
-                Return $"Dim {names(Scan0)} As {type.Description} = {any.ToString(value, "NULL")}"
+                Return $"let {names(Scan0)} as {type.Description} = {If(value Is Nothing, "NULL", value.Indent)}"
             End If
         End Function
 

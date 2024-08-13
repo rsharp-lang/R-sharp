@@ -58,6 +58,7 @@
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -102,7 +103,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
         End Sub
 
         Public Overrides Function ToString() As String
-            Return $"@profile -> ( {target.ToString} )"
+            Return $"@profile -> ( {target.Indent} );"
         End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object

@@ -65,6 +65,17 @@ Namespace Language
 
     Module Code
 
+        <Extension>
+        Public Function Indent(exp As Expression, Optional n As Integer = 3) As String
+            Dim indent_str As New String(" "c, n)
+            Dim script As String = exp.ToString _
+                .LineTokens _
+                .Select(Function(line) indent_str & line) _
+                .JoinBy(vbLf)
+
+            Return script
+        End Function
+
         Public Function ParseVector(expr As String) As VectorLiteral
             Dim tokens As Token() = ParseScript(expr)
             Dim opt As New SyntaxBuilderOptions(AddressOf Expression.CreateExpression, Function(c, s) New Scanner(c, s)) With {

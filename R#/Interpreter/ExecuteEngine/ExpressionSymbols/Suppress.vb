@@ -89,5 +89,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                 Return result
             End If
         End Function
+
+        Public Overrides Function ToString() As String
+            Return $"@suppress {expression}"
+        End Function
     End Class
 End Namespace
