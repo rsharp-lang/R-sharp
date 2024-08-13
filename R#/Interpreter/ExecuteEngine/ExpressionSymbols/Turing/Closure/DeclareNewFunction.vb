@@ -477,6 +477,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Return Me
         End Function
 
+        ''' <summary>
+        ''' Inspect of the function declaration content of current function closure object.
+        ''' </summary>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
             Return $"

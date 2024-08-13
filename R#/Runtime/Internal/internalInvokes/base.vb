@@ -3357,7 +3357,7 @@ RE0:
             ElseIf type Is GetType(DeclareNewFunction) Then
                 ' print the runtime function code
                 Call Development.ConsoleMarkdownPrinter.printDocs(DirectCast(x, DeclareNewFunction))
-                Call env.globalEnvironment.stdout.WriteLine(x.ToString)
+                Call env.globalEnvironment.stdout.WriteLine(DirectCast(x, DeclareNewFunction).ToString)
             ElseIf type.ImplementInterface(GetType(RPrint)) Then
                 Try
                     Call markdown.DoPrint(DirectCast(x, RPrint).GetPrintContent, 0)
