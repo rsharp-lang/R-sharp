@@ -1,76 +1,76 @@
 ﻿#Region "Microsoft.VisualBasic::6b2efb84bcb1be0819e545f7e62d935f, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 3463
-    '    Code Lines: 1537 (44.38%)
-    ' Comment Lines: 1632 (47.13%)
-    '    - Xml Docs: 84.50%
-    ' 
-    '   Blank Lines: 294 (8.49%)
-    '     File Size: 154.83 KB
+' Summaries:
 
 
-    '     Module base
-    ' 
-    '         Function: __empty, __invisible, [date], [stop], allocate
-    '                   append, appendFinal, appendOfList, appendOfVector, (+3 Overloads) argumentList
-    '                   attachPackageFile, autoDispose, c, cat, cbind
-    '                   character, checkDimensionsAgree, colnames, columnVector, commandArgs
-    '                   doPrintInternal, dQuote, factor, factors, getOption
-    '                   getPosition, ifelse, ifelseScalar, ifelseVector, ints
-    '                   is_array, isDataframe, isEmpty, isEmptyArray, isFALSE
-    '                   isFunction, isList, isNA, isNull, isRVector
-    '                   isTRUE, join_data, length, library, logical
-    '                   makeNames, names, ncol, neg, nrow
-    '                   numeric, objectAddInvoke, options, options_flush, print
-    '                   range, raws, rbind, Rdataframe, rep
-    '                   rep_int, rep_len, replace, Rlist, Robj_dimension
-    '                   rownames, seq, sink, sink_number, source
-    '                   sQuote, str, summary, t, uniqueNames
-    '                   unitOfT, ValueAt, warning, year
-    ' 
-    '         Sub: println_message, warnings
-    '         Class PrinterOptions
-    ' 
-    '             Properties: fields, maxPrint, maxWidth, quot
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 3463
+'    Code Lines: 1537 (44.38%)
+' Comment Lines: 1632 (47.13%)
+'    - Xml Docs: 84.50%
+' 
+'   Blank Lines: 294 (8.49%)
+'     File Size: 154.83 KB
+
+
+'     Module base
+' 
+'         Function: __empty, __invisible, [date], [stop], allocate
+'                   append, appendFinal, appendOfList, appendOfVector, (+3 Overloads) argumentList
+'                   attachPackageFile, autoDispose, c, cat, cbind
+'                   character, checkDimensionsAgree, colnames, columnVector, commandArgs
+'                   doPrintInternal, dQuote, factor, factors, getOption
+'                   getPosition, ifelse, ifelseScalar, ifelseVector, ints
+'                   is_array, isDataframe, isEmpty, isEmptyArray, isFALSE
+'                   isFunction, isList, isNA, isNull, isRVector
+'                   isTRUE, join_data, length, library, logical
+'                   makeNames, names, ncol, neg, nrow
+'                   numeric, objectAddInvoke, options, options_flush, print
+'                   range, raws, rbind, Rdataframe, rep
+'                   rep_int, rep_len, replace, Rlist, Robj_dimension
+'                   rownames, seq, sink, sink_number, source
+'                   sQuote, str, summary, t, uniqueNames
+'                   unitOfT, ValueAt, warning, year
+' 
+'         Sub: println_message, warnings
+'         Class PrinterOptions
+' 
+'             Properties: fields, maxPrint, maxWidth, quot
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -93,6 +93,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.ValueTypes
+Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Development.Configuration
@@ -3355,9 +3356,15 @@ RE0:
                     .packageDocs _
                     .PrintHelp(x, env.globalEnvironment.stdout)
             ElseIf type Is GetType(DeclareNewFunction) Then
+                Dim std_out = env.globalEnvironment.stdout
                 ' print the runtime function code
                 Call Development.ConsoleMarkdownPrinter.printDocs(DirectCast(x, DeclareNewFunction))
-                Call env.globalEnvironment.stdout.WriteLine(DirectCast(x, DeclareNewFunction).ToString)
+
+                If std_out.env = OutputEnvironments.Console Then
+                    Call ConsoleSyntaxHighlightPrinter.PrintCode(vbCrLf & " " & x.ToString, std_out)
+                Else
+                    Call std_out.WriteLine(DirectCast(x, DeclareNewFunction).ToString)
+                End If
             ElseIf type.ImplementInterface(GetType(RPrint)) Then
                 Try
                     Call markdown.DoPrint(DirectCast(x, RPrint).GetPrintContent, 0)

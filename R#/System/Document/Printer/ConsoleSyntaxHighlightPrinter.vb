@@ -62,6 +62,9 @@ Imports SMRUCC.Rsharp.Runtime
 
 Namespace Development
 
+    ''' <summary>
+    ''' Print R# code with syntax highlight on the console by use ascii escape sequence
+    ''' </summary>
     Public Module ConsoleSyntaxHighlightPrinter
 
         ''' <summary>
@@ -105,6 +108,7 @@ Namespace Development
             Dim number As New ConsoleFormat With {.Bold = False, .Underline = False, .Inverted = False, .Background = AnsiColor.Black, .Foreground = AnsiColor.BrightCyan}
             Dim terminator As New ConsoleFormat With {.Bold = True, .Inverted = False, .Background = AnsiColor.Black, .Foreground = AnsiColor.Red, .Underline = False}
             Dim [default] As New ConsoleFormat(Console.ForegroundColor, Console.BackgroundColor)
+            Dim special As New ConsoleFormat With {.Bold = True, .Inverted = False, .Foreground = AnsiColor.BrightRed, .Background = AnsiColor.Black}
 
             Call dev.WriteLine()
             Call dev.WriteLine()
@@ -132,7 +136,11 @@ Namespace Development
                     Case TokenType.terminator
                         Call dev.Write(New TextSpan(t.text, terminator))
                     Case Else
-                        Call dev.Write(New TextSpan(t.text, word))
+                        If t.name = TokenType.identifier AndAlso t.text = "Call" Then
+                            Call dev.Write(New TextSpan(t.text, special))
+                        Else
+                            Call dev.Write(New TextSpan(t.text, word))
+                        End If
                 End Select
             Next
 
