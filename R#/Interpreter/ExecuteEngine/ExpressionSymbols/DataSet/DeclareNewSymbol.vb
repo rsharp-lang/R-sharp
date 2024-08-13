@@ -475,11 +475,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
         Public Overrides Function ToString() As String
             If symbolSize > 1 Then
-                Return $"let [{names.JoinBy(", ")}] as {type.Description} = {If(value Is Nothing, "NULL", value.Indent)};"
+                Return $"let [{names.JoinBy(", ")}] as {type.Description} = {If(value Is Nothing, "NULL", value.Indent).Trim};"
             ElseIf symbolSize = 0 Then
                 Return "# syntax_error!!!"
             Else
-                Return $"let {names(Scan0)} as {type.Description} = {If(value Is Nothing, "NULL", value.Indent)}"
+                Return $"let {names(Scan0)} as {type.Description} = {If(value Is Nothing, "NULL", value.Indent).Trim}"
             End If
         End Function
 
