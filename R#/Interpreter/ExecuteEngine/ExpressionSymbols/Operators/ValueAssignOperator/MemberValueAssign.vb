@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -343,7 +344,7 @@ invalid_index:
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"{memberReference} <- {value}"
+            Return $"{memberReference} <- {value.Indent.Trim}"
         End Function
     End Class
 End Namespace

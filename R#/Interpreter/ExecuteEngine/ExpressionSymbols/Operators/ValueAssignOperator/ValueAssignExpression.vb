@@ -66,6 +66,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -186,9 +187,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
         Public Overrides Function ToString() As String
             If symbolSize = 1 Then
-                Return $"{targetSymbols(0)} <- {value.ToString}"
+                Return $"{targetSymbols(0)} <- {value.Indent.Trim}"
             Else
-                Return $"[{targetSymbols.JoinBy(", ")}] <- {value.ToString}"
+                Return $"[{targetSymbols.JoinBy(", ")}] <- {value.Indent.Trim}"
             End If
         End Function
 
