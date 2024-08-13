@@ -479,8 +479,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
-            Return $"declare function '${funcName}'({parameters.Select(AddressOf DeclareNewSymbol.getParameterView).JoinBy(", ")}) {{
-    # function_internal
+            Return $"
+declare function '${funcName}'({parameters.Select(AddressOf DeclareNewSymbol.getParameterView).JoinBy(", ")}) {{
+   # function_internal
 {body.Indent}
 }}"
         End Function

@@ -151,7 +151,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"if ({ifTest}) then {{
+            Return $"
+if ({ifTest}) then {{
 {trueClosure.Indent}
 }}"
         End Function

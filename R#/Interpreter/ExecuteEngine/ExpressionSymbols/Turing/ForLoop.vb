@@ -166,8 +166,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"for (let {variables.GetJson} in {sequence}) {If(parallel, "%dopar%", "%do%")} {{
-    # forloop_internal
+            Return $"
+for (let {variables.GetJson} in {sequence}) {If(parallel, "%dopar%", "%do%")} {{
+   # forloop_internal
 {body.body.Indent}
 }}"
         End Function

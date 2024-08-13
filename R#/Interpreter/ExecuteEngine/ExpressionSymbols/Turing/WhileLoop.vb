@@ -120,7 +120,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"do while ({test}){{
+            Return $"
+do while ({test}){{
 {loopBody.Indent}
 }}"
         End Function
