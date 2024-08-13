@@ -483,8 +483,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
+            Dim par_indent As String = ",
+                "
+
             Return $"
-declare function '${funcName}'({parameters.Select(AddressOf DeclareNewSymbol.getParameterView).JoinBy(", ")}) {{
+declare function '${funcName}'({parameters.Select(AddressOf DeclareNewSymbol.getParameterView).JoinBy(par_indent)}) {{
    # function_internal
 {body.Indent}
 }}"
