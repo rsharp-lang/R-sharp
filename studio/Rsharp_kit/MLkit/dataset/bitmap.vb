@@ -53,6 +53,7 @@
 
 Imports System.Drawing
 Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.ProgressBar
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
@@ -86,17 +87,7 @@ Module bitmap_func
         Dim w As Integer = args.getValue("w", env, [default]:=5)
         Dim h As Integer = args.getValue("h", env, [default]:=5)
         Dim q As Double = args.getValue("q", env, [default]:=0.65)
-        Dim intensity As New List(Of Double)
-        Dim c As Color
-        Dim bar As Tqdm.ProgressBar = Nothing
-
-        For Each y As Integer In Tqdm.Range(offset_y, h, bar:=bar)
-            For x As Integer = offset_x To offset_x + w - 1
-                c = bmp.GetPixelColor(y, x)
-                intensity.Add(BitmapScale.GrayScaleF(255 - c.R, 255 - c.G, 255 - c.B))
-            Next
-        Next
-
+        Dim intensity As Double() = bmp.intensity_vec(offset_x, offset_y, w, h)
         Dim total As Double = intensity.Sum
         Dim median As Double = intensity.Median
         Dim min As Double = intensity.Min
@@ -116,6 +107,31 @@ Module bitmap_func
             slot("TrIQ_90") = TrIQ90,
             slot("density") = area
         )
+    End Function
+
+    ''' <summary>
+    ''' extract the raster intensity value from a specific region
+    ''' </summary>
+    ''' <param name="bmp"></param>
+    ''' <param name="w"></param>
+    ''' <param name="h"></param>
+    ''' <returns></returns>
+    <ExportAPI("raster_intensity")>
+    <Extension>
+    <RApiReturn(TypeCodes.double)>
+    Public Function intensity_vec(bmp As BitmapReader, offset_x As Integer, offset_y As Integer, w As Integer, h As Integer) As Object
+        Dim intensity As New List(Of Double)
+        Dim c As Color
+        Dim bar As Tqdm.ProgressBar = Nothing
+
+        For Each y As Integer In Tqdm.Range(offset_y, h, bar:=bar)
+            For x As Integer = offset_x To offset_x + w - 1
+                c = bmp.GetPixelColor(y, x)
+                intensity.Add(BitmapScale.GrayScaleF(255 - c.R, 255 - c.G, 255 - c.B))
+            Next
+        Next
+
+        Return intensity.ToArray
     End Function
 
     <ExportAPI("open")>
