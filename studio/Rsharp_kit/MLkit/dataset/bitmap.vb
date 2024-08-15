@@ -56,10 +56,13 @@ Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.ProgressBar
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
+Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.SignalProcessing
 Imports Microsoft.VisualBasic.Math.SignalProcessing.PeakFinding
+Imports Microsoft.VisualBasic.Math.Statistics.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
@@ -71,6 +74,49 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 ''' 
 <Package("bitmap")>
 Module bitmap_func
+
+    Sub Main()
+        Call Internal.generic.add("summary", GetType(BitmapReader), AddressOf summary_region)
+    End Sub
+
+    <RGenericOverloads("summary")>
+    Private Function summary_region(bmp As BitmapReader, args As list, env As Environment) As Object
+        Dim offset_x As Integer = args.getValue("x", env, [default]:=1)
+        Dim offset_y As Integer = args.getValue("y", env, [default]:=1)
+        Dim w As Integer = args.getValue("w", env, [default]:=5)
+        Dim h As Integer = args.getValue("h", env, [default]:=5)
+        Dim q As Double = args.getValue("q", env, [default]:=0.65)
+        Dim intensity As New List(Of Double)
+        Dim c As Color
+        Dim bar As Tqdm.ProgressBar = Nothing
+
+        For Each y As Integer In Tqdm.Range(offset_y, h, bar:=bar)
+            For x As Integer = offset_x To offset_x + w - 1
+                c = bmp.GetPixelColor(y, x)
+                intensity.Add(BitmapScale.GrayScaleF(255 - c.R, 255 - c.G, 255 - c.B))
+            Next
+        Next
+
+        Dim total As Double = intensity.Sum
+        Dim median As Double = intensity.Median
+        Dim min As Double = intensity.Min
+        Dim max As Double = intensity.Max
+        Dim TrIQ90 As Double = TrIQ.FindThreshold(intensity, q:=0.9, eps:=0.1)
+        Dim TrIQCut As Double = TrIQ.FindThreshold(intensity, q, eps:=0.1)
+        Dim area As Double = (Aggregate ti As Double
+                              In intensity
+                              Where ti >= TrIQCut
+                              Into Count) / intensity.Count
+
+        Return New list(
+            slot("total") = total,
+            slot("median") = median,
+            slot("min") = min,
+            slot("max") = max,
+            slot("TrIQ_90") = TrIQ90,
+            slot("density") = area
+        )
+    End Function
 
     <ExportAPI("open")>
     <RApiReturn(GetType(BitmapReader))>
@@ -134,8 +180,8 @@ Module bitmap_func
     ''' scan the peak signal inside the bitmap image data
     ''' </summary>
     ''' <param name="bmp"></param>
-    ''' <param name="pos"></param>
-    ''' <param name="size"></param>
+    ''' <param name="pos">[x,y] position integer vector</param>
+    ''' <param name="size">[w,h] scan size integer vector</param>
     ''' <param name="threshold">
     ''' angle threshold value, value in range (0,90).
     ''' </param>

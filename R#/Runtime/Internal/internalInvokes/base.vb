@@ -74,6 +74,7 @@
 
 #End Region
 
+Imports System.Drawing
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
@@ -87,6 +88,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
@@ -836,6 +838,15 @@ Namespace Runtime.Internal.Invokes
                 Return DirectCast(x, vector).length
             ElseIf TypeOf x Is Array Then
                 Return DirectCast(x, Array).Length
+            ElseIf TypeOf x Is Image OrElse TypeOf x Is Bitmap Then
+                Dim img As Image = CType(x, Image)
+                Dim dims As Integer() = New Integer() {img.Width, img.Height}
+
+                Return dims
+            ElseIf TypeOf x Is BitmapReader Then
+                With DirectCast(x, BitmapReader)
+                    Return New Integer() { .ImageWidth, .ImageHeight}
+                End With
             ElseIf Internal.generic.exists("dim") Then
                 Dim dim_func = generic.getGenericCallable(x, x.GetType, "dim", env)
 
