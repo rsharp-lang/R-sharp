@@ -119,12 +119,18 @@ Module bitmap_func
     <ExportAPI("raster_intensity")>
     <Extension>
     <RApiReturn(TypeCodes.double)>
-    Public Function intensity_vec(bmp As BitmapReader, offset_x As Integer, offset_y As Integer, w As Integer, h As Integer) As Object
+    Public Function intensity_vec(bmp As BitmapReader, offset_x As Integer, offset_y As Integer, w As Integer, h As Integer, Optional progress As Boolean = True) As Object
         Dim intensity As New List(Of Double)
         Dim c As Color
-        Dim bar As Tqdm.ProgressBar = Nothing
+        Dim y_iterator As IEnumerable(Of Integer)
 
-        For Each y As Integer In Tqdm.Range(offset_y, h, bar:=bar)
+        If progress Then
+            y_iterator = Tqdm.Range(offset_y, h)
+        Else
+            y_iterator = Enumerable.Range(offset_y, h)
+        End If
+
+        For Each y As Integer In y_iterator
             For x As Integer = offset_x To offset_x + w - 1
                 c = bmp.GetPixelColor(y, x)
                 intensity.Add(BitmapScale.GrayScaleF(255 - c.R, 255 - c.G, 255 - c.B))
