@@ -441,21 +441,56 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' names.
         ''' </returns>
         <ExportAPI("merge")>
-        Public Function merge(x As dataframe, y As dataframe, <RRawVectorArgument> by As Object, Optional env As Environment = Nothing) As Object
-            Dim byCols As String() = CLRVector.asCharacter(by)
+        Public Function merge(x As dataframe, y As dataframe,
+                              <RRawVectorArgument> Optional by As Object = Nothing,
+                              <RRawVectorArgument> Optional by_x As Object = Nothing,
+                              <RRawVectorArgument> Optional by_y As Object = Nothing,
+                              Optional env As Environment = Nothing) As Object
 
-            For Each col As String In byCols
-                If Not x.hasName(col) Then
-                    Return Internal.debug.stop({$"‘by’ must specify a unique valid column for x", $"missing: {col}"}, env)
-                ElseIf Not y.hasName(col) Then
-                    Return Internal.debug.stop({$"‘by’ must specify a unique valid column for y", $"missing: {col}"}, env)
+            Dim byColsX As String()
+            Dim byColsY As String()
+
+            If by Is Nothing Then
+                ' by_x and by_y should both has been specificed!
+                byColsX = CLRVector.asCharacter(by_x)
+                byColsY = CLRVector.asCharacter(by_y)
+
+                If byColsX.IsNullOrEmpty Then
+                    Return Internal.debug.stop("by.x must be specificed for matches x!", env)
+                ElseIf byColsY.IsNullOrEmpty Then
+                    Return Internal.debug.stop("by.y must be specificed for matches y!", env)
                 End If
-            Next
+
+                ' check of x 
+                For Each col As String In byColsX
+                    If Not x.hasName(col) Then
+                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for x", $"missing: {col}"}, env)
+                    End If
+                Next
+                For Each col As String In byColsY
+                    If Not y.hasName(col) Then
+                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for y", $"missing: {col}"}, env)
+                    End If
+                Next
+            Else
+                Dim byCols As String() = CLRVector.asCharacter(by)
+
+                For Each col As String In byCols
+                    If Not x.hasName(col) Then
+                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for x", $"missing: {col}"}, env)
+                    ElseIf Not y.hasName(col) Then
+                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for y", $"missing: {col}"}, env)
+                    End If
+                Next
+
+                byColsX = byCols
+                byColsY = byCols
+            End If
 
             x = New dataframe(x)
             y = New dataframe(y)
-            x.rownames = GetIndex(x, byCols)
-            y.rownames = GetIndex(y, byCols)
+            x.rownames = GetIndex(x, byColsX)
+            y.rownames = GetIndex(y, byColsY)
 
             Dim sortX = x.colnames
             Dim sortY = y.colnames
