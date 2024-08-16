@@ -511,14 +511,48 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 .rownames = join.Select(Function(i) i.ri).ToArray,
                 .columns = New Dictionary(Of String, Array)
             }
+            Dim common_by As Boolean = Not by Is Nothing
+            Dim index_x As Index(Of String) = byColsX
+            Dim index_y As Index(Of String) = byColsY
+            Dim colname As String
+            Dim commonNames = sortX.Where(Function(si) Not si Like index_x) _
+                .JoinIterates(sortY.Where(Function(si) Not si Like index_y)) _
+                .GroupBy(Function(a) a) _
+                .Where(Function(a) a.Count > 1) _
+                .Select(Function(a) a.Key) _
+                .Indexing
 
             For i As Integer = 0 To sortX.Length - 1
+                colname = sortX(i)
+
+                If colname Like index_x Then
+                    If Not common_by Then
+                        If Not colname Like commonNames Then
+                            colname = $"x.{colname}"
+                        End If
+                    End If
+                ElseIf colname Like commonNames Then
+                    colname = $"x.{colname}"
+                End If
+
                 offset = i
-                df.add(sortX(i), join.Select(Function(v) v.mx(offset)))
+                df.add(colname, join.Select(Function(v) v.mx(offset)))
             Next
             For i As Integer = 0 To sortY.Length - 1
+                colname = sortY(i)
+
+                If colname Like index_y Then
+                    If Not common_by Then
+                        If Not colname Like commonNames Then
+                            colname = $"y.{colname}"
+                        End If
+                    End If
+                ElseIf colname Like commonNames Then
+                    colname = $"y.{colname}"
+                End If
+
                 offset = i
-                df.add(sortY(i), join.Select(Function(v) v.my(offset)))
+                df.add(colname, join.Select(Function(v) v.my(offset)))
             Next
 
             Return df
