@@ -282,7 +282,11 @@ Namespace Runtime
         ''' <param name="packageName">the library package name</param>
         ''' <param name="silent">suppress of print message?</param>
         ''' <param name="ignoreMissingStartupPackages">debug used only</param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this function returns an error message object instance if
+        ''' load package error, otherwise returns nothing means load 
+        ''' the required package correctly.
+        ''' </returns>
         Public Function LoadLibrary(packageName As String,
                                     Optional silent As Boolean = False,
                                     Optional ignoreMissingStartupPackages As Boolean = False) As Message

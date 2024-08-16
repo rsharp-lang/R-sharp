@@ -1,66 +1,68 @@
 ﻿#Region "Microsoft.VisualBasic::2714f87a4e7105ebe09a8078e63d88a1, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 197
-    '    Code Lines: 66 (33.50%)
-    ' Comment Lines: 114 (57.87%)
-    '    - Xml Docs: 94.74%
-    ' 
-    '   Blank Lines: 17 (8.63%)
-    '     File Size: 9.59 KB
+' Summaries:
 
 
-    '     Class Require
-    ' 
-    '         Properties: expressionName, options, packages, type
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    '         Function: Evaluate, getOptions, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 197
+'    Code Lines: 66 (33.50%)
+' Comment Lines: 114 (57.87%)
+'    - Xml Docs: 94.74%
+' 
+'   Blank Lines: 17 (8.63%)
+'     File Size: 9.59 KB
+
+
+'     Class Require
+' 
+'         Properties: expressionName, options, packages, type
+' 
+'         Constructor: (+3 Overloads) Sub New
+'         Function: Evaluate, getOptions, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
@@ -87,7 +89,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
     ''' case-insensitive file systems such as are common on Windows 
     ''' and macOS.
     ''' </summary>
-    ''' 
+    ''' <remarks>
+    ''' ``require`` returns a logical vector for indicates the package loading result.
+    ''' </remarks>
     Public Class Require : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes
@@ -228,19 +232,35 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
             Dim [global] As GlobalEnvironment = envir.globalEnvironment
             Dim options = getOptions(envir)
             Dim pkgName As String
-            Dim message As Message
+            Dim message As Message = Nothing
             Dim quietly As Boolean = options.TryGetValue("quietly")
+            Dim flag As Boolean = True
+            Dim warnings As New List(Of String)
 
             For Each name As Expression In packages
                 pkgName = ValueAssignExpression.GetSymbol(name)
                 message = [global].LoadLibrary(pkgName, silent:=quietly)
 
-                If Not message Is Nothing AndAlso Not quietly Then
-                    Call Internal.debug.PrintMessageInternal(message, envir.globalEnvironment)
+                If Not message Is Nothing Then
+                    flag = False
+
+                    If Not quietly Then
+                        Call Internal.debug.PrintMessageInternal(message, envir.globalEnvironment)
+                    Else
+                        Call warnings.AddRange(message.message)
+                        Call envir.AddMessage(message.message, MSG_TYPES.WRN)
+                    End If
                 End If
             Next
 
-            Return names.ToArray
+            If flag Then
+                Return True
+            Else
+                Dim bool As vector = vector.fromScalar(False)
+                bool.setAttribute("error", message)
+                bool.setAttribute("warning", warnings.ToArray)
+                Return bool
+            End If
         End Function
 
         ''' <summary>

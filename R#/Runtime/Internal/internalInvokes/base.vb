@@ -3526,9 +3526,17 @@ RE0:
                 require = New Require(package)
             End If
 
-            Dim err = require.Evaluate(env)
+            ' require/imports ... from ...
+            Dim err As Object = require.Evaluate(env)
 
             If Program.isException(err) Then
+                Return err
+            ElseIf RType.TypeOf(err).mode = TypeCodes.boolean AndAlso base.isFALSE(err) Then
+                ' 20240816
+                ' require returns false if load package error
+                ' the error message was attached inside the logical vector
+                ' with attribute name ``error``.
+                err = TryCast(err, vector).getAttribute("error")
                 Return err
             Else
                 Return env.globalEnvironment _
