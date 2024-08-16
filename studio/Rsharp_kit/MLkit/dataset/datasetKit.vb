@@ -109,6 +109,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 ''' </summary>
 <Package("dataset", Category:=APICategories.UtilityTools)>
 <RTypeExport("data_matrix", GetType(UnionMatrix))>
+<RTypeExport("data_sample", GetType(SampleData))>
 Module datasetKit
 
     Sub New()
