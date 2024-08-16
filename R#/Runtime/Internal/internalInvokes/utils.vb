@@ -1175,7 +1175,8 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns>
         ''' a list object that contains the meta data of the 
-        ''' package descirption information.
+        ''' package descirption information. details data members
+        ''' see the clr object: <see cref="Development.Package.File.DESCRIPTION"/>.
         ''' </returns>
         <ExportAPI("description")>
         Public Function description(Optional package As String = Nothing,

@@ -66,27 +66,65 @@ Imports SMRUCC.Rsharp.Runtime.Interop.CType
 
 Namespace Development.Package.File
 
+    ''' <summary>
+    ''' the metadata of the R# package file
+    ''' </summary>
     Public Class DESCRIPTION : Implements ICTypeList, IsEmpty
 
         ''' <summary>
         ''' the package name
         ''' </summary>
+        ''' <remarks>
+        ''' this package name could be used for load the package via ``require`` or ``library`` function.
+        ''' </remarks>
         ''' <returns></returns>
         Public Property Package As String
+        ''' <summary>
+        ''' the type of the current R# package.
+        ''' </summary>
+        ''' <returns></returns>
         Public Property Type As String
+        ''' <summary>
+        ''' the title display of the current package.
+        ''' </summary>
+        ''' <returns></returns>
         Public Property Title As String
         ''' <summary>
         ''' the package version string
         ''' </summary>
         ''' <returns></returns>
         Public Property Version As String
+        ''' <summary>
+        ''' the date time for build this package
+        ''' </summary>
+        ''' <returns></returns>
         Public Property [Date] As String
+        ''' <summary>
+        ''' the author names for write this packages
+        ''' </summary>
+        ''' <returns></returns>
         Public Property Author As String
         Public Property Maintainer As String
+        ''' <summary>
+        ''' A long text for make notes about this package its function and usage.
+        ''' </summary>
+        ''' <returns></returns>
         Public Property Description As String
+        ''' <summary>
+        ''' the license name
+        ''' </summary>
+        ''' <returns></returns>
         Public Property License As String
+        ''' <summary>
+        ''' other additional metadata about this package
+        ''' </summary>
+        ''' <returns></returns>
         Public Property meta As Dictionary(Of String, String)
 
+        ''' <summary>
+        ''' check of the content data of current package metadata is empty or not?
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property isEmpty As Boolean Implements IsEmpty.IsEmpty
             Get
                 Return Package.StringEmpty

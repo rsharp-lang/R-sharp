@@ -549,6 +549,10 @@ Module datasetKit
             Return Nothing
         ElseIf TypeOf x Is Rdataframe Then
             x = datasetKit.toFeatureSet(x, env)
+        ElseIf TypeOf x Is String OrElse RType.TypeOf(x).mode = TypeCodes.string Then
+            ' description of the package from base runtime environment
+            ' make generic overloads
+            Return Internal.Invokes.utils.description(CLRVector.asCharacter(x).First,, env)
         End If
 
         If TypeOf x Is Message Then
