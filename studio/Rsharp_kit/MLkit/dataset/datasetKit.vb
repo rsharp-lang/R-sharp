@@ -545,7 +545,7 @@ Module datasetKit
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("description")>
-    Public Function dataDescription(x As Object, Optional env As Environment = Nothing) As Object
+    Public Function dataDescription(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
             Return Nothing
         ElseIf TypeOf x Is Rdataframe Then
@@ -555,7 +555,21 @@ Module datasetKit
         If TypeOf x Is Message Then
             Return x
         ElseIf Not TypeOf x Is FeatureFrame Then
-            Return Message.InCompatibleType(GetType(FeatureFrame), x.GetType, env)
+            Dim pull As pipeline = pipeline.TryCreatePipeline(Of SampleData)(x, env)
+
+            If pull.isError Then
+                Return Message.InCompatibleType(GetType(FeatureFrame), x.GetType, env)
+            Else
+                Dim samples As SampleData() = pull _
+                    .populates(Of SampleData)(env) _
+                    .ToArray
+
+                Return New list(
+                    slot("length") = samples.Length,
+                    slot("feature_size") = samples(0).features.Length,
+                    slot("label_size") = samples(0).labels.Length
+                )
+            End If
         End If
 
         Return New Rdataframe With {
