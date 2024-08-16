@@ -15,7 +15,7 @@
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	  <Authors>xieguigang &lt;xie.guigang@gcmodeller.org&gt;</Authors>
 	  <Company>SMRUCC genomics Institute [GuiLin, China]</Company>
-	  <Product>R-sharp Language</Product>
+	  <Product>R#</Product>
 	  <Description>R# language scrpting host</Description>
 	  <Copyright>xieguigang &lt;xie.guigang@gcmodeller.org&gt; 2023</Copyright>
 	  <PackageIcon>R-sharp.png</PackageIcon>

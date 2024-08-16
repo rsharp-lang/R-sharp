@@ -17,6 +17,7 @@
 	  <Authors>xieguigang</Authors>
 	  <Company>SMRUCC genomics Institute [GuiLin, China]</Company>
 	  <UseApplicationFramework>True</UseApplicationFramework>
+	  <Product>R#</Product>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -26,6 +26,8 @@
 	  <UseApplicationFramework>True</UseApplicationFramework>
 	  <FileVersion>3.155.265.3654</FileVersion>
 	  <IncludeSymbols>True</IncludeSymbols>
+	  <PackageId>R-sharp</PackageId>
+	  <Product>R#</Product>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
