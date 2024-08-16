@@ -379,6 +379,8 @@ Module Rgraphics
         Dim size = InteropArgumentHelper _
             .getSize(args.getBySynonyms("size", "Size", "dims"), env, [default]:=$"{poly.width},{poly.height}") _
             .SizeParser
+        Dim cw As Integer = args.getValue("cw", env, 1)
+        Dim ch As Integer = args.getValue("ch", env, 1)
 
         If df.hasName("r") AndAlso df.hasName("g") AndAlso df.hasName("b") Then
             Dim r As Double() = bytes(CLRVector.asNumeric(df!r))
@@ -416,7 +418,7 @@ Module Rgraphics
                 .Select(Function(d, i) New PixelData(px(i), py(i), d)) _
                 .ToArray
 
-            Return raster.RenderRasterImage(pixels, size:=size)
+            Return raster.RenderRasterImage(pixels, size:=size, cw:=cw, ch:=ch)
         End If
     End Function
 

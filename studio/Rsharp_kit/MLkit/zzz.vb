@@ -76,6 +76,7 @@ Public Class zzz
         Call NLP.Main()
         Call aprioriRules.Main()
         Call Manifold.Main()
+        Call bitmap_func.Main()
 
         Call Console.WriteLine()
     End Sub

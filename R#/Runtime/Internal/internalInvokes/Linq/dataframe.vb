@@ -1,55 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::ffcbbd2b8942fc5a810829b0dfe5fa6f, R#\Runtime\Internal\internalInvokes\Linq\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 371
-    '    Code Lines: 209 (56.33%)
-    ' Comment Lines: 118 (31.81%)
-    '    - Xml Docs: 80.51%
-    ' 
-    '   Blank Lines: 44 (11.86%)
-    '     File Size: 15.96 KB
+' Summaries:
 
 
-    '     Module dataframe_methods
-    ' 
-    '         Function: aggregate_eval, aggregate_func, aggregate_run, colMeans, colSums
-    '                   (+2 Overloads) combineFactors, rank_unique, rename, rowMeans, rowSums
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 371
+'    Code Lines: 209 (56.33%)
+' Comment Lines: 118 (31.81%)
+'    - Xml Docs: 80.51%
+' 
+'   Blank Lines: 44 (11.86%)
+'     File Size: 15.96 KB
+
+
+'     Module dataframe_methods
+' 
+'         Function: aggregate_eval, aggregate_func, aggregate_run, colMeans, colSums
+'                   (+2 Overloads) combineFactors, rank_unique, rename, rowMeans, rowSums
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -57,6 +57,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.Expressions
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
@@ -421,6 +422,158 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Next
 
             Return df
+        End Function
+
+        ''' <summary>
+        ''' ### Merge Two Data Frames
+        ''' 
+        ''' Merge two data frames by common columns or row names, or do other versions of database join operations.
+        ''' </summary>
+        ''' <param name="x">data frames, or objects To be coerced To one.</param>
+        ''' <param name="y">data frames, or objects To be coerced To one.</param>
+        ''' <param name="by">specifications of the columns used for merging.</param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' A data frame. The rows are by default lexicographically sorted on the common columns, but for 
+        ''' sort = FALSE are in an unspecified order. The columns are the common columns followed by the 
+        ''' remaining columns in x and then those in y. If the matching involved row names, an extra character 
+        ''' column called Row.names is added at the left, and in all cases the result has ‘automatic’ row 
+        ''' names.
+        ''' </returns>
+        <ExportAPI("merge")>
+        Public Function merge(x As dataframe, y As dataframe,
+                              <RRawVectorArgument> Optional by As Object = Nothing,
+                              <RRawVectorArgument> Optional by_x As Object = Nothing,
+                              <RRawVectorArgument> Optional by_y As Object = Nothing,
+                              Optional env As Environment = Nothing) As Object
+
+            Dim byColsX As String()
+            Dim byColsY As String()
+
+            If by Is Nothing Then
+                ' by_x and by_y should both has been specificed!
+                byColsX = CLRVector.asCharacter(by_x)
+                byColsY = CLRVector.asCharacter(by_y)
+
+                If byColsX.IsNullOrEmpty Then
+                    Return Internal.debug.stop("by.x must be specificed for matches x!", env)
+                ElseIf byColsY.IsNullOrEmpty Then
+                    Return Internal.debug.stop("by.y must be specificed for matches y!", env)
+                End If
+
+                ' check of x 
+                For Each col As String In byColsX
+                    If Not x.hasName(col) Then
+                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for x", $"missing: {col}"}, env)
+                    End If
+                Next
+                For Each col As String In byColsY
+                    If Not y.hasName(col) Then
+                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for y", $"missing: {col}"}, env)
+                    End If
+                Next
+            Else
+                Dim byCols As String() = CLRVector.asCharacter(by)
+
+                For Each col As String In byCols
+                    If Not x.hasName(col) Then
+                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for x", $"missing: {col}"}, env)
+                    ElseIf Not y.hasName(col) Then
+                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for y", $"missing: {col}"}, env)
+                    End If
+                Next
+
+                byColsX = byCols
+                byColsY = byCols
+            End If
+
+            x = New dataframe(x)
+            y = New dataframe(y)
+            x.rownames = GetIndex(x, byColsX)
+            y.rownames = GetIndex(y, byColsY)
+
+            Dim sortX = x.colnames
+            Dim sortY = y.colnames
+
+            Dim dx = x.forEachRow(sortX).ToDictionary(Function(a) a.name, Function(a) a.value)
+            Dim dy = y.forEachRow(sortY).ToDictionary(Function(a) a.name, Function(a) a.value)
+            Dim common As String() = x.rownames.Intersect(y.rownames).ToArray
+            Dim join = common _
+                .Select(Function(ri)
+                            Dim mx = dx(ri)
+                            Dim my = dy(ri)
+
+                            Return (ri, mx, my)
+                        End Function) _
+                .ToArray
+            Dim offset As Integer
+            Dim df As New dataframe With {
+                .rownames = join.Select(Function(i) i.ri).ToArray,
+                .columns = New Dictionary(Of String, Array)
+            }
+            Dim common_by As Boolean = Not by Is Nothing
+            Dim index_x As Index(Of String) = byColsX
+            Dim index_y As Index(Of String) = byColsY
+            Dim colname As String
+            Dim commonNames = sortX.Where(Function(si) Not si Like index_x) _
+                .JoinIterates(sortY.Where(Function(si) Not si Like index_y)) _
+                .GroupBy(Function(a) a) _
+                .Where(Function(a) a.Count > 1) _
+                .Select(Function(a) a.Key) _
+                .Indexing
+
+            For i As Integer = 0 To sortX.Length - 1
+                colname = sortX(i)
+
+                If colname Like index_x Then
+                    If Not common_by Then
+                        If Not colname Like commonNames Then
+                            colname = $"x.{colname}"
+                        End If
+                    End If
+                ElseIf colname Like commonNames Then
+                    colname = $"x.{colname}"
+                End If
+
+                offset = i
+                df.add(colname, join.Select(Function(v) v.mx(offset)))
+            Next
+            For i As Integer = 0 To sortY.Length - 1
+                colname = sortY(i)
+
+                If colname Like index_y Then
+                    If Not common_by Then
+                        If Not colname Like commonNames Then
+                            colname = $"y.{colname}"
+                        End If
+                    End If
+                ElseIf colname Like commonNames Then
+                    colname = $"y.{colname}"
+                End If
+
+                offset = i
+                df.add(colname, join.Select(Function(v) v.my(offset)))
+            Next
+
+            Return df
+        End Function
+
+        Private Function GetIndex(d As dataframe, by As String()) As String()
+            Dim strs As String() = Nothing
+
+            For Each col As String In by
+                Dim v As String() = CLRVector.asCharacter(d(col))
+
+                If strs Is Nothing Then
+                    strs = v
+                Else
+                    strs = strs _
+                        .Select(Function(si, i) si & v(i)) _
+                        .ToArray
+                End If
+            Next
+
+            Return strs.UniqueNames
         End Function
     End Module
 End Namespace
