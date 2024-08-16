@@ -550,25 +550,39 @@ Namespace Runtime.Internal.Invokes
         ''' </example>
         <ExportAPI("seq")>
         Public Function seq(from As Object, [to] As Object,
-                            Optional by As Object = 1.0,
+                            Optional by As Double = Double.NaN,
+                            Optional length_out As Integer = -1,
                             Optional env As Environment = Nothing) As Object
 
             Dim t1 As RType = RType.TypeOf(from)
             Dim t2 As RType = RType.TypeOf([to])
 
             If t1.mode.IsNumeric AndAlso t2.mode.IsNumeric Then
+                Dim from_d As Double = CDbl(from)
+                Dim to_d As Double = CDbl([to])
+
+                If length_out > 0 AndAlso by.IsNaNImaginary Then
+                    by = ((to_d - from_d) / (length_out - 1))
+                End If
+                If by.IsNaNImaginary Then
+                    by = 1
+                End If
+
                 Return Microsoft.VisualBasic.Math _
-                    .seq(CDbl(from), CDbl([to]), CDbl(by)) _
+                    .seq(from_d, to_d, by) _
                     .ToArray
             ElseIf t1.mode = TypeCodes.string AndAlso t2.mode = TypeCodes.string Then
+                ' length_out is not working when make
+                ' ascii char sequence
                 Dim ascFrom As Double = Asc(any.ToString(from).First)
                 Dim ascTo As Double = Asc(any.ToString([to]).First)
-                Dim steps As Double = CDbl(by)
                 Dim ascii As Integer() = Microsoft.VisualBasic.Math _
                     .seq(ascFrom, ascTo, by) _
                     .Select(Function(d) CInt(d)) _
                     .ToArray
-                Dim chrs As Char() = (From i As Integer In ascii Select ChrW(i)).ToArray
+                Dim chrs As Char() = (From i As Integer
+                                      In ascii
+                                      Select ChrW(i)).ToArray
 
                 Return chrs
             Else
