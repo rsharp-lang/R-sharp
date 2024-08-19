@@ -183,6 +183,10 @@ Module Program
             configs:=If(engineConfig.StringEmpty, ConfigFile.localConfigs, engineConfig)
         )
 
+        For Each var In args.EnvironmentVariables
+            Call R.globalEnvir.options.setOption(var.Key, var.Value)
+        Next
+
         If Not redirectConsoleLog.StringEmpty Then
             Dim text = App.RedirectLogging(redirectConsoleLog)
 
