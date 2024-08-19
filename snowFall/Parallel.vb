@@ -108,6 +108,13 @@ Public Module Parallel
     ''' 
     ''' Attempt to detect the number of CPU cores on the current host.
     ''' </summary>
+    ''' <param name="all_tests">
+    ''' Logical: if true apply all known tests.
+    ''' </param>
+    ''' <param name="logical">
+    ''' Logical: if possible, use the number of physical CPUs/cores (if FALSE) or logical CPUs (if TRUE). 
+    ''' Currently this is honoured only on macOS, Solaris and Windows.
+    ''' </param>
     ''' <returns>An integer, NA if the answer is unknown.
     ''' Exactly what this represents Is OS-dependent: where possible by 
     ''' Default it counts logical (e.g., hyperthreaded) CPUs And Not 
@@ -121,7 +128,7 @@ Public Module Parallel
     ''' 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <ExportAPI("detectCores")>
-    Public Function detectCores() As Integer
+    Public Function detectCores(Optional all_tests As Boolean = False, Optional logical As Boolean = True) As Integer
         Return App.CPUCoreNumbers
     End Function
 
