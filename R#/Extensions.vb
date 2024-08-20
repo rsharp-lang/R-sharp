@@ -57,6 +57,7 @@
 Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices.Terminal.ProgressBar.Tqdm
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
@@ -214,13 +215,15 @@ Public Module Extensions
     Private Function evaluateList(Of T, TOut)(x As list,
                                               eval As Func(Of T, TOut),
                                               parallel As Boolean,
-                                              env As Environment) As Object ' [Variant](Of TOut, list)
+                                              tqdm As Boolean,
+                                              env As Environment) As Object
 
         Dim seq = x.AsGeneric(Of T)(env).AsList
         Dim eval2 = Function(xi As KeyValuePair(Of String, T)) As TOut
                         Return eval(xi.Value)
                     End Function
-        Dim result = seq.CastSequence(eval2, parallel)
+        ' cast to tuples for create list later
+        Dim result = seq.CastSequence(eval2, parallel, tqdm)
         Dim list As New list With {.slots = New Dictionary(Of String, Object)}
 
         If result Like GetType(TOut) Then
@@ -258,18 +261,26 @@ Public Module Extensions
     Public Function EvaluateFramework(Of T, TOut)(env As Environment,
                                                   x As Object,
                                                   eval As Func(Of T, TOut),
-                                                  Optional parallel As Boolean = False) As Object
+                                                  Optional parallel As Boolean = False,
+                                                  Optional tqdm As Boolean = False) As Object
         If x Is Nothing Then
             Return Nothing
         ElseIf TypeOf x Is list Then
             ' returns variant of TOut or list
-            Return DirectCast(x, list).evaluateList(eval, parallel, env)
+            Return DirectCast(x, list).evaluateList(eval, parallel, tqdm, env)
         ElseIf TypeOf x Is vector Then
             ' returns variant of Tout or vector
             With DirectCast(x, vector)
                 Dim list As New List(Of TOut)
+                Dim populator As IEnumerable(Of Object)
 
-                For Each item As Object In .data.AsObjectEnumerator
+                If tqdm Then
+                    populator = TqdmWrapper.Wrap(.data.ToArray(Of Object))
+                Else
+                    populator = .data.AsObjectEnumerator
+                End If
+
+                For Each item As Object In populator
                     item = RCType.CTypeDynamic(item, GetType(T), env)
 
                     If Program.isException(item) Then
@@ -304,14 +315,14 @@ Public Module Extensions
                 End If
             Next
 
-            Return cast.CastSequence(eval, parallel).Value
+            Return cast.CastSequence(eval, parallel, tqdm).Value
         ElseIf TypeOf x Is T Then
             ' returns Tout
             Return eval(DirectCast(x, T))
         ElseIf x.GetType.ImplementInterface(Of IEnumerable(Of T)) Then
             Return DirectCast(x, IEnumerable(Of T)) _
                 .AsList _
-                .CastSequence(eval, parallel) _
+                .CastSequence(eval, parallel, tqdm) _
                 .Value
         Else
             Return Internal.debug.stop(Message.InCompatibleType(GetType(T), x.GetType, env), env)
@@ -332,7 +343,8 @@ Public Module Extensions
     <Extension>
     Private Function CastSequence(Of T, TOut)(cast As List(Of T),
                                               eval As Func(Of T, TOut),
-                                              parallel As Boolean) As [Variant](Of vector, TOut)
+                                              parallel As Boolean,
+                                              tqdm As Boolean) As [Variant](Of vector, TOut)
         Dim list As New List(Of TOut)
 
         If cast.Count = 1 AndAlso Not DataFramework.IsPrimitive(GetType(TOut)) Then
@@ -348,7 +360,15 @@ Public Module Extensions
                 .Select(Function(item) item.Item2) _
                 .DoCall(AddressOf list.AddRange)
         Else
-            For Each item As T In cast
+            Dim populator As IEnumerable(Of T)
+
+            If tqdm Then
+                populator = TqdmWrapper.Wrap(cast)
+            Else
+                populator = cast
+            End If
+
+            For Each item As T In populator
                 Call list.Add(eval(item))
             Next
         End If
