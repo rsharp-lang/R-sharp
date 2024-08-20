@@ -68,6 +68,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports rDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 ''' <summary>
@@ -113,6 +114,32 @@ Module NLP
     End Function
 
     Private Function getText(text As Object, env As Environment) As [Variant](Of Message, Paragraph())
+        If TypeOf text Is list AndAlso DirectCast(text, list).listOf(TypeCodes.string) Then
+            Dim strings As New List(Of String())
+
+            For Each val As Object In DirectCast(text, list).data
+                If Not val Is Nothing Then
+                    Call strings.Add(CLRVector.asCharacter(val))
+                End If
+            Next
+
+            Dim pars As Paragraph() = New Paragraph(strings.Count - 1) {}
+
+            If strings.All(Function(s) s.Length = 1) Then
+                ' needs parse as tokens
+                For i As Integer = 0 To strings.Count - 1
+                    pars(i) = Paragraph.Segmentation(strings(i)(Scan0))
+                Next
+            Else
+                ' has been parsed
+                For i As Integer = 0 To strings.Count - 1
+                    pars(i) = New Paragraph With {.sentences = {New Sentence(strings(i))}}
+                Next
+            End If
+
+            Return pars
+        End If
+
         Dim pull As pipeline = pipeline.TryCreatePipeline(Of String)(text, env)
 
         If pull.isError Then

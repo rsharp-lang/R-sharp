@@ -290,6 +290,15 @@ Namespace Runtime.Internal.Object
         End Function
 
         ''' <summary>
+        ''' all value element inside current tuple list is the given element type
+        ''' </summary>
+        ''' <param name="elementMode">the element type for test</param>
+        ''' <returns></returns>
+        Public Function listOf(elementMode As TypeCodes) As Boolean
+            Return data.All(Function(a) a Is Nothing OrElse RType.TypeOf(a).mode = elementMode)
+        End Function
+
+        ''' <summary>
         ''' this function may returns nothing if all index names are default index, example as: [[1]]
         ''' </summary>
         ''' <returns></returns>
