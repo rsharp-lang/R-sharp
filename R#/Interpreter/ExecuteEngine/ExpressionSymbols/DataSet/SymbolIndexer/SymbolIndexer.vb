@@ -99,13 +99,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End Get
         End Property
 
-        Friend ReadOnly index As Expression
+        Friend index As Expression
         Friend symbol As Expression
 
         ''' <summary>
         ''' X[[name]]
         ''' </summary>
         Friend ReadOnly indexType As SymbolIndexers
+        Friend ReadOnly is_Removes As Boolean
 
         Public Overrides ReadOnly Property expressionName As ExpressionTypes
             Get
@@ -117,6 +118,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Me.symbol = symbol
             Me.index = index
             Me.indexType = indexType
+            Me.is_Removes = CheckRemoves()
         End Sub
 
         ''' <summary>
@@ -128,7 +130,22 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Me.symbol = symbol
             Me.index = byName
             Me.indexType = SymbolIndexers.nameIndex
+            Me.is_Removes = CheckRemoves()
         End Sub
+
+        ''' <summary>
+        ''' treat -xxx as removes xxx, 
+        ''' xxx as takes by name xxx
+        ''' </summary>
+        ''' <returns></returns>
+        Private Function CheckRemoves() As Boolean
+            If TypeOf index Is Operators.UnaryNot Then
+                index = DirectCast(index, Operators.UnaryNot).logical
+                Return True
+            Else
+                Return False
+            End If
+        End Function
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim obj As Object = symbol.Evaluate(envir)
