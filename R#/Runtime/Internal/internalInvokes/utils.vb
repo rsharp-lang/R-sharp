@@ -994,7 +994,7 @@ Namespace Runtime.Internal.Invokes
                                                 lib_pkgdir As IFileSystemEnvironment,
                                                 ByRef hit As Boolean) As Message
 
-            Dim dataSymbols = lib_pkgdir.ReadAllText($"/package/manifest/data.json").LoadJSON(Of Dictionary(Of String, NamedValue))
+            Dim dataSymbols = lib_pkgdir.ReadAllText($"/package/manifest/data.json").LoadJSON(Of Dictionary(Of String, NamedValue))(throwEx:=False)
             Dim reader As String
             Dim load As Object
 

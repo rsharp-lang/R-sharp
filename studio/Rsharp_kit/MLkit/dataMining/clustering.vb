@@ -1394,11 +1394,16 @@ Module clustering
     ''' <param name="use_all">controls handling of ties. If true, all distances equal to the kth largest are included. If false, a random selection of distances equal to the kth is chosen to use exactly k neighbours.</param>
     ''' <returns>Factor of classifications of test set. doubt will be returned as NA.</returns>
     ''' <example>
+    ''' imports "dataset" from "MLkit";
+    ''' 
     ''' data(iris);
+    ''' print(iris);
     ''' 
     ''' # create training/test for demo
     ''' set.seed(123);
     ''' 
+    ''' let [training, test] = split_training_test(iris, ratio = 0.7);
+    ''' let predictions = knn(train = training[, -"class"], test = test[, -"class"], cl = training$class, k = 3); 
     ''' </example>
     <ExportAPI("knn")>
     <RApiReturn(GetType(String), GetType(Double))>
