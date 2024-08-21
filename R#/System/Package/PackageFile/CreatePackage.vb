@@ -316,12 +316,18 @@ Namespace Development.Package.File
                 ' config for github page publish
                 Call REngine.globalEnvir.options.setOption("r_syntax.js", App.GetVariable("r_syntax.js"), REngine.globalEnvir)
                 Call REngine.LoadLibrary("JSON", silent:=True)
-                Call PackageLoader.ParsePackages(plugin) _
-                    .Where(Function(pkg) pkg.namespace = "roxygen") _
-                    .FirstOrDefault _
-                    .DoCall(Sub(pkg)
-                                Call REngine.globalEnvir.ImportsStatic(pkg.package)
-                            End Sub)
+                'Call PackageLoader.ParsePackages(plugin) _
+                '    .Where(Function(pkg) pkg.namespace = "roxygen") _
+                '    .FirstOrDefault _
+                '    .DoCall(Sub(pkg)
+                '                Call REngine.globalEnvir.ImportsStatic(pkg.package)
+                '            End Sub)
+
+                For Each required_pkg As Package In PackageLoader.ParsePackages(plugin)
+                    If required_pkg.namespace = "rdocumentation" OrElse required_pkg.namespace = "roxygen" Then
+                        Call REngine.globalEnvir.ImportsStatic(required_pkg.package)
+                    End If
+                Next
             End If
 
             Call Console.WriteLine("       ==> roxygen::roxygenize")
