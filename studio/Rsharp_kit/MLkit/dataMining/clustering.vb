@@ -1445,7 +1445,7 @@ Module clustering
 
         For Each label As String In labels.Distinct.OrderBy(Function(s) s)
             Call class_labels.Add(class_labels.Count + 1, label)
-            Call class_index.Add(label, class_labels(label))
+            Call class_index.Add(label, class_labels.Count)
         Next
 
         Dim i As i32 = 0
