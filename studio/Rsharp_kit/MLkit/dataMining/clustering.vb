@@ -1377,6 +1377,32 @@ Module clustering
     End Function
 
     ''' <summary>
+    ''' k-Nearest Neighbour Classification
+    ''' 
+    ''' k-nearest neighbour classification for test set from training set. For each 
+    ''' row of the test set, the k nearest (in Euclidean distance) training set 
+    ''' vectors are found, and the classification is decided by majority vote, with 
+    ''' ties broken at random. If there are ties for the kth nearest vector, all 
+    ''' candidates are included in the vote.
+    ''' </summary>
+    ''' <param name="train">matrix or data frame of training set cases.</param>
+    ''' <param name="test">matrix or data frame of test set cases. A vector will be interpreted as a row vector for a single case.</param>
+    ''' <param name="cl">factor of true classifications of training set</param>
+    ''' <param name="k">number of neighbours considered.</param>
+    ''' <param name="l">minimum vote for definite decision, otherwise doubt. (More precisely, less than k-l dissenting votes are allowed, even if k is increased by ties.)</param>
+    ''' <param name="prob">If this is true, the proportion of the votes for the winning class are returned as attribute prob.</param>
+    ''' <param name="use_all">controls handling of ties. If true, all distances equal to the kth largest are included. If false, a random selection of distances equal to the kth is chosen to use exactly k neighbours.</param>
+    ''' <returns>Factor of classifications of test set. doubt will be returned as NA.</returns>
+    <ExportAPI("knn")>
+    Public Function knn(<RRawVectorArgument> train As Object, <RRawVectorArgument> test As Object, <RRawVectorArgument> cl As Object,
+                        Optional k As Integer = 1,
+                        Optional l As Double = 0,
+                        Optional prob As Boolean = False,
+                        Optional use_all As Boolean = True) As Object
+
+    End Function
+
+    ''' <summary>
     ''' ### K-NN Classifier in R Programming
     ''' 
     ''' K-Nearest Neighbor or K-NN is a Supervised Non-linear classification 
@@ -1403,12 +1429,12 @@ Module clustering
     ''' For the Nearest Neighbor classifier, the distance between two points 
     ''' Is expressed in the form of Euclidean Distance.
     ''' </remarks>
-    <ExportAPI("knn")>
-    Public Function knn(<RRawVectorArgument>
-                        x As Object,
-                        Optional k As Integer = 16,
-                        Optional jaccard As Double = 0.6,
-                        Optional env As Environment = Nothing) As Object
+    <ExportAPI("knnsearch")>
+    Public Function knnsearch(<RRawVectorArgument>
+                              x As Object,
+                              Optional k As Integer = 16,
+                              Optional jaccard As Double = 0.6,
+                              Optional env As Environment = Nothing) As Object
 
         Dim data As ClusterEntity()
         Dim colnames As String()
