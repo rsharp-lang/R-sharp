@@ -1424,18 +1424,18 @@ Module clustering
         End If
 
         Dim labels As String() = CLRVector.asCharacter(cl)
-        Dim colnames = train_data.TryCast(Of EntityObject()) _
-            .JoinIterates(test_data.TryCast(Of EntityObject())) _
+        Dim colnames = train_data.TryCast(Of EntityClusterModel()) _
+            .JoinIterates(test_data.TryCast(Of EntityClusterModel())) _
             .PropertyNames _
             .ToArray
         Dim train_vec As ClusterEntity() = train_data _
-            .TryCast(Of EntityObject()) _
+            .TryCast(Of EntityClusterModel()) _
             .Select(Function(v)
                         Return New ClusterEntity(v.ID, CLRVector.asNumeric(v(colnames)))
                     End Function) _
             .ToArray
         Dim test_vec As NamedCollection(Of Double)() = test_data _
-            .TryCast(Of EntityObject()) _
+            .TryCast(Of EntityClusterModel()) _
             .Select(Function(v)
                         Return New NamedCollection(Of Double)(v.ID, CLRVector.asNumeric(v(colnames)))
                     End Function) _
