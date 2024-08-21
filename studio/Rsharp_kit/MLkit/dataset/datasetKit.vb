@@ -1,61 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::578b18c9e084f7b752b8dbb734404b9b, studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 982
-    '    Code Lines: 693 (70.57%)
-    ' Comment Lines: 177 (18.02%)
-    '    - Xml Docs: 96.05%
-    ' 
-    '   Blank Lines: 112 (11.41%)
-    '     File Size: 41.26 KB
+' Summaries:
 
 
-    ' Module datasetKit
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: addRow, binEncoder, boolEncoder, CreateMLdataset, dataDescription
-    '               demoMatrix, dimensionRange, EmbeddingRender, Encoding, estimate_alphabets
-    '               factorEncoder, fit_embedding, fitSgt, get_feature, getDataSetDimension
-    '               getMNISTImageSize, getMNISTRawDataset, getNormalizeMatrix, mapEncoder, mapLambda
-    '               project_features, q_factors, readMNISTLabelledVector, readModelDataset, readSampleSet
-    '               sample_id, sampledataDataSet, SampleList, SGT, sort_samples
-    '               sortById, split_training_test, Tabular, TakeSubset, toDataframe
-    '               toFeatureSet, toMatrix, writeMLDataset, writeSampleSet
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 982
+'    Code Lines: 693 (70.57%)
+' Comment Lines: 177 (18.02%)
+'    - Xml Docs: 96.05%
+' 
+'   Blank Lines: 112 (11.41%)
+'     File Size: 41.26 KB
+
+
+' Module datasetKit
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: addRow, binEncoder, boolEncoder, CreateMLdataset, dataDescription
+'               demoMatrix, dimensionRange, EmbeddingRender, Encoding, estimate_alphabets
+'               factorEncoder, fit_embedding, fitSgt, get_feature, getDataSetDimension
+'               getMNISTImageSize, getMNISTRawDataset, getNormalizeMatrix, mapEncoder, mapLambda
+'               project_features, q_factors, readMNISTLabelledVector, readModelDataset, readSampleSet
+'               sample_id, sampledataDataSet, SampleList, SGT, sort_samples
+'               sortById, split_training_test, Tabular, TakeSubset, toDataframe
+'               toFeatureSet, toMatrix, writeMLDataset, writeSampleSet
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -324,15 +324,40 @@ Module datasetKit
 
     <ExportAPI("split_training_test")>
     <RApiReturn("training", "test")>
-    Public Function split_training_test(ds As SampleData(), Optional ratio As Double = 0.7) As Object
-        Dim len As Integer = ds.Length * ratio
-        ds = ds.Shuffles
-        Return New list With {
-            .slots = New Dictionary(Of String, Object) From {
-                {"training", ds.Take(len).ToArray},
-                {"test", ds.Skip(len).ToArray}
+    Public Function split_training_test(<RRawVectorArgument> x As Object,
+                                        Optional ratio As Double = 0.7,
+                                        Optional env As Environment = Nothing) As Object
+        If TypeOf x Is dataframe Then
+            Dim df As dataframe = x
+            Dim rows = df.forEachRow(df.colnames).Shuffles
+            Dim len As Integer = df.nrows * ratio
+            Dim training As dataframe = dataframe.CreateDataFrame(rows.Take(len).ToArray, df.colnames)
+            Dim test As dataframe = dataframe.CreateDataFrame(rows.Skip(len).ToArray, df.colnames)
+
+            Return New list(
+                slot("training") = training,
+                slot("test") = test
+            )
+        Else
+            Dim pull As pipeline = pipeline.TryCreatePipeline(Of SampleData)(x, env)
+
+            If pull.isError Then
+                Return pull.getError
+            End If
+
+            Dim ds As SampleData() = pull.populates(Of SampleData)(env).ToArray
+            Dim len As Integer = ds.Length * ratio
+
+            ' make sampling
+            ds = ds.Shuffles
+
+            Return New list With {
+                .slots = New Dictionary(Of String, Object) From {
+                    {"training", ds.Take(len).ToArray},
+                    {"test", ds.Skip(len).ToArray}
+                }
             }
-        }
+        End If
     End Function
 
     <ExportAPI("estimate_alphabets")>
