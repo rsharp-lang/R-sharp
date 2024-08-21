@@ -320,6 +320,11 @@ Namespace Runtime.Internal.Object
             Return Me
         End Function
 
+        ''' <summary>
+        ''' delete columns from the dataframe.
+        ''' </summary>
+        ''' <param name="keys"></param>
+        ''' <returns></returns>
         Public Function delete(ParamArray keys As String()) As dataframe
             For Each key As String In keys.SafeQuery
                 Call columns.Remove(key)
@@ -473,6 +478,11 @@ Namespace Runtime.Internal.Object
             Dim projections As New Dictionary(Of String, Array)
 
             If indexType Like RType.characters Then
+                ' reverse selection: only takes the columns that not in the given selector index
+                ' which means removes the selectors columns
+                ' implements the syntax for:
+                '
+                ' data[, -selector];
                 If reverse Then
                     Dim negative As Index(Of String) = CLRVector.asCharacter(selector).Indexing
 

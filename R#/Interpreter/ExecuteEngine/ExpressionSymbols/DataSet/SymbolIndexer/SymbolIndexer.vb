@@ -1,59 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::075df6a0372ebd1f712343226ef5bb1b, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 722
-    '    Code Lines: 539 (74.65%)
-    ' Comment Lines: 93 (12.88%)
-    '    - Xml Docs: 33.33%
-    ' 
-    '   Blank Lines: 90 (12.47%)
-    '     File Size: 31.61 KB
+' Summaries:
 
 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
-    '                   getBySymbolIndex, getColumn, getDataframeRowRange, groupSubset, listSubset
-    '                   streamView, ToString, translateInteger2keys, translateLogical2keys, vectorSubset
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 722
+'    Code Lines: 539 (74.65%)
+' Comment Lines: 93 (12.88%)
+'    - Xml Docs: 33.33%
+' 
+'   Blank Lines: 90 (12.47%)
+'     File Size: 31.61 KB
+
+
+'     Class SymbolIndexer
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: doListSubset, emptyIndexError, Evaluate, getByIndex, getByName
+'                   getBySymbolIndex, getColumn, getDataframeRowRange, groupSubset, listSubset
+'                   streamView, ToString, translateInteger2keys, translateLogical2keys, vectorSubset
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -72,6 +72,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
@@ -139,8 +140,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' </summary>
         ''' <returns></returns>
         Private Function CheckRemoves() As Boolean
-            If TypeOf index Is Operators.UnaryNot Then
-                index = DirectCast(index, Operators.UnaryNot).logical
+            If TypeOf index Is UnaryNumeric AndAlso DirectCast(index, UnaryNumeric).operator = "-" Then
+                ' index = DirectCast(index, UnaryNumeric).numeric
                 Return True
             Else
                 Return False
@@ -168,7 +169,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Function
 
         Private Function getBySymbolIndex(obj As Object, envir As Environment) As Object
-            Dim indexerRaw As Object = index.Evaluate(envir)
+            Dim indexerRaw As Object = If(is_Removes, DirectCast(index, UnaryNumeric).numeric, index).Evaluate(envir)
             Dim indexer As Array
             Dim objType As Type = obj.GetType
 
@@ -176,8 +177,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Return indexerRaw
             ElseIf objType.ImplementInterface(Of RIndexer) Then
                 If TypeOf indexerRaw Is Expression Then
+                    If is_Removes Then
+                        Throw New NotImplementedException
+                    End If
                     Return DirectCast(obj, RIndexer).EvaluateIndexer(indexerRaw, env:=envir)
                 ElseIf TypeOf indexerRaw Is String Then
+                    If is_Removes Then
+                        Throw New NotImplementedException
+                    End If
                     Return DirectCast(obj, RIndexer).EvaluateIndexer(New RuntimeValueLiteral(indexerRaw), env:=envir)
                 End If
             End If
@@ -203,15 +210,24 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 '
                 If RType.GetRSharpType(indexer.GetType).mode = TypeCodes.integer AndAlso TypeOf obj IsNot list Then
                     ' a[xxx]
+                    If is_Removes Then
+                        Throw New NotImplementedException
+                    End If
                     Return getByIndex(obj, indexer, envir)
                 Else
                     ' a[[name]]
                     ' a$name
+                    If is_Removes Then
+                        Throw New NotImplementedException
+                    End If
                     Return getByName(obj, indexer, envir)
                 End If
             ElseIf indexType = SymbolIndexers.vectorIndex Then
                 ' a[name]
                 ' a[index]
+                If is_Removes Then
+                    Throw New NotImplementedException
+                End If
                 Return getByIndex(obj, indexer, envir)
             ElseIf indexType = SymbolIndexers.dataframeColumns Then
                 If Not TypeOf obj Is dataframe Then
@@ -305,21 +321,48 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             If indexer.Length = 0 Then
                 Return Nothing
             ElseIf indexer.Length = 1 Then
-                Dim key As Object = indexer.GetValue(Scan0)
+                Return takeColumnVector(obj, indexer, envir)
+            Else
+                ' dataframe projection
+                Return obj.projectByColumn(indexer, envir, reverse:=is_Removes)
+            End If
+        End Function
 
-                If key Is Nothing Then
-                    Return Internal.debug.stop("dataframe index could not be nothing!", envir)
-                ElseIf key.GetType Like RType.integers Then
-                    Dim strKey As String = obj.getKeyByIndex(CInt(key))
+        Private Function takeColumnVector(obj As dataframe, indexer As Array, env As Environment) As Object
+            Dim key As Object = indexer.GetValue(Scan0)
 
-                    If strKey Is Nothing Then
-                        Return Internal.debug.stop({"index outside the bounds!", "index: " & key}, envir)
+            If key Is Nothing Then
+                Return Internal.debug.stop("dataframe index could not be nothing!", env)
+            ElseIf key.GetType Like RType.integers Then
+                Dim strKey As String = obj.getKeyByIndex(CInt(key))
+
+                If strKey Is Nothing Then
+                    If is_Removes Then
+                        ' the target column to removes is missing from the dataframe
+                        ' returns the clone dataframe
+                        Return New dataframe(obj)
+                    End If
+
+                    Return Internal.debug.stop({"index outside the bounds!", "index: " & key}, env)
+                ElseIf is_Removes Then
+                    obj = New dataframe(obj)
+                    obj.delete(strKey)
+                    Return obj
+                Else
+                    Return obj.getColumnVector(strKey)
+                End If
+            Else
+                Dim strKey As String = any.ToString(key)
+
+                If is_Removes Then
+                    If obj.columns.ContainsKey(strKey) Then
+                        obj = New dataframe(obj)
+                        obj.delete(strKey)
+                        Return obj
                     Else
-                        Return obj.getColumnVector(strKey)
+                        Return New dataframe(obj)
                     End If
                 Else
-                    Dim strKey As String = any.ToString(key)
-
                     If obj.columns.ContainsKey(strKey) Then
                         Return obj.getColumnVector(strKey)
                     Else
@@ -327,12 +370,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                             "undefined columns selected",
                             "column key: " & strKey,
                             "columns of your dataframe: " & obj.colnames.GetJson
-                        }, envir)
+                        }, env)
                     End If
                 End If
-            Else
-                ' dataframe projection
-                Return obj.projectByColumn(indexer, envir)
             End If
         End Function
 
