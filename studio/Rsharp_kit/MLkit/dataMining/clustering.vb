@@ -1396,8 +1396,8 @@ Module clustering
     ''' <example>
     ''' imports "dataset" from "MLkit";
     ''' 
-    ''' data(iris);
-    ''' print(iris);
+    ''' data(bezdekIris);
+    ''' print(bezdekIris);
     ''' 
     ''' # create training/test for demo
     ''' set.seed(123);
