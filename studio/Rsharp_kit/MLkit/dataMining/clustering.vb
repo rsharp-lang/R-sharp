@@ -1393,12 +1393,64 @@ Module clustering
     ''' <param name="prob">If this is true, the proportion of the votes for the winning class are returned as attribute prob.</param>
     ''' <param name="use_all">controls handling of ties. If true, all distances equal to the kth largest are included. If false, a random selection of distances equal to the kth is chosen to use exactly k neighbours.</param>
     ''' <returns>Factor of classifications of test set. doubt will be returned as NA.</returns>
+    ''' <example>
+    ''' data(iris);
+    ''' 
+    ''' # create training/test for demo
+    ''' set.seed(123);
+    ''' 
+    ''' </example>
     <ExportAPI("knn")>
-    Public Function knn(<RRawVectorArgument> train As Object, <RRawVectorArgument> test As Object, <RRawVectorArgument> cl As Object,
-                        Optional k As Integer = 1,
-                        Optional l As Double = 0,
-                        Optional prob As Boolean = False,
-                        Optional use_all As Boolean = True) As Object
+    <RApiReturn(GetType(String), GetType(Double))>
+    Public Function knn_class(<RRawVectorArgument> train As Object, <RRawVectorArgument> test As Object, <RRawVectorArgument> cl As Object,
+                              Optional k As Integer = 1,
+                              Optional l As Double = 0,
+                              Optional prob As Boolean = False,
+                              Optional use_all As Boolean = True,
+                              Optional env As Environment = Nothing) As Object
+
+        Dim train_data = DataMiningDataSet.getDataModel(train, False, env)
+        Dim test_data = DataMiningDataSet.getDataModel(test, False, env)
+
+        If train_data Like GetType(Message) Then
+            Return train_data.TryCast(Of Message)
+        ElseIf test_data Like GetType(Message) Then
+            Return test_data.TryCast(Of Message)
+        End If
+
+        Dim labels As String() = CLRVector.asCharacter(cl)
+        Dim colnames = train_data.TryCast(Of EntityObject()) _
+            .JoinIterates(test_data.TryCast(Of EntityObject())) _
+            .PropertyNames _
+            .ToArray
+        Dim train_vec As ClusterEntity() = train_data _
+            .TryCast(Of EntityObject()) _
+            .Select(Function(v)
+                        Return New ClusterEntity(v.ID, CLRVector.asNumeric(v(colnames)))
+                    End Function) _
+            .ToArray
+        Dim test_vec As NamedCollection(Of Double)() = test_data _
+            .TryCast(Of EntityObject()) _
+            .Select(Function(v)
+                        Return New NamedCollection(Of Double)(v.ID, CLRVector.asNumeric(v(colnames)))
+                    End Function) _
+            .ToArray
+        Dim class_labels As New Dictionary(Of Integer, String)
+        Dim class_index As New Dictionary(Of String, Integer)
+
+        For Each label As String In labels.Distinct.OrderBy(Function(s) s)
+            Call class_labels.Add(class_labels.Count + 1, label)
+            Call class_index.Add(label, class_labels(label))
+        Next
+
+        Dim i As i32 = 0
+
+        For Each v As ClusterEntity In train_vec
+            v.cluster = class_index(labels(++i))
+        Next
+
+        Dim knn As New KNN(train_vec, class_labels)
+        Dim predicts = knn.Classify(test_vec, k).ToArray
 
     End Function
 
