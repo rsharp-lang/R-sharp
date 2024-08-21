@@ -1390,7 +1390,9 @@ Module clustering
     ''' <param name="cl">factor of true classifications of training set</param>
     ''' <param name="k">number of neighbours considered.</param>
     ''' <param name="l">minimum vote for definite decision, otherwise doubt. (More precisely, less than k-l dissenting votes are allowed, even if k is increased by ties.)</param>
-    ''' <param name="prob">If this is true, the proportion of the votes for the winning class are returned as attribute prob.</param>
+    ''' <param name="prob">
+    ''' If this is true, the proportion of the votes for the winning class are returned as attribute prob.
+    ''' </param>
     ''' <param name="use_all">controls handling of ties. If true, all distances equal to the kth largest are included. If false, a random selection of distances equal to the kth is chosen to use exactly k neighbours.</param>
     ''' <returns>Factor of classifications of test set. doubt will be returned as NA.</returns>
     ''' <example>
@@ -1404,6 +1406,10 @@ Module clustering
     ''' 
     ''' let [training, test] = split_training_test(iris, ratio = 0.7);
     ''' let predictions = knn(train = training[, -"class"], test = test[, -"class"], cl = training$class, k = 3); 
+    ''' 
+    ''' print(predictions);
+    ''' 
+    ''' 
     ''' </example>
     <ExportAPI("knn")>
     <RApiReturn(GetType(String), GetType(Double))>
@@ -1456,7 +1462,20 @@ Module clustering
 
         Dim knn As New KNN(train_vec, class_labels)
         Dim predicts = knn.Classify(test_vec, k).ToArray
+        Dim classes As vector = vector.asVector(predicts.Select(Function(v) v.GroupBy(Function(a) a.Value).OrderByDescending(Function(a) a.Count).First.First.Description))
 
+        If prob Then
+            Dim prob_vec As Double() = predicts _
+                .Select(Function(v)
+                            Dim top = v.GroupBy(Function(a) a.Value).OrderByDescending(Function(a) a.Count).First
+                            Return top.Count / k
+                        End Function) _
+                .ToArray
+
+            classes.setAttribute("prob", prob_vec)
+        End If
+
+        Return classes
     End Function
 
     ''' <summary>
