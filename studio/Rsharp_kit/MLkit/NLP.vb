@@ -198,6 +198,7 @@ Module NLP
     <ExportAPI("word2vec")>
     <RApiReturn(GetType(VectorModel))>
     Public Function word2vec(<RRawVectorArgument> text As Object,
+                             Optional dims As Integer = 10,
                              Optional method As TrainMethod = TrainMethod.Skip_Gram,
                              Optional freq As Integer = 3,
                              Optional win_size As Integer = 5,
@@ -215,6 +216,7 @@ Module NLP
             .setNumOfThread(1) _
             .setFreqThresold(freq) _
             .setWindow(win_size) _
+            .setVectorSize(dims) _
             .build()
 
         For Each p As Paragraph In rawdata
