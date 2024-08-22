@@ -3292,6 +3292,20 @@ RE0:
         ''' #### max.print
         ''' integer, the max number of elements to print. this parameter value
         ''' will overrides the max.print options from the options function.
+        ''' 
+        ''' #### syntax.highlight
+        ''' logical, indicates that show the R# runtime expression object code
+        ''' with syntax highlights? default is TRUE.
+        ''' 
+        ''' #### max.width
+        ''' integer, the max character number for display in a cell when apply for 
+        ''' print of the dataframe contents. default config is max 200 character
+        ''' in a cell. if the cell string char length is greater then this threshold
+        ''' then the display string will be truncated.
+        ''' 
+        ''' #### select
+        ''' character, a character vector for select the columns for display when 
+        ''' do print of a dataframe object.
         ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
@@ -3314,6 +3328,8 @@ RE0:
             Dim maxPrint As Integer = args.getValue("max.print", env, globalEnv.options.maxPrint)
             Dim fields As String() = args.getValue(Of String())("select", env, Nothing)
             Dim maxWidth As Integer = args.getValue("max.width", env, 200)
+            ' display the syntax highlights of the R# runtime expression object?
+            Dim highlights As Boolean = args.getValue("syntax.highlight", env, [default]:=True)
 
             ' keeps pretty print in multiple threading environment
             Static dummy As New Object
@@ -3331,7 +3347,8 @@ RE0:
                         .maxPrint = maxPrint,
                         .quot = quot,
                         .fields = fields,
-                        .maxWidth = maxWidth
+                        .maxWidth = maxWidth,
+                        .syntax = highlights
                     }.doPrintInternal(x, x.GetType, env)
                 End SyncLock
             End If
@@ -3357,6 +3374,7 @@ RE0:
             ''' </summary>
             ''' <returns></returns>
             Public Property fields As String()
+            Public Property syntax As Boolean = True
 
         End Class
 
@@ -3385,7 +3403,7 @@ RE0:
                 ' print the runtime function code
                 Call Development.ConsoleMarkdownPrinter.printDocs(DirectCast(x, DeclareNewFunction))
 
-                If std_out.env = OutputEnvironments.Console Then
+                If std_out.env = OutputEnvironments.Console AndAlso opts.syntax Then
                     Call ConsoleSyntaxHighlightPrinter.PrintCode(vbCrLf & " " & x.ToString, std_out)
                 Else
                     Call std_out.WriteLine(DirectCast(x, DeclareNewFunction).ToString)
