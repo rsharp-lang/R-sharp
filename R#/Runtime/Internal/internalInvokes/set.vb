@@ -353,6 +353,7 @@ type_err:
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("index_of")>
+        <RApiReturn(GetType(Index(Of String)))>
         Public Function indexOf(<RRawVectorArgument>
                                 x As Object,
                                 Optional getKey As Object = Nothing,
