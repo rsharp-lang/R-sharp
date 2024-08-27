@@ -114,6 +114,11 @@ Module symbolic
             .DoCall(AddressOf Internal.Object.vector.asVector)
     End Function
 
+    ''' <summary>
+    ''' parse the mathml xml document as the math lambda expression
+    ''' </summary>
+    ''' <param name="mathml"></param>
+    ''' <returns></returns>
     <ExportAPI("parse.mathml")>
     Public Function ParseMathML(mathml As String) As LambdaExpression
         Return LambdaExpression.FromMathML(mathml)
