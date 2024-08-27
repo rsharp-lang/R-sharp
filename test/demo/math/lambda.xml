@@ -1,0 +1,39 @@
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <lambda>
+    <bvar>
+      <ci> S </ci>
+    </bvar>
+    <bvar>
+      <ci> Km </ci>
+    </bvar>
+    <bvar>
+      <ci> kcat </ci>
+    </bvar>
+    <bvar>
+      <ci> E </ci>
+    </bvar>
+    <bvar>
+      <ci> kcat_Km </ci>
+    </bvar>
+    <bvar>
+      <ci> A </ci>
+    </bvar>
+    <apply>
+      <divide />
+      <apply>
+        <ci> S </ci>
+        <times />
+        <apply>
+          <ci> kcat </ci>
+          <ci> E </ci>
+          <times />
+        </apply>
+      </apply>
+      <apply>
+        <ci> Km </ci>
+        <ci> S </ci>
+        <plus />
+      </apply>
+    </apply>
+  </lambda>
+</math>
