@@ -83,6 +83,7 @@ Imports vec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 ''' The numeric matrix
 ''' </summary>
 <Package("Matrix")>
+<RTypeExport("LA_mat", GetType(NumericMatrix))>
 Module RMatrix
 
     Sub New()
@@ -101,7 +102,21 @@ Module RMatrix
                            Return sb.ToString
                        End Function
             End Function)
+
+        Call Internal.generic.add("writeBin", GetType(NumericMatrix), AddressOf saveMatrix)
+        Call Internal.generic.add("readBin.LA_mat", GetType(Stream), AddressOf readMatrix)
     End Sub
+
+    Public Function saveMatrix(m As NumericMatrix, args As list, env As Environment) As Object
+        Dim con As Stream = args!con
+        Call m.Save(con)
+        Call con.Flush()
+        Return True
+    End Function
+
+    Public Function readMatrix(s As Stream, args As list, env As Environment) As Object
+        Return Serialization.Load(s)
+    End Function
 
     Private Function createTable(m As GeneralMatrix, args As list, env As Environment) As Object
         Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}

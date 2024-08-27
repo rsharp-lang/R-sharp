@@ -491,3 +491,4 @@ test/demo/machineLearning/umap/Vae/nmf_class.csv
 test/demo/machineLearning/umap/Vae/nmf_deconv.csv
 test/demo/machineLearning/umap/Vae/old/nmf_class.csv
 test/demo/machineLearning/umap/Vae/old/nmf_deconv.csv
+test/unitTest/matrix_test/wine.dat
