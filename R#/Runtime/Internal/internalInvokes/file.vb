@@ -1379,7 +1379,7 @@ Namespace Runtime.Internal.Invokes
             Dim f As GenericFunction = generic.get(fname, GetType(Stream))
 
             If f Is Nothing Then
-                Return generic.missingGenericSymbol(fname, env)
+                Return generic.missingGenericSymbol(fname, Nothing, env)
             End If
 
             Dim out As Object
@@ -1433,13 +1433,13 @@ Namespace Runtime.Internal.Invokes
             End If
 
             If Not generic.exists("writeBin") Then
-                Return generic.missingGenericSymbol("writeBin", env)
+                Return generic.missingGenericSymbol("writeBin", Nothing, env)
             End If
 
             Dim f As GenericFunction = generic.get("writeBin", [object].GetType())
 
             If f Is Nothing Then
-                Return generic.missingGenericSymbol("writeBin", env)
+                Return generic.missingGenericSymbol("writeBin", [object].GetType, env)
             ElseIf args Is Nothing Then
                 args = New list(slot("con") = buf.TryCast(Of Stream))
             Else

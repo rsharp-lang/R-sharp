@@ -194,15 +194,23 @@ Namespace Runtime.Internal
 
         Public Function invokeGeneric(generic As NamedValue(Of Type), args As list, x As Object, env As Environment) As Object
             If Not exists(generic.Name) Then
-                Return missingGenericSymbol(generic.Name, env)
+                Return missingGenericSymbol(generic.Name, Nothing, env)
             Else
                 Return invokeGeneric(args, x, env, generic.Name, generic)
             End If
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Friend Function missingGenericSymbol(funcName As String, env As Environment) As Message
-            Return debug.stop({$"missing loader entry for generic function '{funcName}'!", "consider load required package at first!"}, env)
+        Friend Function missingGenericSymbol(funcName As String, overload As Type, env As Environment) As Message
+            Dim msg As Func(Of IEnumerable(Of String)) = Iterator Function() As IEnumerable(Of String)
+                                                             Yield $"missing loader entry for generic function '{funcName}'!"
+                                                             If Not overload Is Nothing Then
+                                                                 Yield $"clr type overloads for this generic function: {overload.ToString}"
+                                                             End If
+                                                             Yield "consider load required package at first!"
+                                                         End Function
+
+            Return debug.stop(msg().ToArray, env)
         End Function
 
         ''' <summary>
@@ -238,7 +246,7 @@ Namespace Runtime.Internal
             Next
 
             If Not generics.ContainsKey(funcName) Then
-                Return missingGenericSymbol(funcName, env)
+                Return missingGenericSymbol(funcName, Nothing, env)
             Else
                 Return invokeGeneric(args, x, env, funcName, type)
             End If
@@ -286,7 +294,7 @@ Namespace Runtime.Internal
             End If
 
             If Not generics.ContainsKey(funcName) Then
-                Return missingGenericSymbol(funcName, env)
+                Return missingGenericSymbol(funcName, Nothing, env)
             End If
 
             If Not generics(funcName).ContainsKey(type) Then
