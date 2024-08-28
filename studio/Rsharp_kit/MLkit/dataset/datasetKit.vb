@@ -317,8 +317,19 @@ Module datasetKit
         )
     End Function
 
+    ''' <summary>
+    ''' Make sequence graph embedding as a vector
+    ''' </summary>
+    ''' <param name="sgt"></param>
+    ''' <param name="seq"></param>
+    ''' <param name="safe"></param>
+    ''' <returns></returns>
     <ExportAPI("fit_embedding")>
-    Public Function fit_embedding(sgt As SequenceGraphTransform, seq As String) As Double()
+    Public Function fit_embedding(sgt As SequenceGraphTransform, seq As String, Optional safe As Boolean = False) As Double()
+        If safe Then
+            seq = sgt.SafeStrip(seq)
+        End If
+
         Return sgt.fitVector(seq)
     End Function
 
