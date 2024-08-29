@@ -64,8 +64,8 @@ Namespace Protocol
         ''' Create a slave task factory
         ''' </summary>
         ''' <returns></returns>
-        Public Shared Function CreateSlave(Optional debugPort As Integer? = Nothing, Optional verbose As Boolean = False) As SlaveTask
-            Return New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, debugPort, verbose:=verbose)
+        Public Shared Function CreateSlave(Optional debugPort As Integer? = Nothing) As SlaveTask
+            Return New SlaveTask(Host.CreateProcessor, AddressOf Host.SlaveTask, debugPort)
         End Function
 
         Public Shared Function CreateProcessor() As R
