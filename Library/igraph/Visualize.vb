@@ -64,11 +64,13 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime
@@ -357,23 +359,64 @@ Module Visualize
     ''' set color by node group
     ''' </summary>
     ''' <param name="g"></param>
-    ''' <param name="type$"></param>
-    ''' <param name="color$"></param>
+    ''' <param name="type"></param>
+    ''' <param name="color"></param>
     ''' <returns></returns>
     <ExportAPI("setColors")>
-    Public Function colorByTypeGroup(g As NetworkGraph, type$, color As Object) As NetworkGraph
-        Dim colorBrush As New SolidBrush(RColorPalette.GetRawColor(color))
+    Public Function colorByTypeGroup(g As NetworkGraph, Optional type$ = Nothing, <RRawVectorArgument> Optional color As Object = "paper") As NetworkGraph
+        Dim colorList = CLRVector.asCharacter(color)
+        Dim allGroups As String() = g.vertex _
+            .Select(Function(vi) vi.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE)) _
+            .Distinct _
+            .ToArray
 
-        g.vertex _
-            .Where(Function(n)
-                       Return n.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = type
-                   End Function) _
-            .DoEach(Sub(n)
-                        n.data.color = colorBrush
-                    End Sub)
+        If colorList.Length = 1 Then
+            ' is color value or color palette name
+            If colorList(0).IsColorExpression Then
+                ' is a single color value
+                Dim colorBrush As New SolidBrush(RColorPalette.GetRawColor(colorList.First))
+
+                g.vertex _
+                    .Where(Function(n)
+                               Return n.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = type
+                           End Function) _
+                    .DoEach(Sub(n)
+                                n.data.color = colorBrush
+                            End Sub)
+            Else
+                ' set color palette
+                Call setColors(g, Designer.GetColors(colorList(0), allGroups.Length + 1))
+            End If
+        Else
+            ' set colors for each class
+            Call setColors(g, Designer.CubicSpline(colorList.AsColor, allGroups.Length + 1))
+        End If
 
         Return g
     End Function
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="colors">
+    ''' the color set length is equals to the node group size
+    ''' </param>
+    Private Sub setColors(ByRef g As NetworkGraph, colors As Color())
+        Dim allGroups As String() = g.vertex _
+            .Select(Function(vi) vi.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE)) _
+            .Distinct _
+            .ToArray
+        Dim colorMaps As New Dictionary(Of String, Brush)
+
+        For i As Integer = 0 To allGroups.Length - 1
+            colorMaps(allGroups(i)) = New SolidBrush(colors(i))
+        Next
+
+        For Each v As Node In g.vertex
+            v.data.color = colorMaps(v.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE))
+        Next
+    End Sub
 
     <ExportAPI("edge.color")>
     Public Function setEdgeColors(g As NetworkGraph,
