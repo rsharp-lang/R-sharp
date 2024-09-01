@@ -130,11 +130,57 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Else
                 Dim type As RType = RType.TypeOf(_id)
 
+                ' get rownames for the new generated dataframe object
                 If type.mode.IsNumeric Then
                     get_id = Function(df) CLRVector.asCharacter(df(df.colnames(CLRVector.asInteger(_id).First)))
                 Else
                     get_id = Function(df) CLRVector.asCharacter(df(CLRVector.asCharacter(_id).First))
                 End If
+            End If
+
+            ' check value is all vector data
+            ' which means combine all vector as dataframe, each vector is a row inside the dataframe
+            If x.data.All(Function(a) (a Is Nothing) OrElse (TypeOf a Is vector) OrElse a.GetType.IsArray) Then
+                Dim vector_combines As New List(Of Array)
+                Dim rownameSet As New List(Of String)
+
+                For Each rowTuple In x.slots
+                    Dim row = rowTuple.Value
+
+                    If row Is Nothing Then
+                        Continue For
+                    End If
+                    If TypeOf row Is vector Then
+                        row = DirectCast(row, vector).data
+                    End If
+
+                    Call rownameSet.Add(rowTuple.Key)
+                    Call vector_combines.Add(row)
+                Next
+
+                ' cast the row array collection as matrix
+                Dim mat As New dataframe With {
+                    .columns = New Dictionary(Of String, Array),
+                    .rownames = rownameSet.ToArray
+                }
+                Dim maxCols As Integer = Aggregate arr In vector_combines Into Max(arr.Length)
+
+                For i As Integer = 0 To maxCols - 1
+                    Dim offset As Integer = i
+                    Dim v = vector_combines _
+                        .Select(Function(vi)
+                                    If offset < vi.Length Then
+                                        Return vi(offset)
+                                    Else '
+                                        Return Nothing
+                                    End If
+                                End Function) _
+                        .ToArray
+
+                    mat.columns("V" & (i + 1)) = renv.UnsafeTryCastGenericArray(v)
+                Next
+
+                Return mat
             End If
 
             Dim all_dfs As New List(Of dataframe)

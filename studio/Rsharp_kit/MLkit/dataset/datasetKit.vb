@@ -281,6 +281,8 @@ Module datasetKit
     ''' A list or 1d-array of the set of elements that make up the
     ''' sequences. For example, np.array(["A", "B", "C"].
     ''' If mode is 'spark', the alphabets are necessary.
+    ''' 
+    ''' this parameter could be estimates via the ``estimate_alphabets`` method.
     ''' </param>
     ''' <param name="kappa">
     ''' Tuning parameter, kappa > 0, to change the extraction of
@@ -371,6 +373,11 @@ Module datasetKit
         End If
     End Function
 
+    ''' <summary>
+    ''' A helper function for estimates the char set for SGT algorithm features input
+    ''' </summary>
+    ''' <param name="seqs"></param>
+    ''' <returns></returns>
     <ExportAPI("estimate_alphabets")>
     Public Function estimate_alphabets(<RRawVectorArgument> seqs As Object) As Char()
         Return SequenceGraphTransform.estimate_alphabets(CLRVector.asCharacter(seqs))
