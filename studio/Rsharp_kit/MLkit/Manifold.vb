@@ -340,6 +340,7 @@ Module Manifold
                             <RRawVectorArgument>
                             Optional groups As Object = Nothing,
                             Optional threshold As Double = 0,
+                            Optional make_abstract As Boolean = True,
                             Optional env As Environment = Nothing) As Object
 
         Dim labelList As String() = CLRVector.asCharacter(labels)
@@ -377,7 +378,9 @@ Module Manifold
             g = Communities.Analysis(g, 0.01)
         End If
 
-        g = PAGA.Abstraction(manifolds:=g, threshold:=0.1)
+        If make_abstract Then
+            g = PAGA.Abstraction(manifolds:=g, threshold:=0.1)
+        End If
 
         Return g
     End Function
