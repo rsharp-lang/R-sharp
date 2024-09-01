@@ -447,6 +447,7 @@ Public Module NetworkModule
                                   <RRawVectorArgument(TypeCodes.string)>
                                   Optional properties As Object = "*",
                                   Optional meta As MetaData = Nothing,
+                                  Optional _3d As Boolean = False,
                                   Optional env As Environment = Nothing) As Object
 
         Dim tables As NetworkTables
@@ -456,7 +457,7 @@ Public Module NetworkModule
         End If
 
         If g.GetType Is GetType(NetworkGraph) Then
-            tables = DirectCast(g, NetworkGraph).Tabular(CLRVector.asCharacter(properties), meta:=meta)
+            tables = DirectCast(g, NetworkGraph).Tabular(CLRVector.asCharacter(properties), is2D:=Not _3d, meta:=meta)
         ElseIf g.GetType Is GetType(NetworkTables) Then
             tables = g
 
@@ -487,10 +488,11 @@ Public Module NetworkModule
     Public Function SaveNetwork(g As Object, file$,
                                 <RRawVectorArgument(TypeCodes.string)>
                                 Optional properties As Object = "*",
+                                Optional _3d As Boolean = False,
                                 Optional meta As MetaData = Nothing,
                                 Optional env As Environment = Nothing) As Object
 
-        Dim tables = tabular_graph(g, properties, meta, env)
+        Dim tables = tabular_graph(g, properties, meta, _3d:=_3d, env)
 
         If TypeOf tables Is Message Then
             Return tables
