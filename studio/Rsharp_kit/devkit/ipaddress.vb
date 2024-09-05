@@ -85,6 +85,15 @@ Module ipaddress
     End Function
 
     ''' <summary>
+    ''' Get Local Area Network IP
+    ''' </summary>
+    ''' <returns></returns>
+    <ExportAPI("LAN")>
+    Public Function localipaddress() As String
+        Return WebServiceUtils.LocalIPAddress
+    End Function
+
+    ''' <summary>
     ''' Network calculator for subnet mask and other classless (CIDR) network information.
     ''' </summary>
     ''' <param name="network">
