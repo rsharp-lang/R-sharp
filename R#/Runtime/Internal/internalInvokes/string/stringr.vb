@@ -837,6 +837,7 @@ Namespace Runtime.Internal.Invokes
         Friend Function strsplit(text$(),
                                  Optional delimiter As Object = " ",
                                  Optional fixed As Boolean = False,
+                                 Optional drop As Boolean = True,
                                  Optional env As Environment = Nothing) As Object
 
             If delimiter Is Nothing Then
@@ -846,7 +847,13 @@ Namespace Runtime.Internal.Invokes
             If text.IsNullOrEmpty Then
                 Return Nothing
             ElseIf text.Length = 1 Then
-                Return text(Scan0).splitSingleStrAuto(delimiter, fixed)
+                text = text(Scan0).splitSingleStrAuto(delimiter, fixed)
+
+                If drop Then
+                    Return text
+                Else
+                    Return New list(slot("[[1]]") = text)
+                End If
             Else
                 Return text _
                     .SeqIterator _
