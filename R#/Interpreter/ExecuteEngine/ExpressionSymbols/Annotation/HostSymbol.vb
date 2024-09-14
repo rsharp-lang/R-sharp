@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::69e8634518000b6ecd8fb654397ca872, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\HostSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::62ea028726b24b0e6494bba3f5d82a43, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\HostSymbol.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 29
-    '    Code Lines: 19 (65.52%)
-    ' Comment Lines: 5 (17.24%)
+    '   Total Lines: 33
+    '    Code Lines: 22 (66.67%)
+    ' Comment Lines: 5 (15.15%)
     '    - Xml Docs: 80.00%
     ' 
-    '   Blank Lines: 5 (17.24%)
-    '     File Size: 865 B
+    '   Blank Lines: 6 (18.18%)
+    '     File Size: 998 B
 
 
     '     Class HostSymbol
     ' 
     '         Properties: expressionName, type
     ' 
-    '         Function: Evaluate
+    '         Function: Evaluate, ToString
     ' 
     ' 
     ' /********************************************************************************/

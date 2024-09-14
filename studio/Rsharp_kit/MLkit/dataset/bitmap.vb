@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7617533216b1a7b98f00eb1075da22e5, studio\Rsharp_kit\MLkit\dataset\bitmap.vb"
+﻿#Region "Microsoft.VisualBasic::e56b967c00e3a7b20dd7582c7da7a5a6, studio\Rsharp_kit\MLkit\dataset\bitmap.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 154
-    '    Code Lines: 106 (68.83%)
-    ' Comment Lines: 23 (14.94%)
-    '    - Xml Docs: 95.65%
+    '   Total Lines: 222
+    '    Code Lines: 160 (72.07%)
+    ' Comment Lines: 30 (13.51%)
+    '    - Xml Docs: 96.67%
     ' 
-    '   Blank Lines: 25 (16.23%)
-    '     File Size: 5.87 KB
+    '   Blank Lines: 32 (14.41%)
+    '     File Size: 8.72 KB
 
 
     ' Module bitmap_func
     ' 
-    '     Function: corp_rectangle, open, scan_rowpeaks
+    '     Function: corp_rectangle, intensity_vec, open, scan_rowpeaks, summary_region
+    ' 
+    '     Sub: Main
     ' 
     ' /********************************************************************************/
 

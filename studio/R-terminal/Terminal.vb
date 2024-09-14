@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::442fdaf8b98c45f97caf20e7c3d16844, studio\R-terminal\Terminal.vb"
+﻿#Region "Microsoft.VisualBasic::4ba8523a8e512d3547c0edbd9b7ffb96, studio\R-terminal\Terminal.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 305
-    '    Code Lines: 189 (61.97%)
-    ' Comment Lines: 73 (23.93%)
-    '    - Xml Docs: 79.45%
+    '   Total Lines: 327
+    '    Code Lines: 200 (61.16%)
+    ' Comment Lines: 81 (24.77%)
+    '    - Xml Docs: 76.54%
     ' 
-    '   Blank Lines: 43 (14.10%)
-    '     File Size: 11.00 KB
+    '   Blank Lines: 46 (14.07%)
+    '     File Size: 11.71 KB
 
 
     ' Module Terminal
@@ -49,7 +49,7 @@
     ' 
     '     Function: example, help, RunTerminal
     ' 
-    '     Sub: doRunScriptWithSpecialCommandSync, q, quit
+    '     Sub: evalWithSpecialCommandSync, q, quit
     ' 
     ' /********************************************************************************/
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d1610c70c5610c92f6cd046b4b8f6343, R#\Language\Syntax\SyntaxTree\Splitter.vb"
+﻿#Region "Microsoft.VisualBasic::a18a482532a372913f39019281a8e356, R#\Language\Syntax\SyntaxTree\Splitter.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 89
-    '    Code Lines: 71 (79.78%)
-    ' Comment Lines: 5 (5.62%)
+    '   Total Lines: 103
+    '    Code Lines: 83 (80.58%)
+    ' Comment Lines: 5 (4.85%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 13 (14.61%)
-    '     File Size: 3.61 KB
+    '   Blank Lines: 15 (14.56%)
+    '     File Size: 4.14 KB
 
 
     '     Module Splitter
     ' 
-    '         Function: SplitByTopLevelDelimiter
+    '         Function: CheckOfStackOpenClosePair, SplitByTopLevelDelimiter
     ' 
     ' 
     ' /********************************************************************************/

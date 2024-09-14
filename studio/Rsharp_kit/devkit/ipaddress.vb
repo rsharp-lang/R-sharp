@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7918ef22183fe5dd478fa89f043bf474, studio\Rsharp_kit\devkit\ipaddress.vb"
+﻿#Region "Microsoft.VisualBasic::665ccc040267ce9b0ecd136b75af253b, studio\Rsharp_kit\devkit\ipaddress.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 50
-    '    Code Lines: 33 (66.00%)
-    ' Comment Lines: 11 (22.00%)
-    '    - Xml Docs: 90.91%
+    '   Total Lines: 59
+    '    Code Lines: 37 (62.71%)
+    ' Comment Lines: 15 (25.42%)
+    '    - Xml Docs: 93.33%
     ' 
-    '   Blank Lines: 6 (12.00%)
-    '     File Size: 1.88 KB
+    '   Blank Lines: 7 (11.86%)
+    '     File Size: 2.13 KB
 
 
     ' Module ipaddress
     ' 
-    '     Function: cidr, print_string
+    '     Function: cidr, localipaddress, print_string
     ' 
     ' /********************************************************************************/
 

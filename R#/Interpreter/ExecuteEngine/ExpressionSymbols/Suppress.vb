@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e35f2fecb6522519037a47215bc3cd8c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Suppress.vb"
+﻿#Region "Microsoft.VisualBasic::a03026cce7a39de3dd9e5471da3e22f2, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Suppress.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 36
-    '    Code Lines: 29 (80.56%)
+    '   Total Lines: 40
+    '    Code Lines: 32 (80.00%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 7 (19.44%)
-    '     File Size: 1.24 KB
+    '   Blank Lines: 8 (20.00%)
+    '     File Size: 1.37 KB
 
 
     '     Class Suppress
@@ -48,7 +48,7 @@
     '         Properties: expression, expressionName, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate
+    '         Function: Evaluate, ToString
     ' 
     ' 
     ' /********************************************************************************/

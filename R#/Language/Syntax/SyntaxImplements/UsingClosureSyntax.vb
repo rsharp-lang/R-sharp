@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4bdeded76b888a76e90d87cb41358947, R#\Language\Syntax\SyntaxImplements\UsingClosureSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::3b1dbb2aca76d25c9d283e30aed03f68, R#\Language\Syntax\SyntaxImplements\UsingClosureSyntax.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 54
-    '    Code Lines: 45 (83.33%)
+    '   Total Lines: 53
+    '    Code Lines: 44 (83.02%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 9 (16.67%)
-    '     File Size: 2.22 KB
+    '   Blank Lines: 9 (16.98%)
+    '     File Size: 2.19 KB
 
 
     '     Module UsingClosureSyntax

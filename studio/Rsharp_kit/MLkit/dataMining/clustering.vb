@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a4c5340f2db78aa2596d9722e841d5a6, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
+﻿#Region "Microsoft.VisualBasic::44aaf9d4b864f2308c76b8f85c7488d8, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1524
-    '    Code Lines: 1008 (66.14%)
-    ' Comment Lines: 317 (20.80%)
-    '    - Xml Docs: 90.54%
+    '   Total Lines: 1626
+    '    Code Lines: 1064 (65.44%)
+    ' Comment Lines: 352 (21.65%)
+    '    - Xml Docs: 89.49%
     ' 
-    '   Blank Lines: 199 (13.06%)
-    '     File Size: 62.30 KB
+    '   Blank Lines: 210 (12.92%)
+    '     File Size: 67.33 KB
 
 
     ' Module clustering
@@ -50,8 +50,8 @@
     '               dataSetCommon, dbscan, dbscan_objects, densityA, ensureNotIsDistance
     '               fuzzyCMeans, getTraceback, gmm_components, gmm_predict, gmm_predict_proba
     '               gmmf, hclust, hdbscan_exec, hleaf, hnode
-    '               Kmeans_func, knn, Lloyds, showHclust, silhouette_score
-    '               ToHClust, treeDf
+    '               Kmeans_func, knn_class, knnsearch, Lloyds, showHclust
+    '               silhouette_score, ToHClust, treeDf
     ' 
     '     Sub: Main
     '     Class point2DReader

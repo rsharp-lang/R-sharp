@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::27d877b4bb795a9a91117cb5d7980589, Library\Rlapack\symbolic.vb"
+﻿#Region "Microsoft.VisualBasic::9cf84d7652e748c21137ed02a5a45e4c, Library\Rlapack\symbolic.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 126
-    '    Code Lines: 94 (74.60%)
-    ' Comment Lines: 14 (11.11%)
+    '   Total Lines: 131
+    '    Code Lines: 94 (71.76%)
+    ' Comment Lines: 19 (14.50%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 18 (14.29%)
-    '     File Size: 5.37 KB
+    '   Blank Lines: 18 (13.74%)
+    '     File Size: 5.54 KB
 
 
     ' Module symbolic

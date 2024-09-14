@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::def348f61ec94315ef9d0ff87975ddac, R#\Language\Syntax\SyntaxImplements\WhileLoopSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::7fdba9edf0d42dfe2c83642344bd1554, R#\Language\Syntax\SyntaxImplements\WhileLoopSyntax.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 36
-    '    Code Lines: 29 (80.56%)
+    '   Total Lines: 35
+    '    Code Lines: 28 (80.00%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 7 (19.44%)
-    '     File Size: 1.44 KB
+    '   Blank Lines: 7 (20.00%)
+    '     File Size: 1.39 KB
 
 
     '     Module WhileLoopSyntax

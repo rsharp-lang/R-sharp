@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::634c0461107bee17f79b351e25250d7f, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\WhileLoop.vb"
+﻿#Region "Microsoft.VisualBasic::e0f91ede1e4013e0879ef2451c900e9e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\WhileLoop.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 70
-    '    Code Lines: 57 (81.43%)
+    '   Total Lines: 72
+    '    Code Lines: 59 (81.94%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 13 (18.57%)
-    '     File Size: 2.34 KB
+    '   Blank Lines: 13 (18.06%)
+    '     File Size: 2.38 KB
 
 
     '     Class WhileLoop

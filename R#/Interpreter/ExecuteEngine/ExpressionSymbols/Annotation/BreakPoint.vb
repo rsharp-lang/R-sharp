@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6e17a48998112ca21582bd58e5e85aea, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\BreakPoint.vb"
+﻿#Region "Microsoft.VisualBasic::6f477eabe44be100de5249ac71e5ff86, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\BreakPoint.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 100.00%
     ' 
     '   Blank Lines: 6 (20.69%)
-    '     File Size: 862 B
+    '     File Size: 864 B
 
 
     '     Class BreakPoint

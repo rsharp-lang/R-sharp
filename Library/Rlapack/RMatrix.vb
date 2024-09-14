@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::15bcfea84a1a0a0fa835e0c60c4cca5b, Library\Rlapack\RMatrix.vb"
+﻿#Region "Microsoft.VisualBasic::c7765510eb04381ac6473fe95cbf029f, Library\Rlapack\RMatrix.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 541
-    '    Code Lines: 292 (53.97%)
-    ' Comment Lines: 182 (33.64%)
+    '   Total Lines: 556
+    '    Code Lines: 304 (54.68%)
+    ' Comment Lines: 182 (32.73%)
     '    - Xml Docs: 86.81%
     ' 
-    '   Blank Lines: 67 (12.38%)
-    '     File Size: 21.48 KB
+    '   Blank Lines: 70 (12.59%)
+    '     File Size: 22.09 KB
 
 
     ' Module RMatrix
@@ -49,7 +49,7 @@
     ' 
     '     Function: (+3 Overloads) add, asMatrix, createTable, (+3 Overloads) division, dot
     '               eigen, gauss_solve, Matrix, matrix_extractor, (+3 Overloads) multiply
-    '               nmf_matrix, (+3 Overloads) substract
+    '               nmf_matrix, readMatrix, saveMatrix, (+3 Overloads) substract
     ' 
     '     Sub: extractVector
     ' 

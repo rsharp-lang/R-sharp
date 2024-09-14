@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cca8bfaf0a49504929bf308bb0dc899e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\ObjectWith.vb"
+﻿#Region "Microsoft.VisualBasic::ae4f0095d14797c263b23cb7e6b0bfb1, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\ObjectWith.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 62
-    '    Code Lines: 48 (77.42%)
-    ' Comment Lines: 3 (4.84%)
+    '   Total Lines: 69
+    '    Code Lines: 54 (78.26%)
+    ' Comment Lines: 3 (4.35%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 11 (17.74%)
-    '     File Size: 2.25 KB
+    '   Blank Lines: 12 (17.39%)
+    '     File Size: 2.42 KB
 
 
     '     Class ObjectWith
@@ -48,7 +48,7 @@
     '         Properties: expressionName, stackFrame, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate
+    '         Function: Evaluate, ToString
     ' 
     ' 
     ' /********************************************************************************/

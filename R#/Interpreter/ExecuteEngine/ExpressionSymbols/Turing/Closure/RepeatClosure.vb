@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::94a0ef5790ce59d32ca31224421f1987, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\RepeatClosure.vb"
+﻿#Region "Microsoft.VisualBasic::9b6462df55665e8c2cad722eb6dc8f3c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\RepeatClosure.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 52
-    '    Code Lines: 39 (75.00%)
+    '   Total Lines: 59
+    '    Code Lines: 45 (76.27%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 13 (25.00%)
-    '     File Size: 1.64 KB
+    '   Blank Lines: 14 (23.73%)
+    '     File Size: 1.81 KB
 
 
     '     Class RepeatClosure
@@ -48,7 +48,7 @@
     '         Properties: expressionName, stackFrame, type
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate
+    '         Function: Evaluate, ToString
     ' 
     ' 
     ' /********************************************************************************/

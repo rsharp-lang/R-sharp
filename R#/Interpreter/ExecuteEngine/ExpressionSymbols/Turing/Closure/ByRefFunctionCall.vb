@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d3dbd2c17ef10cb74a088a14b1fa6180, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ByRefFunctionCall.vb"
+﻿#Region "Microsoft.VisualBasic::8fa31feee747c026d83ba21a7d1281f2, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ByRefFunctionCall.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 111
-    '    Code Lines: 79 (71.17%)
-    ' Comment Lines: 10 (9.01%)
+    '   Total Lines: 112
+    '    Code Lines: 80 (71.43%)
+    ' Comment Lines: 10 (8.93%)
     '    - Xml Docs: 70.00%
     ' 
-    '   Blank Lines: 22 (19.82%)
-    '     File Size: 4.29 KB
+    '   Blank Lines: 22 (19.64%)
+    '     File Size: 4.33 KB
 
 
     '     Class ByRefFunctionCall

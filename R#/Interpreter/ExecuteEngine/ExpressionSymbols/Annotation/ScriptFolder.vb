@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::585912f25b0a7ed9bc8da6c5298268b5, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\ScriptFolder.vb"
+﻿#Region "Microsoft.VisualBasic::9605d368f335bb716fb303adbd7a5252, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\ScriptFolder.vb"
 
     ' Author:
     ' 

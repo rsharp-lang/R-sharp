@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dbe63ddffaf4752c42722845cdaa91a7, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\HomeSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::5edc236f1863c3669d5b4e8da9911173, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\HomeSymbol.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 100.00%
     ' 
     '   Blank Lines: 6 (19.35%)
-    '     File Size: 966 B
+    '     File Size: 981 B
 
 
     '     Class HomeSymbol

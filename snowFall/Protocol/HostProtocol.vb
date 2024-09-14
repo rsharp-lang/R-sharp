@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ab77f7996a4602620019a8e5cfc5e0cf, snowFall\Protocol\HostProtocol.vb"
+﻿#Region "Microsoft.VisualBasic::41d595a8bc2afd04934da78bc8b0ae30, snowFall\Protocol\HostProtocol.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 100.00%
     ' 
     '   Blank Lines: 5 (19.23%)
-    '     File Size: 1011 B
+    '     File Size: 956 B
 
 
     '     Class Host

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9c422a58859ffee4c5ca8fb0461f5673, R#\Runtime\Internal\internalInvokes\set.vb"
+﻿#Region "Microsoft.VisualBasic::454f8ff7c7f5416387d6538796bd84f7, R#\Runtime\Internal\internalInvokes\set.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 652
-    '    Code Lines: 366 (56.13%)
-    ' Comment Lines: 202 (30.98%)
+    '   Total Lines: 653
+    '    Code Lines: 367 (56.20%)
+    ' Comment Lines: 202 (30.93%)
     '    - Xml Docs: 90.10%
     ' 
-    '   Blank Lines: 84 (12.88%)
-    '     File Size: 27.85 KB
+    '   Blank Lines: 84 (12.86%)
+    '     File Size: 27.90 KB
 
 
     '     Module [set]

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5009f5a938c1a04a4171ab5753a3f4de, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\Profiler.vb"
+﻿#Region "Microsoft.VisualBasic::b895e5efe120488800e53d8e198577af, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Annotation\Profiler.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 70
-    '    Code Lines: 46 (65.71%)
-    ' Comment Lines: 14 (20.00%)
+    '   Total Lines: 71
+    '    Code Lines: 47 (66.20%)
+    ' Comment Lines: 14 (19.72%)
     '    - Xml Docs: 92.86%
     ' 
-    '   Blank Lines: 10 (14.29%)
-    '     File Size: 2.42 KB
+    '   Blank Lines: 10 (14.08%)
+    '     File Size: 2.46 KB
 
 
     '     Class Profiler

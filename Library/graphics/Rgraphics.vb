@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1886e31c01ceb4cf0b745335e1a88a47, Library\graphics\Rgraphics.vb"
+﻿#Region "Microsoft.VisualBasic::ccdf24228ddb803597b15a2f89b6b57f, Library\graphics\Rgraphics.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 389
-    '    Code Lines: 247 (63.50%)
-    ' Comment Lines: 95 (24.42%)
+    '   Total Lines: 391
+    '    Code Lines: 249 (63.68%)
+    ' Comment Lines: 95 (24.30%)
     '    - Xml Docs: 86.32%
     ' 
-    '   Blank Lines: 47 (12.08%)
-    '     File Size: 15.52 KB
+    '   Blank Lines: 47 (12.02%)
+    '     File Size: 15.65 KB
 
 
     ' Module Rgraphics

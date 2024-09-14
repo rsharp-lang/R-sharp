@@ -1,57 +1,57 @@
-﻿#Region "Microsoft.VisualBasic::2714f87a4e7105ebe09a8078e63d88a1, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb"
+﻿#Region "Microsoft.VisualBasic::9aec50ed376aa7b518f883d479f5c733, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 197
-'    Code Lines: 66 (33.50%)
-' Comment Lines: 114 (57.87%)
-'    - Xml Docs: 94.74%
-' 
-'   Blank Lines: 17 (8.63%)
-'     File Size: 9.59 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class Require
-' 
-'         Properties: expressionName, options, packages, type
-' 
-'         Constructor: (+3 Overloads) Sub New
-'         Function: Evaluate, getOptions, ToString
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 217
+    '    Code Lines: 83 (38.25%)
+    ' Comment Lines: 116 (53.46%)
+    '    - Xml Docs: 95.69%
+    ' 
+    '   Blank Lines: 18 (8.29%)
+    '     File Size: 10.45 KB
+
+
+    '     Class Require
+    ' 
+    '         Properties: expressionName, options, packages, type
+    ' 
+    '         Constructor: (+3 Overloads) Sub New
+    '         Function: Evaluate, getOptions, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::61d1ad2bdf484ea1590297709a1b65eb, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\JSONLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::f6454cab64e0729881de57dd5e0d2b7d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\JSONLiteral.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 68
-    '    Code Lines: 49 (72.06%)
-    ' Comment Lines: 6 (8.82%)
+    '   Total Lines: 69
+    '    Code Lines: 50 (72.46%)
+    ' Comment Lines: 6 (8.70%)
     '    - Xml Docs: 83.33%
     ' 
-    '   Blank Lines: 13 (19.12%)
-    '     File Size: 2.12 KB
+    '   Blank Lines: 13 (18.84%)
+    '     File Size: 2.15 KB
 
 
     '     Class JSONLiteral

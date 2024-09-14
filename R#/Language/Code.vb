@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e9934fd9e3ddb1c96f9236b8bf65901e, R#\Language\Code.vb"
+﻿#Region "Microsoft.VisualBasic::2ff165ec5c3cc8ead8c47c7411a788e9, R#\Language\Code.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 72
-    '    Code Lines: 56 (77.78%)
-    ' Comment Lines: 6 (8.33%)
+    '   Total Lines: 83
+    '    Code Lines: 65 (78.31%)
+    ' Comment Lines: 6 (7.23%)
     '    - Xml Docs: 83.33%
     ' 
-    '   Blank Lines: 10 (13.89%)
-    '     File Size: 2.73 KB
+    '   Blank Lines: 12 (14.46%)
+    '     File Size: 3.12 KB
 
 
     '     Module Code
     ' 
-    '         Function: GetCodeSpan, isLINQKeyword, joinNext, ParseScript, ParseVector
+    '         Function: GetCodeSpan, Indent, isLINQKeyword, joinNext, ParseScript
+    '                   ParseVector
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0bf0b41b9ee5d67436286f99c22504a8, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IfBranch.vb"
+﻿#Region "Microsoft.VisualBasic::dc8f91bf96e915b85f6112f8f2eaaca2, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IfBranch.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 101
-    '    Code Lines: 86 (85.15%)
+    '   Total Lines: 103
+    '    Code Lines: 88 (85.44%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 15 (14.85%)
-    '     File Size: 3.84 KB
+    '   Blank Lines: 15 (14.56%)
+    '     File Size: 3.87 KB
 
 
     '     Class IfBranch

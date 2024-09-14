@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ab965e89f0de088d7bcf8ac154ead917, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\MemberValueAssign.vb"
+﻿#Region "Microsoft.VisualBasic::d4de89aa83c62b0319a87e774ea7fc48, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\MemberValueAssign.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 292
-    '    Code Lines: 228 (78.08%)
-    ' Comment Lines: 18 (6.16%)
+    '   Total Lines: 293
+    '    Code Lines: 229 (78.16%)
+    ' Comment Lines: 18 (6.14%)
     '    - Xml Docs: 16.67%
     ' 
-    '   Blank Lines: 46 (15.75%)
-    '     File Size: 12.75 KB
+    '   Blank Lines: 46 (15.70%)
+    '     File Size: 12.79 KB
 
 
     '     Class MemberValueAssign

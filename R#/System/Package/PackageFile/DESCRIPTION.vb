@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::99e95fcac1bc921dbed08ee0b29ff19d, R#\System\Package\PackageFile\DESCRIPTION.vb"
+﻿#Region "Microsoft.VisualBasic::af3e9b98c18d4e929c97639d5b232674, R#\System\Package\PackageFile\DESCRIPTION.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 92
-    '    Code Lines: 73 (79.35%)
-    ' Comment Lines: 8 (8.70%)
+    '   Total Lines: 130
+    '    Code Lines: 73 (56.15%)
+    ' Comment Lines: 46 (35.38%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 11 (11.96%)
-    '     File Size: 3.58 KB
+    '   Blank Lines: 11 (8.46%)
+    '     File Size: 4.92 KB
 
 
     '     Class DESCRIPTION
