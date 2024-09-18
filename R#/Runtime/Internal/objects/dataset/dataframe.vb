@@ -730,8 +730,10 @@ Namespace Runtime.Internal.Object
         ''' a dataframe object with row subset or an error message
         ''' </returns>
         Public Function GetByRowIndex(index As Integer(), env As Environment) As [Variant](Of dataframe, Message)
-            Dim subsetRowNumbers As String() = index _
+            Dim newRowNumbers As String() = index _
                 .Select(Function(i, j)
+                            ' get corresponding old row names
+                            ' if mising, use the new index offset j for new row names 
                             Return rownames.ElementAtOrDefault(i, j + 1)
                         End Function) _
                 .ToArray
@@ -748,7 +750,7 @@ Namespace Runtime.Internal.Object
             Next
 
             Return New dataframe With {
-                .rownames = subsetRowNumbers,
+                .rownames = newRowNumbers,
                 .columns = subsetData
             }
         End Function
@@ -766,6 +768,9 @@ Namespace Runtime.Internal.Object
             Dim is_scalar As Boolean = c.Length = 1
             Dim V As Array = Array.CreateInstance(type, If(is_scalar, 1, index.Length))
 
+            If c.IsNullOrEmpty Then
+                Return New Object(index.Length - 1) {}
+            End If
             If index.Length = 0 Then
                 Return V
             ElseIf is_scalar Then
