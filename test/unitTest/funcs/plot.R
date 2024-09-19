@@ -16,7 +16,7 @@ bitmap(file = "./wine_PCA.png", size = [3100, 2400]) {
     + geom_point(
         size = 20
     )
-    + geom_text(size = 14)    
+    + geom_text(size = 14, check_overlap = FALSE)    
     ;
 }
 
