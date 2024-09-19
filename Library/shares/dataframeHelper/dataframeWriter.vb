@@ -1,4 +1,6 @@
-﻿Imports System.Runtime.CompilerServices
+﻿#If write_csv Then
+
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -104,3 +106,4 @@ Public Module dataframeWriter
         Return dataframe
     End Function
 End Module
+#End If 
