@@ -14,9 +14,9 @@ bitmap(file = "./wine_PCA.png", size = [3100, 2400]) {
                 padding = [100 300 200 200])
     + stat_ellipse()
     + geom_point(
-        size = 20
+        size = 25
     )
-    + geom_text(size = 14, check_overlap = FALSE)    
+    + geom_text(size = 10)    
     ;
 }
 
