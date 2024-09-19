@@ -10,11 +10,22 @@ print(pca_score);
 pca_score[, "class"] = unlist($"class\d+"(rownames(pca_score)));
 
 bitmap(file = "./wine_PCA.png", size = [3100, 2400]) {
+    ggplot(pca_score, aes(x="PC1", y = "PC2", color = "class", label = rownames(pca_score)), 
+                padding = [100 300 200 200])
+    + stat_ellipse()
+    + geom_point(
+        size = 25
+    )
+    + geom_text(size = 10)    
+    ;
+}
+
+svg(file = "./wine_PCA.svg", size = [3100, 2400]) {
     ggplot(pca_score, aes(x="PC1", y = "PC2", color = "class", label = rownames(pca_score)))
     + geom_point(
-        size = 9
+        size = 20
     )
-    + geom_text(size = 6)
+    + geom_text(size = 14)
     + stat_ellipse()
     ;
 }
