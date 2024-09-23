@@ -467,7 +467,7 @@ Namespace Runtime.Internal.Invokes
 
                 If image.GetType.ImplementInterface(Of SaveGdiBitmap) Then
                     Using ms As Stream = New MemoryStream
-                        Call DirectCast(image, SaveGdiBitmap).Save(ms, format.GetFormat)
+                        Call DirectCast(image, SaveGdiBitmap).Save(ms, format)
                         Call ms.Seek(0, SeekOrigin.Begin)
 
                         buf.bitmap = Global.System.Drawing.Image.FromStream(ms)
@@ -485,7 +485,7 @@ Namespace Runtime.Internal.Invokes
                     file:=file,
                     write:=Sub(stream)
                                If image.GetType.ImplementInterface(Of SaveGdiBitmap) Then
-                                   Call DirectCast(image, SaveGdiBitmap).Save(stream, format.GetFormat)
+                                   Call DirectCast(image, SaveGdiBitmap).Save(stream, format)
                                Else
 #Disable Warning
                                    Call DirectCast(image, Image).Save(stream, format.GetFormat)
