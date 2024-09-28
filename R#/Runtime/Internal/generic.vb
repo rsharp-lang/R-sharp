@@ -225,7 +225,7 @@ Namespace Runtime.Internal
         ''' <param name="funcName"></param>
         ''' <returns></returns>
         <Extension>
-        Friend Function invokeGeneric(args As list, x As Object, env As Environment,
+        Public Function invokeGeneric(args As list, x As Object, env As Environment,
                                       <CallerMemberName>
                                       Optional funcName$ = Nothing) As Object
             Dim type As Type
@@ -320,7 +320,7 @@ Namespace Runtime.Internal
         End Function
 
         <Extension>
-        Friend Function invokeGeneric(args As list, x As Object, env As Environment, funcName$, type As Type) As Object
+        Public Function invokeGeneric(args As list, x As Object, env As Environment, funcName$, type As Type) As Object
             Dim apiCalls = getGenericCallable(x, type, funcName, env)
 
             If apiCalls Like GetType(Message) Then

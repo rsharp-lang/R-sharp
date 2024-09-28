@@ -70,12 +70,13 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Net.Http
-Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -127,9 +128,9 @@ Namespace Runtime
             Dim autoCloseFile As Boolean = If(leaveOpen.IsNullOrEmpty, True, Not leaveOpen(0))
             Dim curDev = New graphicsDevice With {
                 .g = dev,
-                .File = buffer,
+                .file = buffer,
                 .args = args,
-                .Index = devlist.Count,
+                .index = devlist.Count,
                 .leaveOpen = Not autoCloseFile
             }
 
@@ -215,9 +216,9 @@ Namespace Runtime
             Else
                 devlist.Add(New graphicsDevice With {
                     .args = New list With {.slots = New Dictionary(Of String, Object)},
-                    .File = Nothing,
+                    .file = Nothing,
                     .g = dev,
-                    .Index = devlist.Count
+                    .index = devlist.Count
                 })
             End If
 
@@ -398,7 +399,7 @@ Namespace Runtime
             If image Is Nothing Then
                 ' just open a new device
                 Dim size As Size = graphicsPipeline.getSize(args!size, env, "2700,2000").SizeParser
-                Dim buffer = GetFileStream(file, FileAccess.Write, env)
+                Dim buffer = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env)
 
                 If buffer Like GetType(Message) Then
                     Return buffer.TryCast(Of Message)
@@ -414,7 +415,7 @@ Namespace Runtime
             ElseIf Not image.GetType.ImplementInterface(Of SaveGdiBitmap) Then
                 Return Message.InCompatibleType(GetType(SaveGdiBitmap), image.GetType, env)
             Else
-                Return FileStreamWriter(
+                Return SMRUCC.Rsharp.FileStreamWriter(
                     env:=env,
                     file:=file,
                     write:=Sub(stream)
@@ -481,7 +482,7 @@ Namespace Runtime
 
                 Return buf
             Else
-                Return FileStreamWriter(
+                Return SMRUCC.Rsharp.FileStreamWriter(
                     env:=env,
                     file:=file,
                     write:=Sub(stream)
@@ -597,7 +598,7 @@ Namespace Runtime
 
                 Return New Size(size.Width, size.Height).CreateGDIDevice(filled:=fill, dpi:=$"{dpi},{dpi}")
             Else
-                Dim buffer = GetFileStream(file, FileAccess.Write, env)
+                Dim buffer = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env)
 
                 If buffer Like GetType(Message) Then
                     Return buffer.TryCast(Of Message)
@@ -632,12 +633,12 @@ Namespace Runtime
             ElseIf TypeOf file Is String Then
                 Return DirectCast(file, String).LoadImage(base64:=isBase64StringOrFile(DirectCast(file, String)))
             ElseIf TypeOf file Is Stream Then
-                Return image.FromStream(DirectCast(file, Stream))
+                Return System.Drawing.Image.FromStream(DirectCast(file, Stream))
             ElseIf TypeOf file Is FileReference Then
                 Dim p As FileReference = file
                 Dim stream As Stream = p.fs.OpenFile(p.filepath, FileMode.OpenOrCreate, FileAccess.Read)
 
-                Return image.FromStream(stream)
+                Return System.Drawing.Image.FromStream(stream)
             Else
                 Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
             End If
