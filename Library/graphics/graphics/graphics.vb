@@ -1,63 +1,63 @@
 ﻿#Region "Microsoft.VisualBasic::fcd1acd16205e109197d8aa304512a7f, R#\Runtime\Internal\internalInvokes\graphics\graphics.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 682
-    '    Code Lines: 413 (60.56%)
-    ' Comment Lines: 189 (27.71%)
-    '    - Xml Docs: 89.95%
-    ' 
-    '   Blank Lines: 80 (11.73%)
-    '     File Size: 29.76 KB
+' Summaries:
 
 
-    '     Module graphics
-    ' 
-    '         Properties: curDev
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: bitmap, colorTable, devCur, devOff, drawText
-    '                   getImageObject, isBase64StringOrFile, OpenNewBitmapDevice, plot, png
-    '                   rasterFont, rasterImage, rasterPixels, readImage, resizeImage
-    '                   setCurrentDev, thumbnail, wmf
-    ' 
-    '         Sub: openNew
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 682
+'    Code Lines: 413 (60.56%)
+' Comment Lines: 189 (27.71%)
+'    - Xml Docs: 89.95%
+' 
+'   Blank Lines: 80 (11.73%)
+'     File Size: 29.76 KB
+
+
+'     Module graphics
+' 
+'         Properties: curDev
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: bitmap, colorTable, devCur, devOff, drawText
+'                   getImageObject, isBase64StringOrFile, OpenNewBitmapDevice, plot, png
+'                   rasterFont, rasterImage, rasterPixels, readImage, resizeImage
+'                   setCurrentDev, thumbnail, wmf
+' 
+'         Sub: openNew
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -74,17 +74,18 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 <Assembly: InternalsVisibleTo("ggplot")>
 <Assembly: InternalsVisibleTo("graphics")>
 
-Namespace Runtime.Internal.Invokes
+Namespace Runtime
 
-    <Package("graphics")>
     Module graphics
 
         ReadOnly devlist As New List(Of graphicsDevice)
@@ -99,7 +100,7 @@ Namespace Runtime.Internal.Invokes
         End Property
 
         Sub New()
-            Internal.Object.Converts.makeDataframe.addHandler(GetType(Color()), AddressOf colorTable)
+            makeDataframe.addHandler(GetType(Color()), AddressOf colorTable)
         End Sub
 
         Private Function colorTable(raster As Color(), args As list, env As Environment) As dataframe
@@ -126,9 +127,9 @@ Namespace Runtime.Internal.Invokes
             Dim autoCloseFile As Boolean = If(leaveOpen.IsNullOrEmpty, True, Not leaveOpen(0))
             Dim curDev = New graphicsDevice With {
                 .g = dev,
-                .file = buffer,
+                .File = buffer,
                 .args = args,
-                .index = devlist.Count,
+                .Index = devlist.Count,
                 .leaveOpen = Not autoCloseFile
             }
 
@@ -214,9 +215,9 @@ Namespace Runtime.Internal.Invokes
             Else
                 devlist.Add(New graphicsDevice With {
                     .args = New list With {.slots = New Dictionary(Of String, Object)},
-                    .file = Nothing,
+                    .File = Nothing,
                     .g = dev,
-                    .index = devlist.Count
+                    .Index = devlist.Count
                 })
             End If
 
@@ -631,12 +632,12 @@ Namespace Runtime.Internal.Invokes
             ElseIf TypeOf file Is String Then
                 Return DirectCast(file, String).LoadImage(base64:=isBase64StringOrFile(DirectCast(file, String)))
             ElseIf TypeOf file Is Stream Then
-                Return Image.FromStream(DirectCast(file, Stream))
+                Return image.FromStream(DirectCast(file, Stream))
             ElseIf TypeOf file Is FileReference Then
                 Dim p As FileReference = file
                 Dim stream As Stream = p.fs.OpenFile(p.filepath, FileMode.OpenOrCreate, FileAccess.Read)
 
-                Return Image.FromStream(stream)
+                Return image.FromStream(stream)
             Else
                 Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
             End If

@@ -61,7 +61,7 @@ Imports Microsoft.VisualBasic.Language.[Default]
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 
-Namespace Runtime.Internal.Invokes
+Namespace Runtime
 
     ''' <summary>
     ''' the internal graphics device handle of the R# environment
