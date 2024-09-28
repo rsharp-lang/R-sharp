@@ -70,6 +70,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports System.Drawing.Imaging
 Imports Image = System.Drawing.Image
 #Else
+Imports Microsoft.VisualBasic.Imaging
 Imports Image = Microsoft.VisualBasic.Imaging.Image
 #End If
 
