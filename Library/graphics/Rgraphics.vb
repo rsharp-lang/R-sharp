@@ -432,13 +432,13 @@ Module Rgraphics
         Dim dims As New Size(m.ColumnDimension, m.RowDimension)
         Dim ms As New MemoryStream
 
-        Call Internal.Invokes.graphics.bitmap(
+        Call R_graphics.Common.Runtime.graphics.bitmap(
             file:=ms,
             args:=New list With {.slots = New Dictionary(Of String, Object) From {{"size", $"{dims.Width},{dims.Height}"}}},
             env:=env
         )
         Call graphics2DTools.rasterHeatmap(raster, colorName:=colors, dimSize:=dims, env:=env)
-        Call Internal.Invokes.graphics.devOff(env:=env)
+        Call R_graphics.Common.Runtime.graphics.devOff(env:=env)
         Call ms.Flush()
 
 #Disable Warning

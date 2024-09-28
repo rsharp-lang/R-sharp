@@ -610,7 +610,7 @@ Module graphics2DTools
         Dim colorVal As Color = RColorPalette.GetRawColor(color)
 
         If g Is Nothing Then
-            g = Invokes.graphics.curDev.g
+            g = R_graphics.Common.Runtime.graphics.curDev.g
         End If
 
         If TypeOf rect Is Rectangle Then

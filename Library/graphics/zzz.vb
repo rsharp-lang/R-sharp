@@ -66,7 +66,7 @@ Public Class zzz
         Call plots.Main()
         Call geometry2D.Main()
         Call Rgraphics.Main()
-        Call invoke.pushEnvir(GetType(Runtime.graphics))
+        Call invoke.pushEnvir(GetType(R_graphics.Common.Runtime.graphics))
 
         Call RegisterDriver()
     End Sub
