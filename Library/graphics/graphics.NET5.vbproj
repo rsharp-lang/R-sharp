@@ -158,6 +158,7 @@
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\mime\text%html\html_netcore5.vbproj" />
     <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
     <ProjectReference Include="..\Rlapack\Rlapack.NET5.vbproj" />
+    <ProjectReference Include="..\shares\graphics.common_runtime\R_graphics.common_runtime.vbproj" />
   </ItemGroup>
 
   <ItemGroup>
