@@ -207,8 +207,8 @@ Public Module NetworkModule
     ''' create a new graph object with the given network 
     ''' edge data and the node properties 
     ''' </summary>
-    ''' <param name="from"></param>
-    ''' <param name="[to]"></param>
+    ''' <param name="from">a character vector of the source node labels</param>
+    ''' <param name="to">a character vector of the target node labels</param>
     ''' <param name="weights"></param>
     ''' <param name="title">
     ''' the node display labels
