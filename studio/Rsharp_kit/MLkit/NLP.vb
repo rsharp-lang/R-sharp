@@ -99,11 +99,18 @@ Module NLP
             .rownames = mat.Select(Function(t) t.Key).ToArray,
             .columns = New Dictionary(Of String, Array)
         }
-        Dim colnames As String() = Enumerable _
-            .Range(0, vec.vectorSize) _
-            .Select(Function(i) $"V{i + 1}") _
-            .ToArray
+        Dim prefix As String = "V"
+        Dim colnames As String()
         Dim offset As Integer
+
+        If args.hasName("prefix") Then
+            prefix = CLRVector.asCharacter(args!prefix).ElementAtOrDefault(Scan0, [default]:="dim")
+        End If
+
+        colnames = Enumerable _
+            .Range(0, vec.vectorSize) _
+            .Select(Function(i) $"{prefix}{i + 1}") _
+            .ToArray
 
         For i As Integer = 0 To vec.vectorSize - 1
             offset = i
