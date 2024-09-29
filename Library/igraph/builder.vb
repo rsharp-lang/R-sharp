@@ -126,6 +126,8 @@ Module builder
             Next
         End If
 
+        Call VBDebugger.EchoLine(g.ToString)
+
         Return g
     End Function
 
