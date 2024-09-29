@@ -106,7 +106,7 @@ Module builder
 
                 For Each name As String In names
                     corDbl(i) = CLRVector.asNumeric(df(name))
-                    pval(i) = New Double(names.Length - 1) {}
+                    pval(++i) = New Double(names.Length - 1) {}
                 Next
 
                 cor = New CorrelationMatrix(names.Indexing, corDbl, pval)
