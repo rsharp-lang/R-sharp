@@ -55,35 +55,67 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.visualize
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 ''' <summary>
 ''' helper module for convert datasets to network graph object
 ''' </summary>
-<Package("igraph.builder")>
+<Package("builder")>
 Module builder
 
     ''' <summary>
-    ''' create a network graph based on the item correlations
+    ''' Create a network graph based on the item correlations
     ''' </summary>
-    ''' <param name="x">a correlation matrix</param>
-    ''' <param name="threshold">the absolute threshold value of the correlation value</param>
+    ''' <param name="x">a correlation matrix or 
+    ''' a correlation matrix represents in dataframe object.
+    ''' </param>
+    ''' <param name="threshold">the absolute threshold value of the correlation value.</param>
     ''' <param name="pvalue"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("correlation.graph")>
     <RApiReturn(GetType(NetworkGraph))>
-    Public Function FromCorrelations(x As CorrelationMatrix,
+    Public Function FromCorrelations(x As Object,
                                      Optional threshold As Double = 0.65,
                                      Optional pvalue As Double = 1,
                                      Optional group As list = Nothing,
                                      Optional env As Environment = Nothing) As Object
 
-        Dim g As NetworkGraph = x.BuildNetwork(threshold, pvalue).Item1
+        Dim cor As CorrelationMatrix = TryCast(x, CorrelationMatrix)
+
+        If x Is Nothing Then
+            Call "The given correlation matrix data is nothing!".Warning
+            Return Nothing
+        End If
+
+        If cor Is Nothing Then
+            If TypeOf x Is rdataframe Then
+                Dim df As rdataframe = DirectCast(x, rdataframe)
+                Dim names As String() = df.colnames
+                Dim corDbl As Double()() = New Double(names.Length - 1)() {}
+                Dim pval As Double()() = New Double(names.Length - 1)() {}
+                Dim i As i32 = 0
+
+                For Each name As String In names
+                    corDbl(i) = CLRVector.asNumeric(df(name))
+                    pval(i) = New Double(names.Length - 1) {}
+                Next
+
+                cor = New CorrelationMatrix(names.Indexing, corDbl, pval)
+            Else
+                Return Message.InCompatibleType(GetType(CorrelationMatrix), x.GetType, env)
+            End If
+        End If
+
+        Dim g As NetworkGraph = cor.BuildNetwork(threshold, pvalue).Item1
 
         If Not group Is Nothing Then
             Dim class_labels As Dictionary(Of String, String) = group.AsGeneric(env, "no_class")
