@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::e7f9a42d3ad81b2a21f4770a5fcb2d62, Library\igraph\builder.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 52
-    '    Code Lines: 34 (65.38%)
-    ' Comment Lines: 11 (21.15%)
-    '    - Xml Docs: 100.00%
-    ' 
-    '   Blank Lines: 7 (13.46%)
-    '     File Size: 2.12 KB
+' Summaries:
 
 
-    ' Module builder
-    ' 
-    '     Function: FromCorrelations, SimilarityGraph
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 52
+'    Code Lines: 34 (65.38%)
+' Comment Lines: 11 (21.15%)
+'    - Xml Docs: 100.00%
+' 
+'   Blank Lines: 7 (13.46%)
+'     File Size: 2.12 KB
+
+
+' Module builder
+' 
+'     Function: FromCorrelations, SimilarityGraph
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports DataFrame = Microsoft.VisualBasic.Math.DataFrame.DataFrame
 Imports rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 ''' <summary>
@@ -129,6 +130,17 @@ Module builder
         Call VBDebugger.EchoLine(g.ToString)
 
         Return g
+    End Function
+
+    <ExportAPI("dataframe.to_graph")>
+    Public Function fromCorDataframe(x As rdataframe, Optional cutoff As Double = 0.65, Optional env As Environment = Nothing) As Object
+        Dim df = MathDataSet.toFeatureSet(x, env)
+
+        If TypeOf df Is Message Then
+            Return df
+        End If
+
+        Return CorrelationNetwork.BuildNetwork(DirectCast(df, DataFrame), cutoff)
     End Function
 
     <ExportAPI("similarity_graph")>

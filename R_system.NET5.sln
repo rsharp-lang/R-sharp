@@ -13377,6 +13377,7 @@ Global
 		Library\shares\xgboostDataSet_helper\xgboostDataSet_helper.projitems*{4de5c337-fa74-4eb9-a2ba-a29899031216}*SharedItemsImports = 5
 		Library\shares\R_graphic.interop\R_graphic.interop.projitems*{53af2b13-ccd5-4f73-94d5-612191e785a9}*SharedItemsImports = 13
 		Library\shares\JsonHelper\JsonHelper.projitems*{56c088d6-6362-4377-8ec8-fd0165eae0d9}*SharedItemsImports = 5
+		Library\shares\dataframeHelper\dataframeHelper.projitems*{700b6326-6278-4677-9dd3-0d63a3486fec}*SharedItemsImports = 5
 		Library\shares\R_graphic.interop\R_graphic.interop.projitems*{700b6326-6278-4677-9dd3-0d63a3486fec}*SharedItemsImports = 5
 		Library\shares\xgboostDataSet_helper\xgboostDataSet_helper.projitems*{78c60f4e-50f9-4a84-8290-2886728a4b34}*SharedItemsImports = 13
 		Library\shares\dataframeHelper\dataframeHelper.projitems*{843b6786-8992-48bf-99be-6579b9645961}*SharedItemsImports = 13
