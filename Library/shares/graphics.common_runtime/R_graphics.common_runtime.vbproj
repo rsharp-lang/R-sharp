@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>R_graphics.Common.Runtime</RootNamespace>
-    <TargetFrameworks>net6.0;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net8.0;net8.0-windows;net48</TargetFrameworks>
     <AssemblyName>R_graphics.Common.Runtime</AssemblyName>
     <UseApplicationFramework>True</UseApplicationFramework>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>

@@ -68,6 +68,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
+Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.Runtime
@@ -81,6 +82,32 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+
+#If NET48 Then
+Imports Pen = System.Drawing.Pen
+Imports Pens = System.Drawing.Pens
+Imports Brush = System.Drawing.Brush
+Imports Font = System.Drawing.Font
+Imports Brushes = System.Drawing.Brushes
+Imports SolidBrush = System.Drawing.SolidBrush
+Imports DashStyle = System.Drawing.Drawing2D.DashStyle
+Imports Image = System.Drawing.Image
+Imports Bitmap = System.Drawing.Bitmap
+Imports GraphicsPath = System.Drawing.Drawing2D.GraphicsPath
+Imports FontStyle = System.Drawing.FontStyle
+#Else
+Imports Pen = Microsoft.VisualBasic.Imaging.Pen
+Imports Pens = Microsoft.VisualBasic.Imaging.Pens
+Imports Brush = Microsoft.VisualBasic.Imaging.Brush
+Imports Font = Microsoft.VisualBasic.Imaging.Font
+Imports Brushes = Microsoft.VisualBasic.Imaging.Brushes
+Imports SolidBrush = Microsoft.VisualBasic.Imaging.SolidBrush
+Imports DashStyle = Microsoft.VisualBasic.Imaging.DashStyle
+Imports Image = Microsoft.VisualBasic.Imaging.Image
+Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
+Imports GraphicsPath = Microsoft.VisualBasic.Imaging.GraphicsPath
+Imports FontStyle = Microsoft.VisualBasic.Imaging.FontStyle
+#End If
 
 <Assembly: InternalsVisibleTo("ggplot")>
 <Assembly: InternalsVisibleTo("graphics")>
@@ -126,9 +153,9 @@ Module graphics
         Dim autoCloseFile As Boolean = If(leaveOpen.IsNullOrEmpty, True, Not leaveOpen(0))
         Dim curDev = New graphicsDevice With {
             .g = dev,
-            .File = buffer,
+            .file = buffer,
             .args = args,
-            .Index = devlist.Count,
+            .index = devlist.Count,
             .leaveOpen = Not autoCloseFile
         }
 
@@ -214,9 +241,9 @@ Module graphics
         Else
             devlist.Add(New graphicsDevice With {
                 .args = New list With {.slots = New Dictionary(Of String, Object)},
-                .File = Nothing,
+                .file = Nothing,
                 .g = dev,
-                .Index = devlist.Count
+                .index = devlist.Count
             })
         End If
 
@@ -594,7 +621,7 @@ Module graphics
 
             Call env.AddMessage("neither image plot data nor file stream is missing, a gdi graphics object will be returns!")
 
-            Return New Size(size.Width, size.Height).CreateGDIDevice(filled:=fill, dpi:=$"{dpi},{dpi}")
+            Return DriverLoad.CreateGraphicsDevice(New Size(size.Width, size.Height), fill, dpi:=dpi, driver:=Drivers.GDI)
         Else
             Dim buffer = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env)
 
@@ -602,7 +629,7 @@ Module graphics
                 Return buffer.TryCast(Of Message)
             Else
                 Call openNew(
-                    dev:=New Size(size.Width, size.Height).CreateGDIDevice(filled:=fill, dpi:=$"{dpi},{dpi}"),
+                    dev:=DriverLoad.CreateGraphicsDevice(New Size(size.Width, size.Height), fill, dpi, driver:=Drivers.GDI),
                     buffer:=buffer.TryCast(Of Stream),
                     args:=args
                 )
