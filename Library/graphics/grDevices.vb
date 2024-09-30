@@ -127,7 +127,7 @@ Public Module grDevices
                 Dim pdfImage = PDF.Driver.OpenDevice(size)
 
                 Call pdfImage.Clear(fill)
-                Call Internal.Invokes.graphics.openNew(
+                Call R_graphics.Common.Runtime.graphics.openNew(
                     dev:=pdfImage,
                     buffer:=buffer.TryCast(Of Stream),
                     args:=args
@@ -160,7 +160,7 @@ Public Module grDevices
             Dim svgImage As New GraphicsSVG(size, dpiXY, dpiXY)
 
             Call svgImage.Clear(fill)
-            Call Internal.Invokes.graphics.openNew(
+            Call R_graphics.Common.Runtime.graphics.openNew(
                 dev:=svgImage,
                 buffer:=buffer.TryCast(Of Stream),
                 args:=args

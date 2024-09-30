@@ -108,7 +108,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         ''' <returns></returns>
         Public ReadOnly Property value As Expression
 
-        Friend isByRef As Boolean
+        Public Property isByRef As Boolean
 
         Public ReadOnly Property symbolSize As Integer
             <MethodImpl(MethodImplOptions.AggressiveInlining)>

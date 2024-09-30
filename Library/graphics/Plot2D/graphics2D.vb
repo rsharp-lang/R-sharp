@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::bb720488e3f78cfcdb159935a8066814, Library\graphics\Plot2D\graphics2D.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 706
-    '    Code Lines: 513 (72.66%)
-    ' Comment Lines: 111 (15.72%)
-    '    - Xml Docs: 95.50%
-    ' 
-    '   Blank Lines: 82 (11.61%)
-    '     File Size: 29.19 KB
+' Summaries:
 
 
-    ' Module graphics2DTools
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asciiArt, axisTicks, colorMapLegend, contourPolygon, contourTracing
-    '               DrawCircle, drawLegends, DrawRectangle, DrawTriangle, layout_grid
-    '               legend, line2D, measureString, offset2D, paddingString
-    '               paddingVector, plotColorMap, point2D, pointsVector, rasterHeatmap
-    '               (+2 Overloads) rectangle, scale, size, sizeVector
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 706
+'    Code Lines: 513 (72.66%)
+' Comment Lines: 111 (15.72%)
+'    - Xml Docs: 95.50%
+' 
+'   Blank Lines: 82 (11.61%)
+'     File Size: 29.19 KB
+
+
+' Module graphics2DTools
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asciiArt, axisTicks, colorMapLegend, contourPolygon, contourTracing
+'               DrawCircle, drawLegends, DrawRectangle, DrawTriangle, layout_grid
+'               legend, line2D, measureString, offset2D, paddingString
+'               paddingVector, plotColorMap, point2D, pointsVector, rasterHeatmap
+'               (+2 Overloads) rectangle, scale, size, sizeVector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -78,10 +78,10 @@ Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.MIME.Html.Render
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports R_graphics.Common.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -610,7 +610,7 @@ Module graphics2DTools
         Dim colorVal As Color = RColorPalette.GetRawColor(color)
 
         If g Is Nothing Then
-            g = Invokes.graphics.curDev.g
+            g = R_graphics.Common.Runtime.graphics.curDev.g
         End If
 
         If TypeOf rect Is Rectangle Then

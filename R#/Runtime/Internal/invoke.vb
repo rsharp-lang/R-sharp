@@ -129,7 +129,7 @@ Namespace Runtime.Internal
             Call GetType(math).DoCall(AddressOf pushEnvir)
             Call GetType(etc).DoCall(AddressOf pushEnvir)
             Call GetType([set]).DoCall(AddressOf pushEnvir)
-            Call GetType(graphics).DoCall(AddressOf pushEnvir)
+            ' Call GetType(graphics).DoCall(AddressOf pushEnvir)
             Call GetType(applys).DoCall(AddressOf pushEnvir)
             Call GetType(reflections).DoCall(AddressOf pushEnvir)
             Call GetType(devtools).DoCall(AddressOf pushEnvir)
