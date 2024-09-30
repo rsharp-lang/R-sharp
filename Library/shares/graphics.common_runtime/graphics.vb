@@ -82,6 +82,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports Microsoft.VisualBasic.Drawing
 
 #If NET48 Then
 Imports Pen = System.Drawing.Pen
@@ -429,11 +430,12 @@ Module graphics
             If buffer Like GetType(Message) Then
                 Return buffer.TryCast(Of Message)
             Else
-                Call openNew(
-                    dev:=New Wmf(size, buffer.TryCast(Of Stream)),
-                    buffer:=buffer.TryCast(Of Stream),
-                    args:=args
-                )
+                'Call openNew(
+                '    dev:=New Wmf(size, buffer.TryCast(Of Stream)),
+                '    buffer:=buffer.TryCast(Of Stream),
+                '    args:=args
+                ')
+                Throw New NotImplementedException
             End If
 
             Return Nothing
@@ -497,7 +499,11 @@ Module graphics
                     Call DirectCast(image, SaveGdiBitmap).Save(ms, format)
                     Call ms.Seek(0, SeekOrigin.Begin)
 
-                    buf.bitmap = Global.System.Drawing.Image.FromStream(ms)
+#If NET48 Then
+                    buf.bitmap = System.Drawing.Image.FromStream(ms)
+#Else
+                    buf.bitmap = Microsoft.VisualBasic.Imaging.Image.FromStream(ms)
+#End If
                 End Using
             Else
 #Disable Warning
@@ -514,9 +520,11 @@ Module graphics
                            If image.GetType.ImplementInterface(Of SaveGdiBitmap) Then
                                Call DirectCast(image, SaveGdiBitmap).Save(stream, format)
                            Else
-#Disable Warning
+#If NET48 Then
                                Call DirectCast(image, Image).Save(stream, format.GetFormat)
-#Enable Warning
+#Else
+                               Call DirectCast(image, Image).Save(stream, format)
+#End If
                            End If
                        End Sub)
         End If
@@ -658,12 +666,12 @@ Module graphics
         ElseIf TypeOf file Is String Then
             Return DirectCast(file, String).LoadImage(base64:=isBase64StringOrFile(DirectCast(file, String)))
         ElseIf TypeOf file Is Stream Then
-            Return System.Drawing.Image.FromStream(DirectCast(file, Stream))
+            Return Image.FromStream(DirectCast(file, Stream))
         ElseIf TypeOf file Is FileReference Then
             Dim p As FileReference = file
             Dim stream As Stream = p.fs.OpenFile(p.filepath, FileMode.OpenOrCreate, FileAccess.Read)
 
-            Return System.Drawing.Image.FromStream(stream)
+            Return Image.FromStream(stream)
         Else
             Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
         End If
@@ -695,18 +703,19 @@ Module graphics
             bitmap = bitmapVal.TryCast(Of Bitmap)
         End If
 
-        Dim resize As Image = bitmap.Resize(max_width, onlyResizeIfWider:=False)
+        Throw New NotImplementedException
+        'Dim resize As Image = bitmap.Resize(max_width, onlyResizeIfWider:=False)
 
-        If resize.Height / resize.Width > 1.3 Then
-            ' 高度远远大于宽度，则垂直居中截断图片
-            Dim newHeight As Integer = max_width
-            Dim offsetY = (resize.Height - max_width) / 2
-            Dim corp As Image = resize.ImageCrop(New Rectangle(0, offsetY, resize.Width, newHeight))
+        'If resize.Height / resize.Width > 1.3 Then
+        '    ' 高度远远大于宽度，则垂直居中截断图片
+        '    Dim newHeight As Integer = max_width
+        '    Dim offsetY = (resize.Height - max_width) / 2
+        '    Dim corp As Image = resize.ImageCrop(New Rectangle(0, offsetY, resize.Width, newHeight))
 
-            Return corp
-        Else
-            Return resize
-        End If
+        '    Return corp
+        'Else
+        '    Return resize
+        'End If
     End Function
 
     Private Function getImageObject(image As Object, env As Environment) As [Variant](Of Bitmap, Message)
@@ -755,9 +764,10 @@ Module graphics
             Dim oldSize As Size = bitmap.Size
 
             ' scale image size by a fiven factor
-            newSize = New Size(oldSize.Width * scaleI, oldSize.Height * scaleI)
-            Dim resize As Image = bitmap.Resize(newSize.Width, onlyResizeIfWider:=newSize.Width > bitmap.Size.Width)
-            Return resize
+            'newSize = New Size(oldSize.Width * scaleI, oldSize.Height * scaleI)
+            'Dim resize As Image = bitmap.Resize(newSize.Width, onlyResizeIfWider:=newSize.Width > bitmap.Size.Width)
+            'Return resize
+            Throw New NotImplementedException
         Else
             ' resize the image to a given size
             newSize = New Size(factor(0), factor(1))
