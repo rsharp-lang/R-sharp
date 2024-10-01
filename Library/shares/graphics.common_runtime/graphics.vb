@@ -772,9 +772,9 @@ Module graphics
             ' resize the image to a given size
             newSize = New Size(factor(0), factor(1))
 
-            Using g As Graphics2D = newSize.CreateGDIDevice(filled:=Color.Transparent)
+            Using g As IGraphics = DriverLoad.CreateGraphicsDevice(newSize, Color.Transparent, driver:=Drivers.GDI)
                 Call g.DrawImage(bitmapVal.TryCast(Of Bitmap), 0, 0, newSize.Width, newSize.Height)
-                Return g.ImageResource
+                Return DirectCast(g, GdiRasterGraphics).ImageResource
             End Using
         End If
     End Function
