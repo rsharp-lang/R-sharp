@@ -78,6 +78,10 @@ Public Module ApiArgumentHelpers
         Return CType(name, ArgumentReference)
     End Function
 
+    Public Function list(ParamArray slots As ArgumentReference()) As list
+        Return New list(slots)
+    End Function
+
     ''' <summary>
     ''' create a name tagged value object from a 
     ''' given data source value
