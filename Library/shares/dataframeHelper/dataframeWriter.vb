@@ -12,6 +12,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports File = Microsoft.VisualBasic.Data.csv.IO.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.[Object].dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Public Module dataframeWriter
 
@@ -46,7 +47,7 @@ Public Module dataframeWriter
         End If
 
         If inputRowNames IsNot Nothing AndAlso inputRowNames.Length <> x.nrows Then
-            Return Internal.debug.stop({
+            Return RInternal.debug.stop({
                 $"The given row.names size({inputRowNames.Length}) from the function parameter is not matched with the dataframe row counts({x.nrows})!",
                 $"Please check of the dataframe value object or the row.names parameter!",
                 $"input_rownames_size: {inputRowNames.Length}",

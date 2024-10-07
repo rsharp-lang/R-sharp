@@ -63,7 +63,6 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Net
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Net.Protocols.ContentTypes
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -75,6 +74,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' the R# http utils
@@ -100,7 +100,7 @@ Public Module URL
             If response.IsSuccessStatusCode Then
                 Return t.Result
             Else
-                Return Internal.debug.stop(t.Result, env)
+                Return RInternal.debug.stop(t.Result, env)
             End If
         Else
             Return ""
@@ -297,7 +297,7 @@ Public Module URL
     <RApiReturn(GetType(WebTextQuery))>
     Public Function httpCache(fs As Object, Optional clear_404 As Boolean = True, Optional env As Environment = Nothing) As Object
         If fs Is Nothing Then
-            Return Internal.debug.stop("the required cache context can not be nothing!", env)
+            Return RInternal.debug.stop("the required cache context can not be nothing!", env)
         End If
 
         Dim cache As WebTextQuery
@@ -440,7 +440,7 @@ Public Module URL
         Dim text As String = data?.html
 
         If throw_http_error AndAlso data.headers.httpCode <> HTTP_RFC.RFC_OK Then
-            Return Internal.debug.stop({
+            Return RInternal.debug.stop({
                 data.html,
                 $"url: {data.url}",
                 $"payload: {data.payload}",
@@ -489,7 +489,7 @@ Public Module URL
                            Optional env As Environment = Nothing) As Object
 
         If files Is Nothing Then
-            Return Internal.debug.stop("the required file list can not be nothing!", env)
+            Return RInternal.debug.stop("the required file list can not be nothing!", env)
         ElseIf env.globalEnvironment.debugMode OrElse env.globalEnvironment.options.verbose Then
             Call env.WriteLineHandler()($"upload file: {url}")
         End If

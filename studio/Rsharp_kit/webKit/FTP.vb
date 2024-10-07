@@ -65,6 +65,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' ftp modules
@@ -108,7 +109,7 @@ Module FTP
             End Using
         Catch ex As Exception
             If throwEx Then
-                Return Internal.debug.stop(New Exception(dir, ex), env)
+                Return RInternal.debug.stop(New Exception(dir, ex), env)
             Else
                 env.AddMessage({ex.Message, "dir: " & dir}, MSG_TYPES.WRN)
                 Return {}

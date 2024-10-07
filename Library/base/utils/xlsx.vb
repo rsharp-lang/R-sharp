@@ -75,6 +75,7 @@ Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataFrame
 Imports msXlsx = Microsoft.VisualBasic.MIME.Office.Excel.XLSX.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports Rsharp = SMRUCC.Rsharp
 Imports Worksheet = Microsoft.VisualBasic.MIME.Office.Excel.XLSX.Writer.Worksheet
 
@@ -134,11 +135,11 @@ Module xlsx
         ElseIf TypeOf file Is msXlsx Then
             xlsx = DirectCast(file, msXlsx)
         Else
-            Return Internal.debug.stop(Message.InCompatibleType(GetType(String), file.GetType, env), env)
+            Return RInternal.debug.stop(Message.InCompatibleType(GetType(String), file.GetType, env), env)
         End If
 
         If sheetIndex Is Nothing Then
-            Return Internal.debug.stop("the sheet index can not be nothing!", env)
+            Return RInternal.debug.stop("the sheet index can not be nothing!", env)
         ElseIf RType.TypeOf(sheetIndex).mode = TypeCodes.integer Then
             table = xlsx.GetTable(CInt(sheetIndex) - 1)
         Else
@@ -173,7 +174,7 @@ Module xlsx
     ''' <returns></returns>
     <ExportAPI("sheetNames")>
     Public Function getSheetNames(file As msXlsx) As vector
-        Return file.SheetNames.DoCall(AddressOf Internal.[Object].vector.asVector)
+        Return file.SheetNames.DoCall(AddressOf RInternal.[Object].vector.asVector)
     End Function
 
     <ExportAPI("write.xlsx")>
@@ -186,13 +187,13 @@ Module xlsx
                               Optional number_format As Object = "~`${getOption('f64.format')}${getOption('digits')}`",
                               Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
-            Return Internal.debug.stop("Empty dataframe object!", env)
+            Return RInternal.debug.stop("Empty dataframe object!", env)
         ElseIf Not file.StringEmpty Then
             ' test if the target table file is not locked by excel
             Dim err As Object = REnv.TryCatch(Function() "".SaveTo(file), debug:=env.globalEnvironment.debugMode)
 
             If Not TypeOf err Is Boolean Then
-                Return Internal.debug.stop(err, env)
+                Return RInternal.debug.stop(err, env)
             End If
         End If
 

@@ -88,6 +88,7 @@ Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
 Imports Idataframe = Microsoft.VisualBasic.Data.csv.IO.DataFrame
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports Rsharp = SMRUCC.Rsharp
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
@@ -345,7 +346,7 @@ Module dataframe
         End If
 
         If check_names Then
-            colNames = Internal.Invokes.base.makeNames(colNames, unique:=True)
+            colNames = RInternal.Invokes.base.makeNames(colNames, unique:=True)
         Else
             ' the underlying base type is dictionary
             ' for columns, this required of the column
@@ -445,7 +446,7 @@ ReturnTable:
             Case GetType(EntityObject)
                 Return DirectCast(x, EntityObject).Properties.Values.ToArray
             Case Else
-                Return Internal.debug.stop(New InvalidCastException(type.FullName), env)
+                Return RInternal.debug.stop(New InvalidCastException(type.FullName), env)
         End Select
     End Function
 
@@ -572,7 +573,7 @@ ReturnTable:
                             End Function) _
                     .PropertyNames
             Else
-                Return Internal.debug.stop(New InvalidProgramException, envir)
+                Return RInternal.debug.stop(New InvalidProgramException, envir)
             End If
         Else
             Dim names As String() = CLRVector.asCharacter(values)
@@ -649,7 +650,7 @@ ReturnTable:
                 End If
             Next
         Else
-            Return Internal.debug.stop(New InvalidProgramException, envir)
+            Return RInternal.debug.stop(New InvalidProgramException, envir)
         End If
 #Enable Warning
 
@@ -708,7 +709,7 @@ ReturnTable:
                         End Function) _
                 .ToArray
         Else
-            Return Internal.debug.stop(New InvalidProgramException, envir)
+            Return RInternal.debug.stop(New InvalidProgramException, envir)
         End If
     End Function
 
@@ -721,7 +722,7 @@ ReturnTable:
         ElseIf baseElement Is GetType(DataSet) Then
             Return dataset.AsObjectEnumerator(Of DataSet).Transpose
         Else
-            Return Internal.debug.stop(New InvalidProgramException, env)
+            Return RInternal.debug.stop(New InvalidProgramException, env)
         End If
     End Function
 
@@ -798,7 +799,7 @@ ReturnTable:
             Dim msg = {$"the given data table file is not exists on your file system!", $"file: {file}"}
 
             If strict Then
-                Return Internal.debug.stop(msg, env)
+                Return RInternal.debug.stop(msg, env)
             Else
                 Call env.AddMessage(msg, MSG_TYPES.WRN)
             End If

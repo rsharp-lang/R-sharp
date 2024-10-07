@@ -68,6 +68,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports ASCII = Microsoft.VisualBasic.Text.ASCII
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports Rsharp = SMRUCC.Rsharp
 
 ''' <summary>
@@ -115,7 +116,7 @@ Module buffer
         ElseIf sizeOf = 64 Then
             Return env.numberFramework(stream, networkOrder, 8, AddressOf BitConverter.ToDouble)
         Else
-            Return Internal.debug.stop($"the given size value '{sizeOf}' is invalid!", env)
+            Return RInternal.debug.stop($"the given size value '{sizeOf}' is invalid!", env)
         End If
     End Function
 
@@ -174,7 +175,7 @@ Module buffer
         ElseIf sizeOf = 64 Then
             Return env.numberFramework(stream, networkOrder, 8, AddressOf BitConverter.ToInt64)
         Else
-            Return Internal.debug.stop($"the given size value '{sizeOf}' is invalid!", env)
+            Return RInternal.debug.stop($"the given size value '{sizeOf}' is invalid!", env)
         End If
     End Function
 

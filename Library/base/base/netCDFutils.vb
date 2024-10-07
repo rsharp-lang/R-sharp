@@ -71,6 +71,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports renv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' netCDF toolkit
@@ -79,7 +80,7 @@ Imports renv = SMRUCC.Rsharp.Runtime
 Module netCDFutils
 
     Sub New()
-        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of variable)(AddressOf printVar)
+        Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of variable)(AddressOf printVar)
     End Sub
 
     Private Function printVar(var As variable) As String
@@ -117,7 +118,7 @@ Module netCDFutils
         ElseIf TypeOf file Is pipeline AndAlso DirectCast(file, pipeline).elementType Like GetType(Byte) Then
             Return New netCDFReader(New BinaryDataReader(New MemoryStream(DirectCast(file, pipeline).populates(Of Byte)(env).ToArray)))
         Else
-            Return Internal.debug.stop(New InvalidProgramException, env)
+            Return RInternal.debug.stop(New InvalidProgramException, env)
         End If
     End Function
 
@@ -127,7 +128,7 @@ Module netCDFutils
             file = netCDFReader.Open(DirectCast(file, String))
         End If
         If Not TypeOf file Is netCDFReader Then
-            Return Internal.debug.stop(New NotImplementedException, env)
+            Return RInternal.debug.stop(New NotImplementedException, env)
         End If
 
         Dim dims = DirectCast(file, netCDFReader).dimensions
@@ -147,7 +148,7 @@ Module netCDFutils
             file = netCDFReader.Open(DirectCast(file, String))
         End If
         If Not TypeOf file Is netCDFReader Then
-            Return Internal.debug.stop(New NotImplementedException, env)
+            Return RInternal.debug.stop(New NotImplementedException, env)
         End If
 
         Dim attrs As attribute() = DirectCast(file, netCDFReader).globalAttributes
@@ -193,7 +194,7 @@ Module netCDFutils
             file = netCDFReader.Open(DirectCast(file, String))
         End If
         If Not TypeOf file Is netCDFReader Then
-            Return Internal.debug.stop(New NotImplementedException, env)
+            Return RInternal.debug.stop(New NotImplementedException, env)
         End If
 
         Dim symbols = DirectCast(file, netCDFReader).variables
@@ -237,7 +238,7 @@ Module netCDFutils
             file = netCDFReader.Open(DirectCast(file, String))
         End If
         If Not TypeOf file Is netCDFReader Then
-            Return Internal.debug.stop(New NotImplementedException, env)
+            Return RInternal.debug.stop(New NotImplementedException, env)
         End If
 
         Dim var As variable = DirectCast(file, netCDFReader).getDataVariableEntry(name)
@@ -253,7 +254,7 @@ Module netCDFutils
             file = netCDFReader.Open(DirectCast(file, String))
         End If
         If Not TypeOf file Is netCDFReader Then
-            Return Internal.debug.stop(New NotImplementedException, env)
+            Return RInternal.debug.stop(New NotImplementedException, env)
         End If
 
         Dim var As variable = DirectCast(file, netCDFReader).getDataVariableEntry(name)
