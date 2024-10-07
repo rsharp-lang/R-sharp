@@ -74,6 +74,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' the ``R#`` terminal console
@@ -317,7 +318,7 @@ an HTML browser interface to help. Type ``q()`` to quit R#.
         Console.WriteLine()
         Console.Title = "R# language"
 
-        Call Internal.invoke.pushEnvir(GetType(Terminal))
+        Call RInternal.invoke.pushEnvir(GetType(Terminal))
 
         AddHandler Console.CancelKeyPress,
             Sub(sender, terminate)

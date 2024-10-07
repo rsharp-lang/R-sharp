@@ -65,10 +65,10 @@ Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
-Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Module Program
 
@@ -94,8 +94,8 @@ Module Program
         If script.IsURLPattern Then
             ' do nothing
         ElseIf Not script.FileExists Then
-            Call Internal.debug.PrintMessageInternal(
-                 Internal.debug.stop({
+            Call RInternal.debug.PrintMessageInternal(
+                 RInternal.debug.stop({
                      $"the given R script file is not found on your filesystem!",
                      $"Rscript: {script}"
                  }, R.globalEnvir),
@@ -108,8 +108,8 @@ Module Program
         Dim Rscript As ShellScript = REnv.Components.Rscript.AutoHandleScript(handle:=script)
 
         If Not Rscript.message.StringEmpty Then
-            Call Internal.debug.PrintMessageInternal(
-                 Internal.debug.stop(Rscript.message, R.globalEnvir), R.globalEnvir
+            Call RInternal.debug.PrintMessageInternal(
+                 RInternal.debug.stop(Rscript.message, R.globalEnvir), R.globalEnvir
             )
 
             Return 500
@@ -337,7 +337,7 @@ Module Program
                     .polyglot _
                     .LoadScript(filepath, R.globalEnvir)
             Else
-                result = Internal.debug.stop({$"unsupported script file type(*.{filepath.ExtensionSuffix})!"}, R.globalEnvir)
+                result = RInternal.debug.stop({$"unsupported script file type(*.{filepath.ExtensionSuffix})!"}, R.globalEnvir)
             End If
         Else
             result = R.Source(filepath)

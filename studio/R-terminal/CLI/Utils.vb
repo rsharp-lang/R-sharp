@@ -65,8 +65,8 @@ Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Partial Module CLI
 
@@ -121,9 +121,9 @@ Partial Module CLI
         Dim config As New Options(localConfigs, saveConfig:=False)
         Dim err As Exception = Nothing
 
-        Internal.debug.verbose = args("--verbose")
-        Internal.debug.write($"load config file: {localConfigs}")
-        Internal.debug.write($"load package registry: {config.lib}")
+        RInternal.debug.verbose = args("--verbose")
+        RInternal.debug.write($"load config file: {localConfigs}")
+        RInternal.debug.write($"load package registry: {config.lib}")
 
         If [module].StringEmpty Then
             [module] = args.Tokens(1)
@@ -228,9 +228,9 @@ Partial Module CLI
         Dim config As New Options(localConfigs, saveConfig:=False)
         Dim file As String = Nothing
 
-        Internal.debug.verbose = args("--verbose")
-        Internal.debug.write($"load config file: {localConfigs}")
-        Internal.debug.write($"load package registry: {config.lib}")
+        RInternal.debug.verbose = args("--verbose")
+        RInternal.debug.write($"load config file: {localConfigs}")
+        RInternal.debug.write($"load package registry: {config.lib}")
 
         App.CurrentDirectory = App.HOME
 
@@ -338,9 +338,9 @@ Partial Module CLI
         Dim inspectObject As Boolean = False
 
         If file.StringEmpty Then
-            result = Internal.debug.stop("missing file path!", R.globalEnvir)
+            result = RInternal.debug.stop("missing file path!", R.globalEnvir)
         ElseIf Not file.FileExists Then
-            result = Internal.debug.stop({$"target file '{file}' is not exists on your filesystem!", $"fullpath: {file.GetFullPath}"}, R.globalEnvir)
+            result = RInternal.debug.stop({$"target file '{file}' is not exists on your filesystem!", $"fullpath: {file.GetFullPath}"}, R.globalEnvir)
         End If
 
         Select Case file.ExtensionSuffix
@@ -355,7 +355,7 @@ Partial Module CLI
                 result = R.Evaluate($"json_decode(readText('{file}'));")
                 inspectObject = True
             Case Else
-                result = Internal.debug.stop(New NotImplementedException(file.ExtensionSuffix), R.globalEnvir)
+                result = RInternal.debug.stop(New NotImplementedException(file.ExtensionSuffix), R.globalEnvir)
         End Select
 
         Return Rscript.handleResult(
