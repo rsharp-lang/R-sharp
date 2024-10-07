@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ' https://stackoverflow.com/questions/55970064/calling-local-julia-package-from-c
 
@@ -74,8 +75,8 @@ Public Class JuliaScriptLoader : Inherits ScriptLoader
     End Property
 
     Shared Sub New()
-        Call Internal.invoke.pushEnvir(GetType(njl.math))
-        Call Internal.invoke.pushEnvir(GetType(njl.io))
+        Call RInternal.invoke.pushEnvir(GetType(njl.math))
+        Call RInternal.invoke.pushEnvir(GetType(njl.io))
     End Sub
 
     Public Overrides Function LoadScript(scriptfile As String, env As Environment) As Object
@@ -108,7 +109,7 @@ Public Class JuliaScriptLoader : Inherits ScriptLoader
         If program Is Nothing Then
             ' there are syntax error in the external script
             ' for current imports action
-            Return Internal.debug.stop("".Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB), env)
+            Return RInternal.debug.stop("".Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB), env)
         Else
             Return program.Execute(env)
         End If
