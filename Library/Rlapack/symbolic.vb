@@ -71,6 +71,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' math symbolic expression for R#
@@ -79,7 +80,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Module symbolic
 
     Friend Sub Main()
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(EvolutionResult()), AddressOf formulaDataFrame)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(EvolutionResult()), AddressOf formulaDataFrame)
     End Sub
 
     Private Function formulaDataFrame(formula As EvolutionResult(), args As list, env As Environment) As dataframe
@@ -111,7 +112,7 @@ Module symbolic
         Return str _
             .populates(Of String)(env) _
             .Select(AddressOf ScriptEngine.ParseExpression) _
-            .DoCall(AddressOf Internal.Object.vector.asVector)
+            .DoCall(AddressOf RInternal.Object.vector.asVector)
     End Function
 
     ''' <summary>
