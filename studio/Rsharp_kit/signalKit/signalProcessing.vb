@@ -56,10 +56,8 @@
 #End Region
 
 Imports System.Drawing
-Imports System.Drawing.Drawing2D
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.csv.IO
@@ -77,6 +75,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports RDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' Signal processing is an electrical engineering subfield that focuses on analyzing, 
@@ -91,11 +90,11 @@ Imports RDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Module signalProcessing
 
     Friend Sub Main()
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(SignalPeak()), AddressOf peakTable)
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Variable()), AddressOf gaussPeaks)
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(GeneralSignal), AddressOf printSignalDf)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(SignalPeak()), AddressOf peakTable)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(Variable()), AddressOf gaussPeaks)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(GeneralSignal), AddressOf printSignalDf)
 
-        Call Internal.generic.add("plot", GetType(Variable()), AddressOf plotPeaksDecomposition)
+        Call RInternal.generic.add("plot", GetType(Variable()), AddressOf plotPeaksDecomposition)
     End Sub
 
     ''' <summary>
