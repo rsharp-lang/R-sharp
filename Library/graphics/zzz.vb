@@ -55,6 +55,7 @@
 
 Imports System.Diagnostics.CodeAnalysis
 Imports System.Drawing
+Imports Microsoft.VisualBasic.Drawing
 Imports SMRUCC.Rsharp.Runtime.Internal
 Imports PdfImage = Microsoft.VisualBasic.Imaging.PDF
 
@@ -90,7 +91,7 @@ Public Class zzz
     End Function
 
     Private Shared Sub RegisterDriver()
-        Call PDFimage.Driver.Init()
+        Call SkiaDriver.Register()
         ' Call Designer.Register("MPL_gist_ncar", loadColors(My.Resources.MPL_gist_ncar))
     End Sub
 End Class
