@@ -132,15 +132,32 @@ Module builder
         Return g
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="cutoff"></param>
+    ''' <param name="sample_label">
+    ''' the node type label of the rows in the given dataframe
+    ''' </param>
+    ''' <param name="feature_label">
+    ''' the node type label of the columns in the given dataframe
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("dataframe.to_graph")>
-    Public Function fromCorDataframe(x As rdataframe, Optional cutoff As Double = 0.65, Optional env As Environment = Nothing) As Object
+    Public Function fromCorDataframe(x As rdataframe, Optional cutoff As Double = 0.65,
+                                     Optional sample_label As String = "Sample",
+                                     Optional feature_label As String = "Feature",
+                                     Optional env As Environment = Nothing) As Object
+
         Dim df = MathDataSet.toFeatureSet(x, env)
 
         If TypeOf df Is Message Then
             Return df
         End If
 
-        Return CorrelationNetwork.BuildNetwork(DirectCast(df, DataFrame), cutoff)
+        Return CorrelationNetwork.BuildNetwork(DirectCast(df, DataFrame), cutoff, sample_label, feature_label)
     End Function
 
     <ExportAPI("similarity_graph")>
