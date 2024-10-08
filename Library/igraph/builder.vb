@@ -65,6 +65,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports DataFrame = Microsoft.VisualBasic.Math.DataFrame.DataFrame
 Imports rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports std = System.Math
 
 ''' <summary>
 ''' helper module for convert datasets to network graph object
@@ -88,6 +89,7 @@ Module builder
                                      Optional threshold As Double = 0.65,
                                      Optional pvalue As Double = 1,
                                      Optional group As list = Nothing,
+                                     Optional top_edges As Integer = Integer.MaxValue,
                                      Optional env As Environment = Nothing) As Object
 
         Dim cor As CorrelationMatrix = TryCast(x, CorrelationMatrix)
@@ -110,6 +112,8 @@ Module builder
                     pval(++i) = New Double(names.Length - 1) {}
                 Next
 
+                ' 20241008
+                ' construct a new correlation matrix
                 cor = New CorrelationMatrix(names.Indexing, corDbl, pval)
             Else
                 Return Message.InCompatibleType(GetType(CorrelationMatrix), x.GetType, env)
@@ -117,6 +121,18 @@ Module builder
         End If
 
         Dim g As NetworkGraph = cor.BuildNetwork(threshold, pvalue).Item1
+
+        If g.graphEdges.Count > top_edges Then
+            ' sort edges by value and get top edges
+            Dim filters = g.graphEdges _
+                .OrderByDescending(Function(e) std.Abs(e.weight)) _
+                .Skip(top_edges) _
+                .ToArray
+
+            For Each edge As Edge In filters
+                Call g.RemoveEdge(edge)
+            Next
+        End If
 
         If Not group Is Nothing Then
             Dim class_labels As Dictionary(Of String, String) = group.AsGeneric(env, "no_class")
