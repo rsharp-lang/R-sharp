@@ -83,6 +83,8 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Text.ASCIIArt
+
 
 #If NET48 Then
 Imports Pen = System.Drawing.Pen
