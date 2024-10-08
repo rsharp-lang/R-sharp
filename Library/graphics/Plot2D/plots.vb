@@ -112,7 +112,6 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -120,8 +119,34 @@ Imports any = Microsoft.VisualBasic.Scripting
 Imports gaussVariable = Microsoft.VisualBasic.Math.SignalProcessing.EmGaussian.Variable
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports RgraphicsDev = SMRUCC.Rsharp.Runtime.Internal.Invokes.graphics
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
+
+#If NET48 Then
+Imports Pen = System.Drawing.Pen
+Imports Pens = System.Drawing.Pens
+Imports Brush = System.Drawing.Brush
+Imports Font = System.Drawing.Font
+Imports Brushes = System.Drawing.Brushes
+Imports SolidBrush = System.Drawing.SolidBrush
+Imports DashStyle = System.Drawing.Drawing2D.DashStyle
+Imports Image = System.Drawing.Image
+Imports Bitmap = System.Drawing.Bitmap
+Imports GraphicsPath = System.Drawing.Drawing2D.GraphicsPath
+Imports FontStyle = System.Drawing.FontStyle
+#Else
+Imports Pen = Microsoft.VisualBasic.Imaging.Pen
+Imports Pens = Microsoft.VisualBasic.Imaging.Pens
+Imports Brush = Microsoft.VisualBasic.Imaging.Brush
+Imports Font = Microsoft.VisualBasic.Imaging.Font
+Imports Brushes = Microsoft.VisualBasic.Imaging.Brushes
+Imports SolidBrush = Microsoft.VisualBasic.Imaging.SolidBrush
+Imports DashStyle = Microsoft.VisualBasic.Imaging.DashStyle
+Imports Image = Microsoft.VisualBasic.Imaging.Image
+Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
+Imports GraphicsPath = Microsoft.VisualBasic.Imaging.GraphicsPath
+Imports FontStyle = Microsoft.VisualBasic.Imaging.FontStyle
+#End If
 
 ''' <summary>
 ''' chartting plots for R#
@@ -280,7 +305,7 @@ Module plots
 
         If classList.Length <> x.Length Then
             If env.globalEnvironment.Rscript.strict Then
-                Return Internal.debug.stop({
+                Return RInternal.debug.stop({
                     $"the size of the point class ({classList.Length}) is not equals to the size of the given data point ({x.Length})!",
                     $"class_size: {classList.Length}",
                     $"point_size: {x.Length}"
@@ -722,7 +747,7 @@ Module plots
         Dim colors As LoopArray(Of Color) = Designer.GetColors(colorSet)
 
         If x Is Nothing Then
-            Return Internal.debug.stop("the requred x data object can not be nothing!", env)
+            Return RInternal.debug.stop("the requred x data object can not be nothing!", env)
         ElseIf TypeOf x Is list Then
             For Each tag As NamedValue(Of Object) In DirectCast(x, list).namedValues
                 data += New FractionData With {
@@ -1095,7 +1120,7 @@ Module plots
                                  Optional env As Environment = Nothing) As Object
 
         If data Is Nothing Then
-            Return Internal.debug.stop("the required dataset is nothing!", env)
+            Return RInternal.debug.stop("the required dataset is nothing!", env)
         End If
 
         Dim type As Type = REnv.MeasureArrayElementType(data)
@@ -1152,7 +1177,7 @@ Module plots
         }
 
         If polygon Is Nothing Then
-            Return Internal.debug.stop("polygon data can not be nothing!", env)
+            Return RInternal.debug.stop("polygon data can not be nothing!", env)
         ElseIf TypeOf polygon Is list Then
             Dim names As String() = DirectCast(polygon, list).getNames
             Dim pathData = names.Select(AddressOf DirectCast(polygon, list).getByName).ToArray
@@ -1199,7 +1224,7 @@ Module plots
 
 
         If data Is Nothing Then
-            Return Internal.debug.stop("object 'data' can not be nothing!", env)
+            Return RInternal.debug.stop("object 'data' can not be nothing!", env)
         ElseIf TypeOf data Is Rdataframe Then
             Dim x As Double() = CLRVector.asNumeric(DirectCast(data, Rdataframe).columns("x"))
             Dim y As Double() = CLRVector.asNumeric(DirectCast(data, Rdataframe).columns("y"))

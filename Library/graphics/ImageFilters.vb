@@ -65,6 +65,9 @@ Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
+Imports Image = Microsoft.VisualBasic.Imaging.Image
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 <Package("filter")>
 Module ImageFilters
@@ -136,7 +139,7 @@ Module ImageFilters
         If TypeOf image Is Image OrElse TypeOf image Is Bitmap Then
             image = CType(image, Image)
         Else
-            Return Internal.debug.stop({$"required of the gdi+ image data! (given {image.GetType.FullName})"}, env)
+            Return RInternal.debug.stop({$"required of the gdi+ image data! (given {image.GetType.FullName})"}, env)
         End If
 
         Dim bitmap As New Bitmap(DirectCast(image, Image))
