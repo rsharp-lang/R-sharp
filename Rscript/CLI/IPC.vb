@@ -1,53 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::d4bb04e8417bdae9cea2ea96ac83ddf1, Rscript\CLI\IPC.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 324
-    '    Code Lines: 257 (79.32%)
-    ' Comment Lines: 23 (7.10%)
-    '    - Xml Docs: 69.57%
-    ' 
-    '   Blank Lines: 44 (13.58%)
-    '     File Size: 13.55 KB
+' Summaries:
 
 
-    ' Module CLI
-    ' 
-    '     Function: fetch_arguments, postResult, slaveMode, tryHandleJSON
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 324
+'    Code Lines: 257 (79.32%)
+' Comment Lines: 23 (7.10%)
+'    - Xml Docs: 69.57%
+' 
+'   Blank Lines: 44 (13.58%)
+'     File Size: 13.55 KB
+
+
+' Module CLI
+' 
+'     Function: fetch_arguments, postResult, slaveMode, tryHandleJSON
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -70,6 +70,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports IPEndPoint = Microsoft.VisualBasic.Net.IPEndPoint
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Partial Module CLI
 
@@ -191,7 +192,7 @@ Partial Module CLI
             Call msgErr.PrintException
 
             Return R.globalEnvir.postResult(
-                result:=Internal.debug.stop({
+                result:=RInternal.debug.stop({
                     msgErr,
                     $"file: {script}",
                     $"workdir: {App.CurrentDirectory}",
@@ -367,7 +368,7 @@ Partial Module CLI
 
         If Not result Is Nothing AndAlso result.GetType Is GetType(Message) Then
             Call App.LogException(DirectCast(result, Message).ToCLRException)
-            Call Internal.debug.PrintMessageInternal(result, env.globalEnvironment)
+            Call RInternal.debug.PrintMessageInternal(result, env.globalEnvironment)
 
             Return DirectCast(result, Message).level
         Else

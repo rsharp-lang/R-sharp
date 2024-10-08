@@ -58,6 +58,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' .NET CLR tools
@@ -80,7 +81,7 @@ Public Module CLRTool
         If pstr.FileExists Then
             Return Assembly.LoadFile(pstr.GetFullPath)
         ElseIf pstr.isFilePath(includeWindowsFs:=True) Then
-            Return Internal.debug.stop({
+            Return RInternal.debug.stop({
                 $".NET assembly is not exists on the given file location: '{pstr}'",
                 $"Full_path: {pstr.GetFullPath}"
             }, env)
@@ -111,7 +112,7 @@ Public Module CLRTool
             .ToArray
 
         If methods.Length = 0 Then
-            Return Internal.debug.stop("method could not be found!", env)
+            Return RInternal.debug.stop("method could not be found!", env)
         End If
 
         ' get given methods list may contains multiple

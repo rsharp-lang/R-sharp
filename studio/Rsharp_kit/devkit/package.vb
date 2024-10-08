@@ -55,9 +55,7 @@
 #End Region
 
 Imports System.IO
-Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
-Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
@@ -72,12 +70,13 @@ Imports SMRUCC.Rsharp.RDataSet.Struct
 Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports R = SMRUCC.Rsharp.Runtime.Components.Rscript
 Imports LibDir = Microsoft.VisualBasic.FileIO.Directory
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports R = SMRUCC.Rsharp.Runtime.Components.Rscript
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 <Package("package_utils")>
 Module package
@@ -151,7 +150,7 @@ Module package
                 ' source from github
                 Return github.hotLoad(package.Substring(1))
             Else
-                Return Internal.debug.stop({$"invalid package source: '{package}'!", $"source: {package}"}, env)
+                Return RInternal.debug.stop({$"invalid package source: '{package}'!", $"source: {package}"}, env)
             End If
         ElseIf package.DirectoryExists Then
             ' is dir
@@ -160,7 +159,7 @@ Module package
             ' source from github
             Return github.hotLoad(package.Substring(1))
         Else
-            Return Internal.debug.stop({$"invalid package source: '{package}'!", $"source: {package}"}, env)
+            Return RInternal.debug.stop({$"invalid package source: '{package}'!", $"source: {package}"}, env)
         End If
     End Function
 

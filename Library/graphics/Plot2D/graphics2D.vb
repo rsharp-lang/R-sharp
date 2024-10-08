@@ -63,13 +63,11 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Axis
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
-Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Math2D.MarchingSquares
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
-Imports Microsoft.VisualBasic.Imaging.Drawing2D.Text.ASCIIArt
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Imaging.Math2D
 Imports Microsoft.VisualBasic.Linq
@@ -81,11 +79,36 @@ Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports R_graphics.Common.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports Canvas = Microsoft.VisualBasic.Imaging.Graphics2D
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+
+#If NET48 Then
+Imports Pen = System.Drawing.Pen
+Imports Pens = System.Drawing.Pens
+Imports Brush = System.Drawing.Brush
+Imports Font = System.Drawing.Font
+Imports Brushes = System.Drawing.Brushes
+Imports SolidBrush = System.Drawing.SolidBrush
+Imports DashStyle = System.Drawing.Drawing2D.DashStyle
+Imports Image = System.Drawing.Image
+Imports Bitmap = System.Drawing.Bitmap
+Imports GraphicsPath = System.Drawing.Drawing2D.GraphicsPath
+Imports FontStyle = System.Drawing.FontStyle
+#Else
+Imports Pen = Microsoft.VisualBasic.Imaging.Pen
+Imports Pens = Microsoft.VisualBasic.Imaging.Pens
+Imports Brush = Microsoft.VisualBasic.Imaging.Brush
+Imports Font = Microsoft.VisualBasic.Imaging.Font
+Imports Brushes = Microsoft.VisualBasic.Imaging.Brushes
+Imports SolidBrush = Microsoft.VisualBasic.Imaging.SolidBrush
+Imports DashStyle = Microsoft.VisualBasic.Imaging.DashStyle
+Imports Image = Microsoft.VisualBasic.Imaging.Image
+Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
+Imports GraphicsPath = Microsoft.VisualBasic.Imaging.GraphicsPath
+Imports FontStyle = Microsoft.VisualBasic.Imaging.FontStyle
+#End If
 
 ''' <summary>
 ''' 2D graphics
@@ -95,7 +118,7 @@ Imports Canvas = Microsoft.VisualBasic.Imaging.Graphics2D
 Module graphics2DTools
 
     Sub New()
-        Call Internal.generic.add("plot", GetType(ColorMapLegend), AddressOf plotColorMap)
+        Call RInternal.generic.add("plot", GetType(ColorMapLegend), AddressOf plotColorMap)
     End Sub
 
     ''' <summary>
@@ -112,7 +135,7 @@ Module graphics2DTools
         Dim barmap As Boolean = CLRVector.asLogical(args.getBySynonyms("bar")).DefaultFirst([default]:=False)
 
         If barmap Then
-            Dim g As Canvas = New Size(256, 1).CreateGDIDevice
+            Dim g As IGraphics = DriverLoad.CreateGraphicsDevice(New Size(256, 1), driver:=Drivers.GDI)
             Dim colors As Brush() = legend.ScaleColors(n:=256) _
                 .Select(Function(c) DirectCast(New SolidBrush(c), Brush)) _
                 .ToArray
@@ -123,7 +146,7 @@ Module graphics2DTools
 
             Call g.Flush()
 
-            Return g.ImageResource
+            Return DirectCast(g, GdiRasterGraphics).ImageResource
         ElseIf Not size.SizeParser.IsValidGDIParameter Then
             ' draw on current graphics context
             Dim dev As graphicsDevice = curDev
@@ -311,7 +334,7 @@ Module graphics2DTools
             canvas = curDev.g
         End If
         If canvas Is Nothing Then
-            canvas = New Bitmap(1, 1).CreateCanvas2D
+            canvas = DriverLoad.CreateGraphicsDevice(New Size(1, 1), driver:=Drivers.GDI)
         End If
 
         Dim fontStyle As Font
@@ -345,9 +368,9 @@ Module graphics2DTools
         End If
 
         If TypeOf canvas Is ImageData Then
-            g = New Canvas(DirectCast(canvas, ImageData).AsGDIImage)
+            g = DriverLoad.CreateGraphicsDevice(DirectCast(canvas, ImageData).AsGDIImage)
         ElseIf TypeOf canvas Is Bitmap OrElse TypeOf canvas Is Image Then
-            g = New Canvas(DirectCast(canvas, Image))
+            g = DriverLoad.CreateGraphicsDevice(DirectCast(canvas, Image))
         ElseIf TypeOf canvas Is IGraphics Then
             g = canvas
         Else
@@ -356,11 +379,11 @@ Module graphics2DTools
 
         Call g.DrawLegends(location, legends, gSize:=InteropArgumentHelper.getSize(gSize, env), regionBorder:=stroke)
 
-        Select Case g.GetType
-            Case GetType(Canvas) : Return DirectCast(g, Canvas).ImageResource
-            Case Else
-                Throw New NotImplementedException
-        End Select
+        If g.GetType.ImplementInterface(Of GdiRasterGraphics) Then
+            Return DirectCast(g, GdiRasterGraphics).ImageResource
+        End If
+
+        Return Nothing
     End Function
 
     <ExportAPI("rect")>
@@ -458,7 +481,7 @@ Module graphics2DTools
                 offsetPt = New PointF(CDbl(.GetValue(Scan0)), CDbl(.GetValue(1)))
             End With
         Else
-            Return Internal.debug.stop(Message.InCompatibleType(GetType(PointF), offset.GetType, env,, NameOf(offset)), env)
+            Return RInternal.debug.stop(Message.InCompatibleType(GetType(PointF), offset.GetType, env,, NameOf(offset)), env)
         End If
 
         If TypeOf layout Is Point Then
@@ -470,7 +493,7 @@ Module graphics2DTools
         ElseIf TypeOf layout Is RectangleF Then
             Return DirectCast(layout, RectangleF).OffSet2D(offsetPt)
         Else
-            Return Internal.debug.stop(Message.InCompatibleType(GetType(PointF), layout.GetType, env,, NameOf(layout)), env)
+            Return RInternal.debug.stop(Message.InCompatibleType(GetType(PointF), layout.GetType, env,, NameOf(layout)), env)
         End If
     End Function
 
@@ -551,7 +574,7 @@ Module graphics2DTools
         End If
 
         If dev.g Is Nothing Then
-            Return Internal.debug.stop({
+            Return RInternal.debug.stop({
                 "the graphics device has not been opened yet, you should use the bitmap function for create a new at first!",
                 "(the acceptor closure syntax of the bitmap function is not working at here!)"
             }, env)
@@ -745,7 +768,7 @@ Module graphics2DTools
         Dim bitmap As Image
 
         If image Is Nothing Then
-            Return Internal.debug.stop("the required bitmap data can not be nothing!", env)
+            Return RInternal.debug.stop("the required bitmap data can not be nothing!", env)
         ElseIf TypeOf image Is Image Then
             bitmap = DirectCast(image, Image)
         ElseIf TypeOf image Is Bitmap Then

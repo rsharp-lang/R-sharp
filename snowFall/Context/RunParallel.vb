@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::0868562e61930ca5ca88420c90ff56d4, snowFall\Context\RunParallel.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 306
-    '    Code Lines: 231 (75.49%)
-    ' Comment Lines: 37 (12.09%)
-    '    - Xml Docs: 83.78%
-    ' 
-    '   Blank Lines: 38 (12.42%)
-    '     File Size: 12.14 KB
+' Summaries:
 
 
-    ' Class RunParallel
-    ' 
-    '     Properties: [error], debug, debugPort, master, seqSet
-    '                 size, slaveDebug, task, taskNames, worker
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: getSymbol, Initialize, readSymbolSet, setTaskNames, taskFactory
-    ' 
-    '     Sub: getResult
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 306
+'    Code Lines: 231 (75.49%)
+' Comment Lines: 37 (12.09%)
+'    - Xml Docs: 83.78%
+' 
+'   Blank Lines: 38 (12.42%)
+'     File Size: 12.14 KB
+
+
+' Class RunParallel
+' 
+'     Properties: [error], debug, debugPort, master, seqSet
+'                 size, slaveDebug, task, taskNames, worker
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: getSymbol, Initialize, readSymbolSet, setTaskNames, taskFactory
+' 
+'     Sub: getResult
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -78,6 +78,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports snowFall.Context.RPC
 Imports R = Rserver.RscriptCommandLine.Rscript
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' context_analysis -> symbols -> serialization -> parallel_slave
@@ -269,7 +270,7 @@ Public Class RunParallel
         End If
 
         If checkSize.Distinct.Count <> 1 Then
-            Return Internal.debug.stop("the sequence size should be equals to each other!", env)
+            Return RInternal.debug.stop("the sequence size should be equals to each other!", env)
         Else
             Return New RunParallel With {
                 .master = parallelBase,
@@ -344,7 +345,7 @@ Public Class RunParallel
                 ElseIf Not env.FindSymbol(symbol.Name) Is Nothing Then
                     parallelBase.push(symbol.Name, env.FindSymbol(symbol.Name).value)
                     Continue For
-                ElseIf Internal.invoke.getFunction(symbol.Name) IsNot Nothing Then
+                ElseIf RInternal.invoke.getFunction(symbol.Name) IsNot Nothing Then
                     Continue For
                 ElseIf symbol.Name Like locals Then
                     Continue For

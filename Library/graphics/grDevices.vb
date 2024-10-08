@@ -62,10 +62,10 @@ Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Driver
-Imports Microsoft.VisualBasic.Imaging.PDF
 Imports Microsoft.VisualBasic.Imaging.SVG
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -79,8 +79,11 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports any = Microsoft.VisualBasic.Scripting
+Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
 Imports bitmapBuffer = SMRUCC.Rsharp.Runtime.Serialize.bitmapBuffer
+Imports Image = Microsoft.VisualBasic.Imaging.Image
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal
+
 
 ''' <summary>
 ''' The R# Graphics Devices and Support for Colours and Fonts
@@ -124,7 +127,7 @@ Public Module grDevices
             If buffer Like GetType(Message) Then
                 Return buffer.TryCast(Of Message)
             Else
-                Dim pdfImage = PDF.Driver.OpenDevice(size)
+                Dim pdfImage = pdf.Driver.OpenDevice(size)
 
                 Call pdfImage.Clear(fill)
                 Call R_graphics.Common.Runtime.graphics.openNew(
@@ -309,13 +312,13 @@ Public Module grDevices
                               Optional env As Environment = Nothing) As Object
 
         If graphics Is Nothing Then
-            Return Internal.debug.stop("Graphics data is NULL!", env)
+            Return REnv.debug.stop("Graphics data is NULL!", env)
         ElseIf graphics.GetType Is GetType(Image) Then
             Return saveBitmap(Of Image)(graphics, file, env)
         ElseIf graphics.GetType Is GetType(Bitmap) Then
             Return saveBitmap(Of Bitmap)(graphics, file, env)
-        ElseIf TypeOf graphics Is Microsoft.VisualBasic.Imaging.Graphics2D Then
-            Return saveBitmap(Of Image)(DirectCast(graphics, Microsoft.VisualBasic.Imaging.Graphics2D).ImageResource, file, env)
+        ElseIf graphics.GetType().ImplementInterface(Of GdiRasterGraphics) Then
+            Return saveBitmap(Of Image)(DirectCast(graphics, GdiRasterGraphics).ImageResource, file, env)
         ElseIf graphics.GetType.IsInheritsFrom(GetType(GraphicsData)) Then
             With DirectCast(graphics, GraphicsData)
                 If file Is Nothing OrElse TypeOf file Is String AndAlso DirectCast(file, String).StringEmpty Then
@@ -342,7 +345,7 @@ Public Module grDevices
                 End If
             End With
         Else
-            Return Internal.debug.stop(New InvalidProgramException($"'{graphics.GetType.Name}' is not a graphics data object!"), env)
+            Return REnv.debug.stop(New InvalidProgramException($"'{graphics.GetType.Name}' is not a graphics data object!"), env)
         End If
 
         Return Nothing
@@ -360,7 +363,7 @@ Public Module grDevices
         If file Is Nothing OrElse TypeOf file Is String AndAlso DirectCast(file, String).StringEmpty Then
             env.globalEnvironment.stdout.Write(DirectCast(graphics, Image))
         ElseIf TypeOf file Is String Then
-            Return DirectCast(graphics, Image).SaveAs(file, getFormatFromSuffix(filename:=file))
+            Call DirectCast(graphics, Image).Save(file, getFormatFromSuffix(filename:=file))
         ElseIf TypeOf file Is Stream Then
             ' save as png image by default for stream object
             ' due to the reason of we can not detected the
@@ -380,15 +383,15 @@ Public Module grDevices
         Return Nothing
     End Function
 
-    Private Function tryMeasureFormat(file As Stream) As ImageFormat
+    Private Function tryMeasureFormat(file As Stream) As ImageFormats
         If TypeOf file Is FileStream Then
             Dim fs As FileStream = DirectCast(file, FileStream)
             Dim filename As String = fs.Name
             Dim format As ImageFormats = getFormatFromSuffix(filename)
 
-            Return format.GetFormat
+            Return format
         Else
-            Return ImageFormat.Png
+            Return ImageFormats.Png
         End If
     End Function
 
@@ -420,7 +423,7 @@ Public Module grDevices
                 ' only works for jpeg
                 Dim jpeg As Image = DirectCast(image, ImageData).Image
             Case Else
-                Return Internal.debug.stop(New NotImplementedException, env)
+                Return REnv.debug.stop(New NotImplementedException, env)
         End Select
 
         Return image

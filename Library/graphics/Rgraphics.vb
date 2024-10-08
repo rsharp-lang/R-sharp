@@ -76,6 +76,9 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
+Imports Image = Microsoft.VisualBasic.Imaging.Image
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
 ''' <summary>
@@ -87,7 +90,7 @@ Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 Module Rgraphics
 
     Sub Main()
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(RasterScaler), AddressOf raster_dataframe)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(RasterScaler), AddressOf raster_dataframe)
     End Sub
 
     ''' <summary>
@@ -125,7 +128,7 @@ Module Rgraphics
         Else
             ' get colors from a color palette value
             If colorSet.StringEmpty Then
-                Return Internal.debug.stop("Invalid color set was provided!", env)
+                Return RInternal.debug.stop("Invalid color set was provided!", env)
             Else
                 colorList = Designer.GetColors(colorSet)
             End If
@@ -441,8 +444,6 @@ Module Rgraphics
         Call R_graphics.Common.Runtime.graphics.devOff(env:=env)
         Call ms.Flush()
 
-#Disable Warning
-        Return System.Drawing.Image.FromStream(ms)
-#Enable Warning
+        Return Global.Microsoft.VisualBasic.Imaging.Image.FromStream(ms)
     End Function
 End Module

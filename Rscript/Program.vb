@@ -60,11 +60,11 @@ Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports Libdir = Microsoft.VisualBasic.FileIO.Directory
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 Imports RscriptText = SMRUCC.Rsharp.Runtime.Components.Rscript
-Imports Libdir = Microsoft.VisualBasic.FileIO.Directory
 
 ''' <summary>
 ''' 
@@ -144,7 +144,7 @@ Module Program
 
         If Not [error].StringEmpty Then
             Call App.LogException([error])
-            Call handleResult(Internal.debug.stop([error], R.globalEnvir), R.globalEnvir, Nothing)
+            Call handleResult(RInternal.debug.stop([error], R.globalEnvir), R.globalEnvir, Nothing)
 
             Return 500
         Else

@@ -68,6 +68,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.[Object].dataframe
 Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Module RCallbackMessage
 
@@ -75,7 +76,7 @@ Module RCallbackMessage
         Dim err As String
 
         Using buffer As New MemoryStream, output As New StreamWriter(buffer)
-            Call Internal.debug.writeErrMessage(message, stdout:=output, redirectError2stdout:=True)
+            Call RInternal.debug.writeErrMessage(message, stdout:=output, redirectError2stdout:=True)
             Call buffer.Flush()
 
             err = Encoding.UTF8.GetString(buffer.ToArray)

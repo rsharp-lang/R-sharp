@@ -52,7 +52,6 @@
 #End Region
 
 Imports System.ComponentModel
-Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -70,6 +69,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports any = Microsoft.VisualBasic.Scripting
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Partial Module CLI
 
@@ -140,7 +140,7 @@ Partial Module CLI
         Dim run As Object = renv.getLambdaArguments(file:=request_argv, debugMode)
 
         If callable Is Nothing OrElse callable.value Is Nothing Then
-            result = Internal.debug.stop({
+            result = RInternal.debug.stop({
                 $"can not found the symbol({del_func}) could be invoke!",
                 $"del_func: {del_func}"
             }, renv.globalEnvir)
@@ -237,7 +237,7 @@ Partial Module CLI
                 run(i) = New InvokeParameter(index, argv.getByName(index), i)
             Else
                 ' missing the required parameter
-                Return Internal.debug.stop({
+                Return RInternal.debug.stop({
                     $"missing the required parameter({name}) with no default value!",
                     $"parameter: {name}"
                 }, env)
