@@ -154,6 +154,7 @@ Namespace Runtime.Internal.Invokes
             If Not tqdm_bar Is Nothing Then
                 Try
                     Call tqdm_bar.SetLabel(label)
+                    Call tqdm_bar.Progress(tqdm_bar.CurrentTicks)
                 Catch ex As Exception
                     ' do nothing
                     ' just ignores this error
