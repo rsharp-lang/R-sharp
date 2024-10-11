@@ -558,6 +558,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Return doListSubset(list, subsetKeys)
         End Function
 
+        ''' <summary>
+        ''' translate the integer index to tuple list keys for make tuple list subset
+        ''' </summary>
+        ''' <param name="indexer">1-based integer index keys</param>
+        ''' <param name="allkeys"></param>
+        ''' <returns></returns>
         Private Shared Function translateInteger2keys(indexer As Array, allkeys As Object()) As Array
             Dim i As New List(Of Object)
 
@@ -566,7 +572,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             ' at the code above
             ' so make the index to integer at here
             For Each flag As Integer In CLRVector.asInteger(indexer)
-                If flag >= allkeys.Length Then
+                If flag > allkeys.Length Then
                     Call i.Add(Nothing)
                 Else
                     Call i.Add(allkeys(flag - 1))
