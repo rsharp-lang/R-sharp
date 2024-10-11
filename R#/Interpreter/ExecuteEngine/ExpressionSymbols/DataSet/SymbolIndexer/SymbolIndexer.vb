@@ -73,7 +73,6 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
@@ -521,6 +520,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
         End Function
 
+        ''' <summary>
+        ''' make the tuple list subset
+        ''' </summary>
+        ''' <param name="list"></param>
+        ''' <param name="indexer"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Private Shared Function listSubset(list As IDictionary, indexer As Array, env As Environment) As Object
             Dim allKeys = (From x In list.Keys).ToArray
             Dim subsetKeys As Array
@@ -529,8 +535,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 ' get by names
                 subsetKeys = CLRVector.asCharacter(indexer)
             Else
-                If indexer.Length >= list.Count Then
-                    env.AddMessage($"the index size({indexer.Length}) is greater than the size({list.Count}) of the target list!", MSG_TYPES.WRN)
+                If indexer.Length > list.Count Then
+                    Call env.AddMessage({
+                        $"the index size({indexer.Length}) is greater than the size({list.Count}) of the target list!",
+                        $"missing value or duplicated value may happends."
+                    }, MSG_TYPES.WRN)
                 End If
 
                 ' translate the bool vector or integer vector 
