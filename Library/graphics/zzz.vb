@@ -57,7 +57,6 @@ Imports System.Diagnostics.CodeAnalysis
 Imports System.Drawing
 Imports Microsoft.VisualBasic.Drawing
 Imports SMRUCC.Rsharp.Runtime.Internal
-Imports PdfImage = Microsoft.VisualBasic.Imaging.PDF
 
 <Assembly: SuppressMessage("", "CA1416")>
 

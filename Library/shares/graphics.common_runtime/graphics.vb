@@ -82,9 +82,10 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports Microsoft.VisualBasic.Drawing
 
 #If NET48 Then
+Imports Microsoft.VisualBasic.Drawing
+
 Imports Pen = System.Drawing.Pen
 Imports Pens = System.Drawing.Pens
 Imports Brush = System.Drawing.Brush
