@@ -6,3 +6,7 @@ print(order(names(l)));
 
 str(l);
 str(s);
+
+a = rev(1:6);
+
+print(a[c(3,5,6,1,1,1,2,4)]);
