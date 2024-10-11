@@ -85,10 +85,12 @@ Namespace Development.CodeAnalysis
         End Sub
 
         Public Sub Flush()
-            If symbol.isSymbol Then
-                Call WriteSymbol()
-            Else
-                Call WriteFunction()
+            If Not symbol Is Nothing Then
+                If symbol.isSymbol Then
+                    Call WriteSymbol()
+                Else
+                    Call WriteFunction()
+                End If
             End If
         End Sub
 
