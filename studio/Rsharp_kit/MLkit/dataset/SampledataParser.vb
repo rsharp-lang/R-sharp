@@ -59,12 +59,13 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Module SampledataParser
 
     Public Function Convert(x As Object, env As Environment) As [Variant](Of Message, SampleData())
         If x Is Nothing Then
-            Return Internal.debug.stop("the required sample data should not be nothing", env)
+            Return RInternal.debug.stop("the required sample data should not be nothing", env)
         End If
 
         Throw New NotImplementedException
@@ -72,7 +73,7 @@ Module SampledataParser
 
     Public Function ConvertVAE(x As Object, env As Environment) As [Variant](Of Message, SampleData())
         If x Is Nothing Then
-            Return Internal.debug.stop("the required sample data x should not be nothing!", env)
+            Return RInternal.debug.stop("the required sample data x should not be nothing!", env)
         End If
 
         If TypeOf x Is dataframe Then

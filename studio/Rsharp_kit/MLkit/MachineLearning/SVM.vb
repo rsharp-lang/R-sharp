@@ -1,62 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::1c163113f34848ec1167711294961705, studio\Rsharp_kit\MLkit\MachineLearning\SVM.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 589
-    '    Code Lines: 423 (71.82%)
-    ' Comment Lines: 83 (14.09%)
-    '    - Xml Docs: 93.98%
-    ' 
-    '   Blank Lines: 83 (14.09%)
-    '     File Size: 23.79 KB
+' Summaries:
 
 
-    ' Module SVMkit
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: expandProblem, getSvmModel, joinTable, NewProblem, packCache
-    '               ParseProblemTableJSON, parseSVMJSON, plotROC, problemDataframe, problemsDataframe
-    '               problemValidateLabels, svmClassify, SVMJSON, svmModelTrimNULL, svmValidates
-    '               trainSVMModel, trimSingleProblem, validateMultipleSvmModel, validateSingleSvmModel
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 589
+'    Code Lines: 423 (71.82%)
+' Comment Lines: 83 (14.09%)
+'    - Xml Docs: 93.98%
+' 
+'   Blank Lines: 83 (14.09%)
+'     File Size: 23.79 KB
+
+
+' Module SVMkit
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: expandProblem, getSvmModel, joinTable, NewProblem, packCache
+'               ParseProblemTableJSON, parseSVMJSON, plotROC, problemDataframe, problemsDataframe
+'               problemValidateLabels, svmClassify, SVMJSON, svmModelTrimNULL, svmValidates
+'               trainSVMModel, trimSingleProblem, validateMultipleSvmModel, validateSingleSvmModel
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
-Imports System.Drawing.Drawing2D
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -81,10 +80,11 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports DashStyle = Microsoft.VisualBasic.Imaging.DashStyle
 Imports dataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports Parameter = Microsoft.VisualBasic.MachineLearning.SVM.Parameter
-Imports REnv = SMRUCC.Rsharp.Runtime
-Imports stdNum = System.Math
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+Imports std = System.Math
 
 <Package("SVM")>
 <RTypeExport("problem", GetType(Problem))>
@@ -93,12 +93,12 @@ Imports stdNum = System.Math
 Module SVMkit
 
     Sub New()
-        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of ColorClass)(Function(o) o.ToString)
+        Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of ColorClass)(Function(o) o.ToString)
 
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Problem), AddressOf problemDataframe)
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(ProblemTable), AddressOf problemsDataframe)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(Problem), AddressOf problemDataframe)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(ProblemTable), AddressOf problemsDataframe)
 
-        Call Internal.generic.add("plot", GetType(PerformanceEvaluator), AddressOf plotROC)
+        Call RInternal.generic.add("plot", GetType(PerformanceEvaluator), AddressOf plotROC)
     End Sub
 
     Private Function plotROC(validates As PerformanceEvaluator, args As list, env As Environment) As Object
@@ -177,7 +177,7 @@ Module SVMkit
             For Each name As String In problem.dimensionNames
                 Dim val As Double = problem.vectors(Scan0)(name)
 
-                If problem.vectors.All(Function(vec) stdNum.Abs(vec(name) - val) <= 0.000000001) Then
+                If problem.vectors.All(Function(vec) std.Abs(vec(name) - val) <= 0.000000001) Then
                     For Each vec As SupportVector In problem.vectors
                         vec.Properties.Remove(name)
                     Next
@@ -206,7 +206,7 @@ Module SVMkit
             Dim val As Double = problem.X(Scan0)(i).value
             Dim j = i
 
-            If problem.X.Any(Function(row) stdNum.Abs(row(j).value - val) > 0.0000001) Then
+            If problem.X.Any(Function(row) std.Abs(row(j).value - val) > 0.0000001) Then
                 trim.Add(problem.X.Select(Function(row) row(j)).ToArray)
                 dimNames.Add(problem.dimensionNames(j))
             End If
@@ -236,7 +236,7 @@ Module SVMkit
     <RApiReturn(GetType(Problem))>
     Public Function NewProblem(<RRawVectorArgument> dimensions As Object, Optional env As Environment = Nothing) As Object
         If dimensions Is Nothing Then
-            Return Internal.debug.stop("the required SVM dimension can not be nothing!", env)
+            Return RInternal.debug.stop("the required SVM dimension can not be nothing!", env)
         End If
 
         Dim dimRaw = pipeline.TryCreatePipeline(Of Integer)(dimensions, env, suppress:=True)
@@ -396,7 +396,7 @@ Module SVMkit
         }
 
         If problem Is Nothing Then
-            Return Internal.debug.stop("the required SVM training dataset can not be nothing!", env)
+            Return RInternal.debug.stop("the required SVM training dataset can not be nothing!", env)
         End If
 
         If Not (TypeOf problem Is Problem OrElse TypeOf problem Is ProblemTable) Then
@@ -474,7 +474,7 @@ Module SVMkit
     <RApiReturn(GetType(SVMModel), GetType(SVMMultipleSet))>
     Public Function parseSVMJSON(x As Object, Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
-            Return Internal.debug.stop("the required json value can not be nothing!", env)
+            Return RInternal.debug.stop("the required json value can not be nothing!", env)
         End If
 
         Dim jsonObj As JsonObject
@@ -537,7 +537,7 @@ Module SVMkit
     <ExportAPI("svm_classify")>
     Public Function svmClassify(svm As Object, data As Object, Optional env As Environment = Nothing) As Object
         If svm Is Nothing Then
-            Return Internal.debug.stop("the required svm model can not be nothing!", env)
+            Return RInternal.debug.stop("the required svm model can not be nothing!", env)
         ElseIf TypeOf svm Is SVMModel Then
             Return DirectCast(svm, SVMModel).svmClassify1(data, env)
         ElseIf TypeOf svm Is SVMMultipleSet Then
@@ -634,7 +634,7 @@ Module SVMkit
     <ExportAPI("svm_validates")>
     Public Function svmValidates(svm As Object, validateSet As Object, <RRawVectorArgument> labels As Object, Optional env As Environment = Nothing) As Object
         If svm Is Nothing Then
-            Return Internal.debug.stop("the required svm model can not be nothing!", env)
+            Return RInternal.debug.stop("the required svm model can not be nothing!", env)
         ElseIf TypeOf svm Is SVMModel Then
             Return validateSingleSvmModel(DirectCast(svm, SVMModel), validateSet, labels, env)
         ElseIf TypeOf svm Is SVMMultipleSet Then

@@ -57,7 +57,6 @@
 #End Region
 
 Imports System.Drawing
-Imports System.Drawing.Drawing2D
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -65,7 +64,6 @@ Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Imaging
-Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Driver
@@ -82,6 +80,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports std = System.Math
 
 ''' <summary>
@@ -91,7 +90,7 @@ Imports std = System.Math
 Module Visualize
 
     Sub New()
-        Call Internal.generic.add("plot", GetType(NetworkGraph), AddressOf plot_network)
+        Call RInternal.generic.add("plot", GetType(NetworkGraph), AddressOf plot_network)
     End Sub
 
     Private Function getNodeSizeHandler(nodeSize As Object, minNodeSize!, env As Environment, ByRef err As Message) As Func(Of Node, Single)
@@ -137,7 +136,7 @@ Module Visualize
                            End Function
                 End If
             Case Else
-                err = Internal.debug.stop(New NotImplementedException(nodeSize.GetType.FullName), env)
+                err = RInternal.debug.stop(New NotImplementedException(nodeSize.GetType.FullName), env)
         End Select
 
         Return Nothing
@@ -296,7 +295,7 @@ Module Visualize
                     getNodeLabel = Function(node) DirectCast(nodeLabel, list).getValue(Of String)(node.label, env, [default]:="")
 
                 Case Else
-                    Return Internal.debug.stop(New NotImplementedException(nodeSize.GetType.FullName), env)
+                    Return RInternal.debug.stop(New NotImplementedException(nodeSize.GetType.FullName), env)
             End Select
         End If
 
@@ -453,14 +452,14 @@ Module Visualize
                     Case GetType(SolidBrush)
                         unify = first
                     Case Else
-                        Return Internal.debug.stop(Message.InCompatibleType(GetType(Color), first.GetType, env,, NameOf(colors)), env)
+                        Return RInternal.debug.stop(Message.InCompatibleType(GetType(Color), first.GetType, env,, NameOf(colors)), env)
                 End Select
 
                 For Each edge As Edge In g.graphEdges
                     edge.data.style = New Pen(unify)
                 Next
             ElseIf values.Length <> g.graphEdges.Count Then
-                Return Internal.debug.stop("the color length is not equals to the edge size!", env)
+                Return RInternal.debug.stop("the color length is not equals to the edge size!", env)
             Else
                 For Each edge As SeqValue(Of Edge) In g.graphEdges.SeqIterator
                     Dim first = values.GetValue(CInt(edge))
@@ -477,7 +476,7 @@ Module Visualize
                         Case GetType(SolidBrush)
                             unify = first
                         Case Else
-                            Return Internal.debug.stop(Message.InCompatibleType(GetType(Color), first.GetType, env,, NameOf(colors)), env)
+                            Return RInternal.debug.stop(Message.InCompatibleType(GetType(Color), first.GetType, env,, NameOf(colors)), env)
                     End Select
 
                     edge.value.data.style = New Pen(unify)

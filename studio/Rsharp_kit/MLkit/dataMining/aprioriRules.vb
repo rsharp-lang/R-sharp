@@ -66,6 +66,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' apriori: Mining Associations with the Apriori Algorithm
@@ -81,7 +82,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Module aprioriRules
 
     Sub Main()
-        Internal.Object.Converts.makeDataframe.addHandler(GetType(Output), AddressOf niceTable)
+        RInternal.Object.Converts.makeDataframe.addHandler(GetType(Output), AddressOf niceTable)
     End Sub
 
     <RGenericOverloads("as.data.frame")>

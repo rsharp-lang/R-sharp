@@ -66,6 +66,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 <Package("styler")>
 Module Styler
@@ -106,7 +107,7 @@ Module Styler
                     Call link.SetPenWidth(w)
                 Next
             ElseIf vec.Length <> e.size Then
-                Return Internal.debug.stop($"the size of the data vector is not equals to the size of the edge list!", env)
+                Return RInternal.debug.stop($"the size of the data vector is not equals to the size of the edge list!", env)
             Else
                 For i As Integer = 0 To vec.Length - 1
                     e.edges(i).SetPenWidth(vec(i))
@@ -201,7 +202,7 @@ Module Styler
                     Next
                 End If
             ElseIf vec.Length <> DirectCast(g, RIndex).length Then
-                Return Internal.debug.stop($"the size of the data vector is not equals to the size of the target graph element list!", env)
+                Return RInternal.debug.stop($"the size of the data vector is not equals to the size of the target graph element list!", env)
             Else
                 If TypeOf g Is E Then
                     For i As Integer = 0 To vec.Length - 1
@@ -270,7 +271,7 @@ Module Styler
             Else
                 ' set size one by one
                 If vec.Length <> v.size Then
-                    Return Internal.debug.stop($"the size of the data vector is not equals to the size of the vertex list!", env)
+                    Return RInternal.debug.stop($"the size of the data vector is not equals to the size of the vertex list!", env)
                 Else
                     For i As Integer = 0 To vec.Length - 1
                         v.vertex(i).data.size = {vec(i)}

@@ -11,6 +11,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Module DataMiningDataSet
 
@@ -18,7 +19,7 @@ Module DataMiningDataSet
         Dim model As EntityClusterModel()
 
         If x Is Nothing Then
-            Return Internal.debug.stop("the given dataset should not be nothing!", env)
+            Return RInternal.debug.stop("the given dataset should not be nothing!", env)
         End If
 
         If x.GetType.IsArray Then

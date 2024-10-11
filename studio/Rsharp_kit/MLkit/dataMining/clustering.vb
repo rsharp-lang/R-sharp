@@ -106,6 +106,7 @@ Imports Distance = Microsoft.VisualBasic.DataMining.HierarchicalClustering.Hiera
 Imports Point2D = System.Drawing.Point
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' R# data clustering tools
@@ -550,7 +551,7 @@ Module clustering
                 T1 = T2 * 2
             End If
             If T1 < T2 Then
-                Return Internal.debug.stop($"value of T1({T1}) should greater than T2({T2}).", env)
+                Return RInternal.debug.stop($"value of T1({T1}) should greater than T2({T2}).", env)
             End If
 
             builder = New CanopyBuilder(data, T1, T2)
@@ -885,7 +886,7 @@ Module clustering
                            Optional env As Environment = Nothing) As Object
 
         If d Is Nothing Then
-            Return Internal.debug.stop(New NullReferenceException("the given distance matrix object can not be nothing!"), env)
+            Return RInternal.debug.stop(New NullReferenceException("the given distance matrix object can not be nothing!"), env)
         End If
 
         Dim cluster As Cluster
@@ -956,7 +957,7 @@ Module clustering
         Dim cluster As BTreeCluster
 
         If d Is Nothing Then
-            Return Internal.debug.stop(New NullReferenceException("the given distance matrix object can not be nothing!"), env)
+            Return RInternal.debug.stop(New NullReferenceException("the given distance matrix object can not be nothing!"), env)
         End If
 
         If TypeOf d Is DistanceMatrix Then
@@ -1356,7 +1357,7 @@ Module clustering
             labels = rows.Select(Function(v) v.name).ToArray
             dataset = rows.Select(Function(v) v.value).ToArray
         Else
-            Return Internal.debug.stop("", env)
+            Return RInternal.debug.stop("", env)
         End If
 
         Dim opts As New HdbscanParameters(Of Double()) With {

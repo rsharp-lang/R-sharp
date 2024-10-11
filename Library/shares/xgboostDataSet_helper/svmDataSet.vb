@@ -9,7 +9,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports dataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Module svmDataSet
 
@@ -95,13 +95,13 @@ Module svmDataSet
         Dim vectors As New Dictionary(Of String, Double())
 
         If data Is Nothing Then
-            err = Internal.debug.stop("no problem data was provided!", env)
+            err = RInternal.debug.stop("no problem data was provided!", env)
             Return Nothing
         ElseIf TypeOf data Is list Then
             With DirectCast(data, list)
                 For Each name As String In dimNames
                     If Not .hasName(name) Then
-                        err = Internal.debug.stop($"missing dimension {name}!", env)
+                        err = RInternal.debug.stop($"missing dimension {name}!", env)
                         Return Nothing
                     End If
 
@@ -112,7 +112,7 @@ Module svmDataSet
             With DirectCast(data, dataframe)
                 For Each name As String In dimNames
                     If Not .hasName(name) Then
-                        err = Internal.debug.stop($"missing dimension {name}!", env)
+                        err = RInternal.debug.stop($"missing dimension {name}!", env)
                         Return Nothing
                     End If
 

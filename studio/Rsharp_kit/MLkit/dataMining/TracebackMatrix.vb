@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Interop.CType
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Public Class TracebackMatrix : Inherits RDefaultFunction
     Implements RIndex, ICTypeList
@@ -129,11 +130,11 @@ Public Class TracebackMatrix : Inherits RDefaultFunction
     End Function
 
     Public Function setByIndex(i As Integer, value As Object, envir As Environment) As Object Implements RIndex.setByIndex
-        Return Internal.debug.stop("data is readonly!", envir)
+        Return RInternal.debug.stop("data is readonly!", envir)
     End Function
 
     Public Function setByindex(i() As Integer, value As Array, envir As Environment) As Object Implements RIndex.setByindex
-        Return Internal.debug.stop("data is readonly!", envir)
+        Return RInternal.debug.stop("data is readonly!", envir)
     End Function
 
     Public Function toList() As list Implements ICTypeList.toList
