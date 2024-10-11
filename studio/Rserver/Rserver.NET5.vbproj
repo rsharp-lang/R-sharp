@@ -334,7 +334,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
   </ItemGroup>
 
   <Import Project="..\..\Library\shares\dataframeHelper\dataframeHelper.projitems" Label="Shared" />
