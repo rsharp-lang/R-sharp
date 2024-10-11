@@ -129,12 +129,20 @@ Namespace Interpreter
                 .JoinBy(vbCrLf)
         End Function
 
+        Public Shared Function GetRLanguageDefaultOption(rscript As Rscript,
+                                                         Optional debug As Boolean = False,
+                                                         Optional keepsCommentLines As Boolean = False) As SyntaxBuilderOptions
+
+            Return New SyntaxBuilderOptions(AddressOf Expression.CreateExpression, Function(c, s) New Scanner(c, s)) With {
+                .keepsCommentLines = keepsCommentLines,
+                .debug = debug,
+                .source = rscript
+            }
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function CreateProgram(Rscript As Rscript, Optional debug As Boolean = False, Optional ByRef error$ = Nothing) As Program
-            Dim opts As New SyntaxBuilderOptions(AddressOf Expression.CreateExpression, Function(c, s) New Scanner(c, s)) With {
-                .debug = debug,
-                .source = Rscript
-            }
+            Dim opts As SyntaxBuilderOptions = GetRLanguageDefaultOption(Rscript, debug)
             Dim exec As Expression() = Rscript _
                 .GetExpressions(opts) _
                 .ToArray
