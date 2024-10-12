@@ -193,7 +193,7 @@ Module validation
     ''' <returns></returns>
     <ExportAPI("fake_result")>
     Public Function fake(labels As Double(), auc As Double, Optional cutoff As Double = 0.5) As Object
-        Return FakeAUCGenerator.BuildOutput(labels, auc, cutoff)
+        Return FakeAUCGenerator.BuildOutput2(labels, auc, cutoff)
     End Function
 
     ''' <summary>
