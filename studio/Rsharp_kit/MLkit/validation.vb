@@ -70,15 +70,18 @@ Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 <Package("validation", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@gcmodeller.org")>
 Module validation
 
     Sub New()
-        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(Evaluation.Validation()), AddressOf Tabular)
-        REnv.Internal.generic.add("plot", GetType(ROC), AddressOf PlotROC)
+        RInternal.Object.Converts.makeDataframe.addHandler(GetType(Evaluation.Validation()), AddressOf Tabular)
+        RInternal.Object.Converts.makeDataframe.addHandler(GetType(ROC), AddressOf ROC_tabular)
+
+        RInternal.generic.add("plot", GetType(ROC), AddressOf PlotROC)
     End Sub
 
     <RGenericOverloads("plot")>
@@ -94,6 +97,30 @@ Module validation
         line.title = roc.AUC.ToString("F3")
 
         Return ROCPlot.Plot(line, size:=size)
+    End Function
+
+    <RGenericOverloads("as.data.frame")>
+    Public Function ROC_tabular(x As ROC, args As list, env As Environment) As Rdataframe
+        Return New Rdataframe With {
+            .rownames = CLRVector.asCharacter(x.threshold),
+            .columns = New Dictionary(Of String, Array) From {
+                {"threshold", x.threshold},
+                {"specificity", x.specificity},
+                {"sensibility", x.sensibility},
+                {"accuracy", x.accuracy},
+                {"precision", x.precision},
+                {"BER", x.BER},
+                {"FPR", x.FPR},
+                {"NPV", x.NPV},
+                {"F1Score", x.F1Score},
+                {"F2Score", x.F2Score},
+                {"All", x.All},
+                {"TP", x.TP},
+                {"FP", x.FP},
+                {"TN", x.TN},
+                {"FN", x.FN}
+            }
+        }
     End Function
 
     <RGenericOverloads("as.data.frame")>
