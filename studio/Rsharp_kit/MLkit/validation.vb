@@ -174,12 +174,12 @@ Module validation
     ''' <param name="resolution"></param>
     ''' <returns></returns>
     <ExportAPI("prediction")>
-    Public Function prediction(predicts As Double(), labels As Boolean(), Optional resolution As Integer = 1000) As ROC
+    Public Function prediction(predicts As Double(), labels As Double(), Optional resolution As Integer = 1000) As ROC
         Dim ROCthreshold As New Sequence(labels.Min, labels.Max, resolution)
         Dim result = Evaluation.Validation _
             .ROC(Of Integer)(
                 entity:=predicts.Sequence,
-                getValidate:=Function(i, d) labels(i),
+                getValidate:=Function(i, d) labels(i) >= d,
                 getPredict:=Function(i, cut) predicts(i) >= cut,
                 threshold:=ROCthreshold
             ) _
