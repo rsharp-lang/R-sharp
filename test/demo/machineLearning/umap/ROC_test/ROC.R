@@ -1,6 +1,9 @@
 imports "validation" from "MLkit";
 
-const data = read.csv(file = "github://rsharp-lang/R-sharp/blob/master/Library/demo/machineLearning/umap/ROC.csv");
+setwd(@dir);
+
+# const data = read.csv(file = "github://rsharp-lang/R-sharp/blob/master/Library/demo/machineLearning/umap/ROC.csv");
+const data = read.csv(file = "./ROC.csv", row.names = NULL);
 const pred = prediction(data[, 1], data[, 2]);
 
 str(data);

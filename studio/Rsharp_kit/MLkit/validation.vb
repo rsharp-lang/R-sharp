@@ -139,9 +139,16 @@ Module validation
         End If
     End Function
 
+    ''' <summary>
+    ''' construct a ROC validation result object
+    ''' </summary>
+    ''' <param name="predicts"></param>
+    ''' <param name="labels"></param>
+    ''' <param name="resolution"></param>
+    ''' <returns></returns>
     <ExportAPI("prediction")>
     Public Function prediction(predicts As Double(), labels As Boolean(), Optional resolution As Integer = 1000) As ROC
-        Dim ROCthreshold As New Sequence(predicts.Min, predicts.Max, resolution)
+        Dim ROCthreshold As New Sequence(labels.Min, labels.Max, resolution)
         Dim result = Evaluation.Validation _
             .ROC(Of Integer)(
                 entity:=predicts.Sequence,
