@@ -27,3 +27,5 @@ print(simple_auc(
 bitmap(file = `${dirname(@script)}/ROC.png`) {
 	plot(pred);
 }
+
+write.csv(as.data.frame(pred), file = "./AUC.csv");
