@@ -166,6 +166,13 @@ Module validation
         End If
     End Function
 
+    ''' <summary>
+    ''' Make a fake result vector for run test
+    ''' </summary>
+    ''' <param name="labels"></param>
+    ''' <param name="auc"></param>
+    ''' <param name="cutoff"></param>
+    ''' <returns></returns>
     <ExportAPI("fake_result")>
     Public Function fake(labels As Double(), auc As Double, Optional cutoff As Double = 0.5) As Object
         Return FakeAUCGenerator.BuildOutput(labels, auc, cutoff)
