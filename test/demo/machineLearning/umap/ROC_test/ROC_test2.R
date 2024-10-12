@@ -11,6 +11,9 @@ let pred = prediction(result, labels);
 
 print(data.frame(result, labels));
 
+print(roc_auc_score(labels, result));
+print(roc_auc_score(labels, 1 - result));
+
 print(`AUC = ${AUC(pred)}`);
 print(`best threshold: ${pred$BestThreshold}`);
 
