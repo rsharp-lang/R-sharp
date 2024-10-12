@@ -167,6 +167,24 @@ Module validation
     End Function
 
     ''' <summary>
+    ''' Compute Area Under the Receiver Operating Characteristic Curve (ROC AUC) from prediction scores.
+    ''' </summary>
+    ''' <param name="y_true">
+    ''' array-like of shape (n_samples,) or (n_samples, n_classes)
+    ''' True binary labels Or binary label indicators. The multiclass case
+    ''' expects shape(n_samples,) And labels With values In 0, 1, ..., n_classes-1.
+    ''' </param>
+    ''' <param name="pred">array-like of shape (n_samples,) or (n_samples, n_classes)
+    ''' Target scores, can either be probability estimates Of the positive
+    ''' Class, confidence values, Or non-thresholded measure of decisions
+    ''' (as returned by "decision_function" on some classifiers).</param>
+    ''' <returns></returns>
+    <ExportAPI("roc_auc_score")>
+    Public Function roc_auc_score(y_true As Double(), pred As Double()) As Double
+        Return Evaluation.AUC(pred, y_true)
+    End Function
+
+    ''' <summary>
     ''' Make a fake result vector for run test
     ''' </summary>
     ''' <param name="labels"></param>
