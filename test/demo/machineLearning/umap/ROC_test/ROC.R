@@ -24,6 +24,7 @@ print(simple_auc(
 	TPR = pred$sensibility,
 	FPR = pred$FPR
 ));
+print(roc_auc_score(data$V2, data$V1));
 
 bitmap(file = `${dirname(@script)}/ROC.png`) {
 	plot(pred);
