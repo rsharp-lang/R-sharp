@@ -10,6 +10,7 @@ str(data);
 print(head(data));
 
 print(`AUC = ${AUC(pred)}`);
+print(`best threshold: ${pred$BestThreshold}`);
 
 const simple_auc <- function(TPR, FPR){
   # inputs already sorted, best scores first 

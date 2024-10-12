@@ -102,6 +102,12 @@ Public Class ROC : Inherits JavaScriptObject
         End Get
     End Property
 
+    Public ReadOnly Property BestThreshold As Double
+        Get
+            Return threshold(Evaluation.BestThreshold(sensibility, FPR))
+        End Get
+    End Property
+
     Protected Overrides Iterator Function IEnumerable_GetEnumerator() As IEnumerator
         Yield IEnumerable()
     End Function
