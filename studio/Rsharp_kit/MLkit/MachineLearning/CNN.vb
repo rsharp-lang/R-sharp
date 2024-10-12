@@ -412,6 +412,19 @@ Module CNNTools
         }
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="dataset">
+    ''' usually be a dataframe object
+    ''' </param>
+    ''' <param name="labels">
+    ''' the column names for defined as label or a numeric vector that 
+    ''' size equals to the rows of the input dataframe used as the 
+    ''' labels value.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("sample_dataset")>
     <RApiReturn(GetType(SampleData))>
     Public Function sample_dataset(<RRawVectorArgument> dataset As Object,
