@@ -10,7 +10,7 @@ let result = sapply(labels, function(xi) {
     if (runif() < accu) {
         xi;
     } else {
-        1-xi;
+        runif() * xi;
     }
 });
 
