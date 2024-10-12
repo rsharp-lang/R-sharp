@@ -98,7 +98,7 @@ Public Class ROC : Inherits JavaScriptObject
             TPR = sort.Select(Function(a) a.First).ToArray
             FPR = sort.Select(Function(a) a.Second).ToArray
 
-            Return (100 - Evaluation.SimpleAUC(TPR, FPR)) / 100
+            Return Evaluation.SimpleAUC(TPR, FPR) / 100
         End Get
     End Property
 
