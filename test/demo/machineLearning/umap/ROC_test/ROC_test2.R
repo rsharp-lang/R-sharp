@@ -9,8 +9,7 @@ let accu = 0.9;
 let result = fake_result(labels, accu);
 let pred = prediction(result, labels);
 
-str(data);
-print(head(data));
+print(data.frame(result, labels));
 
 print(`AUC = ${AUC(pred)}`);
 print(`best threshold: ${pred$BestThreshold}`);
@@ -20,3 +19,4 @@ bitmap(file = "./ROC2.png") {
 }
 
 write.csv(as.data.frame(pred), file = "./AUC2.csv");
+write.csv(data.frame(result, labels), file = "./generates.csv");
