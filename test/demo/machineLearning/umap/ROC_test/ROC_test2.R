@@ -5,7 +5,7 @@ setwd(@dir);
 # const data = read.csv(file = "github://rsharp-lang/R-sharp/blob/master/Library/demo/machineLearning/umap/ROC.csv");
 let data = read.csv(file = "./ROC.csv", row.names = NULL);
 let labels = data$V2;
-let accu = 0.9;
+let accu = 0.8;
 let result = fake_result(labels, accu);
 let pred = prediction(result, labels);
 
