@@ -6,15 +6,8 @@ setwd(@dir);
 let data = read.csv(file = "./ROC.csv", row.names = NULL);
 let labels = data$V2;
 let accu = 0.9;
-let result = sapply(labels, function(xi) {
-    if (runif() < accu) {
-        xi;
-    } else {
-        runif() * xi;
-    }
-});
-
-const pred = prediction(result, labels);
+let result = fake_result(labels, accu);
+let pred = prediction(result, labels);
 
 str(data);
 print(head(data));
