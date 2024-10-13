@@ -88,7 +88,7 @@ Public Class ROC : Inherits JavaScriptObject
             Dim FPR = Me.FPR
             ' 20241012
             ' make both data be sorted via the TPR
-            Dim sort = TPR.Zip(FPR) _
+            Dim sort = TPR.Zip(second:=FPR) _
                 .Where(Function(z)
                            Return Not (z.First.IsNaNImaginary OrElse z.Second.IsNaNImaginary)
                        End Function) _
