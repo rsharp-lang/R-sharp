@@ -86,13 +86,25 @@ Public Class ROC : Inherits JavaScriptObject
         Get
             Dim TPR = sensibility
             Dim FPR = Me.FPR
+            ' 20241012
+            ' make both data be sorted via the TPR
+            Dim sort = TPR.Zip(FPR) _
+                .Where(Function(z)
+                           Return Not (z.First.IsNaNImaginary OrElse z.Second.IsNaNImaginary)
+                       End Function) _
+                .OrderBy(Function(z) z.First) _
+                .ToArray
 
-            With TPR.Select(Function(x, i) (x, i)).OrderBy(Function(t) t.x).ToArray
-                TPR = .Select(Function(t) t.x).ToArray
-                FPR = .Select(Function(t) FPR(t.i)).ToArray
-            End With
+            TPR = sort.Select(Function(a) a.First).ToArray
+            FPR = sort.Select(Function(a) a.Second).ToArray
 
-            Return (100 - Evaluation.SimpleAUC(TPR, FPR)) / 100
+            Return Evaluation.SimpleAUC(TPR, FPR) / 100
+        End Get
+    End Property
+
+    Public ReadOnly Property BestThreshold As Double
+        Get
+            Return threshold(Evaluation.BestThreshold(sensibility, FPR))
         End Get
     End Property
 

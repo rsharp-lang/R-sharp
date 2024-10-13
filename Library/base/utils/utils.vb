@@ -476,6 +476,10 @@ Public Module utils
     ''' x are to be written along with x, or a character vector of 
     ''' row names to be written.
     ''' </param>
+    ''' <param name="meta_blank">
+    ''' set the cell value for represents the missing value of the metadata 
+    ''' column when do save of the clr object array.
+    ''' </param>
     ''' <returns></returns>
     ''' <remarks>
     ''' this function will create an empty table file if the given data
@@ -491,6 +495,7 @@ Public Module utils
                               Optional tsv As Boolean = False,
                               <RDefaultExpression>
                               Optional number_format As Object = Nothing,
+                              Optional meta_blank As String = "",
                               Optional env As Environment = Nothing) As Object
 
         If TypeOf file Is dataframeBuffer Then
@@ -519,7 +524,9 @@ Public Module utils
 
             Return file
         ElseIf file Is Nothing OrElse TypeOf file Is String Then
-            Return env.saveTextFile(x, file, row_names, fileEncoding, tsv, number_format)
+            Return env.saveTextFile(x, file, row_names, fileEncoding, tsv,
+                                    meta_blank:=meta_blank,
+                                    number_format:=number_format)
         Else
             Return Message.InCompatibleType(GetType(String), file.GetType, env)
         End If
@@ -543,6 +550,7 @@ Public Module utils
                                   row_names As Object,
                                   fileEncoding As Object,
                                   tsv As Boolean,
+                                  meta_blank As String,
                                   number_format As Object) As Object
         If x Is Nothing Then
             Call env.AddMessage("Empty dataframe object!", MSG_TYPES.WRN)
@@ -605,7 +613,7 @@ Public Module utils
             )
 #Enable Warning
         ElseIf type.IsArray OrElse type Is GetType(vector) Then
-            Return saveGeneric(x, type, file, encoding.CodePage, env)
+            Return saveGeneric(x, type, file, meta_blank, encoding.CodePage, env)
         Else
             Dim stream As pipeline = pipeline.TryCreatePipeline(Of EntityObject)(x, env)
 
@@ -656,7 +664,9 @@ Public Module utils
     ''' <param name="env"></param>
     ''' <returns></returns>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Private Function saveGeneric(x As Object, type As Type, file$, encoding As Encoding, env As Environment) As Boolean
-        Return MeasureGenericType(x, type).SaveTable(file, encoding, type, silent:=True)
+    Private Function saveGeneric(x As Object, type As Type, file$, meta_blank As String, encoding As Encoding, env As Environment) As Boolean
+        Return MeasureGenericType(x, type).SaveTable(file, encoding, type,
+                                                     meta_blank:=meta_blank,
+                                                     silent:=True)
     End Function
 End Module

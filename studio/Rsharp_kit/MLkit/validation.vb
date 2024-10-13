@@ -70,15 +70,18 @@ Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 <Package("validation", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@gcmodeller.org")>
 Module validation
 
     Sub New()
-        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(Evaluation.Validation()), AddressOf Tabular)
-        REnv.Internal.generic.add("plot", GetType(ROC), AddressOf PlotROC)
+        RInternal.Object.Converts.makeDataframe.addHandler(GetType(Evaluation.Validation()), AddressOf Tabular)
+        RInternal.Object.Converts.makeDataframe.addHandler(GetType(ROC), AddressOf ROC_tabular)
+
+        RInternal.generic.add("plot", GetType(ROC), AddressOf PlotROC)
     End Sub
 
     <RGenericOverloads("plot")>
@@ -94,6 +97,30 @@ Module validation
         line.title = roc.AUC.ToString("F3")
 
         Return ROCPlot.Plot(line, size:=size)
+    End Function
+
+    <RGenericOverloads("as.data.frame")>
+    Public Function ROC_tabular(x As ROC, args As list, env As Environment) As Rdataframe
+        Return New Rdataframe With {
+            .rownames = CLRVector.asCharacter(x.threshold),
+            .columns = New Dictionary(Of String, Array) From {
+                {"threshold", x.threshold},
+                {"specificity", x.specificity},
+                {"sensibility", x.sensibility},
+                {"accuracy", x.accuracy},
+                {"precision", x.precision},
+                {"BER", x.BER},
+                {"FPR", x.FPR},
+                {"NPV", x.NPV},
+                {"F1Score", x.F1Score},
+                {"F2Score", x.F2Score},
+                {"All", x.All},
+                {"TP", x.TP},
+                {"FP", x.FP},
+                {"TN", x.TN},
+                {"FN", x.FN}
+            }
+        }
     End Function
 
     <RGenericOverloads("as.data.frame")>
@@ -139,13 +166,50 @@ Module validation
         End If
     End Function
 
+    ''' <summary>
+    ''' Compute Area Under the Receiver Operating Characteristic Curve (ROC AUC) from prediction scores.
+    ''' </summary>
+    ''' <param name="y_true">
+    ''' array-like of shape (n_samples,) or (n_samples, n_classes)
+    ''' True binary labels Or binary label indicators. The multiclass case
+    ''' expects shape(n_samples,) And labels With values In 0, 1, ..., n_classes-1.
+    ''' </param>
+    ''' <param name="pred">array-like of shape (n_samples,) or (n_samples, n_classes)
+    ''' Target scores, can either be probability estimates Of the positive
+    ''' Class, confidence values, Or non-thresholded measure of decisions
+    ''' (as returned by "decision_function" on some classifiers).</param>
+    ''' <returns></returns>
+    <ExportAPI("roc_auc_score")>
+    Public Function roc_auc_score(y_true As Double(), pred As Double()) As Double
+        Return Evaluation.AUC(pred, y_true)
+    End Function
+
+    ''' <summary>
+    ''' Make a fake result vector for run test
+    ''' </summary>
+    ''' <param name="labels"></param>
+    ''' <param name="auc"></param>
+    ''' <param name="cutoff"></param>
+    ''' <returns></returns>
+    <ExportAPI("fake_result")>
+    Public Function fake(labels As Double(), auc As Double, Optional cutoff As Double = 0.5) As Object
+        Return FakeAUCGenerator.BuildOutput2(labels, auc, cutoff)
+    End Function
+
+    ''' <summary>
+    ''' construct a ROC validation result object
+    ''' </summary>
+    ''' <param name="predicts"></param>
+    ''' <param name="labels"></param>
+    ''' <param name="resolution"></param>
+    ''' <returns></returns>
     <ExportAPI("prediction")>
-    Public Function prediction(predicts As Double(), labels As Boolean(), Optional resolution As Integer = 1000) As ROC
-        Dim ROCthreshold As New Sequence(predicts.Min, predicts.Max, resolution)
+    Public Function prediction(predicts As Double(), labels As Double(), Optional resolution As Integer = 1000) As ROC
+        Dim ROCthreshold As New Sequence(labels.Min, labels.Max, resolution)
         Dim result = Evaluation.Validation _
             .ROC(Of Integer)(
                 entity:=predicts.Sequence,
-                getValidate:=Function(i, d) labels(i),
+                getValidate:=Function(i, d) labels(i) >= d,
                 getPredict:=Function(i, cut) predicts(i) >= cut,
                 threshold:=ROCthreshold
             ) _
