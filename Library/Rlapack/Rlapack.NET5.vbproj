@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<RootNamespace>Rlapack</RootNamespace>
-    <TargetFrameworks>net6.0;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net8.0-windows;net8.0</TargetFrameworks>
 		<AssemblyName>Rlapack</AssemblyName>
 		<Authors>xie.guigang@live.com</Authors>
 		<Company>sciBASIC.NET</Company>
@@ -63,7 +63,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
 	  <DocumentationFile>Rlapack.xml</DocumentationFile>
-	  <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+	  <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
 	  <RemoveIntegerChecks>true</RemoveIntegerChecks>
 	  <Optimize>false</Optimize>
 	  <DebugSymbols>true</DebugSymbols>
@@ -73,7 +73,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
 	  <DocumentationFile>Rlapack.xml</DocumentationFile>
-	  <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+	  <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
 	  <RemoveIntegerChecks>true</RemoveIntegerChecks>
 	  <Optimize>false</Optimize>
 	  <DebugSymbols>true</DebugSymbols>
@@ -353,7 +353,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.10" />
     <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
@@ -371,6 +371,7 @@
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\Visualization\Plots-statistics\plots_extensions-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
+    <ProjectReference Include="..\shares\graphics.common_runtime\R_graphics.common_runtime.vbproj" />
   </ItemGroup>
 
 

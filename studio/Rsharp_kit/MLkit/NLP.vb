@@ -70,6 +70,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports rDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' NLP tools
@@ -78,8 +79,8 @@ Imports rDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Module NLP
 
     Sub Main()
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(VectorModel), AddressOf exportWordVector)
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Bigram()), AddressOf bigramTable)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(VectorModel), AddressOf exportWordVector)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(Bigram()), AddressOf bigramTable)
     End Sub
 
     Private Function bigramTable(bi As Bigram(), args As list, env As Environment) As rDataframe

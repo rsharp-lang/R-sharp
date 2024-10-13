@@ -55,7 +55,8 @@
 
 Imports System.Diagnostics.CodeAnalysis
 Imports System.Drawing
-Imports PdfImage = Microsoft.VisualBasic.Imaging.PDF
+Imports Microsoft.VisualBasic.Drawing
+Imports SMRUCC.Rsharp.Runtime.Internal
 
 <Assembly: SuppressMessage("", "CA1416")>
 
@@ -65,6 +66,7 @@ Public Class zzz
         Call plots.Main()
         Call geometry2D.Main()
         Call Rgraphics.Main()
+        Call invoke.pushEnvir(GetType(R_graphics.Common.Runtime.graphics))
 
         Call RegisterDriver()
     End Sub
@@ -88,7 +90,7 @@ Public Class zzz
     End Function
 
     Private Shared Sub RegisterDriver()
-        Call PDFimage.Driver.Init()
+        Call SkiaDriver.Register()
         ' Call Designer.Register("MPL_gist_ncar", loadColors(My.Resources.MPL_gist_ncar))
     End Sub
 End Class

@@ -98,6 +98,7 @@ Imports FeatureFrame = Microsoft.VisualBasic.Math.DataFrame.DataFrame
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' ### the machine learning dataset toolkit
@@ -596,7 +597,7 @@ Module datasetKit
         ElseIf TypeOf x Is String OrElse RType.TypeOf(x).mode = TypeCodes.string Then
             ' description of the package from base runtime environment
             ' make generic overloads
-            Return Internal.Invokes.utils.description(CLRVector.asCharacter(x).First,, env)
+            Return RInternal.Invokes.utils.description(CLRVector.asCharacter(x).First,, env)
         End If
 
         If TypeOf x Is Message Then
@@ -867,14 +868,14 @@ Module datasetKit
                         Case "dataframe"
                             Return LabelledVector.CreateDataFrame(vector:=rawdata)
                         Case Else
-                            Return Internal.debug.stop(New NotImplementedException($"the data set format '{dataset}' is not yet implemented!"), env)
+                            Return RInternal.debug.stop(New NotImplementedException($"the data set format '{dataset}' is not yet implemented!"), env)
                     End Select
                 End Using
             Case Else
                 Dim labelfile As String = args.getValue("labelfile", env, [default]:="")
 
                 If labelfile.StringEmpty Then
-                    Return Internal.debug.stop("No 'labelfile' was provided for the MNIST image dataset!", env)
+                    Return RInternal.debug.stop("No 'labelfile' was provided for the MNIST image dataset!", env)
                 End If
 
                 Using MNIST As New MNIST(imagesFile:=path, labelfile)
@@ -925,7 +926,7 @@ Module datasetKit
                                       End Function)
                 }
             Case Else
-                Return Internal.debug.stop(New NotImplementedException($"the data set format '{dataset}' is not yet implemented!"), env)
+                Return RInternal.debug.stop(New NotImplementedException($"the data set format '{dataset}' is not yet implemented!"), env)
         End Select
     End Function
 
@@ -1037,7 +1038,7 @@ Module datasetKit
             ElseIf TypeOf code Is DeclareLambdaFunction Then
                 err = encoderMaps.mapLambda(DirectCast(code, DeclareLambdaFunction), env)
             Else
-                Return Internal.debug.stop(New NotImplementedException($"{fieldName} -> {code.GetType.FullName}"), env)
+                Return RInternal.debug.stop(New NotImplementedException($"{fieldName} -> {code.GetType.FullName}"), env)
             End If
 
             If Not err Is Nothing Then
@@ -1067,7 +1068,7 @@ Module datasetKit
         ElseIf TypeOf code Is FeatureEncoder Then
             encoderMaps.AddEncodingRule(fieldName, DirectCast(code, FeatureEncoder))
         Else
-            Return Internal.debug.stop(New NotImplementedException($"{fieldName} -> {code.GetType.FullName}"), env)
+            Return RInternal.debug.stop(New NotImplementedException($"{fieldName} -> {code.GetType.FullName}"), env)
         End If
 
         Return Nothing
@@ -1082,7 +1083,7 @@ Module datasetKit
             Case NameOf(boolEncoder), "to_ints"
                 encoderMaps.AddEncodingRule(fieldName, boolEncoder)
             Case Else
-                Return Internal.debug.stop(New NotImplementedException($"{fieldName} -> {code}"), env)
+                Return RInternal.debug.stop(New NotImplementedException($"{fieldName} -> {code}"), env)
         End Select
 
         Return Nothing

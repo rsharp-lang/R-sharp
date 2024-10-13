@@ -61,7 +61,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 <Package("graphics2D.labeler", Category:=APICategories.SoftwareTools)>
 Module gr2DLabeler
@@ -122,7 +122,7 @@ Module gr2DLabeler
     <RApiReturn(GetType(Labeler))>
     Public Function setAnchors(labeler As Labeler, <RRawVectorArgument> anchor As Object, Optional env As Environment = Nothing) As Object
         If anchor Is Nothing Then
-            Return Internal.debug.stop("anchor object can not be nothing!", env)
+            Return RInternal.debug.stop("anchor object can not be nothing!", env)
         ElseIf TypeOf anchor Is Anchor() Then
             Return labeler.Anchors(DirectCast(anchor, Anchor()))
         ElseIf RType.TypeOf(anchor).mode = TypeCodes.integer Then
@@ -130,7 +130,7 @@ Module gr2DLabeler
         ElseIf RType.TypeOf(anchor).mode = TypeCodes.double Then
             Return labeler.Anchors(labeler.GetLabelAnchors(CLRVector.asFloat(anchor)(Scan0)))
         Else
-            Return Internal.debug.stop(Message.InCompatibleType(GetType(Anchor()), anchor.GetType, env), env)
+            Return RInternal.debug.stop(Message.InCompatibleType(GetType(Anchor()), anchor.GetType, env), env)
         End If
     End Function
 

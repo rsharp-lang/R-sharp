@@ -1,12 +1,12 @@
 ﻿#If MATH_DATASET Then
 
-Imports System.IO
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Math.DataFrame
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports FeatureFrame = Microsoft.VisualBasic.Math.DataFrame.DataFrame
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Module MathDataSet
 
@@ -43,7 +43,7 @@ Module MathDataSet
             general = TryCastGenericArray(general, env)
 
             If Not FeatureVector.CheckSupports(general.GetType.GetElementType) Then
-                Return Internal.debug.stop($"Not supports '{name}'!", env)
+                Return RInternal.debug.stop($"Not supports '{name}'!", env)
             End If
 
             featureSet(name) = FeatureVector.FromGeneral(name, general)

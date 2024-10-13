@@ -75,6 +75,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction
@@ -84,13 +85,13 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Module Manifold
 
     Sub Main()
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Umap), AddressOf exportUmapTable)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(Umap), AddressOf exportUmapTable)
 
-        Call Internal.generic.add("writeBin", GetType(Umap), AddressOf saveUMAP)
-        Call Internal.generic.add("writeBin", GetType(UMAPProject), AddressOf saveUMAP_1)
-        Call Internal.generic.add("readBin.umap", GetType(Stream), AddressOf loadUMAP)
+        Call RInternal.generic.add("writeBin", GetType(Umap), AddressOf saveUMAP)
+        Call RInternal.generic.add("writeBin", GetType(UMAPProject), AddressOf saveUMAP_1)
+        Call RInternal.generic.add("readBin.umap", GetType(Stream), AddressOf loadUMAP)
 
-        Call Internal.generic.add("plot", GetType(Umap), AddressOf datasetKit.EmbeddingRender)
+        Call RInternal.generic.add("plot", GetType(Umap), AddressOf datasetKit.EmbeddingRender)
     End Sub
 
     Private Function saveUMAP_1(umap As UMAPProject, args As list, env As Environment) As Object

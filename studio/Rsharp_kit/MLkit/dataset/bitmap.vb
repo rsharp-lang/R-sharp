@@ -70,6 +70,8 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' bitmap image dataset helper function
@@ -79,7 +81,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Module bitmap_func
 
     Sub Main()
-        Call Internal.generic.add("summary", GetType(BitmapReader), AddressOf summary_region)
+        Call RInternal.generic.add("summary", GetType(BitmapReader), AddressOf summary_region)
     End Sub
 
     <RGenericOverloads("summary")>
@@ -173,10 +175,10 @@ Module bitmap_func
         Dim size_str = InteropArgumentHelper.getSize(size, env, Nothing)
 
         If loc_str.StringEmpty(, True) Then
-            Return Internal.debug.stop("the required location should not be empty!", env)
+            Return RInternal.debug.stop("the required location should not be empty!", env)
         End If
         If size_str.StringEmpty(, True) OrElse size_str = "0,0" Then
-            Return Internal.debug.stop("the required rectangle size for corp should not be empty!", env)
+            Return RInternal.debug.stop("the required rectangle size for corp should not be empty!", env)
         End If
 
         Dim loc As Point = Casting.PointParser(loc_str)
@@ -223,10 +225,10 @@ Module bitmap_func
         Dim size_str = InteropArgumentHelper.getSize(size, env, Nothing)
 
         If loc_str.StringEmpty(, True) Then
-            Return Internal.debug.stop("the required location should not be empty!", env)
+            Return RInternal.debug.stop("the required location should not be empty!", env)
         End If
         If size_str.StringEmpty(, True) OrElse size_str = "0,0" Then
-            Return Internal.debug.stop("the required rectangle size for corp should not be empty!", env)
+            Return RInternal.debug.stop("the required rectangle size for corp should not be empty!", env)
         End If
 
         Dim loc As Point = Casting.PointParser(loc_str)

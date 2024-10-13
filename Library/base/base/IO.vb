@@ -73,7 +73,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' R# raw I/O api module
@@ -148,7 +148,7 @@ Module RawIO
                     .DoCall(AddressOf pipeline.CreateFromPopulator) _
                     .fromPipeline(projection, type, env)
             Else
-                Return Internal.debug.stop(New NotImplementedException(source.GetType.FullName), env)
+                Return RInternal.debug.stop(New NotImplementedException(source.GetType.FullName), env)
             End If
         End If
 
@@ -190,7 +190,7 @@ Module RawIO
             Case sourceTypes.XML
                 Return DirectCast(source, pipeline).populates(Of String)(env).dumpXml(projection)
             Case Else
-                Return Internal.debug.stop(New NotImplementedException(type), env)
+                Return RInternal.debug.stop(New NotImplementedException(type), env)
         End Select
     End Function
 

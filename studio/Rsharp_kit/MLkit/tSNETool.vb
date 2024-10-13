@@ -67,14 +67,15 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 <Package("t-SNE")>
 Module tSNETool
 
     Sub New()
-        Call Internal.generic.add("plot", GetType(tSNE), AddressOf datasetKit.EmbeddingRender)
-        Call Internal.generic.add("plot", GetType(tSNEDataSet), AddressOf datasetKit.EmbeddingRender)
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(tSNEDataSet), AddressOf createResultTable)
+        Call RInternal.generic.add("plot", GetType(tSNE), AddressOf datasetKit.EmbeddingRender)
+        Call RInternal.generic.add("plot", GetType(tSNEDataSet), AddressOf datasetKit.EmbeddingRender)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(tSNEDataSet), AddressOf createResultTable)
     End Sub
 
     <RGenericOverloads("as.data.frame")>
@@ -101,7 +102,7 @@ Module tSNETool
     <RApiReturn(GetType(tSNEDataSet))>
     Public Function LoadDataSet(tSNE As tSNE, <RRawVectorArgument> dataset As Object, Optional env As Environment = Nothing) As Object
         If dataset Is Nothing Then
-            Return Internal.debug.stop("the required dataset can not be nothing!", env)
+            Return RInternal.debug.stop("the required dataset can not be nothing!", env)
         End If
 
         Dim matrix As New List(Of Double())

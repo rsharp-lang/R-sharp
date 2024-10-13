@@ -65,6 +65,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' Waveform Audio File Format (WAVE, or WAV due to its filename extension; pronounced /wæv/ or /weɪv/) 
@@ -80,7 +81,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Public Module wavToolkit
 
     Friend Sub Main()
-        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of WaveFile)(AddressOf wavToString)
+        Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of WaveFile)(AddressOf wavToString)
     End Sub
 
     Private Function wavToString(wavObj As Object) As String
@@ -124,7 +125,7 @@ Public Module wavToolkit
     <RApiReturn(GetType(WaveFile))>
     Public Function readWav(<RRawVectorArgument> file As Object, Optional lazy As Boolean = False, Optional env As Environment = Nothing) As Object
         If file Is Nothing Then
-            Return Internal.debug.stop("the given file object can not be nothing!", env)
+            Return RInternal.debug.stop("the given file object can not be nothing!", env)
         ElseIf TypeOf file Is vector Then
             file = DirectCast(file, vector).data
         End If
@@ -140,7 +141,7 @@ Public Module wavToolkit
         ElseIf TypeOf file Is Byte() Then
             dataFile = New MemoryStream(DirectCast(file, Byte()))
         Else
-            Return Internal.debug.stop(Message.InCompatibleType(GetType(Stream), file.GetType, env), env)
+            Return RInternal.debug.stop(Message.InCompatibleType(GetType(Stream), file.GetType, env), env)
         End If
 
         Return WaveFile.Open(New BinaryDataReader(dataFile), lazy:=lazy)

@@ -74,6 +74,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Directory = Microsoft.VisualBasic.FileIO.Directory
 Imports rDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' HDS stream pack toolkit
@@ -82,9 +83,9 @@ Imports rDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Module HDSutils
 
     Sub New()
-        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of StreamGroup)(Function(o) o.ToString)
-        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of StreamBlock)(Function(o) o.ToString)
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(StreamObject()), AddressOf fileTable)
+        Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of StreamGroup)(Function(o) o.ToString)
+        Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of StreamBlock)(Function(o) o.ToString)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(StreamObject()), AddressOf fileTable)
     End Sub
 
     Private Function fileTable(ls As StreamObject(), args As list, env As Environment)
@@ -124,7 +125,7 @@ Module HDSutils
         Dim dir As IFileSystemEnvironment = Nothing
 
         If fs Is Nothing Then
-            Return Internal.debug.stop("the required target filesystem reference could not be nothing!", env)
+            Return RInternal.debug.stop("the required target filesystem reference could not be nothing!", env)
         End If
         If TypeOf fs Is String Then
             ' should be a dir path
@@ -186,12 +187,12 @@ Module HDSutils
                                Optional env As Environment = Nothing) As Object
 
         If file Is Nothing Then
-            Return Internal.debug.stop("file for open can not be nothing!", env)
+            Return RInternal.debug.stop("file for open can not be nothing!", env)
         ElseIf TypeOf file Is vector Then
             Dim v As Array = DirectCast(file, vector).data
 
             If v.Length = 0 Then
-                Return Internal.debug.stop("file for open can not be nothing!", env)
+                Return RInternal.debug.stop("file for open can not be nothing!", env)
             ElseIf v.Length > 1 Then
                 file = v.GetValue(Scan0)
                 env.AddMessage($"the input file vector contains more than one element, use the first element as file path!")
@@ -206,7 +207,7 @@ Module HDSutils
             ElseIf allowCreate Then
                 Return HDSutils.createStream(DirectCast(file, String), meta_size:=meta_size)
             Else
-                Return Internal.debug.stop({
+                Return RInternal.debug.stop({
                      "the given file is not found on your filesystem!",
                      "You can set the parameter 'allowCreate' = TRUE for enable create a new local file!"
                 }, env)
@@ -214,7 +215,7 @@ Module HDSutils
         ElseIf TypeOf file Is Stream Then
             Return New StreamPack(DirectCast(file, Stream), [readonly]:=[readonly], meta_size:=meta_size)
         Else
-            Return Internal.debug.stop(Message.InCompatibleType(GetType(String), file.GetType, env), env)
+            Return RInternal.debug.stop(Message.InCompatibleType(GetType(String), file.GetType, env), env)
         End If
     End Function
 
@@ -247,7 +248,7 @@ Module HDSutils
                 }
 
                 If env.globalEnvironment.options.strict Then
-                    Return Internal.debug.stop(msg, env)
+                    Return RInternal.debug.stop(msg, env)
                 Else
                     env.AddMessage(msg, MSG_TYPES.WRN)
                     Return Nothing

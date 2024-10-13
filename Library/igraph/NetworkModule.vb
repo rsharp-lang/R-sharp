@@ -97,6 +97,7 @@ Imports any = Microsoft.VisualBasic.Scripting
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
 Imports rDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' package or create network graph and do network analysis.
@@ -230,7 +231,7 @@ Public Module NetworkModule
                           Optional env As Environment = Nothing) As Object
 
         If from.TryCount <> [to].TryCount Then
-            Return Internal.debug.stop($"size of from node({from.TryCount}) must be equals to the to nodes({[to].TryCount})!", env)
+            Return RInternal.debug.stop($"size of from node({from.TryCount}) must be equals to the to nodes({[to].TryCount})!", env)
         End If
 
         Dim g As New NetworkGraph
@@ -453,7 +454,7 @@ Public Module NetworkModule
         Dim tables As NetworkTables
 
         If g Is Nothing Then
-            Return Internal.debug.stop("the required network graph object can not be nothing!", env)
+            Return RInternal.debug.stop("the required network graph object can not be nothing!", env)
         End If
 
         If g.GetType Is GetType(NetworkGraph) Then
@@ -465,7 +466,7 @@ Public Module NetworkModule
                 tables.meta = meta
             End If
         Else
-            Return Internal.debug.stop(New InvalidProgramException(g.GetType.FullName), env)
+            Return RInternal.debug.stop(New InvalidProgramException(g.GetType.FullName), env)
         End If
 
         Return tables
@@ -723,7 +724,7 @@ Public Module NetworkModule
             v = g.GetElementByID(DirectCast(node, String))
 
             If v Is Nothing Then
-                Return Internal.debug.stop({$"we are not able to found a node with label id: {node}!", $"label: {node}"}, env)
+                Return RInternal.debug.stop({$"we are not able to found a node with label id: {node}!", $"label: {node}"}, env)
             End If
         ElseIf TypeOf node Is node Then
             v = node
@@ -951,7 +952,7 @@ Public Module NetworkModule
                             "missing node: " & id
                         }, MSG_TYPES.WRN)
                     Else
-                        Return Internal.debug.stop({
+                        Return RInternal.debug.stop({
                             "missing target node for create a new edge...",
                             "missing node: " & id
                         }, env)
@@ -976,7 +977,7 @@ Public Module NetworkModule
             End If
 
             If data Is Nothing Then
-                Return Internal.debug.stop({$"the required object '{formula.var}' can not be nothing!", $"object: {formula.var}"}, env)
+                Return RInternal.debug.stop({$"the required object '{formula.var}' can not be nothing!", $"object: {formula.var}"}, env)
             End If
 
             Dim table As rDataframe = DirectCast(data, rDataframe)
@@ -1156,7 +1157,7 @@ Public Module NetworkModule
             End If
 
             If classList.Length > 1 AndAlso classList.Length <> nodes.Length Then
-                Return Internal.debug.stop("the size of the class id and the node collection must be equals!", env)
+                Return RInternal.debug.stop("the size of the class id and the node collection must be equals!", env)
             End If
 
             For i As Integer = 0 To nodes.Length - 1
@@ -1222,9 +1223,9 @@ Public Module NetworkModule
 
             ' set edge attribute vector
         ElseIf TypeOf values Is vector Then
-            Return Internal.debug.stop(New NotImplementedException, env)
+            Return RInternal.debug.stop(New NotImplementedException, env)
         Else
-            Return Internal.debug.stop(New NotImplementedException, env)
+            Return RInternal.debug.stop(New NotImplementedException, env)
         End If
     End Function
 
@@ -1248,7 +1249,7 @@ Public Module NetworkModule
 
         If elements Is Nothing Then
             If Not values Is Nothing Then
-                Return Internal.debug.stop("target elements for set attribute values can not be nothing!", env)
+                Return RInternal.debug.stop("target elements for set attribute values can not be nothing!", env)
             Else
                 Return Nothing
             End If

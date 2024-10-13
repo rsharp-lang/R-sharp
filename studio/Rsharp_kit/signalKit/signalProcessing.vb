@@ -56,10 +56,8 @@
 #End Region
 
 Imports System.Drawing
-Imports System.Drawing.Drawing2D
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.csv.IO
@@ -77,6 +75,33 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports RDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+
+#If NET48 Then
+Imports Pen = System.Drawing.Pen
+Imports Pens = System.Drawing.Pens
+Imports Brush = System.Drawing.Brush
+Imports Font = System.Drawing.Font
+Imports Brushes = System.Drawing.Brushes
+Imports SolidBrush = System.Drawing.SolidBrush
+Imports DashStyle = System.Drawing.Drawing2D.DashStyle
+Imports Image = System.Drawing.Image
+Imports Bitmap = System.Drawing.Bitmap
+Imports GraphicsPath = System.Drawing.Drawing2D.GraphicsPath
+Imports FontStyle = System.Drawing.FontStyle
+#Else
+Imports Pen = Microsoft.VisualBasic.Imaging.Pen
+Imports Pens = Microsoft.VisualBasic.Imaging.Pens
+Imports Brush = Microsoft.VisualBasic.Imaging.Brush
+Imports Font = Microsoft.VisualBasic.Imaging.Font
+Imports Brushes = Microsoft.VisualBasic.Imaging.Brushes
+Imports SolidBrush = Microsoft.VisualBasic.Imaging.SolidBrush
+Imports DashStyle = Microsoft.VisualBasic.Imaging.DashStyle
+Imports Image = Microsoft.VisualBasic.Imaging.Image
+Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
+Imports GraphicsPath = Microsoft.VisualBasic.Imaging.GraphicsPath
+Imports FontStyle = Microsoft.VisualBasic.Imaging.FontStyle
+#End If
 
 ''' <summary>
 ''' Signal processing is an electrical engineering subfield that focuses on analyzing, 
@@ -91,11 +116,11 @@ Imports RDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Module signalProcessing
 
     Friend Sub Main()
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(SignalPeak()), AddressOf peakTable)
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(Variable()), AddressOf gaussPeaks)
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(GeneralSignal), AddressOf printSignalDf)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(SignalPeak()), AddressOf peakTable)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(Variable()), AddressOf gaussPeaks)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(GeneralSignal), AddressOf printSignalDf)
 
-        Call Internal.generic.add("plot", GetType(Variable()), AddressOf plotPeaksDecomposition)
+        Call RInternal.generic.add("plot", GetType(Variable()), AddressOf plotPeaksDecomposition)
     End Sub
 
     ''' <summary>

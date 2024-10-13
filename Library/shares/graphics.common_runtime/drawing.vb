@@ -53,7 +53,6 @@ Imports System.Drawing.Imaging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging
 
-Namespace Runtime.Internal.Invokes
+Module drawing
 
-
-End Namespace
+End Module

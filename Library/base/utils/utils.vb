@@ -92,6 +92,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports Rsharp = SMRUCC.Rsharp
 Imports textStream = System.IO.StreamReader
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' The R Utils Package 
@@ -251,7 +252,7 @@ Public Module utils
         If s Like GetType(Message) Then
             Return s.TryCast(Of Message)
         ElseIf x Is Nothing Then
-            Return Internal.debug.stop("the required dataframe object should not be nothing!", env)
+            Return RInternal.debug.stop("the required dataframe object should not be nothing!", env)
         End If
 
         Using writer As New FeatherWriter(s.TryCast(Of Stream), WriteMode.Eager)
@@ -365,11 +366,11 @@ Public Module utils
                             End Function)
             End Using
         Else
-            Return Internal.debug.stop("invalid file content type!", env)
+            Return RInternal.debug.stop("invalid file content type!", env)
         End If
 
         If Not TypeOf datafile Is file Then
-            Return Internal.debug.stop(datafile, env)
+            Return RInternal.debug.stop(datafile, env)
         Else
             Return DirectCast(datafile, csv).rawToDataFrame(
                 row_names:=row_names,
@@ -392,7 +393,7 @@ Public Module utils
             ElseIf indexType.mode = TypeCodes.integer Then
                 row_names = New vector(GetType(Integer), CLRVector.asInteger(row_names), env)
             Else
-                Return Internal.debug.stop({
+                Return RInternal.debug.stop({
                     "invalid data type for set row names!",
                     "given: " & RType.TypeOf(row_names).ToString
                 }, env)
@@ -417,7 +418,7 @@ Public Module utils
                         ' unsure for the NULL literal bug in build R package
                         Return Nothing
                     Else
-                        Return Internal.debug.stop({
+                        Return RInternal.debug.stop({
                             "undefined column was selected as row names!",
                             "given: " & key,
                             "you can check your table file format andalso check the parameters: check.names, comment.char, skip_rows"
@@ -443,7 +444,7 @@ Public Module utils
 
                 End If
             Case Else
-                Return Internal.debug.stop("invalid row names data type! required character or numeric!", env)
+                Return RInternal.debug.stop("invalid row names data type! required character or numeric!", env)
         End Select
 
         Return Nothing
@@ -559,7 +560,7 @@ Public Module utils
             Dim err As Object = REnv.TryCatch(Function() "".SaveTo(file), debug:=env.globalEnvironment.debugMode)
 
             If Not TypeOf err Is Boolean Then
-                Return Internal.debug.stop(err, env)
+                Return RInternal.debug.stop(err, env)
             End If
         End If
 

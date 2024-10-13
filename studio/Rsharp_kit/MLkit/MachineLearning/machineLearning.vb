@@ -82,6 +82,7 @@ Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataSet
 Imports MLDataSet = Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure.DataSet
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' R# machine learning library
@@ -209,7 +210,7 @@ Module machineLearning
                 If .type Like GetType(MLDataSet) Then
                     dataset = .Value
                 Else
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                         $"invalid model data type: { .type}!",
                         $"required: {GetType(MLDataSet).FullName}"
                     }, env)
@@ -218,7 +219,7 @@ Module machineLearning
         ElseIf TypeOf model Is MLDataSet Then
             dataset = model
         Else
-            Return Internal.debug.stop({
+            Return RInternal.debug.stop({
                 $"invalid model data type: {model.GetType.FullName}!",
                 $"required: {GetType(MLDataSet).FullName}"
             }, env)
@@ -235,7 +236,7 @@ Module machineLearning
     <ExportAPI("ANN.predict")>
     Public Function ANNpredict(model As Object, input As Double(), Optional env As Environment = Nothing) As Object
         If model Is Nothing Then
-            Return Internal.debug.stop("the required neuron network can not be nothing!", env)
+            Return RInternal.debug.stop("the required neuron network can not be nothing!", env)
         ElseIf TypeOf model Is Network Then
             Return DirectCast(model, Network).Compute(input)
         ElseIf TypeOf model Is ParallelNetwork Then
@@ -265,7 +266,7 @@ Module machineLearning
                                               Optional env As Environment = Nothing) As Object
 
         If dataset.DataSamples Is Nothing OrElse dataset.DataSamples.AsEnumerable.Count = 0 Then
-            Return Internal.debug.stop("the required training sample data can not be empty!", env)
+            Return RInternal.debug.stop("the required training sample data can not be empty!", env)
         End If
 
         If names.IsNullOrEmpty Then
@@ -317,7 +318,7 @@ Module machineLearning
             Call DirectCast(model, IndividualParallelTraining).Snapshot(file)
             Return True
         ElseIf Not TypeOf model Is NeuralNetwork Then
-            Return Internal.debug.stop({
+            Return RInternal.debug.stop({
                 $"invalid data type for save: {model.GetType.FullName}",
                 $"required: {GetType(NeuralNetwork).FullName}"
             }, env)
@@ -345,13 +346,13 @@ Module machineLearning
         Dim model As Network
 
         If ANN Is Nothing Then
-            Return Internal.debug.stop("the ANN network model can Not be nothing!", env)
+            Return RInternal.debug.stop("the ANN network model can Not be nothing!", env)
         ElseIf TypeOf ANN Is TrainingUtils Then
             ANN = DirectCast(ANN, TrainingUtils).NeuronNetwork
         End If
 
         If Not TypeOf ANN Is Network Then
-            Return Internal.debug.stop({
+            Return RInternal.debug.stop({
                 $"unsupported object type: {ANN.GetType.FullName}!",
                 $"required: {GetType(Network).FullName}"
             }, env)

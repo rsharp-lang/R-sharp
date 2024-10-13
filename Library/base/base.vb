@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' #### The R Base Package
@@ -137,7 +138,7 @@ Public Module base
         Dim rtype As RType = env.globalEnvironment.GetType([typeof])
 
         If rtype.raw Is GetType(Object) Then
-            Return Internal.debug.stop("a valid type schema must be provided to construct the .net clr data set!", env)
+            Return RInternal.debug.stop("a valid type schema must be provided to construct the .net clr data set!", env)
         End If
 
         Dim type As Type = rtype.raw

@@ -121,6 +121,23 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Imports std = System.Math
 Imports stdVector = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+
+#If NET48 Then
+Imports Pen = System.Drawing.Pen
+Imports Pens = System.Drawing.Pens
+Imports Brush = System.Drawing.Brush
+Imports Font = System.Drawing.Font
+Imports Brushes = System.Drawing.Brushes
+Imports SolidBrush = System.Drawing.SolidBrush
+Imports DashStyle = System.Drawing.Drawing2D.DashStyle
+Imports Image = System.Drawing.Image
+Imports Bitmap = System.Drawing.Bitmap
+Imports GraphicsPath = System.Drawing.Drawing2D.GraphicsPath
+Imports FontStyle = System.Drawing.FontStyle
+#Else
+Imports Image = Microsoft.VisualBasic.Imaging.Image
+#End If
 
 ''' <summary>
 ''' ### The R Stats Package 
@@ -135,16 +152,16 @@ Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 Module stats
 
     Sub New()
-        Internal.ConsolePrinter.AttachConsoleFormatter(Of DistanceMatrix)(AddressOf printMatrix)
-        Internal.ConsolePrinter.AttachConsoleFormatter(Of TtestResult)(AddressOf printTtest)
-        Internal.ConsolePrinter.AttachConsoleFormatter(Of TwoSampleResult)(AddressOf printTwoSampleTTest)
-        Internal.ConsolePrinter.AttachConsoleFormatter(Of FishersExactPvalues)(Function(o) o.ToString)
-        Internal.ConsolePrinter.AttachConsoleFormatter(Of FTest)(Function(o) o.ToString)
-        Internal.ConsolePrinter.AttachConsoleFormatter(Of MultivariateAnalysisResult)(AddressOf printMvar)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of DistanceMatrix)(AddressOf printMatrix)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of TtestResult)(AddressOf printTtest)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of TwoSampleResult)(AddressOf printTwoSampleTTest)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of FishersExactPvalues)(Function(o) o.ToString)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of FTest)(Function(o) o.ToString)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of MultivariateAnalysisResult)(AddressOf printMvar)
 
-        Internal.Object.Converts.makeDataframe.addHandler(GetType(DataMatrix), AddressOf matrixDataFrame)
-        Internal.Object.Converts.makeDataframe.addHandler(GetType(DistanceMatrix), AddressOf matrixDataFrame)
-        Internal.Object.Converts.makeDataframe.addHandler(GetType(CorrelationMatrix), AddressOf matrixDataFrame2)
+        RInternal.Object.Converts.makeDataframe.addHandler(GetType(DataMatrix), AddressOf matrixDataFrame)
+        RInternal.Object.Converts.makeDataframe.addHandler(GetType(DistanceMatrix), AddressOf matrixDataFrame)
+        RInternal.Object.Converts.makeDataframe.addHandler(GetType(CorrelationMatrix), AddressOf matrixDataFrame2)
     End Sub
 
     Private Function printMvar(x As MultivariateAnalysisResult) As String
@@ -359,7 +376,7 @@ Module stats
         Select Case method
             Case p_adjust_methods.fdr : Return p.FDR(n).ToArray
             Case Else
-                Return Internal.debug.stop(New NotImplementedException(method.Description), env)
+                Return RInternal.debug.stop(New NotImplementedException(method.Description), env)
         End Select
     End Function
 
@@ -490,7 +507,7 @@ Module stats
 
         End Select
 
-        Return Internal.debug.stop($"unsupported spline algorithm: {algorithm.ToString}", env)
+        Return RInternal.debug.stop($"unsupported spline algorithm: {algorithm.ToString}", env)
     End Function
 
     ''' <summary>
@@ -563,7 +580,7 @@ Module stats
                            Optional threshold As Double = 0.0000001,
                            Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
-            Return Internal.debug.stop("'data' must be of a vector type, was 'NULL'", env)
+            Return RInternal.debug.stop("'data' must be of a vector type, was 'NULL'", env)
         End If
 
         Dim ds As StatisticsObject
@@ -936,14 +953,14 @@ Module stats
         ElseIf TypeOf x Is DataSet() Then
             raw = x
         Else
-            Return Internal.debug.stop(New InvalidCastException(x.GetType.FullName), env)
+            Return RInternal.debug.stop(New InvalidCastException(x.GetType.FullName), env)
         End If
 
         Select Case Strings.LCase(method)
             Case "euclidean"
                 Return raw.Euclidean
             Case Else
-                Return Internal.debug.stop(New NotImplementedException(method), env)
+                Return RInternal.debug.stop(New NotImplementedException(method), env)
         End Select
     End Function
 
@@ -1014,7 +1031,7 @@ Module stats
                 ref = env.FindSymbol(name)
 
                 If ref Is Nothing Then
-                    Return Internal.debug.stop($"missing required symbol '{name}' for evaluate formula!", env)
+                    Return RInternal.debug.stop($"missing required symbol '{name}' for evaluate formula!", env)
                 Else
                     v.Add(name, CLRVector.asNumeric(ref.value))
                 End If
@@ -1201,7 +1218,7 @@ Module stats
         Dim expected As Double()() = Nothing
 
         If x Is Nothing Then
-            Return Internal.debug.stop("the required observed ``x`` ", env)
+            Return RInternal.debug.stop("the required observed ``x`` ", env)
         End If
 
         If TypeOf x Is Rdataframe Then
@@ -1212,7 +1229,7 @@ Module stats
         ElseIf TypeOf x Is NumericMatrix Then
             observed = DirectCast(x, NumericMatrix).ToArray
         Else
-            Return Internal.debug.stop("the required observed ``x`` should be a numeric matrix!", env)
+            Return RInternal.debug.stop("the required observed ``x`` should be a numeric matrix!", env)
         End If
 
         Dim chisq As ChiSquareTest
@@ -1406,7 +1423,7 @@ Module stats
                 py = CLRVector.asFloat(!y)
             End With
         Else
-            Return Internal.debug.stop("", env)
+            Return RInternal.debug.stop("", env)
         End If
 
         Dim fit = px.Select(Function(xi, i) New PointF(xi, py(i))).Lowess(f, nsteps)
@@ -1486,7 +1503,7 @@ Module stats
                     Call observations.Add(group.Select(Function(i) i.Item2).ToArray)
                 Next
             Else
-                Return Internal.debug.stop($"not implemented for the {factor.GetType.FullName}!", env)
+                Return RInternal.debug.stop($"not implemented for the {factor.GetType.FullName}!", env)
             End If
         End If
 
@@ -1602,7 +1619,7 @@ Module stats
                           Optional env As Environment = Nothing) As Object
 
         If y Is Nothing Then
-            Return Internal.debug.stop({
+            Return RInternal.debug.stop({
                 "the sample class information should not be nothing",
                 "it must be a vector of numeric data for regression or a character vector for classification!"}, env)
         Else
@@ -1673,7 +1690,7 @@ Module stats
                           Optional env As Environment = Nothing) As Object
 
         If y Is Nothing Then
-            Return Internal.debug.stop({
+            Return RInternal.debug.stop({
                 "the sample class information should not be nothing",
                 "it must be a vector of numeric data for regression or a character vector for classification!"}, env)
         Else

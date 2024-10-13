@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>Rbase</RootNamespace>
-	  <TargetFrameworks>net6.0;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net8.0-windows;net8.0</TargetFrameworks>
     <AssemblyName>base</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32;gcmodeller_desktop</Configurations>
@@ -23,7 +23,7 @@
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineConstants>write_csv=1,UNIX=1</DefineConstants>
     <DocumentationFile>base.xml</DocumentationFile>
   </PropertyGroup>
 
@@ -31,7 +31,7 @@
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineConstants>write_csv=1,UNIX=1</DefineConstants>
     <DocumentationFile>base.xml</DocumentationFile>
   </PropertyGroup>
 
@@ -64,7 +64,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineConstants>write_csv=1,UNIX=1</DefineConstants>
     <DefineTrace>true</DefineTrace>
     <OutputPath>../../App\</OutputPath>
   </PropertyGroup>
@@ -180,8 +180,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.10" />
     <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
   </ItemGroup>
 

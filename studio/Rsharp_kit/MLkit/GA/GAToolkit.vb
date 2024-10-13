@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' A Genetic Algorithm Toolkit for R# language
@@ -128,7 +129,7 @@ Module GAToolkit
         Dim network As Network
 
         If ANN Is Nothing Then
-            Return Internal.debug.stop("the required ANN model object can not be nothing!", env)
+            Return RInternal.debug.stop("the required ANN model object can not be nothing!", env)
         ElseIf TypeOf ANN Is ANNTrainer Then
             network = DirectCast(ANN, ANNTrainer).NeuronNetwork
         ElseIf TypeOf ANN Is Network Then

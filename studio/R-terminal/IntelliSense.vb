@@ -55,7 +55,7 @@
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.LineEdit
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports rLang = SMRUCC.Rsharp.Language.Syntax
 
 Friend Class IntelliSense
@@ -70,7 +70,7 @@ Friend Class IntelliSense
         Dim globalEnv = R.globalEnvir
         Dim globalSymbols = globalEnv.EnumerateAllSymbols.JoinIterates(globalEnv.EnumerateAllFunctions)
         ' system internal hiddens
-        Dim internals = Internal.invoke.getAllInternals
+        Dim internals = RInternal.invoke.getAllInternals
         Dim symbols As IEnumerable(Of String) = globalSymbols _
             .Select(Function(s) s.name) _
             .JoinIterates(internals.Select(Function(s) s.name)) _

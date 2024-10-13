@@ -254,6 +254,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Call Me.New({symbol}, value, type, [readonly], stackFrame)
         End Sub
 
+        ''' <summary>
+        ''' get symbol name string
+        ''' </summary>
+        ''' <returns>
+        ''' usually be the first element of the names array. For multiple names, 
+        ''' a string json array text will be generates from this function.
+        ''' </returns>
         Public Overrides Function GetSymbolName() As String
             If m_names.Length = 1 Then
                 Return m_names(0)

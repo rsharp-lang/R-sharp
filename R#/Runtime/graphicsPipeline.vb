@@ -166,6 +166,19 @@ Namespace Runtime
             Return args.slots.getSize(env, [default])
         End Function
 
+        ''' <summary>
+        ''' get size value from the arguments list
+        ''' </summary>
+        ''' <param name="args"></param>
+        ''' <param name="env"></param>
+        ''' <param name="default">the default size value is the parameter is not found</param>
+        ''' <returns>
+        ''' size is get via the parameter names:
+        ''' 
+        ''' 1. size: should be an integer vector of [width,height]
+        ''' 2. w and h
+        ''' 3. width and height
+        ''' </returns>
         <Extension>
         Public Function getSize(args As Dictionary(Of String, Object), env As Environment, [default] As SizeF) As SizeF
             Dim w# = [default].Width

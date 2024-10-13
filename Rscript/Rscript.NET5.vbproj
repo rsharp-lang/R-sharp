@@ -3,13 +3,13 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>Rsharp.NetCore5</RootNamespace>
-    <TargetFrameworks>net6.0;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
     <AssemblyName>Rscript</AssemblyName>
     <ApplicationIcon>R#.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;Rsharp_app_release;PlantMAT;NPSearch;mzkit_win32;gcmodeller_desktop</Configurations>
     <StartupObject>Rsharp.NetCore5.Program</StartupObject>
-	  <RuntimeIdentifiers>win7-x64;win7-x86;win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
+	  <RuntimeIdentifiers>win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
 	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 	  <Title>R# language scrpting host</Title>
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
@@ -142,9 +142,11 @@
     <PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="2.88.8" />
     <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="2.88.8" />
     <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
-    <PackageReference Include="System.IO.Packaging" Version="6.0.1" />
-    <PackageReference Include="System.Resources.Extensions" Version="6.0.0" />
+
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
+    <PackageReference Include="System.IO.Packaging" Version="8.0.1" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+
     <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
 

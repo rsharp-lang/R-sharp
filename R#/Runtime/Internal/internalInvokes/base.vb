@@ -1,80 +1,79 @@
 ﻿#Region "Microsoft.VisualBasic::9af6fe0219faea1de6ce96eda9402c69, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 3531
-    '    Code Lines: 1573 (44.55%)
-    ' Comment Lines: 1659 (46.98%)
-    '    - Xml Docs: 84.09%
-    ' 
-    '   Blank Lines: 299 (8.47%)
-    '     File Size: 158.05 KB
+' Summaries:
 
 
-    '     Module base
-    ' 
-    '         Function: __empty, __invisible, [date], [stop], allocate
-    '                   append, appendFinal, appendOfList, appendOfVector, (+3 Overloads) argumentList
-    '                   as_array, attachPackageFile, autoDispose, c, cat
-    '                   cbind, character, checkDimensionsAgree, colnames, columnVector
-    '                   commandArgs, doPrintInternal, dQuote, factor, factors
-    '                   getOption, getPosition, ifelse, ifelseScalar, ifelseVector
-    '                   ints, is_array, isDataframe, isEmpty, isEmptyArray
-    '                   isFALSE, isFunction, isList, isNA, isNull
-    '                   isRVector, isTRUE, join_data, length, library
-    '                   logical, makeNames, names, ncol, neg
-    '                   nrow, numeric, objectAddInvoke, options, options_flush
-    '                   print, range, raws, rbind, Rdataframe
-    '                   rep, rep_int, rep_len, replace, Rlist
-    '                   Robj_dimension, rownames, seq, sink, sink_number
-    '                   source, sQuote, str, summary, t
-    '                   uniqueNames, unitOfT, ValueAt, warning, year
-    ' 
-    '         Sub: println_message, warnings
-    '         Class PrinterOptions
-    ' 
-    '             Properties: fields, maxPrint, maxWidth, quot, syntax
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 3531
+'    Code Lines: 1573 (44.55%)
+' Comment Lines: 1659 (46.98%)
+'    - Xml Docs: 84.09%
+' 
+'   Blank Lines: 299 (8.47%)
+'     File Size: 158.05 KB
+
+
+'     Module base
+' 
+'         Function: __empty, __invisible, [date], [stop], allocate
+'                   append, appendFinal, appendOfList, appendOfVector, (+3 Overloads) argumentList
+'                   as_array, attachPackageFile, autoDispose, c, cat
+'                   cbind, character, checkDimensionsAgree, colnames, columnVector
+'                   commandArgs, doPrintInternal, dQuote, factor, factors
+'                   getOption, getPosition, ifelse, ifelseScalar, ifelseVector
+'                   ints, is_array, isDataframe, isEmpty, isEmptyArray
+'                   isFALSE, isFunction, isList, isNA, isNull
+'                   isRVector, isTRUE, join_data, length, library
+'                   logical, makeNames, names, ncol, neg
+'                   nrow, numeric, objectAddInvoke, options, options_flush
+'                   print, range, raws, rbind, Rdataframe
+'                   rep, rep_int, rep_len, replace, Rlist
+'                   Robj_dimension, rownames, seq, sink, sink_number
+'                   source, sQuote, str, summary, t
+'                   uniqueNames, unitOfT, ValueAt, warning, year
+' 
+'         Sub: println_message, warnings
+'         Class PrinterOptions
+' 
+'             Properties: fields, maxPrint, maxWidth, quot, syntax
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports System.Drawing
 Imports System.IO
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
@@ -121,6 +120,14 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 Imports std = System.Math
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
+
+#If NET48 Then
+Imports Image = System.Drawing.Image
+Imports Bitmap = System.Drawing.Bitmap
+#Else
+Imports Image = Microsoft.VisualBasic.Imaging.Image
+Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
+#End If
 
 Namespace Runtime.Internal.Invokes
 

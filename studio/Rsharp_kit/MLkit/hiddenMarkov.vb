@@ -65,7 +65,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 <Package("hiddenMarkov")>
 <RTypeExport("state", GetType(StatesObject))>
@@ -73,9 +73,9 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Module hiddenMarkov
 
     Sub New()
-        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of Alpha)(AddressOf printAlpha)
-        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of Beta)(AddressOf printBeta)
-        Call Internal.ConsolePrinter.AttachConsoleFormatter(Of viterbiSequence)(AddressOf printViterbi)
+        Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of Alpha)(AddressOf printAlpha)
+        Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of Beta)(AddressOf printBeta)
+        Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of viterbiSequence)(AddressOf printViterbi)
     End Sub
 
     Private Function printAlpha(a As Alpha) As String

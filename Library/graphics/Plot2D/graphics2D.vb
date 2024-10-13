@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::bb720488e3f78cfcdb159935a8066814, Library\graphics\Plot2D\graphics2D.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 706
-    '    Code Lines: 513 (72.66%)
-    ' Comment Lines: 111 (15.72%)
-    '    - Xml Docs: 95.50%
-    ' 
-    '   Blank Lines: 82 (11.61%)
-    '     File Size: 29.19 KB
+' Summaries:
 
 
-    ' Module graphics2DTools
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asciiArt, axisTicks, colorMapLegend, contourPolygon, contourTracing
-    '               DrawCircle, drawLegends, DrawRectangle, DrawTriangle, layout_grid
-    '               legend, line2D, measureString, offset2D, paddingString
-    '               paddingVector, plotColorMap, point2D, pointsVector, rasterHeatmap
-    '               (+2 Overloads) rectangle, scale, size, sizeVector
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 706
+'    Code Lines: 513 (72.66%)
+' Comment Lines: 111 (15.72%)
+'    - Xml Docs: 95.50%
+' 
+'   Blank Lines: 82 (11.61%)
+'     File Size: 29.19 KB
+
+
+' Module graphics2DTools
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asciiArt, axisTicks, colorMapLegend, contourPolygon, contourTracing
+'               DrawCircle, drawLegends, DrawRectangle, DrawTriangle, layout_grid
+'               legend, line2D, measureString, offset2D, paddingString
+'               paddingVector, plotColorMap, point2D, pointsVector, rasterHeatmap
+'               (+2 Overloads) rectangle, scale, size, sizeVector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -78,14 +78,18 @@ Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.MIME.Html.Render
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports R_graphics.Common.Runtime
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal
-Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports Canvas = Microsoft.VisualBasic.Imaging.Graphics2D
+Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
+Imports Brush = Microsoft.VisualBasic.Imaging.Brush
+Imports Font = Microsoft.VisualBasic.Imaging.Font
+Imports Image = Microsoft.VisualBasic.Imaging.Image
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+Imports SolidBrush = Microsoft.VisualBasic.Imaging.SolidBrush
 
 ''' <summary>
 ''' 2D graphics
@@ -95,7 +99,7 @@ Imports Canvas = Microsoft.VisualBasic.Imaging.Graphics2D
 Module graphics2DTools
 
     Sub New()
-        Call Internal.generic.add("plot", GetType(ColorMapLegend), AddressOf plotColorMap)
+        Call RInternal.generic.add("plot", GetType(ColorMapLegend), AddressOf plotColorMap)
     End Sub
 
     ''' <summary>
@@ -112,7 +116,7 @@ Module graphics2DTools
         Dim barmap As Boolean = CLRVector.asLogical(args.getBySynonyms("bar")).DefaultFirst([default]:=False)
 
         If barmap Then
-            Dim g As Canvas = New Size(256, 1).CreateGDIDevice
+            Dim g As IGraphics = DriverLoad.CreateGraphicsDevice(New Size(256, 1), driver:=Drivers.GDI)
             Dim colors As Brush() = legend.ScaleColors(n:=256) _
                 .Select(Function(c) DirectCast(New SolidBrush(c), Brush)) _
                 .ToArray
@@ -123,7 +127,7 @@ Module graphics2DTools
 
             Call g.Flush()
 
-            Return g.ImageResource
+            Return DirectCast(g, GdiRasterGraphics).ImageResource
         ElseIf Not size.SizeParser.IsValidGDIParameter Then
             ' draw on current graphics context
             Dim dev As graphicsDevice = curDev
@@ -311,7 +315,7 @@ Module graphics2DTools
             canvas = curDev.g
         End If
         If canvas Is Nothing Then
-            canvas = New Bitmap(1, 1).CreateCanvas2D
+            canvas = DriverLoad.CreateGraphicsDevice(New Size(1, 1), driver:=Drivers.GDI)
         End If
 
         Dim fontStyle As Font
@@ -345,9 +349,9 @@ Module graphics2DTools
         End If
 
         If TypeOf canvas Is ImageData Then
-            g = New Canvas(DirectCast(canvas, ImageData).AsGDIImage)
+            g = DriverLoad.CreateGraphicsDevice(DirectCast(canvas, ImageData).AsGDIImage)
         ElseIf TypeOf canvas Is Bitmap OrElse TypeOf canvas Is Image Then
-            g = New Canvas(DirectCast(canvas, Image))
+            g = DriverLoad.CreateGraphicsDevice(DirectCast(canvas, Image))
         ElseIf TypeOf canvas Is IGraphics Then
             g = canvas
         Else
@@ -356,11 +360,11 @@ Module graphics2DTools
 
         Call g.DrawLegends(location, legends, gSize:=InteropArgumentHelper.getSize(gSize, env), regionBorder:=stroke)
 
-        Select Case g.GetType
-            Case GetType(Canvas) : Return DirectCast(g, Canvas).ImageResource
-            Case Else
-                Throw New NotImplementedException
-        End Select
+        If g.GetType.ImplementInterface(Of GdiRasterGraphics) Then
+            Return DirectCast(g, GdiRasterGraphics).ImageResource
+        End If
+
+        Return Nothing
     End Function
 
     <ExportAPI("rect")>
@@ -458,7 +462,7 @@ Module graphics2DTools
                 offsetPt = New PointF(CDbl(.GetValue(Scan0)), CDbl(.GetValue(1)))
             End With
         Else
-            Return Internal.debug.stop(Message.InCompatibleType(GetType(PointF), offset.GetType, env,, NameOf(offset)), env)
+            Return RInternal.debug.stop(Message.InCompatibleType(GetType(PointF), offset.GetType, env,, NameOf(offset)), env)
         End If
 
         If TypeOf layout Is Point Then
@@ -470,7 +474,7 @@ Module graphics2DTools
         ElseIf TypeOf layout Is RectangleF Then
             Return DirectCast(layout, RectangleF).OffSet2D(offsetPt)
         Else
-            Return Internal.debug.stop(Message.InCompatibleType(GetType(PointF), layout.GetType, env,, NameOf(layout)), env)
+            Return RInternal.debug.stop(Message.InCompatibleType(GetType(PointF), layout.GetType, env,, NameOf(layout)), env)
         End If
     End Function
 
@@ -551,7 +555,7 @@ Module graphics2DTools
         End If
 
         If dev.g Is Nothing Then
-            Return Internal.debug.stop({
+            Return RInternal.debug.stop({
                 "the graphics device has not been opened yet, you should use the bitmap function for create a new at first!",
                 "(the acceptor closure syntax of the bitmap function is not working at here!)"
             }, env)
@@ -610,7 +614,7 @@ Module graphics2DTools
         Dim colorVal As Color = RColorPalette.GetRawColor(color)
 
         If g Is Nothing Then
-            g = Invokes.graphics.curDev.g
+            g = R_graphics.Common.Runtime.graphics.curDev.g
         End If
 
         If TypeOf rect Is Rectangle Then
@@ -745,7 +749,7 @@ Module graphics2DTools
         Dim bitmap As Image
 
         If image Is Nothing Then
-            Return Internal.debug.stop("the required bitmap data can not be nothing!", env)
+            Return RInternal.debug.stop("the required bitmap data can not be nothing!", env)
         ElseIf TypeOf image Is Image Then
             bitmap = DirectCast(image, Image)
         ElseIf TypeOf image Is Bitmap Then

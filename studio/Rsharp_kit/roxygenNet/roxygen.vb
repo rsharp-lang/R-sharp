@@ -72,6 +72,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports MarkdownHTML = Microsoft.VisualBasic.MIME.text.markdown.MarkdownRender
 Imports pkg = SMRUCC.Rsharp.Development.Package.Package
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' # In-Line Documentation for R
@@ -151,7 +152,7 @@ Public Module roxygen
                         .SaveTo($"{man_dir}/{symbol.declares.name}.1")
                 Next
             Catch ex As Exception
-                Return Internal.debug.stop({
+                Return RInternal.debug.stop({
                     $"script syntax parser error: {ex.Message}",
                     $"RSCRIPT: {Rscript}"
                 }, env)

@@ -56,7 +56,6 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Emit.Delegates
-Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.Syntax
@@ -121,12 +120,9 @@ Namespace Interpreter.ExecuteEngine
                 .ParseExpression(opts)
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function ParseLines(rscript As Rscript, Optional keepsCommentLines As Boolean = False) As IEnumerable(Of Expression)
-            Return New SyntaxBuilderOptions(AddressOf CreateExpression, Function(c, s) New Scanner(c, s)) With {
-                .keepsCommentLines = keepsCommentLines,
-                .source = rscript
-            } _
-            .DoCall(AddressOf rscript.GetExpressions)
+            Return rscript.GetExpressions(Program.GetRLanguageDefaultOption(rscript, keepsCommentLines:=keepsCommentLines))
         End Function
     End Class
 End Namespace

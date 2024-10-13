@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Public Class PythonScriptLoader : Inherits ScriptLoader
 
@@ -99,7 +100,7 @@ Public Class PythonScriptLoader : Inherits ScriptLoader
         If program Is Nothing Then
             ' there are syntax error in the external script
             ' for current imports action
-            Return Internal.debug.stop("".Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB), env)
+            Return RInternal.debug.stop("".Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB), env)
         Else
             Return program.Execute(env)
         End If

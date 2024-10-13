@@ -1,65 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::fbd75a2ee003a9e0e8275ecd98a1df34, studio\Rsharp_kit\MLkit\MachineLearning\CNN.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 768
-    '    Code Lines: 487 (63.41%)
-    ' Comment Lines: 194 (25.26%)
-    '    - Xml Docs: 96.39%
-    ' 
-    '   Blank Lines: 87 (11.33%)
-    '     File Size: 31.51 KB
+' Summaries:
 
 
-    ' Module CNNTools
-    ' 
-    '     Function: AdaDeltaTrainer, AdaGradTrainer, AdamTrainer, addLayer, auto_encoder
-    '               cnn_new, conv_layer, conv_transpose_layer, detectObject, dropout_layer
-    '               full_connected_layer, gaussian_layer, input_layer, leaky_relu_layer, loadModel
-    '               lrn_layer, maxout_layer, n_threads, NesterovTrainer, pool_layer
-    '               predict, regression_layer, relu_layer, sample_dataset, sample_dataset_from_df
-    '               sample_image_dataset, saveModel, SGDTrainer, sigmoid_layer, softmax_layer
-    '               tanh_layer, training, WindowGradTrainer
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 768
+'    Code Lines: 487 (63.41%)
+' Comment Lines: 194 (25.26%)
+'    - Xml Docs: 96.39%
+' 
+'   Blank Lines: 87 (11.33%)
+'     File Size: 31.51 KB
+
+
+' Module CNNTools
+' 
+'     Function: AdaDeltaTrainer, AdaGradTrainer, AdamTrainer, addLayer, auto_encoder
+'               cnn_new, conv_layer, conv_transpose_layer, detectObject, dropout_layer
+'               full_connected_layer, gaussian_layer, input_layer, leaky_relu_layer, loadModel
+'               lrn_layer, maxout_layer, n_threads, NesterovTrainer, pool_layer
+'               predict, regression_layer, relu_layer, sample_dataset, sample_dataset_from_df
+'               sample_image_dataset, saveModel, SGDTrainer, sigmoid_layer, softmax_layer
+'               tanh_layer, training, WindowGradTrainer
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports System.Drawing
 Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -79,7 +78,10 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
+Imports Image = Microsoft.VisualBasic.Imaging.Image
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' feed-forward phase of deep Convolutional Neural Networks
@@ -89,8 +91,8 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Module CNNTools
 
     Sub Main()
-        Internal.ConsolePrinter.AttachConsoleFormatter(Of CNNFunction)(Function(cnn) cnn.ToString)
-        Internal.ConsolePrinter.AttachConsoleFormatter(Of ConvolutionalNN)(Function(cnn) cnn.ToString)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of CNNFunction)(Function(cnn) cnn.ToString)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of ConvolutionalNN)(Function(cnn) cnn.ToString)
     End Sub
 
     ''' <summary>
@@ -792,7 +794,7 @@ Module CNNTools
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("detectObject")>
-    Public Function detectObject(model As CeNiN, target As Drawing.Bitmap, Optional env As Environment = Nothing) As dataframe
+    Public Function detectObject(model As CeNiN, target As Bitmap, Optional env As Environment = Nothing) As dataframe
         Dim result As NamedValue(Of Double)() = model.DetectObject(target, dev:=env.globalEnvironment.stdout)
         Dim classes As String() = result.Select(Function(v) v.Name).ToArray
         Dim probs As Double() = result.Select(Function(v) v.Value).ToArray

@@ -75,6 +75,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' Make documents for R# symbol object
@@ -400,7 +401,7 @@ Public Module rdocumentation
                 func = New RMethodInfo(f)
                 funcs.add(func.name, func)
             Catch ex As Exception
-                Return Internal.debug.stop({
+                Return RInternal.debug.stop({
                     $"error load .net clr library while parse function: {f.Name}",
                     $"package: {package}",
                     ex.Message,
@@ -421,7 +422,7 @@ Public Module rdocumentation
                 .ToArray
 
             If Not ex Is Nothing Then
-                Return Internal.debug.stop(ex, env)
+                Return RInternal.debug.stop(ex, env)
             Else
                 Return func_clr
             End If
@@ -447,7 +448,7 @@ Public Module rdocumentation
                 .FindPackage(any.ToString(package), env.globalEnvironment, ex)
 
             If Not ex Is Nothing Then
-                Return Internal.debug.stop(ex, env)
+                Return RInternal.debug.stop(ex, env)
             Else
                 Return pkg_clr
             End If

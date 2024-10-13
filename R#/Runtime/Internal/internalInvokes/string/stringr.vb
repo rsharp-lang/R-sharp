@@ -102,6 +102,14 @@ Imports std = System.Math
 Imports VBStr = Microsoft.VisualBasic.Strings
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
+#If NET48 Then
+Imports Image = System.Drawing.Image
+Imports Bitmap = System.Drawing.Bitmap
+#Else
+Imports Image = Microsoft.VisualBasic.Imaging.Image
+Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
+#End If
+
 Namespace Runtime.Internal.Invokes
 
     ''' <summary>

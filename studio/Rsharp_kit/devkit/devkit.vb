@@ -1,60 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::1287c5cf5325af51440860584ecfd551, studio\Rsharp_kit\devkit\devkit.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 158
-    '    Code Lines: 105 (66.46%)
-    ' Comment Lines: 33 (20.89%)
-    '    - Xml Docs: 96.97%
-    ' 
-    '   Blank Lines: 20 (12.66%)
-    '     File Size: 6.07 KB
+' Summaries:
 
 
-    ' Module devkit
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: AssemblyInfo, decodeSourceMap, encodeSourceMap, getSourceFiles, gitLog
-    '               inspect, printProject, readBannerData, readVbProject, showIL
-    '               svnLog, writeCodeBanner
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 158
+'    Code Lines: 105 (66.46%)
+' Comment Lines: 33 (20.89%)
+'    - Xml Docs: 96.97%
+' 
+'   Blank Lines: 20 (12.66%)
+'     File Size: 6.07 KB
+
+
+' Module devkit
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: AssemblyInfo, decodeSourceMap, encodeSourceMap, getSourceFiles, gitLog
+'               inspect, printProject, readBannerData, readVbProject, showIL
+'               svnLog, writeCodeBanner
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports System.Diagnostics.SymbolStore
 Imports System.Reflection
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Development
@@ -71,6 +70,7 @@ Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' VisualBasic.NET application development kit
@@ -79,9 +79,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Module devkit
 
     Sub New()
-        Internal.ConsolePrinter.AttachConsoleFormatter(Of ILInstruction)(Function(a) DirectCast(a, ILInstruction).GetCode)
-        Internal.ConsolePrinter.AttachConsoleFormatter(Of Project)(AddressOf printProject)
-        Internal.ConsolePrinter.AttachConsoleFormatter(Of LicenseInfo)(Function(a) a.ToString)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of ILInstruction)(Function(a) DirectCast(a, ILInstruction).GetCode)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of Project)(AddressOf printProject)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of LicenseInfo)(Function(a) a.ToString)
     End Sub
 
     Private Function printProject(vbproj As Project) As String
@@ -208,7 +208,7 @@ Module devkit
                 Return Nothing
             End If
         Else
-            Return Internal.debug.stop({$"unsupported script file type(*.{script.ExtensionSuffix})!"}, globalEnv)
+            Return RInternal.debug.stop({$"unsupported script file type(*.{script.ExtensionSuffix})!"}, globalEnv)
         End If
     End Function
 End Module

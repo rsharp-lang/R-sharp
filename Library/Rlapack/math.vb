@@ -98,6 +98,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports baseMath = Microsoft.VisualBasic.Math
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports stdVec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
@@ -318,7 +319,7 @@ Module math
 
         If [step] Is Nothing Then
             If n Is Nothing Then
-                Return Internal.debug.stop("the historgram parameter step and n should not be both nothing!", env)
+                Return RInternal.debug.stop("the historgram parameter step and n should not be both nothing!", env)
             End If
 
             [step] = New DoubleRange(v).Length / n
@@ -546,7 +547,7 @@ theta = {objToString(thetaFunc, env:=env)}
 
             Return lm
         Else
-            Return Internal.debug.stop(New NotImplementedException, env)
+            Return RInternal.debug.stop(New NotImplementedException, env)
         End If
     End Function
 
@@ -595,7 +596,7 @@ theta = {objToString(thetaFunc, env:=env)}
                     .ITERATIONS = iteration
                 }
             Case Else
-                Return Internal.debug.stop(New NotImplementedException(link), env)
+                Return RInternal.debug.stop(New NotImplementedException(link), env)
         End Select
     End Function
 
@@ -662,13 +663,13 @@ theta = {objToString(thetaFunc, env:=env)}
             End If
 
             If df Is Nothing Then
-                Return Internal.debug.stop({"the required data can not be nothing!"}, env)
+                Return RInternal.debug.stop({"the required data can not be nothing!"}, env)
             End If
         ElseIf TypeOf data Is Rdataframe Then
             df = DirectCast(data, Rdataframe)
 
             If Not df.columns.ContainsKey(formula.var) Then
-                Return Internal.debug.stop({
+                Return RInternal.debug.stop({
                     $"missing the required symbol '{formula.var}' in your input data!",
                     $"symbol: {formula.var}",
                     $"formula: {formula}"
@@ -747,7 +748,7 @@ theta = {objToString(thetaFunc, env:=env)}
     <RApiReturn(GetType(DeclareLambdaFunction))>
     Public Function asFormula(lm As lmCall, Optional env As Environment = Nothing) As Object
         If lm Is Nothing Then
-            Return Internal.debug.stop("the required linear model can not be nothing!", env)
+            Return RInternal.debug.stop("the required linear model can not be nothing!", env)
         End If
 
         ' 主要是生成lambda函数的closure表达式
@@ -802,14 +803,14 @@ theta = {objToString(thetaFunc, env:=env)}
                             Optional env As Environment = Nothing) As Object
 
         If lm Is Nothing Then
-            Return Internal.debug.stop("the required model object can not be nothing!", env)
+            Return RInternal.debug.stop("the required model object can not be nothing!", env)
         End If
 
         Dim input As New Dictionary(Of String, Double())
         Dim names As String() = Nothing
 
         If x Is Nothing Then
-            Return Internal.debug.stop("the required input data x can not be nothing!", env)
+            Return RInternal.debug.stop("the required input data x can not be nothing!", env)
         ElseIf TypeOf x Is Integer OrElse TypeOf x Is Long OrElse TypeOf x Is Single OrElse TypeOf x Is Double Then
             Return lm.lm.GetY(CDbl(x))
         ElseIf TypeOf x Is Double() OrElse TypeOf x Is vector Then
@@ -844,7 +845,7 @@ theta = {objToString(thetaFunc, env:=env)}
 
         With input.First.Value
             If Not input.All(Function(a) a.Value.Length = .Length) Then
-                Return Internal.debug.stop("all of the data variable vector for predicts should be equals to each other in size!", env)
+                Return RInternal.debug.stop("all of the data variable vector for predicts should be equals to each other in size!", env)
             End If
 
             For i As Integer = 0 To .Length - 1
@@ -958,9 +959,9 @@ theta = {objToString(thetaFunc, env:=env)}
                                         Optional env As Environment = Nothing) As Object
 
         If x Is Nothing OrElse y Is Nothing Then
-            Return Internal.debug.stop("the given input of numeric vector x or y can not be nothing!", env)
+            Return RInternal.debug.stop("the given input of numeric vector x or y can not be nothing!", env)
         ElseIf x.Length <> y.Length Then
-            Return Internal.debug.stop($"the given input vector size x({x.Length}) is not equals to y({y.Length})!", env)
+            Return RInternal.debug.stop($"the given input vector size x({x.Length}) is not equals to y({y.Length})!", env)
         Else
             Dim methods As String() = CLRVector.asCharacter(method)
             Dim data As PointF() = x _
@@ -972,7 +973,7 @@ theta = {objToString(thetaFunc, env:=env)}
                 Case "RDPsd" : pointList = data.RDPsd(epsilon)
                 Case "RDPppd" : pointList = data.RDPppd(epsilon)
                 Case Else
-                    Return Internal.debug.stop($"unknow method: {methods(Scan0)}!", env)
+                    Return RInternal.debug.stop($"unknow method: {methods(Scan0)}!", env)
             End Select
 
             Return New Rdataframe With {

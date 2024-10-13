@@ -77,6 +77,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports vec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 
 ''' <summary>
@@ -87,8 +88,8 @@ Imports vec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 Module RMatrix
 
     Sub New()
-        Call Internal.Object.Converts.makeDataframe.addHandler(GetType(NumericMatrix), AddressOf createTable)
-        Call Internal.ConsolePrinter.AttachInternalConsoleFormatter(Of NumericMatrix)(
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(NumericMatrix), AddressOf createTable)
+        Call RInternal.ConsolePrinter.AttachInternalConsoleFormatter(Of NumericMatrix)(
             Function(print, env)
                 Return Function(o) As String
                            Dim df As Rdataframe = createTable(o, New list With {.slots = New Dictionary(Of String, Object)}, env)
@@ -103,8 +104,8 @@ Module RMatrix
                        End Function
             End Function)
 
-        Call Internal.generic.add("writeBin", GetType(NumericMatrix), AddressOf saveMatrix)
-        Call Internal.generic.add("readBin.LA_mat", GetType(Stream), AddressOf readMatrix)
+        Call RInternal.generic.add("writeBin", GetType(NumericMatrix), AddressOf saveMatrix)
+        Call RInternal.generic.add("readBin.LA_mat", GetType(Stream), AddressOf readMatrix)
     End Sub
 
     Public Function saveMatrix(m As NumericMatrix, args As list, env As Environment) As Object
@@ -308,7 +309,7 @@ Module RMatrix
                 Return New NumericMatrix(rows)
             End If
 
-            Return Internal.debug.stop("input data should be a dataframe or matrix object", env)
+            Return RInternal.debug.stop("input data should be a dataframe or matrix object", env)
         End If
 
         Return data
@@ -480,7 +481,7 @@ Module RMatrix
             ' check expression type:
             ' all expression should be the value assign expression?
             If Not equ.All(Function(exp) Not exp Is Nothing) Then
-                Return Internal.debug.stop("all of the input problem equation expression must be value assign expression, example like: a + b = y", env)
+                Return RInternal.debug.stop("all of the input problem equation expression must be value assign expression, example like: a + b = y", env)
             End If
 
             Dim bvec As Object() = equ _
@@ -500,7 +501,7 @@ Module RMatrix
                 Dim math As BinaryExpression = TryCast(eq.targetSymbols(0), BinaryExpression)
 
                 If math Is Nothing Then
-                    Return Internal.debug.stop("the equation expression should be a math binary expression!", env)
+                    Return RInternal.debug.stop("the equation expression should be a math binary expression!", env)
                 Else
                     Dim row As New List(Of Double)
 
@@ -509,7 +510,7 @@ Module RMatrix
                 End If
 
                 If rows.Last.Any(Function(d) d.IsNaNImaginary) Then
-                    Return Internal.debug.stop("syntax error when parse the equation!", env)
+                    Return RInternal.debug.stop("syntax error when parse the equation!", env)
                 End If
             Next
 

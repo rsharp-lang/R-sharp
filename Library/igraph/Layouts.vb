@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' Do network layouts
@@ -80,7 +81,7 @@ Module Layouts
     <RApiReturn(GetType(NetworkGraph))>
     Public Function randomLayout(g As NetworkGraph, Optional env As Environment = Nothing) As Object
         If g Is Nothing Then
-            Return Internal.debug.stop("the given network graph object can not be nothing!", env)
+            Return RInternal.debug.stop("the given network graph object can not be nothing!", env)
         Else
             Return g.doRandomLayout
         End If
@@ -207,7 +208,7 @@ Module Layouts
                     avoidRegions:=avoids
                 )
             Case Else
-                Return Internal.debug.stop($"invalid algorithm name: {algorithm}", env)
+                Return RInternal.debug.stop($"invalid algorithm name: {algorithm}", env)
         End Select
 
         For i As Integer = 0 To iterations
@@ -265,13 +266,13 @@ Module Layouts
             Dim tooLarge As Boolean = g.graphEdges.Count / g.connectedNodes.Length > 10
 
             If tooLarge Then
-                Return Internal.debug.stop({
+                Return RInternal.debug.stop({
                     "do network graph layout failure...",
                     "your network size is too large, please consider reduce the edge connection size...",
                     "size: [" & g.vertex.Count & ", " & g.graphEdges.Count & "]"
                 }, env)
             Else
-                Return Internal.debug.stop({
+                Return RInternal.debug.stop({
                     "do network graph layout failure...",
                     "please consider adjust one of the physics parameters: stiffness, repulsion or damping..."
                 }, env)

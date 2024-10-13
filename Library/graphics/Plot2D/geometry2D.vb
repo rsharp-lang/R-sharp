@@ -82,6 +82,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Public Class PolygonGroup
 
@@ -101,9 +102,9 @@ End Class
 Module geometry2D
 
     Public Sub Main()
-        Call Internal.generic.add("plot", GetType(Polygon2D), Function(polygon, args, env) fillPolygons({DirectCast(polygon, Polygon2D)}, args, env))
-        Call Internal.generic.add("plot", GetType(Polygon2D()), AddressOf fillPolygons)
-        Call Internal.generic.add("plot", GetType(PolygonGroup()), AddressOf fillPolygonGroups)
+        Call RInternal.generic.add("plot", GetType(Polygon2D), Function(polygon, args, env) fillPolygons({DirectCast(polygon, Polygon2D)}, args, env))
+        Call RInternal.generic.add("plot", GetType(Polygon2D()), AddressOf fillPolygons)
+        Call RInternal.generic.add("plot", GetType(PolygonGroup()), AddressOf fillPolygonGroups)
     End Sub
 
     Private Function fillPolygonGroups(polygons As PolygonGroup(), args As list, env As Environment) As Object
@@ -185,7 +186,7 @@ Module geometry2D
         If x.IsNullOrEmpty OrElse y.IsNullOrEmpty Then
             Return Nothing
         ElseIf x.Length <> y.Length Then
-            Return Internal.debug.stop($"the size({x.Length}) of vector x must be equals to the size({y.Length}) of vector y!", env)
+            Return RInternal.debug.stop($"the size({x.Length}) of vector x must be equals to the size({y.Length}) of vector y!", env)
         End If
 
         Dim density As Dictionary(Of String, Double) = x _

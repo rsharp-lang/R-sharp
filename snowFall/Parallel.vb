@@ -74,6 +74,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports snowFall.Context
 Imports snowFall.Context.RPC
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' # Support for Parallel computation in ``R#`` 
@@ -261,7 +262,7 @@ Public Module Parallel
             ' 20221024 capture the unexpected error
             result = New ResultPayload(env) With {
                 .uuid = uuid,
-                .value = Internal.debug.stop(ex, env, suppress:=True)
+                .value = RInternal.debug.stop(ex, env, suppress:=True)
             }
         End Try
 
@@ -419,7 +420,7 @@ Public Module Parallel
                     ' needs -1 for matched with the input argument
                     ' folder
                     Using file As StreamWriter = $"{log_tmp}/{err.i - 1}/slave_message.err".OpenWriter
-                        Call Internal.debug.writeErrMessage(err.ex, stdout:=file, redirectError2stdout:=True)
+                        Call RInternal.debug.writeErrMessage(err.ex, stdout:=file, redirectError2stdout:=True)
                         Call file.Flush()
                     End Using
                 Next

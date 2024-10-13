@@ -71,6 +71,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports renv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' JSON (JavaScript Object Notation) is a lightweight data-interchange format. 
@@ -173,7 +174,7 @@ Module JSON
                     Return loadClrObjectFromJson(str, schema, env)
                 End If
             Catch ex As Exception When throwEx
-                Return Internal.debug.stop(ex, env)
+                Return RInternal.debug.stop(ex, env)
             Catch ex As Exception
                 Call env.AddMessage(ex.ToString, MSG_TYPES.WRN)
                 Return Nothing
@@ -335,7 +336,7 @@ Module JSON
         Dim json As JsonElement
 
         If obj Is Nothing Then
-            Return Internal.debug.stop("the given object data can not be nothing!", env)
+            Return RInternal.debug.stop("the given object data can not be nothing!", env)
         Else
             json = opts.GetJsonLiteralRaw(obj, encoder, err, env)
         End If
@@ -343,7 +344,7 @@ Module JSON
         If Not err Is Nothing Then
             Return err
         ElseIf Not TypeOf json Is JsonObject Then
-            Return Internal.debug.stop($"the given json data model must be an object! ({json.GetType.Name} was given...)", env)
+            Return RInternal.debug.stop($"the given json data model must be an object! ({json.GetType.Name} was given...)", env)
         End If
 
         Call BSON.WriteBuffer(DirectCast(json, JsonObject), stream)
@@ -394,7 +395,7 @@ Module JSON
             End If
 
             If Not TypeOf x Is list Then
-                Return Internal.debug.stop("read dataframe from jsonl only enable when each line is a tuple list object!", env)
+                Return RInternal.debug.stop("read dataframe from jsonl only enable when each line is a tuple list object!", env)
             End If
 
             Dim row As list = DirectCast(x, list)
