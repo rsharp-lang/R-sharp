@@ -81,7 +81,6 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports R_graphics.Common.Runtime
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
@@ -100,25 +99,19 @@ Imports Bitmap = System.Drawing.Bitmap
 Imports GraphicsPath = System.Drawing.Drawing2D.GraphicsPath
 Imports FontStyle = System.Drawing.FontStyle
 #Else
-Imports Pen = Microsoft.VisualBasic.Imaging.Pen
-Imports Pens = Microsoft.VisualBasic.Imaging.Pens
-Imports Brush = Microsoft.VisualBasic.Imaging.Brush
 Imports Font = Microsoft.VisualBasic.Imaging.Font
-Imports Brushes = Microsoft.VisualBasic.Imaging.Brushes
 Imports SolidBrush = Microsoft.VisualBasic.Imaging.SolidBrush
-Imports DashStyle = Microsoft.VisualBasic.Imaging.DashStyle
 Imports Image = Microsoft.VisualBasic.Imaging.Image
 Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
-Imports GraphicsPath = Microsoft.VisualBasic.Imaging.GraphicsPath
 Imports FontStyle = Microsoft.VisualBasic.Imaging.FontStyle
 #End If
 
 <Assembly: InternalsVisibleTo("ggplot")>
 <Assembly: InternalsVisibleTo("graphics")>
 
-Module graphics
+Partial Module grDevices
 
-    Sub New()
+    Sub Main()
         makeDataframe.addHandler(GetType(Color()), AddressOf colorTable)
     End Sub
 
@@ -146,20 +139,20 @@ Module graphics
         Dim dev As graphicsDevice
 
         If which < 1 Then
-            dev = devlist.LastOrDefault
+            dev = R_graphics.Common.Runtime.graphics.Devices.LastOrDefault
 
             If dev.g Is Nothing Then
                 Return RInternal.debug.stop("Error in dev.off() : cannot shut down device 1 (the null device)", env)
             Else
-                devlist.Pop()
+                Call R_graphics.Common.Runtime.graphics.PopLastDevice()
             End If
         Else
-            dev = devlist.ElementAtOrDefault(which - 1)
+            dev = R_graphics.Common.Runtime.graphics.Devices.ElementAtOrDefault(which - 1)
 
             If dev.g Is Nothing Then
                 Return RInternal.debug.stop($"Error in dev.off() : cannot shut down device {which} (the null device)", env)
             Else
-                devlist.RemoveAt(which)
+                R_graphics.Common.Runtime.graphics.RemoveAt(which)
             End If
         End If
 
@@ -210,13 +203,13 @@ Module graphics
         If dev Is Nothing AndAlso which < 0 Then
             Return RInternal.debug.stop("no active graphics device is specificed!", env)
         ElseIf dev Is Nothing Then
-            devlist.Swap(which, devlist.Count - 1)
+            R_graphics.Common.Runtime.graphics.SwapDevice(which, R_graphics.Common.Runtime.graphics.Devices.Count - 1)
         Else
-            devlist.Add(New graphicsDevice With {
+            R_graphics.Common.Runtime.graphics.PushNewDevice(New graphicsDevice With {
                 .args = New list With {.slots = New Dictionary(Of String, Object)},
                 .file = Nothing,
                 .g = dev,
-                .index = devlist.Count
+                .index = R_graphics.Common.Runtime.graphics.Devices.Count
             })
         End If
 
@@ -287,7 +280,7 @@ Module graphics
         If image Is Nothing Then
             Return Nothing
         ElseIf TypeOf image Is Image OrElse TypeOf image Is Bitmap Then
-            Return graphics.colorTable(BitmapBuffer.FromImage(CType(image, Image)).GetPixelsAll.ToArray, New list, env)
+            Return grDevices.colorTable(BitmapBuffer.FromImage(CType(image, Image)).GetPixelsAll.ToArray, New list, env)
         Else
             Return Message.InCompatibleType(GetType(Image), image.GetType, env)
         End If
@@ -638,12 +631,12 @@ Module graphics
         ElseIf TypeOf file Is String Then
             Return DirectCast(file, String).LoadImage(base64:=isBase64StringOrFile(DirectCast(file, String)))
         ElseIf TypeOf file Is Stream Then
-            Return image.FromStream(DirectCast(file, Stream))
+            Return Image.FromStream(DirectCast(file, Stream))
         ElseIf TypeOf file Is FileReference Then
             Dim p As FileReference = file
             Dim stream As Stream = p.fs.OpenFile(p.filepath, FileMode.OpenOrCreate, FileAccess.Read)
 
-            Return image.FromStream(stream)
+            Return Image.FromStream(stream)
         Else
             Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
         End If

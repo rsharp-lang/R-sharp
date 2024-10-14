@@ -67,6 +67,7 @@ Public Class zzz
         Call geometry2D.Main()
         Call Rgraphics.Main()
         Call invoke.pushEnvir(GetType(R_graphics.Common.Runtime.graphics))
+        Call grDevices.Main()
 
         Call RegisterDriver()
     End Sub

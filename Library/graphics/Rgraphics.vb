@@ -435,13 +435,13 @@ Module Rgraphics
         Dim dims As New Size(m.ColumnDimension, m.RowDimension)
         Dim ms As New MemoryStream
 
-        Call R_graphics.Common.Runtime.graphics.bitmap(
+        Call grDevices.bitmap(
             file:=ms,
             args:=New list With {.slots = New Dictionary(Of String, Object) From {{"size", $"{dims.Width},{dims.Height}"}}},
             env:=env
         )
         Call graphics2DTools.rasterHeatmap(raster, colorName:=colors, dimSize:=dims, env:=env)
-        Call R_graphics.Common.Runtime.graphics.devOff(env:=env)
+        Call grDevices.devOff(env:=env)
         Call ms.Flush()
 
         Return Global.Microsoft.VisualBasic.Imaging.Image.FromStream(ms)

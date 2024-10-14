@@ -17,6 +17,28 @@ Public Module graphics
         End Get
     End Property
 
+    Public ReadOnly Property Devices As IEnumerable(Of graphicsDevice)
+        Get
+            Return devlist
+        End Get
+    End Property
+
+    Public Function PopLastDevice() As graphicsDevice
+        Return devlist.Pop
+    End Function
+
+    Public Sub RemoveAt(offset As Integer)
+        Call devlist.RemoveAt(offset)
+    End Sub
+
+    Public Sub PushNewDevice(dev As graphicsDevice)
+        Call devlist.Add(dev)
+    End Sub
+
+    Public Sub SwapDevice(a As Integer, b As Integer)
+        Call devlist.Swap(a, b)
+    End Sub
+
     ''' <summary>
     ''' a common method for create new graphics device
     ''' </summary>
