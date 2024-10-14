@@ -340,12 +340,12 @@ Module Rgraphics
     ''' }
     ''' </example>
     <ExportAPI("image")>
-    Public Function image(x As Object,
-                          <RRawVectorArgument>
-                          Optional col As Object = "YlOrRd",
-                          <RListObjectArgument>
-                          Optional args As list = Nothing,
-                          Optional env As Environment = Nothing) As Object
+    Public Function cast_image(x As Object,
+                               <RRawVectorArgument>
+                               Optional col As Object = "YlOrRd",
+                               <RListObjectArgument>
+                               Optional args As list = Nothing,
+                               Optional env As Environment = Nothing) As Object
 
         If x Is Nothing Then
             Return Nothing
