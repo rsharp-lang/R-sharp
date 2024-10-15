@@ -159,7 +159,7 @@ Partial Module grDevices
         Call dev.g.Flush()
 
         If dev.g.GetType.ImplementInterface(Of SaveGdiBitmap) Then
-            Call DirectCast(dev.g, SaveGdiBitmap).Save(dev.file, Nothing)
+            Call DirectCast(dev.g, SaveGdiBitmap).Save(dev.file, dev.TryMeasureFormatEncoder)
         End If
 
         Call dev.file.Flush()

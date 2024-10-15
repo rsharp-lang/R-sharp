@@ -57,6 +57,7 @@
 Imports System.Drawing
 Imports System.IO
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language.[Default]
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -74,6 +75,7 @@ Public Structure graphicsDevice : Implements IsEmpty
     Dim args As list
     Dim index As Integer
     Dim leaveOpen As Boolean
+    Dim dev As String
 
     Public ReadOnly Property isEmpty As Boolean Implements IsEmpty.IsEmpty
         Get
@@ -84,6 +86,37 @@ Public Structure graphicsDevice : Implements IsEmpty
     Public ReadOnly Property Background As Color
         Get
             Return g.Background
+        End Get
+    End Property
+
+    Public ReadOnly Property TryMeasureFormatEncoder As ImageFormats
+        Get
+            Dim driver As Drivers = g.Driver
+
+            If driver = Drivers.Default Then
+                driver = DriverLoad.DefaultGraphicsDevice
+            End If
+
+            Select Case g.Driver
+                Case Drivers.WMF : Return ImageFormats.Wmf
+                Case Drivers.PDF : Return ImageFormats.Pdf
+                Case Drivers.PS : Return ImageFormats.Unknown
+                Case Drivers.SVG : Return ImageFormats.Svg
+                Case Drivers.GDI
+
+                    Select Case dev
+                        Case "bitmap" : Return ImageFormats.Bmp
+                        Case "png" : Return ImageFormats.Png
+                        Case "jpeg" : Return ImageFormats.Jpeg
+                        Case "win.metafile" : Return ImageFormats.Wmf
+                        Case "postscript" : Throw New NotImplementedException("postscript")
+                        Case "tiff" : Return ImageFormats.Tiff
+                        Case Else
+                            Throw New NotImplementedException
+                    End Select
+            End Select
+
+            Throw New NotImplementedException
         End Get
     End Property
 
