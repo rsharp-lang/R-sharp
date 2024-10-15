@@ -118,6 +118,7 @@ Public Module grDevices
                               Optional env As Environment = Nothing) As Object
 
         Dim size As Size = graphicsPipeline.getSize(args!size, env, "2700,2000").SizeParser
+        Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
 
         If image Is Nothing Then
             ' just open a new device
@@ -127,7 +128,7 @@ Public Module grDevices
             If buffer Like GetType(Message) Then
                 Return buffer.TryCast(Of Message)
             Else
-                Dim pdfImage = DriverLoad.CreateGraphicsDevice(size, driver:=Drivers.PDF)
+                Dim pdfImage = DriverLoad.CreateGraphicsDevice(size, dpi:=dpi, driver:=Drivers.PDF)
 
                 Call pdfImage.Clear(fill)
                 Call R_graphics.Common.Runtime.graphics.openNew(
@@ -143,7 +144,7 @@ Public Module grDevices
             Return env.FileStreamWriter(
                 file, Sub(stream)
                           If TypeOf image Is Plot Then
-                              Call DirectCast(image, Plot).Plot(size, , Drivers.PDF).Save(stream)
+                              Call DirectCast(image, Plot).Plot(size, dpi, Drivers.PDF).Save(stream)
                           Else
                               Call DirectCast(image, PdfImage).Save(stream)
                           End If
@@ -156,12 +157,12 @@ Public Module grDevices
         ' just open a new device
         Dim buffer = GetFileStream(file, FileAccess.Write, env)
         Dim fill As Color = graphicsPipeline.GetRawColor(args!fill, [default]:="white")
+        Dim dpi As Integer = args.getValue(Of Integer)({"res", "dpi", "ppi"}, env, [default]:=100)
 
         If buffer Like GetType(Message) Then
             Return buffer.TryCast(Of Message)
         Else
-            Dim dpiXY = 100
-            Dim svgImage As IGraphics = DriverLoad.CreateGraphicsDevice(size, fill, dpiXY, driver:=Drivers.SVG)
+            Dim svgImage As IGraphics = DriverLoad.CreateGraphicsDevice(size, fill, dpi, driver:=Drivers.SVG)
 
             Call R_graphics.Common.Runtime.graphics.openNew(
                 dev:=svgImage,

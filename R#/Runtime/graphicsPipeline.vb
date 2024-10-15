@@ -101,7 +101,7 @@ Namespace Runtime
 
         <Extension>
         Public Function CheckDpiArgument(args As Dictionary(Of String, Object)) As Boolean
-            Return {"dpi", "Dpi", "DPI", "PPI", "ppi"}.Any(AddressOf args.ContainsKey)
+            Return {"dpi", "Dpi", "DPI", "PPI", "ppi", "res"}.Any(AddressOf args.ContainsKey)
         End Function
 
         Public Function getDpi(args As Dictionary(Of String, Object), env As Environment, [default] As Integer) As Integer
@@ -117,6 +117,8 @@ Namespace Runtime
                 raw = args("PPI")
             ElseIf args.ContainsKey("ppi") Then
                 raw = args("ppi")
+            ElseIf args.ContainsKey("res") Then
+                raw = args("res")
             Else
                 Return [default]
             End If

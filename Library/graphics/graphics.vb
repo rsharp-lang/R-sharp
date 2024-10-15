@@ -259,6 +259,13 @@ Partial Module grDevices
         Return Nothing
     End Function
 
+    ''' <summary>
+    ''' Create a raster font object
+    ''' </summary>
+    ''' <param name="name"></param>
+    ''' <param name="size"></param>
+    ''' <param name="style"></param>
+    ''' <returns></returns>
     <ExportAPI("rasterFont")>
     Public Function rasterFont(name As String,
                                Optional size As Single = 12,
@@ -581,7 +588,7 @@ Partial Module grDevices
         Dim size As SizeF = args.getSize(env, [default]:=New SizeF(2700, 2000))
         Dim backColor As Object = args.getValue(Of Object)({"fill", "color", "background"}, env)
         Dim fill As Color = graphicsPipeline.GetRawColor(backColor, [default]:=NameOf(Color.Transparent))
-        Dim dpi As Integer = args.getValue({"dpi", "res"}, env, [default]:=100)
+        Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
         Dim dev_name As String = "bitmap"
 
         Select Case format
