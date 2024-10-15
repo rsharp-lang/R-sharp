@@ -45,7 +45,7 @@ Public Module graphics
     ''' <param name="dev"></param>
     ''' <param name="buffer"></param>
     ''' <param name="args"></param>
-    Public Sub openNew(dev As IGraphics, buffer As Stream, args As list)
+    Public Sub openNew(dev As IGraphics, buffer As Stream, args As list, [function] As String)
         Dim leaveOpen As Boolean() = CLRVector.asLogical(args.getBySynonyms("leaveOpen", "leave.open"))
         Dim autoCloseFile As Boolean = If(leaveOpen.IsNullOrEmpty, True, Not leaveOpen(0))
         Dim curDev = New graphicsDevice With {
@@ -53,7 +53,8 @@ Public Module graphics
             .file = buffer,
             .args = args,
             .index = devlist.Count,
-            .leaveOpen = Not autoCloseFile
+            .leaveOpen = Not autoCloseFile,
+            .dev = [function]
         }
 
         Call devlist.Add(curDev)

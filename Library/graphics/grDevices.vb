@@ -133,7 +133,8 @@ Public Module grDevices
                 Call R_graphics.Common.Runtime.graphics.openNew(
                     dev:=pdfImage,
                     buffer:=buffer.TryCast(Of Stream),
-                    args:=args
+                    args:=args,
+                    [function]:="pdf"
                 )
             End If
 
@@ -165,7 +166,8 @@ Public Module grDevices
             Call R_graphics.Common.Runtime.graphics.openNew(
                 dev:=svgImage,
                 buffer:=buffer.TryCast(Of Stream),
-                args:=args
+                args:=args,
+                [function]:="svg"
             )
         End If
 

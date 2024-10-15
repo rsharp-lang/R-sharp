@@ -209,7 +209,8 @@ Partial Module grDevices
                 .args = New list With {.slots = New Dictionary(Of String, Object)},
                 .file = Nothing,
                 .g = dev,
-                .index = R_graphics.Common.Runtime.graphics.Devices.Count
+                .index = R_graphics.Common.Runtime.graphics.Devices.Count,
+                .dev = "dev.set"
             })
         End If
 
@@ -455,7 +456,7 @@ Partial Module grDevices
                            Optional env As Environment = Nothing) As Object
 
         If image Is Nothing Then
-            Return OpenNewBitmapDevice(file, args, env)
+            Return OpenNewBitmapDevice(file, args, format, env)
         ElseIf TypeOf file Is Serialize.bitmapBuffer Then
             Dim buf As Serialize.bitmapBuffer = file
 
@@ -575,12 +576,21 @@ Partial Module grDevices
     ''' <param name="args"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
-    Private Function OpenNewBitmapDevice(file As Object, args As list, env As Environment) As Object
+    Private Function OpenNewBitmapDevice(file As Object, args As list, format As ImageFormats, env As Environment) As Object
         ' just open a new device
         Dim size As SizeF = args.getSize(env, [default]:=New SizeF(2700, 2000))
         Dim backColor As Object = args.getValue(Of Object)({"fill", "color", "background"}, env)
         Dim fill As Color = graphicsPipeline.GetRawColor(backColor, [default]:=NameOf(Color.Transparent))
         Dim dpi As Integer = args.getValue({"dpi", "res"}, env, [default]:=100)
+        Dim dev_name As String = "bitmap"
+
+        Select Case format
+            Case ImageFormats.Gif : dev_name = "gif"
+            Case ImageFormats.Jpeg : dev_name = "jpeg"
+            Case ImageFormats.Png : dev_name = "png"
+            Case ImageFormats.Tiff : dev_name = "tiff"
+            Case ImageFormats.Webp : dev_name = "webp"
+        End Select
 
         If file Is Nothing Then
             ' just open a new canvas object and returns to user?
@@ -604,7 +614,8 @@ Partial Module grDevices
                 Call openNew(
                     dev:=DriverLoad.CreateGraphicsDevice(New Size(size.Width, size.Height), fill, dpi, driver:=Drivers.GDI),
                     buffer:=buffer.TryCast(Of Stream),
-                    args:=args
+                    args:=args,
+                    [function]:=dev_name
                 )
             End If
 
