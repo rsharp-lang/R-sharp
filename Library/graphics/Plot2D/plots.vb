@@ -958,14 +958,14 @@ Module plots
 
         Dim serials As SerialData() = DirectCast(data, IEnumerable(Of SerialData)).ToArray
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="2100,1600")
-        Dim margin = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 150px 150px 200px 200px;", env:=env)
+        Dim margin = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 2.5% 5% 5% 5%;", env:=env)
         Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
         Dim spline As Splines = args.getValue(Of Splines)("interplot", env, Splines.None)
         Dim xlim As Double = args.getValue("xlim", env, Double.NaN)
         Dim ylim As Double = args.getValue("ylim", env, Double.NaN)
         Dim absoluteScale As Boolean = args.getValue("absolute_scale", env, False)
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
-        Dim dpi As Integer = args.getValue("dpi", env, [default]:=100)
+        Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
         Dim showLegend As Boolean = args.getValue(Of Boolean)({"showLegend", "legend", "legend.show"}, env, [default]:=True)
 
         If args.CheckGraphicsDeviceExists Then
