@@ -151,7 +151,7 @@ Public Module grDevices
     End Function
 
     Private Function openSvgDevice(file As Object, args As list, env As Environment) As Object
-        Dim size As SizeF = graphicsPipeline.getSize(args, env, New SizeF(2700, 2000))
+        Dim size As Size = graphicsPipeline.getSize(args, env, New SizeF(2700, 2000)).ToSize
         ' just open a new device
         Dim buffer = GetFileStream(file, FileAccess.Write, env)
         Dim fill As Color = graphicsPipeline.GetRawColor(args!fill, [default]:="white")
@@ -160,9 +160,8 @@ Public Module grDevices
             Return buffer.TryCast(Of Message)
         Else
             Dim dpiXY = 100
-            Dim svgImage As New GraphicsSVG(size, dpiXY, dpiXY)
+            Dim svgImage As IGraphics = DriverLoad.CreateGraphicsDevice(size, fill, dpiXY, driver:=Drivers.SVG)
 
-            Call svgImage.Clear(fill)
             Call R_graphics.Common.Runtime.graphics.openNew(
                 dev:=svgImage,
                 buffer:=buffer.TryCast(Of Stream),
