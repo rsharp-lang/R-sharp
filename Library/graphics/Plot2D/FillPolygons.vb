@@ -64,6 +64,10 @@ Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Math2D
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
+Imports Microsoft.VisualBasic.MIME.Html.CSS
+Imports Microsoft.VisualBasic.MIME.Html.Render
+
+
 
 #If NET48 Then
 Imports Pen = System.Drawing.Pen
@@ -120,11 +124,12 @@ Public Class FillPolygons : Inherits Plot
     Protected Overrides Sub PlotInternal(ByRef g As IGraphics, canvas As GraphicsRegion)
         Dim xTicks = union.xpoints.CreateAxisTicks
         Dim yTicks = union.ypoints.CreateAxisTicks
-        Dim x = d3js.scale.linear.domain(values:=xTicks).range(values:=canvas.GetXLinearScaleRange)
-        Dim y = d3js.scale.linear.domain(values:=yTicks).range(values:=canvas.GetYLinearScaleRange)
+        Dim css As CSSEnvirnment = g.LoadEnvironment
+        Dim x = d3js.scale.linear.domain(values:=xTicks).range(values:=canvas.GetXLinearScaleRange(css))
+        Dim y = d3js.scale.linear.domain(values:=yTicks).range(values:=canvas.GetYLinearScaleRange(css))
         Dim scaler As New DataScaler(rev:=True) With {
             .AxisTicks = (xTicks.AsVector, yTicks.AsVector),
-            .region = canvas.PlotRegion,
+            .region = canvas.PlotRegion(css),
             .X = x,
             .Y = y
         }
