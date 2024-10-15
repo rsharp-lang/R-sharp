@@ -132,9 +132,10 @@ Module graphics2DTools
         ElseIf Not size.SizeParser.IsValidGDIParameter Then
             ' draw on current graphics context
             Dim dev As graphicsDevice = curDev
+            Dim css As CSSEnvirnment = dev.g.LoadEnvironment
             Dim padding As Padding = InteropArgumentHelper.getPadding(dev!padding)
             Dim canvas As New GraphicsRegion(dev.g.Size, padding)
-            Dim layout As Rectangle = canvas.PlotRegion
+            Dim layout As Rectangle = canvas.PlotRegion(css)
 
             layout = New Rectangle(
                 x:=layout.Right + padding.Right / 4,
@@ -151,7 +152,7 @@ Module graphics2DTools
                 driver:=driver,
                 dpi:=dpi,
                 plotAPI:=Sub(ByRef g, region)
-                             Call legend.Draw(g, region.PlotRegion)
+                             Call legend.Draw(g, region.PlotRegion(g.LoadEnvironment))
                          End Sub)
         End If
 
@@ -186,7 +187,8 @@ Module graphics2DTools
         Dim padding As Padding = InteropArgumentHelper.getPadding(dev!padding)
         Dim innerPadding As Padding = InteropArgumentHelper.getPadding(margin)
         Dim region As New GraphicsRegion(size, padding)
-        Dim rect As Rectangle = region.PlotRegion
+        Dim css As CSSEnvirnment = dev.g.LoadEnvironment
+        Dim rect As Rectangle = region.PlotRegion(css)
         Dim layouts As New List(Of Rectangle)
         Dim x As Integer = rect.Left
         Dim y As Integer = rect.Top
@@ -199,10 +201,10 @@ Module graphics2DTools
 
             For j As Integer = 1 To layout(0)
                 cell = New Rectangle With {
-                    .X = x + innerPadding.Left,
-                    .Y = y + innerPadding.Top,
-                    .Width = w - innerPadding.Horizontal,
-                    .Height = h - innerPadding.Vertical
+                    .X = x + css.GetValue(innerPadding.Left),
+                    .Y = y + css.GetValue(innerPadding.Top),
+                    .Width = w - innerPadding.Horizontal(css),
+                    .Height = h - innerPadding.Vertical(css)
                 }
                 layouts.Add(cell)
 
