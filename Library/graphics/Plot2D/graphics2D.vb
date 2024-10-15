@@ -114,9 +114,10 @@ Module graphics2DTools
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="0,0")
         Dim margin As String = InteropArgumentHelper.getPadding(args!padding)
         Dim barmap As Boolean = CLRVector.asLogical(args.getBySynonyms("bar")).DefaultFirst([default]:=False)
+        Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
 
         If barmap Then
-            Dim g As IGraphics = DriverLoad.CreateGraphicsDevice(New Size(256, 1), driver:=Drivers.GDI)
+            Dim g As IGraphics = DriverLoad.CreateGraphicsDevice(New Size(256, 1), dpi:=dpi, driver:=Drivers.GDI)
             Dim colors As Brush() = legend.ScaleColors(n:=256) _
                 .Select(Function(c) DirectCast(New SolidBrush(c), Brush)) _
                 .ToArray
@@ -148,7 +149,7 @@ Module graphics2DTools
                 Padding.TryParse(margin),
                 "transparent",
                 driver:=driver,
-                dpi:="300,300",
+                dpi:=dpi,
                 plotAPI:=Sub(ByRef g, region)
                              Call legend.Draw(g, region.PlotRegion)
                          End Sub)
