@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::adaec2bbda9097c455bfc30abb5e5a8b, Library\graphics\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::826882a70b5e4a74f1a2f6ebfc0cb9e0, Library\graphics\zzz.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 39
-    '    Code Lines: 30 (76.92%)
-    ' Comment Lines: 1 (2.56%)
+    '   Total Lines: 42
+    '    Code Lines: 33 (78.57%)
+    ' Comment Lines: 1 (2.38%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 8 (20.51%)
-    '     File Size: 1.31 KB
+    '   Blank Lines: 8 (19.05%)
+    '     File Size: 1.45 KB
 
 
     ' Class zzz

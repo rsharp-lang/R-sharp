@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d7996da9561a77343ad5de53528c2116, Library\igraph\Visualize.vb"
+﻿#Region "Microsoft.VisualBasic::c731024d105c5c481c86b7cfb7ac19a6, Library\igraph\Visualize.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 455
-    '    Code Lines: 373 (81.98%)
-    ' Comment Lines: 30 (6.59%)
+    '   Total Lines: 454
+    '    Code Lines: 372 (81.94%)
+    ' Comment Lines: 30 (6.61%)
     '    - Xml Docs: 83.33%
     ' 
-    '   Blank Lines: 52 (11.43%)
-    '     File Size: 20.58 KB
+    '   Blank Lines: 52 (11.45%)
+    '     File Size: 20.55 KB
 
 
     ' Module Visualize

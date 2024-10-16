@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7544e1c3358d28873e48da4881253d8e, studio\Rsharp_kit\webKit\Html.vb"
+﻿#Region "Microsoft.VisualBasic::575bafd51a2066bcca2941d210bf6c67, studio\Rsharp_kit\webKit\Html.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 90.00%
     ' 
     '   Blank Lines: 20 (15.62%)
-    '     File Size: 4.49 KB
+    '     File Size: 4.51 KB
 
 
     ' Module Html

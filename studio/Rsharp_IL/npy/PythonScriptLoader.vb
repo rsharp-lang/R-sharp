@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::81ef96ef5b712b70aed0a57c21ed5f0d, studio\Rsharp_IL\npy\PythonScriptLoader.vb"
+﻿#Region "Microsoft.VisualBasic::a343ce5250f4cb309b588629a7014218, studio\Rsharp_IL\npy\PythonScriptLoader.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 61
-    '    Code Lines: 47 (77.05%)
-    ' Comment Lines: 5 (8.20%)
+    '   Total Lines: 62
+    '    Code Lines: 48 (77.42%)
+    ' Comment Lines: 5 (8.06%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 9 (14.75%)
-    '     File Size: 2.42 KB
+    '   Blank Lines: 9 (14.52%)
+    '     File Size: 2.47 KB
 
 
     ' Class PythonScriptLoader

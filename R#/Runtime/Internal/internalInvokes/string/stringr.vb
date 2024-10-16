@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a9fd4e3ca920a96477d5c752c0db5611, R#\Runtime\Internal\internalInvokes\string\stringr.vb"
+﻿#Region "Microsoft.VisualBasic::1bf2334c26a9db33ef521ae2d92eace7, R#\Runtime\Internal\internalInvokes\string\stringr.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1411
-    '    Code Lines: 882 (62.51%)
-    ' Comment Lines: 381 (27.00%)
+    '   Total Lines: 1419
+    '    Code Lines: 889 (62.65%)
+    ' Comment Lines: 381 (26.85%)
     '    - Xml Docs: 89.50%
     ' 
-    '   Blank Lines: 148 (10.49%)
-    '     File Size: 58.74 KB
+    '   Blank Lines: 149 (10.50%)
+    '     File Size: 58.96 KB
 
 
     '     Module stringr

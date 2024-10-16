@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b7612be1ea566a701db27a96b752f16e, studio\Rsharp_kit\MLkit\dataMining\TracebackMatrix.vb"
+﻿#Region "Microsoft.VisualBasic::d33ecbf88d6f7256aa877eb9f4352f48, studio\Rsharp_kit\MLkit\dataMining\TracebackMatrix.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 94
-    '    Code Lines: 60 (63.83%)
-    ' Comment Lines: 17 (18.09%)
+    '   Total Lines: 95
+    '    Code Lines: 61 (64.21%)
+    ' Comment Lines: 17 (17.89%)
     '    - Xml Docs: 88.24%
     ' 
-    '   Blank Lines: 17 (18.09%)
-    '     File Size: 3.31 KB
+    '   Blank Lines: 17 (17.89%)
+    '     File Size: 3.37 KB
 
 
     ' Class TracebackMatrix

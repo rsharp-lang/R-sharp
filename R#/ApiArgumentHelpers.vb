@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7ef1fecbbd6d8fba11920790775bab36, R#\ApiArgumentHelpers.vb"
+﻿#Region "Microsoft.VisualBasic::22ccd9bb5cdef2a56119325ba8cf8598, R#\ApiArgumentHelpers.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 266
-    '    Code Lines: 189 (71.05%)
-    ' Comment Lines: 49 (18.42%)
+    '   Total Lines: 270
+    '    Code Lines: 192 (71.11%)
+    ' Comment Lines: 49 (18.15%)
     '    - Xml Docs: 91.84%
     ' 
-    '   Blank Lines: 28 (10.53%)
-    '     File Size: 10.64 KB
+    '   Blank Lines: 29 (10.74%)
+    '     File Size: 10.76 KB
 
 
     ' Module ApiArgumentHelpers
     ' 
-    '     Function: FileStreamWriter, GetDoubleRange, GetFileStream, GetNamedValueTuple, rangeFromVector
-    '               slot
+    '     Function: FileStreamWriter, GetDoubleRange, GetFileStream, GetNamedValueTuple, list
+    '               rangeFromVector, slot
     ' 
     ' /********************************************************************************/
 

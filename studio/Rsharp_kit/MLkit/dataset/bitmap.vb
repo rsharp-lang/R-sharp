@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e56b967c00e3a7b20dd7582c7da7a5a6, studio\Rsharp_kit\MLkit\dataset\bitmap.vb"
+﻿#Region "Microsoft.VisualBasic::e82346187276f99f773149fe7e549efe, studio\Rsharp_kit\MLkit\dataset\bitmap.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 222
-    '    Code Lines: 160 (72.07%)
-    ' Comment Lines: 30 (13.51%)
+    '   Total Lines: 224
+    '    Code Lines: 162 (72.32%)
+    ' Comment Lines: 30 (13.39%)
     '    - Xml Docs: 96.67%
     ' 
-    '   Blank Lines: 32 (14.41%)
-    '     File Size: 8.72 KB
+    '   Blank Lines: 32 (14.29%)
+    '     File Size: 8.83 KB
 
 
     ' Module bitmap_func

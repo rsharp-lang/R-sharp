@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c659f6ab5cf61054b4079b728de9cd2f, studio\R-terminal\Program.vb"
+﻿#Region "Microsoft.VisualBasic::bc93abec85c4ef60fbd865b10a3873f4, studio\R-terminal\Program.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 40.43%
     ' 
     '   Blank Lines: 40 (13.61%)
-    '     File Size: 12.10 KB
+    '     File Size: 12.13 KB
 
 
     ' Module Program

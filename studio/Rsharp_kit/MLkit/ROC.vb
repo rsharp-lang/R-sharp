@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ce38a95c04821335e43255e81d53f72d, studio\Rsharp_kit\MLkit\ROC.vb"
+﻿#Region "Microsoft.VisualBasic::4c9b5cd2a1d915ff5d4458f3746bcf51, studio\Rsharp_kit\MLkit\ROC.vb"
 
     ' Author:
     ' 
@@ -34,21 +34,21 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 62
-    '    Code Lines: 51 (82.26%)
-    ' Comment Lines: 4 (6.45%)
-    '    - Xml Docs: 100.00%
+    '   Total Lines: 74
+    '    Code Lines: 60 (81.08%)
+    ' Comment Lines: 6 (8.11%)
+    '    - Xml Docs: 66.67%
     ' 
-    '   Blank Lines: 7 (11.29%)
-    '     File Size: 2.26 KB
+    '   Blank Lines: 8 (10.81%)
+    '     File Size: 2.70 KB
 
 
     ' Class ROC
     ' 
-    '     Properties: accuracy, All, AUC, BER, F1Score
-    '                 F2Score, FN, FP, FPR, NPV
-    '                 precision, sensibility, specificity, threshold, TN
-    '                 TP
+    '     Properties: accuracy, All, AUC, BER, BestThreshold
+    '                 F1Score, F2Score, FN, FP, FPR
+    '                 NPV, precision, sensibility, specificity, threshold
+    '                 TN, TP
     ' 
     '     Function: IEnumerable, IEnumerable_GetEnumerator
     ' 

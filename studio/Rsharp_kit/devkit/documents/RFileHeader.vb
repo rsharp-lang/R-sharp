@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9e5de220b6c646a782d98f3e9d79990c, studio\Rsharp_kit\devkit\documents\RFileHeader.vb"
+﻿#Region "Microsoft.VisualBasic::b3683da393baca9b38d2d93b81fb58ed, studio\Rsharp_kit\devkit\documents\RFileHeader.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 80.00%
     ' 
     '   Blank Lines: 7 (16.28%)
-    '     File Size: 1.52 KB
+    '     File Size: 1.53 KB
 
 
     ' Module RFileHeader

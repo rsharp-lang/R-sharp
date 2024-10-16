@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a6ce542a6f9913e718b300ba0732cbb5, studio\Rsharp_kit\devkit\CLR.vb"
+﻿#Region "Microsoft.VisualBasic::4949e7b8485afd5aa7be848beaaf0b09, studio\Rsharp_kit\devkit\CLR.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 85
-    '    Code Lines: 51 (60.00%)
-    ' Comment Lines: 22 (25.88%)
+    '   Total Lines: 86
+    '    Code Lines: 52 (60.47%)
+    ' Comment Lines: 22 (25.58%)
     '    - Xml Docs: 68.18%
     ' 
-    '   Blank Lines: 12 (14.12%)
-    '     File Size: 2.97 KB
+    '   Blank Lines: 12 (13.95%)
+    '     File Size: 3.02 KB
 
 
     ' Module CLRTool

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2d7510448cedb8656cdfbad920690ea5, R#\Runtime\Internal\internalInvokes\dev\bitView.vb"
+﻿#Region "Microsoft.VisualBasic::eac6d4ebc1228a22c1b336d4d9b9a356, R#\Runtime\Internal\internalInvokes\dev\bitView.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 100.00%
     ' 
     '   Blank Lines: 19 (20.65%)
-    '     File Size: 3.29 KB
+    '     File Size: 3.31 KB
 
 
     '     Module bitView

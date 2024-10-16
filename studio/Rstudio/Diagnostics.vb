@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d32ab64173bf21e24c25d8280bdb510d, studio\Rstudio\Diagnostics.vb"
+﻿#Region "Microsoft.VisualBasic::129e672cf65d66ef60345481a9a60d5d, studio\Rstudio\Diagnostics.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 217
-    '    Code Lines: 74 (34.10%)
-    ' Comment Lines: 126 (58.06%)
+    '   Total Lines: 218
+    '    Code Lines: 75 (34.40%)
+    ' Comment Lines: 126 (57.80%)
     '    - Xml Docs: 81.75%
     ' 
-    '   Blank Lines: 17 (7.83%)
-    '     File Size: 10.31 KB
+    '   Blank Lines: 17 (7.80%)
+    '     File Size: 10.36 KB
 
 
     ' Module Diagnostics

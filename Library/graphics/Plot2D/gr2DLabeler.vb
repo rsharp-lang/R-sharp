@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5226cc25eecfd9c2f1b9c58df6751871, Library\graphics\Plot2D\gr2DLabeler.vb"
+﻿#Region "Microsoft.VisualBasic::0c7fef2c5cf93ba316d1cf4c796e03fe, Library\graphics\Plot2D\gr2DLabeler.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 58.82%
     ' 
     '   Blank Lines: 9 (9.09%)
-    '     File Size: 3.95 KB
+    '     File Size: 3.97 KB
 
 
     ' Module gr2DLabeler

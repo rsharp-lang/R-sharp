@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4c0ff4c73f875158699188ccf5cec53c, Library\graphics\ImageFilters.vb"
+﻿#Region "Microsoft.VisualBasic::a838387430b1ac91e40478ea54c6a8d2, Library\graphics\ImageFilters.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 128
-    '    Code Lines: 101 (78.91%)
-    ' Comment Lines: 8 (6.25%)
+    '   Total Lines: 131
+    '    Code Lines: 104 (79.39%)
+    ' Comment Lines: 8 (6.11%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 19 (14.84%)
-    '     File Size: 4.85 KB
+    '   Blank Lines: 19 (14.50%)
+    '     File Size: 5.01 KB
 
 
     ' Module ImageFilters

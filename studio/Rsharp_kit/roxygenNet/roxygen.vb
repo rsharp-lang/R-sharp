@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c6abe2d421bf741483593b31cc2beba, studio\Rsharp_kit\roxygenNet\roxygen.vb"
+﻿#Region "Microsoft.VisualBasic::e69e3b0ed848c2fa2ec94478d22d9c45, studio\Rsharp_kit\roxygenNet\roxygen.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 183
-    '    Code Lines: 114 (62.30%)
-    ' Comment Lines: 46 (25.14%)
+    '   Total Lines: 184
+    '    Code Lines: 115 (62.50%)
+    ' Comment Lines: 46 (25.00%)
     '    - Xml Docs: 93.48%
     ' 
-    '   Blank Lines: 23 (12.57%)
-    '     File Size: 7.42 KB
+    '   Blank Lines: 23 (12.50%)
+    '     File Size: 7.48 KB
 
 
     ' Module roxygen

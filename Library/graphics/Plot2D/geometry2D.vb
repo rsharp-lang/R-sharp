@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9b5a0bd20dc4419d216dd6edfcfb26ee, Library\graphics\Plot2D\geometry2D.vb"
+﻿#Region "Microsoft.VisualBasic::38e254c49923fbb7a91a887afaf35814, Library\graphics\Plot2D\geometry2D.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 209
-    '    Code Lines: 156 (74.64%)
-    ' Comment Lines: 26 (12.44%)
+    '   Total Lines: 210
+    '    Code Lines: 157 (74.76%)
+    ' Comment Lines: 26 (12.38%)
     '    - Xml Docs: 96.15%
     ' 
-    '   Blank Lines: 27 (12.92%)
-    '     File Size: 8.42 KB
+    '   Blank Lines: 27 (12.86%)
+    '     File Size: 8.47 KB
 
 
     ' Class PolygonGroup

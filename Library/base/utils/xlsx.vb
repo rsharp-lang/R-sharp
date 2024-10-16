@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::64b8e79ed08a550f63973d3d54dced78, Library\base\utils\xlsx.vb"
+﻿#Region "Microsoft.VisualBasic::77bd95a232c704f7651a6713b15797f4, Library\base\utils\xlsx.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 283
-    '    Code Lines: 198 (69.96%)
-    ' Comment Lines: 60 (21.20%)
+    '   Total Lines: 284
+    '    Code Lines: 199 (70.07%)
+    ' Comment Lines: 60 (21.13%)
     '    - Xml Docs: 86.67%
     ' 
-    '   Blank Lines: 25 (8.83%)
-    '     File Size: 11.56 KB
+    '   Blank Lines: 25 (8.80%)
+    '     File Size: 11.62 KB
 
 
     ' Module xlsx

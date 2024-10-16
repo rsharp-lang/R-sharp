@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f293a4fc77894bf0815d9c19db933753, studio\Rsharp_kit\MLkit\validation.vb"
+﻿#Region "Microsoft.VisualBasic::91270f69d50df152983c68e8e5d99f9e, studio\Rsharp_kit\MLkit\validation.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 141
-    '    Code Lines: 126 (89.36%)
-    ' Comment Lines: 0 (0.00%)
-    '    - Xml Docs: 0.00%
+    '   Total Lines: 205
+    '    Code Lines: 159 (77.56%)
+    ' Comment Lines: 27 (13.17%)
+    '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 15 (10.64%)
-    '     File Size: 6.83 KB
+    '   Blank Lines: 19 (9.27%)
+    '     File Size: 9.53 KB
 
 
     ' Module validation
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: ANN_ROC, AUC, createSampleValidation, PlotROC, prediction
-    '               Tabular
+    '     Function: ANN_ROC, AUC, createSampleValidation, fake, PlotROC
+    '               prediction, roc_auc_score, ROC_tabular, Tabular
     ' 
     ' /********************************************************************************/
 

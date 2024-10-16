@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5db416b637a8dd68f14dd86125c1af9c, Library\base\base\IO.vb"
+﻿#Region "Microsoft.VisualBasic::fe9178e56550f2492913fde9bf40e505, Library\base\base\IO.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 100.00%
     ' 
     '   Blank Lines: 15 (9.32%)
-    '     File Size: 6.62 KB
+    '     File Size: 6.64 KB
 
 
     ' Module RawIO

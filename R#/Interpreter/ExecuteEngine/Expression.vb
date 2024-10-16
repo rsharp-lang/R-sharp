@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fa6b23d1c8a764a919ceb6df5d057d2b, R#\Interpreter\ExecuteEngine\Expression.vb"
+﻿#Region "Microsoft.VisualBasic::b9cf10ff5aa5855b19f29b3e7b907aee, R#\Interpreter\ExecuteEngine\Expression.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 76
-    '    Code Lines: 38 (50.00%)
-    ' Comment Lines: 30 (39.47%)
+    '   Total Lines: 72
+    '    Code Lines: 34 (47.22%)
+    ' Comment Lines: 30 (41.67%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 8 (10.53%)
-    '     File Size: 3.02 KB
+    '   Blank Lines: 8 (11.11%)
+    '     File Size: 2.89 KB
 
 
     '     Class Expression

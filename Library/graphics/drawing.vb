@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2575e33c7b7ff2138c501da94b58652a, R#\Runtime\Internal\internalInvokes\graphics\drawing.vb"
+﻿#Region "Microsoft.VisualBasic::ba3efd1d686de8a654b4a49b3f2a604e, Library\graphics\drawing.vb"
 
     ' Author:
     ' 
@@ -34,15 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 9
-    '    Code Lines: 6 (66.67%)
+    '   Total Lines: 8
+    '    Code Lines: 6 (75.00%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 3 (33.33%)
-    '     File Size: 204 B
+    '   Blank Lines: 2 (25.00%)
+    '     File Size: 179 B
 
 
+    ' Module drawing
+    ' 
+    ' 
     ' 
     ' /********************************************************************************/
 

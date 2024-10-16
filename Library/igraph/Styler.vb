@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::238e96871b7c1a058856345798d9d1ca, Library\igraph\Styler.vb"
+﻿#Region "Microsoft.VisualBasic::83a0b48f18ea64040faf9f06fad4c0e5, Library\igraph\Styler.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 237
-    '    Code Lines: 189 (79.75%)
-    ' Comment Lines: 21 (8.86%)
+    '   Total Lines: 238
+    '    Code Lines: 190 (79.83%)
+    ' Comment Lines: 21 (8.82%)
     '    - Xml Docs: 90.48%
     ' 
-    '   Blank Lines: 27 (11.39%)
-    '     File Size: 9.25 KB
+    '   Blank Lines: 27 (11.34%)
+    '     File Size: 9.30 KB
 
 
     ' Module Styler

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e1d163fe2ab184da58724f81b102d673, studio\Rsharp_kit\MLkit\NLP.vb"
+﻿#Region "Microsoft.VisualBasic::3e5e14ad3b4eea9843fede56b4557a65, studio\Rsharp_kit\MLkit\NLP.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 334
-    '    Code Lines: 245 (73.35%)
-    ' Comment Lines: 35 (10.48%)
+    '   Total Lines: 342
+    '    Code Lines: 251 (73.39%)
+    ' Comment Lines: 35 (10.23%)
     '    - Xml Docs: 80.00%
     ' 
-    '   Blank Lines: 54 (16.17%)
-    '     File Size: 12.87 KB
+    '   Blank Lines: 56 (16.37%)
+    '     File Size: 13.14 KB
 
 
     ' Module NLP

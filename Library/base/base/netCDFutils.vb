@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1da430227341ebc3ffd4ca880df370a5, Library\base\base\netCDFutils.vb"
+﻿#Region "Microsoft.VisualBasic::ab34063aff1f91295fc1d54afb38f683, Library\base\base\netCDFutils.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 315
-    '    Code Lines: 234 (74.29%)
-    ' Comment Lines: 37 (11.75%)
+    '   Total Lines: 316
+    '    Code Lines: 235 (74.37%)
+    ' Comment Lines: 37 (11.71%)
     '    - Xml Docs: 91.89%
     ' 
-    '   Blank Lines: 44 (13.97%)
-    '     File Size: 12.76 KB
+    '   Blank Lines: 44 (13.92%)
+    '     File Size: 12.81 KB
 
 
     ' Module netCDFutils

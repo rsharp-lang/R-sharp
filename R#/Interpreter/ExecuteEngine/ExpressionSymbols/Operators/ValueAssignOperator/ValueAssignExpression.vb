@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1811229c8ba5354b22eac5234a247a69, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssignExpression.vb"
+﻿#Region "Microsoft.VisualBasic::7ae7ab18ffa1f259c8ef4a147d8c9a90, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssignExpression.vb"
 
     ' Author:
     ' 
@@ -40,12 +40,13 @@
     '    - Xml Docs: 62.75%
     ' 
     '   Blank Lines: 55 (14.78%)
-    '     File Size: 15.59 KB
+    '     File Size: 15.60 KB
 
 
     '     Class ValueAssignExpression
     ' 
-    '         Properties: expressionName, symbolSize, targetSymbols, type, value
+    '         Properties: expressionName, isByRef, symbolSize, targetSymbols, type
+    '                     value
     ' 
     '         Constructor: (+3 Overloads) Sub New
     '         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate

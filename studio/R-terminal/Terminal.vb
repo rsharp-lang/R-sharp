@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4ba8523a8e512d3547c0edbd9b7ffb96, studio\R-terminal\Terminal.vb"
+﻿#Region "Microsoft.VisualBasic::3475381a934ffc36cf0e760d7fbf33f7, studio\R-terminal\Terminal.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 327
-    '    Code Lines: 200 (61.16%)
-    ' Comment Lines: 81 (24.77%)
+    '   Total Lines: 328
+    '    Code Lines: 201 (61.28%)
+    ' Comment Lines: 81 (24.70%)
     '    - Xml Docs: 76.54%
     ' 
-    '   Blank Lines: 46 (14.07%)
-    '     File Size: 11.71 KB
+    '   Blank Lines: 46 (14.02%)
+    '     File Size: 11.77 KB
 
 
     ' Module Terminal

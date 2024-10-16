@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8f28a86ef7247c1446a1766babda8923, R#\System\Document\CodeAnalysis\@Export\TypeWriter.vb"
+﻿#Region "Microsoft.VisualBasic::34e3d7625ed33b94b128a1c6f54b84d7, R#\System\Document\CodeAnalysis\@Export\TypeWriter.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 160
-    '    Code Lines: 117 (73.12%)
-    ' Comment Lines: 9 (5.62%)
+    '   Total Lines: 162
+    '    Code Lines: 119 (73.46%)
+    ' Comment Lines: 9 (5.56%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 34 (21.25%)
-    '     File Size: 5.96 KB
+    '   Blank Lines: 34 (20.99%)
+    '     File Size: 6.04 KB
 
 
     '     Class TypeWriter

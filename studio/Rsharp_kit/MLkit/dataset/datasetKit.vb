@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8d8d8f06a06ac9456cb771138812de42, studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
+﻿#Region "Microsoft.VisualBasic::3cee44c11511328953912d704bb4898d, studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1044
-    '    Code Lines: 730 (69.92%)
-    ' Comment Lines: 194 (18.58%)
+    '   Total Lines: 1045
+    '    Code Lines: 731 (69.95%)
+    ' Comment Lines: 194 (18.56%)
     '    - Xml Docs: 94.33%
     ' 
-    '   Blank Lines: 120 (11.49%)
-    '     File Size: 43.81 KB
+    '   Blank Lines: 120 (11.48%)
+    '     File Size: 43.87 KB
 
 
     ' Module datasetKit

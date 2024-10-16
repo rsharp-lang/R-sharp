@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::06df3fe89a00c95f78cf455fdd6bf686, studio\Rserver\Rweb\RCallbackMessage.vb"
+﻿#Region "Microsoft.VisualBasic::055a05572f1431e59dced0c12996f20b, studio\Rserver\Rweb\RCallbackMessage.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 168
-    '    Code Lines: 141 (83.93%)
+    '   Total Lines: 169
+    '    Code Lines: 142 (84.02%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 27 (16.07%)
-    '     File Size: 7.12 KB
+    '   Blank Lines: 27 (15.98%)
+    '     File Size: 7.18 KB
 
 
     ' Module RCallbackMessage

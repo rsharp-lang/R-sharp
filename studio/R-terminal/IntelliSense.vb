@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d6e036694d1cd410158e1a26495fbb84, studio\R-terminal\IntelliSense.vb"
+﻿#Region "Microsoft.VisualBasic::07cbff7b9d0a2109db2a2ddf88b2378b, studio\R-terminal\IntelliSense.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 21 (16.80%)
-    '     File Size: 4.48 KB
+    '     File Size: 4.50 KB
 
 
     ' Class IntelliSense

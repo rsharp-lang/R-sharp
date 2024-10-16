@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e6309ac5b7d4baec68d6b6d85efc4d60, studio\Rsharp_kit\webKit\URL.vb"
+﻿#Region "Microsoft.VisualBasic::060757b6ba270df66041d8410d77f8a6, studio\Rsharp_kit\webKit\URL.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 93.33%
     ' 
     '   Blank Lines: 54 (11.27%)
-    '     File Size: 19.35 KB
+    '     File Size: 19.37 KB
 
 
     ' Module URL

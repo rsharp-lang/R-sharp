@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fb55b25fec99aa2d56edea1a819425a1, studio\Rsharp_kit\MLkit\GA\GAToolkit.vb"
+﻿#Region "Microsoft.VisualBasic::169fc19c6a9731d755ebf0302ae25586, studio\Rsharp_kit\MLkit\GA\GAToolkit.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 94
-    '    Code Lines: 63 (67.02%)
-    ' Comment Lines: 20 (21.28%)
+    '   Total Lines: 95
+    '    Code Lines: 64 (67.37%)
+    ' Comment Lines: 20 (21.05%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 11 (11.70%)
-    '     File Size: 3.81 KB
+    '   Blank Lines: 11 (11.58%)
+    '     File Size: 3.86 KB
 
 
     ' Module GAToolkit

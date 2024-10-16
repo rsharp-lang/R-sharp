@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::76890bfcc15efcca8182ada571828ba5, studio\Rsharp_kit\MLkit\dataMining\aprioriRules.vb"
+﻿#Region "Microsoft.VisualBasic::497b092ffb3f15e3cfe10ff5daab814b, studio\Rsharp_kit\MLkit\dataMining\aprioriRules.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 128
-    '    Code Lines: 84 (65.62%)
-    ' Comment Lines: 26 (20.31%)
+    '   Total Lines: 129
+    '    Code Lines: 85 (65.89%)
+    ' Comment Lines: 26 (20.16%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 18 (14.06%)
-    '     File Size: 5.37 KB
+    '   Blank Lines: 18 (13.95%)
+    '     File Size: 5.42 KB
 
 
     ' Module aprioriRules

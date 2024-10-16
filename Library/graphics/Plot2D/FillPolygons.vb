@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::17e54a2011596d22b2871e75ca0ba48a, Library\graphics\Plot2D\FillPolygons.vb"
+﻿#Region "Microsoft.VisualBasic::58c3f7269345d7cfa1e09d15d4d3882e, Library\graphics\Plot2D\FillPolygons.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 73
-    '    Code Lines: 60 (82.19%)
+    '   Total Lines: 104
+    '    Code Lines: 88 (84.62%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 13 (17.81%)
-    '     File Size: 2.99 KB
+    '   Blank Lines: 16 (15.38%)
+    '     File Size: 4.29 KB
 
 
     ' Class FillPolygons

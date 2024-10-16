@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::60b8dd302c5bc777ea622a1b249745cf, studio\R-terminal\CLI\Utils.vb"
+﻿#Region "Microsoft.VisualBasic::0e8514cfffecbdf8fd9bad0eb06cad80, studio\R-terminal\CLI\Utils.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 83.33%
     ' 
     '   Blank Lines: 49 (15.56%)
-    '     File Size: 12.18 KB
+    '     File Size: 12.21 KB
 
 
     ' Module CLI

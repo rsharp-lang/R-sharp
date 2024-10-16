@@ -1,56 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::c9933aa0576f8c44c0c43040a9f13513, R#\Runtime\Internal\internalInvokes\graphics\graphicsDevice.vb"
+﻿#Region "Microsoft.VisualBasic::307f6a789db788720f0a5f7b57dbe20e, Library\shares\graphics.common_runtime\graphicsDevice.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 96
-'    Code Lines: 53 (55.21%)
-' Comment Lines: 33 (34.38%)
-'    - Xml Docs: 96.97%
-' 
-'   Blank Lines: 10 (10.42%)
-'     File Size: 3.38 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Structure graphicsDevice
-' 
-'         Properties: Background, isEmpty
-' 
-'         Function: getArgumentValue, GetCurrentDevice, ToString
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 126
+    '    Code Lines: 79 (62.70%)
+    ' Comment Lines: 33 (26.19%)
+    '    - Xml Docs: 96.97%
+    ' 
+    '   Blank Lines: 14 (11.11%)
+    '     File Size: 4.35 KB
+
+
+    ' Structure graphicsDevice
+    ' 
+    '     Properties: Background, isEmpty, TryMeasureFormatEncoder
+    ' 
+    '     Function: getArgumentValue, GetCurrentDevice, ToString
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ccdf24228ddb803597b15a2f89b6b57f, Library\graphics\Rgraphics.vb"
+﻿#Region "Microsoft.VisualBasic::5bb9b46dcbf2fb879b2b0a30ff5488cc, Library\graphics\Rgraphics.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 391
-    '    Code Lines: 249 (63.68%)
-    ' Comment Lines: 95 (24.30%)
+    '   Total Lines: 392
+    '    Code Lines: 250 (63.78%)
+    ' Comment Lines: 95 (24.23%)
     '    - Xml Docs: 86.32%
     ' 
-    '   Blank Lines: 47 (12.02%)
-    '     File Size: 15.65 KB
+    '   Blank Lines: 47 (11.99%)
+    '     File Size: 15.79 KB
 
 
     ' Module Rgraphics
     ' 
-    '     Function: as_raster, as_vector, bytes, colorHeightMap, image
+    '     Function: as_raster, as_vector, bytes, cast_image, colorHeightMap
     '               imageFromMatrix, rasetr_matrix, rasetrFromDataframe, raster_convolution, raster_dataframe
     '               rgb_formula
     ' 

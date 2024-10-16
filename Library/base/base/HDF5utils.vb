@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1d357e8c99819962e2bdcf76fd3bf9ef, Library\base\base\HDF5utils.vb"
+﻿#Region "Microsoft.VisualBasic::23fc450ca8b4b1745a215a92ce853d43, Library\base\base\HDF5utils.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 32
-    '    Code Lines: 29 (90.62%)
+    '   Total Lines: 33
+    '    Code Lines: 30 (90.91%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 3 (9.38%)
-    '     File Size: 1.25 KB
+    '   Blank Lines: 3 (9.09%)
+    '     File Size: 1.30 KB
 
 
     ' Module HDF5utils

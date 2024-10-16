@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::86c0df89ab41a47080a3256202aae443, studio\Rsharp_IL\njl\JuliaScriptLoader.vb"
+﻿#Region "Microsoft.VisualBasic::7bebaff7f0490b0ba74659dd3130bf07, studio\Rsharp_IL\njl\JuliaScriptLoader.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 69
-    '    Code Lines: 52 (75.36%)
-    ' Comment Lines: 6 (8.70%)
+    '   Total Lines: 70
+    '    Code Lines: 53 (75.71%)
+    ' Comment Lines: 6 (8.57%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 11 (15.94%)
-    '     File Size: 2.67 KB
+    '   Blank Lines: 11 (15.71%)
+    '     File Size: 2.73 KB
 
 
     ' Class JuliaScriptLoader

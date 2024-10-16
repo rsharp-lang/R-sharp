@@ -1,58 +1,58 @@
-﻿#Region "Microsoft.VisualBasic::659ef9b9553bb1ab585e2ca28d9bf882, R#\Runtime\Environment\Device\RContentOutput.vb"
+﻿#Region "Microsoft.VisualBasic::4ef9e298c741dc2c94afea22a34610fe, R#\Runtime\Environment\Device\RContentOutput.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 216
-'    Code Lines: 147 (68.06%)
-' Comment Lines: 33 (15.28%)
-'    - Xml Docs: 100.00%
-' 
-'   Blank Lines: 36 (16.67%)
-'     File Size: 7.23 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class RContentOutput
-' 
-'         Properties: Encoding, env, isLogOpen, recommendType, stream
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Sub: closeSink, Flush, LoggingDriver, openSink, (+5 Overloads) Write
-'              (+2 Overloads) WriteLine, WriteStream
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 226
+    '    Code Lines: 156 (69.03%)
+    ' Comment Lines: 33 (14.60%)
+    '    - Xml Docs: 100.00%
+    ' 
+    '   Blank Lines: 37 (16.37%)
+    '     File Size: 7.46 KB
+
+
+    '     Class RContentOutput
+    ' 
+    '         Properties: Encoding, env, isLogOpen, recommendType, stream
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Sub: closeSink, Flush, LoggingDriver, openSink, (+5 Overloads) Write
+    '              (+2 Overloads) WriteLine, WriteStream
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

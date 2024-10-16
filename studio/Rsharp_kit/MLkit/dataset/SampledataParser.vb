@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::254eec2f05888b66e4bb0659211583f6, studio\Rsharp_kit\MLkit\dataset\SampledataParser.vb"
+﻿#Region "Microsoft.VisualBasic::4033a8111ae41e3c124ffc811b6ba5bc, studio\Rsharp_kit\MLkit\dataset\SampledataParser.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 74
-    '    Code Lines: 64 (86.49%)
+    '   Total Lines: 75
+    '    Code Lines: 65 (86.67%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 10 (13.51%)
-    '     File Size: 2.95 KB
+    '   Blank Lines: 10 (13.33%)
+    '     File Size: 3.01 KB
 
 
     ' Module SampledataParser

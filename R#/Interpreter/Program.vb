@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b9dd4edac614754cd59702f62d07c00c, R#\Interpreter\Program.vb"
+﻿#Region "Microsoft.VisualBasic::a93543d47cd87904cdc146989c101f17, R#\Interpreter\Program.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 139
-    '    Code Lines: 103 (74.10%)
-    ' Comment Lines: 13 (9.35%)
+    '   Total Lines: 147
+    '    Code Lines: 109 (74.15%)
+    ' Comment Lines: 13 (8.84%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 23 (16.55%)
-    '     File Size: 5.46 KB
+    '   Blank Lines: 25 (17.01%)
+    '     File Size: 5.93 KB
 
 
     '     Class Program
@@ -49,7 +49,7 @@
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: BuildProgram, CreateProgram, EndWithFuncCalls, Execute, GetEnumerator
-    '                   IEnumerable_GetEnumerator, isException, ToString
+    '                   GetRLanguageDefaultOption, IEnumerable_GetEnumerator, isException, ToString
     ' 
     ' 
     ' /********************************************************************************/

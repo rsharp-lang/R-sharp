@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::447427744cfa7d6ece71ed2c8805210c, Library\base\base.vb"
+﻿#Region "Microsoft.VisualBasic::41d8f82c85805bd38e257fa00a3cfb89, Library\base\base.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 104
-    '    Code Lines: 57 (54.81%)
-    ' Comment Lines: 30 (28.85%)
+    '   Total Lines: 105
+    '    Code Lines: 58 (55.24%)
+    ' Comment Lines: 30 (28.57%)
     '    - Xml Docs: 90.00%
     ' 
-    '   Blank Lines: 17 (16.35%)
-    '     File Size: 3.71 KB
+    '   Blank Lines: 17 (16.19%)
+    '     File Size: 3.76 KB
 
 
     ' Module base

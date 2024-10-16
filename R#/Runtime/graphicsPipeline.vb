@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8211f2a95d45ae6aa175d1cf54453643, R#\Runtime\graphicsPipeline.vb"
+﻿#Region "Microsoft.VisualBasic::afe41764be2eb770ff8caa0f8127345a, R#\Runtime\graphicsPipeline.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 200
-    '    Code Lines: 165 (82.50%)
-    ' Comment Lines: 7 (3.50%)
-    '    - Xml Docs: 85.71%
+    '   Total Lines: 215
+    '    Code Lines: 167 (77.67%)
+    ' Comment Lines: 20 (9.30%)
+    '    - Xml Docs: 90.00%
     ' 
-    '   Blank Lines: 28 (14.00%)
-    '     File Size: 8.34 KB
+    '   Blank Lines: 28 (13.02%)
+    '     File Size: 8.94 KB
 
 
     '     Module graphicsPipeline
