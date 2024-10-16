@@ -9,9 +9,18 @@ pdf(file = `${@dir}/dnorm.pdf`) {
 	plot(x, y, background = "white", grid.fill = "white", color = "steelblue", point_size = 16);
 }
 
-pdf(file = `${@dir}/CDF.pdf`) {
-	let ecdf = CDF(x -> dnorm(x, mean = 2.5, sd = 2), [min(x), max(x)], resolution = 120);
+svg(file = `${@dir}/dnorm.svg`) {
+	plot(x, y, background = "white", grid.fill = "white", color = "steelblue", point_size = 16);
+}
+
+let ecdf = CDF(x -> dnorm(x, mean = 2.5, sd = 2), [min(x), max(x)], resolution = 120);
 	
 	str(ecdf);
+
+pdf(file = `${@dir}/CDF.pdf`) {
+	plot(ecdf$x, ecdf$y, grid.fill = "white", color = "steelblue", point_size = 16);
+}
+
+svg(file = `${@dir}/CDF.svg`) {
 	plot(ecdf$x, ecdf$y, grid.fill = "white", color = "steelblue", point_size = 16);
 }

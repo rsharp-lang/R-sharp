@@ -958,7 +958,7 @@ Module plots
 
         Dim serials As SerialData() = DirectCast(data, IEnumerable(Of SerialData)).ToArray
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="2100,1600")
-        Dim margin = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 5% 15% 10% 25%;", env:=env)
+        Dim margin = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 5% 10% 10% 15%;", env:=env)
         Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
         Dim spline As Splines = args.getValue(Of Splines)("interplot", env, Splines.None)
         Dim xlim As Double = args.getValue("xlim", env, Double.NaN)
