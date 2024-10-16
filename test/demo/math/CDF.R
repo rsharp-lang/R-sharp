@@ -10,7 +10,7 @@ pdf(file = `${@dir}/dnorm.pdf`) {
 }
 
 pdf(file = `${@dir}/CDF.pdf`) {
-	ecdf = CDF(x -> dnorm(x, mean = 2.5, sd = 2), [min(x), max(x)], resolution = 120);
+	let ecdf = CDF(x -> dnorm(x, mean = 2.5, sd = 2), [min(x), max(x)], resolution = 120);
 	
 	str(ecdf);
 	plot(ecdf$x, ecdf$y, grid.fill = "white", color = "steelblue", point_size = 16);
