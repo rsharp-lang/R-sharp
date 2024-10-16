@@ -201,8 +201,8 @@ Module graphics2DTools
 
             For j As Integer = 1 To layout(0)
                 cell = New Rectangle With {
-                    .X = x + css.GetValue(innerPadding.Left),
-                    .Y = y + css.GetValue(innerPadding.Top),
+                    .X = x + css.GetWidth(innerPadding.Left),
+                    .Y = y + css.GetHeight(innerPadding.Top),
                     .Width = w - innerPadding.Horizontal(css),
                     .Height = h - innerPadding.Vertical(css)
                 }
