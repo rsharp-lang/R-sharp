@@ -3,118 +3,118 @@
   <rect fill="white" width="2100" height="1600" />
   <rect fill="white" width="2100" height="1600" />
   <rect fill="white" x="315" y="80" width="1575" height="1360" />
-  <path fill="#D3D3D3" d="M315 80L315 1440" />
-  <path fill="#D3D3D3" d="M472.5 80L472.5 1440" />
-  <path fill="#D3D3D3" d="M630 80L630 1440" />
-  <path fill="#D3D3D3" d="M787.5 80L787.5 1440" />
-  <path fill="#D3D3D3" d="M945 80L945 1440" />
-  <path fill="#D3D3D3" d="M1102.5 80L1102.5 1440" />
-  <path fill="#D3D3D3" d="M1260 80L1260 1440" />
-  <path fill="#D3D3D3" d="M1417.5 80L1417.5 1440" />
-  <path fill="#D3D3D3" d="M1575 80L1575 1440" />
-  <path fill="#D3D3D3" d="M1732.5 80L1732.5 1440" />
-  <path fill="#D3D3D3" d="M1890 80L1890 1440" />
-  <path fill="#D3D3D3" d="M315 1440L1890 1440" />
-  <path fill="#D3D3D3" d="M315 1304L1890 1304" />
-  <path fill="#D3D3D3" d="M315 1168L1890 1168" />
-  <path fill="#D3D3D3" d="M315 1032L1890 1032" />
-  <path fill="#D3D3D3" d="M315 896L1890 896" />
-  <path fill="#D3D3D3" d="M315 760L1890 760" />
-  <path fill="#D3D3D3" d="M315 624L1890 624" />
-  <path fill="#D3D3D3" d="M315 488L1890 488" />
-  <path fill="#D3D3D3" d="M315 352L1890 352" />
-  <path fill="#D3D3D3" d="M315 216L1890 216" />
-  <path fill="#D3D3D3" d="M315 80L1890 80" />
-  <path d="M315 1440L1890 1440" />
-  <path d="M315 1440L315 1450" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M315 80L315 1440" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M472.5 80L472.5 1440" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M630 80L630 1440" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M787.5 80L787.5 1440" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M945 80L945 1440" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M1102.5 80L1102.5 1440" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M1260 80L1260 1440" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M1417.5 80L1417.5 1440" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M1575 80L1575 1440" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M1732.5 80L1732.5 1440" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M1890 80L1890 1440" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M315 1440L1890 1440" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M315 1304L1890 1304" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M315 1168L1890 1168" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M315 1032L1890 1032" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M315 896L1890 896" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M315 760L1890 760" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M315 624L1890 624" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M315 488L1890 488" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M315 352L1890 352" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M315 216L1890 216" />
+  <path fill="none" stroke="#D3D3D3" stroke-width="2.0833333" stroke-miterlimit="4" d="M315 80L1890 80" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M315 1440L1890 1440" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M315 1440L315 1450" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="274, 284.81543, 299.47607, 314.13672, 320.15479, 334.81543, " y="1471, ">
 			-10.00
 	</text>
-  <path d="M472.5 1440L472.5 1450" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M472.5 1440L472.5 1450" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="440, 450.81543, 465.47607, 471.49414, 486.15479, " y="1471, ">
 			-8.00
 	</text>
-  <path d="M630 1440L630 1450" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M630 1440L630 1450" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="597, 607.81543, 622.47607, 628.49414, 643.15479, " y="1471, ">
 			-6.00
 	</text>
-  <path d="M787.5 1440L787.5 1450" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M787.5 1440L787.5 1450" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="755, 765.81543, 780.47607, 786.49414, 801.15479, " y="1471, ">
 			-4.00
 	</text>
-  <path d="M945 1440L945 1450" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M945 1440L945 1450" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="912, 922.81543, 937.47607, 943.49414, 958.15479, " y="1471, ">
 			-2.00
 	</text>
-  <path d="M1102.5 1440L1102.5 1450" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M1102.5 1440L1102.5 1450" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="1095, " y="1471, ">
 			0
 	</text>
-  <path d="M1260 1440L1260 1450" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M1260 1440L1260 1450" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="1233, 1247.6606, 1253.6787, 1268.3394, " y="1471, ">
 			2.00
 	</text>
-  <path d="M1417.5 1440L1417.5 1450" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M1417.5 1440L1417.5 1450" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="1390, 1404.6606, 1410.6787, 1425.3394, " y="1471, ">
 			4.00
 	</text>
-  <path d="M1575 1440L1575 1450" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M1575 1440L1575 1450" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="1548, 1562.6606, 1568.6787, 1583.3394, " y="1471, ">
 			6.00
 	</text>
-  <path d="M1732.5 1440L1732.5 1450" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M1732.5 1440L1732.5 1450" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="1705, 1719.6606, 1725.6787, 1740.3394, " y="1471, ">
 			8.00
 	</text>
-  <path d="M1890 1440L1890 1450" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M1890 1440L1890 1450" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="1855, 1869.6606, 1884.3213, 1890.3394, 1905, " y="1471, ">
 			10.00
 	</text>
   <text font-size="37.5" font-family="Microsoft YaHei, 微软雅黑" x="1089, " y="1501.625, ">
 			X
 	</text>
-  <path d="M315 1440L315 80" />
-  <path d="M315 1440L305 1440" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M315 1440L315 80" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M315 1440L305 1440" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="290.375, " y="1448.3125, ">
 			0
 	</text>
-  <path d="M315 1304L305 1304" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M315 1304L305 1304" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="250.61823, 265.27887, 271.29694, 285.95758, " y="1312.3125, ">
 			0.10
 	</text>
-  <path d="M315 1168L305 1168" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M315 1168L305 1168" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="250.61823, 265.27887, 271.29694, 285.95758, " y="1176.3125, ">
 			0.20
 	</text>
-  <path d="M315 1032L305 1032" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M315 1032L305 1032" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="250.61823, 265.27887, 271.29694, 285.95758, " y="1040.3125, ">
 			0.30
 	</text>
-  <path d="M315 896L305 896" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M315 896L305 896" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="250.61823, 265.27887, 271.29694, 285.95758, " y="904.3125, ">
 			0.40
 	</text>
-  <path d="M315 760L305 760" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M315 760L305 760" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="250.61823, 265.27887, 271.29694, 285.95758, " y="768.3125, ">
 			0.50
 	</text>
-  <path d="M315 624L305 624" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M315 624L305 624" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="250.61823, 265.27887, 271.29694, 285.95758, " y="632.3125, ">
 			0.60
 	</text>
-  <path d="M315 488L305 488" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M315 488L305 488" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="250.61823, 265.27887, 271.29694, 285.95758, " y="496.3125, ">
 			0.70
 	</text>
-  <path d="M315 352L305 352" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M315 352L305 352" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="250.61823, 265.27887, 271.29694, 285.95758, " y="360.3125, ">
 			0.80
 	</text>
-  <path d="M315 216L305 216" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M315 216L305 216" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="250.61823, 265.27887, 271.29694, 285.95758, " y="224.3125, ">
 			0.90
 	</text>
-  <path d="M315 80L305 80" />
+  <path fill="none" stroke="black" stroke-width="5.2083335" stroke-miterlimit="4" d="M315 80L305 80" />
   <text font-size="25" font-family="Microsoft YaHei, 微软雅黑" x="251.74323, 266.40387, 272.42194, 287.08258, " y="88.3125, ">
 			1.00
 	</text>
