@@ -132,7 +132,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="System.Resources.Extensions" Version="6.0.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
 
@@ -143,6 +143,6 @@
 
   <Import Project="..\studio\Rstudio.common\Rstudio.common.projitems" Label="Shared" />
 
-  <Import Project="..\..\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\TcpRequest\TcpRequest.projitems" Label="Shared" />
+  <Import Project="..\..\runtime\Darwinism\src\networking\TcpRequest\TcpRequest.projitems" Label="Shared" />
 
 </Project>
