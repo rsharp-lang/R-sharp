@@ -137,6 +137,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\runtime\Darwinism\src\networking\networking.vbproj" />
     <ProjectReference Include="..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\R#\Rsharp-netcore5.vbproj" />
   </ItemGroup>
