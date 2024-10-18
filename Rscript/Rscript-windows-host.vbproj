@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.26100.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     
     <OutputType>Exe</OutputType>
@@ -12,7 +12,7 @@
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;Rsharp_app_release;PlantMAT;NPSearch;mzkit_win32;gcmodeller_desktop;CFD_win32</Configurations>
     <StartupObject>Rsharp.NetCore5.Program</StartupObject>
-	  <RuntimeIdentifiers>win7-x64;win7-x86;win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
+	  <RuntimeIdentifiers>win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
 	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 
   </PropertyGroup>
@@ -21,7 +21,7 @@
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <DefineConstants>netcore5=1</DefineConstants>
+    <DefineConstants></DefineConstants>
     <DocumentationFile>Rscript.xml</DocumentationFile>
   </PropertyGroup>
 
@@ -29,13 +29,13 @@
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <DefineConstants>netcore5=1</DefineConstants>
+    <DefineConstants></DefineConstants>
     <DocumentationFile>Rscript.xml</DocumentationFile>
     <OutputPath>../App\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineConstants>UNIX=1</DefineConstants>
     <OutputPath>../App\</OutputPath>
     <DocumentationFile>Rscript.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -82,7 +82,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineConstants>UNIX=1</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net6.0-windows|x64'">
@@ -123,7 +123,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <DefineConstants>UNIX=1</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0-windows' ">
