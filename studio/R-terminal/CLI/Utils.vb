@@ -287,7 +287,9 @@ Partial Module CLI
     <Group(SystemConfig)>
     <Usage("--config [name1=value1] [name2=value2 ...]")>
     Public Function configREnv(args As CommandLine) As Integer
-        Using config As New Options(ConfigFile.EmptyConfigs, saveConfig:=True)
+        Dim localConfigs As String = getConfig(args)
+
+        Using config As New Options(ConfigFile.Load(localConfigs), saveConfig:=True)
             If args.Tokens.Skip(1).Any Then
                 For Each optVal As NamedValue(Of String) In args.Tokens _
                     .Skip(1) _
