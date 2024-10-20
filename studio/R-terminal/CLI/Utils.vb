@@ -288,8 +288,13 @@ Partial Module CLI
     <Usage("--config [name1=value1] [name2=value2 ...]")>
     Public Function configREnv(args As CommandLine) As Integer
         Using config As New Options(ConfigFile.EmptyConfigs, saveConfig:=True)
-            If args.AsEnumerable.Any Then
-                For Each optVal As NamedValue(Of String) In args.AsEnumerable
+            If args.Tokens.Skip(1).Any Then
+                For Each optVal As NamedValue(Of String) In args.Tokens _
+                    .Skip(1) _
+                    .Select(Function(str)
+                                Return str.GetTagValue("=")
+                            End Function)
+
                     Call config.setOption(optVal.Name, optVal.Value)
                 Next
             Else
