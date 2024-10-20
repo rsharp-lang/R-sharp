@@ -321,10 +321,9 @@ Namespace Development.Configuration
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        <DebuggerStepThrough>
         Public Function getAllConfigs() As Dictionary(Of String, String)
             Dim opts As New Dictionary(Of String, String)(configValues)
-            Dim options = DataFramework.Schema(memoryLoad.GetType, PropertyAccess.Readable, PublicProperty, nonIndex:=True)
+            Dim options = DataFramework.Schema(Me.GetType, PropertyAccess.Readable, PublicProperty, nonIndex:=True)
 
             For Each config As PropertyInfo In options.Values
                 Dim optName = config.GetCustomAttribute(Of OptionAttribute)
