@@ -279,14 +279,24 @@ Partial Module CLI
     End Function
 
     <ExportAPI("--config")>
-    <Description("Run config of the R# environment its default options.")>
+    <Description("Run config of the R# environment its default options. This command will 
+         display all config options value of current R# environment if there is no config 
+         options was set from the commandline.")>
     <Group(SystemConfig)>
-    <Usage("--config name1=value1 [name2=value2 ...]")>
+    <Usage("--config [name1=value1] [name2=value2 ...]")>
     Public Function configREnv(args As CommandLine) As Integer
         Using config As New Options(ConfigFile.EmptyConfigs, saveConfig:=True)
-            For Each optVal As NamedValue(Of String) In args.AsEnumerable
-                Call config.setOption(optVal.Name, optVal.Value)
-            Next
+            If args.AsEnumerable.Any Then
+                For Each optVal As NamedValue(Of String) In args.AsEnumerable
+                    Call config.setOption(optVal.Name, optVal.Value)
+                Next
+            Else
+                ' just print the configs if no options that could be parsed from the commandline
+                Dim allOpts = config.getAllConfigs
+                Dim names = allOpts.Keys.ToArray
+                Dim values = allOpts.Values.ToArray
+
+            End If
         End Using
 
         Return 0
