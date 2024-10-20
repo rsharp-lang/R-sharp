@@ -65,6 +65,8 @@ Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
@@ -295,7 +297,19 @@ Partial Module CLI
                 Dim allOpts = config.getAllConfigs
                 Dim names = allOpts.Keys.ToArray
                 Dim values = allOpts.Values.ToArray
+                Dim df As New dataframe With {
+                    .columns = New Dictionary(Of String, Array) From {
+                        {"option", names},
+                        {"config_value", values}
+                    }
+                }
+                Dim printAll As New list With {
+                    .slots = New Dictionary(Of String, Object) From {
+                        {"max.print", Integer.MaxValue}
+                    }
+                }
 
+                Call base.print(df, printAll, env:=New RInterpreter(config).globalEnvir)
             End If
         End Using
 
