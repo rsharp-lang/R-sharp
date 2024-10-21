@@ -76,6 +76,8 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports RDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+Imports SMRUCC.Rsharp.Runtime.Components
+
 
 #If NET48 Then
 Imports Pen = System.Drawing.Pen
@@ -477,5 +479,21 @@ Module signalProcessing
         Next
 
         Return matrix.ToArray
+    End Function
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="A">is the height of the curve's peak</param>
+    ''' <param name="mu">is the position of the center of the peak</param>
+    ''' <param name="sigma">(the standard deviation, sometimes called the Gaussian RMS width) 
+    ''' controls the width of the "bell"</param>
+    ''' <returns></returns>
+    ''' 
+    <ExportAPI("gaussian")>
+    <RApiReturn(TypeCodes.double)>
+    Public Function Gaussian(<RRawVectorArgument> x As Object, A#, mu#, sigma#) As Object
+        Return Distributions.Gaussian.Gaussian(CLRVector.asNumeric(x), A, mu, sigma)
     End Function
 End Module
