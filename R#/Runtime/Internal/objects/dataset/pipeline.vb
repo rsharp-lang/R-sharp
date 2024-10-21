@@ -234,6 +234,11 @@ Namespace Runtime.Internal.Object
             }
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function CreateFromPopulator(Of T)(pull As Func(Of IEnumerable(Of T)), Optional finalize As Action = Nothing) As pipeline
+            Return CreateFromPopulator(pull(), finalize)
+        End Function
+
         Private Shared Function fromVector(Of T)(upstream As vector, env As Environment, suppress As Boolean) As pipeline
             If upstream.length = 0 Then
                 env.AddMessage("the input vector is in empty size!", MSG_TYPES.WRN)
@@ -326,7 +331,7 @@ Namespace Runtime.Internal.Object
 
             ElseIf GetType(T) Is GetType(Object) Then
                 If upstream_type.IsArray Then
-                    Return CreateFromPopulator(Of T)(From x In DirectCast(upstream, Array) Select x)
+                    Return CreateFromPopulator(From x In DirectCast(upstream, Array) Select DirectCast(x, T))
                 Else
                     Return CreateFromPopulator(Of T)({upstream})
                 End If
