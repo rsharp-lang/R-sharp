@@ -78,6 +78,17 @@ Imports Rsharp = SMRUCC.Rsharp
 Module buffer
 
     ''' <summary>
+    ''' parse the given base64 string as a numeric vector
+    ''' </summary>
+    ''' <param name="base64"></param>
+    ''' <returns></returns>
+    <ExportAPI("parseDouble")>
+    Public Function parseDouble(base64 As String) As Double()
+        Static network As New NetworkByteOrderBuffer
+        Return network.ParseDouble(base64)
+    End Function
+
+    ''' <summary>
     ''' cast a numeric vector as bytes data in network byte order
     ''' </summary>
     ''' <param name="x"></param>
