@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.DataMining
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
 Imports Microsoft.VisualBasic.DataMining.Evaluation
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
@@ -88,6 +89,8 @@ Module validation
     Public Function PlotROC(roc As ROC, args As list, env As Environment) As Object
         Dim line As SerialData = ROCPlot.CreateSerial(roc)
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, "2700,2400")
+        Dim type As Drivers = env.getDriver
+        Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
 
         line.color = args.getValue("line_color", env, "steelblue").TranslateColor
         line.lineType = DashStyle.Dash
@@ -96,7 +99,7 @@ Module validation
         line.width = args.getValue("line_width", env, 1)
         line.title = roc.AUC.ToString("F3")
 
-        Return ROCPlot.Plot(line, size:=size)
+        Return ROCPlot.Plot(line, size:=size, dpi:=dpi, driver:=type)
     End Function
 
     <RGenericOverloads("as.data.frame")>
