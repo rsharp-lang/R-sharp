@@ -158,21 +158,23 @@ Namespace Development
             Dim text As String = "color: red;"
 
             For Each t As Token In tokens
+                Dim str As String = t.text.Replace("<", "&lt;")
+
                 Select Case t.name
                     Case TokenType.booleanLiteral, TokenType.missingLiteral
                         Call dev.Write($"<span style='{keyword}'>{t.text.ToUpper}</span>")
                     Case TokenType.keyword
-                        Call dev.Write($"<span style='{keyword}'>{t.text}</span>")
+                        Call dev.Write($"<span style='{keyword}'>{str}</span>")
                     Case TokenType.newLine : Call dev.WriteLine()
-                    Case TokenType.annotation : Call dev.Write($"<span style='{annotation}'>{t.text}</span>")
-                    Case TokenType.delimiter : Call dev.Write(t.text)
+                    Case TokenType.annotation : Call dev.Write($"<span style='{annotation}'>{str}</span>")
+                    Case TokenType.delimiter : Call dev.Write(str)
                     Case TokenType.stringLiteral, TokenType.stringInterpolation, TokenType.cliShellInvoke
-                        Call dev.Write($"<span style='{text}'>{t.text}</span>")
+                        Call dev.Write($"<span style='{text}'>{str}</span>")
                     Case TokenType.comment
-                        Call dev.Write($"<span style='{comment}'>{t.text}</span>")
+                        Call dev.Write($"<span style='{comment}'>{str}</span>")
 
                     Case Else
-                        Call dev.Write(t.text)
+                        Call dev.Write(str)
                 End Select
             Next
 
