@@ -169,7 +169,7 @@ Namespace Development
                     Case TokenType.annotation : Call dev.Write($"<span style='{annotation}'>{str}</span>")
                     Case TokenType.delimiter : Call dev.Write(str)
                     Case TokenType.stringLiteral, TokenType.stringInterpolation, TokenType.cliShellInvoke
-                        Call dev.Write($"<span style='{text}'>{str}</span>")
+                        Call dev.Write($"<span style='{text}'>""{str}""</span>")
                     Case TokenType.comment
                         Call dev.Write($"<span style='{comment}'>{str}</span>")
 
