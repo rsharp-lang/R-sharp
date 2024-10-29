@@ -101,6 +101,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Imports std = System.Math
 Imports VBStr = Microsoft.VisualBasic.Strings
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
+Imports ASCII = Microsoft.VisualBasic.Text.ASCII
 
 #If NET48 Then
 Imports Image = System.Drawing.Image
@@ -881,6 +882,61 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return str.StringSplit(any.ToString(delimiter))
             End If
+        End Function
+
+        ''' <summary>
+        ''' str_trim() removes whitespace from start and end of string; str_squish() removes whitespace at the start and end, and replaces all internal whitespace with a single space.
+        ''' </summary>
+        ''' <param name="string">Input vector. Either a character vector, Or something coercible To one.</param>
+        ''' <param name="side">Side on which to remove whitespace: "left", "right", or "both", the default.</param>
+        ''' <returns>A character vector the same length as string.</returns>
+        <ExportAPI("str_trim")>
+        Public Function str_trim(<RRawVectorArgument> [string] As Object,
+                                 <RRawVectorArgument(TypeCodes.string)>
+                                 Optional side As Object = "both|left|right") As String()
+
+            Dim sides = CLRVector.asCharacter(side)
+            Dim strs = CLRVector.asCharacter([string])
+            Dim side_flag As String = sides.ElementAtOrDefault(0, "both")
+
+            If strs.IsNullOrEmpty Then
+                Return Nothing
+            End If
+
+            Select Case LCase(side_flag)
+                Case "left"
+                    Return strs _
+                        .Select(Function(s) s.TrimStart(ASCII.Whitespace)) _
+                        .ToArray
+                Case "right"
+                    Return strs _
+                        .Select(Function(s) s.TrimEnd(ASCII.Whitespace)) _
+                        .ToArray
+                Case Else
+                    Return strs _
+                        .Select(Function(s) s.Trim(ASCII.Whitespace)) _
+                        .ToArray
+            End Select
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="[string]"></param>
+        ''' <returns>
+        ''' A character vector the same length as string.
+        ''' </returns>
+        <ExportAPI("str_squish")>
+        Public Function str_squish([string] As Object) As String()
+            Dim strs = CLRVector.asCharacter([string])
+
+            If strs.IsNullOrEmpty Then
+                Return Nothing
+            End If
+
+            Return strs _
+                .Select(Function(s) s.StringReplace("\s+", " ").Trim) _
+                .ToArray
         End Function
 
         ''' <summary>
