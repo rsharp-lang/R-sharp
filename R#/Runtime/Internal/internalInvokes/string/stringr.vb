@@ -96,12 +96,12 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
+Imports ASCII = Microsoft.VisualBasic.Text.ASCII
 Imports encoder = SMRUCC.Rsharp.Development.Components.Encoder
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports std = System.Math
 Imports VBStr = Microsoft.VisualBasic.Strings
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
-Imports ASCII = Microsoft.VisualBasic.Text.ASCII
 
 #If NET48 Then
 Imports Image = System.Drawing.Image
