@@ -885,7 +885,10 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' str_trim() removes whitespace from start and end of string; str_squish() removes whitespace at the start and end, and replaces all internal whitespace with a single space.
+        ''' ## Remove whitespace
+        ''' 
+        ''' str_trim() removes whitespace from start and end of string; str_squish() removes whitespace at 
+        ''' the start and end, and replaces all internal whitespace with a single space.
         ''' </summary>
         ''' <param name="string">Input vector. Either a character vector, Or something coercible To one.</param>
         ''' <param name="side">Side on which to remove whitespace: "left", "right", or "both", the default.</param>
@@ -920,14 +923,18 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ## Remove whitespace
         ''' 
+        ''' str_trim() removes whitespace from start and end of string; str_squish() removes whitespace at 
+        ''' the start and end, and replaces all internal whitespace with a single space.
         ''' </summary>
-        ''' <param name="[string]"></param>
+        ''' <param name="string">	
+        ''' Input vector. Either a character vector, Or something coercible To one.</param>
         ''' <returns>
         ''' A character vector the same length as string.
         ''' </returns>
         <ExportAPI("str_squish")>
-        Public Function str_squish([string] As Object) As String()
+        Public Function str_squish(<RRawVectorArgument> [string] As Object) As String()
             Dim strs = CLRVector.asCharacter([string])
 
             If strs.IsNullOrEmpty Then
@@ -940,12 +947,30 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ## Concatenate Strings
+        ''' 
+        ''' Concatenate vectors after converting to character. Concatenation happens in two basically different ways, 
+        ''' determined by collapse being a string or not.
+        ''' 
         ''' ``paste0(..., collapse)`` is equivalent to ``paste(..., sep = "", collapse)``, slightly more efficiently.
         ''' </summary>
-        ''' <param name="x"></param>
-        ''' <param name="collapse$"></param>
+        ''' <param name="x">one or more R objects, to be converted to character vectors.</param>
+        ''' <param name="collapse">an optional character string to separate the results. Not NA_character_. When collapse
+        ''' is a string, the result is always a string (character of length 1).</param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' A character vector of the concatenated values. This will be of length zero if all the objects are, unless 
+        ''' collapse is non-NULL, in which case it is "" (a single empty string).
+        '''
+        ''' If any input into an element Of the result Is In UTF-8 (And none are declared With encoding "bytes", see Encoding), 
+        ''' that element will be In UTF-8, otherwise In the current encoding In which Case the encoding Of the element 
+        ''' Is declared If the current locale Is either Latin-1 Or UTF-8, at least one Of the corresponding inputs (including 
+        ''' separators) had a declared encoding And all inputs were either ASCII Or declared.
+        '''
+        ''' If an input into an element Is declared With encoding "bytes", no translation will be done Of any Of the elements 
+        ''' And the resulting element will have encoding "bytes". If collapse Is non-NULL, this applies also To the second, 
+        ''' collapsing, phase, but some translation may have been done In pasting Object together In the first phase.
+        ''' </returns>
         ''' 
         <ExportAPI("paste0")>
         <RApiReturn(TypeCodes.string)>
