@@ -739,6 +739,10 @@ Namespace Runtime.Internal.Object
                 .ToArray
             Dim subsetData As New Dictionary(Of String, Array)
 
+            If index.IsNullOrEmpty Then
+                Return New [Variant](Of dataframe, Message)
+            End If
+
             For Each col As KeyValuePair(Of String, Array) In columns
                 Dim v = subsetColData(col.Value, index, env)
 
