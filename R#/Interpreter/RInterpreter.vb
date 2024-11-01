@@ -634,7 +634,9 @@ Namespace Interpreter
         ''' </param>
         ''' <param name="globalEnvir"></param>
         ''' <returns></returns>
-        Private Function RunInternal(Rscript As Rscript, arguments As NamedValue(Of Object)(), Optional ByRef globalEnvir As Environment = Nothing) As Object
+        Private Function RunInternal(Rscript As Rscript,
+                                     arguments As NamedValue(Of Object)(),
+                                     Optional ByRef globalEnvir As Environment = Nothing) As Object
             Dim error$ = Nothing
             Dim program As Program = Program.CreateProgram(Rscript, debug:=debug, [error]:=[error])
             Dim result As Object
@@ -708,6 +710,10 @@ Namespace Interpreter
             Return result
         End Function
 
+        ''' <summary>
+        ''' Default R# script interpreter which is created on the default environment.
+        ''' </summary>
+        ''' <returns></returns>
         Public Shared ReadOnly Property Rsharp As New RInterpreter
 
         Public Shared Function Evaluate(script$, ParamArray args As NamedValue(Of Object)()) As Object

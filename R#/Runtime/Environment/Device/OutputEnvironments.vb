@@ -58,6 +58,9 @@
 
 Namespace Runtime
 
+    ''' <summary>
+    ''' A enum flag value for indicates the console output device: standard output or html display
+    ''' </summary>
     Public Enum OutputEnvironments
         Console
         Html

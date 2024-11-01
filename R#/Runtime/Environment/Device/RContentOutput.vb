@@ -130,6 +130,13 @@ Namespace Runtime
             Log4VB.redirectInfo = AddressOf LoggingDriver
         End Sub
 
+        Public Sub splitLogging(log As Stream)
+            Me.split = True
+            Me.logfile = New StreamWriter(log)
+
+            Log4VB.redirectInfo = AddressOf LoggingDriver
+        End Sub
+
         ''' <summary>
         ''' just write the message text data
         ''' </summary>
