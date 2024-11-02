@@ -7,7 +7,7 @@
     <AssemblyName>Rscript</AssemblyName>
     <ApplicationIcon>R#.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64</Platforms>
-    <Configurations>Debug;Release;Rsharp_app_release;PlantMAT;NPSearch;mzkit_win32;gcmodeller_desktop</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;PlantMAT;NPSearch;mzkit_win32;gcmodeller_desktop;RsharpDev</Configurations>
     <StartupObject>Rsharp.NetCore5.Program</StartupObject>
 	  <RuntimeIdentifiers>win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
 	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -62,6 +62,10 @@
     <DocumentationFile>Rscript.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RsharpDev|AnyCPU'">
+    <DocumentationFile>Rscript.xml</DocumentationFile>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='gcmodeller_desktop|AnyCPU'">
     <DocumentationFile>Rscript.xml</DocumentationFile>
   </PropertyGroup>
@@ -80,7 +84,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|x64'">
     <DocumentationFile>Rscript.xml</DocumentationFile>
-    <OutputPath>../App\</OutputPath>
+   
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>
@@ -88,9 +92,20 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <OutputPath>../App\</OutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'gcmodeller_desktop|net6.0-windows' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)|$(TargetFramework)'=='RsharpDev|x64|net8.0-windows'">
+    <DocumentationFile>Rscript.xml</DocumentationFile>
+   
+    <OutputPath>../../../../mini-R/App/rstudio/bin</OutputPath>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DefineConstants>UNIX=1</DefineConstants>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
@@ -105,6 +120,7 @@
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
     <OutputPath>../../workbench/win32_desktop/Apps/Rstudio/bin</OutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
