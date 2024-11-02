@@ -523,6 +523,11 @@ Namespace Interpreter
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function Evaluate(line As Expression) As Object
+            Return line.Evaluate(globalEnvir)
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Function Evaluate(script$, ParamArray args As (param As String, value As Object)()) As Object
             Return RunInternal(Rscript.FromText(script), args.Select(Function(i) New NamedValue(Of Object)(i.param, i.value)).ToArray)
