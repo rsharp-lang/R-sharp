@@ -75,6 +75,7 @@ Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal
@@ -718,8 +719,17 @@ Namespace Runtime
                 .Select(Function(fun) fun.Value) _
                 .ToList
 
+            For Each symbol As Symbol In symbols.Values
+                If TypeOf symbol.value Is RMethodInfo OrElse
+                    TypeOf symbol.value Is DeclareNewFunction OrElse
+                    TypeOf symbol.value Is DeclareLambdaFunction Then
+
+                    Call list.Add(symbol)
+                End If
+            Next
+
             If enumerateParents AndAlso Not parent Is Nothing Then
-                list.AddRange(parent.EnumerateAllFunctions)
+                Call list.AddRange(parent.EnumerateAllFunctions)
             End If
 
             Return list.Distinct
