@@ -3407,8 +3407,9 @@ RE0:
                     .PrintHelp(x, env.globalEnvironment.stdout)
             ElseIf type Is GetType(DeclareNewFunction) Then
                 Dim std_out = env.globalEnvironment.stdout
+
                 ' print the runtime function code
-                Call Development.ConsoleMarkdownPrinter.printDocs(DirectCast(x, DeclareNewFunction))
+                Call ConsoleMarkdownPrinter.printDocs(DirectCast(x, DeclareNewFunction))
 
                 If std_out.env = OutputEnvironments.Console AndAlso opts.syntax Then
                     Call ConsoleSyntaxHighlightPrinter.PrintCode(vbCrLf & " " & x.ToString, std_out)

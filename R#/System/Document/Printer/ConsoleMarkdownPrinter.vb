@@ -54,17 +54,18 @@
 
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Assembly
 Imports Microsoft.VisualBasic.ApplicationServices.Development.XmlDoc.Serialization
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
-Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports ASCII = Microsoft.VisualBasic.Text.ASCII
 
 Namespace Development
 
@@ -134,6 +135,10 @@ Namespace Development
             Call Console.WriteLine()
         End Sub
 
+        ''' <summary>
+        ''' print highlighted markdown on console
+        ''' </summary>
+        ''' <param name="f"></param>
         Public Sub printDocs(f As SymbolExpression)
             Dim doc_json As String = f.GetAttributeValue(PackageLoader2.RsharpHelp).DefaultFirst
             Dim help As Document = doc_json.LoadJSON(Of Document)(throwEx:=False)
@@ -152,7 +157,7 @@ Namespace Development
             Call Console.WriteLine()
 
             For Each param As NamedValue In help.parameters.SafeQuery
-                Call markdown.DoPrint($"``{param.name}``: " & If(param.text, "").Trim(" "c, ASCII.CR, ASCII.LF), 3)
+                Call markdown.DoPrint($"``{param.name}``: " & If(param.text, "").Trim(" "c, Ascii.CR, Ascii.LF), 3)
             Next
 
             Call Console.WriteLine()
@@ -163,6 +168,47 @@ Namespace Development
                 Call Console.WriteLine()
             End If
         End Sub
+
+        ''' <summary>
+        ''' get help document content in markdown format
+        ''' </summary>
+        ''' <param name="f"></param>
+        ''' <returns></returns>
+        Public Function getMarkdownDocs(f As SymbolExpression) As String
+            Dim s As New StringBuilder
+            Dim doc_json As String = f.GetAttributeValue(PackageLoader2.RsharpHelp).DefaultFirst
+            Dim help As Document = doc_json.LoadJSON(Of Document)(throwEx:=False)
+
+            ' skip print if contains no help document
+            ' of current symbol
+            If help Is Nothing Then
+                Return ""
+            End If
+
+            Call s.AppendLine(If(help.title, ""))
+            Call s.AppendLine()
+            Call s.AppendLine(If(help.description, ""))
+            Call s.AppendLine()
+            Call s.AppendLine(If(help.details, ""))
+            Call s.AppendLine()
+
+            Call s.AppendLine("|name|description|")
+            Call s.AppendLine("|----|-----------|")
+
+            For Each param As NamedValue In help.parameters.SafeQuery
+                Call s.AppendLine($"|{param.name}|" & If(param.text, "").Trim(" "c, ASCII.CR, ASCII.LF) & "|")
+            Next
+
+            Call s.AppendLine()
+
+            If Not help.returns.StringEmpty Then
+                Call s.AppendLine("**returns** ")
+                Call s.AppendLine(help.returns)
+                Call s.AppendLine()
+            End If
+
+            Return s.ToString
+        End Function
 
         Private Sub printDocs(docs As ProjectMember)
             Call markdown.DoPrint(docs.Summary, 1)

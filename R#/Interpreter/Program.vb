@@ -140,6 +140,15 @@ Namespace Interpreter
             }
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="Rscript"></param>
+        ''' <param name="debug"></param>
+        ''' <param name="error"></param>
+        ''' <returns>
+        ''' this function returns nothing if syntax error
+        ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function CreateProgram(Rscript As Rscript, Optional debug As Boolean = False, Optional ByRef error$ = Nothing) As Program
             Dim opts As SyntaxBuilderOptions = GetRLanguageDefaultOption(Rscript, debug)
@@ -183,6 +192,15 @@ Namespace Interpreter
             End If
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="scriptText"></param>
+        ''' <param name="debug"></param>
+        ''' <param name="error"></param>
+        ''' <returns>
+        ''' this function returns nothing if syntax error
+        ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <DebuggerStepThrough>
         Public Shared Function BuildProgram(scriptText As String, Optional debug As Boolean = False, Optional ByRef error$ = Nothing) As Program
