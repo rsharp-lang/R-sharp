@@ -133,7 +133,7 @@ Namespace Runtime.Internal.ConsolePrinter
             part.Add(New NamedCollection(Of String)("", rowsNames))
             size = maxRowNames
 
-            For Each col In columns
+            For Each col As NamedCollection(Of String) In columns
                 If size + Integer.Parse(col.description) > maxColumns Then
                     ' create part of table
                     Yield part.PartOfTable(nrows)
@@ -152,6 +152,12 @@ Namespace Runtime.Internal.ConsolePrinter
             End If
         End Function
 
+        ''' <summary>
+        ''' Get console print table data
+        ''' </summary>
+        ''' <param name="part"></param>
+        ''' <param name="nrows"></param>
+        ''' <returns></returns>
         <Extension>
         Private Function PartOfTable(part As List(Of NamedCollection(Of String)), nrows As Integer) As ConsoleTableBaseData
             Dim data As New ConsoleTableBaseData With {
