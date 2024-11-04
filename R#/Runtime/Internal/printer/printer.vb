@@ -439,12 +439,14 @@ printSingleElement:
         End Function
 
         ''' <summary>
-        ''' populate strings
+        ''' populate strings from the data array
         ''' </summary>
         ''' <param name="xVec"></param>
         ''' <param name="elementType"></param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' try to convert any kind of array as the string collection for do console print
+        ''' </returns>
         Friend Function getStrings(xVec As Array, ByRef elementType As Type, env As GlobalEnvironment) As IEnumerable(Of String)
             Dim toString As IStringBuilder
 
