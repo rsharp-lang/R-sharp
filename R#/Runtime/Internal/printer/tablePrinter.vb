@@ -63,7 +63,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports stdNum = System.Math
+Imports std = System.Math
 
 Namespace Runtime.Internal.ConsolePrinter
 
@@ -117,7 +117,7 @@ Namespace Runtime.Internal.ConsolePrinter
 
         <Extension>
         Public Iterator Function ToContent(table As dataframe, maxPrint%, maxWidth%, globalEnv As GlobalEnvironment) As IEnumerable(Of ConsoleTableBaseData)
-            Dim nrows As Integer = stdNum.Min(table.nrows, maxPrint)
+            Dim nrows As Integer = std.Min(table.nrows, maxPrint)
             Dim rowsNames As String() = {"<mode>"}.JoinIterates(table.getRowNames.Take(nrows)).ToArray
             Dim maxRowNames As Integer = rowsNames.MaxLengthString.Length
             Dim maxColumns As Integer = globalEnv.getMaxColumns

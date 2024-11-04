@@ -225,6 +225,14 @@ Namespace Runtime.Internal.ConsolePrinter
             RInternalToString(GetType(T)) = formatter
         End Sub
 
+        ''' <summary>
+        ''' Print the internal R# runtime object
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="listPrefix"></param>
+        ''' <param name="opts"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Friend Function printInternal(x As Object, listPrefix As String, opts As PrinterOptions, env As GlobalEnvironment) As Message
             Dim valueType As Type
             Dim output As RContentOutput = env.stdout
