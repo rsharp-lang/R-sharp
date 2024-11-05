@@ -164,6 +164,12 @@ Namespace Runtime.Internal.Object.Converts
             Return dataframe
         End Function
 
+        ''' <summary>
+        ''' Do check of the row names its vector length is equals to the dataframe rows?
+        ''' </summary>
+        ''' <param name="data"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function CheckRowDimension(data As dataframe, env As Environment) As Object
             ' the rownames size may be mis-matched with the

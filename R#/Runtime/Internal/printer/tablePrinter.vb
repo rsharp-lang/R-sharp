@@ -1,54 +1,54 @@
 ﻿#Region "Microsoft.VisualBasic::9638718e47c07486b717098d3c01a125, R#\Runtime\Internal\printer\tablePrinter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 158
-    '    Code Lines: 133 (84.18%)
-    ' Comment Lines: 1 (0.63%)
-    '    - Xml Docs: 0.00%
-    ' 
-    '   Blank Lines: 24 (15.19%)
-    '     File Size: 6.73 KB
+' Summaries:
 
 
-    '     Module tablePrinter
-    ' 
-    '         Function: getColumnPrintVector, PartOfTable, PrintTable, ToContent
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 158
+'    Code Lines: 133 (84.18%)
+' Comment Lines: 1 (0.63%)
+'    - Xml Docs: 0.00%
+' 
+'   Blank Lines: 24 (15.19%)
+'     File Size: 6.73 KB
+
+
+'     Module tablePrinter
+' 
+'         Function: getColumnPrintVector, PartOfTable, PrintTable, ToContent
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -63,10 +63,14 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports stdNum = System.Math
+Imports std = System.Math
+Imports consoleDevice = Microsoft.VisualBasic.ApplicationServices.Terminal.TablePrinter.ConsoleTableBuilderExtensions
 
 Namespace Runtime.Internal.ConsolePrinter
 
+    ''' <summary>
+    ''' R# runtime dataframe object printer
+    ''' </summary>
     Public Module tablePrinter
 
         <Extension>
@@ -79,9 +83,12 @@ Namespace Runtime.Internal.ConsolePrinter
             Dim arr As String() = printer.getStrings(table(colname), type, globalEnv) _
                 .Take(nrows) _
                 .Select(Function(si)
+                            ' try to make string truncated for deal with the long string
                             If si IsNot Nothing AndAlso maxWidth > 0 Then
-                                If si.Length > maxWidth Then
-                                    Dim truncated As Integer = si.Length - maxWidth
+                                Dim strlen As Integer = consoleDevice.RealLength(si, withUtf8Characters:=True)
+
+                                If strlen > maxWidth Then
+                                    Dim truncated As Integer = strlen - maxWidth
 
                                     si = si.Substring(0, maxWidth - 3) & "..."
                                     si = si & $"|{truncated} chars truncated"
@@ -94,7 +101,8 @@ Namespace Runtime.Internal.ConsolePrinter
             Dim typeStr As String = $"<{RType.GetRSharpType(type).ToString}>"
             Dim max As String = {colname, typeStr} _
                 .JoinIterates(arr) _
-                .MaxLengthString
+                .MaxLengthString(consolePrintWidth:=True)
+            Dim maxStrlen As Integer = consoleDevice.RealLength(max, withUtf8Characters:=True)
 
             arr = arr _
                 .Select(Function(str)
@@ -102,22 +110,22 @@ Namespace Runtime.Internal.ConsolePrinter
                                 str = ""
                             End If
 
-                            Return New String(" "c, max.Length - str.Length) & str
+                            Return New String(" "c, maxStrlen - consoleDevice.RealLength(str, True)) & str
                         End Function) _
                 .ToArray
 
             Return New NamedCollection(Of String) With {
-                .name = New String(" "c, max.Length - colname.Length) & colname,
-                .value = {New String(" "c, max.Length - typeStr.Length) & typeStr} _
+                .name = New String(" "c, maxStrlen - consoleDevice.RealLength(colname, True)) & colname,
+                .value = {New String(" "c, maxStrlen - typeStr.Length) & typeStr} _
                     .JoinIterates(arr) _
                     .ToArray,
-                .description = max.Length
+                .description = maxStrlen
             }
         End Function
 
         <Extension>
         Public Iterator Function ToContent(table As dataframe, maxPrint%, maxWidth%, globalEnv As GlobalEnvironment) As IEnumerable(Of ConsoleTableBaseData)
-            Dim nrows As Integer = stdNum.Min(table.nrows, maxPrint)
+            Dim nrows As Integer = std.Min(table.nrows, maxPrint)
             Dim rowsNames As String() = {"<mode>"}.JoinIterates(table.getRowNames.Take(nrows)).ToArray
             Dim maxRowNames As Integer = rowsNames.MaxLengthString.Length
             Dim maxColumns As Integer = globalEnv.getMaxColumns
@@ -133,7 +141,7 @@ Namespace Runtime.Internal.ConsolePrinter
             part.Add(New NamedCollection(Of String)("", rowsNames))
             size = maxRowNames
 
-            For Each col In columns
+            For Each col As NamedCollection(Of String) In columns
                 If size + Integer.Parse(col.description) > maxColumns Then
                     ' create part of table
                     Yield part.PartOfTable(nrows)
@@ -152,6 +160,12 @@ Namespace Runtime.Internal.ConsolePrinter
             End If
         End Function
 
+        ''' <summary>
+        ''' Get console print table data
+        ''' </summary>
+        ''' <param name="part"></param>
+        ''' <param name="nrows"></param>
+        ''' <returns></returns>
         <Extension>
         Private Function PartOfTable(part As List(Of NamedCollection(Of String)), nrows As Integer) As ConsoleTableBaseData
             Dim data As New ConsoleTableBaseData With {
