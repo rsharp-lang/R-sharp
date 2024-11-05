@@ -54,7 +54,7 @@
 
 Imports Darwinism.HPC.Parallel
 Imports Microsoft.VisualBasic.CommandLine.InteropService
-Imports R = Rserver.RscriptCommandLine.Rscript
+Imports R = snowFall.RscriptCommandLine.Rscript
 
 Namespace Protocol
 

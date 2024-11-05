@@ -245,4 +245,6 @@
 
   <Import Project="..\studio\Rstudio.common\Rstudio.common.projitems" Label="Shared" />
 
+  <Import Project="..\studio\Rserver\RscriptInterop\RscriptInterop.projitems" Label="Shared" />
+
 </Project>
