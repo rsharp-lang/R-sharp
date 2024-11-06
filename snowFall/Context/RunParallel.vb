@@ -76,7 +76,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports snowFall.Context.RPC
-Imports R = Rserver.RscriptCommandLine.Rscript
+Imports R = snowFall.RscriptCommandLine.Rscript
 Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 

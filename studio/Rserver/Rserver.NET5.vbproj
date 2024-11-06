@@ -317,6 +317,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="RscriptInterop\RscriptInterop.projitems" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\runtime\Darwinism\src\networking\networking.vbproj" />
     <ProjectReference Include="..\..\..\runtime\httpd\src\Flute\Flute.NET5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\httpd\src\WebCloud\Flute.SessionManager\Flute.SessionManager.vbproj" />
