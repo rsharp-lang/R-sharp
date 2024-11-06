@@ -171,8 +171,10 @@ Namespace Runtime.Internal.Object
         Private Shared Iterator Function propertyParserInternal(p As PropertyInfo) As IEnumerable(Of NamedValue(Of PropertyInfo))
             Dim attrs = p.CustomAttributes.ToArray
             Dim name As String
-            Dim nameAttr As CustomAttributeNamedArgument
             Dim typeAttr As CustomAttributeTypedArgument
+#If NETCOREAPP Then
+            Dim nameAttr As CustomAttributeNamedArgument
+#End If
 
             ' Column
             Yield New NamedValue(Of PropertyInfo)(p.Name, p)
