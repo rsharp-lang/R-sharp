@@ -361,12 +361,47 @@ Module JSON
     End Function
 
     ''' <summary>
+    ''' read json list 
+    ''' </summary>
+    ''' <param name="file">the file path to the json list, usually be the ``*.jsonl`` file.</param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' a tuple list that contains the json objects that parsed from the json list file.
+    ''' </returns>
+    <ExportAPI("read.jsonl")>
+    Public Function read_jsonl(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
+
+        If s Like GetType(Message) Then
+            Return s.TryCast(Of Message)
+        End If
+
+        Dim read As New StreamReader(s.TryCast(Of Stream))
+        Dim line As Value(Of String) = ""
+        Dim list As New List(Of Object)
+
+        Do While (line = read.ReadLine) IsNot Nothing
+            Call list.Add(CStr(line).ParseJSONinternal(
+                 raw:=False,
+                 strict_vector_syntax:=False,
+                 env:=env))
+        Loop
+
+        Return list.ToArray
+    End Function
+
+    ''' <summary>
     ''' read json list as dataframe
     ''' </summary>
-    ''' <param name="file"></param>
+    ''' <param name="file">the file path to the json list, usually be the ``*.jsonl`` file.</param>
     ''' <param name="env"></param>
-    ''' <returns></returns>
-    <ExportAPI("read.jsonl")>
+    ''' <returns>a dataframe object that loaded data from the json list file</returns>
+    ''' <remarks>
+    ''' the given json list file its json structure format should be simple, and contains no nested 
+    ''' structure for each field. each field in one json object from the list will be treated as 
+    ''' the fields in the generated dataframe table.
+    ''' </remarks>
+    <ExportAPI("read.jsonl_table")>
     Public Function read_jsonl(<RRawVectorArgument> file As Object, cols As String(),
                                Optional row_names As String = Nothing,
                                Optional env As Environment = Nothing) As Object
