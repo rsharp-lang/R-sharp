@@ -696,7 +696,8 @@ Module plots
         Dim title$ = args.GetString("title", "Histogram Plot")
         Dim xlab$ = args.GetString("x.lab", "X")
         Dim ylab$ = args.GetString("y.lab", "Y")
-        Dim padding$ = InteropArgumentHelper.getPadding(args!padding)
+        Dim padding$ = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 10% 15% 15% 20%;", env)
+        Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
 
         If [step] <= 0 Then
             ' guess step value from binbox width
@@ -711,7 +712,9 @@ Module plots
             serialsTitle:=title,
             xLabel:=xlab,
             yLabel:=ylab,
-            padding:=padding
+            padding:=padding,
+            dpi:=dpi,
+            driver:=env.getDriver
         )
     End Function
 
