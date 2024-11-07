@@ -313,9 +313,19 @@ Module math
                          x As Object,
                          Optional step!? = Nothing,
                          Optional n%? = 10,
+                         <RRawVectorArgument>
+                         Optional range As Object = Nothing,
                          Optional env As Environment = Nothing) As Object
 
         Dim v As Double() = CLRVector.asNumeric(x)
+        Dim hist_range As Double() = CLRVector.asNumeric(range)
+        Dim min As Double? = Nothing
+        Dim max As Double? = Nothing
+
+        If Not hist_range.IsNullOrEmpty Then
+            min = hist_range.Min
+            max = hist_range.Max
+        End If
 
         If [step] Is Nothing Then
             If n Is Nothing Then
@@ -326,7 +336,7 @@ Module math
         End If
 
         Return v _
-            .Hist([step]) _
+            .Hist([step], min, max) _
             .ToArray
     End Function
 

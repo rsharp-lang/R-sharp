@@ -469,7 +469,9 @@ Namespace Runtime.Vectorization
         ''' cast any .net clr object to a numeric vector
         ''' </summary>
         ''' <param name="x"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' an empty vector will be returns if the given object <paramref name="x"/> is nothing
+        ''' </returns>
         Public Function asNumeric(x As Object) As Double()
             If x Is Nothing Then
                 Return {}
