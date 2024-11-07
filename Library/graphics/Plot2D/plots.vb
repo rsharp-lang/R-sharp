@@ -696,7 +696,7 @@ Module plots
         Dim title$ = args.GetString("title", "Histogram Plot")
         Dim xlab$ = args.GetString("x.lab", "X")
         Dim ylab$ = args.GetString("y.lab", "Y")
-        Dim padding$ = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 10% 15% 15% 20%;", env)
+        Dim padding$ = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 10% 15% 15% 10%;", env)
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
 
         If [step] <= 0 Then
@@ -964,8 +964,8 @@ Module plots
         Dim margin = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 5% 10% 10% 15%;", env:=env)
         Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
         Dim spline As Splines = args.getValue(Of Splines)("interplot", env, Splines.None)
-        Dim xlim As Double = args.getValue("xlim", env, Double.NaN)
-        Dim ylim As Double = args.getValue("ylim", env, Double.NaN)
+        Dim xlim As Double() = CLRVector.asNumeric(args("xlim"))
+        Dim ylim As Double() = CLRVector.asNumeric(args("ylim"))
         Dim absoluteScale As Boolean = args.getValue("absolute_scale", env, False)
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
