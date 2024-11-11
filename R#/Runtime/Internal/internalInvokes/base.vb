@@ -700,11 +700,11 @@ Namespace Runtime.Internal.Invokes
             Dim list As New List(Of Object)
             Dim val As Object
 
-            For Each item As InvokeParameter In DirectCast(values, InvokeParameter())
-                If TypeOf item.value Is ValueAssignExpression Then
-                    val = DirectCast(item.value, ValueAssignExpression).value.Evaluate(env)
+            For Each par As InvokeParameter In DirectCast(values, InvokeParameter())
+                If TypeOf par.value Is ValueAssignExpression Then
+                    val = DirectCast(par.value, ValueAssignExpression).value.Evaluate(env)
                 Else
-                    val = item.value.Evaluate(env)
+                    val = par.value.Evaluate(env)
                 End If
 
                 If Program.isException(val) Then
@@ -712,7 +712,7 @@ Namespace Runtime.Internal.Invokes
                 End If
 
                 For Each x As Object In REnv.asVector(Of Object)(val)
-                    list.Add(x)
+                    Call list.Add(x)
                 Next
             Next
 

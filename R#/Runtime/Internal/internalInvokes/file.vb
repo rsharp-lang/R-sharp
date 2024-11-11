@@ -247,7 +247,15 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return DirectCast(array, Array) _
                     .AsObjectEnumerator _
-                    .Select(AddressOf any.ToString) _
+                    .Select(Function(c)
+                                If c Is Nothing Then
+                                    Return ""
+                                ElseIf c.GetType.ImplementInterface(Of IWorkspace) Then
+                                    Return DirectCast(c, IWorkspace).Workspace
+                                Else
+                                    Return any.ToString(c)
+                                End If
+                            End Function) _
                     .JoinBy(fsep)
             End If
         End Function
