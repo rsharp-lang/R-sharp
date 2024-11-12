@@ -189,7 +189,7 @@ Namespace Runtime.Internal.Invokes
                 Return Nothing
             ElseIf Not TypeOf x Is SymbolExpression Then
                 If TypeOf x Is RsharpDataObject Then
-                    Dim attrs As list = list.empty
+                    Dim attrs As list = Internal.Object.list.empty
                     Dim obj As RsharpDataObject = x
 
                     For Each name As String In obj.getAttributeNames

@@ -282,7 +282,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                             Call env.AddMessage("the required row index is nothing!")
 
                             If drop Then
-                                Return list.empty
+                                Return Internal.Object.list.empty
                             Else
                                 Return Nothing
                             End If

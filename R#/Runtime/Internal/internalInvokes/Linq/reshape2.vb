@@ -347,7 +347,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             If TypeOf x Is list Then
                 Dim dels As String() = CLRVector.asCharacter(n)
-                Dim li As list = RConversion.asList(x, list.empty, env)
+                Dim li As list = RConversion.asList(x, Internal.Object.list.empty, env)
 
                 For Each name As String In dels.SafeQuery
                     Call li.slots.Remove(name)

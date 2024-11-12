@@ -84,7 +84,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim ddd As Symbol = envir.FindSymbol(dddSymbolName, [inherits]:=True)
 
             If ddd Is Nothing Then
-                Return list.empty
+                Return Internal.Object.list.empty
             Else
                 Return ddd.value
             End If

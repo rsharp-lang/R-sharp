@@ -872,7 +872,7 @@ Namespace Runtime.Internal.Invokes
                 Dim dim_func = generic.getGenericCallable(x, x.GetType, "dim", env)
 
                 If Not dim_func Like GetType(Message) Then
-                    Return dim_func.TryCast(Of GenericFunction)()(x, list.empty, env)
+                    Return dim_func.TryCast(Of GenericFunction)()(x, Internal.Object.list.empty, env)
                 Else
                     Return 1
                 End If
