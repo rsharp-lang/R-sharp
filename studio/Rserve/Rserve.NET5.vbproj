@@ -63,6 +63,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	  <DefineConstants>netcore5=1</DefineConstants>
     <OutputPath>../../../../../mzkit\dist\bin\Rstudio\bin</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0-windows' ">
