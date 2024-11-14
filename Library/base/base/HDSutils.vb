@@ -199,6 +199,19 @@ Module HDSutils
     End Function
 
     ''' <summary>
+    ''' Get hds stream file actual file header size
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' this function is debug used only
+    ''' </remarks>
+    <ExportAPI("header_size")>
+    Public Function get_hds_headersize(file As StreamPack) As Long
+        Return file.HeaderSize
+    End Function
+
+    ''' <summary>
     ''' Open a HDS stream pack file, this function will create a new file is the given <paramref name="file"/> is not exists
     ''' </summary>
     ''' <param name="file"></param>
