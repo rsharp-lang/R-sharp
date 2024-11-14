@@ -88,7 +88,15 @@ Module HDSutils
         Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(StreamObject()), AddressOf fileTable)
     End Sub
 
-    Private Function fileTable(ls As StreamObject(), args As list, env As Environment)
+    ''' <summary>
+    ''' view of the file list inside the data pack file in dataframe
+    ''' </summary>
+    ''' <param name="ls"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <RGenericOverloads("as.data.frame")>
+    Private Function fileTable(ls As StreamObject(), args As list, env As Environment) As rDataframe
         Dim df As New rDataframe With {.columns = New Dictionary(Of String, Array)}
 
         Call df.add("path", ls.Select(Function(f) f.referencePath.ToString))
@@ -167,6 +175,27 @@ Module HDSutils
         Next
 
         Return newPack
+    End Function
+
+    ''' <summary>
+    ''' open the HDS stream file for readonly
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("read_stream")>
+    Public Function openReadStream(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
+        If file Is Nothing Then
+            Return RInternal.debug.stop("file for open can not be nothing!", env)
+        End If
+
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
+
+        If s Like GetType(Message) Then
+            Return s.TryCast(Of Message)
+        End If
+
+        Return New StreamPack(s.TryCast(Of Stream), [readonly]:=True)
     End Function
 
     ''' <summary>
