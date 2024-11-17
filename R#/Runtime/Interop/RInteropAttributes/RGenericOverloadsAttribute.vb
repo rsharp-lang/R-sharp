@@ -100,10 +100,13 @@ Namespace Runtime.Interop
         End Function
     End Class
 
+    ''' <summary>
+    ''' <see cref="RGenericOverloadsAttribute"/> parser result
+    ''' </summary>
     Public Class RGenericOverloads
 
         ''' <summary>
-        ''' the name of the target function
+        ''' the name of the target generic overloads function
         ''' </summary>
         ''' <returns></returns>
         Public Property name As String
@@ -120,7 +123,13 @@ Namespace Runtime.Interop
         ''' <param name="pkg"></param>
         ''' <returns></returns>
         Public Shared Iterator Function GetOverloads(pkg As Type) As IEnumerable(Of RGenericOverloads)
-            Dim methods As MethodInfo() = pkg.GetMethods(bindingAttr:=BindingFlags.Static)
+            ' 20241117 get methods only gets the public methods
+            ' get methods with static binding flag only works for public method
+            ' needs use the getruntimemethods for get the possible private 
+            ' functions which are tagged with the overloads flags attribute
+            Dim methods As MethodInfo() = pkg.GetRuntimeMethods() _
+                .Where(Function(m) m.IsStatic) _
+                .ToArray
             Dim flag As RGenericOverloadsAttribute
             Dim clr_overloads As Type()
 
