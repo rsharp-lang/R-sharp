@@ -135,6 +135,11 @@ Public Module ColorBrewerSystem
         End If
     End Function
 
+    <ExportAPI("scaler_palette")>
+    Public Function ScalerPalette() As String()
+        Return Enums(Of ScalerPalette).Select(Function(c) c.Description).ToArray
+    End Function
+
 #Region "Sequential"
 
     <ExportAPI> Public Function OrRd() As Color()
