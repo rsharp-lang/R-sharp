@@ -57,13 +57,15 @@ Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.MIME.Html.Document
+Imports Microsoft.VisualBasic.MIME.Html.XmlMeta
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text.Parser.HtmlParser
 Imports Microsoft.VisualBasic.Text.Xml
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports ASCII = Microsoft.VisualBasic.Text.ASCII
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' Html document tools
@@ -72,8 +74,8 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Module Html
 
     Sub New()
-        Call REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of HtmlElement)(AddressOf documentDebugView)
-        Call REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of HtmlDocument)(AddressOf documentDebugView)
+        Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of HtmlElement)(AddressOf documentDebugView)
+        Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of HtmlDocument)(AddressOf documentDebugView)
     End Sub
 
     Private Function documentDebugView(doc As HtmlElement) As String
@@ -127,6 +129,36 @@ Module Html
     <RApiReturn(GetType(HtmlElement))>
     Public Function getElementsByTagName(doc As HtmlElement, name As String) As Object
         Return doc.getElementsByTagName(name)
+    End Function
+
+    ''' <summary>
+    ''' cast the document element model as the node element object model?
+    ''' </summary>
+    ''' <param name="doc"></param>
+    ''' <returns></returns>
+    <ExportAPI("cast")>
+    Public Function castModel(<RRawVectorArgument> doc As Object, Optional env As Environment = Nothing) As Object
+        If doc Is Nothing Then
+            Return Nothing
+        End If
+
+        Dim pull As pipeline = pipeline.TryCreatePipeline(Of HtmlElement)(doc, env)
+
+        If pull.isError Then
+            Return pull.getError
+        End If
+
+        Dim castTo As New List(Of Node)
+
+        For Each element As HtmlElement In pull.populates(Of HtmlElement)(env)
+            Select Case Strings.LCase(element.TagName)
+                Case "a" : Call castTo.Add(Anchor.FromElement(element))
+                Case Else
+                    Throw New NotImplementedException(element.TagName)
+            End Select
+        Next
+
+        Return TryCastGenericArray(castTo.ToArray, env)
     End Function
 
     ''' <summary>
