@@ -258,6 +258,11 @@ Module Html
         Return html.HTMLTitle
     End Function
 
+    ''' <summary>
+    ''' parse one line url from the given html document string fragment
+    ''' </summary>
+    ''' <param name="html"></param>
+    ''' <returns></returns>
     <ExportAPI("link")>
     Public Function links(html As String) As String
         Return html.href
