@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text.Parser.HtmlParser
 Imports Microsoft.VisualBasic.Text.Xml
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports ASCII = Microsoft.VisualBasic.Text.ASCII
@@ -77,8 +78,22 @@ Module Html
         Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of HtmlElement)(AddressOf documentDebugView)
         Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of HtmlDocument)(AddressOf documentDebugView)
 
+        Call RInternal.generic.add(htmlPrinter.toHtml_apiName, GetType(HtmlElement), AddressOf to_html)
+
         Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(Anchor()), AddressOf anchor_table)
     End Sub
+
+    ''' <summary>
+    ''' get html text
+    ''' </summary>
+    ''' <param name="html"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <RGenericOverloads(htmlPrinter.toHtml_apiName)>
+    Private Function to_html(html As HtmlElement, args As list, env As Environment) As String
+        Return html.GetHtmlText
+    End Function
 
     <RGenericOverloads("as.data.frame")>
     Private Function anchor_table(anchors As Anchor(), args As list, env As Environment) As dataframe
