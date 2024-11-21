@@ -155,6 +155,12 @@ Module Html
         Return doc.getElementsByTagName(name)
     End Function
 
+    <ExportAPI("getElementsByClass")>
+    <RApiReturn(GetType(HtmlElement))>
+    Public Function getElementsByClass(doc As HtmlElement, [class] As String) As Object
+        Return doc.getElementsByClassName([class]).ToArray
+    End Function
+
     ''' <summary>
     ''' cast the document element model as the node element object model?
     ''' </summary>
