@@ -1,55 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::575bafd51a2066bcca2941d210bf6c67, studio\Rsharp_kit\webKit\Html.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 128
-    '    Code Lines: 88 (68.75%)
-    ' Comment Lines: 20 (15.62%)
-    '    - Xml Docs: 90.00%
-    ' 
-    '   Blank Lines: 20 (15.62%)
-    '     File Size: 4.51 KB
+' Summaries:
 
 
-    ' Module Html
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: documentDebugView, getPlainText, links, parse, QueryHtmlTables
-    '               title
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 128
+'    Code Lines: 88 (68.75%)
+' Comment Lines: 20 (15.62%)
+'    - Xml Docs: 90.00%
+' 
+'   Blank Lines: 20 (15.62%)
+'     File Size: 4.51 KB
+
+
+' Module Html
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: documentDebugView, getPlainText, links, parse, QueryHtmlTables
+'               title
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -73,10 +73,34 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 <Package("Html", Category:=APICategories.UtilityTools)>
 Module Html
 
-    Sub New()
+    Sub Main()
         Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of HtmlElement)(AddressOf documentDebugView)
         Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of HtmlDocument)(AddressOf documentDebugView)
+
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(Anchor()), AddressOf anchor_table)
     End Sub
+
+    <RGenericOverloads("as.data.frame")>
+    Private Function anchor_table(anchors As Anchor(), args As list, env As Environment) As dataframe
+        Dim df As New dataframe With {
+            .columns = New Dictionary(Of String, Array)
+        }
+
+        Call df.add("id", From a As Anchor In anchors Select a.id)
+        Call df.add("class", From a As Anchor In anchors Select a.class)
+        Call df.add("style", From a As Anchor In anchors Select a.style)
+        Call df.add("href", From a As Anchor In anchors Select a.href)
+        Call df.add("target", From a As Anchor In anchors Select a.target)
+        Call df.add("rel", From a As Anchor In anchors Select a.rel)
+        Call df.add("title", From a As Anchor In anchors Select a.title)
+        Call df.add("download", From a As Anchor In anchors Select a.download)
+        Call df.add("hreflang", From a As Anchor In anchors Select a.hreflang)
+        Call df.add("type", From a As Anchor In anchors Select a.type)
+        Call df.add("media", From a As Anchor In anchors Select a.media)
+        Call df.add("text", From a As Anchor In anchors Select a.text)
+
+        Return df
+    End Function
 
     Private Function documentDebugView(doc As HtmlElement) As String
         Dim sb As New StringBuilder
