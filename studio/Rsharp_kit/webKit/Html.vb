@@ -106,6 +106,30 @@ Module Html
     End Function
 
     ''' <summary>
+    ''' get html element by its id
+    ''' </summary>
+    ''' <param name="doc"></param>
+    ''' <param name="id"></param>
+    ''' <returns></returns>
+    <ExportAPI("getElementById")>
+    <RApiReturn(GetType(HtmlElement))>
+    Public Function getElementById(doc As HtmlElement, id As String) As Object
+        Return doc.getElementById(id)
+    End Function
+
+    ''' <summary>
+    ''' get a collection of elements with specific tag name
+    ''' </summary>
+    ''' <param name="doc"></param>
+    ''' <param name="name"></param>
+    ''' <returns>a vector of the target html elements</returns>
+    <ExportAPI("getElementsByTagName")>
+    <RApiReturn(GetType(HtmlElement))>
+    Public Function getElementsByTagName(doc As HtmlElement, name As String) As Object
+        Return doc.getElementsByTagName(name)
+    End Function
+
+    ''' <summary>
     ''' query a list of html tables in the given html page text document
     ''' </summary>
     ''' <param name="html">text string in html format</param>
