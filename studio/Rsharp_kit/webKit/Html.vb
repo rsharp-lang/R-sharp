@@ -172,7 +172,10 @@ Module Html
             Return pull.getError
         End If
 
-        Dim castTo As New List(Of Node)
+        ' 20241121 do not use List(of Node)
+        ' or the vector this function produced will be cast to Node[] generic array
+        ' due to the reason of array of node is already generic
+        Dim castTo As New List(Of Object)
 
         For Each element As HtmlElement In pull.populates(Of HtmlElement)(env)
             Select Case Strings.LCase(element.TagName)
