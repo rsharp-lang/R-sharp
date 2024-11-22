@@ -263,6 +263,7 @@ RE0:
             ElseIf hasTypeCast(objType, type) Then
                 Return typeCast.GetCType(objType, [to]:=type)(obj)
             Else
+                ' create type cast cache at here?
                 For Each i As Type In objType.GetInterfaces
                     If hasInterfaceCast(i, type) Then
                         Call typeCast.AddCType(objType, [to]:=type, cast:=interfaceCast.castFunc(i)(type))
