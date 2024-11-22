@@ -363,68 +363,15 @@ Namespace Runtime.Internal.Invokes
             End If
 
             If X.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Dim list = DirectCast(X, IDictionary)
-                Dim seq As New List(Of Object)
-                Dim names As New List(Of String)
-                Dim value As Object
-                Dim i As i32 = 1
-
-                For Each key As Object In list.Keys
-                    value = apply.Invoke(envir, InvokeParameter.CreateLiterals(list(key), ++i))
-
-                    If TypeOf value Is ReturnValue Then
-                        value = DirectCast(value, ReturnValue).value.Evaluate(envir)
-                    End If
-                    If Program.isException(value) Then
-                        Return value
-                    End If
-
-                    seq.Add(REnv.single(value))
-                    names.Add(any.ToString(key))
-                Next
-
-                Dim a As Object = TryCastGenericArray(seq.ToArray, envir)
-                Dim type As Type
-
-                If TypeOf a Is Message Then
-                    type = GetType(Object)
-                Else
-                    type = a.GetType.GetElementType
-                End If
-
-                nameVec = names.ToArray
-                arrayVec = DirectCast(a, Array)
+                check = DirectCast(X, IDictionary).sapplyList(apply, nameVec, envir)
             Else
-                Dim seq As New List(Of Object)
-                Dim value As Object
-                Dim argsPreviews As InvokeParameter()
-                Dim i As i32 = 1
+                check = sapplySequence(X, apply, envir)
+            End If
 
-                For Each d As Object In REnv.asVector(Of Object)(X).AsObjectEnumerator
-                    argsPreviews = invokeArgument(d, ++i)
-                    value = apply.Invoke(envir, argsPreviews)
-
-                    If TypeOf value Is ReturnValue Then
-                        value = DirectCast(value, ReturnValue).value.Evaluate(envir)
-                    End If
-
-                    If Program.isException(value) Then
-                        Return value
-                    Else
-                        seq.Add(REnv.single(value))
-                    End If
-                Next
-
-                Dim a As Object = TryCastGenericArray(seq.ToArray, envir)
-                Dim type As Type
-
-                If TypeOf a Is Message Then
-                    type = GetType(Object)
-                Else
-                    type = a.GetType.GetElementType
-                End If
-
-                arrayVec = DirectCast(a, Array)
+            If TypeOf check Is Message Then
+                Return check
+            Else
+                arrayVec = check
             End If
 
             arrayVec = REnv.TryCastGenericArray(arrayVec, envir)
@@ -434,6 +381,64 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return New RObj.vector(nameVec, arrayVec, RType.GetRSharpType(arrayVec.GetType.GetElementType), envir)
             End If
+        End Function
+
+        Private Function sapplySequence(x As Object, apply As RFunction, envir As Environment) As Object
+            Dim seq As New List(Of Object)
+            Dim value As Object
+            Dim argsPreviews As InvokeParameter()
+            Dim i As i32 = 1
+            Dim pull As IEnumerable(Of Object)
+
+            If TypeOf x Is tqdmList Then
+                pull = DirectCast(x, tqdmList).pullData
+            Else
+                pull = REnv.asVector(Of Object)(x).AsObjectEnumerator
+            End If
+
+            For Each d As Object In pull
+                argsPreviews = invokeArgument(d, ++i)
+                value = apply.Invoke(envir, argsPreviews)
+
+                If TypeOf value Is ReturnValue Then
+                    value = DirectCast(value, ReturnValue).value.Evaluate(envir)
+                End If
+
+                If Program.isException(value) Then
+                    Return value
+                Else
+                    Call seq.Add(REnv.single(value))
+                End If
+            Next
+
+            Dim a As Object = TryCastGenericArray(seq.ToArray, envir)
+            Return DirectCast(a, Array)
+        End Function
+
+        <Extension>
+        Private Function sapplyList(list As IDictionary, apply As RFunction, ByRef nameVec As String(), envir As Environment) As Object
+            Dim seq As New List(Of Object)
+            Dim names As New List(Of String)
+            Dim value As Object
+            Dim i As i32 = 1
+
+            For Each key As Object In list.Keys
+                value = apply.Invoke(envir, InvokeParameter.CreateLiterals(list(key), ++i))
+
+                If TypeOf value Is ReturnValue Then
+                    value = DirectCast(value, ReturnValue).value.Evaluate(envir)
+                End If
+                If Program.isException(value) Then
+                    Return value
+                End If
+
+                Call seq.Add(REnv.single(value))
+                Call names.Add(any.ToString(key))
+            Next
+
+            Dim a As Object = TryCastGenericArray(seq.ToArray, envir)
+            nameVec = names.ToArray
+            Return DirectCast(a, Array)
         End Function
 
         <Extension>

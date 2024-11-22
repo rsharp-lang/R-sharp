@@ -251,15 +251,7 @@ for (let {variables.GetJson} in {sequence}) {If(parallel, "%dopar%", "%do%")} {{
                         .ToArray
                 End If
             ElseIf TypeOf rawSeq Is tqdmList Then
-                Dim tqdm As tqdmList = rawSeq
-                Dim pull As Func(Of IEnumerable(Of Object)) =
-                    Iterator Function() As IEnumerable(Of Object)
-                        For Each key As String In tqdm.getKeys
-                            Yield tqdm(key)
-                        Next
-                    End Function
-
-                data = pull()
+                data = DirectCast(rawSeq, tqdmList).pullData
             Else
                 data = ObjectSet.GetObjectSet(rawSeq, env)
             End If

@@ -102,6 +102,16 @@ Namespace Development.Components
             Return list.getByName(key.ToString)
         End Function
 
+        ''' <summary>
+        ''' populate of the data collection with tqdm progress bar
+        ''' </summary>
+        ''' <returns></returns>
+        Public Iterator Function pullData() As IEnumerable(Of Object)
+            For Each key As String In getKeys()
+                Yield list.getByName(key)
+            Next
+        End Function
+
         Public Overrides Function ToString() As String
             Return list.ToString
         End Function
