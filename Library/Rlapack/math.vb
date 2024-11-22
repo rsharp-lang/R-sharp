@@ -157,13 +157,15 @@ Module math
         Dim max As String() = hist.Select(Function(bin) bin.getMax.ToString(format)).ToArray
         Dim count As Integer() = hist.Select(Function(bin) bin.Count).ToArray
         Dim total As Integer = count.Sum
+        Dim base As Integer = count.Max
 
         Return New Rdataframe With {
             .columns = New Dictionary(Of String, Array) From {
                 {"min", min},
                 {"max", max},
                 {"bin_size", count},
-                {"percent", (count.AsVector / total * 100).ToArray}
+                {"percent", (count.AsVector / total * 100).ToArray},
+                {"relative", (count.AsVector / base * 100).ToArray}
             },
             .rownames = range
         }
