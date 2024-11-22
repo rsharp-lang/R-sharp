@@ -1873,6 +1873,29 @@ Module stats
     End Function
 
     ''' <summary>
+    ''' check of the outliers via IQR method
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <returns>
+    ''' a numeric vector with outlier data removed, a attribute value which is named ``outliers`` is tagged with
+    ''' the generated result numeric vector, you can get the outliers data from this attribute.
+    ''' </returns>
+    <ExportAPI("iqr_outliers")>
+    Public Function iqr_outliers(<RRawVectorArgument> x As Object) As Object
+        Dim v = CLRVector.asNumeric(x)
+
+        If v.IsNullOrEmpty Then
+            Return Nothing
+        End If
+
+        Dim quartile = v.Quartile
+        Dim preprocess = quartile.Outlier(v)
+        Dim norm As New vec(preprocess.normal)
+        norm.setAttribute("outliers", preprocess.outlier)
+        Return norm
+    End Function
+
+    ''' <summary>
     ''' Fast Poisson Disk Sampling in Arbitrary Dimensions. Robert Bridson. ACM SIGGRAPH 2007
     ''' </summary>
     ''' <param name="minDist">the minimumx distance between any of the two samples.</param>
