@@ -231,6 +231,12 @@ RE0:
                 Return Nothing
             End If
 
+            ' 20241122 use the cache for ctype at here 
+            ' for boost up the dynamics type cast operation
+            If hasTypeCast(objType, type) Then
+                Return typeCast.GetCType(objType, [to]:=type)(obj)
+            End If
+
             Try
                 Return castUnsure(obj, objType, type, env)
             Catch ex As Exception
