@@ -64,6 +64,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Development.Components
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
@@ -130,6 +131,7 @@ Namespace Runtime.Internal.Object.Converts
 RE0:
             Dim objType As Type = obj.GetType
 
+            ' get from type
             If objType Is type Then
                 Return obj
             ElseIf objType.IsArray AndAlso Not type.IsArray Then
@@ -195,6 +197,7 @@ RE0:
             ElseIf objType.IsArray AndAlso type.IsArray Then
                 Return Runtime.asVector(obj, type.GetElementType, env)
             ElseIf type.IsArray AndAlso type.GetElementType Is objType Then
+                ' cast scalar to array
                 Dim array As Array = Array.CreateInstance(objType, 1)
                 array.SetValue(obj, Scan0)
                 Return array
@@ -244,7 +247,15 @@ RE0:
             End Try
         End Function
 
-        Private Shared Function castUnsure(obj As Object, objType As Type, type As Type, env As Environment)
+        ''' <summary>
+        ''' Make ctype function cache at here based on the type assigned rule
+        ''' </summary>
+        ''' <param name="obj"></param>
+        ''' <param name="objType"></param>
+        ''' <param name="type"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        Private Shared Function castUnsure(obj As Object, objType As Type, type As Type, env As Environment) As Object
             If obj.GetType.IsArray Then
                 If obj.GetType.GetElementType Is type Then
                     If DirectCast(obj, Array).Length = 0 Then
@@ -269,6 +280,9 @@ RE0:
                 End If
             ElseIf hasTypeCast(objType, type) Then
                 Return typeCast.GetCType(objType, [to]:=type)(obj)
+            ElseIf type Is GetType(String) Then
+                Call typeCast.AddCType(objType, type, cast:=Function(o) any.ToString(o))
+                Return any.ToString(obj)
             Else
                 ' create type cast cache at here?
                 For Each i As Type In objType.GetInterfaces
@@ -278,6 +292,12 @@ RE0:
                     End If
                 Next
 
+                If (type.IsInterface AndAlso objType.ImplementInterface(type)) Or objType.IsSubclassOf(type) Then
+                    ' add ctype cache for cast to base type or cast to interface type
+                    Call typeCast.AddCType(objType, type, Function(o) Conversion.CTypeDynamic(o, type))
+                    Return Conversion.CTypeDynamic(obj, type)
+                End If
+
                 Dim ctype_op = ImplictCType.GetCTypeOperator(objType, type)
 
                 If Not ctype_op Is Nothing Then
@@ -286,7 +306,19 @@ RE0:
                     Return ctype_op.Invoke(Nothing, {obj})
                 End If
 
-                Return Conversion.CTypeDynamic(obj, type)
+                If type.IsAssignableFrom(objType) Then
+                    Call typeCast.AddCType(objType, type, Function(o) Conversion.CTypeDynamic(o, type))
+                    Return Conversion.CTypeDynamic(obj, type)
+                End If
+
+                Try
+                    Dim castResult = Conversion.CTypeDynamic(obj, type)
+                    ' make cache at here
+                    Call typeCast.AddCType(objType, type, Function(o) Conversion.CTypeDynamic(o, type))
+                    Return castResult
+                Catch ex As Exception
+                    Return debug.stop(ex, env)
+                End Try
             End If
         End Function
 
