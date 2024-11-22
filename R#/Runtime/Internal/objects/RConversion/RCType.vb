@@ -1,59 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::42dea2af50fa35d27c921a19c5501afe, R#\Runtime\Internal\objects\RConversion\RCType.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 253
-    '    Code Lines: 186 (73.52%)
-    ' Comment Lines: 31 (12.25%)
-    '    - Xml Docs: 32.26%
-    ' 
-    '   Blank Lines: 36 (14.23%)
-    '     File Size: 11.99 KB
+' Summaries:
 
 
-    '     Class RCType
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    ' 
-    '         Function: CastToEnum, castUnsure, CTypeDynamic, GetCType, hasInterfaceCast
-    '                   hasTypeCast, IsNALiteralValue, NADefault
-    ' 
-    '         Sub: AddCType
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 253
+'    Code Lines: 186 (73.52%)
+' Comment Lines: 31 (12.25%)
+'    - Xml Docs: 32.26%
+' 
+'   Blank Lines: 36 (14.23%)
+'     File Size: 11.99 KB
+
+
+'     Class RCType
+' 
+'         Constructor: (+2 Overloads) Sub New
+' 
+'         Function: CastToEnum, castUnsure, CTypeDynamic, GetCType, hasInterfaceCast
+'                   hasTypeCast, IsNALiteralValue, NADefault
+' 
+'         Sub: AddCType
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -270,6 +271,14 @@ RE0:
                         Return interfaceCast.castFunc(i)(type)(obj)
                     End If
                 Next
+
+                Dim ctype_op = ImplictCType.GetCTypeOperator(objType, type)
+
+                If Not ctype_op Is Nothing Then
+                    ' add cast cache
+                    Call typeCast.AddCType(objType, type, Function(o) ctype_op.Invoke(Nothing, {o}))
+                    Return ctype_op.Invoke(Nothing, {obj})
+                End If
 
                 Return Conversion.CTypeDynamic(obj, type)
             End If
