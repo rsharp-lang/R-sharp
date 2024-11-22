@@ -144,6 +144,8 @@ Module math
     ''' <returns>
     ''' a dataframe table with column names: min, max, bin_size
     ''' </returns>
+    ''' 
+    <RGenericOverloads("as.data.frame")>
     Private Function getBinTable(hist As DataBinBox(Of Double)(), args As list, env As Environment) As Rdataframe
         Dim format As String = args.getValue("format", env, "F2")
         Dim range As String() = hist _
@@ -154,12 +156,14 @@ Module math
         Dim min As String() = hist.Select(Function(bin) bin.getMin.ToString(format)).ToArray
         Dim max As String() = hist.Select(Function(bin) bin.getMax.ToString(format)).ToArray
         Dim count As Integer() = hist.Select(Function(bin) bin.Count).ToArray
+        Dim total As Integer = count.Sum
 
         Return New Rdataframe With {
             .columns = New Dictionary(Of String, Array) From {
                 {"min", min},
                 {"max", max},
-                {"bin_size", count}
+                {"bin_size", count},
+                {"percent", (count.AsVector / total * 100).ToArray}
             },
             .rownames = range
         }
