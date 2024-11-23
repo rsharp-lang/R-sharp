@@ -369,25 +369,64 @@ Module JSON
     ''' a tuple list that contains the json objects that parsed from the json list file.
     ''' </returns>
     <ExportAPI("read.jsonl")>
-    Public Function read_jsonl(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
-        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
+    Public Function read_jsonl(<RRawVectorArgument> file As Object,
+                               Optional lazy As Boolean = False,
+                               Optional env As Environment = Nothing) As Object
+
+        Dim is_file As Boolean = False
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env, is_filepath:=is_file)
 
         If s Like GetType(Message) Then
             Return s.TryCast(Of Message)
         End If
 
         Dim read As New StreamReader(s.TryCast(Of Stream))
-        Dim line As Value(Of String) = ""
-        Dim list As New List(Of Object)
 
-        Do While (line = read.ReadLine) IsNot Nothing
-            Call list.Add(CStr(line).ParseJSONinternal(
-                 raw:=False,
-                 strict_vector_syntax:=False,
-                 env:=env))
-        Loop
+        If lazy Then
+            Dim line As Value(Of String) = ""
+            Dim list As IEnumerable(Of Object) =
+                Iterator Function() As IEnumerable(Of Object)
+                    Do While (line = read.ReadLine) IsNot Nothing
+                        Yield CStr(line).ParseJSONinternal(
+                            raw:=False,
+                            strict_vector_syntax:=False,
+                            env:=env)
+                    Loop
+                End Function()
 
-        Return list.ToArray
+            Return pipeline.CreateFromPopulator(
+                list, finalize:=Sub()
+                                    If is_file Then
+                                        Try
+                                            Call read.Dispose()
+                                            Call s.TryCast(Of Stream).Close()
+                                        Catch ex As Exception
+
+                                        End Try
+                                    End If
+                                End Sub)
+        Else
+            Dim line As Value(Of String) = ""
+            Dim list As New List(Of Object)
+
+            Do While (line = read.ReadLine) IsNot Nothing
+                Call list.Add(CStr(line).ParseJSONinternal(
+                     raw:=False,
+                     strict_vector_syntax:=False,
+                     env:=env))
+            Loop
+
+            If is_file Then
+                Try
+                    Call read.Dispose()
+                    Call s.TryCast(Of Stream).Close()
+                Catch ex As Exception
+
+                End Try
+            End If
+
+            Return list.ToArray
+        End If
     End Function
 
     ''' <summary>
