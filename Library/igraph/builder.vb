@@ -184,14 +184,25 @@ Module builder
         Return x.BuildNetwork(cutoff)
     End Function
 
+    ''' <summary>
+    ''' Create sparse graph matrix
+    ''' </summary>
+    ''' <param name="g">
+    ''' should be a graph object that implements of the interface <see cref="SparseGraph.ISparseGraph"/>
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("spare_graph")>
+    <RApiReturn(GetType(SparseGraph))>
     Public Function clone_sparegraph(g As Object, Optional env As Environment = Nothing) As Object
         If g Is Nothing Then
             Return Nothing
         End If
 
         If g.GetType.ImplementInterface(Of SparseGraph.ISparseGraph) Then
-
+            Return SparseGraph.Copy(DirectCast(g, SparseGraph.ISparseGraph))
+        Else
+            Return Message.InCompatibleType(GetType(SparseGraph), g.GetType, env)
         End If
     End Function
 End Module
