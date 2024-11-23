@@ -67,6 +67,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports DataFrame = Microsoft.VisualBasic.Math.DataFrame.DataFrame
 Imports rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports std = System.Math
 
 ''' <summary>
@@ -197,6 +198,32 @@ Module builder
     Public Function clone_sparegraph(g As Object, Optional env As Environment = Nothing) As Object
         If g Is Nothing Then
             Return Nothing
+        End If
+
+        If TypeOf g Is list AndAlso DirectCast(g, list).hasName(NameOf(SparseGraph.Edges)) Then
+            ' from json list?
+            Dim edges = DirectCast(g, list).getByName(NameOf(SparseGraph.Edges))
+            Dim edgeSet As New List(Of SparseGraph.Edge)
+
+            For Each obj In ObjectSet.GetObjectSet(edges, env)
+                If Not TypeOf obj Is list Then
+                    Return RInternal.debug.stop("the required edge data should be a tuple list object!", env)
+                End If
+
+                Dim u As String = DirectCast(obj, list).getValue(Of String)("u", env)
+                Dim v As String = DirectCast(obj, list).getValue(Of String)("v", env)
+
+                ' missing data
+                If u Is Nothing OrElse v Is Nothing Then
+                    Return RInternal.debug.stop("there are some missing data inside your molecule graph!", env)
+                End If
+
+                Call edgeSet.Add(New SparseGraph.Edge(u, v))
+            Next
+
+            Return New SparseGraph() With {
+                .Edges = edgeSet.ToArray
+            }
         End If
 
         If g.GetType.ImplementInterface(Of SparseGraph.ISparseGraph) Then
