@@ -292,6 +292,27 @@ Module RMatrix
     End Function
 
     ''' <summary>
+    ''' matrix to vector by extract from the row dimensions
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("row_pack")>
+    Public Function rowPack(x As Object, Optional env As Environment = Nothing) As Object
+        Dim pack As New List(Of Double)
+
+        If x Is Nothing Then
+            Return Nothing
+        ElseIf x.GetType.ImplementInterface(Of GeneralMatrix) Then
+            Dim m As GeneralMatrix = x
+            m.RowVectors.DoEach(Sub(v) pack.AddRange(v))
+            Return pack.ToArray
+        Else
+            Return Message.InCompatibleType(GetType(GeneralMatrix), x.GetType, env)
+        End If
+    End Function
+
+    ''' <summary>
     ''' sum all matrix
     ''' </summary>
     ''' <param name="x">a collection of the data matrix</param>
