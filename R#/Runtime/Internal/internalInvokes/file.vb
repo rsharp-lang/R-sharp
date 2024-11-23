@@ -1256,6 +1256,9 @@ Namespace Runtime.Internal.Invokes
         ''' character string. A description of how to open the connection (if it should be opened initially). 
         ''' See section ‘Modes’ for possible values.
         ''' </param>
+        ''' <param name="repo">
+        ''' this function will open an internal block stream if this repository reference has been specificed.
+        ''' </param>
         ''' <returns></returns>
         ''' <remarks>
         ''' + ``stdin``  for stdinput stream, and
@@ -1264,7 +1267,8 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("file")>
         Public Function file(description$,
                              Optional open As FileMode = FileMode.OpenOrCreate,
-                             Optional truncate As Boolean = False) As Stream
+                             Optional truncate As Boolean = False,
+                             Optional repo As IFileSystemEnvironment = Nothing) As Stream
 
             If description.TextEquals("stdin") Then
                 ' read from console stdinput
@@ -1282,6 +1286,8 @@ Namespace Runtime.Internal.Invokes
                 End If
 
                 Return Console.OpenStandardOutput
+            ElseIf Not repo Is Nothing Then
+                Return repo.OpenFile(description, open, access:=If(truncate, FileAccess.Write, FileAccess.Read))
             Else
                 If open = FileMode.Truncate OrElse open = FileMode.CreateNew Then
                     Return description.Open(open, doClear:=truncate)
