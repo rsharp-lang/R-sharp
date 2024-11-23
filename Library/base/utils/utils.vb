@@ -93,6 +93,7 @@ Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports Rsharp = SMRUCC.Rsharp
 Imports textStream = System.IO.StreamReader
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+Imports Microsoft.VisualBasic.ApplicationServices
 
 ''' <summary>
 ''' The R Utils Package 
@@ -504,6 +505,7 @@ Public Module utils
             DirectCast(file, dataframeBuffer).tsv = tsv
             Return file
         ElseIf TypeOf file Is textBuffer Then
+            ' transfer as plant text file
             Dim document = DirectCast(x, Rdataframe).DataFrameRows(row_names, formatNumber:=Nothing, env)
             Dim ms As New MemoryStream
             Dim text As String
@@ -512,7 +514,7 @@ Public Module utils
                 Return document.TryCast(Of Message)
             End If
 
-            StreamIO.SaveDataFrame(document.TryCast(Of csv).Rows, ms, Encoding.UTF8, tsv:=tsv, silent:=False)
+            StreamIO.SaveDataFrame(document.TryCast(Of csv).Rows, ms, Encoding.UTF8, tsv:=tsv, silent:=True)
             ms.Flush()
             text = Encoding.UTF8.GetString(ms.ToArray)
             ms.Dispose()
@@ -523,7 +525,21 @@ Public Module utils
             End With
 
             Return file
+        ElseIf TypeOf file Is Stream Then
+            ' save table with given stream
+            Dim document = DirectCast(x, Rdataframe).DataFrameRows(row_names, formatNumber:=Nothing, env)
+
+            If document Like GetType(Message) Then
+                Return document.TryCast(Of Message)
+            End If
+
+            StreamIO.SaveDataFrame(document.TryCast(Of csv).Rows, DirectCast(file, Stream), Encoding.UTF8,
+                                   tsv:=tsv,
+                                   silent:=True,
+                                   autoCloseFile:=False)
+            Return True
         ElseIf file Is Nothing OrElse TypeOf file Is String Then
+            ' save table with specific file path
             Return env.saveTextFile(x, file, row_names, fileEncoding, tsv,
                                     meta_blank:=meta_blank,
                                     number_format:=number_format)
