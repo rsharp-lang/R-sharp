@@ -344,10 +344,14 @@ Module HDSutils
     ''' </summary>
     ''' <param name="pack"></param>
     ''' <param name="file"></param>
+    ''' <param name="load_memory">
+    ''' load the block file data into memory on load instead of 
+    ''' open a <see cref="SubStream"/> of the base file.
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("getData")>
-    Public Function getData(pack As StreamPack, file As StreamBlock) As Stream
-        Return pack.OpenBlock(file)
+    Public Function getData(pack As StreamPack, file As StreamBlock, Optional load_memory As Boolean = False) As Stream
+        Return pack.OpenBlock(file, load_memory)
     End Function
 
     ''' <summary>
