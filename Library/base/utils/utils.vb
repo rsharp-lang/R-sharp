@@ -366,6 +366,13 @@ Public Module utils
                                 Return New file(ls)
                             End Function)
             End Using
+        ElseIf TypeOf file Is textBuffer Then
+            datafile = DirectCast(file, textBuffer).text _
+                .LineTokens _
+                .DoCall(Function(lines) FileLoader.Load(lines, False, Nothing, isTsv:=tsv)) _
+                .DoCall(Function(ls)
+                            Return New file(ls)
+                        End Function)
         Else
             Return RInternal.debug.stop("invalid file content type!", env)
         End If
