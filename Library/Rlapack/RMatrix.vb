@@ -291,6 +291,37 @@ Module RMatrix
         End If
     End Function
 
+    ''' <summary>
+    ''' sum all matrix
+    ''' </summary>
+    ''' <param name="x">a collection of the data matrix</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("sum_all")>
+    <RApiReturn(GetType(NumericMatrix))>
+    Public Function sum_all(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Dim sum As NumericMatrix = Nothing
+        Dim pull = ObjectSet.GetObjectSet(x, env)
+
+        For Each xi As Object In pull
+            If xi Is Nothing Then
+                Continue For
+            End If
+
+            If xi.GetType.ImplementInterface(Of GeneralMatrix) Then
+                If sum Is Nothing Then
+                    sum = xi
+                Else
+                    sum = sum + DirectCast(xi, GeneralMatrix)
+                End If
+            Else
+                Return Message.InCompatibleType(GetType(NumericMatrix), xi.GetType, env)
+            End If
+        Next
+
+        Return sum
+    End Function
+
     Private Function matrix_extractor(x As Object, env As Environment) As [Variant](Of NumericMatrix, Message)
         Dim data As NumericMatrix
 
