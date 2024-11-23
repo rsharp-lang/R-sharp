@@ -61,6 +61,7 @@ Imports System.IO
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.GraphTheory
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -128,6 +129,28 @@ Module RMatrix
         Next
 
         Return df
+    End Function
+
+    ''' <summary>
+    ''' create matrix from a graph
+    ''' </summary>
+    ''' <param name="g"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("fromGraph")>
+    <RApiReturn(GetType(NumericMatrix))>
+    Public Function fromGraph(g As Object, keys As String(), Optional env As Environment = Nothing) As Object
+        If g Is Nothing Then
+            Return Nothing
+        End If
+
+        If TypeOf g Is SparseGraph Then
+            Return DirectCast(g, SparseGraph).CreateMatrix(keys)
+        ElseIf g.GetType.ImplementInterface(Of SparseGraph.ISparseGraph) Then
+            Return SparseGraph.CreateMatrix(DirectCast(g, SparseGraph.ISparseGraph).GetGraph, keys)
+        Else
+            Return Message.InCompatibleType(GetType(SparseGraph), g.GetType, env)
+        End If
     End Function
 
     ''' <summary>
