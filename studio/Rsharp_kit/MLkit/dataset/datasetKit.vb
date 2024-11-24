@@ -790,6 +790,12 @@ Module datasetKit
         Dim input As Double()
         Dim output As Double()
 
+        If x Is Nothing Then
+            Return RInternal.debug.stop("the input data should not be nothing!", env)
+        ElseIf y Is Nothing Then
+            Return RInternal.debug.stop("the output label data should not be nothing!", env)
+        End If
+
         If x.GetType.ImplementInterface(Of GeneralMatrix) Then
             input = DirectCast(x, GeneralMatrix).RowVectors.IteratesALL.ToArray
         Else
