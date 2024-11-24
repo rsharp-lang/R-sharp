@@ -810,7 +810,9 @@ Module datasetKit
             output = CLRVector.asNumeric(y)
         End If
 
-        Return New SampleData(input, output) With {.id = id}
+        Return New SampleData(input, output) With {
+            .id = If(id, App.GetNextUniqueName("sample_"))
+        }
     End Function
 
     ''' <summary>
