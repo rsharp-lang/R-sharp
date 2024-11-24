@@ -786,7 +786,10 @@ Module datasetKit
 
     <ExportAPI("create_single_sampledata")>
     <RApiReturn(GetType(SampleData))>
-    Public Function createSingleSampleData(x As Object, y As Object, Optional id As String = Nothing, Optional env As Environment = Nothing) As Object
+    Public Function createSingleSampleData(<RRawVectorArgument> x As Object,
+                                           <RRawVectorArgument> y As Object,
+                                           Optional id As String = Nothing,
+                                           Optional env As Environment = Nothing) As Object
         Dim input As Double()
         Dim output As Double()
 
