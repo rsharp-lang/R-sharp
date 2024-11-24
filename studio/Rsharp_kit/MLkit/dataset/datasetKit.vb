@@ -71,6 +71,7 @@ Imports Microsoft.VisualBasic.Data.IO.MessagePack
 Imports Microsoft.VisualBasic.Data.visualize
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
 Imports Microsoft.VisualBasic.DataMining.FeatureFrame
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
@@ -78,6 +79,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure.DataPack
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
+Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.Html.CSS
@@ -551,6 +553,7 @@ Module datasetKit
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("as.MLdataset")>
+    <RApiReturn(GetType(DataSet))>
     Public Function CreateMLdataset(<RRawVectorArgument> x As Object,
                                     <RRawVectorArgument>
                                     Optional labels As Object = Nothing,
@@ -722,6 +725,11 @@ Module datasetKit
         Return x.ToTable(markOuput).ToArray
     End Function
 
+    ''' <summary>
+    ''' make data set convert
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <returns></returns>
     <ExportAPI("as.sampleSet")>
     Public Function SampleList(x As DataSet) As SampleData()
         Return x.DataSamples _
@@ -774,6 +782,25 @@ Module datasetKit
 
             Return True
         End If
+    End Function
+
+    <ExportAPI("create_single_sampledata")>
+    Public Function createSingleSampleData(x As Object, y As Object, Optional id As String = Nothing, Optional env As Environment = Nothing) As Object
+        Dim input As Double()
+        Dim output As Double()
+
+        If x.GetType.ImplementInterface(Of GeneralMatrix) Then
+            input = DirectCast(x, GeneralMatrix).RowVectors.IteratesALL.ToArray
+        Else
+            input = CLRVector.asNumeric(x)
+        End If
+        If y.GetType.ImplementInterface(Of GeneralMatrix) Then
+            output = DirectCast(y, GeneralMatrix).RowVectors.IteratesALL.ToArray
+        Else
+            output = CLRVector.asNumeric(y)
+        End If
+
+        Return New SampleData(input, output) With {.id = id}
     End Function
 
     <ExportAPI("write.sample_set")>
