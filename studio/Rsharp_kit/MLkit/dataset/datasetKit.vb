@@ -785,6 +785,7 @@ Module datasetKit
     End Function
 
     <ExportAPI("create_single_sampledata")>
+    <RApiReturn(GetType(SampleData))>
     Public Function createSingleSampleData(x As Object, y As Object, Optional id As String = Nothing, Optional env As Environment = Nothing) As Object
         Dim input As Double()
         Dim output As Double()
@@ -803,6 +804,15 @@ Module datasetKit
         Return New SampleData(input, output) With {.id = id}
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x">
+    ''' should be a collection of the <see cref="SampleData"/>
+    ''' </param>
+    ''' <param name="file"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("write.sample_set")>
     Public Function writeSampleSet(<RRawVectorArgument> x As Object, file As Object, Optional env As Environment = Nothing) As Object
         Dim buf = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env)
