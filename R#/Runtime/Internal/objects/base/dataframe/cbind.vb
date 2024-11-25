@@ -181,7 +181,10 @@ Namespace Runtime.Internal.Object.baseOp.dataframeOp
                 ' this needs the row order between the 
                 ' two dataframe object keeps the same
                 For i As Integer = 0 To append.columns.Count - 1
-                    d.columns.Add(newNames(i + colnames.Length), append.columns(oldColNames(i)))
+                    Call d.columns.Add(
+                        key:=newNames(i + colnames.Length),
+                        value:=append.columns(oldColNames(i))
+                    )
                 Next
             Else
                 d = strictColumnAppend(d, append, [default], env)
@@ -198,7 +201,10 @@ Namespace Runtime.Internal.Object.baseOp.dataframeOp
             Dim df_names = df.colnames
             Dim y_names = y.colnames
             Dim union_names = df_names.JoinIterates(y_names).UniqueNames.ToArray
-            Dim df_rows = df.forEachRow(df_names).ToDictionary
+            ' 20241125 ToDictionary function should specific the key name source
+            ' or the sorted dictionary helper extension function will be
+            ' apply for this index operation, lead to incorrect result orders!
+            Dim df_rows = df.forEachRow(df_names).ToDictionary(Function(a) a.name)
             Dim y_rows = y.forEachRow(y_names).ToArray
 
             For Each row As NamedCollection(Of Object) In y_rows
