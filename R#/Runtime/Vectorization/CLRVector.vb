@@ -58,6 +58,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Language.Vectorization
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Microsoft.VisualBasic.ValueTypes
@@ -460,6 +461,10 @@ Namespace Runtime.Vectorization
                 Return DirectCast(x, TimeSpan()).Select(Function(d) CSng(d.TotalMilliseconds)).ToArray
             ElseIf TypeOf x Is Object() Then
                 Return DirectCast(x, Object()).Select(Function(d) CSng(d)).ToArray
+            ElseIf x.GetType.IsInheritsFrom(GetType(Vector(Of Double()))) Then
+                Return DirectCast(x, Vector(Of Double())).Array.IteratesALL.Select(Function(d) CSng(d)).ToArray
+            ElseIf x.GetType.IsInheritsFrom(GetType(Vector(Of Single()))) Then
+                Return DirectCast(x, Vector(Of Single())).Array.IteratesALL.ToArray
             Else
                 Throw New InvalidCastException(x.GetType.FullName)
             End If
@@ -489,6 +494,10 @@ Namespace Runtime.Vectorization
                 x = DirectCast(x, vector).data
             ElseIf TypeOf x Is collectionSet Then
                 x = DirectCast(x, collectionSet).ToArray
+            ElseIf x.GetType.IsInheritsFrom(GetType(Vector(Of Double()))) Then
+                Return DirectCast(x, Vector(Of Double())).Array _
+                    .IteratesALL _
+                    .ToArray
             End If
 
             If x.GetType.IsArray Then
