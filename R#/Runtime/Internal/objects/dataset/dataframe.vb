@@ -282,7 +282,7 @@ Namespace Runtime.Internal.Object
                 Dim colnames As String() = Me.colnames
 
                 For Each row As NamedCollection(Of Object) In forEachRow(colnames)
-
+                    Yield New JavaScriptObject(colnames, row.value)
                 Next
             End Get
         End Property
