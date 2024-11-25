@@ -71,6 +71,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.My.JavaScript
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -269,6 +270,20 @@ Namespace Runtime.Internal.Object
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return getColumnVector(getKeyByIndex(index))
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' debug view of this dataframe object in rows, debug used only.
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Iterator Property rowViews As IEnumerable(Of JavaScriptObject)
+            Get
+                Dim colnames As String() = Me.colnames
+
+                For Each row As NamedCollection(Of Object) In forEachRow(colnames)
+
+                Next
             End Get
         End Property
 
