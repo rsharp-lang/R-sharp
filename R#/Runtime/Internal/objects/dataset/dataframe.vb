@@ -71,6 +71,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.My.JavaScript
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
@@ -269,6 +270,44 @@ Namespace Runtime.Internal.Object
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return getColumnVector(getKeyByIndex(index))
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' debug view of this dataframe object in rows, debug used only.
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Iterator Property rowViews As IEnumerable(Of Object)
+            Get
+                Dim colnames As String() = Me.colnames
+                Dim dynamic As New DynamicType
+
+                For Each name As String In colnames
+                    Call dynamic.Add(
+                        name:=DynamicType.CreateValidSymbolName(name),
+                        type:=If(columns(name).GetType.GetElementType, GetType(Object)),
+                        displayName:=name
+                    )
+                Next
+
+                Dim template As Type = dynamic.Create
+                Dim symbols As String() = (From name As String
+                                           In colnames
+                                           Select DynamicType.CreateValidSymbolName(name)).ToArray
+                Dim data As New Dictionary(Of String, Object)
+                Dim rowObj As Object
+
+                For Each row As NamedCollection(Of Object) In forEachRow(colnames)
+                    Call data.Clear()
+
+                    For i As Integer = 0 To symbols.Length - 1
+                        Call data.Add(symbols(i), row(i))
+                    Next
+
+                    rowObj = JavaScriptObject.CreateDynamicObject(template, data)
+
+                    Yield rowObj
+                Next
             End Get
         End Property
 

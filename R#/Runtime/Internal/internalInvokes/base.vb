@@ -1118,6 +1118,22 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' dataframe to rows
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("rowwise")>
+        Public Function rowwise(x As dataframe,
+                                Optional clr_dynamic As Boolean = False,
+                                Optional env As Environment = Nothing) As Object
+            If clr_dynamic Then
+                Return x.rowViews.ToArray
+            Else
+                Return asList(x, New list(slot("byrow") = True), env)
+            End If
+        End Function
+
+        ''' <summary>
         ''' ### matrix transpose
         ''' 
         ''' Given a matrix or data.frame x, t returns the transpose of x.

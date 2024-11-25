@@ -150,7 +150,8 @@ Module math
         Dim format As String = args.getValue("format", env, "F2")
         Dim range As String() = hist _
             .Select(Function(bin)
-                        Return $"{bin.getMin.ToString(format)} ~ {bin.getMax.ToString(format)}"
+                        Dim boundary As DoubleRange = bin.Boundary
+                        Return $"{boundary.Min.ToString(format)} ~ {boundary.Max.ToString(format)}"
                     End Function) _
             .ToArray
         Dim min As String() = hist.Select(Function(bin) bin.getMin.ToString(format)).ToArray
@@ -161,6 +162,7 @@ Module math
 
         Return New Rdataframe With {
             .columns = New Dictionary(Of String, Array) From {
+                {"boundary", range},
                 {"min", min},
                 {"max", max},
                 {"bin_size", count},
@@ -338,7 +340,11 @@ Module math
                 Return RInternal.debug.stop("the historgram parameter step and n should not be both nothing!", env)
             End If
 
-            [step] = New DoubleRange(v).Length / n
+            If min Is Nothing AndAlso max Is Nothing Then
+                [step] = New DoubleRange(v).Length / n
+            Else
+                [step] = (max - min) / n
+            End If
         End If
 
         Return v _

@@ -120,10 +120,14 @@ Module RJSON
 
             Return Nothing
         Else
-            rawElement = New JsonParser(str, strictVectorSyntax:=strict_vector_syntax).OpenJSON()
+            Try
+                rawElement = New JsonParser(str, strictVectorSyntax:=strict_vector_syntax).OpenJSON()
+            Catch ex As Exception
+                rawElement = Nothing
+            End Try
         End If
 
-        If raw Then
+        If raw AndAlso Not rawElement Is Nothing Then
             Return rawElement
         ElseIf rawElement Is Nothing Then
             If env.globalEnvironment.options.strict Then
