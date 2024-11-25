@@ -756,7 +756,10 @@ Module CNNTools
     ''' <param name="ro"></param>
     ''' <returns></returns>
     <ExportAPI("window_grad")>
-    Public Function WindowGradTrainer(batch_size As Integer, Optional l2_decay As Single = 0.001, Optional ro As Double = 0.95) As TrainerAlgorithm
+    Public Function WindowGradTrainer(batch_size As Integer,
+                                      Optional l2_decay As Single = 0.001,
+                                      Optional ro As Double = 0.95) As TrainerAlgorithm
+
         Return New WindowGradTrainer(batch_size, l2_decay, ro)
     End Function
 
@@ -765,12 +768,20 @@ Module CNNTools
                             <RRawVectorArgument>
                             Optional class_labels As Object = "class_%d",
                             Optional is_generative As Boolean = False,
+                            Optional scalar_vector As Boolean = False,
                             Optional env As Environment = Nothing) As Object
 
         If TypeOf cnn Is ConvolutionalNN Then
-            Return CNNFunction.DoPrediction(cnn, dataset, class_labels, is_generative, env)
+            Return CNNFunction.DoPrediction(
+                cnn,
+                dataset, class_labels, is_generative, scalar_vector,
+                env
+            )
         ElseIf TypeOf cnn Is CNNFunction Then
-            Return DirectCast(cnn, CNNFunction).DoPrediction(dataset, class_labels, is_generative, env)
+            Return DirectCast(cnn, CNNFunction).DoPrediction(
+                dataset, class_labels, is_generative, scalar_vector,
+                env
+            )
         Else
             Return Message.InCompatibleType(GetType(CNNFunction), cnn.GetType, env)
         End If
