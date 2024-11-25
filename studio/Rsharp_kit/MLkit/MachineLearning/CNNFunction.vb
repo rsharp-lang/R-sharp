@@ -164,9 +164,10 @@ Public Class CNNFunction : Inherits RDefaultFunction
                                  <RRawVectorArgument>
                                  Optional class_labels As Object = "class_%d",
                                  Optional is_generative As Boolean = False,
+                                 Optional scalar_vector As Boolean = False,
                                  Optional env As Environment = Nothing) As Object
 
-        Return DoPrediction(cnn, dataset, class_labels, is_generative, env)
+        Return DoPrediction(cnn, dataset, class_labels, is_generative, scalar_vector, env)
     End Function
 
 End Class
