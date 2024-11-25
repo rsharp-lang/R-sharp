@@ -76,6 +76,7 @@ Public Class CNNFunction : Inherits RDefaultFunction
                                         <RRawVectorArgument>
                                         Optional class_labels As Object = "class_%d",
                                         Optional is_generative As Boolean = False,
+                                        Optional scalar_vector As Boolean = False,
                                         Optional env As Environment = Nothing) As Object
         Dim ds As SampleData()
 
@@ -118,6 +119,13 @@ Public Class CNNFunction : Inherits RDefaultFunction
         For Each sample As SampleData In ds
             Call data.addImageData(sample.features, 1.0)
             Call outputs.Add(cnn.predict(data))
+
+            ' 20241125 just contains one sample data andalso user required
+            ' of returns a vector data
+            ' then returns the vector result directly from here
+            If scalar_vector AndAlso ds.Length = 1 Then
+                Return outputs(Scan0)
+            End If
 
             If dd > 0 AndAlso ++i Mod dd = 0 Then
                 Call VBDebugger.EchoLine($"[{i}/{ds.Length}] {(i / ds.Length * 100).ToString("F2")}% ... {sample.id}")
