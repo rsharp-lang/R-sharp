@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::faf6ef534690963525ea08dbaf961138, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::fabb4b426ea234bd70db6c21ebb1cbf2, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 42.98%
     ' 
     '   Blank Lines: 93 (11.71%)
-    '     File Size: 34.53 KB
+    '     File Size: 34.55 KB
 
 
     '     Class SymbolIndexer

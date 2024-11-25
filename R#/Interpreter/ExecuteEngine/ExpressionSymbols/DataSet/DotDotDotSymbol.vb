@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5b3237c647bf3381d69812fc80167db3, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\DotDotDotSymbol.vb"
+﻿#Region "Microsoft.VisualBasic::4f02b9a18776910defb9bbe8d62512af, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\DotDotDotSymbol.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 100.00%
     ' 
     '   Blank Lines: 8 (19.51%)
-    '     File Size: 1.25 KB
+    '     File Size: 1.27 KB
 
 
     '     Class DotDotDotSymbol

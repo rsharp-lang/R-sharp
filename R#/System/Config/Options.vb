@@ -1,63 +1,63 @@
-﻿#Region "Microsoft.VisualBasic::30285806d14b543a5055d90ec8c642a5, R#\System\Config\Options.vb"
+﻿#Region "Microsoft.VisualBasic::3d70d7496273b308f0c8a830af869275, R#\System\Config\Options.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 382
-'    Code Lines: 208 (54.45%)
-' Comment Lines: 128 (33.51%)
-'    - Xml Docs: 71.88%
-' 
-'   Blank Lines: 46 (12.04%)
-'     File Size: 15.12 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class Options
-' 
-'         Properties: [lib], [strict], digits, environments, f64Format
-'                     HTTPUserAgent, julia, lib_loc, localConfig, log4vb_redirect
-'                     maxPrint, memoryLoad, MimeType, nwarnings, python
-'                     stdout_multipline, typescript, verbose
-' 
-'         Constructor: (+3 Overloads) Sub New
-' 
-'         Function: getAllConfigs, getOption, hasOption, setOption, ToString
-' 
-'         Sub: (+2 Overloads) Dispose, flush
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 401
+    '    Code Lines: 219 (54.61%)
+    ' Comment Lines: 132 (32.92%)
+    '    - Xml Docs: 72.73%
+    ' 
+    '   Blank Lines: 50 (12.47%)
+    '     File Size: 16.35 KB
+
+
+    '     Class Options
+    ' 
+    '         Properties: [lib], [strict], digits, environments, f64Format
+    '                     HTTPUserAgent, julia, lib_loc, localConfig, log4vb_redirect
+    '                     maxPrint, memoryLoad, MimeType, nwarnings, python
+    '                     stdout_multipline, typescript, verbose
+    ' 
+    '         Constructor: (+3 Overloads) Sub New
+    ' 
+    '         Function: getAllConfigs, getOption, hasOption, setOption, ToString
+    ' 
+    '         Sub: (+2 Overloads) Dispose, flush
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

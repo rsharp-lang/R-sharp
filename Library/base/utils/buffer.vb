@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::94489f8aab0edbcdde3afc0f2e539f36, Library\base\utils\buffer.vb"
+﻿#Region "Microsoft.VisualBasic::58b016f519c101eb70476baa6aca6f1e, Library\base\utils\buffer.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 262
-    '    Code Lines: 181 (69.08%)
-    ' Comment Lines: 49 (18.70%)
-    '    - Xml Docs: 97.96%
+    '   Total Lines: 273
+    '    Code Lines: 186 (68.13%)
+    ' Comment Lines: 54 (19.78%)
+    '    - Xml Docs: 98.15%
     ' 
-    '   Blank Lines: 32 (12.21%)
-    '     File Size: 9.84 KB
+    '   Blank Lines: 33 (12.09%)
+    '     File Size: 10.21 KB
 
 
     ' Module buffer
     ' 
     '     Function: asBuffer, escapeString, float, getString, gzipDecompression
-    '               normChar, numberFramework, toInteger, zlibDecompress, zlibStream
+    '               normChar, numberFramework, parseDouble, toInteger, zlibDecompress
+    '               zlibStream
     ' 
     ' /********************************************************************************/
 

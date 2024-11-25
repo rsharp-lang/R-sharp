@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::af99864215226a0faa214379b3cabcd9, R#\Runtime\Internal\internalInvokes\applys.vb"
+﻿#Region "Microsoft.VisualBasic::4adbfc2b363ce57d089db6a59ee7342d, R#\Runtime\Internal\internalInvokes\applys.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 644
-    '    Code Lines: 423 (65.68%)
-    ' Comment Lines: 135 (20.96%)
+    '   Total Lines: 649
+    '    Code Lines: 428 (65.95%)
+    ' Comment Lines: 135 (20.80%)
     '    - Xml Docs: 82.96%
     ' 
-    '   Blank Lines: 86 (13.35%)
-    '     File Size: 27.62 KB
+    '   Blank Lines: 86 (13.25%)
+    '     File Size: 27.80 KB
 
 
     '     Module applys
     ' 
     '         Function: apply, checkInternal, lapply, (+3 Overloads) lapplyGeneralIDictionary, lapplyGeneralSequence
     '                   lapplyPipelineStream, lapplyRNameIndex, parLapply, parSapply, sapply
+    '                   sapplyList, sapplySequence
     ' 
     ' 
     ' /********************************************************************************/

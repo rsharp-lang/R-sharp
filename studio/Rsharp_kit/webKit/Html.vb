@@ -1,55 +1,57 @@
-﻿#Region "Microsoft.VisualBasic::575bafd51a2066bcca2941d210bf6c67, studio\Rsharp_kit\webKit\Html.vb"
+﻿#Region "Microsoft.VisualBasic::6ee699003c3b1c0b05a1ac8d774fb82d, studio\Rsharp_kit\webKit\Html.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 128
-'    Code Lines: 88 (68.75%)
-' Comment Lines: 20 (15.62%)
-'    - Xml Docs: 90.00%
-' 
-'   Blank Lines: 20 (15.62%)
-'     File Size: 4.51 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module Html
-' 
-'     Constructor: (+1 Overloads) Sub New
-'     Function: documentDebugView, getPlainText, links, parse, QueryHtmlTables
-'               title
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 236
+    '    Code Lines: 149 (63.14%)
+    ' Comment Lines: 52 (22.03%)
+    '    - Xml Docs: 90.38%
+    ' 
+    '   Blank Lines: 35 (14.83%)
+    '     File Size: 8.91 KB
+
+
+    ' Module Html
+    ' 
+    '     Function: anchor_table, castModel, documentDebugView, getElementById, getElementsByClass
+    '               getElementsByTagName, getPlainText, links, parse, QueryHtmlTables
+    '               title, to_html
+    ' 
+    '     Sub: Main
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

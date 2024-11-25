@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cf95fa6d2b220f630e9bf970cec998b0, Library\base\utils\utils.vb"
+﻿#Region "Microsoft.VisualBasic::4ab873156f7e3d18fd8f38aa48b41188, Library\base\utils\utils.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 615
-    '    Code Lines: 413 (67.15%)
-    ' Comment Lines: 138 (22.44%)
-    '    - Xml Docs: 89.13%
+    '   Total Lines: 638
+    '    Code Lines: 431 (67.55%)
+    ' Comment Lines: 141 (22.10%)
+    '    - Xml Docs: 87.23%
     ' 
-    '   Blank Lines: 64 (10.41%)
-    '     File Size: 26.00 KB
+    '   Blank Lines: 66 (10.34%)
+    '     File Size: 27.11 KB
 
 
     ' Module utils

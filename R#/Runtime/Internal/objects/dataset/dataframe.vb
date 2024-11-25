@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::02667f4facf60e702b007e1c44c5e899, R#\Runtime\Internal\objects\dataset\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::f49533af91f9a984ee1553d36bc5bcf4, R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 938
-    '    Code Lines: 475 (50.64%)
-    ' Comment Lines: 362 (38.59%)
-    '    - Xml Docs: 87.57%
+    '   Total Lines: 981
+    '    Code Lines: 506 (51.58%)
+    ' Comment Lines: 366 (37.31%)
+    '    - Xml Docs: 87.70%
     ' 
-    '   Blank Lines: 101 (10.77%)
-    '     File Size: 37.78 KB
+    '   Blank Lines: 109 (11.11%)
+    '     File Size: 39.49 KB
 
 
     '     Interface IdataframeReader

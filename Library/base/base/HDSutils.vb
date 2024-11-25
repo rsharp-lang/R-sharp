@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::633e46db9e1d343cc3852a81a1ae2f5a, Library\base\base\HDSutils.vb"
+﻿#Region "Microsoft.VisualBasic::48ac473e735059b73e95d86f6bd3312a, Library\base\base\HDSutils.vb"
 
     ' Author:
     ' 
@@ -34,22 +34,22 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 339
-    '    Code Lines: 223 (65.78%)
-    ' Comment Lines: 67 (19.76%)
-    '    - Xml Docs: 98.51%
+    '   Total Lines: 385
+    '    Code Lines: 239 (62.08%)
+    ' Comment Lines: 92 (23.90%)
+    '    - Xml Docs: 98.91%
     ' 
-    '   Blank Lines: 49 (14.45%)
-    '     File Size: 13.22 KB
+    '   Blank Lines: 54 (14.03%)
+    '     File Size: 14.88 KB
 
 
     ' Module HDSutils
     ' 
     '     Constructor: (+1 Overloads) Sub New
     ' 
-    '     Function: createStream, DiskDefragmentation, ExtractFiles, fileTable, getData
-    '               listFiles, openStream, readText, saveFile, Tree
-    '               writeText
+    '     Function: createStream, DiskDefragmentation, ExtractFiles, fileTable, get_hds_headersize
+    '               getData, listFiles, openReadStream, openStream, readText
+    '               saveFile, Tree, writeText
     ' 
     '     Sub: flush
     ' 

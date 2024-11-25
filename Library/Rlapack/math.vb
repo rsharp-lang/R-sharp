@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::524f68f8c85b2cf6e3dc899ff9bdf927, Library\Rlapack\math.vb"
+﻿#Region "Microsoft.VisualBasic::cefcb128809f4d9ca452a8676fe5b277, Library\Rlapack\math.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1013
-    '    Code Lines: 636 (62.78%)
-    ' Comment Lines: 256 (25.27%)
-    '    - Xml Docs: 89.84%
+    '   Total Lines: 1035
+    '    Code Lines: 656 (63.38%)
+    ' Comment Lines: 257 (24.83%)
+    '    - Xml Docs: 89.49%
     ' 
-    '   Blank Lines: 121 (11.94%)
-    '     File Size: 41.23 KB
+    '   Blank Lines: 122 (11.79%)
+    '     File Size: 42.15 KB
 
 
     ' Module math

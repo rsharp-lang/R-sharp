@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7db7646579173d129d2cbb4a62af0662, R#\Runtime\Interop\RInteropAttributes\RGenericOverloadsAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::061cfa9ce525351913f06378e1dfab6d, R#\Runtime\Interop\RInteropAttributes\RGenericOverloadsAttribute.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 99
-    '    Code Lines: 54 (54.55%)
-    ' Comment Lines: 32 (32.32%)
-    '    - Xml Docs: 93.75%
+    '   Total Lines: 108
+    '    Code Lines: 56 (51.85%)
+    ' Comment Lines: 39 (36.11%)
+    '    - Xml Docs: 84.62%
     ' 
-    '   Blank Lines: 13 (13.13%)
-    '     File Size: 3.69 KB
+    '   Blank Lines: 13 (12.04%)
+    '     File Size: 4.17 KB
 
 
     '     Class RGenericOverloadsAttribute

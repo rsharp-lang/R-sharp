@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::564c4f40b4b66a299616a73c4fbca0e7, R#\Runtime\Internal\objects\base\dataframe\cbind.vb"
+﻿#Region "Microsoft.VisualBasic::f0b5b6648f95d42d0ee16b42ccdefe2a, R#\Runtime\Internal\objects\base\dataframe\cbind.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 235
-    '    Code Lines: 166 (70.64%)
-    ' Comment Lines: 38 (16.17%)
-    '    - Xml Docs: 63.16%
+    '   Total Lines: 241
+    '    Code Lines: 169 (70.12%)
+    ' Comment Lines: 41 (17.01%)
+    '    - Xml Docs: 58.54%
     ' 
-    '   Blank Lines: 31 (13.19%)
-    '     File Size: 9.88 KB
+    '   Blank Lines: 31 (12.86%)
+    '     File Size: 10.23 KB
 
 
     '     Module cbindOp

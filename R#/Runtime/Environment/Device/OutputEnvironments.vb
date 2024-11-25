@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::81663512c5e039a3893f630242460edc, R#\Runtime\Environment\Device\OutputEnvironments.vb"
+﻿#Region "Microsoft.VisualBasic::28b81af7836528548099ca60c5fa91e8, R#\Runtime\Environment\Device\OutputEnvironments.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 8
-    '    Code Lines: 7 (87.50%)
-    ' Comment Lines: 0 (0.00%)
-    '    - Xml Docs: 0.00%
+    '   Total Lines: 11
+    '    Code Lines: 7 (63.64%)
+    ' Comment Lines: 3 (27.27%)
+    '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 1 (12.50%)
-    '     File Size: 129 B
+    '   Blank Lines: 1 (9.09%)
+    '     File Size: 268 B
 
 
     '     Enum OutputEnvironments

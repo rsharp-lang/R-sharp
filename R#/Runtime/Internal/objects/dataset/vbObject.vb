@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6fd469b76d0303c0e91506c1076c1381, R#\Runtime\Internal\objects\dataset\vbObject.vb"
+﻿#Region "Microsoft.VisualBasic::17dc8e16f6b25a2e3ceebbda7148d495, R#\Runtime\Internal\objects\dataset\vbObject.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 267
-    '    Code Lines: 194 (72.66%)
-    ' Comment Lines: 40 (14.98%)
+    '   Total Lines: 269
+    '    Code Lines: 196 (72.86%)
+    ' Comment Lines: 40 (14.87%)
     '    - Xml Docs: 90.00%
     ' 
-    '   Blank Lines: 33 (12.36%)
-    '     File Size: 11.24 KB
+    '   Blank Lines: 33 (12.27%)
+    '     File Size: 11.27 KB
 
 
     '     Class vbObject

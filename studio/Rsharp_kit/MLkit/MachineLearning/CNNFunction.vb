@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d42b2986657b02856672bcd8ed1bb8ac, studio\Rsharp_kit\MLkit\MachineLearning\CNNFunction.vb"
+﻿#Region "Microsoft.VisualBasic::ba0c53b8c962fbb31c8de1131709201b, studio\Rsharp_kit\MLkit\MachineLearning\CNNFunction.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 111
-    '    Code Lines: 92 (82.88%)
-    ' Comment Lines: 2 (1.80%)
+    '   Total Lines: 120
+    '    Code Lines: 97 (80.83%)
+    ' Comment Lines: 5 (4.17%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 17 (15.32%)
-    '     File Size: 4.45 KB
+    '   Blank Lines: 18 (15.00%)
+    '     File Size: 4.92 KB
 
 
     ' Class CNNFunction

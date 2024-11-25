@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::69dffa75cf99bbb6e1bf56348a769ae0, R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::ef8321d698322d54ded2e6457add4617, R#\Interpreter\RInterpreter.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 714
-    '    Code Lines: 428 (59.94%)
-    ' Comment Lines: 183 (25.63%)
-    '    - Xml Docs: 72.68%
+    '   Total Lines: 725
+    '    Code Lines: 434 (59.86%)
+    ' Comment Lines: 187 (25.79%)
+    '    - Xml Docs: 73.26%
     ' 
-    '   Blank Lines: 103 (14.43%)
-    '     File Size: 29.15 KB
+    '   Blank Lines: 104 (14.34%)
+    '     File Size: 29.59 KB
 
 
     '     Class RInterpreter
@@ -51,7 +51,7 @@
     ' 
     '         Constructor: (+2 Overloads) Sub New
     ' 
-    '         Function: [Imports], [Set], (+3 Overloads) Evaluate, FromEnvironmentConfiguration, getDataStream
+    '         Function: [Imports], [Set], (+4 Overloads) Evaluate, FromEnvironmentConfiguration, getDataStream
     '                   InitializeEnvironment, (+4 Overloads) Invoke, (+2 Overloads) LoadLibrary, options, Parse
     '                   RedirectOutput, Run, RunInternal, SetTaskCancelHook, Source
     ' 

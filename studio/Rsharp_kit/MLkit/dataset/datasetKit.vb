@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3cee44c11511328953912d704bb4898d, studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
+﻿#Region "Microsoft.VisualBasic::59f241442d010e94ff14e1555883b373, studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
 
     ' Author:
     ' 
@@ -34,26 +34,26 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1045
-    '    Code Lines: 731 (69.95%)
-    ' Comment Lines: 194 (18.56%)
-    '    - Xml Docs: 94.33%
+    '   Total Lines: 1093
+    '    Code Lines: 761 (69.62%)
+    ' Comment Lines: 208 (19.03%)
+    '    - Xml Docs: 94.23%
     ' 
-    '   Blank Lines: 120 (11.48%)
-    '     File Size: 43.87 KB
+    '   Blank Lines: 124 (11.34%)
+    '     File Size: 45.73 KB
 
 
     ' Module datasetKit
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: addRow, binEncoder, boolEncoder, CreateMLdataset, dataDescription
-    '               demoMatrix, dimensionRange, EmbeddingRender, Encoding, estimate_alphabets
-    '               factorEncoder, fit_embedding, fitSgt, get_feature, getDataSetDimension
-    '               getMNISTImageSize, getMNISTRawDataset, getNormalizeMatrix, mapEncoder, mapLambda
-    '               project_features, q_factors, readMNISTLabelledVector, readModelDataset, readSampleSet
-    '               sample_id, sampledataDataSet, SampleList, SGT, sort_samples
-    '               sortById, split_training_test, Tabular, TakeSubset, toDataframe
-    '               toFeatureSet, toMatrix, writeMLDataset, writeSampleSet
+    '     Function: addRow, binEncoder, boolEncoder, CreateMLdataset, createSingleSampleData
+    '               dataDescription, demoMatrix, dimensionRange, EmbeddingRender, Encoding
+    '               estimate_alphabets, factorEncoder, fit_embedding, fitSgt, get_feature
+    '               getDataSetDimension, getMNISTImageSize, getMNISTRawDataset, getNormalizeMatrix, mapEncoder
+    '               mapLambda, project_features, q_factors, readMNISTLabelledVector, readModelDataset
+    '               readSampleSet, sample_id, sampledataDataSet, SampleList, SGT
+    '               sort_samples, sortById, split_training_test, Tabular, TakeSubset
+    '               toDataframe, toFeatureSet, toMatrix, writeMLDataset, writeSampleSet
     ' 
     ' /********************************************************************************/
 

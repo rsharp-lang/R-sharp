@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d8b7adadbcddecf0a3ec77c28ba3f88c, Library\graphics\ColorBrewer.vb"
+﻿#Region "Microsoft.VisualBasic::e3aaad1e69b5e48c506f59ed7699ffc3, Library\graphics\ColorBrewer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 226
-    '    Code Lines: 134 (59.29%)
-    ' Comment Lines: 51 (22.57%)
+    '   Total Lines: 231
+    '    Code Lines: 138 (59.74%)
+    ' Comment Lines: 51 (22.08%)
     '    - Xml Docs: 80.39%
     ' 
-    '   Blank Lines: 41 (18.14%)
-    '     File Size: 7.66 KB
+    '   Blank Lines: 42 (18.18%)
+    '     File Size: 7.84 KB
 
 
     ' Module ColorBrewerSystem
@@ -50,9 +50,9 @@
     '               OrRd, Paired, Pastel1, Pastel2, PiYG
     '               PRGn, PuBu, PuBuGn, PuOr, PuRd
     '               Purples, RdBu, RdGy, RdPu, RdYlBu
-    '               RdYlGn, Reds, Set1, Set2, Set3
-    '               Spectral, TrIQ, YlGn, YlGnBu, YlOrBr
-    '               YlOrRd
+    '               RdYlGn, Reds, ScalerPalette, Set1, Set2
+    '               Set3, Spectral, TrIQ, YlGn, YlGnBu
+    '               YlOrBr, YlOrRd
     ' 
     ' /********************************************************************************/
 

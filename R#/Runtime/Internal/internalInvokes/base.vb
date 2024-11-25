@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::91cddace3ce3df55de2249838cf5a2e9, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::3b7d84df4c9552278048369108d5e4a7, R#\Runtime\Internal\internalInvokes\base.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 3538
-    '    Code Lines: 1579 (44.63%)
-    ' Comment Lines: 1659 (46.89%)
-    '    - Xml Docs: 84.09%
+    '   Total Lines: 3555
+    '    Code Lines: 1589 (44.70%)
+    ' Comment Lines: 1664 (46.81%)
+    '    - Xml Docs: 84.13%
     ' 
-    '   Blank Lines: 300 (8.48%)
-    '     File Size: 158.25 KB
+    '   Blank Lines: 302 (8.50%)
+    '     File Size: 158.85 KB
 
 
     '     Module base
@@ -58,9 +58,10 @@
     '                   nrow, numeric, objectAddInvoke, options, options_flush
     '                   print, range, raws, rbind, Rdataframe
     '                   rep, rep_int, rep_len, replace, Rlist
-    '                   Robj_dimension, rownames, seq, sink, sink_number
-    '                   source, sQuote, str, summary, t
-    '                   uniqueNames, unitOfT, ValueAt, warning, year
+    '                   Robj_dimension, rownames, rowwise, seq, sink
+    '                   sink_number, source, sQuote, str, summary
+    '                   t, uniqueNames, unitOfT, ValueAt, warning
+    '                   year
     ' 
     '         Sub: println_message, warnings
     '         Class PrinterOptions

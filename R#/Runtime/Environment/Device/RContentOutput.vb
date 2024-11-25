@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4ef9e298c741dc2c94afea22a34610fe, R#\Runtime\Environment\Device\RContentOutput.vb"
+﻿#Region "Microsoft.VisualBasic::c14fe5376234dbc3d5e252bc980f542b, R#\Runtime\Environment\Device\RContentOutput.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 226
-    '    Code Lines: 156 (69.03%)
-    ' Comment Lines: 33 (14.60%)
+    '   Total Lines: 233
+    '    Code Lines: 161 (69.10%)
+    ' Comment Lines: 33 (14.16%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 37 (16.37%)
-    '     File Size: 7.46 KB
+    '   Blank Lines: 39 (16.74%)
+    '     File Size: 7.66 KB
 
 
     '     Class RContentOutput
@@ -48,8 +48,8 @@
     '         Properties: Encoding, env, isLogOpen, recommendType, stream
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Sub: closeSink, Flush, LoggingDriver, openSink, (+5 Overloads) Write
-    '              (+2 Overloads) WriteLine, WriteStream
+    '         Sub: closeSink, Flush, LoggingDriver, openSink, splitLogging
+    '              (+5 Overloads) Write, (+2 Overloads) WriteLine, WriteStream
     ' 
     ' 
     ' /********************************************************************************/

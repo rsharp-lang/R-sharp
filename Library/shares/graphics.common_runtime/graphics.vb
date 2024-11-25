@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bced97482afb19978ea4fee5a7a2b157, Library\shares\graphics.common_runtime\graphics.vb"
+﻿#Region "Microsoft.VisualBasic::243e2416975a27186fce8f74dfc8002a, Library\shares\graphics.common_runtime\graphics.vb"
 
     ' Author:
     ' 
@@ -117,4 +117,3 @@ Public Module graphics
         Call devlist.Add(curDev)
     End Sub
 End Module
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::acffe15516f5d565f84f9043eb929088, R#\System\Components\Tqdm.vb"
+﻿#Region "Microsoft.VisualBasic::72e9ba89d1c7a9e3653e314b88cfbaea, R#\System\Components\Tqdm.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 56
-    '    Code Lines: 38 (67.86%)
-    ' Comment Lines: 6 (10.71%)
-    '    - Xml Docs: 66.67%
+    '   Total Lines: 66
+    '    Code Lines: 43 (65.15%)
+    ' Comment Lines: 10 (15.15%)
+    '    - Xml Docs: 80.00%
     ' 
-    '   Blank Lines: 12 (21.43%)
-    '     File Size: 1.77 KB
+    '   Blank Lines: 13 (19.70%)
+    '     File Size: 2.13 KB
 
 
     '     Class tqdmList
     ' 
-    '         Function: getKeys, getValue, ToString
+    '         Function: getKeys, getValue, pullData, ToString
     ' 
     ' 
     ' /********************************************************************************/

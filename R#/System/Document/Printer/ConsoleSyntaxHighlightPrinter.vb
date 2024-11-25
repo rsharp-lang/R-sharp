@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d438a083de793307cf98290d6ef681fb, R#\System\Document\Printer\ConsoleSyntaxHighlightPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::fd4b82a36099c0d5b6167c0300a15382, R#\System\Document\Printer\ConsoleSyntaxHighlightPrinter.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 128
-    '    Code Lines: 101 (78.91%)
-    ' Comment Lines: 14 (10.94%)
+    '   Total Lines: 130
+    '    Code Lines: 102 (78.46%)
+    ' Comment Lines: 14 (10.77%)
     '    - Xml Docs: 92.86%
     ' 
-    '   Blank Lines: 13 (10.16%)
-    '     File Size: 6.71 KB
+    '   Blank Lines: 14 (10.77%)
+    '     File Size: 6.76 KB
 
 
     '     Module ConsoleSyntaxHighlightPrinter

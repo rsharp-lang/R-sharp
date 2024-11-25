@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a93543d47cd87904cdc146989c101f17, R#\Interpreter\Program.vb"
+﻿#Region "Microsoft.VisualBasic::6ba80ca6bc98c00bce4c0f81486f19d9, R#\Interpreter\Program.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 147
-    '    Code Lines: 109 (74.15%)
-    ' Comment Lines: 13 (8.84%)
-    '    - Xml Docs: 100.00%
+    '   Total Lines: 165
+    '    Code Lines: 109 (66.06%)
+    ' Comment Lines: 31 (18.79%)
+    '    - Xml Docs: 93.55%
     ' 
-    '   Blank Lines: 25 (17.01%)
-    '     File Size: 5.93 KB
+    '   Blank Lines: 25 (15.15%)
+    '     File Size: 6.53 KB
 
 
     '     Class Program
