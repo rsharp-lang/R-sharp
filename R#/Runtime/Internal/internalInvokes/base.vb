@@ -1123,7 +1123,9 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="x"></param>
         ''' <returns></returns>
         <ExportAPI("rowwise")>
-        Public Function rowwise(x As dataframe, Optional clr_dynamic As Boolean = False, Optional env As Environment = Nothing) As Object
+        Public Function rowwise(x As dataframe,
+                                Optional clr_dynamic As Boolean = False,
+                                Optional env As Environment = Nothing) As Object
             If clr_dynamic Then
                 Return x.rowViews.ToArray
             Else
