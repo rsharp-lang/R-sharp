@@ -338,7 +338,11 @@ Module math
                 Return RInternal.debug.stop("the historgram parameter step and n should not be both nothing!", env)
             End If
 
-            [step] = New DoubleRange(v).Length / n
+            If min Is Nothing AndAlso max Is Nothing Then
+                [step] = New DoubleRange(v).Length / n
+            Else
+                [step] = (max - min) / n
+            End If
         End If
 
         Return v _
