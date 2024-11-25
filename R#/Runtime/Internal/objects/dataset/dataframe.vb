@@ -277,12 +277,12 @@ Namespace Runtime.Internal.Object
         ''' debug view of this dataframe object in rows, debug used only.
         ''' </summary>
         ''' <returns></returns>
-        Public ReadOnly Iterator Property rowViews As IEnumerable(Of JavaScriptObject)
+        Public ReadOnly Iterator Property rowViews As IEnumerable(Of Object)
             Get
                 Dim colnames As String() = Me.colnames
 
                 For Each row As NamedCollection(Of Object) In forEachRow(colnames)
-                    Yield New JavaScriptObject(colnames, row.value)
+                    Yield JavaScriptObject.CreateDynamicObject(colnames, row.value)
                 Next
             End Get
         End Property
