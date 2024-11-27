@@ -90,7 +90,7 @@ Namespace Runtime
 
         Public Overrides Function FindFunction(name As String, Optional [inherits] As Boolean = True) As Symbol
             ' found on local environment at first
-            Dim symbol As Symbol = funcSymbols.TryGetValue(name)
+            Dim symbol As Symbol = funcSymbols.FindSymbol(name)
 
             ' then found function in the closure environment
             If symbol Is Nothing Then
@@ -116,7 +116,7 @@ Namespace Runtime
         ''' </returns>
         Public Overrides Function FindSymbol(name As String, Optional [inherits] As Boolean = True) As Symbol
             ' found on local environment at first
-            Dim symbol As Symbol = Me.symbols.TryGetValue(name)
+            Dim symbol As Symbol = Me.symbols.FindSymbol(name)
 
             ' then found symbol in the closure environment
             If symbol Is Nothing Then

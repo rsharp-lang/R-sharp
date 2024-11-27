@@ -66,6 +66,11 @@ Friend Class RunScript
         Me.script = script
     End Sub
 
+    ''' <summary>
+    ''' do run script expression and await the evaluation finish
+    ''' </summary>
+    ''' <param name="ct"></param>
+    ''' <returns></returns>
     Public Async Function doRunScript(ct As CancellationToken) As Task(Of Integer)
         Dim error$ = Nothing
         Dim program As RProgram = RProgram.BuildProgram(script, [error]:=[error])

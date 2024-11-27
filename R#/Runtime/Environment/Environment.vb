@@ -119,13 +119,13 @@ Namespace Runtime
             End Get
         End Property
 
-        Protected ReadOnly symbols As Dictionary(Of Symbol)
+        Protected ReadOnly symbols As SymbolSet
 
         ''' <summary>
         ''' 导入的函数列表
         ''' </summary>
         ''' <returns></returns>
-        Public ReadOnly Property funcSymbols As Dictionary(Of Symbol)
+        Public ReadOnly Property funcSymbols As SymbolSet
             Get
                 Return hiddenFunctions
             End Get
@@ -170,7 +170,7 @@ Namespace Runtime
         ''' So this parent field should not be readonly
         ''' </summary>
         Protected [global] As GlobalEnvironment
-        Protected hiddenFunctions As Dictionary(Of Symbol)
+        Protected hiddenFunctions As SymbolSet
 
         ''' <summary>
         ''' It is the top level global environment?
@@ -246,8 +246,8 @@ Namespace Runtime
         ''' 2. <see cref="hiddenFunctions"/>
         ''' </summary>
         Sub New()
-            symbols = New Dictionary(Of Symbol)
-            hiddenFunctions = New Dictionary(Of Symbol)
+            symbols = New SymbolSet
+            hiddenFunctions = New SymbolSet
             parent = Nothing
             [global] = Nothing
             stackFrame = globalStackFrame
@@ -271,8 +271,8 @@ Namespace Runtime
 
             Call Me.New(parent, stackName)
 
-            Me.symbols = symbols.ToDictionary
-            Me.hiddenFunctions = funcs.ToDictionary
+            Me.symbols = New SymbolSet(symbols)
+            Me.hiddenFunctions = New SymbolSet(funcs)
         End Sub
 
         ''' <param name="isInherits">
@@ -355,7 +355,7 @@ Namespace Runtime
         ''' 
         <DebuggerStepThrough>
         Public Function GetSymbolsNames() As IEnumerable(Of String)
-            Return symbols.Keys
+            Return symbols.SymbolNames
         End Function
 
         ''' <summary>
@@ -473,9 +473,9 @@ Namespace Runtime
             '    Return globalEnvironment.FindSymbol(name.GetStackValue("[", "]"))
             'End If
 
-            If symbols.ContainsKey(name) Then
+            If symbols.CheckSymbolExists(name) Then
                 Return symbols(name)
-            ElseIf funcSymbols.ContainsKey(name) Then
+            ElseIf funcSymbols.CheckSymbolExists(name) Then
                 Return funcSymbols(name)
             ElseIf [inherits] AndAlso Not parent Is Nothing Then
                 Return parent.FindSymbol(name)
@@ -520,11 +520,18 @@ Namespace Runtime
                 Return FindFunctionWithNamespaceRestrict(name)
             End If
 
-            If symbols.ContainsKey(name) AndAlso symbols(name).isCallable Then
+            ' 20241127
+            ' current symbols list is always overrides the
+            ' hidden function symbols
+            ' if the given symbol is existsed inside the symbol 
+            ' pool andalso the symbol could be evaluated as function
+            ' then we populate the symbol before check of the hidden
+            ' functions
+            If symbols.CheckSymbolExists(name) AndAlso symbols(name).isCallable Then
                 Return symbols(name)
             End If
 
-            If funcSymbols.ContainsKey(name) Then
+            If funcSymbols.CheckSymbolExists(name) Then
                 Return funcSymbols(name)
             End If
 
@@ -554,8 +561,8 @@ Namespace Runtime
                 Return
             End If
 
-            If symbols.ContainsKey(name) Then
-                Call symbols.Remove(name)
+            If symbols.CheckSymbolExists(name) Then
+                Call symbols.Delete(name)
             ElseIf seekParent AndAlso Not parent Is Nothing Then
                 Call parent.Delete(name)
             End If
@@ -581,7 +588,7 @@ Namespace Runtime
         ''' </param>
         ''' <returns></returns>
         Public Function AssignSymbol(name As String, value As Object, Optional [strict] As Boolean = False) As Object
-            If symbols.ContainsKey(name) Then
+            If symbols.CheckSymbolExists(name) Then
                 Return symbols(name).setValue(value, Me)
             ElseIf strict Then
                 Return Message.SymbolNotFound(Me, name, TypeCodes.generic)
@@ -604,7 +611,7 @@ Namespace Runtime
                              Optional mode As TypeCodes = TypeCodes.generic,
                              Optional [overrides] As Boolean = False) As Object
 
-            If symbols.ContainsKey(name) Then
+            If symbols.CheckSymbolExists(name) Then
                 ' 变量可以被重复申明
                 ' 即允许
                 ' let x = 1
@@ -715,11 +722,9 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public Function EnumerateAllFunctions(Optional enumerateParents As Boolean = True) As IEnumerable(Of Symbol)
-            Dim list = funcSymbols.SafeQuery _
-                .Select(Function(fun) fun.Value) _
-                .ToList
+            Dim list As New List(Of Symbol)(funcSymbols.SafeQuery)
 
-            For Each symbol As Symbol In symbols.Values
+            For Each symbol As Symbol In symbols
                 If TypeOf symbol.value Is RMethodInfo OrElse
                     TypeOf symbol.value Is DeclareNewFunction OrElse
                     TypeOf symbol.value Is DeclareLambdaFunction Then
@@ -742,9 +747,7 @@ Namespace Runtime
         ''' not includes the function symbols
         ''' </returns>
         Public Function EnumerateAllSymbols(Optional enumerateParents As Boolean = True) As IEnumerable(Of Symbol)
-            Dim list = symbols.SafeQuery _
-                .Select(Function(fun) fun.Value) _
-                .ToList
+            Dim list As New List(Of Symbol)(symbols.SafeQuery)
 
             If enumerateParents AndAlso Not parent Is Nothing Then
                 list.AddRange(parent.EnumerateAllSymbols)
@@ -758,7 +761,7 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public Iterator Function GetEnumerator() As IEnumerator(Of Symbol) Implements IEnumerable(Of Symbol).GetEnumerator
-            For Each var As Symbol In symbols.Values
+            For Each var As Symbol In symbols
                 Yield var
             Next
         End Function
@@ -832,25 +835,21 @@ Namespace Runtime
             '
             SyncLock parent
                 SyncLock parent.funcSymbols
-                    For Each symbol In parent.funcSymbols
-                        Call funcs.Add(symbol)
-                    Next
+                    Call funcs.AddRange(parent.funcSymbols.EnumerateKeyTuples)
                 End SyncLock
                 SyncLock parent.symbols
-                    For Each symbol In parent.symbols
-                        Call symbols.Add(symbol)
-                    Next
+                    Call symbols.AddRange(parent.symbols.EnumerateKeyTuples)
                 End SyncLock
             End SyncLock
 
             For Each func As KeyValuePair(Of String, Symbol) In funcs
-                If Not join.funcSymbols.ContainsKey(func.Key) Then
-                    join.funcSymbols.Add(func.Key, func.Value)
+                If Not join.funcSymbols.CheckSymbolExists(func.Key) Then
+                    Call join.funcSymbols.Add(func.Key, func.Value)
                 End If
             Next
             For Each symbol As KeyValuePair(Of String, Symbol) In symbols
-                If Not join.symbols.ContainsKey(symbol.Key) Then
-                    join.symbols.Add(symbol.Key, symbol.Value)
+                If Not join.symbols.CheckSymbolExists(symbol.Key) Then
+                    Call join.symbols.Add(symbol.Key, symbol.Value)
                 End If
             Next
         End Sub

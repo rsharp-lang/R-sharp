@@ -108,6 +108,11 @@ Namespace Runtime.Components
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property constraint As TypeCodes
+
+        ''' <summary>
+        ''' current symbol value is constant lock binding in the environment?
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property [readonly] As Boolean
 
         ''' <summary>

@@ -194,7 +194,7 @@ Namespace Runtime
                 Return funcOverloads(symbolName)([namespace])
             Else
                 Dim ns As PackageEnvironment = attachedNamespace([namespace])
-                Dim func As Symbol = ns.funcSymbols.TryGetValue(symbolName)
+                Dim func As Symbol = ns.funcSymbols.FindSymbol(symbolName)
 
                 If func IsNot Nothing AndAlso func.value.GetType.ImplementInterface(Of INamespaceReferenceSymbol) Then
                     If DirectCast(func.value, INamespaceReferenceSymbol).namespace = [namespace] Then

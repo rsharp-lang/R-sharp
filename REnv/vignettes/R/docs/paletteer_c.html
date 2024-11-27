@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Load the internal cancer classify demo dataset http://www.sph.emory.edu/~dkleinb/datasets/cancer.dat</title>
+    <title>Get continuous palette by package and name Available package/palette combinations are available in the data.frame \code{\link[paletteer]{palettes_c_names}}.</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <link rel="stylesheet" type="text/css" href="../../_assets/page.css">
@@ -13,12 +13,12 @@
 
         <table style="width: 100%;">
             <tr>
-                <td>classify_cancer {REnv}</td>
+                <td>paletteer_c {REnv}</td>
                 <td style="text-align: right;">R Documentation</td>
             </tr>
         </table>
 
-        <h2>Load the internal cancer classify demo dataset http://www.sph.emory.edu/~dkleinb/datasets/cancer.dat</h2>
+        <h2>Get continuous palette by package and name Available package/palette combinations are available in the data.frame \code{\link[paletteer]{palettes_c_names}}.</h2>
 
         <h3>Description</h3>
 
@@ -27,13 +27,25 @@
         <h3>Usage</h3>
 
         <div style="width: 100%; padding-left: 3%; color: black;">
-            <pre><code class='language-R' style="color: black; font-weight:normal;"><strong>classify_cancer</strong>();</code></pre>
+            <pre><code class='language-R' style="color: black; font-weight:normal;"><strong>paletteer_c</strong>(<i>palette</i>, <i>n</i>,
+    <i>direction</i> = <span style='color: green;'>1</span>);</code></pre>
         </div>
 
         <h3>Arguments</h3>
 
         <table>
             
+<dt>palette</dt>
+<dd><p><p>Name of palette as a string. Must be on the form packagename::palettename.</p></p></dd>
+
+
+<dt>n</dt>
+<dd><p><p>Number of colors desired. Must be supplied.</p></p></dd>
+
+
+<dt>direction</dt>
+<dd><p><p>Either `1` or `-1`. If `-1` the palette will be reversed.</p></p></dd>
+
         </table>
 
 
@@ -47,7 +59,7 @@
 
         <h3>Value</h3>
 
-        This function has no value returns.
+        <p>A vector of colors.</p>
 
         <h3 style="display: none;">Examples</h3>
 
