@@ -6,10 +6,14 @@ Namespace Runtime
     ''' <summary>
     ''' A set of the R# runtime symbols
     ''' </summary>
-    Public Class SymbolSet : Implements IEnumerable(Of Symbol)
+    Public Class SymbolSet : Implements IEnumerable(Of Symbol), IEnumerable(Of KeyValuePair(Of String, Symbol))
 
         ReadOnly symbols As Dictionary(Of String, Symbol)
 
+        ''' <summary>
+        ''' get all variable symbol names inside current symbol list
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property SymbolNames As String()
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
@@ -110,6 +114,12 @@ Namespace Runtime
 
         Private Iterator Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
             Yield GetEnumerator()
+        End Function
+
+        Private Iterator Function IEnumerable_GetEnumerator1() As IEnumerator(Of KeyValuePair(Of String, Symbol)) Implements IEnumerable(Of KeyValuePair(Of String, Symbol)).GetEnumerator
+            For Each tuple As KeyValuePair(Of String, Symbol) In symbols
+                Yield tuple
+            Next
         End Function
     End Class
 End Namespace

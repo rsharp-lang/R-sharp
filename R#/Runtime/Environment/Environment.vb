@@ -355,7 +355,7 @@ Namespace Runtime
         ''' 
         <DebuggerStepThrough>
         Public Function GetSymbolsNames() As IEnumerable(Of String)
-            Return symbols.Keys
+            Return symbols.SymbolNames
         End Function
 
         ''' <summary>
@@ -839,12 +839,12 @@ Namespace Runtime
             '
             SyncLock parent
                 SyncLock parent.funcSymbols
-                    For Each symbol In parent.funcSymbols
+                    For Each symbol As KeyValuePair(Of String, Symbol) In parent.funcSymbols
                         Call funcs.Add(symbol)
                     Next
                 End SyncLock
                 SyncLock parent.symbols
-                    For Each symbol In parent.symbols
+                    For Each symbol As KeyValuePair(Of String, Symbol) In parent.symbols
                         Call symbols.Add(symbol)
                     Next
                 End SyncLock
