@@ -75,14 +75,16 @@ Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Serialize
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
 Imports bitmapBuffer = SMRUCC.Rsharp.Runtime.Serialize.bitmapBuffer
 Imports Image = Microsoft.VisualBasic.Imaging.Image
-Imports REnv = SMRUCC.Rsharp.Runtime.Internal
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 
 ''' <summary>
@@ -314,7 +316,7 @@ Public Module grDevices
                               Optional env As Environment = Nothing) As Object
 
         If graphics Is Nothing Then
-            Return REnv.debug.stop("Graphics data is NULL!", env)
+            Return RInternal.debug.stop("Graphics data is NULL!", env)
         ElseIf graphics.GetType Is GetType(Image) Then
             Return saveBitmap(Of Image)(graphics, file, env)
         ElseIf graphics.GetType Is GetType(Bitmap) Then
@@ -347,7 +349,7 @@ Public Module grDevices
                 End If
             End With
         Else
-            Return REnv.debug.stop(New InvalidProgramException($"'{graphics.GetType.Name}' is not a graphics data object!"), env)
+            Return RInternal.debug.stop(New InvalidProgramException($"'{graphics.GetType.Name}' is not a graphics data object!"), env)
         End If
 
         Return Nothing
@@ -425,7 +427,7 @@ Public Module grDevices
                 ' only works for jpeg
                 Dim jpeg As Image = DirectCast(image, ImageData).Image
             Case Else
-                Return REnv.debug.stop(New NotImplementedException, env)
+                Return RInternal.debug.stop(New NotImplementedException, env)
         End Select
 
         Return image
@@ -555,17 +557,45 @@ break:
     ''' register a custom color palette to the graphics system
     ''' </summary>
     ''' <param name="name"></param>
-    ''' <param name="colors"></param>
+    ''' <param name="palette">A set of the colors or a function for produce 
+    ''' the color palette from a given name.</param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("register.color_palette")>
-    Public Function registerCustomPalette(name As String, <RRawVectorArgument> colors As Object, Optional env As Environment = Nothing) As Object
-        Dim colorSet As Color() = RColorPalette _
-            .getColors(colors, -1, [default]:=Nothing) _
-            .Select(Function(c) c.TranslateColor) _
-            .ToArray
+    Public Function registerCustomPalette(Optional name As String = Nothing,
+                                          <RRawVectorArgument>
+                                          Optional palette As Object = Nothing,
+                                          Optional env As Environment = Nothing) As Object
+        If palette Is Nothing Then
+            Return RInternal.debug.stop("the palette object should not be nothing!", env)
+        End If
 
-        Call Designer.Register(name, colorSet)
+        If palette.GetType.ImplementInterface(Of RFunction) Then
+            Dim eval As RFunction = palette
+            Dim external As Designer.TryGetExternalColorPalette =
+                Function(term) As Color()
+                    Dim result = eval.Invoke({term}, env)
+
+                    If TypeOf result Is Message Then
+                        Call DirectCast(result, Message).message.JoinBy("; ").Warning
+                        Return Nothing
+                    Else
+                        Dim chars As String() = CLRVector.asCharacter(result)
+                        Dim rgb As Color() = chars.Select(Function(c) c.TranslateColor).ToArray
+
+                        Return rgb
+                    End If
+                End Function
+
+            Call Designer.Register(external)
+        Else
+            Dim colorSet As Color() = RColorPalette _
+                .getColors(palette, -1, [default]:=Nothing) _
+                .Select(Function(c) c.TranslateColor) _
+                .ToArray
+
+            Call Designer.Register(name, colorSet)
+        End If
 
         Return Nothing
     End Function
@@ -650,7 +680,7 @@ break:
                 list = Designer.GetColors(CStr(term))
             End If
         Else
-            Return REnv.debug.stop(New InvalidProgramException(term.GetType.FullName), env)
+            Return RInternal.debug.stop(New InvalidProgramException(term.GetType.FullName), env)
         End If
 
         If character Then
