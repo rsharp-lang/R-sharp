@@ -6,7 +6,7 @@ Namespace Runtime
     ''' <summary>
     ''' A set of the R# runtime symbols
     ''' </summary>
-    Public Class SymbolSet : Implements IEnumerable(Of Symbol), IEnumerable(Of KeyValuePair(Of String, Symbol))
+    Public Class SymbolSet : Implements IEnumerable(Of Symbol)
 
         ReadOnly symbols As Dictionary(Of String, Symbol)
 
@@ -49,6 +49,11 @@ Namespace Runtime
 
         Sub New()
         End Sub
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function EnumerateKeyTuples() As IEnumerable(Of KeyValuePair(Of String, Symbol))
+            Return symbols.AsEnumerable
+        End Function
 
         ''' <summary>
         ''' Check of the given symbol name is existsed inside current symbols collection
@@ -122,13 +127,6 @@ Namespace Runtime
 
         Private Iterator Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
             Yield GetEnumerator()
-            Yield IEnumerable_GetEnumerator1()
-        End Function
-
-        Private Iterator Function IEnumerable_GetEnumerator1() As IEnumerator(Of KeyValuePair(Of String, Symbol)) Implements IEnumerable(Of KeyValuePair(Of String, Symbol)).GetEnumerator
-            For Each tuple As KeyValuePair(Of String, Symbol) In symbols
-                Yield tuple
-            Next
         End Function
     End Class
 End Namespace

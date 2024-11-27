@@ -722,9 +722,7 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public Function EnumerateAllFunctions(Optional enumerateParents As Boolean = True) As IEnumerable(Of Symbol)
-            Dim list = funcSymbols.SafeQuery _
-                .Select(Function(fun) fun.Value) _
-                .ToList
+            Dim list As New List(Of Symbol)(funcSymbols.SafeQuery)
 
             For Each symbol As Symbol In symbols
                 If TypeOf symbol.value Is RMethodInfo OrElse
@@ -749,9 +747,7 @@ Namespace Runtime
         ''' not includes the function symbols
         ''' </returns>
         Public Function EnumerateAllSymbols(Optional enumerateParents As Boolean = True) As IEnumerable(Of Symbol)
-            Dim list = symbols.SafeQuery _
-                .Select(Function(fun) fun.Value) _
-                .ToList
+            Dim list As New List(Of Symbol)(symbols.SafeQuery)
 
             If enumerateParents AndAlso Not parent Is Nothing Then
                 list.AddRange(parent.EnumerateAllSymbols)
@@ -839,25 +835,21 @@ Namespace Runtime
             '
             SyncLock parent
                 SyncLock parent.funcSymbols
-                    For Each symbol As KeyValuePair(Of String, Symbol) In parent.funcSymbols
-                        Call funcs.Add(symbol)
-                    Next
+                    Call funcs.AddRange(parent.funcSymbols.EnumerateKeyTuples)
                 End SyncLock
                 SyncLock parent.symbols
-                    For Each symbol As KeyValuePair(Of String, Symbol) In parent.symbols
-                        Call symbols.Add(symbol)
-                    Next
+                    Call symbols.AddRange(parent.symbols.EnumerateKeyTuples)
                 End SyncLock
             End SyncLock
 
             For Each func As KeyValuePair(Of String, Symbol) In funcs
                 If Not join.funcSymbols.CheckSymbolExists(func.Key) Then
-                    join.funcSymbols.Add(func.Key, func.Value)
+                    Call join.funcSymbols.Add(func.Key, func.Value)
                 End If
             Next
             For Each symbol As KeyValuePair(Of String, Symbol) In symbols
                 If Not join.symbols.CheckSymbolExists(symbol.Key) Then
-                    join.symbols.Add(symbol.Key, symbol.Value)
+                    Call join.symbols.Add(symbol.Key, symbol.Value)
                 End If
             Next
         End Sub

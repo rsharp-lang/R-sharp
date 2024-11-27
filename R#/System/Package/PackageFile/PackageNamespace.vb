@@ -243,11 +243,12 @@ Namespace Development.Package.File
         End Function
 
         Public Iterator Function EnumerateSymbols() As IEnumerable(Of NamedValue(Of String))
-            For Each item In symbols.SafeQuery
+            For Each item As KeyValuePair(Of String, String) In symbols.SafeQuery
                 Yield New NamedValue(Of String)(item)
             Next
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function ToString() As String
             Return meta.ToString
         End Function
