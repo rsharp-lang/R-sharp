@@ -119,13 +119,13 @@ Namespace Runtime
             End Get
         End Property
 
-        Protected ReadOnly symbols As Dictionary(Of Symbol)
+        Protected ReadOnly symbols As SymbolSet
 
         ''' <summary>
         ''' 导入的函数列表
         ''' </summary>
         ''' <returns></returns>
-        Public ReadOnly Property funcSymbols As Dictionary(Of Symbol)
+        Public ReadOnly Property funcSymbols As SymbolSet
             Get
                 Return hiddenFunctions
             End Get
@@ -170,7 +170,7 @@ Namespace Runtime
         ''' So this parent field should not be readonly
         ''' </summary>
         Protected [global] As GlobalEnvironment
-        Protected hiddenFunctions As Dictionary(Of Symbol)
+        Protected hiddenFunctions As SymbolSet
 
         ''' <summary>
         ''' It is the top level global environment?
@@ -246,8 +246,8 @@ Namespace Runtime
         ''' 2. <see cref="hiddenFunctions"/>
         ''' </summary>
         Sub New()
-            symbols = New Dictionary(Of Symbol)
-            hiddenFunctions = New Dictionary(Of Symbol)
+            symbols = New SymbolSet
+            hiddenFunctions = New SymbolSet
             parent = Nothing
             [global] = Nothing
             stackFrame = globalStackFrame

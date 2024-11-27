@@ -103,8 +103,11 @@ Namespace Interpreter
         Dim cts As CancellationTokenSource
 
         ''' <summary>
-        ''' Global runtime environment.(全局环境)
+        ''' Global runtime environment.
         ''' </summary>
+        ''' <remarks>
+        ''' (全局环境)
+        ''' </remarks>
         Public ReadOnly Property globalEnvir As GlobalEnvironment
         Public ReadOnly Property warnings As New List(Of Message)
 
@@ -167,7 +170,7 @@ Namespace Interpreter
         ''' <returns></returns>
         Public ReadOnly Property globalSymbols As Symbol()
             Get
-                Return globalEnvir.ToArray
+                Return (From s As Symbol In globalEnvir Order By s.name).ToArray
             End Get
         End Property
 
