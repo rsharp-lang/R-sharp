@@ -210,6 +210,13 @@ Module Program
             R.debug = True
         End If
 
+        ' 20241127
+        ' the base package should be loaded at first, before we attach other packages
+        ' due to the reason of some function from the base packages may be called from
+        ' the .onLoad function in the zzz.R when on the package startup
+        Call LoadLibrary(R, ignoreMissingStartupPackages, "base", "utils", "grDevices", "math")
+        Call Console.WriteLine()
+
         If Not attach.StringEmpty Then
             ' loading package list
             ' --attach GCModeller,mzkit,REnv
@@ -236,9 +243,6 @@ Module Program
             Call Console.WriteLine(args.ToString)
             Call Console.WriteLine()
         End If
-
-        Call LoadLibrary(R, ignoreMissingStartupPackages, "base", "utils", "grDevices", "math")
-        Call Console.WriteLine()
 
         'For Each arg As NamedValue(Of String) In args.ToArgumentVector
         '    Call R.Add(CommandLine.TrimNamePrefix(arg.Name), arg.Value, TypeCodes.generic)
