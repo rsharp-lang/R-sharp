@@ -1,0 +1,27 @@
+﻿.TH PALETTEER_C 1 2024-Nov "" "Get continuous palette by package and name Available package/palette combinations are available in the data.frame \code{\link[paletteer]{palettes_c_names}}."
+.SH NAME
+paletteer_c \- paletteer_c(palette, n,
+    <i>direction</i> = <span style='color: green;'>1</span>)
+.SH SYNOPSIS
+\fIpaletteer_c(palette, n,
+    <i>direction</i> = <span style='color: green;'>1</span>)\fR
+.SH OPTIONS
+.PP
+\fBpalette\fB \fR\- . Name of palette as a string. Must be on the form packagename::palettename.
+.PP
+.PP
+\fBn\fB \fR\- . Number of colors desired. Must be supplied.
+.PP
+.PP
+\fBdirection\fB \fR\- 1. Either `1` or `-1`. If `-1` the palette will be reversed.
+.PP
+.SH VALUE
+.PP
+A vector of colors.
+.PP
+.SH FILES
+.PP
+SMRUCC/R#.declare_function.paletteer_c at paletteer.R:line 14
+.PP
+.SH COPYRIGHT
+Copyright © xieguigang <xie.guigang@gcmodeller.org>, MIT Licensed 2024
