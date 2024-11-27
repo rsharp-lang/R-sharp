@@ -4,7 +4,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Namespace Runtime
 
     ''' <summary>
-    ''' A set of the R# runtime symbols
+    ''' A pool set of the R# runtime symbols
     ''' </summary>
     Public Class SymbolSet : Implements IEnumerable(Of Symbol)
 
