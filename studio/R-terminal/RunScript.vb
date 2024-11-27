@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dd72119a0ca7f2ffdc013b841a3c72bb, studio\R-terminal\RunScript.vb"
+﻿#Region "Microsoft.VisualBasic::42e1dc8af8748aaa16fce9a242525502, studio\R-terminal\RunScript.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 35
-    '    Code Lines: 27 (77.14%)
-    ' Comment Lines: 0 (0.00%)
-    '    - Xml Docs: 0.00%
+    '   Total Lines: 40
+    '    Code Lines: 27 (67.50%)
+    ' Comment Lines: 5 (12.50%)
+    '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 8 (22.86%)
-    '     File Size: 1.03 KB
+    '   Blank Lines: 8 (20.00%)
+    '     File Size: 1.20 KB
 
 
     ' Class RunScript

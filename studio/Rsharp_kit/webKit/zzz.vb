@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4a7eee0655562fd0305d1ea1a1b3880a, studio\Rsharp_kit\webKit\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::5bddac71028a614c02accc665ea3c510, studio\Rsharp_kit\webKit\zzz.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 6 (40.00%)
-    '     File Size: 214 B
+    '     File Size: 212 B
 
 
     ' Class zzz
@@ -67,4 +67,3 @@ Public Class zzz
     End Sub
 
 End Class
-

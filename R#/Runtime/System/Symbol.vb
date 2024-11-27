@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::08c078a2ea56918740a3fe868dc04225, R#\Runtime\System\Symbol.vb"
+﻿#Region "Microsoft.VisualBasic::7cb422513ddab5946f18ea9bf66b585b, R#\Runtime\System\Symbol.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 270
-    '    Code Lines: 170 (62.96%)
-    ' Comment Lines: 65 (24.07%)
-    '    - Xml Docs: 92.31%
+    '   Total Lines: 275
+    '    Code Lines: 170 (61.82%)
+    ' Comment Lines: 69 (25.09%)
+    '    - Xml Docs: 92.75%
     ' 
-    '   Blank Lines: 35 (12.96%)
-    '     File Size: 9.68 KB
+    '   Blank Lines: 36 (13.09%)
+    '     File Size: 9.84 KB
 
 
     '     Class Symbol

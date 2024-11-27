@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::466510a2bf37ab52eafae7e42cdb38d3, R#\Runtime\Environment\SymbolNamespaceSolver.vb"
+﻿#Region "Microsoft.VisualBasic::8d39d0aea837cff0042a9f9529bc28ea, R#\Runtime\Environment\SymbolNamespaceSolver.vb"
 
     ' Author:
     ' 
