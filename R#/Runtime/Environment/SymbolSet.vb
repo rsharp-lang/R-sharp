@@ -48,6 +48,7 @@ Namespace Runtime
         End Sub
 
         Sub New()
+            Me.symbols = New Dictionary(Of String, Symbol)
         End Sub
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
