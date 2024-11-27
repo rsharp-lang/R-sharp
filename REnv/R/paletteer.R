@@ -12,6 +12,22 @@
 #' paletteer_c("scico::berlin", 100)
 #' @export
 const paletteer_c = function(palette, n, direction = 1) {
+  if (direction < 0) {
+    # make reverse
+    rev(
+      grDevices::colors(
+          paletteer_colors(palette), n, 
+          character = TRUE)
+    );
+  } else {
+    grDevices::colors(
+      paletteer_colors(palette), n, 
+      character = TRUE
+    );
+  }
+}
+
+const paletteer_colors = function(palette) {
   let palette_internal = ".paletteer$in-memory";
 
   if (!exists(palette_internal, globalenv())) {
@@ -43,14 +59,7 @@ const paletteer_c = function(palette, n, direction = 1) {
        'Palette not found. Make sure both package and palette name are spelled correct in the format "package::palette".',
        `palette name is unavailable: ${c_name}`
     ]);
-  }  
-
-  if (direction < 0) {
-    # make reverse
-    rev(
-      grDevices::colors(palette[[c_name]], n, character = TRUE)
-    );
   } else {
-    grDevices::colors(palette[[c_name]], n, character = TRUE);
-  }
+    palette[[c_name]];
+  }  
 }
