@@ -7,4 +7,4 @@ SET REnv="%R_HOME%/R#.exe"
 %Rscript% --build /save ./REnv.zip
 %REnv% --install.packages /module ./REnv.zip
 
-pause
+REM pause
