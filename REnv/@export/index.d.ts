@@ -60,6 +60,9 @@ declare namespace REnv {
    function paletteer_c(palette: any, n: any, direction?: any): object;
    /**
    */
+   function paletteer_colors(palette: any): object;
+   /**
+   */
    function platformName(): object;
    /**
      * @param stat default value Is ``Call "list"("totalLines" <- [],
