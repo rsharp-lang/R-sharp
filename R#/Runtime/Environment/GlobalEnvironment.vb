@@ -203,7 +203,7 @@ Namespace Runtime
             Me.stdout = New RContentOutput(App.StdOut.DefaultValue, env:=OutputEnvironments.Console)
             Me.log4vb_redirect = globalEnv.log4vb_redirect
             Me.symbolLanguages = New SymbolLanguageProcessor(Me)
-            Me.hiddenFunctions = New SymbolSet(globalEnv.funcSymbols.Values)
+            Me.hiddenFunctions = New SymbolSet(globalEnv.funcSymbols)
             Me.attachedNamespace = globalEnv.attachedNamespace
 
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))

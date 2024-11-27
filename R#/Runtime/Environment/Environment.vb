@@ -726,7 +726,7 @@ Namespace Runtime
                 .Select(Function(fun) fun.Value) _
                 .ToList
 
-            For Each symbol As Symbol In symbols.Values
+            For Each symbol As Symbol In symbols
                 If TypeOf symbol.value Is RMethodInfo OrElse
                     TypeOf symbol.value Is DeclareNewFunction OrElse
                     TypeOf symbol.value Is DeclareLambdaFunction Then
@@ -765,7 +765,7 @@ Namespace Runtime
         ''' </summary>
         ''' <returns></returns>
         Public Iterator Function GetEnumerator() As IEnumerator(Of Symbol) Implements IEnumerable(Of Symbol).GetEnumerator
-            For Each var As Symbol In symbols.Values
+            For Each var As Symbol In symbols
                 Yield var
             Next
         End Function

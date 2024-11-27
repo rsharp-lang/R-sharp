@@ -39,6 +39,14 @@ Namespace Runtime
             Me.symbols = symbols.ToDictionary(Function(s) s.name)
         End Sub
 
+        ''' <summary>
+        ''' make symbol list copy
+        ''' </summary>
+        ''' <param name="copy"></param>
+        Sub New(copy As SymbolSet)
+            Me.symbols = New Dictionary(Of String, Symbol)(copy.symbols)
+        End Sub
+
         Sub New()
         End Sub
 
@@ -114,6 +122,7 @@ Namespace Runtime
 
         Private Iterator Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
             Yield GetEnumerator()
+            Yield IEnumerable_GetEnumerator1()
         End Function
 
         Private Iterator Function IEnumerable_GetEnumerator1() As IEnumerator(Of KeyValuePair(Of String, Symbol)) Implements IEnumerable(Of KeyValuePair(Of String, Symbol)).GetEnumerator
