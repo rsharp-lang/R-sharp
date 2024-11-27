@@ -459,7 +459,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim symbol As Symbol = envir.funcSymbols.TryGetValue(funcName)
+            Dim symbol As Symbol = envir.funcSymbols.FindSymbol(funcName)
 
             If symbol Is Nothing Then
                 envir.funcSymbols(funcName) = New Symbol(Me, TypeCodes.closure, is_readonly:=False) With {

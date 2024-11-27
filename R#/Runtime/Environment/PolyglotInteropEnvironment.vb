@@ -110,7 +110,7 @@ Namespace Runtime
         End Sub
 
         Private Function TryGetInteropSymbol(s0 As String) As list
-            If Not symbols.ContainsKey(s0) Then
+            If Not symbols.CheckSymbolExists(s0) Then
                 Dim empty_list As New list With {.slots = New Dictionary(Of String, Object)}
                 Dim interop_symbol As New Symbol(s0, empty_list, TypeCodes.list, [readonly]:=True)
 
