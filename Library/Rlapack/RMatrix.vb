@@ -254,6 +254,7 @@ Module RMatrix
                                Optional max_iterations As Integer = 1000,
                                Optional tolerance As Double = 0.001,
                                Optional epsilon As Double = 1.0E-20,
+                               Optional clr_obj As Boolean = False,
                                Optional env As Environment = Nothing) As Object
 
         Dim m = matrix_extractor(x, env)
@@ -266,6 +267,11 @@ Module RMatrix
         End If
 
         Dim nmf_result As NMF = NMF.Factorisation(data, rank, max_iterations, tolerance, epsilon)
+
+        If clr_obj Then
+            Return nmf_result
+        End If
+
         Dim result As New list(
             slot("W") = nmf_result.W,
             slot("H") = nmf_result.H,
