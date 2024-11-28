@@ -275,6 +275,27 @@ Module RMatrix
         Return result
     End Function
 
+    <ExportAPI("nmf_decompose")>
+    Public Function nmf_decompose(<RRawVectorArgument> x As Object, nmf As NMF, Optional env As Environment = Nothing) As Object
+        Dim m = matrix_extractor(x, env)
+        Dim data As NumericMatrix
+
+        If m Like GetType(Message) Then
+            Return m.TryCast(Of Message)
+        Else
+            data = m.TryCast(Of NumericMatrix)
+        End If
+
+        Dim decompose As list = list.empty
+        Dim i As i32 = 1
+
+        For Each xi As NumericMatrix In nmf.Decompose(data)
+            Call decompose.add($"x{++i}", xi)
+        Next
+
+        Return decompose
+    End Function
+
     ''' <summary>
     ''' as.matrix attempts to turn its argument into a matrix.
     ''' </summary>
