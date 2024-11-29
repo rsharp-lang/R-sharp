@@ -345,6 +345,16 @@ Public Module utils
         Dim datafile As Object
         Dim textEncoding As Encoding = Rsharp.GetEncoding(encoding)
 
+        If file Is Nothing Then
+            If env.strictOption Then
+                Return RInternal.debug.stop("the required dataframe file source should not be nothing!", env)
+            Else
+                Call "the required dataframe file source is nothing, null value will be returns as the dataframe result value.".Warning
+            End If
+
+            Return Nothing
+        End If
+
         If TypeOf file Is String Then
             datafile = REnv _
                 .TryCatch(runScript:=Function()
@@ -373,7 +383,10 @@ Public Module utils
                             Return New file(ls)
                         End Function)
         Else
-            Return RInternal.debug.stop("invalid file content type!", env)
+            Return RInternal.debug.stop({
+                "invalid file clr object content type!",
+                "clr_type: " & file.GetType.FullName
+            }, env)
         End If
 
         If Not TypeOf datafile Is file Then
