@@ -1019,25 +1019,25 @@ RE0:
         ''' <summary>
         ''' Cast the given vector or list to integer type
         ''' </summary>
-        ''' <param name="obj"></param>
+        ''' <param name="x"></param>
         ''' <returns></returns>
         <ExportAPI("as.integer")>
         <RApiReturn(GetType(Long))>
-        Public Function asInteger(<RRawVectorArgument> obj As Object, Optional env As Environment = Nothing) As Object
-            If obj Is Nothing Then
+        Public Function asInteger(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
                 Return 0
-            ElseIf obj.GetType.ImplementInterface(GetType(IDictionary)) Then
-                Return REnv.CTypeOfList(Of Long)(obj, env)
-            ElseIf obj.GetType.ImplementInterface(Of ICTypeVector) Then
-                Return DirectCast(obj, ICTypeVector).ToLong
+            ElseIf x.GetType.ImplementInterface(GetType(IDictionary)) Then
+                Return REnv.CTypeOfList(Of Long)(x, env)
+            ElseIf x.GetType.ImplementInterface(Of ICTypeVector) Then
+                Return DirectCast(x, ICTypeVector).ToLong
             Else
-                If TypeOf obj Is vector Then
-                    obj = DirectCast(obj, vector).data
+                If TypeOf x Is vector Then
+                    x = DirectCast(x, vector).data
                 End If
             End If
 
-            If obj.GetType.IsArray Then
-                Dim type As Type = MeasureRealElementType(obj)
+            If x.GetType.IsArray Then
+                Dim type As Type = MeasureRealElementType(x)
 
                 If type Is GetType(String) Then
                     ' 20200427 try to fix bugs on linux platform 
@@ -1058,18 +1058,18 @@ RE0:
                     ' SMRUCC/R#.call_function.str_pad at renderMap_CLI.R:line 17
                     ' SMRUCC/R#.n/a.InitializeEnvironment at renderMap_CLI.R:line 0
                     ' SMRUCC/R#.global.<globalEnvironment> at <globalEnvironment>:line n/a
-                    Return CLRVector.asCharacter(obj) _
+                    Return CLRVector.asCharacter(x) _
                         .Select(AddressOf Long.Parse) _
                         .ToArray
                 ElseIf type Is GetType(Boolean) Then
-                    Return CLRVector.asLogical(obj) _
+                    Return CLRVector.asLogical(x) _
                         .Select(Function(b) If(b, 1, 0)) _
                         .ToArray
                 Else
-                    Return CLRVector.asLong(obj)
+                    Return CLRVector.asLong(x)
                 End If
             Else
-                Return CLRVector.asLong(obj)
+                Return CLRVector.asLong(x)
             End If
         End Function
 
