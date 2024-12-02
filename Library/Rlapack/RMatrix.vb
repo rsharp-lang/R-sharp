@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::f4defd813b85702f34c0deb25011936f, Library\Rlapack\RMatrix.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 632
-    '    Code Lines: 354 (56.01%)
-    ' Comment Lines: 200 (31.65%)
-    '    - Xml Docs: 88.00%
-    ' 
-    '   Blank Lines: 78 (12.34%)
-    '     File Size: 24.84 KB
+' Summaries:
 
 
-    ' Module RMatrix
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: (+3 Overloads) add, asMatrix, createTable, (+3 Overloads) division, dot
-    '               eigen, fromGraph, gauss_solve, Matrix, matrix_extractor
-    '               (+3 Overloads) multiply, nmf_matrix, readMatrix, rowPack, saveMatrix
-    '               (+3 Overloads) substract, sum_all
-    ' 
-    '     Sub: extractVector
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 632
+'    Code Lines: 354 (56.01%)
+' Comment Lines: 200 (31.65%)
+'    - Xml Docs: 88.00%
+' 
+'   Blank Lines: 78 (12.34%)
+'     File Size: 24.84 KB
+
+
+' Module RMatrix
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: (+3 Overloads) add, asMatrix, createTable, (+3 Overloads) division, dot
+'               eigen, fromGraph, gauss_solve, Matrix, matrix_extractor
+'               (+3 Overloads) multiply, nmf_matrix, readMatrix, rowPack, saveMatrix
+'               (+3 Overloads) substract, sum_all
+' 
+'     Sub: extractVector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -76,10 +76,12 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+Imports std = System.Math
 Imports vec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 
 ''' <summary>
@@ -231,6 +233,32 @@ Module RMatrix
     End Function
 
     ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("as.integer")>
+    Public Function asInteger(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        If x Is Nothing Then
+            Return Nothing
+        End If
+
+        If x.GetType.ImplementInterface(Of GeneralMatrix) Then
+            Dim m As Double()() = DirectCast(x, GeneralMatrix).ArrayPack
+            Dim i As Double()() = m _
+                .Select(Function(r)
+                            Return r.Select(Function(vi) std.Round(vi)).ToArray
+                        End Function) _
+                .ToArray
+
+            Return New NumericMatrix(i)
+        Else
+            Return RConversion.asInteger(x, env)
+        End If
+    End Function
+
+    ''' <summary>
     ''' ### NMF Model fitting function
     ''' 
     ''' Fit a non-negative matrix factorization model to a given target matrix. 
@@ -254,6 +282,7 @@ Module RMatrix
                                Optional max_iterations As Integer = 1000,
                                Optional tolerance As Double = 0.001,
                                Optional epsilon As Double = 1.0E-20,
+                               Optional clr_obj As Boolean = False,
                                Optional env As Environment = Nothing) As Object
 
         Dim m = matrix_extractor(x, env)
@@ -266,6 +295,11 @@ Module RMatrix
         End If
 
         Dim nmf_result As NMF = NMF.Factorisation(data, rank, max_iterations, tolerance, epsilon)
+
+        If clr_obj Then
+            Return nmf_result
+        End If
+
         Dim result As New list(
             slot("W") = nmf_result.W,
             slot("H") = nmf_result.H,
@@ -273,6 +307,27 @@ Module RMatrix
         )
 
         Return result
+    End Function
+
+    <ExportAPI("nmf_decompose")>
+    Public Function nmf_decompose(<RRawVectorArgument> x As Object, nmf As NMF, Optional env As Environment = Nothing) As Object
+        Dim m = matrix_extractor(x, env)
+        Dim data As NumericMatrix
+
+        If m Like GetType(Message) Then
+            Return m.TryCast(Of Message)
+        Else
+            data = m.TryCast(Of NumericMatrix)
+        End If
+
+        Dim decompose As list = list.empty
+        Dim i As i32 = 1
+
+        For Each xi As NumericMatrix In nmf.Decompose(data)
+            Call decompose.add($"x{++i}", xi)
+        Next
+
+        Return decompose
     End Function
 
     ''' <summary>
@@ -653,6 +708,16 @@ Module RMatrix
     <ROperator("*")>
     Public Function multiply(a As NumericMatrix, b As Double) As NumericMatrix
         Return a * b
+    End Function
+
+    <ROperator("*")>
+    Public Function multiply(a As NumericMatrix, b As Long) As NumericMatrix
+        Return a * CDbl(b)
+    End Function
+
+    <ROperator("*")>
+    Public Function multiply(a As NumericMatrix, b As Integer) As NumericMatrix
+        Return a * CDbl(b)
     End Function
 
     <ROperator("/")>
