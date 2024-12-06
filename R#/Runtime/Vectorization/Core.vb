@@ -205,10 +205,15 @@ Namespace Runtime.Vectorization
         ''' <typeparam name="TOut"></typeparam>
         ''' <param name="x"></param>
         ''' <param name="y"></param>
-        ''' <param name="[do]"></param>
+        ''' <param name="do"></param>
         ''' <returns>
         ''' error message or array of <typeparamref name="TOut"/>.
         ''' </returns>
+        ''' <remarks>
+        ''' the <paramref name="do"/> delegate function should be used for measure two scalar element value:
+        ''' 
+        ''' op_evaluator = function(a,b,env) {...}
+        ''' </remarks>
         Public Function BinaryCoreInternal(Of TX, TY, TOut)(x As Object, y As Object, [do] As op_evaluator, env As Environment) As Object
             Dim vx As GetVectorElement = GetVectorElement.Create(Of TX)(x)
             Dim vy As GetVectorElement = GetVectorElement.Create(Of TY)(y)

@@ -1418,5 +1418,49 @@ sample estimates:
                 End Select
             End If
         End Function
+
+        <ExportAPI("gcd")>
+        Public Function gcd(<RRawVectorArgument> a As Object,
+                            <RRawVectorArgument> b As Object,
+                            <RRawVectorArgument(TypeCodes.string)>
+                            Optional method As Object = "euclid|stein",
+                            Optional env As Environment = Nothing) As Object
+
+            Dim va As Integer() = CLRVector.asInteger(a)
+            Dim vb As Integer() = CLRVector.asInteger(b)
+            Dim gcd_f As op_evaluator
+
+            Select Case CLRVector.asCharacter(method).ElementAtOrDefault(0, "euclid")
+                Case "euclid" : gcd_f = Function(ai, bi, nil) VBMath.EuclidGcd(CInt(ai), CInt(bi))
+                Case "stein" : gcd_f = Function(ai, bi, nil) VBMath.SteinGcd(CInt(a), CInt(b))
+                Case Else
+                    Call $"unknown method '{CLRVector.asCharacter(method).First}', euclid will be used by default.".Warning
+                    gcd_f = Function(ai, bi, nil) VBMath.EuclidGcd(CInt(ai), CInt(bi))
+            End Select
+
+            Return Core.BinaryCoreInternal(Of Integer, Integer, Integer)(va, vb, gcd_f, env)
+        End Function
+
+        ''' <summary>
+        ''' Function to calculate the Least Common Multiple (LCM)
+        ''' </summary>
+        ''' <param name="a"></param>
+        ''' <param name="b"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("lcm")>
+        Public Function lcm_r(<RRawVectorArgument> a As Object,
+                              <RRawVectorArgument> b As Object,
+                              Optional env As Environment = Nothing) As Object
+
+            Dim lcm_f As op_evaluator = Function(ai, bi, nil) VBMath.LeastCommonMultiple(CInt(ai), CInt(bi))
+            Dim lcm As Object = Core.BinaryCoreInternal(Of Integer, Integer, Integer)(
+                x:=CLRVector.asInteger(a),
+                y:=CLRVector.asInteger(b),
+                lcm_f, env
+            )
+
+            Return lcm
+        End Function
     End Module
 End Namespace
