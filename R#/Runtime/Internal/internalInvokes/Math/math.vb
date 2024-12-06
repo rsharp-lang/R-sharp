@@ -1462,5 +1462,25 @@ sample estimates:
 
             Return lcm
         End Function
+
+        ''' <summary>
+        ''' finds root of specific degree of number.
+        ''' </summary>
+        ''' <param name="x">should be a numeric vector</param>
+        ''' <param name="n">
+        ''' Degree of root.
+        ''' </param>
+        ''' <param name="eps">
+        ''' Precision with which the calculations are performed. value should be in range (0,1).
+        ''' </param>
+        ''' <returns>Root of number.</returns>
+        <ExportAPI("root")>
+        Public Function root(<RRawVectorArgument> x As Object, n As Integer, Optional eps As Double = 0.00001) As Object
+            Return CLRVector.asNumeric(x) _
+                .Select(Function(xi)
+                            Return NumeralSystem.FindNthRoot(xi, n, precision:=eps)
+                        End Function) _
+                .ToArray
+        End Function
     End Module
 End Namespace
