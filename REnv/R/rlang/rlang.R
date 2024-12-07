@@ -1,6 +1,7 @@
 #' translate R# code to Rscript text
 #' 
 #' @return this function build rscript text from a given R# closure code
+#' @details this function could be used for generates script for run in docker container
 #' 
 const transform_rlang_source = function(code, source = NULL, debug = FALSE) {
     let load_deps = __sourcescript(source);
