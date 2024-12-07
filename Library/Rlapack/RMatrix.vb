@@ -1,60 +1,60 @@
-﻿#Region "Microsoft.VisualBasic::f4defd813b85702f34c0deb25011936f, Library\Rlapack\RMatrix.vb"
+﻿#Region "Microsoft.VisualBasic::209c7c62253b9de930a529c7a197ac93, Library\Rlapack\RMatrix.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 632
-'    Code Lines: 354 (56.01%)
-' Comment Lines: 200 (31.65%)
-'    - Xml Docs: 88.00%
-' 
-'   Blank Lines: 78 (12.34%)
-'     File Size: 24.84 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module RMatrix
-' 
-'     Constructor: (+1 Overloads) Sub New
-' 
-'     Function: (+3 Overloads) add, asMatrix, createTable, (+3 Overloads) division, dot
-'               eigen, fromGraph, gauss_solve, Matrix, matrix_extractor
-'               (+3 Overloads) multiply, nmf_matrix, readMatrix, rowPack, saveMatrix
-'               (+3 Overloads) substract, sum_all
-' 
-'     Sub: extractVector
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 697
+    '    Code Lines: 401 (57.53%)
+    ' Comment Lines: 206 (29.56%)
+    '    - Xml Docs: 87.86%
+    ' 
+    '   Blank Lines: 90 (12.91%)
+    '     File Size: 26.89 KB
+
+
+    ' Module RMatrix
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    ' 
+    '     Function: (+3 Overloads) add, asInteger, asMatrix, createTable, (+3 Overloads) division
+    '               dot, eigen, fromGraph, gauss_solve, Matrix
+    '               matrix_extractor, (+5 Overloads) multiply, nmf_decompose, nmf_matrix, readMatrix
+    '               rowPack, saveMatrix, (+3 Overloads) substract, sum_all
+    ' 
+    '     Sub: extractVector
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

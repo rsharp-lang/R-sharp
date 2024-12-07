@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4472441d1e6bff11ea92b88bf1cbc7d4, R#\Runtime\Vectorization\Core.vb"
+﻿#Region "Microsoft.VisualBasic::e76e8fccb6c126cdf8dbc83a65223b3b, R#\Runtime\Vectorization\Core.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 255
-    '    Code Lines: 163 (63.92%)
-    ' Comment Lines: 51 (20.00%)
-    '    - Xml Docs: 82.35%
+    '   Total Lines: 260
+    '    Code Lines: 163 (62.69%)
+    ' Comment Lines: 56 (21.54%)
+    '    - Xml Docs: 82.14%
     ' 
-    '   Blank Lines: 41 (16.08%)
-    '     File Size: 10.18 KB
+    '   Blank Lines: 41 (15.77%)
+    '     File Size: 10.40 KB
 
 
     '     Delegate Function
