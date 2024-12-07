@@ -178,12 +178,14 @@ Namespace Development.CodeAnalysis
         Private Function getForLoop(forLoop As ForLoop, env As Environment) As String
             Dim x As String = forLoop.variables(0)
             Dim seq As String = GetScript(forLoop.sequence, env)
-            Dim run As String() = forLoop.body.body.program _
-                .Select(Function(l) GetScript(l, env)) _
-                .ToArray
+            Dim inner As New Dictionary(Of String, String)(symbols)
+            Dim run As String
+
+            inner(x) = CreateSymbol
+            run = New RlangTranslator(forLoop.body.body, inner, indent + 3).GetScript(env)
 
             Return $"for({x} in {seq}) {{
-    {run.JoinBy(vbCrLf)}
+{run}
             }}"
         End Function
 
