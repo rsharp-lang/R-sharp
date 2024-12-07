@@ -167,10 +167,23 @@ Namespace Development.CodeAnalysis
                 Case GetType(SymbolIndexer) : Return GetSymbolIndexSubset(line, env)
                 Case GetType(Operators.UnaryNot) : Return GetUnaryNot(line, env)
                 Case GetType(ByRefFunctionCall) : Return getByref(line, env)
+                Case GetType(ForLoop) : Return getForLoop(line, env)
 
                 Case Else
                     Throw New NotImplementedException(line.GetType.FullName)
             End Select
+        End Function
+
+        Private Function getForLoop(forLoop As ForLoop, env As Environment) As String
+            Dim x As String = forLoop.variables(0)
+            Dim seq As String = GetScript(forLoop.sequence, env)
+            Dim run As String() = forLoop.body.body.program _
+                .Select(Function(l) GetScript(l, env)) _
+                .ToArray
+
+            Return $"for({x} in {seq}) {{
+    {run.JoinBy(vbCrLf)}
+            }}"
         End Function
 
         Private Function getByref(line As ByRefFunctionCall, env As Environment) As String
