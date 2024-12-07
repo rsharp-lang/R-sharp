@@ -104,6 +104,11 @@ declare namespace REnv {
    */
    function scale0_1(x: any): object;
    /**
+     * @param source default value Is ``null``.
+     * @param debug default value Is ``false``.
+   */
+   function transform_rlang_source(code: any, source?: any, debug?: any): object;
+   /**
    */
    function walkFiles(vbproj: any, refer: any, banner: any, proj_folder: any): object;
 }
