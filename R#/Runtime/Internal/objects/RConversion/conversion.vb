@@ -712,21 +712,26 @@ RE0:
                 type = MeasureRealElementType(x)
 
                 If x.GetType.GetElementType Is Nothing OrElse x.GetType.GetElementType Is GetType(Object) Then
-                    Dim list = Array.CreateInstance(type, DirectCast(x, Array).Length)
+                    If DirectCast(x, Array).Length = 0 Then
+                        ' 20241208 is empty vector
+                        ' just do nothing
+                    Else
+                        Dim list = Array.CreateInstance(type, DirectCast(x, Array).Length)
 
-                    With DirectCast(x, Array)
-                        For i As Integer = 0 To .Length - 1
-                            x = .GetValue(i)
+                        With DirectCast(x, Array)
+                            For i As Integer = 0 To .Length - 1
+                                x = .GetValue(i)
 
-                            If TypeOf x Is vbObject Then
-                                x = DirectCast(x, vbObject).target
-                            End If
+                                If TypeOf x Is vbObject Then
+                                    x = DirectCast(x, vbObject).target
+                                End If
 
-                            list.SetValue(x, i)
-                        Next
-                    End With
+                                list.SetValue(x, i)
+                            Next
+                        End With
 
-                    x = list
+                        x = list
+                    End If
                 End If
 
                 Return Nothing
