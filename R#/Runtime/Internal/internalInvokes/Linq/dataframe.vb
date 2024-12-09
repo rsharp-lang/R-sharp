@@ -381,7 +381,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <param name="env"></param>
         ''' <returns>a new dataframe object with duplicated rows removed</returns>
         <ExportAPI("rank_unique")>
-        Public Function rank_unique(x As dataframe, duplicates As String, <RRawVectorArgument> ranking As Object, Optional env As Environment = Nothing) As Object
+        Public Function rank_unique(x As dataframe,
+                                    duplicates As String,
+                                    <RRawVectorArgument>
+                                    ranking As Object,
+                                    Optional env As Environment = Nothing) As Object
+
             Dim ranking_str As String() = CLRVector.asCharacter(ranking)
             Dim ranks As Double()
 
