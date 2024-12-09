@@ -388,7 +388,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             If ranking_str.IsNullOrEmpty Then
                 Return Internal.debug.stop("the required of the ranking score should not be nothing!", env)
             End If
-            If ranking_str.Length = 1 Then
+            If ranking_str.Length = 1 AndAlso
+                x.hasName(ranking_str(0)) AndAlso
+                Not ranking_str(0).IsNumeric(, True) Then
+
                 ' is column field name
                 ranks = CLRVector.asNumeric(x(ranking_str(0)))
             Else
