@@ -210,7 +210,7 @@ RE0:
     ''' <summary>
     ''' open the help document file
     ''' </summary>
-    ''' <param name="x"></param>
+    ''' <param name="x">target symbol or the target symbol name for get the help information</param>
     ''' <returns></returns>
     ''' <remarks>
     ''' this function open the html help document file on windows and
@@ -223,7 +223,19 @@ RE0:
 
         If x Is Nothing Then
             Return invisible.NULL
-        ElseIf Not x.GetType.ImplementInterface(Of RFunction) Then
+        End If
+
+        If TypeOf x Is String Then
+            x = env.FindFunction(CStr(x))
+
+            If x Is Nothing Then
+                Return invisible.NULL
+            Else
+                x = DirectCast(x, Symbol).value
+            End If
+        End If
+
+        If Not x.GetType.ImplementInterface(Of RFunction) Then
             Return Message.InCompatibleType(GetType(RFunction), x.GetType, env)
         Else
             f = x
