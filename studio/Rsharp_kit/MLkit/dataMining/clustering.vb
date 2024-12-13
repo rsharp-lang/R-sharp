@@ -133,6 +133,20 @@ Module clustering
         Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of Cluster)(AddressOf showHclust)
     End Sub
 
+    <RGenericOverloads("as.data.frame")>
+    Public Function getSOMNeurons(som As SelfOrganizingMap, args As list, env As Environment) As Object
+        Dim cols As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim neurons = som.embeddings
+        Dim offset As Integer = 0
+
+        For i As Integer = 0 To som.depth - 1
+            offset = i
+            cols.add("V" & (i + 1), From r As Double() In neurons Select r(offset))
+        Next
+
+        Return cols
+    End Function
+
     <RGenericOverloads("plot")>
     Private Function plotSOMEmbedding(som As SelfOrganizingMap, args As list, env As Environment) As Object
         Dim padding As String = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 5% 15% 10% 15%;", env)
