@@ -72,9 +72,11 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
+Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Canvas
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
+Imports Microsoft.VisualBasic.Data.visualize
 Imports Microsoft.VisualBasic.DataMining
 Imports Microsoft.VisualBasic.DataMining.BinaryTree
 Imports Microsoft.VisualBasic.DataMining.BinaryTree.AffinityPropagation
@@ -129,6 +131,18 @@ Module clustering
 
         Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of Cluster)(AddressOf showHclust)
     End Sub
+
+    <RGenericOverloads("plot")>
+    Private Function plotSOMEmbedding(som As SelfOrganizingMap, args As list, env As Environment) As Object
+        Dim padding As String = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 5% 15% 10% 15%;", env)
+        Dim ndims As Integer = args.getValue("ndims", env, [default]:=2)
+        Dim theme As New Theme With {.padding = padding}
+        Dim app As New SOMEmbedding(som, dims:=ndims, theme)
+        Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=300)
+        Dim size = graphicsPipeline.getSize(args, env, [default]:=New SizeF(1600, 1200))
+
+        Return app.Plot(size, dpi, env.getDriver)
+    End Function
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function showHclust(cluster As Cluster) As String
