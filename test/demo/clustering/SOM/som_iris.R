@@ -9,12 +9,12 @@ let class_labels = bezdekIris$class;
 
 bezdekIris <- bezdekIris[, c("D1","D2","D3","D4")];
 
-let model = somgrid(xdim = 10, ydim = 5);
-let result = som(bezdekIris, grid=model);
+let model = somgrid(xdim = 10, ydim = 10);
+let result = som(scale(bezdekIris), grid=model);
 let class_id = [result]::class_id;
 
 print(class_id);
-print(class_labels);
+print(class_labels,max.print= 999);
 
 str(as.list(class_id, names = class_labels));
 
