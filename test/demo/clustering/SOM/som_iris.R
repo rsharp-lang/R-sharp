@@ -16,6 +16,6 @@ let class_id = [result]::class_id;
 print(class_id);
 print(class_labels);
 
-svg(file = "bezdekIris_SOM.svg") {
-    plot(result);
+svg(file = "bezdekIris_SOM.svg", size = [3600,2400]) {
+    plot(result, point.size = 32);
 }
