@@ -95,7 +95,6 @@ Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder.GMM.EMGauss
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.DataFrame
-Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
@@ -1742,6 +1741,6 @@ Module clustering
             Return dataset.TryCast(Of Message)
         End If
 
-        Return grid.train(dataset.VB.ToArray, rate(0), rate(1), epoch)
+        Return grid.train(dataset.TryCast(Of IEnumerable(Of Double())).ToArray, rate(0), rate(1), epoch)
     End Function
 End Module
