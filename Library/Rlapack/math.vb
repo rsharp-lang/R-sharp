@@ -275,8 +275,22 @@ Module math
         ElseIf TypeOf x Is NumericMatrix Then
             ' scale by columns
             Dim mat As NumericMatrix = DirectCast(x, NumericMatrix)
+            Dim columns = mat.ColWise.ScaleX(center, scale).ToArray
+            Dim rows As New List(Of Double())
+            Dim offset As Integer
+            Dim vec As Double()
 
-            Throw New NotImplementedException
+            ' columns to matrix
+            For r As Integer = 0 To mat.RowDimension - 1
+                offset = r
+                vec = columns _
+                    .Select(Function(v) v(offset)) _
+                    .ToArray
+
+                Call rows.Add(vec)
+            Next
+
+            Return New NumericMatrix(rows)
         Else
             Dim check = RType.TypeOf(x).mode
 
