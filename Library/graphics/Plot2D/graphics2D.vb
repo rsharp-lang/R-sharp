@@ -659,7 +659,7 @@ Module graphics2DTools
     ''' <returns>
     ''' A color character vector in html code format
     ''' </returns>
-    <ExportAPI("scale")>
+    <ExportAPI("color_scale")>
     Public Function scale(x As Double(),
                           <RRawVectorArgument>
                           colorSet As Object,

@@ -1746,7 +1746,7 @@ Module clustering
     <ExportAPI("som")>
     Public Function som(x As Object, grid As SelfOrganizingMap,
                         <RRawVectorArgument(TypeCodes.double)>
-                        Optional alpha As Object = "0.05,0.01",
+                        Optional alpha As Object = "0.1,0.001",
                         Optional epoch As Integer = 1000,
                         Optional env As Environment = Nothing) As Object
 
