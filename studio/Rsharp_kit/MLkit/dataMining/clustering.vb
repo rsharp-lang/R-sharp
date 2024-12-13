@@ -119,6 +119,7 @@ Module clustering
     Friend Sub Main()
         Call RInternal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
         Call RInternal.generic.add("plot", GetType(SelfOrganizingMap), AddressOf plotSOMEmbedding)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(SelfOrganizingMap), AddressOf getSOMNeurons)
 
         Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(Bisecting.Cluster()), AddressOf clustersDf1)
         Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(EntityClusterModel()), AddressOf clusterResultDataFrame)
