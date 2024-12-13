@@ -106,7 +106,6 @@ Imports BisectingKMeans = Microsoft.VisualBasic.DataMining.KMeans.Bisecting.Bise
 Imports Distance = Microsoft.VisualBasic.DataMining.HierarchicalClustering.Hierarchy.Distance
 Imports Point2D = System.Drawing.Point
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
-Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
@@ -116,19 +115,19 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Module clustering
 
     Friend Sub Main()
-        Call REnv.Internal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
+        Call RInternal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
 
-        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(Bisecting.Cluster()), AddressOf clustersDf1)
-        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(EntityClusterModel()), AddressOf clusterResultDataFrame)
-        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(FuzzyCMeansEntity()), AddressOf cmeansSummary)
-        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(Bisecting.Cluster()), AddressOf clustersDf1)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(EntityClusterModel()), AddressOf clusterResultDataFrame)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(FuzzyCMeansEntity()), AddressOf cmeansSummary)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(
             type:=GetType(dbscanResult),
             handler:=Function(result, args, env)
                          Return DirectCast(result, dbscanResult).cluster.clusterResultDataFrame(args, env)
                      End Function)
-        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(BTreeCluster), AddressOf treeDf)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(BTreeCluster), AddressOf treeDf)
 
-        Call REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of Cluster)(AddressOf showHclust)
+        Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of Cluster)(AddressOf showHclust)
     End Sub
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
