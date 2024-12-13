@@ -1742,7 +1742,6 @@ Module clustering
             Return dataset.TryCast(Of Message)
         End If
 
-        Call grid.train(dataset.VB.ToArray, rate(0), rate(1), epoch)
-
+        Return grid.train(dataset.VB.ToArray, rate(0), rate(1), epoch)
     End Function
 End Module
