@@ -75,6 +75,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
+Imports Microsoft.VisualBasic.DataMining
 Imports Microsoft.VisualBasic.DataMining.BinaryTree
 Imports Microsoft.VisualBasic.DataMining.BinaryTree.AffinityPropagation
 Imports Microsoft.VisualBasic.DataMining.Clustering
@@ -94,6 +95,7 @@ Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder.GMM.EMGauss
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.DataFrame
+Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
@@ -1691,5 +1693,56 @@ Module clustering
                 .ToArray,
             .dataLabels = dataLabels
         }
+    End Function
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="xdim"></param>
+    ''' <param name="ydim"></param>
+    ''' <returns></returns>
+    <ExportAPI("somgrid")>
+    Public Function somgrid(xdim As Integer, ydim As Integer) As SelfOrganizingMap
+        Return New SelfOrganizingMap(xdim, ydim)
+    End Function
+
+    ''' <summary>
+    ''' ### Self- and super-organising maps
+    ''' 
+    ''' A supersom is an extension of self-organising maps (SOMs) to multiple data layers, 
+    ''' possibly with different numbers and different types of variables (though equal numbers 
+    ''' of objects). NAs are allowed. A weighted distance over all layers is calculated 
+    ''' to determine the winning units during training. Functions som and xyf are simply 
+    ''' wrappers for supersoms with one and two layers, respectively. Function nunits is
+    ''' a utility function returning the number of units in the map.
+    ''' </summary>
+    ''' <param name="x">
+    ''' numerical data matrices, or factors. No data.frame objects are allowed - convert them to matrices first.
+    ''' </param>
+    ''' <param name="alpha">	
+    ''' learning rate, a vector Of two numbers indicating the amount Of change. Default Is 
+    ''' To decline linearly from 0.05 To 0.01 over rlen updates. Not used For the batch 
+    ''' algorithm.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("som")>
+    Public Function som(x As Object, grid As SelfOrganizingMap,
+                        <RRawVectorArgument(TypeCodes.double)>
+                        Optional alpha As Object = "0.05,0.01",
+                        Optional epoch As Integer = 1000,
+                        Optional env As Environment = Nothing) As Object
+
+        Dim rate As Double() = CLRVector.asNumeric(alpha)
+        Dim dataset = DataMiningDataSet.getRawMatrix(x, check_class:=True, env)
+
+        If rate.TryCount < 2 Then
+            Return RInternal.debug.stop("the learning rate alpha parameter vector size should be equals to two element!", env)
+        End If
+        If dataset Like GetType(Message) Then
+            Return dataset.TryCast(Of Message)
+        End If
+
+        Call grid.train(dataset.VB.ToArray, rate(0), rate(1), epoch)
+
     End Function
 End Module
