@@ -236,7 +236,11 @@ Namespace Runtime
             End If
 
             Dim manifest = $"{libdir}/package/manifest/symbols.json"
-            Dim symbols As Dictionary(Of String, String) = manifest.LoadJsonFile(Of Dictionary(Of String, String))
+            Dim symbols As Dictionary(Of String, String) = Nothing
+
+            If manifest.FileExists Then
+                symbols = manifest.LoadJsonFile(Of Dictionary(Of String, String))(throwEx:=False)
+            End If
 
             If symbols.IsNullOrEmpty Then
                 Return Nothing
