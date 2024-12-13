@@ -16,3 +16,6 @@ let class_id = [result]::class_id;
 print(class_id);
 print(class_labels);
 
+svg(file = "bezdekIris_SOM.svg") {
+    plot(result);
+}
