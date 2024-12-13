@@ -140,7 +140,8 @@ Module clustering
         Dim pointSize As Integer = args.getValue({"point.size", "point_size"}, env, [default]:=12)
         Dim theme As New Theme With {
             .padding = padding,
-            .pointSize = pointSize
+            .pointSize = pointSize,
+            .legendBoxStroke = Nothing
         }
         Dim app As New SOMEmbedding(som, dims:=ndims, theme)
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=300)
