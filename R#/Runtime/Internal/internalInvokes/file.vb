@@ -1535,6 +1535,18 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+#If NET8_0_OR_GREATER Then
+        <ExportAPI("open.tar.gz")>
+        <RApiReturn(GetType(TarGzFileSystem))>
+        Public Function openTargzip(file As String, Optional env As Environment = Nothing) As Object
+            If Not file.FileExists(ZERO_Nonexists:=True) Then
+                Return Internal.debug.stop("file is not existsed!", env)
+            Else
+                Return New TarGzFileSystem(file)
+            End If
+        End Function
+#End If
+
         ''' <summary>
         ''' decompression of a gzip file and get the deflate file data stream.
         ''' </summary>
