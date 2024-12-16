@@ -1,11 +1,9 @@
-#' helper function for R# interop with R language
+#' translate R# code to Rscript text
 #' 
-#' @param code a closure expresion for invoke R function
-#' @param source the source file paths for provides the 
-#'    runtime environment for the specific input code. 
+#' @return this function build rscript text from a given R# closure code
+#' @details this function could be used for generates script for run in docker container
 #' 
-const rlang_interop = function(code, source = NULL, debug = FALSE, workdir = NULL) {
-    let code_save = tempfile(fileext = ".R");
+const transform_rlang_source = function(code, source = NULL, debug = FALSE) {
     let load_deps = __sourcescript(source);
     let program   = translate_to_rlang(code);
     let script_code <- paste([
@@ -20,7 +18,23 @@ const rlang_interop = function(code, source = NULL, debug = FALSE, workdir = NUL
         print("translate R# code to rlang script:");
         cat(script_code);
         cat("\n\n");
-    } else {
+    }
+
+    script_code;
+} 
+
+#' helper function for R# interop with R language
+#' 
+#' @param code a closure expresion for invoke R function
+#' @param source the source file paths for provides the 
+#'    runtime environment for the specific input code. 
+#' 
+const rlang_interop = function(code, source = NULL, debug = FALSE, workdir = NULL) {
+    let code_save = tempfile(fileext = ".R");
+    let script_code = transform_rlang_source(code, source, 
+            debug = debug);
+
+    if (!debug) {
         let current_wd = getwd();
         let change_wd = nchar(workdir) > 0;
         

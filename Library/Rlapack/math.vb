@@ -199,6 +199,111 @@ Module math
     End Function
 
     ''' <summary>
+    ''' ### Scaling and Centering of Matrix-like Objects
+    ''' 
+    ''' ``scale`` is generic function whose default method centers and/or scales the columns of a numeric matrix.
+    ''' </summary>
+    ''' <param name="x">a numeric matrix(like object).</param>
+    ''' <param name="center">	
+    ''' either a logical value or numeric-alike vector of length equal to the number of columns of x, 
+    ''' where ‘numeric-alike’ means that as.numeric(.) will be applied successfully if is.numeric(.) 
+    ''' is not true.</param>
+    ''' <param name="strict">
+    ''' throw error when set strict to TRUE and if non-numeric column occurs
+    ''' </param>
+    ''' <param name="scale">
+    ''' either a logical value or a numeric-alike vector of length equal to the number of columns of x.
+    ''' </param>
+    ''' <returns>For scale.default, the centered, scaled matrix. The numeric centering and scalings used (if any) 
+    ''' are returned as attributes "scaled:center" and "scaled:scale"</returns>
+    ''' <remarks>
+    ''' The value of center determines how column centering is performed. If center is a numeric-alike vector with 
+    ''' length equal to the number of columns of x, then each column of x has the corresponding value from center 
+    ''' subtracted from it. If center is TRUE then centering is done by subtracting the column means (omitting NAs)
+    ''' of x from their corresponding columns, and if center is FALSE, no centering is done.
+    ''' 
+    ''' The value of scale determines how column scaling is performed (after centering). If scale is a numeric-alike 
+    ''' vector with length equal to the number of columns of x, then each column of x is divided by the corresponding 
+    ''' value from scale. If scale is TRUE then scaling is done by dividing the (centered) columns of x by their
+    ''' standard deviations if center is TRUE, and the root mean square otherwise. If scale is FALSE, no scaling
+    ''' is done.
+    ''' 
+    ''' The root-mean-square for a (possibly centered) column is defined as 
+    ''' 
+    ''' sqrt(∑((x2)/(n−1)))
+    ''' 
+    ''' , where 
+    '''
+    ''' x is a vector of the non-missing values and 
+    ''' n is the number of non-missing values. 
+    ''' 
+    ''' In the case center = TRUE, this is the same as the standard deviation, but in general it is not. (To scale 
+    ''' by the standard deviations without centering, use scale(x, center = FALSE, scale = apply(x, 2, sd, na.rm = TRUE)).)
+    ''' </remarks>
+    <ExportAPI("scale")>
+    Public Function scale_x(<RRawVectorArgument> x As Object,
+                            Optional center As Boolean = True,
+                            Optional scale As Boolean = True,
+                            Optional strict As Boolean = False,
+                            Optional env As Environment = Nothing) As Object
+
+        If TypeOf x Is Rdataframe Then
+            ' scale by columns
+            Dim df As New Rdataframe(DirectCast(x, Rdataframe))
+            Dim cols As String() = df.colnames
+            Dim non_numeric As New Dictionary(Of String, TypeCodes)
+
+            For Each name As String In cols
+                Dim v As Array = df(name)
+                Dim check = RType.TypeOf(v).mode
+
+                If check = TypeCodes.double OrElse check = TypeCodes.integer Then
+                    v = ScaleMaps.Scale(CLRVector.asNumeric(v), center, scale)
+                    df.add(name, v)
+                ElseIf strict Then
+                    Return RInternal.debug.stop($"data type for x({check.Description}) to scale must be numeric!", env)
+                Else
+                    Call non_numeric.Add(name, check)
+                End If
+            Next
+
+            If non_numeric.Any Then
+                Call env.AddMessage($"there are some data fields in your dataframe is non-numeric, scale only processing of the numeric fields.")
+            End If
+
+            Return df
+        ElseIf TypeOf x Is NumericMatrix Then
+            ' scale by columns
+            Dim mat As NumericMatrix = DirectCast(x, NumericMatrix)
+            Dim columns = mat.ColWise.ScaleX(center, scale).ToArray
+            Dim rows As New List(Of Double())
+            Dim offset As Integer
+            Dim vec As Double()
+
+            ' columns to matrix
+            For r As Integer = 0 To mat.RowDimension - 1
+                offset = r
+                vec = columns _
+                    .Select(Function(v) v(offset)) _
+                    .ToArray
+
+                Call rows.Add(vec)
+            Next
+
+            Return New NumericMatrix(rows)
+        Else
+            Dim check = RType.TypeOf(x).mode
+
+            If check = TypeCodes.integer OrElse check = TypeCodes.double Then
+                ' scale of vector
+                Return ScaleMaps.Scale(CLRVector.asNumeric(x), center, scale)
+            Else
+                Return RInternal.debug.stop($"data type of x({check.Description}) to scale must be numeric type!", env)
+            End If
+        End If
+    End Function
+
+    ''' <summary>
     ''' measure similarity between two data vector via entropy difference
     ''' </summary>
     ''' <param name="x">a numeric vector</param>

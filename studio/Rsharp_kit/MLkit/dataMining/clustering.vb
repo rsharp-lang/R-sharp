@@ -72,9 +72,12 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
+Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Canvas
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.csv.IO
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
+Imports Microsoft.VisualBasic.Data.visualize
+Imports Microsoft.VisualBasic.DataMining
 Imports Microsoft.VisualBasic.DataMining.BinaryTree
 Imports Microsoft.VisualBasic.DataMining.BinaryTree.AffinityPropagation
 Imports Microsoft.VisualBasic.DataMining.Clustering
@@ -105,7 +108,6 @@ Imports BisectingKMeans = Microsoft.VisualBasic.DataMining.KMeans.Bisecting.Bise
 Imports Distance = Microsoft.VisualBasic.DataMining.HierarchicalClustering.Hierarchy.Distance
 Imports Point2D = System.Drawing.Point
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
-Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
@@ -115,20 +117,53 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Module clustering
 
     Friend Sub Main()
-        Call REnv.Internal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
+        Call RInternal.generic.add("summary", GetType(EntityClusterModel()), AddressOf clusterSummary)
+        Call RInternal.generic.add("plot", GetType(SelfOrganizingMap), AddressOf plotSOMEmbedding)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(SelfOrganizingMap), AddressOf getSOMNeurons)
 
-        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(Bisecting.Cluster()), AddressOf clustersDf1)
-        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(EntityClusterModel()), AddressOf clusterResultDataFrame)
-        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(FuzzyCMeansEntity()), AddressOf cmeansSummary)
-        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(Bisecting.Cluster()), AddressOf clustersDf1)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(EntityClusterModel()), AddressOf clusterResultDataFrame)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(FuzzyCMeansEntity()), AddressOf cmeansSummary)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(
             type:=GetType(dbscanResult),
             handler:=Function(result, args, env)
                          Return DirectCast(result, dbscanResult).cluster.clusterResultDataFrame(args, env)
                      End Function)
-        Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(BTreeCluster), AddressOf treeDf)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(BTreeCluster), AddressOf treeDf)
 
-        Call REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of Cluster)(AddressOf showHclust)
+        Call RInternal.ConsolePrinter.AttachConsoleFormatter(Of Cluster)(AddressOf showHclust)
     End Sub
+
+    <RGenericOverloads("as.data.frame")>
+    Public Function getSOMNeurons(som As SelfOrganizingMap, args As list, env As Environment) As Object
+        Dim cols As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+        Dim neurons = som.embeddings
+        Dim offset As Integer = 0
+
+        For i As Integer = 0 To som.depth - 1
+            offset = i
+            cols.add("V" & (i + 1), From r As Double() In neurons Select r(offset))
+        Next
+
+        Return cols
+    End Function
+
+    <RGenericOverloads("plot")>
+    Private Function plotSOMEmbedding(som As SelfOrganizingMap, args As list, env As Environment) As Object
+        Dim padding As String = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 5% 15% 10% 15%;", env)
+        Dim ndims As Integer = args.getValue("ndims", env, [default]:=2)
+        Dim pointSize As Integer = args.getValue({"point.size", "point_size"}, env, [default]:=12)
+        Dim theme As New Theme With {
+            .padding = padding,
+            .pointSize = pointSize,
+            .legendBoxStroke = Nothing
+        }
+        Dim app As New SOMEmbedding(som, dims:=ndims, theme)
+        Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=300)
+        Dim size = graphicsPipeline.getSize(args, env, [default]:=New SizeF(1600, 1200))
+
+        Return app.Plot(size, dpi, env.getDriver)
+    End Function
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function showHclust(cluster As Cluster) As String
@@ -1691,5 +1726,55 @@ Module clustering
                 .ToArray,
             .dataLabels = dataLabels
         }
+    End Function
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="xdim"></param>
+    ''' <param name="ydim"></param>
+    ''' <returns></returns>
+    <ExportAPI("somgrid")>
+    Public Function somgrid(xdim As Integer, ydim As Integer) As SelfOrganizingMap
+        Return New SelfOrganizingMap(xdim, ydim)
+    End Function
+
+    ''' <summary>
+    ''' ### Self- and super-organising maps
+    ''' 
+    ''' A supersom is an extension of self-organising maps (SOMs) to multiple data layers, 
+    ''' possibly with different numbers and different types of variables (though equal numbers 
+    ''' of objects). NAs are allowed. A weighted distance over all layers is calculated 
+    ''' to determine the winning units during training. Functions som and xyf are simply 
+    ''' wrappers for supersoms with one and two layers, respectively. Function nunits is
+    ''' a utility function returning the number of units in the map.
+    ''' </summary>
+    ''' <param name="x">
+    ''' numerical data matrices, or factors. No data.frame objects are allowed - convert them to matrices first.
+    ''' </param>
+    ''' <param name="alpha">	
+    ''' learning rate, a vector Of two numbers indicating the amount Of change. Default Is 
+    ''' To decline linearly from 0.05 To 0.01 over rlen updates. Not used For the batch 
+    ''' algorithm.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("som")>
+    Public Function som(x As Object, grid As SelfOrganizingMap,
+                        <RRawVectorArgument(TypeCodes.double)>
+                        Optional alpha As Object = "0.1,0.001",
+                        Optional epoch As Integer = 1000,
+                        Optional env As Environment = Nothing) As Object
+
+        Dim rate As Double() = CLRVector.asNumeric(alpha)
+        Dim dataset = DataMiningDataSet.getRawMatrix(x, check_class:=True, env)
+
+        If rate.TryCount < 2 Then
+            Return RInternal.debug.stop("the learning rate alpha parameter vector size should be equals to two element!", env)
+        End If
+        If dataset Like GetType(Message) Then
+            Return dataset.TryCast(Of Message)
+        End If
+
+        Return grid.train(dataset.TryCast(Of IEnumerable(Of Double())).ToArray, rate(0), rate(1), epoch)
     End Function
 End Module

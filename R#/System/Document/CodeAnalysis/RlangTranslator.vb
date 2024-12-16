@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::50ba2a7c5d70f5f2f035ae87791daa50, R#\System\Document\CodeAnalysis\RlangTranslator.vb"
+﻿#Region "Microsoft.VisualBasic::910aa4cbd526842686e84629f63f6ceb, R#\System\Document\CodeAnalysis\RlangTranslator.vb"
 
     ' Author:
     ' 
@@ -34,21 +34,22 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 320
-    '    Code Lines: 247 (77.19%)
-    ' Comment Lines: 17 (5.31%)
+    '   Total Lines: 333
+    '    Code Lines: 258 (77.48%)
+    ' Comment Lines: 17 (5.11%)
     '    - Xml Docs: 76.47%
     ' 
-    '   Blank Lines: 56 (17.50%)
-    '     File Size: 13.24 KB
+    '   Blank Lines: 58 (17.42%)
+    '     File Size: 13.77 KB
 
 
     '     Class RlangTranslator
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: AssignNewSymbol, castLiteral, CreateSymbols, GetAssignValue, GetBinaryOp
-    '                   getByref, GetElse, GetFunctionInvoke, GetIf, (+2 Overloads) GetScript
-    '                   GetSymbol, GetSymbolIndexSubset, GetUnaryNot, (+2 Overloads) Literal, Vector
+    '                   getByref, GetElse, getForLoop, GetFunctionInvoke, GetIf
+    '                   (+2 Overloads) GetScript, GetSymbol, GetSymbolIndexSubset, GetUnaryNot, (+2 Overloads) Literal
+    '                   Vector
     ' 
     ' 
     ' /********************************************************************************/
@@ -167,10 +168,25 @@ Namespace Development.CodeAnalysis
                 Case GetType(SymbolIndexer) : Return GetSymbolIndexSubset(line, env)
                 Case GetType(Operators.UnaryNot) : Return GetUnaryNot(line, env)
                 Case GetType(ByRefFunctionCall) : Return getByref(line, env)
+                Case GetType(ForLoop) : Return getForLoop(line, env)
 
                 Case Else
                     Throw New NotImplementedException(line.GetType.FullName)
             End Select
+        End Function
+
+        Private Function getForLoop(forLoop As ForLoop, env As Environment) As String
+            Dim x As String = forLoop.variables(0)
+            Dim seq As String = GetScript(forLoop.sequence, env)
+            Dim inner As New Dictionary(Of String, String)(symbols)
+            Dim run As String
+
+            inner(x) = CreateSymbol
+            run = New RlangTranslator(forLoop.body.body, inner, indent + 3).GetScript(env)
+
+            Return $"for({x} in {seq}) {{
+{run}
+            }}"
         End Function
 
         Private Function getByref(line As ByRefFunctionCall, env As Environment) As String

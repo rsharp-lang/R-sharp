@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::442236bb9ac440d89c820c6a4c721ee9, Library\base\utils\utils.vb"
+﻿#Region "Microsoft.VisualBasic::eec0b01bcf0300f340e23ef3ed67c481, Library\base\utils\utils.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 637
-    '    Code Lines: 430 (67.50%)
-    ' Comment Lines: 141 (22.14%)
+    '   Total Lines: 650
+    '    Code Lines: 441 (67.85%)
+    ' Comment Lines: 141 (21.69%)
     '    - Xml Docs: 87.23%
     ' 
-    '   Blank Lines: 66 (10.36%)
-    '     File Size: 27.06 KB
+    '   Blank Lines: 68 (10.46%)
+    '     File Size: 27.56 KB
 
 
     ' Module utils
@@ -345,6 +345,16 @@ Public Module utils
         Dim datafile As Object
         Dim textEncoding As Encoding = Rsharp.GetEncoding(encoding)
 
+        If file Is Nothing Then
+            If env.strictOption Then
+                Return RInternal.debug.stop("the required dataframe file source should not be nothing!", env)
+            Else
+                Call "the required dataframe file source is nothing, null value will be returns as the dataframe result value.".Warning
+            End If
+
+            Return Nothing
+        End If
+
         If TypeOf file Is String Then
             datafile = REnv _
                 .TryCatch(runScript:=Function()
@@ -373,7 +383,10 @@ Public Module utils
                             Return New file(ls)
                         End Function)
         Else
-            Return RInternal.debug.stop("invalid file content type!", env)
+            Return RInternal.debug.stop({
+                "invalid file clr object content type!",
+                "clr_type: " & file.GetType.FullName
+            }, env)
         End If
 
         If Not TypeOf datafile Is file Then

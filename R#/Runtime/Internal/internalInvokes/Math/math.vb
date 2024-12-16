@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3cb8a332f16137259832ec6c594249b6, R#\Runtime\Internal\internalInvokes\Math\math.vb"
+﻿#Region "Microsoft.VisualBasic::1de8d48f9d5b7459cb36f7a8857c5c0a, R#\Runtime\Internal\internalInvokes\Math\math.vb"
 
     ' Author:
     ' 
@@ -34,25 +34,26 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1351
-    '    Code Lines: 529 (39.16%)
-    ' Comment Lines: 703 (52.04%)
-    '    - Xml Docs: 88.34%
+    '   Total Lines: 1415
+    '    Code Lines: 567 (40.07%)
+    ' Comment Lines: 721 (50.95%)
+    '    - Xml Docs: 88.63%
     ' 
-    '   Blank Lines: 119 (8.81%)
-    '     File Size: 60.73 KB
+    '   Blank Lines: 127 (8.98%)
+    '     File Size: 63.67 KB
 
 
     '     Module math
     ' 
     '         Function: abs, ceiling, cluster1D, cor, cor_test
     '                   cos, diff, exp, fit, floor
-    '                   getRandom, isFinite, isInfinite, isNaN, log
-    '                   log10, log2, max, mean, median
-    '                   min, numericClassTags, pearson, pow, prod
-    '                   rnorm, round, rsd, runif, (+2 Overloads) sample
-    '                   sample_int, sd, (+4 Overloads) shuffle, sign, sin
-    '                   sqrt, sum, trunc, var, weighted_mean
+    '                   gcd, getRandom, isFinite, isInfinite, isNaN
+    '                   lcm_r, log, log10, log2, max
+    '                   mean, median, min, numericClassTags, pearson
+    '                   pow, prod, rnorm, root, round
+    '                   rsd, runif, (+2 Overloads) sample, sample_int, sd
+    '                   (+4 Overloads) shuffle, sign, sin, sqrt, sum
+    '                   trunc, var, weighted_mean
     ' 
     '         Sub: set_seed
     '         Class corTestResult
@@ -1417,6 +1418,70 @@ sample estimates:
                         Return Internal.debug.stop("method argument value should be one of [pearson kendall spearman]!", env)
                 End Select
             End If
+        End Function
+
+        <ExportAPI("gcd")>
+        Public Function gcd(<RRawVectorArgument> a As Object,
+                            <RRawVectorArgument> b As Object,
+                            <RRawVectorArgument(TypeCodes.string)>
+                            Optional method As Object = "euclid|stein",
+                            Optional env As Environment = Nothing) As Object
+
+            Dim va As Integer() = CLRVector.asInteger(a)
+            Dim vb As Integer() = CLRVector.asInteger(b)
+            Dim gcd_f As op_evaluator
+
+            Select Case CLRVector.asCharacter(method).ElementAtOrDefault(0, "euclid")
+                Case "euclid" : gcd_f = Function(ai, bi, nil) VBMath.EuclidGcd(CInt(ai), CInt(bi))
+                Case "stein" : gcd_f = Function(ai, bi, nil) VBMath.SteinGcd(CInt(a), CInt(b))
+                Case Else
+                    Call $"unknown method '{CLRVector.asCharacter(method).First}', euclid will be used by default.".Warning
+                    gcd_f = Function(ai, bi, nil) VBMath.EuclidGcd(CInt(ai), CInt(bi))
+            End Select
+
+            Return Core.BinaryCoreInternal(Of Integer, Integer, Integer)(va, vb, gcd_f, env)
+        End Function
+
+        ''' <summary>
+        ''' Function to calculate the Least Common Multiple (LCM)
+        ''' </summary>
+        ''' <param name="a"></param>
+        ''' <param name="b"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("lcm")>
+        Public Function lcm_r(<RRawVectorArgument> a As Object,
+                              <RRawVectorArgument> b As Object,
+                              Optional env As Environment = Nothing) As Object
+
+            Dim lcm_f As op_evaluator = Function(ai, bi, nil) VBMath.LeastCommonMultiple(CInt(ai), CInt(bi))
+            Dim lcm As Object = Core.BinaryCoreInternal(Of Integer, Integer, Integer)(
+                x:=CLRVector.asInteger(a),
+                y:=CLRVector.asInteger(b),
+                lcm_f, env
+            )
+
+            Return lcm
+        End Function
+
+        ''' <summary>
+        ''' finds root of specific degree of number.
+        ''' </summary>
+        ''' <param name="x">should be a numeric vector</param>
+        ''' <param name="n">
+        ''' Degree of root.
+        ''' </param>
+        ''' <param name="eps">
+        ''' Precision with which the calculations are performed. value should be in range (0,1).
+        ''' </param>
+        ''' <returns>Root of number.</returns>
+        <ExportAPI("root")>
+        Public Function root(<RRawVectorArgument> x As Object, n As Integer, Optional eps As Double = 0.00001) As Object
+            Return CLRVector.asNumeric(x) _
+                .Select(Function(xi)
+                            Return NumeralSystem.FindNthRoot(xi, n, precision:=eps)
+                        End Function) _
+                .ToArray
         End Function
     End Module
 End Namespace

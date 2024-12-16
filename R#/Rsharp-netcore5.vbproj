@@ -242,10 +242,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Composition" Version="8.0.0" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.1" />
     <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
     <PackageReference Include="System.Numerics.Tensors" Version="8.0.0" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.6.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
