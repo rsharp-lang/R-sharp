@@ -1487,11 +1487,12 @@ Namespace Runtime.Internal.Invokes
                         Call .Close()
                         Call .Dispose()
                     End With
+
+                    Return True
                 Catch ex As Exception
                     Call env.AddMessage(ex.Message)
+                    Return False
                 End Try
-
-                Return True
             ElseIf TypeOf con Is StreamWriter Then
                 Try
                     With DirectCast(con, StreamWriter)
@@ -1499,19 +1500,20 @@ Namespace Runtime.Internal.Invokes
                         Call .Close()
                         Call .Dispose()
                     End With
+
+                    Return True
                 Catch ex As Exception
                     Call env.AddMessage(ex.Message)
+                    Return False
                 End Try
-
-                Return True
             ElseIf con.GetType.ImplementInterface(GetType(IDisposable)) Then
                 Try
                     Call DirectCast(con, IDisposable).Dispose()
+                    Return True
                 Catch ex As Exception
                     Call env.AddMessage(ex.Message)
+                    Return False
                 End Try
-
-                Return True
             Else
                 Return Internal.debug.stop(Message.InCompatibleType(GetType(Stream), con.GetType, env), env)
             End If
