@@ -1,61 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::3e5e14ad3b4eea9843fede56b4557a65, studio\Rsharp_kit\MLkit\NLP.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 342
-    '    Code Lines: 251 (73.39%)
-    ' Comment Lines: 35 (10.23%)
-    '    - Xml Docs: 80.00%
-    ' 
-    '   Blank Lines: 56 (16.37%)
-    '     File Size: 13.14 KB
+' Summaries:
 
 
-    ' Module NLP
-    ' 
-    '     Function: bigram_func, bigramTable, countMultipleParagraph, counts, CrawlerText
-    '               exportWordVector, getText, ldaCorpus, split_to_sentences, Tokenice
-    '               word2vec
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 342
+'    Code Lines: 251 (73.39%)
+' Comment Lines: 35 (10.23%)
+'    - Xml Docs: 80.00%
+' 
+'   Blank Lines: 56 (16.37%)
+'     File Size: 13.14 KB
+
+
+' Module NLP
+' 
+'     Function: bigram_func, bigramTable, countMultipleParagraph, counts, CrawlerText
+'               exportWordVector, getText, ldaCorpus, split_to_sentences, Tokenice
+'               word2vec
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data
 Imports Microsoft.VisualBasic.Data.NLP
 Imports Microsoft.VisualBasic.Data.NLP.LDA
 Imports Microsoft.VisualBasic.Data.NLP.Model
@@ -76,7 +77,7 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 ''' NLP tools
 ''' </summary>
 <Package("NLP")>
-Module NLP
+Module NLPtools
 
     Sub Main()
         Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(VectorModel), AddressOf exportWordVector)
@@ -398,9 +399,9 @@ Module NLP
         Throw New NotImplementedException
     End Function
 
-    <ExportAPI("")>
-    Public Function stemmer_normalize() As Object
-
+    <ExportAPI("stemmer_normalize")>
+    Public Function stemmer_normalize(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Return env.EvaluateFramework(Of String, String())(x, Function(s) NLP.StemmerNormalize(s).ToArray)
     End Function
 
     <ExportAPI("article")>
