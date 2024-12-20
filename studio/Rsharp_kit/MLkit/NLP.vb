@@ -387,6 +387,22 @@ Module NLP
         Return df
     End Function
 
+    <ExportAPI("TF_IDF")>
+    Public Function TF_IDF(<RRawVectorArgument> docs As Object,
+                           <RRawVectorArgument>
+                           Optional stopwords As Object = Nothing,
+                           Optional env As Environment = Nothing) As Object
+
+        Dim method As New TF_IDF(CLRVector.asCharacter(docs), CLRVector.asCharacter(stopwords))
+
+        Throw New NotImplementedException
+    End Function
+
+    <ExportAPI("")>
+    Public Function stemmer_normalize() As Object
+
+    End Function
+
     <ExportAPI("article")>
     Public Function CrawlerText(html As String,
                                 Optional depth As Integer = 6,
