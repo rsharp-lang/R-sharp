@@ -73,7 +73,7 @@ Public Class zzz
 
         Call clustering.Main()
         Call CNNTools.Main()
-        Call NLP.Main()
+        Call NLPtools.Main()
         Call aprioriRules.Main()
         Call Manifold.Main()
         Call bitmap_func.Main()
