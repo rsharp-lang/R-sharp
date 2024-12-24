@@ -61,6 +61,7 @@ Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports Libdir = Microsoft.VisualBasic.FileIO.Directory
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
@@ -176,16 +177,26 @@ Module Program
         Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
         Dim engineConfig As String = (args("--R_LIBS_USER") Or System.Environment.GetEnvironmentVariable("R_LIBS_USER"))
         Dim SetDllDirectory As String = args("--SetDllDirectory")
+        ' redirect the standard output to a log file
+        ' this option will mute all console output
         Dim redirectConsoleLog As String = args("--redirect_stdout")
         Dim redirectErrorLog As String = args("--redirect_stderr")
+        ' a shortcut of the sink() log function
+        ' this option could also redirect the standard output to a log file
+        ' but not mute all console outputs
+        Dim logfile As String = args("--sink")
         Dim attach As String = args("--attach")
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(
             configs:=If(engineConfig.StringEmpty, ConfigFile.localConfigs, engineConfig)
         )
 
-        For Each var In args.EnvironmentVariables
+        For Each var As KeyValuePair(Of String, String) In args.EnvironmentVariables
             Call R.globalEnvir.options.setOption(var.Key, var.Value)
         Next
+
+        If Not logfile.StringEmpty(, True) Then
+            Call base.sink(logfile, env:=R.globalEnvir)
+        End If
 
         If Not redirectConsoleLog.StringEmpty Then
             Dim text = App.RedirectLogging(redirectConsoleLog)
@@ -215,7 +226,7 @@ Module Program
         ' due to the reason of some function from the base packages may be called from
         ' the .onLoad function in the zzz.R when on the package startup
         Call LoadLibrary(R, ignoreMissingStartupPackages, "base", "utils", "grDevices", "math")
-        Call Console.WriteLine()
+        Call VBDebugger.EchoLine("")
 
         If Not attach.StringEmpty Then
             ' loading package list
@@ -240,8 +251,8 @@ Module Program
         End If
 
         If R.debug Then
-            Call Console.WriteLine(args.ToString)
-            Call Console.WriteLine()
+            Call VBDebugger.EchoLine(args.ToString)
+            Call VBDebugger.EchoLine("")
         End If
 
         'For Each arg As NamedValue(Of String) In args.ToArgumentVector
@@ -249,11 +260,16 @@ Module Program
         'Next
 
         Dim result As Object = R.Source(filepath)
+        Dim code As Integer = 0
 
         If RProgram.isException(result) Then
-            Return Rscript.handleResult(result, R.globalEnvir, Nothing)
-        Else
-            Return 0
+            code = Rscript.handleResult(result, R.globalEnvir, Nothing)
         End If
+
+        If Not logfile.StringEmpty(, True) Then
+            Call base.sink(env:=R.globalEnvir)
+        End If
+
+        Return code
     End Function
 End Module
