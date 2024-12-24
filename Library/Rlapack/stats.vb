@@ -965,6 +965,21 @@ Module stats
     End Function
 
     ''' <summary>
+    ''' ## The Student t Distribution
+    ''' 
+    ''' Density, distribution function, quantile function and random generation for the t distribution with df degrees of freedom (and optional non-centrality parameter ncp).
+    ''' </summary>
+    ''' <param name="x">vector of quantiles. the t-test value
+    ''' </param>
+    ''' <param name="df">degrees of freedom (>0, maybe non-integer). df = Inf Is allowed.</param>
+    ''' <param name="env"></param>
+    ''' <returns>cdf value of the t-distribution</returns>
+    <ExportAPI("pt")>
+    Public Function pt(<RRawVectorArgument> x As Object, df As Integer, Optional env As Environment = Nothing) As Object
+        Return t.Tcdf(CLRVector.asNumeric(x), df).ToArray
+    End Function
+
+    ''' <summary>
     ''' Student's t-Test
     ''' 
     ''' Performs one and two sample t-tests on vectors of data.
