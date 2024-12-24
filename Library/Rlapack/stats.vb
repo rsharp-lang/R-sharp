@@ -1872,6 +1872,26 @@ Module stats
         Return result
     End Function
 
+    <ExportAPI("gamma")>
+    Public Function gamma(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Return env.EvaluateFramework(Of Double, Double)(x, Function(xi) SpecialFunctions.gamma(xi))
+    End Function
+
+    <ExportAPI("lgamma")>
+    Public Function lgamma(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+        Return env.EvaluateFramework(Of Double, Double)(x, Function(xi) SpecialFunctions.gammaln(xi))
+    End Function
+
+    <ExportAPI("beta")>
+    Public Function beta(<RRawVectorArgument> a As Object, <RRawVectorArgument> b As Object, Optional env As Environment = Nothing) As Object
+        Return Core.BinaryCoreInternal(Of Double, Double, Double)(CLRVector.asNumeric(a), CLRVector.asNumeric(b), Function(x, y, envir) SpecialFunctions.BetaFunction(x, y), env)
+    End Function
+
+    <ExportAPI("lbeta")>
+    Public Function lbeta(<RRawVectorArgument> a As Object, <RRawVectorArgument> b As Object, Optional env As Environment = Nothing) As Object
+        Return Core.BinaryCoreInternal(Of Double, Double, Double)(CLRVector.asNumeric(a), CLRVector.asNumeric(b), Function(x, y, envir) std.Log(SpecialFunctions.BetaFunction(x, y)), env)
+    End Function
+
     ''' <summary>
     ''' check of the outliers via IQR method
     ''' </summary>
