@@ -95,10 +95,10 @@ Namespace Development.CodeAnalysis
         End Function
 
         Public Function SortName() As FunctionTree
-            ChildNodes = ChildNodes _
+            m_childs = ChildNodes _
                 .OrderBy(Function(a) a.Name) _
                 .Select(Function(a) a.SortName) _
-                .AsList
+                .ToList
 
             Return Me
         End Function
