@@ -69,6 +69,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Solvers
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Serialization.BinaryDumping
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -154,6 +155,46 @@ Module RMatrix
         Else
             Return Message.InCompatibleType(GetType(SparseGraph), g.GetType, env)
         End If
+    End Function
+
+    ''' <summary>
+    ''' Parse the given base64 string as matrix
+    ''' </summary>
+    ''' <param name="base64">
+    ''' should be network byte order encoded numeric vector in double type
+    ''' </param>
+    ''' <param name="dims">
+    ''' the dimension size of the parsed matrix data, value should be an integer vector of [w x h].
+    ''' value of this parameter also could be a scalar integer value, stands for dimension size of [N x N].
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("parse")>
+    <RApiReturn(GetType(NumericMatrix))>
+    Public Function parse(base64 As String, <RRawVectorArgument> dims As Object, Optional env As Environment = Nothing) As Object
+        Dim dim_size As Integer() = CLRVector.asInteger(dims)
+
+        If dim_size.Length = 1 Then
+            ' N x N
+            dim_size = {dim_size(0), dim_size(0)}
+        ElseIf dim_size.Length < 1 Then
+            Return RInternal.debug.stop("missing dimension size for create matrix!", env)
+        End If
+
+        Static network As New NetworkByteOrderBuffer
+
+        Dim vec As Double() = network.ParseDouble(base64)
+        Dim m As Double()() = vec.Split(dim_size(0))
+
+        ' check height
+        If m(0).Length <> dim_size(1) Then
+            Return RInternal.debug.stop({
+                $"invalid dimension size of the matrix: {dim_size(0)}x{dim_size(1)}!",
+                $"parsed matrix size: {dim_size(0)}x{m(0).Length}"
+            }, env)
+        End If
+
+        Return New NumericMatrix(m)
     End Function
 
     ''' <summary>
