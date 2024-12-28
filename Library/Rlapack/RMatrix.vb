@@ -135,6 +135,24 @@ Module RMatrix
         Return df
     End Function
 
+    <ExportAPI("one")>
+    <RApiReturn(GetType(NumericMatrix))>
+    Public Function one(m As Integer, n As Integer) As Object
+        Return NumericMatrix.One(m, n)
+    End Function
+
+    <ExportAPI("zero")>
+    <RApiReturn(GetType(NumericMatrix))>
+    Public Function zero(m As Integer, n As Integer) As Object
+        Return NumericMatrix.Zero(m, n)
+    End Function
+
+    <ExportAPI("gauss")>
+    <RApiReturn(GetType(NumericMatrix))>
+    Public Function gauss(m As Integer, n As Integer) As Object
+        Return NumericMatrix.Gauss(m, n)
+    End Function
+
     ''' <summary>
     ''' create matrix from a graph
     ''' </summary>
