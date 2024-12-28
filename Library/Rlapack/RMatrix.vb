@@ -171,7 +171,10 @@ Module RMatrix
     ''' <returns></returns>
     <ExportAPI("parse")>
     <RApiReturn(GetType(NumericMatrix))>
-    Public Function parse(base64 As String, <RRawVectorArgument> dims As Object, Optional env As Environment = Nothing) As Object
+    Public Function parse(base64 As String, <RRawVectorArgument> dims As Object,
+                          Optional gzip As Boolean = False,
+                          Optional env As Environment = Nothing) As Object
+
         Dim dim_size As Integer() = CLRVector.asInteger(dims)
 
         If dim_size.Length = 1 Then
@@ -183,7 +186,7 @@ Module RMatrix
 
         Static network As New NetworkByteOrderBuffer
 
-        Dim vec As Double() = network.ParseDouble(base64)
+        Dim vec As Double() = network.ParseDouble(base64, gzip)
         Dim m As Double()() = vec.Split(dim_size(0))
 
         ' check height
