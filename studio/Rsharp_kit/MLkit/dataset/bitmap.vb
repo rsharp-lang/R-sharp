@@ -84,7 +84,29 @@ Module bitmap_func
 
     Sub Main()
         Call RInternal.generic.add("summary", GetType(BitmapReader), AddressOf summary_region)
+        Call RInternal.Object.Converts.addHandler(GetType(SLICPixel()), AddressOf createPixelClusterTable)
     End Sub
+
+    <RGenericOverloads("as.data.frame")>
+    Private Function createPixelClusterTable(pixels As SLICPixel(), args As list, env As Environment) As Object
+        Dim df As New dataframe With {
+            .columns = New Dictionary(Of String, Array)
+        }
+        Dim offset As Integer
+
+        Call df.add("x", From pixel As SLICPixel In pixels Select pixel.x)
+        Call df.add("y", From pixel As SLICPixel In pixels Select pixel.y)
+        Call df.add("cluster", From pixel As SLICPixel In pixels Select pixel.cluster)
+
+        For i As Integer = 0 To pixels(0).color.Length - 1
+            offset = i
+            df.add($"v{i + 1}", From pixel As SLICPixel
+                                In pixels
+                                Select pixel.color(offset))
+        Next
+
+        Return df
+    End Function
 
     <RGenericOverloads("summary")>
     Private Function summary_region(bmp As BitmapReader, args As list, env As Environment) As Object
