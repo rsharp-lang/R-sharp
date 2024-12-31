@@ -6,6 +6,8 @@ let regions = bitmap::slic(data,region_size = 0.05,
 
 regions = as.data.frame(regions);
 
+setwd(@dir);
+
 bitmap(file = "./lena.png") {
     plot(regions$x, regions$y, class = "cluster"  );
 };
