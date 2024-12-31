@@ -1,8 +1,8 @@
 imports "bitmap" from "MLkit";
 
 let data = readImage(file.path(@dir, "lena.jpg" ));
-let regions = bitmap::slic(data,region_size = 0.1,
-                         iterations = 1);
+let regions = bitmap::slic(data,region_size = 0.05,
+                         iterations = 2);
 
 regions = as.data.frame(regions);
 
