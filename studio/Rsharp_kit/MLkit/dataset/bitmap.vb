@@ -212,7 +212,7 @@ Module bitmap_func
     <ExportAPI("slic")>
     <RApiReturn(GetType(SLICPixel))>
     Public Function slic(bmp As Object,
-                         Optional region_size As Double = 0.2,
+                         Optional region_size As Double = 0.05,
                          Optional iterations As Integer = 1000,
                          Optional env As Environment = Nothing) As Object
 
