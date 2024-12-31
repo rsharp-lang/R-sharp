@@ -1,55 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::e82346187276f99f773149fe7e549efe, studio\Rsharp_kit\MLkit\dataset\bitmap.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 224
-    '    Code Lines: 162 (72.32%)
-    ' Comment Lines: 30 (13.39%)
-    '    - Xml Docs: 96.67%
-    ' 
-    '   Blank Lines: 32 (14.29%)
-    '     File Size: 8.83 KB
+' Summaries:
 
 
-    ' Module bitmap_func
-    ' 
-    '     Function: corp_rectangle, intensity_vec, open, scan_rowpeaks, summary_region
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 224
+'    Code Lines: 162 (72.32%)
+' Comment Lines: 30 (13.39%)
+'    - Xml Docs: 96.67%
+' 
+'   Blank Lines: 32 (14.29%)
+'     File Size: 8.83 KB
+
+
+' Module bitmap_func
+' 
+'     Function: corp_rectangle, intensity_vec, open, scan_rowpeaks, summary_region
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -58,6 +58,8 @@ Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.ProgressBar
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.DataMining.DensityQuery
+Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.SignalProcessing
@@ -200,6 +202,45 @@ Module bitmap_func
         Next
 
         Return copy
+    End Function
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="bmp"></param>
+    ''' <returns></returns>
+    <ExportAPI("slic")>
+    <RApiReturn(GetType(SLICPixel))>
+    Public Function slic(bmp As Object,
+                         Optional region_size As Double = 0.2,
+                         Optional iterations As Integer = 1000,
+                         Optional env As Environment = Nothing) As Object
+
+        Dim buf As BitmapBuffer
+
+        If bmp Is Nothing Then
+            Return RInternal.debug.stop("the given bitmap data object should not be nothing!", env)
+        End If
+
+        If TypeOf bmp Is Bitmap Then
+            buf = BitmapBuffer.FromBitmap(DirectCast(bmp, Bitmap))
+        ElseIf TypeOf bmp Is Image Then
+            buf = BitmapBuffer.FromImage(DirectCast(bmp, Image))
+        ElseIf TypeOf bmp Is BitmapBuffer Then
+            buf = bmp
+        Else
+            Return Message.InCompatibleType(GetType(BitmapBuffer), bmp.GetType, env)
+        End If
+
+        If region_size < 1 Then
+            ' convert ration to pixel size
+            region_size = {buf.Width * region_size, buf.Height * region_size}.Average
+        End If
+
+        Dim method As New SLIC(buf)
+        Dim pixels = method.MeasureSegments(region_size, iterations)
+
+        Return pixels
     End Function
 
     ''' <summary>
