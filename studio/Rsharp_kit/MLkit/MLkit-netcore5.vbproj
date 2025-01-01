@@ -178,6 +178,7 @@
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data\word2vec\word2vec.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\DataMining\BinaryTree\btree-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\DataMining\DataMining\DataMining.NET5.vbproj" />
+    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\DataMining\DensityQuery\DensityQuery.NET5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\DataMining\FeatureFrame\FeatureFrame.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\DataMining\hierarchical-clustering\hierarchical-clustering\hctree.NET5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\DataMining\HMM\HMM.NET5.vbproj" />
