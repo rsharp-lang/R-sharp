@@ -262,16 +262,13 @@ RE0:
                 Dim docs As AnnotationDocs = env.globalEnvironment.packages.packageDocs
 
                 Call help_df.add("symbols", funcs.AsEnumerable.Select(Function(fi) fi.name))
-                Call help_df.add("required parameters", funList.Select(Function(fi) fi.getArguments.Where(Function(a) a.Value Is Nothing).Keys.JoinBy(", ")))
+                Call help_df.add("required parameters", funList.Select(Function(fi) fi.getArguments.Where(Function(a) a.Value Is Nothing).Keys.JoinBy("; ")))
                 Call help_df.add("optional parameters", funList _
                      .Select(Function(fi)
                                  Return fi.getArguments _
                                      .Where(Function(a) a.Value IsNot Nothing) _
-                                     .ToDictionary(Function(a) a.Name,
-                                                   Function(a)
-                                                       Return a.Value.ToString.TrimNewLine
-                                                   End Function) _
-                                     .GetJson
+                                     .Keys _
+                                     .JoinBy("; ")
                              End Function))
                 Call help_df.add("help",
                      funList.Select(Function(fi)
