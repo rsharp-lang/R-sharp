@@ -255,7 +255,7 @@ RE0:
                 Dim help_df As New dataframe With {.columns = New Dictionary(Of String, Array)}
                 Dim funList As RFunction() = funcs _
                     .AsEnumerable _
-                    .Select(Function(fi) DirectCast(fi, RFunction)) _
+                    .Select(Function(fi) DirectCast(fi.value, RFunction)) _
                     .ToArray
                 Dim docs As AnnotationDocs = env.globalEnvironment.packages.packageDocs
 
