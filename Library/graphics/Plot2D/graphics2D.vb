@@ -136,11 +136,12 @@ Module graphics2DTools
             Dim padding As Padding = InteropArgumentHelper.getPadding(dev!padding)
             Dim canvas As New GraphicsRegion(dev.g.Size, padding)
             Dim layout As Rectangle = canvas.PlotRegion(css)
+            Dim paddingVec As PaddingLayout = PaddingLayout.EvaluateFromCSS(css, padding)
 
             layout = New Rectangle(
-                x:=layout.Right + padding.Right / 4,
+                x:=layout.Right + paddingVec.Right / 4,
                 y:=layout.Top,
-                width:=padding.Right * 2 / 3,
+                width:=paddingVec.Right * 2 / 3,
                 height:=layout.Height
             )
             legend.Draw(dev.g, layout)
