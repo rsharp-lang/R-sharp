@@ -227,6 +227,7 @@ RE0:
     ''' 
     ''' # get help of a package
     ''' help("package:base");
+    ''' help("package:REnv");
     ''' </example>
     <ExportAPI("help")>
     Public Function help(x As Object, Optional env As Environment = Nothing) As Object
