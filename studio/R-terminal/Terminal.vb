@@ -216,6 +216,13 @@ RE0:
     ''' this function open the html help document file on windows and
     ''' open the unix man page file on linux system.
     ''' </remarks>
+    ''' <example>
+    ''' # get help of a specific function
+    ''' help(example);
+    ''' 
+    ''' # get help of a package
+    ''' help("package:base");
+    ''' </example>
     <ExportAPI("help")>
     Public Function help(x As Object, Optional env As Environment = Nothing) As Object
         Dim f As RFunction
@@ -226,12 +233,20 @@ RE0:
         End If
 
         If TypeOf x Is String Then
-            x = env.FindFunction(CStr(x))
+            If CStr(x).StartsWith("package") Then
+                Dim pkgName As String = CStr(x).GetTagValue(":").Value
 
-            If x Is Nothing Then
-                Return invisible.NULL
+                ' get package help
+                ' help("package:base")
+
             Else
-                x = DirectCast(x, Symbol).value
+                x = env.FindFunction(CStr(x))
+
+                If x Is Nothing Then
+                    Return invisible.NULL
+                Else
+                    x = DirectCast(x, Symbol).value
+                End If
             End If
         End If
 
