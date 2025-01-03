@@ -65,6 +65,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language.UnixBash
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Configuration
@@ -268,7 +269,8 @@ RE0:
                                      .ToDictionary(Function(a) a.Name,
                                                    Function(a)
                                                        Return a.Value.ToString.TrimNewLine
-                                                   End Function)
+                                                   End Function) _
+                                     .GetJson
                              End Function))
                 Call help_df.add("help",
                      funList.Select(Function(fi)
