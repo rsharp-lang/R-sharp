@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::27d042a801226278189773ef10a5d07d, Library\graphics\Plot2D\graphics2D.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 713
-    '    Code Lines: 519 (72.79%)
-    ' Comment Lines: 111 (15.57%)
-    '    - Xml Docs: 95.50%
-    ' 
-    '   Blank Lines: 83 (11.64%)
-    '     File Size: 29.83 KB
+' Summaries:
 
 
-    ' Module graphics2DTools
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asciiArt, axisTicks, colorMapLegend, contourPolygon, contourTracing
-    '               DrawCircle, drawLegends, DrawRectangle, DrawTriangle, layout_grid
-    '               legend, line2D, measureString, offset2D, paddingString
-    '               paddingVector, plotColorMap, point2D, pointsVector, rasterHeatmap
-    '               (+2 Overloads) rectangle, scale, size, sizeVector
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 713
+'    Code Lines: 519 (72.79%)
+' Comment Lines: 111 (15.57%)
+'    - Xml Docs: 95.50%
+' 
+'   Blank Lines: 83 (11.64%)
+'     File Size: 29.83 KB
+
+
+' Module graphics2DTools
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asciiArt, axisTicks, colorMapLegend, contourPolygon, contourTracing
+'               DrawCircle, drawLegends, DrawRectangle, DrawTriangle, layout_grid
+'               legend, line2D, measureString, offset2D, paddingString
+'               paddingVector, plotColorMap, point2D, pointsVector, rasterHeatmap
+'               (+2 Overloads) rectangle, scale, size, sizeVector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -136,11 +136,12 @@ Module graphics2DTools
             Dim padding As Padding = InteropArgumentHelper.getPadding(dev!padding)
             Dim canvas As New GraphicsRegion(dev.g.Size, padding)
             Dim layout As Rectangle = canvas.PlotRegion(css)
+            Dim paddingVec As PaddingLayout = PaddingLayout.EvaluateFromCSS(css, padding)
 
             layout = New Rectangle(
-                x:=layout.Right + padding.Right / 4,
+                x:=layout.Right + paddingVec.Right / 4,
                 y:=layout.Top,
-                width:=padding.Right * 2 / 3,
+                width:=paddingVec.Right * 2 / 3,
                 height:=layout.Height
             )
             legend.Draw(dev.g, layout)
@@ -177,17 +178,23 @@ Module graphics2DTools
     ''' </remarks>
     ''' <returns></returns>
     <ExportAPI("layout.grid")>
+    <RApiReturn(GetType(Rectangle))>
     Public Function layout_grid(layout As Integer(),
                                 <RRawVectorArgument>
                                 Optional margin As Object = 0,
-                                Optional env As Environment = Nothing) As Rectangle()
+                                Optional env As Environment = Nothing) As Object
 
         Dim dev As graphicsDevice = curDev
+
+        If dev.g Is Nothing Then
+            Return RInternal.debug.stop("invalid graphics context!", env)
+        End If
+
         Dim size As Size = InteropArgumentHelper.getSize(dev!size, env).SizeParser
         Dim padding As Padding = InteropArgumentHelper.getPadding(dev!padding)
         Dim innerPadding As Padding = InteropArgumentHelper.getPadding(margin)
         Dim region As New GraphicsRegion(size, padding)
-        Dim css As CSSEnvirnment = dev.g.LoadEnvironment
+        Dim css As New CSSEnvirnment(size)
         Dim rect As Rectangle = region.PlotRegion(css)
         Dim layouts As New List(Of Rectangle)
         Dim x As Integer = rect.Left

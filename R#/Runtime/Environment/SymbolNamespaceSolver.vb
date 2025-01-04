@@ -69,6 +69,9 @@ Imports Directory = Microsoft.VisualBasic.FileIO.Directory
 
 Namespace Runtime
 
+    ''' <summary>
+    ''' Package namespace environment
+    ''' </summary>
     Public Class SymbolNamespaceSolver : Implements IEnumerable(Of PackageEnvironment)
 
         Public ReadOnly Property attachedNamespace As New Dictionary(Of String, PackageEnvironment)

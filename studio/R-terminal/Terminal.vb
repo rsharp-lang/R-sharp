@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::3475381a934ffc36cf0e760d7fbf33f7, studio\R-terminal\Terminal.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 328
-    '    Code Lines: 201 (61.28%)
-    ' Comment Lines: 81 (24.70%)
-    '    - Xml Docs: 76.54%
-    ' 
-    '   Blank Lines: 46 (14.02%)
-    '     File Size: 11.77 KB
+' Summaries:
 
 
-    ' Module Terminal
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: example, help, RunTerminal
-    ' 
-    '     Sub: evalWithSpecialCommandSync, q, quit
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 328
+'    Code Lines: 201 (61.28%)
+' Comment Lines: 81 (24.70%)
+'    - Xml Docs: 76.54%
+' 
+'   Blank Lines: 46 (14.02%)
+'     File Size: 11.77 KB
+
+
+' Module Terminal
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: example, help, RunTerminal
+' 
+'     Sub: evalWithSpecialCommandSync, q, quit
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -62,19 +62,23 @@ Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.LineEdit
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Configuration
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Language.Syntax
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
 ''' <summary>
 ''' the ``R#`` terminal console
@@ -146,7 +150,7 @@ RE0:
         Call Console.Write("Save workspace image? [y/n/c]: ")
 
         ' null string will be return if ctrl+C was pressed
-        Dim input As String = Strings.Trim(Console.ReadLine).Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB)
+        Dim input As String = Microsoft.VisualBasic.Strings.Trim(Console.ReadLine).Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB)
 
         If input = "c" Then
             ' cancel
@@ -216,6 +220,14 @@ RE0:
     ''' this function open the html help document file on windows and
     ''' open the unix man page file on linux system.
     ''' </remarks>
+    ''' <example>
+    ''' # get help of a specific function
+    ''' help(example);
+    ''' 
+    ''' # get help of a package
+    ''' help("package:base");
+    ''' help("package:REnv");
+    ''' </example>
     <ExportAPI("help")>
     Public Function help(x As Object, Optional env As Environment = Nothing) As Object
         Dim f As RFunction
@@ -226,12 +238,64 @@ RE0:
         End If
 
         If TypeOf x Is String Then
-            x = env.FindFunction(CStr(x))
+            If CStr(x).StartsWith("package") Then
+                Dim pkgName As String = CStr(x).GetTagValue(":").Value
 
-            If x Is Nothing Then
-                Return invisible.NULL
+                If Not globalPkg.hasNamespace(pkgName) Then
+                    Dim err = base.library(pkgName, env)
+
+                    If RProgram.isException(err) Then
+                        Return err
+                    End If
+                End If
+
+                ' get package help
+                ' help("package:base")
+                Dim ns As PackageEnvironment = globalPkg(pkgName)
+                Dim funcs = ns.funcSymbols
+                Dim help_df As New dataframe With {.columns = New Dictionary(Of String, Array)}
+                Dim funList As RFunction() = funcs _
+                    .AsEnumerable _
+                    .Select(Function(fi) DirectCast(fi.value, RFunction)) _
+                    .ToArray
+                Dim docs As AnnotationDocs = env.globalEnvironment.packages.packageDocs
+
+                Call help_df.add("symbols", funcs.AsEnumerable.Select(Function(fi) fi.name))
+                Call help_df.add("required parameters", funList.Select(Function(fi) fi.getArguments.Where(Function(a) a.Value Is Nothing).Keys.JoinBy("; ")))
+                Call help_df.add("optional parameters", funList _
+                     .Select(Function(fi)
+                                 Return fi.getArguments _
+                                     .Where(Function(a) a.Value IsNot Nothing) _
+                                     .Keys _
+                                     .JoinBy("; ")
+                             End Function))
+                Call help_df.add("help",
+                     funList.Select(Function(fi)
+                                        If TypeOf fi Is RMethodInfo Then
+                                            Dim xml = docs.GetAnnotations(DirectCast(fi, RMethodInfo).GetNetCoreCLRDeclaration, True)
+                                            Return xml.Summary.TrimNewLine
+                                        ElseIf TypeOf fi Is DeclareNewFunction Then
+                                            Dim doc As Document = DirectCast(fi, DeclareNewFunction).TryGetHelpDocument
+
+                                            If doc Is Nothing Then
+                                                Return ""
+                                            Else
+                                                Return doc.description.TrimNewLine
+                                            End If
+                                        Else
+                                            Return fi.ToString
+                                        End If
+                                    End Function))
+
+                Return help_df
             Else
-                x = DirectCast(x, Symbol).value
+                x = env.FindFunction(CStr(x))
+
+                If x Is Nothing Then
+                    Return invisible.NULL
+                Else
+                    x = DirectCast(x, Symbol).value
+                End If
             End If
         End If
 
@@ -241,7 +305,7 @@ RE0:
             f = x
         End If
 
-        If Platform = PlatformID.Unix Then
+        If Platform = System.PlatformID.Unix Then
             Dim ns_str As String = globalPkg.FindNamespace(f.name).FirstOrDefault
             Dim manfile As String
 

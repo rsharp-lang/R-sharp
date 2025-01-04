@@ -137,13 +137,20 @@ Namespace Development
             Call Console.WriteLine()
         End Sub
 
+        <Extension>
+        Public Function TryGetHelpDocument(f As SymbolExpression) As Document
+            Dim doc_json As String = f.GetAttributeValue(PackageLoader2.RsharpHelp).DefaultFirst
+            Dim help As Document = doc_json.LoadJSON(Of Document)(throwEx:=False)
+
+            Return help
+        End Function
+
         ''' <summary>
         ''' print highlighted markdown on console
         ''' </summary>
         ''' <param name="f"></param>
         Public Sub printDocs(f As SymbolExpression)
-            Dim doc_json As String = f.GetAttributeValue(PackageLoader2.RsharpHelp).DefaultFirst
-            Dim help As Document = doc_json.LoadJSON(Of Document)(throwEx:=False)
+            Dim help = f.TryGetHelpDocument
 
             ' skip print if contains no help document
             ' of current symbol
@@ -178,8 +185,7 @@ Namespace Development
         ''' <returns></returns>
         Public Function getMarkdownDocs(f As SymbolExpression) As String
             Dim s As New StringBuilder
-            Dim doc_json As String = f.GetAttributeValue(PackageLoader2.RsharpHelp).DefaultFirst
-            Dim help As Document = doc_json.LoadJSON(Of Document)(throwEx:=False)
+            Dim help As Document = f.TryGetHelpDocument
 
             ' skip print if contains no help document
             ' of current symbol
