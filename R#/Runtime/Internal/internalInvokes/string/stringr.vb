@@ -851,7 +851,7 @@ Namespace Runtime.Internal.Invokes
                                  Optional env As Environment = Nothing) As Object
 
             If delimiter Is Nothing Then
-                Return debug.stop("the given delimiter is nothing!", env)
+                Return debug.stop("the given delimiter for make string split should not be nothing!", env)
             End If
 
             If text.IsNullOrEmpty Then
