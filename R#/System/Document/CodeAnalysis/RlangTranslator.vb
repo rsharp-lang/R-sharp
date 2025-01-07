@@ -171,7 +171,11 @@ Namespace Development.CodeAnalysis
                 Case GetType(ForLoop) : Return getForLoop(line, env)
 
                 Case Else
-                    Throw New NotImplementedException(line.GetType.FullName)
+                    Dim expr_clr As String = line.GetType.Name
+                    Dim rsharp_str As String = line.ToString
+                    Dim msg_err As String = $"{expr_clr}: {rsharp_str}"
+
+                    Throw New NotImplementedException(msg_err)
             End Select
         End Function
 
