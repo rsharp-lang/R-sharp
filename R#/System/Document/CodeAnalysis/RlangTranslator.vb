@@ -169,6 +169,7 @@ Namespace Development.CodeAnalysis
                 Case GetType(Operators.UnaryNot) : Return GetUnaryNot(line, env)
                 Case GetType(ByRefFunctionCall) : Return getByref(line, env)
                 Case GetType(ForLoop) : Return getForLoop(line, env)
+                Case GetType(MemberValueAssign) : Return getMemberValueAssign(line, env)
 
                 Case Else
                     Dim expr_clr As String = line.GetType.Name
@@ -191,6 +192,23 @@ Namespace Development.CodeAnalysis
             Return $"for({x} in {seq}) {{
 {run}
             }}"
+        End Function
+
+        Private Function getMemberValueAssign(line As MemberValueAssign, env As Environment) As String
+            Dim target = line.memberReference
+            Dim symbol = GetScript(target.symbol, env)
+            Dim index = GetScript(target.index, env)
+            Dim val_str = GetScript(line.value, env)
+
+            If target.indexType = SymbolIndexers.dataframeColumns Then
+                Return $"{symbol}[,{index}]<-{val_str};"
+            ElseIf target.indexType = SymbolIndexers.nameIndex Then
+                Return $"{symbol}[[{index}]]<-{val_str};"
+            ElseIf target.indexType = SymbolIndexers.vectorIndex Then
+                Return $"{symbol}[{index}]<-{val_str};"
+            Else
+                Throw New NotImplementedException($"{target.indexType.Description}: {line.ToString}")
+            End If
         End Function
 
         Private Function getByref(line As ByRefFunctionCall, env As Environment) As String
