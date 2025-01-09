@@ -81,18 +81,34 @@ Public Module graphics
     End Property
 
     Public Function PopLastDevice() As graphicsDevice
+        If Env.debugOpt Then
+            Call VBDebugger.EchoLine($"pop out the last graphics device [{devlist.LastOrDefault}].")
+        End If
+
         Return devlist.Pop
     End Function
 
     Public Sub RemoveAt(offset As Integer)
+        If Env.debugOpt Then
+            Call VBDebugger.EchoLine($"remove a specifc graphics device at index {offset} [{devlist.ElementAtOrDefault(offset)}].")
+        End If
+
         Call devlist.RemoveAt(offset)
     End Sub
 
     Public Sub PushNewDevice(dev As graphicsDevice)
+        If Env.debugOpt Then
+            Call VBDebugger.EchoLine($"push a new graphics device [{dev}].")
+        End If
+
         Call devlist.Add(dev)
     End Sub
 
     Public Sub SwapDevice(a As Integer, b As Integer)
+        If Env.debugOpt Then
+            Call VBDebugger.EchoLine($"swap two graphics device of {a} ~ {b} [{devlist(a)}] ~ [{devlist(b)}].")
+        End If
+
         Call devlist.Swap(a, b)
     End Sub
 
@@ -114,6 +130,6 @@ Public Module graphics
             .dev = [function]
         }
 
-        Call devlist.Add(curDev)
+        Call PushNewDevice(curDev)
     End Sub
 End Module
