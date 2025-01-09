@@ -308,16 +308,23 @@ Namespace Development.CodeAnalysis
         End Function
 
         Private Function GetAssignValue(assign As ValueAssignExpression, env As Environment) As String
-            Dim symbols As String() = assign.targetSymbols _
-                .Select(Function(a) ValueAssignExpression.GetSymbol(a)) _
-                .ToArray
-            Dim value As String = GetScript(assign.value, env)
+            Dim left = assign.targetSymbols
 
-            If symbols.Length > 1 Then
-                Throw New NotImplementedException("tuple deconstructor is not implements in R language.")
+            If left.Length > 1 Then
+                Throw New NotImplementedException($"tuple deconstructor is not implements in R language: {assign}.")
             End If
 
-            Return $"{symbols(0)} = {value}"
+            Dim symbol = assign.targetSymbols(0)
+            Dim symbol_str As String
+            Dim value As String = GetScript(assign.value, env)
+
+            If TypeOf symbol Is SymbolIndexer Then
+                symbol_str = GetScript(symbol, env)
+            Else
+                symbol_str = ValueAssignExpression.GetSymbol(symbol)
+            End If
+
+            Return $"{symbol_str} = {value}"
         End Function
 
         Private Function GetSymbol(line As SymbolReference, env As Environment) As String
