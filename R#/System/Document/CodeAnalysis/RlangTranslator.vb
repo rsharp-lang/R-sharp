@@ -276,6 +276,8 @@ Namespace Development.CodeAnalysis
 
             If value Is Nothing Then
                 Return "NULL"
+            ElseIf value Is GetType(Void) Then
+                Return "NA"
             Else
                 If TypeOf value Is String Then
                     Return $"'{value}'"
