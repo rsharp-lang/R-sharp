@@ -169,9 +169,14 @@ Namespace Development.CodeAnalysis
                 Case GetType(Operators.UnaryNot) : Return GetUnaryNot(line, env)
                 Case GetType(ByRefFunctionCall) : Return getByref(line, env)
                 Case GetType(ForLoop) : Return getForLoop(line, env)
+                Case GetType(MemberValueAssign) : Return getMemberValueAssign(line, env)
 
                 Case Else
-                    Throw New NotImplementedException(line.GetType.FullName)
+                    Dim expr_clr As String = line.GetType.Name
+                    Dim rsharp_str As String = line.ToString
+                    Dim msg_err As String = $"{expr_clr}: {rsharp_str}"
+
+                    Throw New NotImplementedException(msg_err)
             End Select
         End Function
 
@@ -187,6 +192,23 @@ Namespace Development.CodeAnalysis
             Return $"for({x} in {seq}) {{
 {run}
             }}"
+        End Function
+
+        Private Function getMemberValueAssign(line As MemberValueAssign, env As Environment) As String
+            Dim target = line.memberReference
+            Dim symbol = GetScript(target.symbol, env)
+            Dim index = GetScript(target.index, env)
+            Dim val_str = GetScript(line.value, env)
+
+            If target.indexType = SymbolIndexers.dataframeColumns Then
+                Return $"{symbol}[,{index}]<-{val_str};"
+            ElseIf target.indexType = SymbolIndexers.nameIndex Then
+                Return $"{symbol}[[{index}]]<-{val_str};"
+            ElseIf target.indexType = SymbolIndexers.vectorIndex Then
+                Return $"{symbol}[{index}]<-{val_str};"
+            Else
+                Throw New NotImplementedException($"{target.indexType.Description}: {line.ToString}")
+            End If
         End Function
 
         Private Function getByref(line As ByRefFunctionCall, env As Environment) As String
@@ -254,6 +276,8 @@ Namespace Development.CodeAnalysis
 
             If value Is Nothing Then
                 Return "NULL"
+            ElseIf value Is GetType(Void) Then
+                Return "NA"
             Else
                 If TypeOf value Is String Then
                     Return $"'{value}'"
@@ -286,16 +310,23 @@ Namespace Development.CodeAnalysis
         End Function
 
         Private Function GetAssignValue(assign As ValueAssignExpression, env As Environment) As String
-            Dim symbols As String() = assign.targetSymbols _
-                .Select(Function(a) ValueAssignExpression.GetSymbol(a)) _
-                .ToArray
-            Dim value As String = GetScript(assign.value, env)
+            Dim left = assign.targetSymbols
 
-            If symbols.Length > 1 Then
-                Throw New NotImplementedException("tuple deconstructor is not implements in R language.")
+            If left.Length > 1 Then
+                Throw New NotImplementedException($"tuple deconstructor is not implements in R language: {assign}.")
             End If
 
-            Return $"{symbols(0)} = {value}"
+            Dim symbol = assign.targetSymbols(0)
+            Dim symbol_str As String
+            Dim value As String = GetScript(assign.value, env)
+
+            If TypeOf symbol Is SymbolIndexer Then
+                symbol_str = GetScript(symbol, env)
+            Else
+                symbol_str = ValueAssignExpression.GetSymbol(symbol)
+            End If
+
+            Return $"{symbol_str} = {value}"
         End Function
 
         Private Function GetSymbol(line As SymbolReference, env As Environment) As String

@@ -48,7 +48,7 @@ const rlang_interop = function(code, source = NULL, debug = FALSE, workdir = NUL
         print(`Rscript "${code_save}"`);
 
         writeLines(script_code, con = code_save);
-        system(`Rscript "${code_save}"`);
+        system(`/usr/lib/R/bin/Rscript "${code_save}"`);
 
         if (change_wd) {
             setwd(current_wd);
