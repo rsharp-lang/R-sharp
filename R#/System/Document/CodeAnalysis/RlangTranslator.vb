@@ -159,6 +159,7 @@ Namespace Development.CodeAnalysis
                 Case GetType(SymbolReference) : Return GetSymbol(line, env)
                 Case GetType(ValueAssignExpression) : Return GetAssignValue(line, env)
                 Case GetType(DeclareNewSymbol) : Return AssignNewSymbol(line, env)
+                Case GetType(DeclareNewFunction) : Return createFunction(line, env)
                 Case GetType(VectorLiteral) : Return Vector(line, env)
                 Case GetType(Literal) : Return Literal(line, env)
                 Case GetType(IfBranch) : Return GetIf(line, env)
@@ -178,6 +179,28 @@ Namespace Development.CodeAnalysis
 
                     Throw New NotImplementedException(msg_err)
             End Select
+        End Function
+
+        Private Function createFunction(f As DeclareNewFunction, env As Environment) As String
+            Dim name As String = f.funcName
+            Dim args = f.parameters _
+                .Select(Function(a)
+                            If a.hasInitializeExpression Then
+                                Return $"{a.GetSymbolName} = {GetScript(a.value, env)}"
+                            Else
+                                Return a.GetSymbolName
+                            End If
+                        End Function) _
+                .ToArray
+            Dim inner As New Dictionary(Of String, String)(symbols)
+            Dim run As String
+
+            inner(name) = CreateSymbol
+            run = New RlangTranslator(f.body, inner, indent + 3).GetScript(env)
+
+            Return $"{name} = function({args.JoinBy(", ")}) {{
+{run}
+}}"
         End Function
 
         Private Function getForLoop(forLoop As ForLoop, env As Environment) As String
