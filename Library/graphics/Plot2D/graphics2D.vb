@@ -671,7 +671,7 @@ Module graphics2DTools
                           <RRawVectorArgument>
                           colorSet As Object,
                           Optional levels As Integer = 25,
-                          Optional TrIQ As Double = 0.65,
+                          Optional TrIQ As Double = 0.95,
                           Optional zero As String = Nothing) As String()
 
         Dim colors As String() = Designer _
