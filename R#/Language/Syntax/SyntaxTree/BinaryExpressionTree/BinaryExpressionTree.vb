@@ -505,7 +505,7 @@ Namespace Language.Syntax.SyntaxParser
             If raw = 3 AndAlso raw(1).TryCast(Of String) = "~" Then
                 ' formula expression: a ~ b
                 Return New FormulaExpression(
-                    y:=ValueAssignExpression.GetSymbol(raw(0).TryCast(Of SyntaxResult).expression),
+                    y:=raw(0).TryCast(Of SyntaxResult).expression,
                     formula:=raw(2).TryCast(Of SyntaxResult).expression
                 )
             End If

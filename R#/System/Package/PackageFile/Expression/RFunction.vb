@@ -216,7 +216,7 @@ Namespace Development.Package.File.Expressions
                 Call BlockReader.ParseBlock(reader).Parse(desc).DoCall(AddressOf body.Add)
             Next
 
-            Return New FormulaExpression(DirectCast(args(Scan0), SymbolReference).symbol, body(Scan0))
+            Return New FormulaExpression(args(Scan0), body(Scan0))
         End Function
 
         Private Shared Function parseLambda(reader As BinaryReader, desc As DESCRIPTION) As DeclareLambdaFunction
