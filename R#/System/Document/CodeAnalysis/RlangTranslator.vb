@@ -329,12 +329,16 @@ Namespace Development.CodeAnalysis
                 Case SymbolIndexers.vectorIndex : script = $"{symbol}[{indexer}]"
                 Case SymbolIndexers.dataframeRanges
                     ' a[1,,drop=TRUE]
-                    If TypeOf line.index Is VectorLiteral AndAlso DirectCast(line.index, VectorLiteral).Skip(1).All(Function(a) TypeOf a Is ValueAssignExpression) Then
-                        Dim index As VectorLiteral = line.index
-                        Dim rowIndex As String = GetScript(index(0), env)
-                        Dim opt As String = index.Skip(1).Select(Function(a) GetScript(a, env)).JoinBy(", ")
+                    If TypeOf line.index Is VectorLiteral Then
+                        If DirectCast(line.index, VectorLiteral).Skip(1).All(Function(a) TypeOf a Is ValueAssignExpression) Then
+                            Dim index As VectorLiteral = line.index
+                            Dim rowIndex As String = GetScript(index(0), env)
+                            Dim opt As String = index.Skip(1).Select(Function(a) GetScript(a, env)).JoinBy(", ")
 
-                        script = $"{symbol}[{rowIndex},,{opt}]"
+                            script = $"{symbol}[{rowIndex},,{opt}]"
+                        Else
+                            script = $"{symbol}[{GetScript(line.index, env).GetStackValue("(", ")")}]"
+                        End If
                     Else
                         Throw New NotImplementedException(line.indexType.ToString & ": " & line.index.ToString)
                     End If
