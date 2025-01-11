@@ -479,7 +479,9 @@ Namespace Language.Syntax.SyntaxParser
 
                     Return FormulaExpressionSyntax.CreateFormula(a, b, opts)
                 End If
-            ElseIf tokens.isLambdaFunction Then
+            End If
+
+            If tokens.isLambdaFunction Then
                 Return SyntaxImplements.DeclareLambdaFunction(tokens(Scan0).VA, tokens(2).VA, lineNum, opts)
             End If
 

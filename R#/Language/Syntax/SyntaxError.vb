@@ -70,6 +70,9 @@ Namespace Language.Syntax.SyntaxParser
         Public Property exception As Exception
         Public Property file As String
 
+        Sub New()
+        End Sub
+
         Public Overrides Function ToString() As String
             Dim rawText As String = errorBlock
             Dim err As Exception = exception
