@@ -174,6 +174,7 @@ Namespace Development.CodeAnalysis
                 Case GetType(MemberValueAssign) : Return getMemberValueAssign(line, env)
                 Case GetType(FormulaExpression) : Return getFormulaString(line, env)
                 Case GetType(Require) : Return requirePkg(line, env)
+                Case GetType(SequenceLiteral) : Return getSequence(line, env)
 
                 Case Else
                     Dim expr_clr As String = line.GetType.Name
@@ -182,6 +183,18 @@ Namespace Development.CodeAnalysis
 
                     Throw New NotImplementedException(msg_err)
             End Select
+        End Function
+
+        Private Function getSequence(seq As SequenceLiteral, env As Environment) As String
+            Dim from As String = GetScript(seq.from, env)
+            Dim [to] As String = GetScript(seq.to, env)
+            Dim [by] As String = GetScript(seq.steps, env)
+
+            If by <> "1" Then
+                Return $"seq(from = {from}, to = {[to]}, by = {by})"
+            Else
+                Return $"{from}:{[to]}"
+            End If
         End Function
 
         Private Function requirePkg(require As Require, env As Environment) As String
@@ -432,7 +445,14 @@ Namespace Development.CodeAnalysis
                             descriptor = castLiteral(val, val.TryGetValueType, castError)
                         End If
                         If castError Then
-                            Throw New NotImplementedException(val.typeCode.ToString)
+                            If val.typeCode = TypeCodes.closure Then
+                                ' use the function name as symbol reference
+                                ' example as pass the function name as parameter value
+                                ' sapply(m,1,sd);
+                                descriptor = val.name
+                            Else
+                                Throw New NotImplementedException(val.typeCode.ToString)
+                            End If
                         End If
 
                         Call symbols.Add(name, descriptor)
