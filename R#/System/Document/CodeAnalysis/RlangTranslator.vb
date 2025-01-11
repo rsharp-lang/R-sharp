@@ -448,32 +448,32 @@ Namespace Development.CodeAnalysis
 
                 If val Is Nothing Then
                     Throw New MissingPrimaryKeyException($"missing of the symbol: {name}")
+                End If
+
+                If val.value Is Nothing Then
+                    symbols.Add(name, "NULL")
                 Else
-                    If val.value Is Nothing Then
-                        symbols.Add(name, "NULL")
-                    Else
-                        Dim descriptor As String
-                        Dim castError As Boolean
+                    Dim descriptor As String
+                    Dim castError As Boolean
 
-                        descriptor = castLiteral(val, val.typeCode, castError)
+                    descriptor = castLiteral(val, val.typeCode, castError)
 
-                        If castError Then
-                            descriptor = castLiteral(val, val.TryGetValueType, castError)
-                        End If
-                        If castError Then
-                            If val.typeCode = TypeCodes.closure Then
-                                ' use the function name as symbol reference
-                                ' example as pass the function name as parameter value
-                                ' sapply(m,1,sd);
-                                descriptor = val.name
-                                Call $"closure symbol '{descriptor}' has been used as the parameter value.".Warning
-                            Else
-                                Throw New NotImplementedException(val.typeCode.ToString)
-                            End If
-                        End If
-
-                        Call symbols.Add(name, descriptor)
+                    If castError Then
+                        descriptor = castLiteral(val, val.TryGetValueType, castError)
                     End If
+                    If castError Then
+                        If val.typeCode = TypeCodes.closure Then
+                            ' use the function name as symbol reference
+                            ' example as pass the function name as parameter value
+                            ' sapply(m,1,sd);
+                            descriptor = val.name
+                            Call $"closure symbol '{descriptor}' has been used as the parameter value.".Warning
+                        Else
+                            Throw New NotImplementedException(val.typeCode.ToString)
+                        End If
+                    End If
+
+                    Call symbols.Add(name, descriptor)
                 End If
             End If
 
