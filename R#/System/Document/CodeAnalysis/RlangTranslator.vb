@@ -466,6 +466,7 @@ Namespace Development.CodeAnalysis
                                 ' example as pass the function name as parameter value
                                 ' sapply(m,1,sd);
                                 descriptor = val.name
+                                Call $"closure symbol '{descriptor}' has been used as the parameter value.".Warning
                             Else
                                 Throw New NotImplementedException(val.typeCode.ToString)
                             End If
