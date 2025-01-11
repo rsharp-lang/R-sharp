@@ -181,7 +181,7 @@ Module xlsx
     <RApiReturn(GetType(Boolean))>
     Public Function writeXlsx(<RRawVectorArgument> x As Object, file$,
                               Optional sheetName$ = "Sheet1",
-                              Optional row_names As Boolean = True,
+                              Optional row_names As Object = True,
                               Optional fileEncoding As Object = "",
                               <RDefaultExpression>
                               Optional number_format As Object = "~`${getOption('f64.format')}${getOption('digits')}`",
@@ -250,7 +250,7 @@ Module xlsx
         End If
     End Function
 
-    Private Function coercesDataTable(x As Object, row_names As Boolean, formatNumber As String, env As Environment) As [Variant](Of Message, csv)
+    Private Function coercesDataTable(x As Object, row_names As Object, formatNumber As String, env As Environment) As [Variant](Of Message, csv)
         Dim type As Type = x.GetType
 
         If type Is GetType(Rdataframe) Then
