@@ -175,6 +175,7 @@ Namespace Development.CodeAnalysis
                 Case GetType(FormulaExpression) : Return getFormulaString(line, env)
                 Case GetType(Require) : Return requirePkg(line, env)
                 Case GetType(SequenceLiteral) : Return getSequence(line, env)
+                Case GetType(UnaryNumeric) : Return getNeg(line, env)
 
                 Case Else
                     Dim expr_clr As String = line.GetType.Name
@@ -183,6 +184,11 @@ Namespace Development.CodeAnalysis
 
                     Throw New NotImplementedException(msg_err)
             End Select
+        End Function
+
+        Private Function getNeg(neg As UnaryNumeric, env As Environment) As String
+            Dim val As String = GetScript(neg.numeric, env)
+            Return $"{neg.operator}{val}"
         End Function
 
         Private Function getSequence(seq As SequenceLiteral, env As Environment) As String
