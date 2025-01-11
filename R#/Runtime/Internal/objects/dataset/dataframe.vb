@@ -365,25 +365,16 @@ Namespace Runtime.Internal.Object
         ''' <param name="keys"></param>
         ''' <returns></returns>
         Public Function delete(ParamArray keys As String()) As dataframe
-            Dim cols As New Dictionary(Of String, Array)(columns)
-
             For Each key As String In keys.SafeQuery
-                Call cols.Remove(key)
+                Call columns.Remove(key)
             Next
 
-            Return New dataframe With {
-                .columns = cols,
-                .rownames = rownames.ToArray
-            }
+            Return Me
         End Function
 
         Public Function delete(offset As Integer) As dataframe
-            Dim cols As New Dictionary(Of String, Array)(columns)
-            Call cols.Remove(getKeyByIndex(offset))
-            Return New dataframe With {
-                .columns = cols,
-                .rownames = rownames.ToArray
-            }
+            Call columns.Remove(getKeyByIndex(offset))
+            Return Me
         End Function
 
         ''' <summary>

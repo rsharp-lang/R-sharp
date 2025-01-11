@@ -160,9 +160,17 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     ' offset -1 inside dataframe automatically
                     keyX = left.getColumnVector(CInt(by))
                     keyY = right.getColumnVector(CInt(by))
+
+                    ' removes the duplicated col in right
+                    right = New dataframe(right)
+                    right.delete(CInt(by))
                 Else
-                    keyX = left.getColumnVector(by)
-                    keyY = right.getColumnVector(by)
+                    keyX = left.getColumnVector(CStr(by))
+                    keyY = right.getColumnVector(CStr(by))
+
+                    ' removes the duplicated col in right
+                    right = New dataframe(right)
+                    right.delete(CStr(by))
                 End If
             ElseIf by_x Is Nothing OrElse by_y Is Nothing Then
                 Return Internal.debug.stop({
