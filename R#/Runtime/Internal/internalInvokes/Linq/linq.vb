@@ -130,7 +130,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <param name="right"></param>
         ''' <param name="by">the field name that used for join two data table, if the field name that 
         ''' specific by this parameter is existsed in both <paramref name="left"/> and 
-        ''' <paramref name="right"/>.</param>
+        ''' <paramref name="right"/>.
+        ''' 
+        ''' this parameter option also could be an integer value 1-based.
+        ''' </param>
         ''' <param name="grep">
         ''' text grep expression for the index key string value, see ``text_grep``.
         ''' </param>
@@ -139,7 +142,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         Public Function left_join(left As dataframe, right As dataframe,
                                   Optional by_x As String = Nothing,
                                   Optional by_y As String = Nothing,
-                                  Optional [by] As String = Nothing,
+                                  Optional [by] As Object = Nothing,
                                   Optional grep As Object = Nothing,
                                   Optional env As Environment = Nothing) As Object
 
@@ -153,8 +156,14 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim keyY As String()
 
             If Not by Is Nothing Then
-                keyX = left.getColumnVector(by)
-                keyY = right.getColumnVector(by)
+                If RType.TypeOf(by).mode = TypeCodes.integer Then
+                    ' offset -1 inside dataframe automatically
+                    keyX = left.getColumnVector(CInt(by))
+                    keyY = right.getColumnVector(CInt(by))
+                Else
+                    keyX = left.getColumnVector(by)
+                    keyY = right.getColumnVector(by)
+                End If
             ElseIf by_x Is Nothing OrElse by_y Is Nothing Then
                 Return Internal.debug.stop({
                     "missing primary key for join two dataframe!",
