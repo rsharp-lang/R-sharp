@@ -172,6 +172,7 @@ Namespace Development.CodeAnalysis
                 Case GetType(ForLoop) : Return getForLoop(line, env)
                 Case GetType(MemberValueAssign) : Return getMemberValueAssign(line, env)
                 Case GetType(FormulaExpression) : Return getFormulaString(line, env)
+                Case GetType(Require) : Return requirePkg(line, env)
 
                 Case Else
                     Dim expr_clr As String = line.GetType.Name
@@ -180,6 +181,20 @@ Namespace Development.CodeAnalysis
 
                     Throw New NotImplementedException(msg_err)
             End Select
+        End Function
+
+        Private Function requirePkg(require As Require, env As Environment) As String
+            Dim pkgs = require.packages.Select(Function(p) GetScript(p, env)).ToArray
+
+            If require.options.IsNullOrEmpty Then
+                Return $"require({pkgs.JoinBy(", ")})"
+            Else
+                Dim opts As String() = require.options _
+                    .Select(Function(a) GetScript(a, env)) _
+                    .ToArray
+
+                Return $"require({pkgs.JoinBy(", ")}, {opts.JoinBy(", ")})"
+            End If
         End Function
 
         Private Function getFormulaString(f As FormulaExpression, env As Environment) As String
