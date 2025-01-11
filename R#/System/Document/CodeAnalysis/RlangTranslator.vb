@@ -131,7 +131,7 @@ Namespace Development.CodeAnalysis
                     ' or syntax error in R langhage
                     script(script.Count - 1) = script.Last & line_translate
                 Else
-                    If appendTerminator Then
+                    If appendTerminator AndAlso line_translate.Length > 0 AndAlso line_translate.Last <> ";"c Then
                         Call script.Add(line_translate & ";")
                     Else
                         Call script.Add(line_translate)
