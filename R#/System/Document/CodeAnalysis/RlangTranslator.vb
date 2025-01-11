@@ -277,12 +277,23 @@ Namespace Development.CodeAnalysis
             Dim is_symbol As Boolean = Scanner.CheckIdentifierSymbol(indexer.Trim("'"c, """"c))
             Dim symbolName As String = indexer.Trim("'"c, """"c)
 
+            If Not is_symbol Then
+                If line.indexType = SymbolIndexers.nameIndex AndAlso symbolName.IndexOf("$") > 0 Then
+                    is_symbol = True
+                End If
+            End If
+
             Select Case line.indexType
                 Case SymbolIndexers.dataframeColumns : script = $"{symbol}[, {indexer}]"
                 Case SymbolIndexers.dataframeRows : script = $"{symbol}[{indexer}, ]"
                 Case SymbolIndexers.nameIndex
                     If is_symbol Then
-                        script = $"{symbol}${symbolName}"
+                        If symbolName.IndexOf("$") > 0 Then
+                            ' `a$b`
+                            script = $"{symbol}$`{symbolName}`"
+                        Else
+                            script = $"{symbol}${symbolName}"
+                        End If
                     Else
                         script = $"{symbol}[[{indexer}]]"
                     End If
