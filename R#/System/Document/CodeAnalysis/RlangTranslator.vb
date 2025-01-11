@@ -232,12 +232,22 @@ Namespace Development.CodeAnalysis
             Dim inner As New Dictionary(Of String, String)(symbols)
             Dim run As String
 
+            For Each arg As DeclareNewSymbol In f.parameters
+                inner(arg.GetSymbolName) = CreateSymbol
+            Next
+
             inner(name) = CreateSymbol
             run = New RlangTranslator(f.body, inner, indent + 3).GetScript(env)
 
-            Return $"{name} = function({args.JoinBy(", ")}) {{
+            Dim func_body = $"function({args.JoinBy(", ")}) {{
 {run}
 }}"
+
+            If name.StringEmpty OrElse Not Scanner.CheckIdentifierSymbol(name) Then
+                Return func_body
+            Else
+                Return $"{name} = {func_body}"
+            End If
         End Function
 
         Private Function getForLoop(forLoop As ForLoop, env As Environment) As String
