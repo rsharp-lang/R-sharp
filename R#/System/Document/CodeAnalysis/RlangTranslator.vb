@@ -392,7 +392,9 @@ Namespace Development.CodeAnalysis
             End If
 
             If Not Scanner.CheckIdentifierSymbol(symbol_str) Then
-                symbol_str = $"""{symbol_str}"""
+                If Not TypeOf symbol Is SymbolIndexer Then
+                    symbol_str = $"""{symbol_str}"""
+                End If
             End If
 
             Return $"{symbol_str} = {value}"
