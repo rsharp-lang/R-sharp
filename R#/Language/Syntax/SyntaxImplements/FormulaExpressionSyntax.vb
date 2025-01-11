@@ -103,7 +103,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                 Return data
             End If
 
-
+            Return New FormulaExpression(response.expression, data.expression)
         End Function
     End Module
 End Namespace

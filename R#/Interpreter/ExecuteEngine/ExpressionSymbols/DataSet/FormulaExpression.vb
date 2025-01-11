@@ -104,6 +104,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Me.formula = formula
         End Sub
 
+        Sub New(y As Expression, formula As Expression)
+            Me.var = y
+            Me.formula = formula
+        End Sub
+
         ''' <summary>
         ''' get all symbol names from <see cref="formula"/>
         ''' </summary>
