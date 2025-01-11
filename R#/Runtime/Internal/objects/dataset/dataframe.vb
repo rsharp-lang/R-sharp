@@ -262,7 +262,7 @@ Namespace Runtime.Internal.Object
         End Property
 
         ''' <summary>
-        ''' <see cref="getKeyByIndex"/>
+        ''' <see cref="getKeyByIndex"/>, get column by 1-based offset
         ''' </summary>
         ''' <param name="index"></param>
         ''' <returns></returns>

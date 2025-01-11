@@ -8,6 +8,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports File = Microsoft.VisualBasic.Data.csv.IO.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.[Object].dataframe
@@ -42,7 +43,24 @@ Public Module dataframeWriter
             End If
         End If
         If Not TypeOf row_names Is Boolean Then
-            inputRowNames = CLRVector.asCharacter(row_names)
+            If RType.TypeOf(row_names).mode = TypeCodes.integer Then
+                Dim offset = CInt(row_names)
+                inputRowNames = x.getColumnVector(offset)
+                x = New Rdataframe(x)
+                x.delete(offset)
+            Else
+                inputRowNames = CLRVector.asCharacter(row_names)
+
+                If Not inputRowNames.IsNullOrEmpty Then
+                    If inputRowNames.Length = 1 Then
+                        Dim col As String = inputRowNames(Scan0)
+                        inputRowNames = x.getColumnVector(col)
+                        x = New Rdataframe(x)
+                        x.delete(col)
+                    End If
+                End If
+            End If
+
             row_names = False
         End If
 
