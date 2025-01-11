@@ -76,6 +76,10 @@ Namespace Language.Syntax.SyntaxParser
 
         Friend ReadOnly iterateAssign As Index(Of String) = {"+=", "-=", "*=", "/="}
         Friend ReadOnly valueAssignOperatorSymbols As Index(Of String) = {"<-", "="}
+
+        ''' <summary>
+        ''' -> orelse =>
+        ''' </summary>
         Friend ReadOnly lambdaOperator As Index(Of String) = {"->", "=>"}
         Friend ReadOnly literalTypes As Index(Of TokenType) = {
             TokenType.stringLiteral,
@@ -121,7 +125,12 @@ Namespace Language.Syntax.SyntaxParser
         <DebuggerStepThrough>
         <Extension>
         Public Function isLambdaFunction(code As [Variant](Of Expression, String)()) As Boolean
-            Return code.Length > 2 AndAlso (TypeOf code(Scan0).VA Is SymbolReference OrElse TypeOf code(Scan0).VA Is VectorLiteral) AndAlso code(1).VB Like lambdaOperator
+            Dim check_arg = TypeOf code(Scan0).VA Is SymbolReference OrElse
+                TypeOf code(Scan0).VA Is VectorLiteral
+
+            Return code.Length > 2 AndAlso
+                check_arg AndAlso
+                code(1).VB Like lambdaOperator
         End Function
 
         <Extension>
