@@ -171,6 +171,7 @@ Namespace Development.CodeAnalysis
                 Case GetType(ByRefFunctionCall) : Return getByref(line, env)
                 Case GetType(ForLoop) : Return getForLoop(line, env)
                 Case GetType(MemberValueAssign) : Return getMemberValueAssign(line, env)
+                Case GetType(FormulaExpression) : Return getFormulaString(line, env)
 
                 Case Else
                     Dim expr_clr As String = line.GetType.Name
@@ -179,6 +180,13 @@ Namespace Development.CodeAnalysis
 
                     Throw New NotImplementedException(msg_err)
             End Select
+        End Function
+
+        Private Function getFormulaString(f As FormulaExpression, env As Environment) As String
+            Dim response As String = GetScript(f.var, env)
+            Dim data As String = GetScript(f.formula, env)
+
+            Return $"{response} ~ {data}"
         End Function
 
         Private Function createFunction(f As DeclareNewFunction, env As Environment) As String
