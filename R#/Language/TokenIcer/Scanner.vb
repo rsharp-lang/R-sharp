@@ -481,6 +481,11 @@ Namespace Language.TokenIcer
         ''' </summary>
         Public Const RSymbol$ = "([_\.])*[a-z0-9_\.]*"
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function CheckIdentifierSymbol(str As String) As Boolean
+            Return str.IsPattern(RSymbol) AndAlso Not str.IsNumeric
+        End Function
+
         ''' <summary>
         ''' 这个函数的调用会将<see cref="buffer"/>清空
         ''' </summary>
