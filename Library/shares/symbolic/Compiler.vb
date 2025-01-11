@@ -12,8 +12,12 @@ Imports MathSymbol = Microsoft.VisualBasic.MIME.application.xml.MathML.SymbolExp
 Friend Module Compiler
 
     Public Function GetLambda(exp As FormulaExpression) As LambdaExpression
-        Dim symbol As String = exp.var
+        Dim symbol = exp.GetResponseSymbol
         Dim formula As MathExpression = Compiler.BuildExpression(exp.formula)
+
+        If symbol Like GetType(Exception) Then
+            Throw symbol.TryCast(Of Exception)
+        End If
 
         Return New LambdaExpression With {
             .parameters = New String() {symbol},

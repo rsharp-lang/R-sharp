@@ -95,5 +95,15 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                 Return New ExpressionLiteral(literal.expression, stackFrame)
             End If
         End Function
+
+        Public Function CreateFormula(response As SyntaxResult, data As SyntaxResult, opts As SyntaxBuilderOptions) As SyntaxResult
+            If response.isException Then
+                Return response
+            ElseIf data.isException Then
+                Return data
+            End If
+
+
+        End Function
     End Module
 End Namespace

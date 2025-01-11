@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Namespace Language.Syntax.SyntaxParser
@@ -454,24 +455,29 @@ Namespace Language.Syntax.SyntaxParser
                 Dim [namespace] As Expression = buf(Scan0).TryCast(Of Expression)
 
                 Return SyntaxResult.CreateError(New NotImplementedException, opts)
-            ElseIf buf = 3 AndAlso
-                (tokens(1) Like GetType(String)) AndAlso
-                (tokens(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols OrElse tokens(1).TryCast(Of String) Like iterateAssign) Then
+            ElseIf buf = 3 Then
+                If (tokens(1) Like GetType(String)) AndAlso (tokens(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols OrElse tokens(1).TryCast(Of String) Like iterateAssign) Then
+                    Dim target As Expression = tokens(Scan0).TryCast(Of Expression)
+                    Dim value As Expression = tokens(2)
 
-                Dim target As Expression = tokens(Scan0).TryCast(Of Expression)
-                Dim value As Expression = tokens(2)
+                    If tokens(1).TryCast(Of String) Like iterateAssign Then
+                        value = BinaryExpressionTree.CreateBinary(target, value, tokens(1).TryCast(Of String).First, opts)
+                    End If
 
-                If tokens(1).TryCast(Of String) Like iterateAssign Then
-                    value = BinaryExpressionTree.CreateBinary(target, value, tokens(1).TryCast(Of String).First, opts)
-                End If
+                    ' set value by name
+                    If TypeOf tokens(Scan0).TryCast(Of Expression) Is BinaryExpression Then
+                        Return New ValueAssignExpression({target}, value)
+                    ElseIf TypeOf target Is SymbolIndexer Then
+                        Return New MemberValueAssign(target, value)
+                    Else
+                        Return New ValueAssignExpression({target}, value)
+                    End If
+                ElseIf buf(1) Like GetType(String) AndAlso buf(1).TryCast(Of String) = "~" Then
+                    ' formula: a ~ b
+                    Dim a = buf(0).TryCast(Of SyntaxResult)
+                    Dim b = buf(2).TryCast(Of SyntaxResult)
 
-                ' set value by name
-                If TypeOf tokens(Scan0).TryCast(Of Expression) Is BinaryExpression Then
-                    Return New ValueAssignExpression({target}, value)
-                ElseIf TypeOf target Is SymbolIndexer Then
-                    Return New MemberValueAssign(target, value)
-                Else
-                    Return New ValueAssignExpression({target}, value)
+                    Return FormulaExpressionSyntax.CreateFormula(a, b, opts)
                 End If
             ElseIf tokens.isLambdaFunction Then
                 Return SyntaxImplements.DeclareLambdaFunction(tokens(Scan0).VA, tokens(2).VA, lineNum, opts)

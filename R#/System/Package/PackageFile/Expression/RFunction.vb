@@ -114,7 +114,7 @@ Namespace Development.Package.File.Expressions
                     Call outfile.Write(Encoding.ASCII.GetBytes(DirectCast(x, DeclareNewFunction).funcName))
                     Call outfile.Write(CByte(0))
                 ElseIf TypeOf x Is FormulaExpression Then
-                    params = {New SymbolReference(DirectCast(x, FormulaExpression).var)}
+                    params = {DirectCast(x, FormulaExpression).var}
                     body = {DirectCast(x, FormulaExpression).formula}
                 ElseIf TypeOf x Is UsingClosure Then
                     params = {DirectCast(x, UsingClosure).params}

@@ -83,7 +83,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' <summary>
         ''' 因变量
         ''' </summary>
-        Public ReadOnly Property var As String
+        Public ReadOnly Property var As Expression
 
         ''' <summary>
         ''' 只能够是符号引用或者双目运算符表达式
@@ -100,7 +100,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' <param name="y"></param>
         ''' <param name="formula">x factor variable in the formula expression</param>
         Sub New(y As String, formula As Expression)
-            Me.var = y
+            Me.var = New SymbolReference(y)
             Me.formula = formula
         End Sub
 
@@ -115,6 +115,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Return result.TryCast(Of String())
             Else
                 Return Internal.debug.stop(result.TryCast(Of Exception), env)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' A helper function for get symbol name from response <see cref="var"/>.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function GetResponseSymbol() As [Variant](Of String, Exception)
+            If TypeOf var Is SymbolReference Then
+                Return DirectCast(var, SymbolReference).symbol
+            Else
+                Return New NotImplementedException($"create response symbol from {var.GetType.Name} has not been supported: {var.ToString}")
             End If
         End Function
 

@@ -1505,13 +1505,21 @@ Module stats
                 Call observations.Add(v)
             Next
         Else
-            Dim vec As String = formula.var
+            Dim responseVar = formula.GetResponseSymbol
+            Dim responseSymbol As String
+
+            If responseVar Like GetType(Exception) Then
+                Return RInternal.debug.stop(responseVar.TryCast(Of Exception), env)
+            Else
+                responseSymbol = responseVar.TryCast(Of String)
+            End If
+
             Dim factor As Expression = formula.formula
 
             If TypeOf factor Is SymbolReference Then
                 Dim factorName As String = DirectCast(factor, SymbolReference).symbol
                 Dim factors As String() = CLRVector.asCharacter(x.getColumnVector(factorName))
-                Dim data As Double() = CLRVector.asNumeric(x.getColumnVector(vec))
+                Dim data As Double() = CLRVector.asNumeric(x.getColumnVector(responseSymbol))
                 Dim groups = factors.Select(Function(k, i) (k, data(i))).GroupBy(Function(i) i.k).ToArray
 
                 For Each group In groups

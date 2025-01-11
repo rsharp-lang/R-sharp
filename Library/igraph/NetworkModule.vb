@@ -967,17 +967,25 @@ Public Module NetworkModule
             tuplesData = list.GetSlots(data).IterateNameValues
         ElseIf TypeOf data Is FormulaExpression Then
             Dim formula As FormulaExpression = DirectCast(data, FormulaExpression)
+            Dim responseVar = formula.GetResponseSymbol
+            Dim responseSymbol As String
 
-            data = env.FindSymbol(formula.var)
+            If responseVar Like GetType(Exception) Then
+                Return RInternal.debug.stop(responseVar.TryCast(Of Exception), env)
+            Else
+                responseSymbol = responseVar.TryCast(Of String)
+            End If
+
+            data = env.FindSymbol(responseSymbol)
 
             If data Is Nothing Then
-                Return Message.SymbolNotFound(env, formula.var, TypeCodes.generic)
+                Return Message.SymbolNotFound(env, responseSymbol, TypeCodes.generic)
             Else
                 data = DirectCast(data, Symbol).value
             End If
 
             If data Is Nothing Then
-                Return RInternal.debug.stop({$"the required object '{formula.var}' can not be nothing!", $"object: {formula.var}"}, env)
+                Return RInternal.debug.stop({$"the required object '{ responseSymbol}' can not be nothing!", $"object: {responseSymbol}"}, env)
             End If
 
             Dim table As rDataframe = DirectCast(data, rDataframe)

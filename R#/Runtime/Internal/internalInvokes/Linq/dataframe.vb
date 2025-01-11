@@ -170,7 +170,16 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 End If
 
                 Dim formula As FormulaExpression = by
-                Dim vx_name As String = formula.var
+                Dim vx_exp As Expression = formula.var
+
+                If Not TypeOf vx_exp Is SymbolReference Then
+                    Return Internal.debug.stop({
+                        $"create symbol from {vx_exp.GetType.Name} is not supported.",
+                        $"response_var: {vx_exp.ToString}"
+                    }, env)
+                End If
+
+                Dim vx_name As String = DirectCast(vx_exp, SymbolReference).symbol
                 Dim symbols = SymbolAnalysis _
                     .GetSymbolReferenceList(formula.formula) _
                     .Select(Function(fi) fi.Name) _

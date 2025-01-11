@@ -454,12 +454,20 @@ Namespace Runtime.Interop
                             Yield arguments(nameKey).value
                         ElseIf arguments(nameKey).isFormula AndAlso Not arg.acceptFormula Then
                             Dim formula As FormulaExpression = arguments(nameKey).value
-                            Dim var As String = formula.var
+                            Dim var As Expression = formula.var
+
+                            If Not TypeOf var Is SymbolReference Then
+                                Yield Internal.debug.stop({
+                                    $"other kind of the response variable is not supported when create variable name from a formula expression.",
+                                    $"response_var: {var.ToString}"
+                                }, envir)
+                                Return
+                            End If
 
                             ' 20221130
                             ' syntax sugar for do something like:
                             ' t.test(data.frame(...), y, t ~ a + b + c + x);
-                            Call arguments.Add(var, arguments(nameKey))
+                            Call arguments.Add(DirectCast(var, SymbolReference).symbol, arguments(nameKey))
 
                             GoTo opt
                         Else

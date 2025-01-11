@@ -635,7 +635,14 @@ theta = {objToString(thetaFunc, env:=env)}
                         Optional env As Environment = Nothing) As Object
 
         Dim df As Rdataframe = DirectCast(data, Rdataframe)
-        Dim y As Double() = df.getVector(Of Double)(formula.var)
+        Dim responseVar = formula.GetResponseSymbol
+
+        If responseVar Like GetType(Exception) Then
+            Return RInternal.debug.stop(responseVar.TryCast(Of Exception), env)
+        End If
+
+        Dim responseSymbol As String = responseVar.TryCast(Of String)
+        Dim y As Double() = df.getVector(Of Double)(responseSymbol)
         Dim println As Action(Of String) = Nothing
 
         If env.globalEnvironment.options.verbose Then
@@ -666,7 +673,7 @@ theta = {objToString(thetaFunc, env:=env)}
 
             Dim log As Logistic = family
             Dim logfit = New Logistic(columns.Count, log.ALPHA, println) With {.ITERATIONS = log.ITERATIONS}.train(matrix)
-            Dim lm As New lmCall(formula.var, DirectCast(symbol, String())) With {
+            Dim lm As New lmCall(responseSymbol, DirectCast(symbol, String())) With {
                 .formula = formula,
                 .lm = logfit,
                 .data = df.ToString
@@ -766,16 +773,23 @@ theta = {objToString(thetaFunc, env:=env)}
                        Optional env As Environment = Nothing) As Object
 
         Dim df As Rdataframe = Nothing
+        Dim responseVar = formula.GetResponseSymbol
+
+        If responseVar Like GetType(Exception) Then
+            Return RInternal.debug.stop(responseVar.TryCast(Of Exception), env)
+        End If
+
+        Dim responseSymbol As String = responseVar.TryCast(Of String)
 
         If data Is Nothing Then
-            Dim symbol As Symbol = env.FindSymbol(formula.var)
+            Dim symbol As Symbol = env.FindSymbol(responseSymbol)
 
             ' check variables in the environment
             If symbol IsNot Nothing Then
                 Dim vars = SymbolAnalysis.GetSymbolReferenceList(formula.formula).ToArray
 
                 df = New Rdataframe With {.columns = New Dictionary(Of String, Array)}
-                df.add(formula.var, CLRVector.asNumeric(symbol.value))
+                df.add(responseSymbol, CLRVector.asNumeric(symbol.value))
 
                 For Each v In vars
                     symbol = env.FindSymbol(v.Name)
@@ -795,10 +809,10 @@ theta = {objToString(thetaFunc, env:=env)}
         ElseIf TypeOf data Is Rdataframe Then
             df = DirectCast(data, Rdataframe)
 
-            If Not df.columns.ContainsKey(formula.var) Then
+            If Not df.columns.ContainsKey(responseSymbol) Then
                 Return RInternal.debug.stop({
-                    $"missing the required symbol '{formula.var}' in your input data!",
-                    $"symbol: {formula.var}",
+                    $"missing the required symbol '{responseSymbol}' in your input data!",
+                    $"symbol: {responseSymbol}",
                     $"formula: {formula}"
                 }, env)
             End If
@@ -814,7 +828,7 @@ theta = {objToString(thetaFunc, env:=env)}
             w = Nothing
         End If
 
-        Dim y As Double() = df.getVector(Of Double)(formula.var)
+        Dim y As Double() = df.getVector(Of Double)(responseSymbol)
 
         If TypeOf formula.formula Is SymbolReference Then
             ' y ~ x
@@ -822,7 +836,7 @@ theta = {objToString(thetaFunc, env:=env)}
             Dim x As Double() = df.getVector(Of Double)(x_symbol)
 
             If w.IsNullOrEmpty Then
-                Return New lmCall(formula.var, {x_symbol}) With {
+                Return New lmCall(responseSymbol, {x_symbol}) With {
                     .formula = formula,
                     .lm = LeastSquares.LinearFit(x, y),
                     .data = df.ToString
@@ -834,7 +848,7 @@ theta = {objToString(thetaFunc, env:=env)}
                     wStr = Mid(wStr, 1, 32) & "..."
                 End If
 
-                Return New lmCall(formula.var, {x_symbol}) With {
+                Return New lmCall(responseSymbol, {x_symbol}) With {
                     .formula = formula,
                     .lm = WeightedLinearRegression.Regress(x, y, w, orderOfPolynomial:=1),
                     .data = df.ToString,
@@ -857,7 +871,7 @@ theta = {objToString(thetaFunc, env:=env)}
             Dim matrix As New NumericMatrix(columns.ToArray, t:=True)
             Dim fit As MLRFit = MLRFit.LinearFitting(matrix, f:=y)
 
-            Return New lmCall(formula.var, DirectCast(symbol, String())) With {
+            Return New lmCall(responseSymbol, DirectCast(symbol, String())) With {
                 .formula = formula,
                 .lm = fit,
                 .data = df.ToString

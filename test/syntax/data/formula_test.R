@@ -1,0 +1,1 @@
+let aov_model = lm(data$response ~ data$group);
