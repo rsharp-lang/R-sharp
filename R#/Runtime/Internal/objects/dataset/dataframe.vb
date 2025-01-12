@@ -554,7 +554,15 @@ Namespace Runtime.Internal.Object
                     projections(key) = getVector(key, fullSize)
                 Next
             ElseIf indexType Like RType.logicals Then
-                Throw New InvalidCastException
+                Dim flags = CLRVector.asLogical(selector)
+                Dim cols = flags.Zip(join:=colnames) _
+                    .Where(Function(i) i.First) _
+                    .Select(Function(i) i.Second) _
+                    .ToArray
+
+                For Each key As String In cols
+                    projections(key) = getVector(key, fullSize)
+                Next
             Else
                 Throw New InvalidCastException
             End If
