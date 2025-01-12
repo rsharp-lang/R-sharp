@@ -607,6 +607,8 @@ Module plots
         Dim ptSize As Double = args.getValue(Of Double)("pt.size", env, 10)
         Dim bg$ = RColorPalette.getColor(args.getByName("background"), "white")
         Dim pointColor$ = RColorPalette.getColor(args.getByName("pt.color"), "black")
+        Dim driver As Drivers = env.getDriver
+        Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, 300)
         Dim classes As ColorClass() = Nothing
         Dim classinfo As Dictionary(Of String, String) = Nothing
 
@@ -632,7 +634,7 @@ Module plots
             classes:=classes,
             classinfo:=classinfo,
             pointColor:=pointColor
-        ).Plot(size)
+        ).Plot(size, dpi, driver:=driver)
     End Function
 
     ''' <summary>
