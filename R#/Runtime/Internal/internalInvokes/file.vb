@@ -873,12 +873,16 @@ Namespace Runtime.Internal.Invokes
         ''' means this function will returns a character vector which contains all 
         ''' data content lines directly.
         ''' </param>
+        ''' <param name="strict">
+        ''' this function will returns an empty string vector if not in strict mode
+        ''' </param>
         ''' <returns></returns>
         <ExportAPI("readLines")>
         <RApiReturn(GetType(String))>
         Public Function readLines(con As Object,
                                   Optional encoding As Encodings = Encodings.UTF8,
                                   Optional stream As Boolean = False,
+                                  Optional strict As Boolean? = Nothing,
                                   Optional env As Environment = Nothing) As Object
 
             If TypeOf con Is Stream Then
@@ -888,8 +892,15 @@ Namespace Runtime.Internal.Invokes
                 Return DirectCast(con, WebResponseResult).html.LineTokens
             ElseIf TypeOf con Is FileReference Then
                 Dim p As FileReference = con
-                Dim text As String = p.fs.ReadAllText(p.filepath)
 
+                If env.globalEnvironment.strictOption(strict) Then
+                    If Not p.fs.FileExists(p.filepath) Then
+                        Call $"the specific file '{p.filepath}' for read text lines is missing from filesystem: {p.fs.ToString}".Warning
+                        Return New String() {}
+                    End If
+                End If
+
+                Dim text As String = p.fs.ReadAllText(p.filepath)
                 Return text.LineTokens
             Else
                 Dim str = CLRVector.asCharacter(con)
@@ -899,13 +910,13 @@ Namespace Runtime.Internal.Invokes
                     Return Internal.debug.stop("no file is specified for read data!", env)
                 End If
 
-                Return readFromFile(filepath, encoding, env)
+                Return readFromFile(filepath, encoding, strict, env)
             End If
         End Function
 
-        Private Function readFromFile(filepath As String, encoding As Encodings, env As Environment) As Object
+        Private Function readFromFile(filepath As String, encoding As Encodings, strict As Boolean?, env As Environment) As Object
             If Not filepath.FileExists Then
-                If env.globalEnvironment.options.strict Then
+                If env.globalEnvironment.strictOption(opt:=strict) Then
                     Return Internal.debug.stop($"the given file '{filepath}' is missing!", env)
                 Else
                     Call env.AddMessage($"the given file '{filepath}' is missing!")
