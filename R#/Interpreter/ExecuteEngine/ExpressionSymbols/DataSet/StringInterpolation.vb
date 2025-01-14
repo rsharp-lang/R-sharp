@@ -170,9 +170,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Function
 
         Friend Shared Function r_string_concatenate(x As Object, y As Object, env As Environment) As Object
-            If x Is Nothing OrElse y Is Nothing Then
-                Call env.AddMessage("One of the string value is nothing!", MSG_TYPES.WRN)
+            If x Is Nothing Then
+                Return y
+            ElseIf y Is Nothing Then
+                Return x
             End If
+
+            'If x Is Nothing OrElse y Is Nothing Then
+            '    Call env.AddMessage("One of the string value is nothing!", MSG_TYPES.WRN)
+            'End If
 
             Return CStr(x) & CStr(y)
         End Function
