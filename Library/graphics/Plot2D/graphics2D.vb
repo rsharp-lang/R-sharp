@@ -619,19 +619,53 @@ Module graphics2DTools
         Return g
     End Function
 
-    <ExportAPI("draw.rectangle")>
-    Public Function DrawRectangle(color As Object, rect As Object, Optional g As IGraphics = Nothing)
+    ''' <summary>
+    ''' Draw rectangle on the canvas
+    ''' </summary>
+    ''' <param name="color"></param>
+    ''' <param name="rect">[x,y,width,height]</param>
+    ''' <param name="g"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("rectangle")>
+    Public Function DrawRectangle(color As Object, <RRawVectorArgument> rect As Object,
+                                  Optional g As IGraphics = Nothing,
+                                  Optional env As Environment = Nothing) As Object
+
         Dim colorVal As Color = RColorPalette.GetRawColor(color)
+        Dim ints = pipeline.TryCreatePipeline(Of Single)(rect, env, suppress:=True)
+        Dim rects As RectangleF()
+
+        If ints.isError Then
+            ' is a collection of rectangle object
+            ints = pipeline.TryCreatePipeline(Of Rectangle)(rect, env, suppress:=True)
+
+            If ints.isError Then
+                ints = pipeline.TryCreatePipeline(Of RectangleF)(rect, env)
+
+                If ints.isError Then
+                    Return ints.getError
+                Else
+                    rects = ints.populates(Of RectangleF)(env).ToArray
+                End If
+            Else
+                rects = ints.populates(Of Rectangle)(env) _
+                    .Select(Function(ri) CType(ri, RectangleF)) _
+                    .ToArray
+            End If
+        Else
+            ' is a single rectangle that represents by a numeric vector
+            Dim r As Single() = CLRVector.asFloat(rect)
+            rects = {New RectangleF(r(0), r(1), r(2), r(3))}
+        End If
 
         If g Is Nothing Then
             g = R_graphics.Common.Runtime.graphics.curDev.g
         End If
 
-        If TypeOf rect Is Rectangle Then
-            Call g.FillRectangle(New SolidBrush(colorVal), DirectCast(rect, Rectangle))
-        Else
-            Call g.FillRectangle(New SolidBrush(colorVal), DirectCast(rect, RectangleF))
-        End If
+        For Each rectangle As RectangleF In rects
+            Call g.FillRectangle(New SolidBrush(colorVal), rectangle)
+        Next
 
         Return g
     End Function
