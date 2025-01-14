@@ -619,6 +619,36 @@ Module graphics2DTools
         Return g
     End Function
 
+    Public Function MeasureNumericVector(x As Object, env As Environment) As pipeline
+        Dim vec As pipeline = pipeline.TryCreatePipeline(Of Integer)(x, env, suppress:=True)
+
+        If vec.isError Then
+            vec = pipeline.TryCreatePipeline(Of Long)(x, env, suppress:=True)
+        Else
+            Return vec
+        End If
+
+        If vec.isError Then
+            vec = pipeline.TryCreatePipeline(Of Single)(x, env, suppress:=True)
+        Else
+            Return vec
+        End If
+
+        If vec.isError Then
+            vec = pipeline.TryCreatePipeline(Of Double)(x, env, suppress:=True)
+        Else
+            Return vec
+        End If
+
+        If vec.isError Then
+            vec = pipeline.TryCreatePipeline(Of Short)(x, env, suppress:=True)
+        Else
+            Return vec
+        End If
+
+        Return vec
+    End Function
+
     ''' <summary>
     ''' Draw rectangle on the canvas
     ''' </summary>
@@ -633,7 +663,7 @@ Module graphics2DTools
                                   Optional env As Environment = Nothing) As Object
 
         Dim colorVal As Color = RColorPalette.GetRawColor(color)
-        Dim ints = pipeline.TryCreatePipeline(Of Single)(rect, env, suppress:=True)
+        Dim ints As pipeline = MeasureNumericVector(rect, env)
         Dim rects As RectangleF()
 
         If ints.isError Then
