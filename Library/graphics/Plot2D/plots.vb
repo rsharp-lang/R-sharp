@@ -972,6 +972,7 @@ Module plots
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
         Dim showLegend As Boolean = args.getValue(Of Boolean)({"showLegend", "legend", "legend.show"}, env, [default]:=True)
+        Dim showAxis As Boolean = args.getValue(Of Boolean)({"show.axis", "axis.show"}, env, [default]:=True)
 
         If args.CheckGraphicsDeviceExists Then
             ' draw on current graphics context
@@ -999,7 +1000,8 @@ Module plots
                 xlim:=xlim,
                 ylim:=ylim,
                 XaxisAbsoluteScalling:=absoluteScale,
-                YaxisAbsoluteScalling:=absoluteScale
+                YaxisAbsoluteScalling:=absoluteScale,
+                drawAxis:=showAxis
             )
 
             Return Nothing
@@ -1027,7 +1029,8 @@ Module plots
                 XaxisAbsoluteScalling:=absoluteScale,
                 YaxisAbsoluteScalling:=absoluteScale,
                 dpi:=dpi,
-                driver:=env.getDriver
+                driver:=env.getDriver,
+                drawAxis:=showAxis
             )
         End If
     End Function
