@@ -212,7 +212,7 @@ Module bitmap_func
         Dim px, py As Integer
         Dim bar As Tqdm.ProgressBar = Nothing
 
-        For Each x As Integer In Tqdm.Range(loc.X, sizeVal.Width, bar:=bar)
+        For Each x As Integer In Tqdm.Range(loc.X, sizeVal.Width, bar:=bar, wrap_console:=App.EnableTqdm)
             bar.SetLabel($"processing (x={x})...")
 
             For y As Integer = loc.Y To loc.Y + sizeVal.Height - 1
@@ -300,7 +300,7 @@ Module bitmap_func
         Dim c As Color
         Dim rows As New List(Of GeneralSignal)
 
-        For Each y As Integer In Tqdm.Range(loc.Y, sizeVal.Height, bar:=bar)
+        For Each y As Integer In Tqdm.Range(loc.Y, sizeVal.Height, bar:=bar, wrap_console:=App.EnableTqdm)
             Dim tx As New List(Of Double)
             Dim data As New List(Of Double)
 
