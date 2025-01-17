@@ -275,7 +275,7 @@ Public Module Extensions
                 Dim populator As IEnumerable(Of Object)
 
                 If tqdm Then
-                    populator = TqdmWrapper.Wrap(.data.ToArray(Of Object))
+                    populator = TqdmWrapper.Wrap(.data.ToArray(Of Object), wrap_console:=App.EnableTqdm)
                 Else
                     populator = .data.AsObjectEnumerator
                 End If

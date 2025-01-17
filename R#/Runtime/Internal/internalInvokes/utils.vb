@@ -212,7 +212,8 @@ Namespace Runtime.Internal.Invokes
                     width:=width,
                     printsPerSecond:=prints_perSecond,
                     bar:=tqdm_bar,
-                    useColor:=use_color
+                    useColor:=use_color,
+                    wrap_console:=App.EnableTqdm
                 )
                 Dim pip As pipeline = pipeline.CreateFromPopulator(bar, finalize:=Sub() tqdm_bar = Nothing)
 
