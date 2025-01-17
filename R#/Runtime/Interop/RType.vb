@@ -398,6 +398,11 @@ Namespace Runtime.Interop
             Return rtype
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Shared Function [TypeOf](Of T)() As RType
+            Return RType.GetRSharpType(GetType(T))
+        End Function
+
         ''' <summary>
         ''' get R# type value of the given VB.NET object value
         ''' </summary>
