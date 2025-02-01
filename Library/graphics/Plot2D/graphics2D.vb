@@ -488,14 +488,20 @@ Module graphics2DTools
         End If
     End Function
 
+    ''' <summary>
+    ''' create a line shape model
+    ''' </summary>
+    ''' <param name="a"></param>
+    ''' <param name="b"></param>
+    ''' <param name="stroke"></param>
+    ''' <returns></returns>
     <ExportAPI("line")>
     Public Function line2D(<RRawVectorArgument> a As Object, <RRawVectorArgument> b As Object, Optional stroke As Object = Stroke.AxisStroke) As Shapes.Line
         Dim p1 As PointF = InteropArgumentHelper.getVector2D(a)
         Dim p2 As PointF = InteropArgumentHelper.getVector2D(b)
         Dim penCSS As String = InteropArgumentHelper.getStrokePenCSS(stroke)
-        Dim css As CSSEnvirnment = CSSEnvirnment.Empty(100)
 
-        Return New Shapes.Line(p1, p2, css.GetPen(penCSS))
+        Return New Shapes.Line(p1, p2, Microsoft.VisualBasic.MIME.Html.CSS.Stroke.TryParse(penCSS))
     End Function
 
     ''' <summary>
