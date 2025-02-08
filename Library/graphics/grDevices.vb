@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::4611a7af0f1ab228431e4bc5a52b4a23, Library\graphics\grDevices.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 636
-    '    Code Lines: 413 (64.94%)
-    ' Comment Lines: 158 (24.84%)
-    '    - Xml Docs: 85.44%
-    ' 
-    '   Blank Lines: 65 (10.22%)
-    '     File Size: 27.52 KB
+' Summaries:
 
 
-    ' Module grDevices
-    ' 
-    '     Function: adjustAlpha, colorPopulator, colors, getFormatFromSuffix, imageAttrs
-    '               openSvgDevice, pdfDevice, registerCustomPalette, requireSvgData, rgb
-    '               saveBitmap, saveImage, saveSvgFile, saveSvgStream, svg
-    '               tryMeasureFormat
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 636
+'    Code Lines: 413 (64.94%)
+' Comment Lines: 158 (24.84%)
+'    - Xml Docs: 85.44%
+' 
+'   Blank Lines: 65 (10.22%)
+'     File Size: 27.52 KB
+
+
+' Module grDevices
+' 
+'     Function: adjustAlpha, colorPopulator, colors, getFormatFromSuffix, imageAttrs
+'               openSvgDevice, pdfDevice, registerCustomPalette, requireSvgData, rgb
+'               saveBitmap, saveImage, saveSvgFile, saveSvgStream, svg
+'               tryMeasureFormat
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -66,7 +66,6 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Driver
-Imports Microsoft.VisualBasic.Imaging.SVG
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -92,6 +91,256 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 ''' </summary>
 <Package("grDevices", Category:=APICategories.UtilityTools)>
 Public Module grDevices
+
+    ''' <summary>
+    ''' ### PostScript Graphics
+    ''' 
+    ''' ``postscript`` starts the graphics device driver for producing PostScript graphics.
+    ''' </summary>
+    ''' <param name="file">	
+    ''' a character string giving the file path. If it is "", the output is piped to the command given 
+    ''' by the argument command. If it is of the form "|cmd", the output is piped to the command given
+    ''' by cmd.
+    ''' 
+    ''' For use with onefile = FALSE give a printf format such as "Rplot%03d.ps" (the default in that case). 
+    ''' The string should not otherwise contain a %: if it is really necessary, use %% in the string for % 
+    ''' in the file name. A single integer format matching the regular expression "%[#0 +=-]*[0-9.]*[diouxX]" 
+    ''' is allowed.
+    ''' 
+    ''' Tilde expansion (see path.expand) is done. An input with a marked encoding is converted to the 
+    ''' native encoding or an error is given.</param>
+    ''' <param name="onefile">logical: if true (the default) allow multiple figures in one file. If false, 
+    ''' generate a file name containing the page number for each page and use an EPSF header and no 
+    ''' DocumentMedia comment. Defaults to TRUE.</param>
+    ''' <param name="family">the initial font family to be used, normally as a character string. See the 
+    ''' section ‘Families’. Defaults to "Helvetica".</param>
+    ''' <param name="title">title string to embed as the Title comment in the file. Defaults to "R Graphics Output".</param>
+    ''' <param name="fonts">a character vector specifying additional R graphics font family names for font 
+    ''' families whose declarations will be included in the PostScript file and are available for use with 
+    ''' the device. See ‘Families’ below. Defaults to NULL.</param>
+    ''' <param name="encoding">the name of an encoding file. Defaults to "default". The latter is interpreted
+    ''' 
+    ''' on Unix-alikes
+    ''' as ‘"ISOLatin1.enc"’ unless the locale is recognized as corresponding to a language using ISO 8859-{2,5,7,13,15} or KOI8-{R,U}.
+    ''' 
+    ''' on Windows
+    ''' as ‘"CP1250.enc"’ (Central European), "CP1251.enc" (Cyrillic), "CP1253.enc" (Greek) or "CP1257.enc" 
+    ''' (Baltic) if one of those codepages is in use, otherwise ‘"WinAnsi.enc"’ (codepage 1252).
+    ''' 
+    ''' The file is looked for in the ‘enc’ directory of package grDevices if the path does not contain a path separator. 
+    ''' An extension ".enc" can be omitted.</param>
+    ''' <param name="bg">the initial background color to be used. If "transparent" (or any other non-opaque colour), 
+    ''' no background is painted. Defaults to "transparent".</param>
+    ''' <param name="fg">the initial foreground color to be used. Defaults to "black".</param>
+    ''' <param name="width">the width and height of the graphics region in inches. Default to 0.</param>
+    ''' <param name="height">the width and height of the graphics region in inches. Default to 0.
+    ''' If paper != "special" and width or height is less than 0.1 or too large to give a total margin of 0.5 inch, 
+    ''' the graphics region is reset to the corresponding paper dimension minus 0.5.</param>
+    ''' <param name="horizontal">the orientation of the printed image, a logical. Defaults to true, 
+    ''' that is landscape orientation on paper sizes with width less than height.</param>
+    ''' <param name="pointsize">the default point size to be used. Strictly speaking, in bp, 
+    ''' that is 1/72 of an inch, but approximately in points. Defaults to 12.</param>
+    ''' <param name="paper">the size of paper in the printer. The choices are "a4", "letter" (or "us"), 
+    ''' "legal" and "executive" (and these can be capitalized). Also, "special" can be used, when arguments 
+    ''' width and height specify the paper size. A further choice is "default" (the default): If this is 
+    ''' selected, the papersize is taken from the option "papersize" if that is set and to "a4" if it is 
+    ''' unset or empty.</param>
+    ''' <param name="pagecentre">logical: should the device region be centred on the page? Defaults to true.</param>
+    ''' <param name="print_it">logical: should the file be printed when the device is closed? (This only applies if file is a real file name.) Defaults to false.</param>
+    ''' <param name="command">the command to be used for ‘printing’. Defaults to "default", the value of option "printcmd". 
+    ''' The length limit is 2*PATH_MAX, typically 8096 bytes on Unix-alikes and 520 bytes on Windows. Recent Windows 
+    ''' systems may be configured to use long paths, raising this limit currently to 10000.</param>
+    ''' <param name="colormodel">a character string describing the color model: currently allowed values as 
+    ''' "srgb", "srgb+gray", "rgb", "rgb-nogray", "gray" (or "grey") and "cmyk". Defaults to "srgb". 
+    ''' See section ‘Color models’.</param>
+    ''' <param name="useKerning">logical. Should kerning corrections be included in setting text and calculating string widths? Defaults to TRUE.</param>
+    ''' <param name="fillOddEven">logical controlling the polygon fill mode: see polygon for details. Default FALSE.</param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' All arguments except file default to values given by ps.options(). The ultimate defaults are quoted in the arguments section.
+    ''' 
+    ''' postscript opens the file file and the PostScript commands needed to plot any graphics requested are written to that file. 
+    ''' This file can then be printed on a suitable device to obtain hard copy.
+    ''' 
+    ''' The file argument is interpreted as a C integer format as used by sprintf, with integer argument the page number. The default 
+    ''' gives files ‘Rplot001.ps’, ..., ‘Rplot999.ps’, ‘Rplot1000.ps’, ....
+    ''' 
+    ''' The postscript produced for a single R plot is EPS (Encapsulated PostScript) compatible, and can be included into other documents,
+    ''' e.g., into LaTeX, using \includegraphics{&lt;filename>}. For use in this way you will probably want to use setEPS() to set
+    ''' the defaults as horizontal = FALSE, onefile = FALSE, paper = "special". Note that the bounding box is for the device region: 
+    ''' if you find the white space around the plot region excessive, reduce the margins of the figure region via par(mar = ).
+    ''' 
+    ''' Most of the PostScript prologue used is taken from the R character vector .ps.prolog. This is marked in the output, and can be
+    ''' changed by changing that vector. (This is only advisable for PostScript experts: the standard version is in namespace:grDevices.)
+    ''' 
+    ''' A PostScript device has a default family, which can be set by the user via family. If other font families are to be used when
+    ''' drawing to the PostScript device, these must be declared when the device is created via fonts; the font family names for 
+    ''' this argument are R graphics font family names (see the documentation for postscriptFonts).
+    ''' 
+    ''' Line widths as controlled by par(lwd = ) are in multiples of 1/96 inch: multiples less than 1 are allowed. pch = "." 
+    ''' with cex = 1 corresponds to a square of side 1/72 inch, which is also the ‘pixel’ size assumed for graphics parameters 
+    ''' such as "cra".
+    ''' 
+    ''' When the background colour is fully transparent (as is the initial default value), the PostScript produced does not paint
+    ''' the background. Almost all PostScript viewers will use a white canvas so the visual effect is if the background were
+    ''' white. This will not be the case when printing onto coloured paper, though.
+    ''' 
+    ''' ##### Families
+    ''' 
+    ''' Font families are collections of fonts covering the five font faces, (conventionally plain, bold, italic, bold-italic and
+    ''' symbol) selected by the graphics parameter par(font = ) or the grid parameter gpar(fontface = ). Font families can be specified 
+    ''' either as an initial/default font family for the device via the family argument or after the device is opened by the graphics
+    ''' parameter par(family = ) or the grid parameter gpar(fontfamily = ). Families which will be used in addition to the initial
+    ''' family must be specified in the fonts argument when the device is opened.
+    ''' 
+    ''' Font families are declared via a call to postscriptFonts.
+    ''' 
+    ''' The argument family specifies the initial/default font family to be used. In normal use it is one of "AvantGarde", "Bookman",
+    ''' "Courier", "Helvetica", "Helvetica-Narrow", "NewCenturySchoolbook", "Palatino" or "Times", and refers to the standard Adobe
+    ''' PostScript fonts families of those names which are included (or cloned) in all common PostScript devices.
+    ''' 
+    ''' Many PostScript emulators (including those based on ghostscript) use the URW equivalents of these fonts, which are "URWGothic", 
+    ''' "URWBookman", "NimbusMon", "NimbusSan", "NimbusSanCond", "CenturySch", "URWPalladio" and "NimbusRom" respectively. 
+    ''' If your PostScript device is using URW fonts, you will obtain access to more characters and more appropriate metrics by using 
+    ''' these names. To make these easier to remember, "URWHelvetica" == "NimbusSan" and "URWTimes" == "NimbusRom" are also supported.
+    ''' 
+    ''' Another type of family makes use of CID-keyed fonts for East Asian languages – see postscriptFonts.
+    ''' 
+    ''' The family argument is normally a character string naming a font family, but family objects generated by Type1Font and CIDFont 
+    ''' are also accepted. For compatibility with earlier versions of R, the initial family can also be specified as a vector of 
+    ''' four or five afm files.
+    ''' 
+    ''' Note that R does not embed the font(s) used in the PostScript output: see embedFonts for a utility to help do so.
+    ''' 
+    ''' Viewers and embedding applications frequently substitute fonts for those specified in the family, and the substitute will 
+    ''' often have slightly different font metrics. useKerning = TRUE spaces the letters in the string using kerning corrections 
+    ''' for the intended family: this may look uglier than useKerning = FALSE.
+    ''' 
+    ''' ##### Encodings
+    ''' 
+    ''' Encodings describe which glyphs are used to display the character codes (in the range 0–255). Most commonly R uses ISOLatin1 encoding,
+    ''' and the examples for text are in that encoding. However, the encoding used on machines running R may well be different, and by using
+    ''' the encoding argument the glyphs can be matched to encoding in use. This suffices for European and Cyrillic languages, but not for
+    ''' East Asian languages. For the latter, composite CID fonts are used. These fonts are useful for other languages: for example they 
+    ''' may contain Greek glyphs. (The rest of this section applies only when CID fonts are not used.)
+    ''' 
+    ''' None of this will matter if only ASCII characters (codes 32–126) are used as all the encodings (except "TeXtext") agree over that range.
+    ''' Some encodings are supersets of ISOLatin1, too. However, if accented and special characters do not come out as you expect, you may 
+    ''' need to change the encoding. Some other encodings are supplied with R: "WinAnsi.enc" and "MacRoman.enc" correspond to the encodings 
+    ''' normally used on Windows and Classic Mac OS (at least by Adobe), and "PDFDoc.enc" is the first 256 characters of the Unicode encoding,
+    ''' the standard for PDF. There are also encodings "ISOLatin2.enc", "CP1250.enc", "ISOLatin7.enc" (ISO 8859-13), "CP1257.enc", and "ISOLatin9.enc" 
+    ''' (ISO 8859-15), "Cyrillic.enc" (ISO 8859-5), "KOI8-R.enc", "KOI8-U.enc", "CP1251.enc", "Greek.enc" (ISO 8859-7) and "CP1253.enc". Note
+    ''' that many glyphs in these encodings are not in the fonts corresponding to the standard families. (The Adobe ones for all but Courier, 
+    ''' Helvetica and Times cover little more than Latin-1, whereas the URW ones also cover Latin-2, Latin-7, Latin-9 and Cyrillic but no Greek.
+    ''' The Adobe exceptions cover the Latin character sets, but not the Euro.)
+    ''' 
+    ''' If you specify the encoding, it is your responsibility to ensure that the PostScript font contains the glyphs used. One issue here 
+    ''' is the Euro symbol which is in the WinAnsi and MacRoman encodings but may well not be in the PostScript fonts. (It is in the
+    ''' URW variants; it is not in the supplied Adobe Font Metric files.)
+    ''' 
+    ''' There is an exception. Character 45 ("-") is always set as minus (its value in Adobe ISOLatin1) even though it is hyphen in the 
+    ''' other encodings. Hyphen is available as character 173 (octal 0255) in all the Latin encodings, Cyrillic and Greek. (This can 
+    ''' be entered as "\uad" in a UTF-8 locale.) There are some discrepancies in accounts of glyphs 39 and 96: the supplied encodings
+    ''' (except CP1250 and CP1251) treat these as ‘quoteright’ and ‘quoteleft’ (rather than ‘quotesingle’/‘acute’ and ‘grave’ respectively), 
+    ''' as they are in the Adobe documentation.
+    ''' 
+    ''' ##### TeX fonts
+    ''' 
+    ''' TeX has traditionally made use of fonts such as Computer Modern which are encoded rather differently, in a 7-bit encoding. This encoding 
+    ''' can be specified by encoding = "TeXtext.enc", taking care that the ASCII characters &lt; > \ _ { } are not available in those fonts.
+    ''' 
+    ''' There are supplied families "ComputerModern" and "ComputerModernItalic" which use this encoding, and which are only supported for
+    ''' postscript (and not pdf). They are intended to use with the Type 1 versions of the TeX CM fonts. It will normally be possible to 
+    ''' include such output in TeX or LaTeX provided it is processed with dvips -Ppfb -j0 or the equivalent on your system. (-j0 turns off
+    ''' font subsetting.) When family = "ComputerModern" is used, the italic/bold-italic fonts used are slanted fonts (cmsl10 and cmbxsl10). 
+    ''' To use text italic fonts instead, set family = "ComputerModernItalic".
+    ''' 
+    ''' These families use the TeX math italic and symbol fonts for a comprehensive but incomplete coverage of the glyphs covered by the Adobe
+    ''' symbol font in other families. This is achieved by special-casing the postscript code generated from the supplied ‘CM_symbol_10.afm’.
+    ''' 
+    ''' ##### Color models
+    ''' 
+    ''' The default color model ("srgb") is sRGB.
+    ''' 
+    ''' The alternative "srgb+gray" uses sRGB for colors, but with pure gray colors (including black and white) expressed as greyscales 
+    ''' (which results in smaller files and can be advantageous with some printer drivers). Conversely, its files can be rendered much
+    ''' slower on some viewers, and there can be a noticeable discontinuity in color gradients involving gray or white.
+    ''' 
+    ''' Other possibilities are "gray" (or "grey") which used only greyscales (and converts other colours to a luminance), and "cmyk". 
+    ''' The simplest possible conversion from sRGB to CMYK is used (https://en.wikipedia.org/wiki/CMYK_color_model#Mapping_RGB_to_CMYK), 
+    ''' and raster images are output in RGB.
+    ''' 
+    ''' Color models provided for backwards compatibility are "rgb" (which is RGB+gray) and "rgb-nogray" which use uncalibrated RGB 
+    ''' (as used in R prior to 2.13.0). These result in slightly smaller files which may render faster, but do rely on the viewer
+    ''' being properly calibrated.
+    ''' 
+    ''' ##### Printing
+    ''' 
+    ''' A postscript plot can be printed via postscript in two ways.
+    ''' 
+    ''' Setting print.it = TRUE causes the command given in argument command to be called with argument "file" when the device is closed. 
+    ''' Note that the plot file is not deleted unless command arranges to delete it.
+    ''' 
+    ''' file = "" or file = "|cmd" can be used to print using a pipe. Failure to open the command will probably be reported to the
+    ''' terminal but not to R, in which case close the device by dev.off immediately.
+    ''' 
+    ''' On Windows the default "printcmd" is empty and will give an error if print.it = TRUE is used. Suitable commands to spool a 
+    ''' PostScript file to a printer can be found in ‘RedMon’ suite available from http://pages.cs.wisc.edu/~ghost/index.html.
+    ''' The command will be run in a minimized window. GSView 4.x provides ‘gsprint.exe’ which may be more convenient (it requires
+    ''' Ghostscript version 6.50 or later).
+    ''' 
+    ''' ##### Conventions
+    ''' 
+    ''' This section describes the implementation of the conventions for graphics devices set out in the ‘R Internals’ manual.
+    ''' 
+    ''' The default device size is 7 inches square.
+    ''' 
+    ''' Font sizes are in big points.
+    ''' 
+    ''' The default font family is Helvetica.
+    ''' 
+    ''' Line widths are as a multiple of 1/96 inch, with a minimum of 0.01 enforced.
+    ''' 
+    ''' Circle of any radius are allowed.
+    ''' 
+    ''' Colours are by default specified as sRGB.
+    ''' 
+    ''' At very small line widths, the line type may be forced to solid.
+    ''' 
+    ''' Raster images are currently limited to opaque colours.
+    ''' 
+    ''' ##### Note
+    ''' 
+    ''' If you see problems with postscript output, do remember that the problem is much more likely to be in your viewer than in R.
+    ''' Try another viewer if possible. Symptoms for which the viewer has been at fault are apparent grids on image plots (turn off 
+    ''' graphics anti-aliasing in your viewer if you can) and missing or incorrect glyphs in text (viewers silently doing font 
+    ''' substitution).
+    ''' 
+    ''' Unfortunately the default viewers on most Linux and macOS systems have these problems, and no obvious way to turn off graphics 
+    ''' anti-aliasing.
+    ''' </remarks>
+    <ExportAPI("postscript")>
+    Public Function postscriptDev(Optional file As Object = Nothing,
+                                  Optional onefile As Boolean = True,
+                                  Optional family As String = "Helvetica",
+                                  Optional title As String = "R Graphics Output",
+                                  <RRawVectorArgument>
+                                  Optional fonts As Object = Nothing,
+                                  Optional encoding As Object = "default",
+                                  Optional bg As Object = "transparent",
+                                  Optional fg As Object = "black",
+                                  Optional width As Integer = 0, Optional height As Integer = 0,
+                                  Optional horizontal As Boolean = True,
+                                  Optional pointsize As Single = 12,
+                                  Optional paper As Object = "default",
+                                  Optional pagecentre As Boolean = True,
+                                  Optional print_it As Boolean = False,
+                                  Optional command As Object = "default",
+                                  Optional colormodel As Object = "srgb",
+                                  Optional useKerning As Boolean = True,
+                                  Optional fillOddEven As Boolean = False) As Object
+
+    End Function
 
     ''' <summary>
     ''' ### PDF Graphics Device
