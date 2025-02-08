@@ -121,6 +121,8 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
+Imports Microsoft.VisualBasic.Math.Distributions
+
 
 #If NET48 Then
 Imports Pen = System.Drawing.Pen
@@ -187,10 +189,15 @@ Module plots
     <RGenericOverloads("plot")>
     Private Function plot_heatmap(m As Rdataframe, args As list, env As Environment) As Object
         Dim cols = m.colnames
+        Dim row_scale As Boolean = CLRVector.asLogical(args.getBySynonyms("row_scale", "row.scale")).ElementAtOrDefault(0, [default]:=False)
         Dim dataset As DataSet() = m.forEachRow _
             .Select(Function(a)
                         Dim fields As New Dictionary(Of String, Double)
                         Dim vec As Double() = CLRVector.asNumeric(a.value)
+
+                        If row_scale Then
+                            vec = vec.Z
+                        End If
 
                         For i As Integer = 0 To cols.Length - 1
                             Call fields.Add(cols(i), vec(i))
