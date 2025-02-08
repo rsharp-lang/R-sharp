@@ -505,7 +505,7 @@ Module graphics2DTools
     End Function
 
     ''' <summary>
-    ''' 
+    ''' Render raster image in heatmap mode
     ''' </summary>
     ''' <param name="x"></param>
     ''' <param name="region"></param>

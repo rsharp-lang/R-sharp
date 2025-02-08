@@ -175,6 +175,7 @@ Module plots
         Call REnv.Internal.generic.add("plot", GetType(Integer()), AddressOf plotArray)
         Call REnv.Internal.generic.add("plot", GetType(Long()), AddressOf plotArray)
         Call REnv.Internal.generic.add("plot", GetType(ContourLayer()), AddressOf plotContourLayers)
+        Call REnv.Internal.generic.add("plot", GetType(Rdataframe), AddressOf plot_heatmap)
 
         Call REnv.Internal.generic.add("plot", GetType(WeightedFit), AddressOf plotLinearYFit)
         Call REnv.Internal.generic.add("plot", GetType(IFitted), AddressOf plotLinearYFit)
@@ -182,6 +183,30 @@ Module plots
 
         Call REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(MeasureData()), AddressOf measureDataTable)
     End Sub
+
+    <RGenericOverloads("plot")>
+    Private Function plot_heatmap(m As Rdataframe, args As list, env As Environment) As Object
+        Dim cols = m.colnames
+        Dim dataset As DataSet() = m.forEachRow _
+            .Select(Function(a)
+                        Dim fields As New Dictionary(Of String, Double)
+                        Dim vec As Double() = CLRVector.asNumeric(a.value)
+
+                        For i As Integer = 0 To cols.Length - 1
+                            Call fields.Add(cols(i), vec(i))
+                        Next
+
+                        Return New DataSet With {
+                            .ID = a.name,
+                            .Properties = fields
+                        }
+                    End Function) _
+            .ToArray
+        Dim driver As Drivers = env.getDriver
+        Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
+
+        Return Heatmap.Plot(dataset, ppi:=dpi, driver:=driver)
+    End Function
 
     Private Function printImage(img As GraphicsData) As String
         Dim sb As New StringBuilder
