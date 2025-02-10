@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3e50219017905a84953bbcec746af6ba, R#\Runtime\Interop\RType.vb"
+﻿#Region "Microsoft.VisualBasic::cdbda6a2f5f5b40f44ed08f4cf5ca898, R#\Runtime\Interop\RType.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 412
-    '    Code Lines: 252 (61.17%)
-    ' Comment Lines: 114 (27.67%)
+    '   Total Lines: 417
+    '    Code Lines: 256 (61.39%)
+    ' Comment Lines: 114 (27.34%)
     '    - Xml Docs: 98.25%
     ' 
-    '   Blank Lines: 46 (11.17%)
-    '     File Size: 15.73 KB
+    '   Blank Lines: 47 (11.27%)
+    '     File Size: 15.92 KB
 
 
     '     Interface IRType
@@ -55,7 +55,7 @@
     '                     logicals, mode, name, raw
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: (+3 Overloads) [GetType], [TypeOf], getNames, GetRawElementType, GetRSharpType
+    '         Function: (+3 Overloads) [GetType], (+2 Overloads) [TypeOf], getNames, GetRawElementType, GetRSharpType
     '                   GetUnderlyingType, populateNames, ToString
     '         Operators: (+4 Overloads) Like
     ' 

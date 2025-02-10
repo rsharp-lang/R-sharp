@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::da1e630a0b8f6bb2899c10af7300597b, Library\Rlapack\stats.vb"
+﻿#Region "Microsoft.VisualBasic::4f50b71e82a71248d58c671977b39b25, Library\Rlapack\stats.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1845
-    '    Code Lines: 1033 (55.99%)
-    ' Comment Lines: 610 (33.06%)
-    '    - Xml Docs: 91.48%
+    '   Total Lines: 1888
+    '    Code Lines: 1059 (56.09%)
+    ' Comment Lines: 620 (32.84%)
+    '    - Xml Docs: 91.45%
     ' 
-    '   Blank Lines: 202 (10.95%)
-    '     File Size: 78.13 KB
+    '   Blank Lines: 209 (11.07%)
+    '     File Size: 80.47 KB
 
 
     ' Module stats
@@ -57,13 +57,14 @@
     ' 
     '  
     ' 
-    '     Function: aov, asDist, chisq_test, ChiSquare, combin
-    '               corr, corr_sign, corrTest, dataframeRow, dist
-    '               dnorm, ECDF, ecdf0, filterMissing, fisher_test
-    '               gammaCDF, GetDataSetCommon, getMatrix, getQuantileLevels, iqr_outliers
-    '               Lowess, mantel_test, median, moran_test, mul
-    '               oplsr, p_adjust, plsda, pnorm_func, PoissonDiskGenerator_func
-    '               (+2 Overloads) pow, prcomp, quantile, safeCheck, spline
+    '     Function: aov, asDist, beta, chisq_test, ChiSquare
+    '               combin, corr, corr_sign, corrTest, dataframeRow
+    '               dist, dnorm, ECDF, ecdf0, filterMissing
+    '               fisher_test, gamma, gammaCDF, GetDataSetCommon, getMatrix
+    '               getQuantileLevels, iqr_outliers, lbeta, lgamma, Lowess
+    '               mantel_test, median, moran_test, mul, oplsr
+    '               p_adjust, plsda, pnorm_func, PoissonDiskGenerator_func, (+2 Overloads) pow
+    '               prcomp, pt, quantile, safeCheck, spline
     '               tabulateMode, ttest, ttestBatch, ttestImpl, varTest
     '               z_score, z_scoreByColumn, z_scoreByRow
     ' 

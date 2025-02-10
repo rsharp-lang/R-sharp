@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d9f943472a95d353edba96819f6dfea6, R#\System\Document\CodeAnalysis\@Export\FunctionTree.vb"
+﻿#Region "Microsoft.VisualBasic::bf663a8311634f7eea95217dbb7595f3, R#\System\Document\CodeAnalysis\@Export\FunctionTree.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 85.71%
     ' 
     '   Blank Lines: 10 (20.41%)
-    '     File Size: 1.47 KB
+    '     File Size: 1.46 KB
 
 
     '     Class FunctionTree

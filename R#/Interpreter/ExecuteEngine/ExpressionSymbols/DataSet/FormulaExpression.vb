@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4c60e0b380d666e66be2ef9c05c0d998, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\FormulaExpression.vb"
+﻿#Region "Microsoft.VisualBasic::97db68742d5106cf4ed6e8ad4417d053, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\FormulaExpression.vb"
 
     ' Author:
     ' 
@@ -34,21 +34,21 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 112
-    '    Code Lines: 63 (56.25%)
-    ' Comment Lines: 32 (28.57%)
-    '    - Xml Docs: 96.88%
+    '   Total Lines: 129
+    '    Code Lines: 74 (57.36%)
+    ' Comment Lines: 36 (27.91%)
+    '    - Xml Docs: 97.22%
     ' 
-    '   Blank Lines: 17 (15.18%)
-    '     File Size: 3.92 KB
+    '   Blank Lines: 19 (14.73%)
+    '     File Size: 4.64 KB
 
 
     '     Class FormulaExpression
     ' 
     '         Properties: expressionName, formula, type, var
     ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Evaluate, (+2 Overloads) GetSymbols, ToString
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: Evaluate, GetResponseSymbol, (+2 Overloads) GetSymbols, ToString
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7cf830d4f3d4bfcc50530507eb6afb0d, R#\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::2a9015d25eaa4cb2c53a7ee1cf660a4b, R#\Extensions.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 87.18%
     ' 
     '   Blank Lines: 42 (11.80%)
-    '     File Size: 13.16 KB
+    '     File Size: 13.19 KB
 
 
     ' Module Extensions

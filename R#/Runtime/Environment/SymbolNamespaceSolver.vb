@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8d39d0aea837cff0042a9f9529bc28ea, R#\Runtime\Environment\SymbolNamespaceSolver.vb"
+﻿#Region "Microsoft.VisualBasic::bcb6253487073741702a747531484be8, R#\Runtime\Environment\SymbolNamespaceSolver.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 233
-    '    Code Lines: 139 (59.66%)
-    ' Comment Lines: 63 (27.04%)
-    '    - Xml Docs: 92.06%
+    '   Total Lines: 240
+    '    Code Lines: 142 (59.17%)
+    ' Comment Lines: 66 (27.50%)
+    '    - Xml Docs: 92.42%
     ' 
-    '   Blank Lines: 31 (13.30%)
-    '     File Size: 10.07 KB
+    '   Blank Lines: 32 (13.33%)
+    '     File Size: 10.26 KB
 
 
     '     Class SymbolNamespaceSolver

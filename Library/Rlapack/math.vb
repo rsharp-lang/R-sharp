@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cefcb128809f4d9ca452a8676fe5b277, Library\Rlapack\math.vb"
+﻿#Region "Microsoft.VisualBasic::2aaccec18dc8df72907c635af4797fb8, Library\Rlapack\math.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1035
-    '    Code Lines: 656 (63.38%)
-    ' Comment Lines: 257 (24.83%)
-    '    - Xml Docs: 89.49%
+    '   Total Lines: 1154
+    '    Code Lines: 715 (61.96%)
+    ' Comment Lines: 303 (26.26%)
+    '    - Xml Docs: 87.46%
     ' 
-    '   Blank Lines: 122 (11.79%)
-    '     File Size: 42.15 KB
+    '   Blank Lines: 136 (11.79%)
+    '     File Size: 47.86 KB
 
 
     ' Module math
@@ -49,8 +49,8 @@
     '     Function: asFormula, asLmcall, binomial, bootstrap, create_deSolve_DataFrame
     '               curve_fit, DiffEntropy, getBinTable, getMax, getMin
     '               Gini, glm, Hist, lm, loess
-    '               predict, RamerDouglasPeucker, (+2 Overloads) RK4, sim, ssm
-    '               summaryFit
+    '               predict, RamerDouglasPeucker, (+2 Overloads) RK4, scale_x, sim
+    '               ssm, summaryFit
     ' 
     ' /********************************************************************************/
 

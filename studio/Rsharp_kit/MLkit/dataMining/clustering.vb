@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ffee98668979a62ed82ecc8405116bb2, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
+﻿#Region "Microsoft.VisualBasic::37728a971984202c4ecc7cc9c1dd14ef, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1627
-    '    Code Lines: 1065 (65.46%)
-    ' Comment Lines: 352 (21.63%)
-    '    - Xml Docs: 89.49%
+    '   Total Lines: 1712
+    '    Code Lines: 1115 (65.13%)
+    ' Comment Lines: 377 (22.02%)
+    '    - Xml Docs: 89.66%
     ' 
-    '   Blank Lines: 210 (12.91%)
-    '     File Size: 67.38 KB
+    '   Blank Lines: 220 (12.85%)
+    '     File Size: 71.46 KB
 
 
     ' Module clustering
@@ -48,10 +48,11 @@
     '     Function: AffinityPropagationClustering, btreeClusterFUN, calinski_harabasz, Canopy, clusterGroups
     '               clusterResultDataFrame, clusters, clustersDf1, clusterSummary, cmeansSummary
     '               dataSetCommon, dbscan, dbscan_objects, densityA, ensureNotIsDistance
-    '               fuzzyCMeans, getTraceback, gmm_components, gmm_predict, gmm_predict_proba
-    '               gmmf, hclust, hdbscan_exec, hleaf, hnode
-    '               Kmeans_func, knn_class, knnsearch, Lloyds, showHclust
-    '               silhouette_score, ToHClust, treeDf
+    '               fuzzyCMeans, getSOMNeurons, getTraceback, gmm_components, gmm_predict
+    '               gmm_predict_proba, gmmf, hclust, hdbscan_exec, hleaf
+    '               hnode, Kmeans_func, knn_class, knnsearch, Lloyds
+    '               plotSOMEmbedding, showHclust, silhouette_score, som, somgrid
+    '               ToHClust, treeDf
     ' 
     '     Sub: Main
     '     Class point2DReader

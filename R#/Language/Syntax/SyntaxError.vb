@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a2420748556b16610eed499716057484, R#\Language\Syntax\SyntaxError.vb"
+﻿#Region "Microsoft.VisualBasic::ecadf1979cdcd9bf5ec4ce0504924f14, R#\Language\Syntax\SyntaxError.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 71
-    '    Code Lines: 57 (80.28%)
+    '   Total Lines: 74
+    '    Code Lines: 59 (79.73%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 14 (19.72%)
-    '     File Size: 3.03 KB
+    '   Blank Lines: 15 (20.27%)
+    '     File Size: 3.07 KB
 
 
     '     Class SyntaxError
@@ -48,6 +48,7 @@
     '         Properties: [to], downstream, errorBlock, exception, file
     '                     from, upstream
     ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: (+3 Overloads) CreateError, ToString
     ' 
     ' 

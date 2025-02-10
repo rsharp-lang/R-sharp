@@ -1,57 +1,57 @@
-﻿#Region "Microsoft.VisualBasic::3475381a934ffc36cf0e760d7fbf33f7, studio\R-terminal\Terminal.vb"
+﻿#Region "Microsoft.VisualBasic::f3c69888d1805b8f225ef2446ce94c25, studio\R-terminal\Terminal.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 328
-'    Code Lines: 201 (61.28%)
-' Comment Lines: 81 (24.70%)
-'    - Xml Docs: 76.54%
-' 
-'   Blank Lines: 46 (14.02%)
-'     File Size: 11.77 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module Terminal
-' 
-'     Constructor: (+1 Overloads) Sub New
-' 
-'     Function: example, help, RunTerminal
-' 
-'     Sub: evalWithSpecialCommandSync, q, quit
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 404
+    '    Code Lines: 258 (63.86%)
+    ' Comment Lines: 91 (22.52%)
+    '    - Xml Docs: 75.82%
+    ' 
+    '   Blank Lines: 55 (13.61%)
+    '     File Size: 15.39 KB
+
+
+    ' Module Terminal
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    ' 
+    '     Function: example, help, RunTerminal
+    ' 
+    '     Sub: evalWithSpecialCommandSync, q, quit
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

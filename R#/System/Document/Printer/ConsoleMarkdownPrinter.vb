@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9088e8598c59acbd5689908bb6bfb6fd, R#\System\Document\Printer\ConsoleMarkdownPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::d126e2282af1fe4c69c2c6f8ddfe2206, R#\System\Document\Printer\ConsoleMarkdownPrinter.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 196
-    '    Code Lines: 142 (72.45%)
-    ' Comment Lines: 13 (6.63%)
+    '   Total Lines: 202
+    '    Code Lines: 146 (72.28%)
+    ' Comment Lines: 13 (6.44%)
     '    - Xml Docs: 69.23%
     ' 
-    '   Blank Lines: 41 (20.92%)
-    '     File Size: 7.26 KB
+    '   Blank Lines: 43 (21.29%)
+    '     File Size: 7.33 KB
 
 
     '     Module ConsoleMarkdownPrinter
     ' 
-    '         Function: getMarkdownDocs
+    '         Function: getMarkdownDocs, TryGetHelpDocument
     ' 
     '         Sub: printConsole, (+2 Overloads) printDocs, printFuncBody, PrintText
     ' 

@@ -1,56 +1,56 @@
-﻿#Region "Microsoft.VisualBasic::4611a7af0f1ab228431e4bc5a52b4a23, Library\graphics\grDevices.vb"
+﻿#Region "Microsoft.VisualBasic::93f7a026e2ed8df40f51f87ab7dbe03a, Library\graphics\grDevices.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 636
-'    Code Lines: 413 (64.94%)
-' Comment Lines: 158 (24.84%)
-'    - Xml Docs: 85.44%
-' 
-'   Blank Lines: 65 (10.22%)
-'     File Size: 27.52 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module grDevices
-' 
-'     Function: adjustAlpha, colorPopulator, colors, getFormatFromSuffix, imageAttrs
-'               openSvgDevice, pdfDevice, registerCustomPalette, requireSvgData, rgb
-'               saveBitmap, saveImage, saveSvgFile, saveSvgStream, svg
-'               tryMeasureFormat
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 885
+    '    Code Lines: 433 (48.93%)
+    ' Comment Lines: 385 (43.50%)
+    '    - Xml Docs: 80.00%
+    ' 
+    '   Blank Lines: 67 (7.57%)
+    '     File Size: 47.10 KB
+
+
+    ' Module grDevices
+    ' 
+    '     Function: adjustAlpha, colorPopulator, colors, getFormatFromSuffix, imageAttrs
+    '               openSvgDevice, pdfDevice, postscriptDev, registerCustomPalette, requireSvgData
+    '               rgb, saveBitmap, saveImage, saveSvgFile, saveSvgStream
+    '               svg, tryMeasureFormat
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
