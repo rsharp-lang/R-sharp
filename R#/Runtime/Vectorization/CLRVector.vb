@@ -222,6 +222,16 @@ Namespace Runtime.Vectorization
                 .ToArray
         End Function
 
+        Public Function asScalarCharacter(x As Object) As String
+            Dim str = CLRVector.asCharacter(x)
+
+            If str.IsNullOrEmpty Then
+                Return Nothing
+            Else
+                Return str(0)
+            End If
+        End Function
+
         ''' <summary>
         ''' try to cast any object to .net clr character vector 
         ''' </summary>
