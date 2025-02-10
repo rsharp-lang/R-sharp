@@ -1205,29 +1205,134 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' get or set unit to a given vector
+        ''' ### Function to Create a Unit Object
+        ''' 
+        ''' get or set unit to a given vector. This function creates a unit object — a vector of unit values. 
+        ''' A unit value is typically just a single numeric value with an associated unit.
         ''' </summary>
-        ''' <param name="x"></param>
-        ''' <param name="unit"></param>
-        ''' <returns></returns>
+        ''' <param name="x">A numeric vector. For is.unit, any R object.</param>
+        ''' <param name="units">A character vector specifying the units for the corresponding numeric values.</param>
+        ''' <param name="data">
+        ''' This argument is used to supply extra information for special unit types.
+        ''' </param>
+        ''' <returns>
+        ''' a numeric vector data that tagged with the given specific unit value, or returns the 
+        ''' units name of the given vector data if the <paramref name="units"/> parameter has 
+        ''' not been assigned.
+        ''' </returns>
+        ''' <remarks>
+        ''' Unit objects allow the user to specify locations and dimensions in a large number of different
+        ''' coordinate systems. All drawing occurs relative to a viewport and the units specifies what
+        ''' coordinate system to use within that viewport.
+        ''' 
+        ''' Possible units (coordinate systems) are:
+        ''' 
+        ''' "npc"
+        ''' Normalised Parent Coordinates (the default). The origin of the viewport is (0, 0) and the 
+        ''' viewport has a width and height of 1 unit. For example, (0.5, 0.5) is the centre of the 
+        ''' viewport.
+        ''' 
+        ''' "cm"
+        ''' Centimetres.
+        ''' 
+        ''' "inches"
+        ''' Inches. 1 in = 2.54 cm.
+        ''' 
+        ''' "mm"
+        ''' Millimetres. 10 mm = 1 cm.
+        ''' 
+        ''' "points"
+        ''' Points. 72.27 pt = 1 in.
+        ''' 
+        ''' "picas"
+        ''' Picas. 1 pc = 12 pt.
+        ''' 
+        ''' "bigpts"
+        ''' Big Points. 72 bp = 1 in.
+        ''' 
+        ''' "dida"
+        ''' Dida. 1157 dd = 1238 pt.
+        ''' 
+        ''' "cicero"
+        ''' Cicero. 1 cc = 12 dd.
+        ''' 
+        ''' "scaledpts"
+        ''' Scaled Points. 65536 sp = 1 pt.
+        ''' 
+        ''' "lines"
+        ''' Lines of text. Locations and dimensions are in terms of multiples of the default text size of the
+        ''' viewport (as specified by the viewport's fontsize and lineheight).
+        ''' 
+        ''' "char"
+        ''' Multiples of nominal font height of the viewport (as specified by the viewport's fontsize).
+        ''' 
+        ''' "native"
+        ''' Locations and dimensions are relative to the viewport's xscale and yscale.
+        ''' 
+        ''' "snpc"
+        ''' Square Normalised Parent Coordinates. Same as Normalised Parent Coordinates, except gives the same
+        ''' answer for horizontal and vertical locations/dimensions. It uses the lesser of npc-width and npc-height. 
+        ''' This is useful for making things which are a proportion of the viewport, but have to be square 
+        ''' (or have a fixed aspect ratio).
+        ''' 
+        ''' "strwidth"
+        ''' Multiples of the width of the string specified in the data argument. The font size is determined by
+        ''' the pointsize of the viewport.
+        ''' 
+        ''' "strheight"
+        ''' Multiples of the height of the string specified in the data argument. The font size is determined by 
+        ''' the pointsize of the viewport.
+        ''' 
+        ''' "grobwidth"
+        ''' Multiples of the width of the grob specified in the data argument.
+        ''' 
+        ''' "grobheight"
+        ''' Multiples of the height of the grob specified in the data argument.
+        ''' 
+        ''' A number of variations are also allowed for the most common units. For example, it is possible to 
+        ''' use "in" or "inch" instead of "inches" and "centimetre" or "centimeter" instead of "cm".
+        ''' 
+        ''' A special units value of "null" is also allowed, but only makes sense when used in specifying widths of
+        ''' columns or heights of rows in grid layouts (see grid.layout).
+        ''' 
+        ''' The data argument must be a list when the unit.length() is greater than 1. For example,
+        ''' 
+        ''' ```r
+        ''' unit(rep(1, 3), c("npc", "strwidth", "inches"),
+        ''' data = list(NULL, "my string", NULL))
+        ''' ```
+        ''' 
+        ''' It is possible to subset unit objects in the normal way and to perform subassignment (see the examples),
+        ''' but a special function unit.c is provided for combining unit objects.
+        ''' 
+        ''' Certain arithmetic and summary operations are defined for unit objects. In particular, it is possible 
+        ''' to add and subtract unit objects (e.g., unit(1, "npc") - unit(1, "inches")), and to specify the minimum 
+        ''' or maximum of a list of unit objects (e.g., min(unit(0.5, "npc"), unit(1, "inches"))).
+        ''' 
+        ''' There is a format method for units, which should respond to the arguments for the default format method, 
+        ''' e.g., digits to control the number of significant digits printed for numeric values.
+        ''' 
+        ''' The is.unit() function is a convenience for checking whether x inherits from the "unit" class.
+        ''' </remarks>
         <ExportAPI("unit")>
         Public Function unitOfT(<RRawVectorArgument> x As Object,
                                 <RByRefValueAssign>
-                                Optional unit As Object = Nothing,
+                                Optional units As Object = Nothing,
+                                Optional data As Object = Nothing,
                                 Optional env As Environment = Nothing) As Object
 
-            If unit Is Nothing Then
+            If units Is Nothing Then
                 If TypeOf x Is vector Then
                     Return DirectCast(x, vector).unit
                 Else
                     Return Nothing
                 End If
             Else
-                If TypeOf unit Is vbObject Then
-                    unit = DirectCast(unit, vbObject).target
+                If TypeOf units Is vbObject Then
+                    units = DirectCast(units, vbObject).target
                 End If
-                If TypeOf unit Is String Then
-                    unit = New unit With {.name = unit}
+                If TypeOf units Is String Then
+                    units = New unit With {.name = units}
                 End If
 
                 If Not x Is Nothing AndAlso Not TypeOf x Is vector Then
@@ -1243,9 +1348,9 @@ Namespace Runtime.Internal.Invokes
             End If
 
             If x Is Nothing Then
-                x = New vector With {.data = {}, .unit = unit}
+                x = New vector With {.data = {}, .unit = units}
             Else
-                DirectCast(x, vector).unit = unit
+                DirectCast(x, vector).unit = units
             End If
 
             Return x

@@ -759,4 +759,23 @@ Partial Module grDevices
             End Using
         End If
     End Function
+
+    ''' <summary>
+    ''' ### Function to Create a Unit Object
+    ''' 
+    ''' This function creates a unit object — a vector of unit values. A unit value is typically
+    ''' just a single numeric value with an associated unit.
+    ''' </summary>
+    ''' <param name="angle"></param>
+    ''' <param name="length"></param>
+    ''' <param name="ends"></param>
+    ''' <param name="type"></param>
+    ''' <returns></returns>
+    <ExportAPI("arrow")>
+    Public Function arrow(Optional angle! = 30,
+                          Optional length As Object = unit(0.25, "inches"),
+                          Optional ends As String = "last",
+                          Optional type As String = "open") As Triangle
+
+    End Function
 End Module
