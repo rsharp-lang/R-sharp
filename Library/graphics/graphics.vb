@@ -78,6 +78,12 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports R_graphics.Common.Runtime
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
+Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports Microsoft.VisualBasic.Linq
+
+
+
 
 #If NET48 Then
 Imports Microsoft.VisualBasic.Drawing
@@ -761,21 +767,35 @@ Partial Module grDevices
     End Function
 
     ''' <summary>
-    ''' ### Function to Create a Unit Object
+    ''' ### Describe arrows to add to a line.
     ''' 
-    ''' This function creates a unit object — a vector of unit values. A unit value is typically
-    ''' just a single numeric value with an associated unit.
+    ''' Produces a description of what arrows to add to a line. The result can be passed 
+    ''' to a function that draws a line, e.g., grid.lines.
     ''' </summary>
-    ''' <param name="angle"></param>
-    ''' <param name="length"></param>
-    ''' <param name="ends"></param>
-    ''' <param name="type"></param>
+    ''' <param name="angle">The angle of the arrow head in degrees (smaller numbers produce narrower, pointier arrows). Essentially describes the width of the arrow head.</param>
+    ''' <param name="length">A unit specifying the length of the arrow head (from tip to base).</param>
+    ''' <param name="ends">One of "last", "first", or "both", indicating which ends of the line to draw arrow heads.</param>
+    ''' <param name="type">One of "open" or "closed" indicating whether the arrow head should be a closed triangle.</param>
     ''' <returns></returns>
     <ExportAPI("arrow")>
+    <RApiReturn(GetType(Triangle))>
     Public Function arrow(Optional angle! = 30,
-                          Optional length As Object = unit(0.25, "inches"),
+                          <RLazyExpression>
+                          Optional length As Object = "~unit(0.25, ""inches"")",
                           Optional ends As String = "last",
-                          Optional type As String = "open") As Triangle
+                          Optional type As String = "open",
+                          Optional env As Environment = Nothing) As Object
 
+        Dim d As New Triangle With {.Angle = angle}
+        Dim len As Double = CLRVector.asNumeric(length).DefaultFirst(2.5)
+        Dim a As New PointF(0, len)
+        Dim b As New PointF(-1, 0)
+        Dim c As New PointF(1, 0)
+
+        d.Vertex1 = a
+        d.Vertex2 = b
+        d.Vertex3 = c
+
+        Return d
     End Function
 End Module
