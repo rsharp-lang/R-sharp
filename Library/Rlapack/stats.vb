@@ -1,81 +1,81 @@
 ﻿#Region "Microsoft.VisualBasic::da1e630a0b8f6bb2899c10af7300597b, Library\Rlapack\stats.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1845
-    '    Code Lines: 1033 (55.99%)
-    ' Comment Lines: 610 (33.06%)
-    '    - Xml Docs: 91.48%
-    ' 
-    '   Blank Lines: 202 (10.95%)
-    '     File Size: 78.13 KB
+' Summaries:
 
 
-    ' Module stats
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: matrixDataFrame, matrixDataFrame2, printMatrix, printMvar, printTtest
-    '               printTwoSampleTTest
-    '     Enum p_adjust_methods
-    ' 
-    '         BH, bonferroni, BY, fdr, hochberg
-    '         holm, hommel, none
-    ' 
-    ' 
-    ' 
-    '  
-    ' 
-    '     Function: aov, asDist, chisq_test, ChiSquare, combin
-    '               corr, corr_sign, corrTest, dataframeRow, dist
-    '               dnorm, ECDF, ecdf0, filterMissing, fisher_test
-    '               gammaCDF, GetDataSetCommon, getMatrix, getQuantileLevels, iqr_outliers
-    '               Lowess, mantel_test, median, moran_test, mul
-    '               oplsr, p_adjust, plsda, pnorm_func, PoissonDiskGenerator_func
-    '               (+2 Overloads) pow, prcomp, quantile, safeCheck, spline
-    '               tabulateMode, ttest, ttestBatch, ttestImpl, varTest
-    '               z_score, z_scoreByColumn, z_scoreByRow
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1845
+'    Code Lines: 1033 (55.99%)
+' Comment Lines: 610 (33.06%)
+'    - Xml Docs: 91.48%
+' 
+'   Blank Lines: 202 (10.95%)
+'     File Size: 78.13 KB
+
+
+' Module stats
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: matrixDataFrame, matrixDataFrame2, printMatrix, printMvar, printTtest
+'               printTwoSampleTTest
+'     Enum p_adjust_methods
+' 
+'         BH, bonferroni, BY, fdr, hochberg
+'         holm, hommel, none
+' 
+' 
+' 
+'  
+' 
+'     Function: aov, asDist, chisq_test, ChiSquare, combin
+'               corr, corr_sign, corrTest, dataframeRow, dist
+'               dnorm, ECDF, ecdf0, filterMissing, fisher_test
+'               gammaCDF, GetDataSetCommon, getMatrix, getQuantileLevels, iqr_outliers
+'               Lowess, mantel_test, median, moran_test, mul
+'               oplsr, p_adjust, plsda, pnorm_func, PoissonDiskGenerator_func
+'               (+2 Overloads) pow, prcomp, quantile, safeCheck, spline
+'               tabulateMode, ttest, ttestBatch, ttestImpl, varTest
+'               z_score, z_scoreByColumn, z_scoreByRow
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -122,6 +122,8 @@ Imports std = System.Math
 Imports stdVector = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+Imports Microsoft.VisualBasic.Data.GraphTheory
+
 
 #If NET48 Then
 Imports Pen = System.Drawing.Pen
@@ -1958,6 +1960,34 @@ Module stats
         Call df.add("y", vx.Select(Function(vi) vi.y))
 
         Return df
+    End Function
+
+    ''' <summary>
+    ''' ### Earth Mover's Distance
+    ''' 
+    ''' Implementation of the Fast Earth Mover's Algorithm by Ofir Pele and Michael Werman.
+    ''' </summary>
+    ''' <param name="x">the sparse matrices being compared</param>
+    ''' <param name="y">the sparse matrices being compared</param>
+    ''' <param name="bins"></param>
+    ''' <param name="extra_mass_penalty">
+    ''' penalty for extra mass. 0 for no penalty, -1 for the default, other positive values to specify the penalty;
+    ''' An extraMassPenalty of -1 means that the extra mass penalty is the maximum distance found between two features.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("emd_dist")>
+    <RApiReturn(GetType(Double))>
+    Public Function emd_dist(<RRawVectorArgument> x As Object,
+                             <RRawVectorArgument> y As Object,
+                             Optional bins As Integer = 10,
+                             Optional extra_mass_penalty As Double = -1,
+                             Optional env As Environment = Nothing) As Object
+
+        Dim v1 = CLRVector.asNumeric(x)
+        Dim v2 = CLRVector.asNumeric(y)
+
+        Return EMD.emdDist(v1, v2, bins, extra_mass_penalty)
     End Function
 End Module
 
