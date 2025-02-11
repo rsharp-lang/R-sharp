@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::452c2ee9445c36bd7ce2ff60d8d49b25, R#\Runtime\Environment\PackageEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::653fea209384dcfe8859bf7ff54e2d90, R#\Runtime\Environment\PackageEnvironment.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 95
-    '    Code Lines: 64 (67.37%)
-    ' Comment Lines: 14 (14.74%)
+    '   Total Lines: 94
+    '    Code Lines: 63 (67.02%)
+    ' Comment Lines: 14 (14.89%)
     '    - Xml Docs: 92.86%
     ' 
-    '   Blank Lines: 17 (17.89%)
-    '     File Size: 3.61 KB
+    '   Blank Lines: 17 (18.09%)
+    '     File Size: 3.57 KB
 
 
     '     Class PackageEnvironment

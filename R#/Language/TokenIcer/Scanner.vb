@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8f021118eeb419a5be47a1d95ce0faf6, R#\Language\TokenIcer\Scanner.vb"
+﻿#Region "Microsoft.VisualBasic::fade43b4b9823b0e09c6910e07fb0a6e, R#\Language\TokenIcer\Scanner.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 588
-    '    Code Lines: 415 (70.58%)
-    ' Comment Lines: 99 (16.84%)
+    '   Total Lines: 593
+    '    Code Lines: 419 (70.66%)
+    ' Comment Lines: 99 (16.69%)
     '    - Xml Docs: 53.54%
     ' 
-    '   Blank Lines: 74 (12.59%)
-    '     File Size: 24.96 KB
+    '   Blank Lines: 75 (12.65%)
+    '     File Size: 25.20 KB
 
 
     '     Class Scanner
@@ -48,8 +48,8 @@
     '         Properties: lastCharIsEscapeSplash
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: finalizeToken, GetRKeywords, GetTokens, isLINQKeyword, MeasureToken
-    '                   populateToken, walkChar
+    '         Function: CheckIdentifierSymbol, finalizeToken, GetRKeywords, GetTokens, isLINQKeyword
+    '                   MeasureToken, populateToken, walkChar
     '         Class Escapes
     ' 
     '             Function: ToString

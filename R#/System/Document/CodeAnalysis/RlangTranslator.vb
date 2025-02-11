@@ -1,58 +1,59 @@
-﻿#Region "Microsoft.VisualBasic::910aa4cbd526842686e84629f63f6ceb, R#\System\Document\CodeAnalysis\RlangTranslator.vb"
+﻿#Region "Microsoft.VisualBasic::08388e86856aa1e8aa9ab7e9291fbe3c, R#\System\Document\CodeAnalysis\RlangTranslator.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 333
-'    Code Lines: 258 (77.48%)
-' Comment Lines: 17 (5.11%)
-'    - Xml Docs: 76.47%
-' 
-'   Blank Lines: 58 (17.42%)
-'     File Size: 13.77 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class RlangTranslator
-' 
-'         Constructor: (+2 Overloads) Sub New
-'         Function: AssignNewSymbol, castLiteral, CreateSymbols, GetAssignValue, GetBinaryOp
-'                   getByref, GetElse, getForLoop, GetFunctionInvoke, GetIf
-'                   (+2 Overloads) GetScript, GetSymbol, GetSymbolIndexSubset, GetUnaryNot, (+2 Overloads) Literal
-'                   Vector
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 489
+    '    Code Lines: 386 (78.94%)
+    ' Comment Lines: 22 (4.50%)
+    '    - Xml Docs: 59.09%
+    ' 
+    '   Blank Lines: 81 (16.56%)
+    '     File Size: 20.93 KB
+
+
+    '     Class RlangTranslator
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: AssignNewSymbol, castLiteral, createFunction, CreateSymbols, GetAssignValue
+    '                   GetBinaryOp, getByref, GetElse, getForLoop, getFormulaString
+    '                   GetFunctionInvoke, GetIf, getMemberValueAssign, getNeg, (+2 Overloads) GetScript
+    '                   getSequence, GetSymbol, GetSymbolIndexSubset, GetUnaryNot, (+2 Overloads) Literal
+    '                   requirePkg, Vector
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

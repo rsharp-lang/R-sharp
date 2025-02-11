@@ -1,57 +1,57 @@
-﻿#Region "Microsoft.VisualBasic::3e5e14ad3b4eea9843fede56b4557a65, studio\Rsharp_kit\MLkit\NLP.vb"
+﻿#Region "Microsoft.VisualBasic::34d0d776643cb46d40eaefdcc7937dfe, studio\Rsharp_kit\MLkit\NLP.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 342
-'    Code Lines: 251 (73.39%)
-' Comment Lines: 35 (10.23%)
-'    - Xml Docs: 80.00%
-' 
-'   Blank Lines: 56 (16.37%)
-'     File Size: 13.14 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module NLP
-' 
-'     Function: bigram_func, bigramTable, countMultipleParagraph, counts, CrawlerText
-'               exportWordVector, getText, ldaCorpus, split_to_sentences, Tokenice
-'               word2vec
-' 
-'     Sub: Main
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 359
+    '    Code Lines: 264 (73.54%)
+    ' Comment Lines: 35 (9.75%)
+    '    - Xml Docs: 80.00%
+    ' 
+    '   Blank Lines: 60 (16.71%)
+    '     File Size: 13.92 KB
+
+
+    ' Module NLPtools
+    ' 
+    '     Function: bigram_func, bigramTable, countMultipleParagraph, counts, CrawlerText
+    '               exportWordVector, getText, ldaCorpus, split_to_sentences, stemmer_normalize
+    '               TF_IDF, Tokenice, word2vec
+    ' 
+    '     Sub: Main
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

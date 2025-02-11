@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::243e2416975a27186fce8f74dfc8002a, Library\shares\graphics.common_runtime\graphics.vb"
+﻿#Region "Microsoft.VisualBasic::9b9d4be011c17bed0488a5eca27234ef, Library\shares\graphics.common_runtime\graphics.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 62
-    '    Code Lines: 42 (67.74%)
-    ' Comment Lines: 9 (14.52%)
+    '   Total Lines: 78
+    '    Code Lines: 54 (69.23%)
+    ' Comment Lines: 9 (11.54%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 11 (17.74%)
-    '     File Size: 1.83 KB
+    '   Blank Lines: 15 (19.23%)
+    '     File Size: 2.45 KB
 
 
     ' Module graphics

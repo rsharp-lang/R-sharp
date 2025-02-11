@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6d4b1297ce59091c9d564e967c6219c1, studio\Rsharp_kit\MLkit\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::5dd0dcbe367a6e407179fa21469684f3, studio\Rsharp_kit\MLkit\zzz.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 6 (20.00%)
-    '     File Size: 906 B
+    '     File Size: 911 B
 
 
     ' Class zzz

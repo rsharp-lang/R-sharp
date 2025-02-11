@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bc0c9f9219ed4b0f66ed633b561df1f7, Library\graphics\Plot2D\plots.vb"
+﻿#Region "Microsoft.VisualBasic::d8265d208f6b104152e032f843d80493, Library\graphics\Plot2D\plots.vb"
 
     ' Author:
     ' 
@@ -34,22 +34,23 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1207
-    '    Code Lines: 940 (77.88%)
-    ' Comment Lines: 146 (12.10%)
+    '   Total Lines: 1244
+    '    Code Lines: 971 (78.05%)
+    ' Comment Lines: 146 (11.74%)
     '    - Xml Docs: 85.62%
     ' 
-    '   Blank Lines: 121 (10.02%)
-    '     File Size: 54.68 KB
+    '   Blank Lines: 127 (10.21%)
+    '     File Size: 56.41 KB
 
 
     ' Module plots
     ' 
     '     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, findNumberVector
     '               measureDataTable, modelWithClass, modelWithoutClass, plot_binBox, plot_categoryBars
-    '               plot_corHeatmap, plot_deSolveResult, plot_hclust, plotArray, plotContourLayers
-    '               plotFormula, plotLinearYFit, plotLmCall, plotODEResult, plotPieChart
-    '               PlotPolygon, plotSerials, plotVector, printImage, UpSetPlot
+    '               plot_corHeatmap, plot_deSolveResult, plot_hclust, plot_heatmap, plotArray
+    '               plotContourLayers, plotFormula, plotLinearYFit, plotLmCall, plotODEResult
+    '               plotPieChart, PlotPolygon, plotSerials, plotVector, printImage
+    '               UpSetPlot
     ' 
     '     Sub: Main, TryGetClassData
     ' 

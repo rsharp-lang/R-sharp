@@ -1,55 +1,56 @@
-﻿#Region "Microsoft.VisualBasic::e82346187276f99f773149fe7e549efe, studio\Rsharp_kit\MLkit\dataset\bitmap.vb"
+﻿#Region "Microsoft.VisualBasic::c6bc80de68fb6059618307def4488bdb, studio\Rsharp_kit\MLkit\dataset\bitmap.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 224
-'    Code Lines: 162 (72.32%)
-' Comment Lines: 30 (13.39%)
-'    - Xml Docs: 96.67%
-' 
-'   Blank Lines: 32 (14.29%)
-'     File Size: 8.83 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module bitmap_func
-' 
-'     Function: corp_rectangle, intensity_vec, open, scan_rowpeaks, summary_region
-' 
-'     Sub: Main
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 287
+    '    Code Lines: 208 (72.47%)
+    ' Comment Lines: 36 (12.54%)
+    '    - Xml Docs: 91.67%
+    ' 
+    '   Blank Lines: 43 (14.98%)
+    '     File Size: 11.28 KB
+
+
+    ' Module bitmap_func
+    ' 
+    '     Function: corp_rectangle, createPixelClusterTable, intensity_vec, open, scan_rowpeaks
+    '               slic, summary_region
+    ' 
+    '     Sub: Main
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
