@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f67086cd1dbe388cd3d68238e48015a1, Library\shares\graphics.common_runtime\Env.vb"
+﻿#Region "Microsoft.VisualBasic::8ea181f7cebfe63764cc07fa38459f59, Library\shares\graphics.common_runtime\Env.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 5 (27.78%)
-    '     File Size: 463 B
+    '     File Size: 461 B
 
 
     ' Module Env
@@ -69,4 +69,3 @@ Module Env
         End Get
     End Property
 End Module
-
