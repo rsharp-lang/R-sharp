@@ -76,49 +76,49 @@
 ' 
 ' 
 ' /********************************************************************************/
-    '   Total Lines: 1888
-    '    Code Lines: 1059 (56.09%)
-    ' Comment Lines: 620 (32.84%)
-    '    - Xml Docs: 91.45%
-    ' 
-    '   Blank Lines: 209 (11.07%)
-    '     File Size: 80.47 KB
+'   Total Lines: 1888
+'    Code Lines: 1059 (56.09%)
+' Comment Lines: 620 (32.84%)
+'    - Xml Docs: 91.45%
+' 
+'   Blank Lines: 209 (11.07%)
+'     File Size: 80.47 KB
 
 
-    ' Module stats
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: matrixDataFrame, matrixDataFrame2, printMatrix, printMvar, printTtest
-    '               printTwoSampleTTest
-    '     Enum p_adjust_methods
-    ' 
-    '         BH, bonferroni, BY, fdr, hochberg
-    '         holm, hommel, none
-    ' 
-    ' 
-    ' 
-    '  
-    ' 
-    '     Function: aov, asDist, beta, chisq_test, ChiSquare
-    '               combin, corr, corr_sign, corrTest, dataframeRow
-    '               dist, dnorm, ECDF, ecdf0, filterMissing
-    '               fisher_test, gamma, gammaCDF, GetDataSetCommon, getMatrix
-    '               getQuantileLevels, iqr_outliers, lbeta, lgamma, Lowess
-    '               mantel_test, median, moran_test, mul, oplsr
-    '               p_adjust, plsda, pnorm_func, PoissonDiskGenerator_func, (+2 Overloads) pow
-    '               prcomp, pt, quantile, safeCheck, spline
-    '               tabulateMode, ttest, ttestBatch, ttestImpl, varTest
-    '               z_score, z_scoreByColumn, z_scoreByRow
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Module stats
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: matrixDataFrame, matrixDataFrame2, printMatrix, printMvar, printTtest
+'               printTwoSampleTTest
+'     Enum p_adjust_methods
+' 
+'         BH, bonferroni, BY, fdr, hochberg
+'         holm, hommel, none
+' 
+' 
+' 
+'  
+' 
+'     Function: aov, asDist, beta, chisq_test, ChiSquare
+'               combin, corr, corr_sign, corrTest, dataframeRow
+'               dist, dnorm, ECDF, ecdf0, filterMissing
+'               fisher_test, gamma, gammaCDF, GetDataSetCommon, getMatrix
+'               getQuantileLevels, iqr_outliers, lbeta, lgamma, Lowess
+'               mantel_test, median, moran_test, mul, oplsr
+'               p_adjust, plsda, pnorm_func, PoissonDiskGenerator_func, (+2 Overloads) pow
+'               prcomp, pt, quantile, safeCheck, spline
+'               tabulateMode, ttest, ttestBatch, ttestImpl, varTest
+'               z_score, z_scoreByColumn, z_scoreByRow
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
