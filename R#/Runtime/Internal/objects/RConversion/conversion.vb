@@ -990,18 +990,25 @@ RE0:
                                Optional env As Environment = Nothing) As Object
 
             If TypeOf args Is InvokeParameter() Then
+                ' 20250212 this function may returns the error message if error occurs
+                ' make conversion of the arguments to the list
                 args = base.Rlist(args, env)
             End If
 
             If x Is Nothing Then
                 ' returns nothing if the given data x is nothing
                 Return Nothing
+            ElseIf TypeOf x Is Message Then
+                Return x
             ElseIf TypeOf x Is list Then
-                ' just make a list data copy if the given data is already a R-sharp tuple list
+                ' just make a list data copy if the given data is already
+                ' a R-sharp runtime tuple list object
                 Return New list(DirectCast(x, list).elementType) With {
                     .slots = New Dictionary(Of String, Object)(DirectCast(x, list).slots)
                 }
-            ElseIf x.GetType.ImplementInterface(Of IDictionary) Then
+            End If
+
+            If x.GetType.ImplementInterface(Of IDictionary) Then
                 ' try to convert the clr dictionary object as R-sharp tuple list
                 Return DirectCast(x, IDictionary).dictionaryToRList(args, env)
             ElseIf TypeOf x Is Size OrElse TypeOf x Is SizeF Then

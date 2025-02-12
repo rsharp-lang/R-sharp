@@ -72,6 +72,9 @@ Namespace Runtime.Components
     ''' <summary>
     ''' The warning message and exception message
     ''' </summary>
+    ''' <remarks>
+    ''' this runtime message object is a collection of the error message string
+    ''' </remarks>
     Public Class Message : Implements Enumeration(Of String)
 
         ''' <summary>

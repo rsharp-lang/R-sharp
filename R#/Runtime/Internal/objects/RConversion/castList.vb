@@ -173,6 +173,10 @@ Namespace Runtime.Internal.Object.Converts
 
                         If Not (DataFramework.IsPrimitive(value.GetType) OrElse value.GetType.IsEnum) Then
                             value = listInternal(value, args, env)
+
+                            If TypeOf value Is Message Then
+                                Return value
+                            End If
                         End If
 
                         Call array.SetValue(value, i)
@@ -212,7 +216,7 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         <Extension>
-        Friend Function dictionaryToRList(dict As IDictionary, args As list, env As Environment) As list
+        Friend Function dictionaryToRList(dict As IDictionary, args As list, env As Environment) As Object
             Dim objList As New Dictionary(Of String, Object)
             Dim eleType As RType = RType.any
             Dim type As Type = dict.GetType
@@ -241,6 +245,10 @@ Namespace Runtime.Internal.Object.Converts
                             ' dictionary valye is any object
                             If Not DataFramework.IsPrimitive(value.GetType) Then
                                 value = listInternal(value, args, env)
+
+                                If TypeOf value Is Message Then
+                                    Return value
+                                End If
                             End If
                         End If
                     End If
@@ -286,7 +294,9 @@ Namespace Runtime.Internal.Object.Converts
         ''' <param name="vbobj"></param>
         ''' <param name="args"></param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' this function may returns an error message if the clr object property read error.
+        ''' </returns>
         <Extension>
         Private Function objCastList(vbobj As vbObject, args As list, env As Environment) As Object
             Dim list As New Dictionary(Of String, Object)

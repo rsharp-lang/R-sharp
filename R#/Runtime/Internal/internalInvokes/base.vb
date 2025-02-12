@@ -1829,7 +1829,9 @@ RE0:
         ''' </summary>
         ''' <param name="slots">objects, possibly named.</param>
         ''' <param name="envir"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' 
+        ''' </returns>
         <ExportAPI("list")>
         <RApiReturn(GetType(list))>
         Public Function Rlist(<RListObjectArgument, RRawVectorArgument>
