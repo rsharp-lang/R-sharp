@@ -139,7 +139,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
             If reader Is Nothing Then
                 If getStrictOpt(envir) Then
-                    Return Internal.debug.stop($"can not found member symbol '{memberName}' in [{type.GetElementType.FullName}].", envir)
+                    Return Internal.debug.stop($"can not found member symbol '{memberName}' in vector element [{type.GetElementType.FullName}].", envir)
                 Else
                     Return Nothing
                 End If
@@ -177,7 +177,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
             If reader Is Nothing Then
                 If getStrictOpt(envir) Then
-                    Return Internal.debug.stop($"can not found member symbol '{memberName}' in [{objVal.GetType.FullName}].", envir)
+                    Return Internal.debug.stop($"can not found member symbol '{memberName}' in scalar object [{objVal.GetType.FullName}].", envir)
                 Else
                     Return Nothing
                 End If
