@@ -996,7 +996,7 @@ RE0:
 
                 If args Is Nothing Then
                     args = list.empty
-                ElseIf TypeOf args Is list Then
+                ElseIf TypeOf args Is Message Then
                     Return args
                 End If
             End If
