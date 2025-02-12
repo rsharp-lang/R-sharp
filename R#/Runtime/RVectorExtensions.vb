@@ -69,6 +69,11 @@ Namespace Runtime
 
     <HideModuleName> Public Module RVectorExtensions
 
+        ''' <summary>
+        ''' check all elements inside the given array is all nothing?
+        ''' </summary>
+        ''' <param name="v"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function AllNothing(v As Array) As Boolean
             If v Is Nothing Then

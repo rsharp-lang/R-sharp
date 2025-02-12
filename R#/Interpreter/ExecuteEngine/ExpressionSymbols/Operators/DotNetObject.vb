@@ -138,6 +138,21 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Dim reader As PropertyInfo = getReader(type.GetElementType, memberName)
 
             If reader Is Nothing Then
+                ' 20250214 deal with some special situation
+                '
+                ' empty vector? -> returns nothing
+                If array.IsNullOrEmpty Then
+                    Return Nothing
+                End If
+                ' all elements inside vector is nothing? -> returns a vector with all elements is nothing?
+                If array.AllNothing Then
+                    If getStrictOpt(envir) Then
+                        Return Internal.debug.stop("all of the elements inside the given vector is nothing, can not extract symbol value when in strict mode!", envir)
+                    Else
+                        Return array
+                    End If
+                End If
+
                 If getStrictOpt(envir) Then
                     Return Internal.debug.stop($"can not found member symbol '{memberName}' in vector element [{type.GetElementType.FullName}].", envir)
                 Else
