@@ -2979,7 +2979,7 @@ RE0:
         ''' 
         ''' Functions to get or set the names of an object.
         ''' </summary>
-        ''' <param name="[object]">an R object.</param>
+        ''' <param name="object">an R object.</param>
         ''' <param name="namelist">
         ''' a character vector of up to the same length as ``x``, or ``NULL``.
         ''' </param>
@@ -3069,6 +3069,11 @@ RE0:
             Return resultNames
         End Function
 
+        ''' <summary>
+        ''' make the given name string be unique
+        ''' </summary>
+        ''' <param name="names"></param>
+        ''' <returns>this function by extends the numeric suffix to the duplictaed name for make the name string be uniqued!</returns>
         <ExportAPI("unique.names")>
         Public Function uniqueNames(<RRawVectorArgument(GetType(String))> names As Object) As String()
             Dim nameList As String() = CLRVector.asCharacter(names)
