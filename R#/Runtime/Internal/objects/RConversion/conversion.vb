@@ -993,6 +993,12 @@ RE0:
                 ' 20250212 this function may returns the error message if error occurs
                 ' make conversion of the arguments to the list
                 args = base.Rlist(args, env)
+
+                If args Is Nothing Then
+                    args = list.empty
+                ElseIf TypeOf args Is list Then
+                    Return args
+                End If
             End If
 
             If x Is Nothing Then
