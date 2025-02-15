@@ -396,6 +396,9 @@ Namespace Runtime.Internal.Invokes
                     If from(i).FileCopy([to](i)) Then
                         Call result.Add(True)
                     Else
+                        If verbose Then
+                            Call $"[file copy error] {App.GetLastError.Message}".Warning
+                        End If
                         Call result.Add(from(i))
                     End If
                 Next
