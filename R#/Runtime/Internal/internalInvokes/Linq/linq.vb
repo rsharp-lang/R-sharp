@@ -140,8 +140,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' <returns></returns>
         <ExportAPI("left_join")>
         Public Function left_join(left As dataframe, right As dataframe,
-                                  Optional by_x As String = Nothing,
-                                  Optional by_y As String = Nothing,
+                                  Optional by_x As Object = Nothing,
+                                  Optional by_y As Object = Nothing,
                                   Optional [by] As Object = Nothing,
                                   Optional grep As Object = Nothing,
                                   Optional env As Environment = Nothing) As Object
@@ -178,8 +178,16 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     "you should set parameter 'by' for specific field name that bot existed in two given dataset, or by.x and by.y if the index field its field name is different between two dataset."
                 }, env)
             Else
-                keyX = left.getColumnVector(by_x)
-                keyY = right.getColumnVector(by_y)
+                If RType.TypeOf(by_x).mode = TypeCodes.integer Then
+                    keyX = left.getColumnVector(CLRVector.asInteger(by_x)(0))
+                Else
+                    keyX = left.getColumnVector(CLRVector.asCharacter(by_x)(0))
+                End If
+                If RType.TypeOf(by_y).mode = TypeCodes.integer Then
+                    keyY = right.getColumnVector(CLRVector.asInteger(by_y)(0))
+                Else
+                    keyY = right.getColumnVector(CLRVector.asCharacter(by_y)(0))
+                End If
             End If
 
             If Not grep Is Nothing Then
