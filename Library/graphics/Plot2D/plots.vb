@@ -739,7 +739,7 @@ Module plots
         Dim highlights As NamedValue(Of DoubleRange)() = Nothing
         Dim size = graphicsPipeline.getSize(args.slots, env, New Size(1600, 1200))
 
-        If highlightRange.TryCount < 2 Then
+        If highlightRange.TryCount >= 2 Then
             highlights = {
                 New NamedValue(Of DoubleRange)(highlightTitle, New DoubleRange(highlightRange), highlightColor.ToHtmlColor)
             }
