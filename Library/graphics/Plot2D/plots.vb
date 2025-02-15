@@ -213,7 +213,7 @@ Module plots
         Dim driver As Drivers = env.getDriver
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
 
-        Return Heatmap.Plot(dataset, ppi:=dpi, driver:=driver)
+        Return HeatMap.Plot(dataset, ppi:=dpi, driver:=driver)
     End Function
 
     Private Function printImage(img As GraphicsData) As String
@@ -733,7 +733,17 @@ Module plots
         Dim ylab$ = args.GetString("y.lab", "Y")
         Dim padding$ = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 10% 15% 15% 10%;", env)
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
+        Dim highlightRange As Double() = CLRVector.asNumeric(args.getBySynonyms("highlights", "highlight.range"))
+        Dim highlightColor = graphicsPipeline.GetRawColor(args.getBySynonyms("highlight.color", "highlights.color"), [default]:="red")
+        Dim highlightTitle As String = args.getValue("highlights.title", env, "highlights " & highlightColor.ToHtmlColor)
+        Dim highlights As NamedValue(Of DoubleRange)() = Nothing
+        Dim size = graphicsPipeline.getSize(args.slots, env, New Size(1600, 1200))
 
+        If highlightRange.TryCount < 2 Then
+            highlights = {
+                New NamedValue(Of DoubleRange)(highlightTitle, New DoubleRange(highlightRange), highlightColor.ToHtmlColor)
+            }
+        End If
         If [step] <= 0 Then
             ' guess step value from binbox width
             [step] = data _
@@ -749,7 +759,9 @@ Module plots
             yLabel:=ylab,
             padding:=padding,
             dpi:=dpi,
-            driver:=env.getDriver
+            driver:=env.getDriver,
+            size:=$"{size.Width},{size.Height}",
+            highlights:=highlights
         )
     End Function
 
