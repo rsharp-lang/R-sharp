@@ -66,7 +66,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
         Public Function ValueAssign(symbolIndex As SymbolIndexer, indexStr As String(), targetObj As dataframe, value As Object, env As Environment) As Message
             If symbolIndex.indexType = SymbolIndexers.dataframeColumns Then
                 If indexStr.Length = 1 Then
+                    ' set single column
                     Return setSingleColumn(targetObj, value, indexStr(Scan0), env)
+                ElseIf value Is Nothing Then
+                    ' delete multiple columns
+                    ' x[,cols] <- NULL;
+                    Call targetObj.delete(indexStr)
                 Else
                     Dim seqVal As Array = Runtime.asVector(Of Object)(value)
                     Dim i As i32 = Scan0
