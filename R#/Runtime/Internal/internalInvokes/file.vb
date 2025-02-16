@@ -1800,8 +1800,8 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         ''' <param name="x"></param>
         <ExportAPI("unlink")>
-        Public Sub unlinks(x As String())
-            Call fileRemove(x)
+        Public Sub unlinks(x As String(), Optional env As Environment = Nothing)
+            Call fileRemove(x, env:=env)
         End Sub
 
         ''' <summary>
