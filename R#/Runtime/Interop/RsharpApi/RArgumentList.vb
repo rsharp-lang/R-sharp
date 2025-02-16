@@ -315,6 +315,12 @@ Namespace Runtime.Interop
 
             If listIndex > -1 Then
                 listObject = parameterVals(listIndex)
+
+                If listObject Is Nothing Then
+                    Return New Object() {
+                        Internal.debug.stop("invalid clr function declares for the list object arguments, list object argument should be the first argument or the last argument of the function parameters.", env)
+                    }
+                End If
             End If
 
             For Each arg As RMethodArgument In declareArguments.Values
