@@ -1774,9 +1774,7 @@ Namespace Runtime.Internal.Invokes
 
             Dim println As Action(Of Object)
 
-            If verbose Is Nothing Then
-                verbose = env.globalEnvironment.options.verbose
-            End If
+            verbose = env.verboseOption(opt:=verbose)
 
             If verbose Then
                 println = env.WriteLineHandler
