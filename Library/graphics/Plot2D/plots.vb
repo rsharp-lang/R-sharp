@@ -214,7 +214,7 @@ Module plots
         Dim driver As Drivers = env.getDriver
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
 
-        Return HeatMap.Plot(dataset, mainTitle:=mainTitle, ppi:=dpi, driver:=driver)
+        Return HeatMap.Plot(dataset, size:="3000,3000", dendrogramLayout:="600,300", mainTitle:=mainTitle, ppi:=dpi, driver:=driver)
     End Function
 
     Private Function printImage(img As GraphicsData) As String
