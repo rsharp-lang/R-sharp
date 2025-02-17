@@ -191,6 +191,7 @@ Module plots
     Private Function plot_heatmap(m As Rdataframe, args As list, env As Environment) As Object
         Dim cols = m.colnames
         Dim row_scale As Boolean = CLRVector.asLogical(args.getBySynonyms("row_scale", "row.scale")).ElementAtOrDefault(0, [default]:=False)
+        Dim mainTitle As String = CLRVector.asCharacter(args.getBySynonyms("title")).DefaultFirst("heatmap")
         Dim dataset As DataSet() = m.forEachRow _
             .Select(Function(a)
                         Dim fields As New Dictionary(Of String, Double)
@@ -213,7 +214,7 @@ Module plots
         Dim driver As Drivers = env.getDriver
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
 
-        Return HeatMap.Plot(dataset, ppi:=dpi, driver:=driver)
+        Return HeatMap.Plot(dataset, mainTitle:=mainTitle, ppi:=dpi, driver:=driver)
     End Function
 
     Private Function printImage(img As GraphicsData) As String
