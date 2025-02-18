@@ -227,18 +227,14 @@ Module Layouts
     ''' </summary>
     ''' <param name="g">A network graph object.</param>
     ''' <param name="iterations">The number of layout iterations.</param>
-    ''' <param name="clearScreen">
-    ''' Clear of the console screen when display the progress bar.
-    ''' </param>
     ''' <returns></returns>
     <ExportAPI("layout.springForce")>
     <RApiReturn(GetType(NetworkGraph))>
     Public Function SpringForce(g As NetworkGraph,
-                                Optional stiffness# = 80,
-                                Optional repulsion# = 4000,
-                                Optional damping# = 0.83,
+                                Optional stiffness# = 81.76,
+                                Optional repulsion# = 2000.0!,
+                                Optional damping# = 0.5,
                                 Optional iterations% = 1000,
-                                Optional clearScreen As Boolean = False,
                                 Optional showProgress As Boolean = True,
                                 Optional env As Environment = Nothing) As Object
 
@@ -254,7 +250,6 @@ Module Layouts
         Call g.doForceLayout(
             showProgress:=showProgress,
             iterations:=iterations,
-            clearScreen:=clearScreen,
             Stiffness:=stiffness,
             Repulsion:=repulsion,
             Damping:=damping
