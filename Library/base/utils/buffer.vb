@@ -84,9 +84,11 @@ Module buffer
     ''' <param name="base64"></param>
     ''' <returns></returns>
     <ExportAPI("parseDouble")>
-    Public Function parseDouble(base64 As String) As Double()
+    Public Function parseDouble(base64 As String,
+                                Optional gzip As NetworkByteOrderBuffer.Compression = NetworkByteOrderBuffer.Compression.none,
+                                Optional no_magic As Boolean = False) As Double()
         Static network As New NetworkByteOrderBuffer
-        Return network.ParseDouble(base64)
+        Return network.ParseDouble(base64, gzip, no_magic)
     End Function
 
     ''' <summary>
