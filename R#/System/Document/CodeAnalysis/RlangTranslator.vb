@@ -537,7 +537,22 @@ Namespace Development.CodeAnalysis
                 Next
             Else
                 For Each par As Expression In pars
-                    Call parList.Add(GetScript(par, env))
+                    If TypeOf par Is SymbolReference Then
+                        ' deal with the symbol parameter in some ggplot function
+                        ' example as ggplot2 aes(x = xxx);
+                        Call parList.Add(ValueAssignExpression.GetSymbol(par))
+                    ElseIf TypeOf par Is ValueAssignExpression Then
+                        Dim namedPar As ValueAssignExpression = par
+                        Dim name As String = ValueAssignExpression.GetSymbol(namedPar.targetSymbols(0))
+
+                        If TypeOf namedPar.value Is SymbolReference Then
+                            Call parList.Add($"{name} = {ValueAssignExpression.GetSymbol(namedPar.value)}")
+                        Else
+                            Call parList.Add($"{name} = {GetScript(namedPar.value, env)}")
+                        End If
+                    Else
+                        Call parList.Add(GetScript(par, env))
+                    End If
                 Next
             End If
 
