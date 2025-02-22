@@ -29,7 +29,12 @@ const transform_rlang_source = function(code, source = NULL, debug = FALSE) {
 #' @param source the source file paths for provides the 
 #'    runtime environment for the specific input code. 
 #' 
-const rlang_interop = function(code, source = NULL, debug = FALSE, workdir = NULL) {
+const rlang_interop = function(code, 
+    source = NULL, 
+    debug = FALSE, 
+    workdir = NULL, 
+    print_code = FALSE) {
+
     let code_save = tempfile(fileext = ".R");
     let script_code = transform_rlang_source(code, source, 
             debug = debug);
@@ -40,6 +45,11 @@ const rlang_interop = function(code, source = NULL, debug = FALSE, workdir = NUL
         
         if (change_wd) {
             setwd(workdir);
+        }
+        if (print_code) {
+            cat("\n\n");
+            print(script_code);
+            cat("\n\n");
         }
 
         print("run script at workspace:");
