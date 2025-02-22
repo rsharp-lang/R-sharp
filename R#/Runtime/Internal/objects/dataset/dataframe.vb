@@ -372,6 +372,16 @@ Namespace Runtime.Internal.Object
             Return Me
         End Function
 
+        ''' <summary>
+        ''' delete the specific col and get the deleted col array
+        ''' </summary>
+        ''' <param name="col"></param>
+        ''' <returns>this function will returns nothing if the given <paramref name="col"/> 
+        ''' is not existed inside the dataframe columns.</returns>
+        Public Function detach(col As String) As Array
+            Return columns.TryPopOut(col)
+        End Function
+
         Public Function delete(offset As Integer) As dataframe
             Call columns.Remove(getKeyByIndex(offset))
             Return Me

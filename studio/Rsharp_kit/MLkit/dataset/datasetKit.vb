@@ -70,6 +70,7 @@ Imports Microsoft.VisualBasic.Data.GraphTheory
 Imports Microsoft.VisualBasic.Data.IO.MessagePack
 Imports Microsoft.VisualBasic.Data.visualize
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
+Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
 Imports Microsoft.VisualBasic.DataMining.FeatureFrame
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
@@ -553,12 +554,47 @@ Module datasetKit
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("as.MLdataset")>
-    <RApiReturn(GetType(DataSet))>
+    <RApiReturn(GetType(DataSet), GetType(MLDataFrame))>
     Public Function CreateMLdataset(<RRawVectorArgument> x As Object,
                                     <RRawVectorArgument>
                                     Optional labels As Object = Nothing,
+                                    Optional in_memory As Boolean = False,
                                     Optional env As Environment = Nothing) As Object
         Dim ds As DataSet
+
+        If TypeOf x Is dataframe Then
+            Dim df As New dataframe(DirectCast(x, dataframe))
+            Dim label_str As String() = CLRVector.safeCharacters(labels)
+            Dim key As String = label_str.ElementAtOrDefault(0)
+
+            If label_str.Length = 1 Then
+                label_str = CLRVector.asCharacter(df.detach(key))
+
+                If label_str Is Nothing Then
+                    Return RInternal.debug.stop($"the given label field '{key}' is not existsed inside the given dataframe object!", env)
+                End If
+            ElseIf label_str.Length = df.nrows Then
+                ' do nothing 
+            End If
+
+            Dim factors As New ClassEncoder(label_str)
+            Dim label_val As Double() = factors.labels
+
+            If in_memory Then
+                Return New MLDataFrame With {
+                    .featureNames = df.colnames,
+                    .featureLabels = label_str,
+                    .samples = df _
+                        .forEachRow _
+                        .Select(Function(r, i)
+                                    Return New SampleData(r.name, CLRVector.asNumeric(r.value), label_val(i))
+                                End Function) _
+                        .ToArray
+                }
+            Else
+                Throw New NotImplementedException
+            End If
+        End If
 
         If TypeOf x Is FeatureFrame Then
             ds = DirectCast(x, FeatureFrame).Imports(labels:=CLRVector.asCharacter(labels))

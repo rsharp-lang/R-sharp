@@ -213,9 +213,17 @@ Namespace Runtime.Vectorization
             Throw New NotImplementedException(x.GetType.FullName)
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns>
+        ''' the returns string array always not null
+        ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function safeCharacters(x As Object) As String()
             Return asCharacter(x) _
+                .SafeQuery _
                 .Select(Function(i)
                             Return If(i Is Nothing, "", any.ToString(i))
                         End Function) _
