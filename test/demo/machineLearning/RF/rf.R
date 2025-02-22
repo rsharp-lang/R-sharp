@@ -10,3 +10,5 @@ bezdekIris <- as.MLdataset(bezdekIris,
                                     in_memory = TRUE);
 
 print(bezdekIris);
+
+let rf = randomForest(bezdekIris);
