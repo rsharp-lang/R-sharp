@@ -452,7 +452,15 @@ Namespace Development.CodeAnalysis
                 Dim val As Symbol = env.FindSymbol(name)
 
                 If val Is Nothing Then
-                    Throw New MissingPrimaryKeyException($"missing of the symbol: {name}")
+                    ' 20250222
+                    ' deal with the lazy expression in some ggplot2 function,
+                    ' example as: aes(x = xxx);
+                    '
+                    ' Throw New MissingPrimaryKeyException($"missing of the symbol: {name}")
+                    Call $"missing of the symbol: {name}".Warning
+                    Call VBDebugger.WaitOutput()
+
+                    Return name
                 End If
 
                 If val.value Is Nothing Then
@@ -472,7 +480,9 @@ Namespace Development.CodeAnalysis
                             ' example as pass the function name as parameter value
                             ' sapply(m,1,sd);
                             descriptor = val.name
+
                             Call $"closure symbol '{descriptor}' has been used as the parameter value.".Warning
+                            Call VBDebugger.WaitOutput()
                         Else
                             Throw New NotImplementedException(val.typeCode.ToString)
                         End If
