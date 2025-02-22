@@ -457,7 +457,7 @@ Namespace Development.CodeAnalysis
                     ' example as: aes(x = xxx);
                     '
                     ' Throw New MissingPrimaryKeyException($"missing of the symbol: {name}")
-                    Call $"missing of the symbol: {name}".Warning
+                    Call $"missing of the symbol while translate clr code to native R: {name}".Warning
                     Call VBDebugger.WaitOutput()
 
                     Return name
