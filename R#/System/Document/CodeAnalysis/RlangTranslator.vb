@@ -479,10 +479,12 @@ Namespace Development.CodeAnalysis
                             ' use the function name as symbol reference
                             ' example as pass the function name as parameter value
                             ' sapply(m,1,sd);
-                            descriptor = val.name
+                            ' descriptor = val.name
 
                             Call $"closure symbol '{descriptor}' has been used as the parameter value.".Warning
                             Call VBDebugger.WaitOutput()
+
+                            Return name
                         Else
                             Throw New NotImplementedException(val.typeCode.ToString)
                         End If
