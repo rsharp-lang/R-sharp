@@ -213,8 +213,16 @@ Module plots
             .ToArray
         Dim driver As Drivers = env.getDriver
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
+        Dim colors As String = CLRVector.safeCharacters(args.getBySynonyms("colors", "colorset")).ElementAtOrDefault(0, ColorBrewer.DivergingSchemes.RdYlBu11)
+        Dim size = graphicsPipeline.getSize(args.slots, env, New SizeF(3000, 3000))
 
-        Return HeatMap.Plot(dataset, size:="3000,3000", dendrogramLayout:="600,300", mainTitle:=mainTitle, ppi:=dpi, driver:=driver)
+        Return HeatMap.Plot(dataset,
+                            mapName:=colors,
+                            size:=$"{size.Width},{size.Height}",
+                            dendrogramLayout:="600,300",
+                            mainTitle:=mainTitle,
+                            ppi:=dpi,
+                            driver:=driver)
     End Function
 
     Private Function printImage(img As GraphicsData) As String
