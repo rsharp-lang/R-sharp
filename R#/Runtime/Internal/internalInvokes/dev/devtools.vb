@@ -187,7 +187,7 @@ Namespace Runtime.Internal.Invokes
                 If TypeOf code Is DeclareNewFunction Then
                     code = DirectCast(code, DeclareNewFunction).body
                 Else
-                    Return Message.InCompatibleType(GetType(ClosureExpression), code.GetType, env)
+                    code = New ClosureExpression(code)
                 End If
             End If
 

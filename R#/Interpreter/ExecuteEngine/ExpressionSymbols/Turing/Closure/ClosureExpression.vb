@@ -100,6 +100,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
         Protected Friend ReadOnly program As Program
 
+        ''' <summary>
+        ''' construct closure from a collection of the multiple expression
+        ''' </summary>
+        ''' <param name="code"></param>
         <DebuggerStepThrough>
         Sub New(ParamArray code As Expression())
             program = New Program(code)
