@@ -357,12 +357,20 @@ Namespace Development.CodeAnalysis
         End Function
 
         Private Function GetBinaryOp(bin As IBinaryExpression, env As Environment) As String
+            Dim binaryLeft = TypeOf bin.left Is BinaryExpression OrElse TypeOf bin.left Is BinaryInExpression OrElse TypeOf bin.left Is UnaryNumeric
+            Dim binaryRight = TypeOf bin.right Is BinaryExpression OrElse TypeOf bin.right Is BinaryInExpression OrElse TypeOf bin.right Is UnaryNumeric
             Dim left = GetScript(bin.left, env)
             Dim right = GetScript(bin.right, env)
             Dim op As String = bin.operator
 
             If op = "in" Then
                 op = "%in%"
+            End If
+            If binaryLeft Then
+                left = $"({left})"
+            End If
+            If binaryRight Then
+                right = $"({right})"
             End If
 
             Dim script As String = $"{left} {op} {right}"
