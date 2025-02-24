@@ -500,7 +500,7 @@ Namespace Development.CodeAnalysis
 
                             Return name
                         Else
-                            Throw New NotImplementedException(val.typeCode.ToString)
+                            Throw New NotImplementedException($"unable to cast data symbol({name}) of type: " & val.typeCode.ToString)
                         End If
                     End If
 
