@@ -226,6 +226,31 @@ Namespace Runtime.Internal.Object
         End Sub
 
         ''' <summary>
+        ''' add unique key-value safely
+        ''' </summary>
+        ''' <param name="name">duplicated name will be appends a suffix string for avoid the key conflicts</param>
+        ''' <param name="value"></param>
+        ''' <remarks>
+        ''' the duplicated name will be resolved safely in this function.
+        ''' </remarks>
+        Public Sub unique_add(name As String, value As Object)
+            If slots Is Nothing Then
+                slots = New Dictionary(Of String, Object)
+            End If
+            If slots.ContainsKey(name) Then
+                For i As Integer = 1 To Integer.MaxValue
+                    Dim key As String = $"{name}_{i}"
+
+                    If Not slots.ContainsKey(key) Then
+                        name = key
+                    End If
+                Next
+            End If
+
+            Call slots.Add(name, value)
+        End Sub
+
+        ''' <summary>
         ''' add a string value
         ''' </summary>
         ''' <param name="name"></param>
