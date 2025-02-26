@@ -71,7 +71,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports csv = Microsoft.VisualBasic.Data.Framework.IO.File
-Imports DataTable = Microsoft.VisualBasic.Data.Framework.IO.DataFrame
+Imports DataTable = Microsoft.VisualBasic.Data.Framework.IO.DataFrameReader
 Imports msXlsx = Microsoft.VisualBasic.MIME.Office.Excel.XLSX.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
