@@ -57,7 +57,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Flute.Http.Core
 Imports Flute.Http.Core.Message
-Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Data.Framework.IO
 Imports Microsoft.VisualBasic.Net.HTTP
 Imports Microsoft.VisualBasic.Net.Protocols.ContentTypes
 Imports SMRUCC.Rsharp.Interpreter
@@ -67,7 +67,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.[Object].dataframe
-Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
+Imports csv = Microsoft.VisualBasic.Data.Framework.IO.File
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Module RCallbackMessage

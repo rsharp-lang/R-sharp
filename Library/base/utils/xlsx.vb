@@ -53,9 +53,9 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Data.csv
-Imports Microsoft.VisualBasic.Data.csv.IO
-Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
+Imports Microsoft.VisualBasic.Data.Framework
+Imports Microsoft.VisualBasic.Data.Framework.IO
+Imports Microsoft.VisualBasic.Data.Framework.StorageProvider.Reflection
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLS.MsHtml
@@ -70,8 +70,8 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
-Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
-Imports DataTable = Microsoft.VisualBasic.Data.csv.IO.DataFrame
+Imports csv = Microsoft.VisualBasic.Data.Framework.IO.File
+Imports DataTable = Microsoft.VisualBasic.Data.Framework.IO.DataFrame
 Imports msXlsx = Microsoft.VisualBasic.MIME.Office.Excel.XLSX.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime

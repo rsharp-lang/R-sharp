@@ -61,10 +61,10 @@ Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Data.csv
-Imports Microsoft.VisualBasic.Data.csv.DATA
-Imports Microsoft.VisualBasic.Data.csv.IO
-Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
+Imports Microsoft.VisualBasic.Data.Framework
+Imports Microsoft.VisualBasic.Data.Framework.DATA
+Imports Microsoft.VisualBasic.Data.Framework.IO
+Imports Microsoft.VisualBasic.Data.Framework.StorageProvider.Reflection
 Imports Microsoft.VisualBasic.DataStorage
 Imports Microsoft.VisualBasic.DataStorage.FeatherFormat
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -83,9 +83,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
-Imports csv = Microsoft.VisualBasic.Data.csv.IO.File
-Imports csvData = Microsoft.VisualBasic.Data.csv.IO.DataFrame
-Imports file = Microsoft.VisualBasic.Data.csv.IO.File
+Imports csv = Microsoft.VisualBasic.Data.Framework.IO.File
+Imports csvData = Microsoft.VisualBasic.Data.Framework.IO.DataFrame
+Imports file = Microsoft.VisualBasic.Data.Framework.IO.File
 Imports fileStream = System.IO.Stream
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime

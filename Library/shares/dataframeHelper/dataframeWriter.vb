@@ -1,7 +1,7 @@
 ﻿#If write_csv Then
 
 Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.Data.csv.IO
+Imports Microsoft.VisualBasic.Data.Framework.IO
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime
@@ -10,7 +10,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports File = Microsoft.VisualBasic.Data.csv.IO.File
+Imports File = Microsoft.VisualBasic.Data.Framework.IO.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.[Object].dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
