@@ -86,7 +86,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports ASCII = Microsoft.VisualBasic.Text.ASCII
 Imports csv = Microsoft.VisualBasic.Data.Framework.IO.File
-Imports Idataframe = Microsoft.VisualBasic.Data.Framework.IO.DataFrameReader
+Imports Idataframe = Microsoft.VisualBasic.Data.Framework.IO.DataFrameResolver
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal

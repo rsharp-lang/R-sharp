@@ -85,7 +85,7 @@ Imports SMRUCC.Rsharp.Runtime.Serialize
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports csv = Microsoft.VisualBasic.Data.Framework.IO.File
-Imports csvData = Microsoft.VisualBasic.Data.Framework.IO.DataFrameReader
+Imports csvData = Microsoft.VisualBasic.Data.Framework.IO.DataFrameResolver
 Imports file = Microsoft.VisualBasic.Data.Framework.IO.File
 Imports fileStream = System.IO.Stream
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
@@ -627,8 +627,8 @@ Public Module utils
             End If
         ElseIf type Is GetType(file) Then
             Return DirectCast(x, file).Save(path:=file, encoding:=encoding, silent:=True)
-        ElseIf type Is GetType(IO.DataFrameReader) Then
-            Return DirectCast(x, IO.DataFrameReader).csv.Save(path:=file, encoding:=encoding, silent:=True)
+        ElseIf type Is GetType(IO.DataFrameResolver) Then
+            Return DirectCast(x, IO.DataFrameResolver).csv.Save(path:=file, encoding:=encoding, silent:=True)
         ElseIf REnv.isVector(Of EntityObject)(x) Then
 #Disable Warning
             Return DirectCast(REnv.asVector(Of EntityObject)(x), EntityObject()).SaveDataSet(path:=file, encoding:=encoding, silent:=True)
