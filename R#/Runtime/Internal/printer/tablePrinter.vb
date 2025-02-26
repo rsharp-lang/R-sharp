@@ -89,8 +89,14 @@ Namespace Runtime.Internal.ConsolePrinter
 
                                 If strlen > maxWidth Then
                                     Dim truncated As Integer = strlen - maxWidth
+                                    ' 20250226
+                                    ' Index and length must refer to a location within the string. (Parameter 'length')
+                                    Dim len = maxWidth - 3
 
-                                    si = si.Substring(0, maxWidth - 3) & "..."
+                                    If len < si.Length Then
+                                        si = si.Substring(0, len) & "..."
+                                    End If
+
                                     si = si & $"|{truncated} chars truncated"
                                 End If
                             End If
