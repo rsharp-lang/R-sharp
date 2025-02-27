@@ -95,6 +95,38 @@ Namespace Runtime.Internal.ConsolePrinter
             Return si
         End Function
 
+        Const ascii_upperbound As Char = ChrW(&H80)
+
+        Public Function TruncateString(si As String, displayWidth As Integer) As String
+            If si IsNot Nothing AndAlso displayWidth > 0 Then
+                ' 初始化字符计数器
+                Dim charCount As Integer = 0
+                Dim strlen As Integer = si.Length
+                Dim truncated As Integer = strlen - displayWidth
+
+                ' 遍历字符串中的每个字符
+                For i As Integer = 0 To strlen - 1
+                    ' 检查当前字符是否是ASCII字符
+                    If si(i) < ascii_upperbound Then
+                        ' ASCII字符，宽度为1
+                        charCount += 1
+                    Else
+                        ' 非ASCII字符（假设为中文字符），宽度为2
+                        charCount += 2
+                    End If
+
+                    ' 如果字符计数器超过显示宽度，则截断字符串
+                    If charCount > displayWidth Then
+                        ' 返回截断后的字符串
+                        Return si.Substring(0, i) & $"...|{truncated} chars truncated"
+                    End If
+                Next
+            End If
+
+            ' 如果字符串的显示宽度小于或等于设定的显示宽度，返回原始字符串
+            Return si
+        End Function
+
         <Extension>
         Private Function getColumnPrintVector(table As dataframe,
                                               colname As String,
