@@ -63,8 +63,8 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports std = System.Math
 Imports consoleDevice = Microsoft.VisualBasic.ApplicationServices.Terminal.TablePrinter.ConsoleTableBuilderExtensions
+Imports std = System.Math
 
 Namespace Runtime.Internal.ConsolePrinter
 
@@ -97,7 +97,7 @@ Namespace Runtime.Internal.ConsolePrinter
 
         Const ascii_upperbound As Char = ChrW(&H80)
 
-        Public Function TruncateString(si As String, displayWidth As Integer) As String
+        Public Function truncateDisplayString(si As String, displayWidth As Integer) As String
             If si IsNot Nothing AndAlso displayWidth > 0 Then
                 ' 初始化字符计数器
                 Dim charCount As Integer = 0
@@ -137,6 +137,8 @@ Namespace Runtime.Internal.ConsolePrinter
             Dim arr As String() = printer.getStrings(table(colname), type, globalEnv) _
                 .Take(nrows) _
                 .Select(Function(si)
+                            ' 20250227 apply of the more safe display string truncated method
+                            Return truncateDisplayString(si, maxWidth)
                             Return simpleTruncatedString(si, maxWidth)
                         End Function) _
                 .ToArray
