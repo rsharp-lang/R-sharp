@@ -79,6 +79,9 @@ Namespace Runtime
     ''' <summary>
     ''' R# I/O redirect and interface for Rserve http server
     ''' </summary>
+    ''' <remarks>
+    ''' a <see cref="TextWriter"/> sub class object.
+    ''' </remarks>
     Public Class RContentOutput : Inherits TextWriter
 
         Public ReadOnly Property env As OutputEnvironments = OutputEnvironments.Console
@@ -95,7 +98,13 @@ Namespace Runtime
             End Get
         End Property
 
+        ''' <summary>
+        ''' usually be the console standard output 
+        ''' </summary>
         Dim stdout As StreamWriter
+        ''' <summary>
+        ''' save the print content to the *.log local file
+        ''' </summary>
         Dim logfile As StreamWriter
         Dim split As Boolean = True
 

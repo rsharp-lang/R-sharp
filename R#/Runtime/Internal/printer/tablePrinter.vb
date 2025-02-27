@@ -73,6 +73,28 @@ Namespace Runtime.Internal.ConsolePrinter
     ''' </summary>
     Public Module tablePrinter
 
+        Private Function simpleTruncatedString(si As String, maxWidth As Integer) As String
+            ' try to make string truncated for deal with the long string
+            If si IsNot Nothing AndAlso maxWidth > 0 Then
+                Dim strlen As Integer = consoleDevice.RealLength(si, withUtf8Characters:=True)
+
+                If strlen > maxWidth Then
+                    Dim truncated As Integer = strlen - maxWidth
+                    ' 20250226
+                    ' Index and length must refer to a location within the string. (Parameter 'length')
+                    Dim len As Integer = maxWidth - 3
+
+                    If len < si.Length Then
+                        si = si.Substring(0, len) & "..."
+                    End If
+
+                    si = si & $"|{truncated} chars truncated"
+                End If
+            End If
+
+            Return si
+        End Function
+
         <Extension>
         Private Function getColumnPrintVector(table As dataframe,
                                               colname As String,
@@ -83,25 +105,7 @@ Namespace Runtime.Internal.ConsolePrinter
             Dim arr As String() = printer.getStrings(table(colname), type, globalEnv) _
                 .Take(nrows) _
                 .Select(Function(si)
-                            ' try to make string truncated for deal with the long string
-                            If si IsNot Nothing AndAlso maxWidth > 0 Then
-                                Dim strlen As Integer = consoleDevice.RealLength(si, withUtf8Characters:=True)
-
-                                If strlen > maxWidth Then
-                                    Dim truncated As Integer = strlen - maxWidth
-                                    ' 20250226
-                                    ' Index and length must refer to a location within the string. (Parameter 'length')
-                                    Dim len = maxWidth - 3
-
-                                    If len < si.Length Then
-                                        si = si.Substring(0, len) & "..."
-                                    End If
-
-                                    si = si & $"|{truncated} chars truncated"
-                                End If
-                            End If
-
-                            Return si
+                            Return simpleTruncatedString(si, maxWidth)
                         End Function) _
                 .ToArray
             Dim typeStr As String = $"<{RType.GetRSharpType(type).ToString}>"
