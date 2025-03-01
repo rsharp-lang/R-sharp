@@ -1,82 +1,82 @@
 ﻿#Region "Microsoft.VisualBasic::4fb8119e361064fb779014b4ef3217c1, Library\Rlapack\stats.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1918
-    '    Code Lines: 1071 (55.84%)
-    ' Comment Lines: 634 (33.06%)
-    '    - Xml Docs: 91.48%
-    ' 
-    '   Blank Lines: 213 (11.11%)
-    '     File Size: 81.81 KB
+' Summaries:
 
 
-    ' Module stats
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: matrixDataFrame, matrixDataFrame2, printMatrix, printMvar, printTtest
-    '               printTwoSampleTTest
-    '     Enum p_adjust_methods
-    ' 
-    '         BH, bonferroni, BY, fdr, hochberg
-    '         holm, hommel, none
-    ' 
-    ' 
-    ' 
-    '  
-    ' 
-    '     Function: aov, asDist, beta, chisq_test, ChiSquare
-    '               combin, corr, corr_sign, corrTest, dataframeRow
-    '               dist, dnorm, ECDF, ecdf0, emd_dist
-    '               filterMissing, fisher_test, gamma, gammaCDF, GetDataSetCommon
-    '               getMatrix, getQuantileLevels, iqr_outliers, lbeta, lgamma
-    '               Lowess, mantel_test, median, moran_test, mul
-    '               oplsr, p_adjust, plsda, pnorm_func, PoissonDiskGenerator_func
-    '               (+2 Overloads) pow, prcomp, pt, quantile, safeCheck
-    '               spline, tabulateMode, ttest, ttestBatch, ttestImpl
-    '               varTest, z_score, z_scoreByColumn, z_scoreByRow
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1918
+'    Code Lines: 1071 (55.84%)
+' Comment Lines: 634 (33.06%)
+'    - Xml Docs: 91.48%
+' 
+'   Blank Lines: 213 (11.11%)
+'     File Size: 81.81 KB
+
+
+' Module stats
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: matrixDataFrame, matrixDataFrame2, printMatrix, printMvar, printTtest
+'               printTwoSampleTTest
+'     Enum p_adjust_methods
+' 
+'         BH, bonferroni, BY, fdr, hochberg
+'         holm, hommel, none
+' 
+' 
+' 
+'  
+' 
+'     Function: aov, asDist, beta, chisq_test, ChiSquare
+'               combin, corr, corr_sign, corrTest, dataframeRow
+'               dist, dnorm, ECDF, ecdf0, emd_dist
+'               filterMissing, fisher_test, gamma, gammaCDF, GetDataSetCommon
+'               getMatrix, getQuantileLevels, iqr_outliers, lbeta, lgamma
+'               Lowess, mantel_test, median, moran_test, mul
+'               oplsr, p_adjust, plsda, pnorm_func, PoissonDiskGenerator_func
+'               (+2 Overloads) pow, prcomp, pt, quantile, safeCheck
+'               spline, tabulateMode, ttest, ttestBatch, ttestImpl
+'               varTest, z_score, z_scoreByColumn, z_scoreByRow
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -91,14 +91,15 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.Framework.IO
+Imports Microsoft.VisualBasic.Data.GraphTheory
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Calculus
-Imports Microsoft.VisualBasic.Math.DataFrame
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
+Imports Microsoft.VisualBasic.Math.Matrix
 Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.Math.Statistics
 Imports Microsoft.VisualBasic.Math.Statistics.Distributions
@@ -119,12 +120,10 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports std = System.Math
 Imports stdVector = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
-Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
-Imports Microsoft.VisualBasic.Data.GraphTheory
-
 
 #If NET48 Then
 Imports Pen = System.Drawing.Pen

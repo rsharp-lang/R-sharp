@@ -97,7 +97,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports DataTable = Microsoft.VisualBasic.Data.Framework.IO.DataSet
-Imports FeatureFrame = Microsoft.VisualBasic.Math.DataFrame.DataFrame
+Imports FeatureFrame = Microsoft.VisualBasic.Data.Framework.DataFrame
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime

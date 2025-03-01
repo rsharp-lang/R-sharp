@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::d8265d208f6b104152e032f843d80493, Library\graphics\Plot2D\plots.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1244
-    '    Code Lines: 971 (78.05%)
-    ' Comment Lines: 146 (11.74%)
-    '    - Xml Docs: 85.62%
-    ' 
-    '   Blank Lines: 127 (10.21%)
-    '     File Size: 56.41 KB
+' Summaries:
 
 
-    ' Module plots
-    ' 
-    '     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, findNumberVector
-    '               measureDataTable, modelWithClass, modelWithoutClass, plot_binBox, plot_categoryBars
-    '               plot_corHeatmap, plot_deSolveResult, plot_hclust, plot_heatmap, plotArray
-    '               plotContourLayers, plotFormula, plotLinearYFit, plotLmCall, plotODEResult
-    '               plotPieChart, PlotPolygon, plotSerials, plotVector, printImage
-    '               UpSetPlot
-    ' 
-    '     Sub: Main, TryGetClassData
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1244
+'    Code Lines: 971 (78.05%)
+' Comment Lines: 146 (11.74%)
+'    - Xml Docs: 85.62%
+' 
+'   Blank Lines: 127 (10.21%)
+'     File Size: 56.41 KB
+
+
+' Module plots
+' 
+'     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, findNumberVector
+'               measureDataTable, modelWithClass, modelWithoutClass, plot_binBox, plot_categoryBars
+'               plot_corHeatmap, plot_deSolveResult, plot_hclust, plot_heatmap, plotArray
+'               plotContourLayers, plotFormula, plotLinearYFit, plotLmCall, plotODEResult
+'               plotPieChart, PlotPolygon, plotSerials, plotVector, printImage
+'               UpSetPlot
+' 
+'     Sub: Main, TryGetClassData
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -97,9 +97,10 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.Calculus.Dynamics.Data
-Imports Microsoft.VisualBasic.Math.DataFrame
+Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Math.Interpolation
+Imports Microsoft.VisualBasic.Math.Matrix
 Imports Microsoft.VisualBasic.MIME.Html.CSS
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
@@ -122,8 +123,6 @@ Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
-Imports Microsoft.VisualBasic.Math.Distributions
-
 
 #If NET48 Then
 Imports Pen = System.Drawing.Pen
