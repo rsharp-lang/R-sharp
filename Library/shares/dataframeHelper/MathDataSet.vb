@@ -1,10 +1,10 @@
 ﻿#If MATH_DATASET Then
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
-Imports Microsoft.VisualBasic.Math.DataFrame
+Imports Microsoft.VisualBasic.Data.Framework
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports FeatureFrame = Microsoft.VisualBasic.Math.DataFrame.DataFrame
+Imports FeatureFrame = Microsoft.VisualBasic.Data.Framework.DataFrame
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 

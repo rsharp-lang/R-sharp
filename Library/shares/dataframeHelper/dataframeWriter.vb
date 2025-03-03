@@ -45,7 +45,7 @@ Public Module dataframeWriter
         If Not TypeOf row_names Is Boolean Then
             If RType.TypeOf(row_names).mode = TypeCodes.integer Then
                 Dim offset = CInt(row_names)
-                inputRowNames = x.getColumnVector(offset)
+                inputRowNames = CLRVector.asCharacter(x.getColumnVector(offset))
                 x = New Rdataframe(x)
                 x.delete(offset)
             Else
