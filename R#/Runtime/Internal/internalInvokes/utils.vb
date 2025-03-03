@@ -410,7 +410,10 @@ Namespace Runtime.Internal.Invokes
         ''' <paramref name="save"/> file location. 
         ''' </returns>
         <ExportAPI("wget")>
-        Public Function wget_file(url As String, Optional save As Object = Nothing, Optional env As Environment = Nothing) As Object
+        Public Function wget_file(url As String,
+                                  Optional save As Object = Nothing,
+                                  Optional env As Environment = Nothing) As Object
+
             If url.StringEmpty Then
                 Return Internal.debug.stop({"Missing url data source for file get!"}, env)
             ElseIf save Is Nothing OrElse (TypeOf save Is String AndAlso CStr(save).StringEmpty) Then
