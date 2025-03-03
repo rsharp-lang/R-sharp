@@ -1,71 +1,71 @@
 ﻿#Region "Microsoft.VisualBasic::9b68d8ad2159a861668f47de5d5a31cb, R#\Runtime\Internal\internalInvokes\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1538
-    '    Code Lines: 806 (52.41%)
-    ' Comment Lines: 589 (38.30%)
-    '    - Xml Docs: 88.79%
-    ' 
-    '   Blank Lines: 143 (9.30%)
-    '     File Size: 72.53 KB
+' Summaries:
 
 
-    '     Module utils
-    ' 
-    '         Function: castTS, createAlternativeName, createCommandLine, createTimespan, data
-    '                   dataSearchByPackageDir, debugTool, description, FindSystemFile, GetInstalledPackages
-    '                   (+2 Overloads) getPackageSystemFile, head, installPackages, keyGroups, loadByName
-    '                   md5, memorySize, now, progress_bar, readFile
-    '                   setTqdmProgressBarlabel, system, systemFile, tqdm_wrap, wget
-    '                   workdir
-    ' 
-    '         Sub: cls, pause, sleep
-    '         Enum TimeSpanUnits
-    ' 
-    '             Days, Hours, Milliseconds, Minutes, Seconds
-    '             Ticks
-    ' 
-    ' 
-    ' 
-    '  
-    ' 
-    '     Function: create_zip, package_skeleton, sendMessage, unzipFile
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1538
+'    Code Lines: 806 (52.41%)
+' Comment Lines: 589 (38.30%)
+'    - Xml Docs: 88.79%
+' 
+'   Blank Lines: 143 (9.30%)
+'     File Size: 72.53 KB
+
+
+'     Module utils
+' 
+'         Function: castTS, createAlternativeName, createCommandLine, createTimespan, data
+'                   dataSearchByPackageDir, debugTool, description, FindSystemFile, GetInstalledPackages
+'                   (+2 Overloads) getPackageSystemFile, head, installPackages, keyGroups, loadByName
+'                   md5, memorySize, now, progress_bar, readFile
+'                   setTqdmProgressBarlabel, system, systemFile, tqdm_wrap, wget
+'                   workdir
+' 
+'         Sub: cls, pause, sleep
+'         Enum TimeSpanUnits
+' 
+'             Days, Hours, Milliseconds, Minutes, Seconds
+'             Ticks
+' 
+' 
+' 
+'  
+' 
+'     Function: create_zip, package_skeleton, sendMessage, unzipFile
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -85,6 +85,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.My
 Imports Microsoft.VisualBasic.Net
+Imports Microsoft.VisualBasic.Net.WebClient
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.SecurityString
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -409,32 +410,31 @@ Namespace Runtime.Internal.Invokes
         ''' <paramref name="save"/> file location. 
         ''' </returns>
         <ExportAPI("wget")>
-        Public Function wget(url As String, Optional save As Object = Nothing, Optional env As Environment = Nothing) As Object
+        Public Function wget_file(url As String, Optional save As Object = Nothing, Optional env As Environment = Nothing) As Object
             If url.StringEmpty Then
                 Return Internal.debug.stop({"Missing url data source for file get!"}, env)
             ElseIf save Is Nothing OrElse (TypeOf save Is String AndAlso CStr(save).StringEmpty) Then
                 Dim buffer As New MemoryStream
 
                 ' just return a stream data if the save is not specific
-                Http.wget.Download(url, buffer)
-                buffer.Flush()
+                Call wget.Download(url, buffer)
+                Call buffer.Flush()
 
                 Return buffer
             ElseIf TypeOf save Is String Then
-                Return Http.wget.Download(url, CStr(save))
+                Return wget.Download(url, CStr(save))
             ElseIf TypeOf save Is FileReference Then
                 ' save to a local cache
                 Dim p As FileReference = save
                 Dim buffer As Stream = p.fs.OpenFile(p.filepath, FileMode.OpenOrCreate, FileAccess.Write)
-                Dim result As Boolean
+                Dim result As Boolean = wget.Download(url, buffer)
 
-                result = Http.wget.Download(url, buffer)
-                buffer.Flush()
-                p.fs.Flush()
+                Call buffer.Flush()
+                Call p.fs.Flush()
 
                 Return result
             Else
-                Return Internal.debug.stop("The local 'save' target must be nothing or a character vector for specific the file save location on locally!", env)
+                Return Internal.debug.stop($"The local '{NameOf(save)}' target must be nothing or a character vector for specific the file save location on locally!", env)
             End If
         End Function
 
