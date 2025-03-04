@@ -123,6 +123,9 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Else
                     Throw New InvalidCastException("invalid data type for the required input dataframe list!")
                 End If
+            ElseIf x.length = 0 Then
+                ' no dataframe to combine
+                Return Nothing
             End If
 
             If _id Is Nothing Then
