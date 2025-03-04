@@ -50,6 +50,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Driver
@@ -61,17 +62,23 @@ Module imageDriverHandler
 
     ReadOnly grDevices As Index(Of String) = {"grDevices", "graphics"}
 
+    ''' <summary>
+    ''' get graphics device driver flag
+    ''' </summary>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <Extension>
-    Public Function getDriver(env As Environment) As Drivers
-        Dim frames = env.stackTrace
+    Public Function getDriver(env As Environment, Optional [default] As Drivers = Drivers.Default) As Drivers
+        Dim frames As StackFrame() = env.stackTrace
 
-        For Each stack In frames
+        For Each stack As StackFrame In frames
             If stack.Method.Namespace Like grDevices Then
                 Select Case Microsoft.VisualBasic.Strings.LCase(stack.Method.Method)
                     Case "wmf" : Return Drivers.WMF
                     Case "bitmap" : Return Drivers.GDI
                     Case "svg" : Return Drivers.SVG
                     Case "pdf" : Return Drivers.PDF
+                    Case "postscript" : Return Drivers.PostScript
                     Case Else
                         ' do nothing, and then test
                         ' next frame data
@@ -79,7 +86,7 @@ Module imageDriverHandler
             End If
         Next
 
-        Return Drivers.Default
+        Return [default]
     End Function
 
     ''' <summary>
