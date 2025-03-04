@@ -1,57 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::444970d24d9dd70c5d610b7e84792a4d, R#\Runtime\Internal\internalInvokes\Linq\dplyr.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 204
-    '    Code Lines: 127 (62.25%)
-    ' Comment Lines: 44 (21.57%)
-    '    - Xml Docs: 75.00%
-    ' 
-    '   Blank Lines: 33 (16.18%)
-    '     File Size: 8.08 KB
+' Summaries:
 
 
-    '     Module dplyr
-    ' 
-    '         Function: bind_rows
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 204
+'    Code Lines: 127 (62.25%)
+' Comment Lines: 44 (21.57%)
+'    - Xml Docs: 75.00%
+' 
+'   Blank Lines: 33 (16.18%)
+'     File Size: 8.08 KB
+
+
+'     Module dplyr
+' 
+'         Function: bind_rows
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Linq
@@ -123,8 +124,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Else
                     Throw New InvalidCastException("invalid data type for the required input dataframe list!")
                 End If
-            ElseIf x.length = 0 Then
+            End If
+
+            If x.length = 0 Then
                 ' no dataframe to combine
+                ' bind_rows(list());
+                Call env.AddMessage("empty data frame list to combine rows: bind_rows(list());", MSG_TYPES.WRN)
                 Return Nothing
             End If
 

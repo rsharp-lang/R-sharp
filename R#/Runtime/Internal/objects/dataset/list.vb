@@ -287,6 +287,9 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <param name="name"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' check for the dictionary key is existsed?
+        ''' </remarks>
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function hasName(name As String) As Boolean Implements RNames.hasName
