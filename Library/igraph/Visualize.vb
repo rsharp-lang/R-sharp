@@ -89,7 +89,7 @@ Imports std = System.Math
 <Package("visualizer")>
 Module Visualize
 
-    Sub New()
+    Sub Main()
         Call RInternal.generic.add("plot", GetType(NetworkGraph), AddressOf plot_network)
     End Sub
 
@@ -152,7 +152,8 @@ Module Visualize
             nodeSize:=args!nodeSize,
             minNodeSize:=args.getValue(Of Single)("minNodeSize", env, 10),
             driver:=args.getValue(Of Drivers)("driver", env, Drivers.GDI),
-            labelerIterations:=args.getValue("labelerIterations", env, 0)
+            labelerIterations:=args.getValue("labelerIterations", env, 0),
+            env:=env
         )
     End Function
 

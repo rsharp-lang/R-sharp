@@ -55,5 +55,6 @@ Public Class zzz
 
     Public Shared Sub onLoad()
         Call NetworkModule.Main()
+        Call Visualize.Main()
     End Sub
 End Class
