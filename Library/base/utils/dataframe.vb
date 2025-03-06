@@ -1,61 +1,61 @@
-﻿#Region "Microsoft.VisualBasic::95216f913338e3779de1def4362a9ae9, Library\base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::df912b561b9c8ea5af10f1a3b5414797, Library\base\utils\dataframe.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 799
-'    Code Lines: 591 (73.97%)
-' Comment Lines: 106 (13.27%)
-'    - Xml Docs: 87.74%
-' 
-'   Blank Lines: 102 (12.77%)
-'     File Size: 30.92 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module dataframe
-' 
-'     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
-'               colnames, column, create_tableFrame, createEntityRow, CreateRowObject
-'               dataframeTable, deserialize, field_vector, loadDataframe, measureColumnVector
-'               openCsv, parseDataframe, parseRow, printRowVector, printTable
-'               project, rawToDataFrame, readCsvRaw, readDataSet, rows
-'               rowToString, RowToString, stripCommentRows, to_dataframe, transpose
-'               vector
-' 
-'     Sub: Main
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 800
+    '    Code Lines: 592 (74.00%)
+    ' Comment Lines: 106 (13.25%)
+    '    - Xml Docs: 87.74%
+    ' 
+    '   Blank Lines: 102 (12.75%)
+    '     File Size: 31.01 KB
+
+
+    ' Module dataframe
+    ' 
+    '     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
+    '               colnames, column, create_tableFrame, createEntityRow, CreateRowObject
+    '               dataframeTable, deserialize, field_vector, loadDataframe, measureColumnVector
+    '               openCsv, parseDataframe, parseRow, printRowVector, printTable
+    '               project, rawToDataFrame, readCsvRaw, readDataSet, rows
+    '               rowToString, RowToString, stripCommentRows, to_dataframe, transpose
+    '               vector
+    ' 
+    '     Sub: Main
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9f2600158c7d4dcb53d38393f3125191, studio\Rsharp_kit\signalKit\signalProcessing.vb"
+﻿#Region "Microsoft.VisualBasic::e2b73eee812812bba799ca3c2c59f958, studio\Rsharp_kit\signalKit\signalProcessing.vb"
 
     ' Author:
     ' 

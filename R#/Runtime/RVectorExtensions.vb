@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d6fb04f2104aa2d386b552d5b53702a2, R#\Runtime\RVectorExtensions.vb"
+﻿#Region "Microsoft.VisualBasic::f0023c2b2db216cbfe15cefb06c580a3, R#\Runtime\RVectorExtensions.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 573
-    '    Code Lines: 392 (68.41%)
-    ' Comment Lines: 114 (19.90%)
-    '    - Xml Docs: 85.09%
+    '   Total Lines: 578
+    '    Code Lines: 392 (67.82%)
+    ' Comment Lines: 119 (20.59%)
+    '    - Xml Docs: 85.71%
     ' 
-    '   Blank Lines: 67 (11.69%)
-    '     File Size: 22.26 KB
+    '   Blank Lines: 67 (11.59%)
+    '     File Size: 22.45 KB
 
 
     '     Module RVectorExtensions

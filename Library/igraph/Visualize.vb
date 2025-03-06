@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c731024d105c5c481c86b7cfb7ac19a6, Library\igraph\Visualize.vb"
+﻿#Region "Microsoft.VisualBasic::5441de5c2c7e28031539edda237c8321, Library\igraph\Visualize.vb"
 
     ' Author:
     ' 
@@ -34,23 +34,21 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 454
-    '    Code Lines: 372 (81.94%)
-    ' Comment Lines: 30 (6.61%)
+    '   Total Lines: 455
+    '    Code Lines: 373 (81.98%)
+    ' Comment Lines: 30 (6.59%)
     '    - Xml Docs: 83.33%
     ' 
-    '   Blank Lines: 52 (11.45%)
-    '     File Size: 20.55 KB
+    '   Blank Lines: 52 (11.43%)
+    '     File Size: 20.57 KB
 
 
     ' Module Visualize
     ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
     '     Function: colorByTypeGroup, getNodeSizeHandler, plot_network, renderPlot, setEdgeColors
     '               setNodeColors
     ' 
-    '     Sub: setColors
+    '     Sub: Main, setColors
     ' 
     ' /********************************************************************************/
 

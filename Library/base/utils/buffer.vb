@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::58b016f519c101eb70476baa6aca6f1e, Library\base\utils\buffer.vb"
+﻿#Region "Microsoft.VisualBasic::12090414ccf0a231cd498cb476e4fa51, Library\base\utils\buffer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 273
-    '    Code Lines: 186 (68.13%)
-    ' Comment Lines: 54 (19.78%)
+    '   Total Lines: 275
+    '    Code Lines: 188 (68.36%)
+    ' Comment Lines: 54 (19.64%)
     '    - Xml Docs: 98.15%
     ' 
-    '   Blank Lines: 33 (12.09%)
-    '     File Size: 10.21 KB
+    '   Blank Lines: 33 (12.00%)
+    '     File Size: 10.43 KB
 
 
     ' Module buffer

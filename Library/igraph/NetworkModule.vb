@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::14a2cc3f9efda82c36b1ac2102f9f684, Library\igraph\NetworkModule.vb"
+﻿#Region "Microsoft.VisualBasic::b96093442ab357d1102ebbe6b449e3f6, Library\igraph\NetworkModule.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 94.06%
     ' 
     '   Blank Lines: 171 (12.57%)
-    '     File Size: 52.96 KB
+    '     File Size: 52.97 KB
 
 
     ' Module NetworkModule

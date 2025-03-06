@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ddf554419e1f078e059f7a12e5bd3886, studio\Rsharp_kit\MLkit\MachineLearning\machineLearning.vb"
+﻿#Region "Microsoft.VisualBasic::d600d060469c06b289857d4f23632dd8, studio\Rsharp_kit\MLkit\MachineLearning\machineLearning.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 98.13%
     ' 
     '   Blank Lines: 59 (10.85%)
-    '     File Size: 22.33 KB
+    '     File Size: 22.34 KB
 
 
     ' Module machineLearning

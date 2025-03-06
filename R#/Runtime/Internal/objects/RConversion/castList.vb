@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::939cd04279812096728e395b0cf0e3c3, R#\Runtime\Internal\objects\RConversion\castList.vb"
+﻿#Region "Microsoft.VisualBasic::dfea287623e4dcd420e25354d9dd82e5, R#\Runtime\Internal\objects\RConversion\castList.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 316
-    '    Code Lines: 242 (76.58%)
-    ' Comment Lines: 24 (7.59%)
-    '    - Xml Docs: 70.83%
+    '   Total Lines: 326
+    '    Code Lines: 248 (76.07%)
+    ' Comment Lines: 26 (7.98%)
+    '    - Xml Docs: 73.08%
     ' 
-    '   Blank Lines: 50 (15.82%)
-    '     File Size: 12.81 KB
+    '   Blank Lines: 52 (15.95%)
+    '     File Size: 13.23 KB
 
 
     '     Module castList
