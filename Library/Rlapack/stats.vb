@@ -1774,11 +1774,9 @@ Module stats
             .rownames = labels,
             .columns = New Dictionary(Of String, Array)
         }
-        Dim offset As Integer
 
         For i As Integer = 0 To k - 1
-            offset = i
-            pos.add("D" & (i + 1), pco.Select(Function(r) r(offset)))
+            pos.add("D" & (i + 1), pco(i))
         Next
 
         If _list Then
