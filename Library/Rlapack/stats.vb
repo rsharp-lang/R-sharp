@@ -1770,7 +1770,10 @@ Module stats
             labels = pco.Sequence(offSet:=1).Select(Function(i) $"r-{i}").ToArray
         End If
 
-        Dim pos As New Rdataframe With {.rownames = labels}
+        Dim pos As New Rdataframe With {
+            .rownames = labels,
+            .columns = New Dictionary(Of String, Array)
+        }
         Dim offset As Integer
 
         For i As Integer = 0 To k - 1
