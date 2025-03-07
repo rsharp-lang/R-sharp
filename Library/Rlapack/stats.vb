@@ -125,6 +125,10 @@ Imports std = System.Math
 Imports stdVector = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix.MDSScale
+Imports Microsoft.VisualBasic.Emit.Delegates
+Imports System.Runtime.InteropServices
+
+
 
 
 #If NET48 Then
@@ -1402,7 +1406,7 @@ Module stats
         }
     End Function
 
-    Private Function getMatrix(x As Object, env As Environment, tag As String, ByRef err As Message) As Double()()
+    Private Function getMatrix(x As Object, env As Environment, tag As String, <Out> ByRef err As Message) As Double()()
         If TypeOf x Is Rdataframe Then
             Dim mat As New List(Of Double())
             Dim df As Rdataframe = DirectCast(x, Rdataframe)
@@ -1417,6 +1421,8 @@ Module stats
             Next
 
             Return mat.ToArray
+        ElseIf x.GetType.ImplementInterface(Of INumericMatrix) Then
+            Return DirectCast(x, INumericMatrix).ArrayPack
         Else
             err = Message.InCompatibleType(GetType(Rdataframe), x.GetType, env, message:=$"can not extract numeric matrix from {tag}!")
             Return Nothing
