@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e10784feb4a7e548c3ee0dda6dfd3b7d, Library\base\dataframe\CharacterTable.vb"
+﻿#Region "Microsoft.VisualBasic::1f803938f1e0ef0d94712a0bd656e9d3, Library\base\dataframe\CharacterTable.vb"
 
     ' Author:
     ' 

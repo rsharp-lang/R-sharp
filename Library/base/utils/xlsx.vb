@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::36e1c6e9fee69d857eb8b104f256cf77, Library\base\utils\xlsx.vb"
+﻿#Region "Microsoft.VisualBasic::bbe410991dfbe7b9080f54b839dbe052, Library\base\utils\xlsx.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 86.67%
     ' 
     '   Blank Lines: 25 (8.80%)
-    '     File Size: 11.62 KB
+    '     File Size: 11.65 KB
 
 
     ' Module xlsx

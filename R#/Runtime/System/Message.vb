@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::131ec55f2b4c2aea56b9ce45824cd76c, R#\Runtime\System\Message.vb"
+﻿#Region "Microsoft.VisualBasic::6a682a977883e348041edf3048f771b1, R#\Runtime\System\Message.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 175
-    '    Code Lines: 112 (64.00%)
-    ' Comment Lines: 42 (24.00%)
-    '    - Xml Docs: 97.62%
+    '   Total Lines: 178
+    '    Code Lines: 112 (62.92%)
+    ' Comment Lines: 45 (25.28%)
+    '    - Xml Docs: 97.78%
     ' 
-    '   Blank Lines: 21 (12.00%)
-    '     File Size: 6.97 KB
+    '   Blank Lines: 21 (11.80%)
+    '     File Size: 7.09 KB
 
 
     '     Class Message

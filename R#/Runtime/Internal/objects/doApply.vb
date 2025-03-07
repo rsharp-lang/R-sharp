@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d3520dc67cae28bf07470959156dc142, R#\Runtime\Internal\objects\doApply.vb"
+﻿#Region "Microsoft.VisualBasic::2bc313bfe2adc8cad929a5f5b77797c8, R#\Runtime\Internal\objects\doApply.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 88
-    '    Code Lines: 65 (73.86%)
-    ' Comment Lines: 6 (6.82%)
+    '   Total Lines: 87
+    '    Code Lines: 64 (73.56%)
+    ' Comment Lines: 6 (6.90%)
     '    - Xml Docs: 50.00%
     ' 
-    '   Blank Lines: 17 (19.32%)
-    '     File Size: 2.94 KB
+    '   Blank Lines: 17 (19.54%)
+    '     File Size: 2.89 KB
 
 
     '     Enum margins

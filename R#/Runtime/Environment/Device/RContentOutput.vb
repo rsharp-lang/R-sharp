@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c14fe5376234dbc3d5e252bc980f542b, R#\Runtime\Environment\Device\RContentOutput.vb"
+﻿#Region "Microsoft.VisualBasic::b5f41742ae6bcf2a7b47b3679dd250ba, R#\Runtime\Environment\Device\RContentOutput.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 233
-    '    Code Lines: 161 (69.10%)
-    ' Comment Lines: 33 (14.16%)
+    '   Total Lines: 242
+    '    Code Lines: 161 (66.53%)
+    ' Comment Lines: 42 (17.36%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 39 (16.74%)
-    '     File Size: 7.66 KB
+    '   Blank Lines: 39 (16.12%)
+    '     File Size: 7.96 KB
 
 
     '     Class RContentOutput

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5bca0434842327edb0ef46343fcb9314, Library\igraph\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::6654f5bf5b32250c2115c404320e3f65, Library\igraph\zzz.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 6
-    '    Code Lines: 5 (83.33%)
+    '   Total Lines: 7
+    '    Code Lines: 6 (85.71%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 1 (16.67%)
-    '     File Size: 109 B
+    '   Blank Lines: 1 (14.29%)
+    '     File Size: 140 B
 
 
     ' Class zzz

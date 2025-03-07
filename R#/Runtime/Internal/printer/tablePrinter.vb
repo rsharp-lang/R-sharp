@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b50c9200e3604d00af8979571c25ded1, R#\Runtime\Internal\printer\tablePrinter.vb"
+﻿#Region "Microsoft.VisualBasic::d234231c080d5c9f9ffb71a747e544a7, R#\Runtime\Internal\printer\tablePrinter.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 172
-    '    Code Lines: 136 (79.07%)
-    ' Comment Lines: 11 (6.40%)
-    '    - Xml Docs: 81.82%
+    '   Total Lines: 216
+    '    Code Lines: 162 (75.00%)
+    ' Comment Lines: 22 (10.19%)
+    '    - Xml Docs: 40.91%
     ' 
-    '   Blank Lines: 25 (14.53%)
-    '     File Size: 7.53 KB
+    '   Blank Lines: 32 (14.81%)
+    '     File Size: 9.41 KB
 
 
     '     Module tablePrinter
     ' 
-    '         Function: getColumnPrintVector, PartOfTable, PrintTable, ToContent
+    '         Function: getColumnPrintVector, PartOfTable, PrintTable, simpleTruncatedString, ToContent
+    '                   truncateDisplayString
     ' 
     ' 
     ' /********************************************************************************/

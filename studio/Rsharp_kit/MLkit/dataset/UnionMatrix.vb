@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f8b1a32b1c54a54fcb8338dcb4083ca1, studio\Rsharp_kit\MLkit\dataset\UnionMatrix.vb"
+﻿#Region "Microsoft.VisualBasic::1d80e6613f3cde61392b19b8aeb8c231, studio\Rsharp_kit\MLkit\dataset\UnionMatrix.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 94.74%
     ' 
     '   Blank Lines: 13 (13.83%)
-    '     File Size: 3.38 KB
+    '     File Size: 3.39 KB
 
 
     ' Class UnionMatrix

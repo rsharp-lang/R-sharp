@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2b0a1a59807d8fd0d47078e6529d052e, studio\Rsharp_kit\MLkit\MachineLearning\SVM.vb"
+﻿#Region "Microsoft.VisualBasic::ed2eb4a9cb5ec86354b6b5fcd24ea236, studio\Rsharp_kit\MLkit\MachineLearning\SVM.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 93.98%
     ' 
     '   Blank Lines: 83 (14.09%)
-    '     File Size: 23.83 KB
+    '     File Size: 23.84 KB
 
 
     ' Module SVMkit

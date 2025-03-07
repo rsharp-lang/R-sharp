@@ -1,54 +1,54 @@
-﻿#Region "Microsoft.VisualBasic::055a05572f1431e59dced0c12996f20b, studio\Rserver\Rweb\RCallbackMessage.vb"
+﻿#Region "Microsoft.VisualBasic::87a9659347aab0e33841f2207db402b3, studio\Rserver\Rweb\RCallbackMessage.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 169
-'    Code Lines: 142 (84.02%)
-' Comment Lines: 0 (0.00%)
-'    - Xml Docs: 0.00%
-' 
-'   Blank Lines: 27 (15.98%)
-'     File Size: 7.18 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module RCallbackMessage
-' 
-'     Sub: sendDataframe, SendHttpResponseMessage, sendImage, sendListObject, sendRawdata
-'          sendRStudioErrDebugMessage, sendText, sendVector
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 169
+    '    Code Lines: 142 (84.02%)
+    ' Comment Lines: 0 (0.00%)
+    '    - Xml Docs: 0.00%
+    ' 
+    '   Blank Lines: 27 (15.98%)
+    '     File Size: 7.20 KB
+
+
+    ' Module RCallbackMessage
+    ' 
+    '     Sub: sendDataframe, SendHttpResponseMessage, sendImage, sendListObject, sendRawdata
+    '          sendRStudioErrDebugMessage, sendText, sendVector
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

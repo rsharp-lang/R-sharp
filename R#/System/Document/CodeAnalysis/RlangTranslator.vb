@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::08388e86856aa1e8aa9ab7e9291fbe3c, R#\System\Document\CodeAnalysis\RlangTranslator.vb"
+﻿#Region "Microsoft.VisualBasic::429885d014a44b3b5483caa8af4a83e3, R#\System\Document\CodeAnalysis\RlangTranslator.vb"
 
     ' Author:
     ' 
@@ -34,23 +34,23 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 489
-    '    Code Lines: 386 (78.94%)
-    ' Comment Lines: 22 (4.50%)
-    '    - Xml Docs: 59.09%
+    '   Total Lines: 515
+    '    Code Lines: 402 (78.06%)
+    ' Comment Lines: 28 (5.44%)
+    '    - Xml Docs: 46.43%
     ' 
-    '   Blank Lines: 81 (16.56%)
-    '     File Size: 20.93 KB
+    '   Blank Lines: 85 (16.50%)
+    '     File Size: 22.25 KB
 
 
     '     Class RlangTranslator
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: AssignNewSymbol, castLiteral, createFunction, CreateSymbols, GetAssignValue
-    '                   GetBinaryOp, getByref, GetElse, getForLoop, getFormulaString
-    '                   GetFunctionInvoke, GetIf, getMemberValueAssign, getNeg, (+2 Overloads) GetScript
-    '                   getSequence, GetSymbol, GetSymbolIndexSubset, GetUnaryNot, (+2 Overloads) Literal
-    '                   requirePkg, Vector
+    '                   GetBinaryOp, getByref, GetElse, getExpressionLiteral, getForLoop
+    '                   getFormulaString, GetFunctionInvoke, GetIf, getMemberValueAssign, getNeg
+    '                   (+2 Overloads) GetScript, getSequence, GetSymbol, GetSymbolIndexSubset, GetUnaryNot
+    '                   (+2 Overloads) Literal, requirePkg, Vector
     ' 
     ' 
     ' /********************************************************************************/
