@@ -124,6 +124,8 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports std = System.Math
 Imports stdVector = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
+Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix.MDSScale
+
 
 #If NET48 Then
 Imports Pen = System.Drawing.Pen
@@ -1685,6 +1687,67 @@ Module stats
                 {"loadingMN", loadingMN}
             }
         }
+    End Function
+
+    ''' <summary>
+    ''' ### Classical (Metric) Multidimensional Scaling
+    ''' 
+    ''' Classical multidimensional scaling (MDS) of a data matrix. Also known as principal coordinates analysis (Gower, 1966).
+    ''' </summary>
+    ''' <param name="d">a distance structure such as that returned by dist or a full symmetric matrix containing the dissimilarities.</param>
+    ''' <param name="k">the maximum dimension of the space which the data are to be represented in; must be in {1,2,…,n−1}.</param>
+    ''' <param name="_list">
+    ''' logical indicating If a list should be returned Or just the n×k matrix, see 'Value:’.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns>
+    ''' If ``.list`` is false (as per default), a matrix with k columns whose rows give the coordinates of the points chosen to represent the dissimilarities.
+    ''' Otherwise, a list containing the following components.
+    ''' 
+    ''' + points: a matrix with up to k columns whose rows give the coordinates of the points chosen to represent the dissimilarities.
+    ''' + eig: the n eigenvalues computed during the scaling process if eig is true. NB: versions of R before 2.12.1 returned only k but were documented to return n−1.
+    ''' + x: the doubly centered distance matrix if x.ret is true.
+    ''' + ac: the additive constant c∗, 0 if add = FALSE.
+    ''' + GOF: a numeric vector of length 2, equal to say (g1 ,g2), where gi =(∑j=1,k λj )/(∑j=1,n Ti (λj )), where 
+    '''        λj are the eigenvalues (sorted in decreasing order), T1 (v)=∣v∣, and T2 (v)=max(v,0).
+    ''' </returns>
+    ''' <remarks>
+    ''' Multidimensional scaling takes a set of dissimilarities and returns a set of points such that the distances 
+    ''' between the points are approximately equal to the dissimilarities. (It is a major part of what ecologists 
+    ''' call ‘ordination’.)
+    ''' A set of Euclidean distances on n points can be represented exactly in at most 
+    ''' n−1 dimensions. cmdscale follows the analysis of Mardia (1978), and returns the best-fitting 
+    ''' k-dimensional representation, where k may be less than the argument k.
+    ''' The representation is only determined up to location (cmdscale takes the column means of the configuration 
+    ''' to be at the origin), rotations and reflections. The configuration returned is given in principal-component 
+    ''' axes, so the reflection chosen may differ between R platforms (see prcomp).
+    ''' When add = TRUE, a minimal additive constant c∗ is computed such that the dissimilarities 
+    ''' dij +c∗ are Euclidean and hence can be represented in n - 1 dimensions. Whereas S (Becker et al, 1988) 
+    ''' computes this constant using an approximation suggested by Torgerson, R uses the analytical solution of 
+    ''' Cailliez (1983), see also Cox and Cox (2001). Note that because of numerical errors the computed eigenvalues 
+    ''' need not all be non-negative, and even theoretically the representation could be in fewer than n - 1 
+    ''' dimensions.
+    ''' </remarks>
+    <ExportAPI("cmdscale")>
+    Public Function cmdscale(<RRawVectorArgument> d As Object,
+                             Optional k As Integer = 2,
+                             Optional _list As Boolean = False,
+                             Optional env As Environment = Nothing) As Object
+
+        Dim err As Message = Nothing
+        Dim x = getMatrix(d, env, "source d", err)
+
+        If Not err Is Nothing Then
+            Return err
+        End If
+
+        Dim pco = MDS.fullmds(x, [dim]:=k)
+
+        If _list Then
+            Return New list(slot("points") = pco)
+        Else
+            Return pco
+        End If
     End Function
 
     ''' <summary>
