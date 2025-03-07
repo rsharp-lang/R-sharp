@@ -1406,6 +1406,22 @@ Module stats
         }
     End Function
 
+    Private Function getLabels(x As Object, env As Environment, tag As String, <Out> ByRef err As Message, strict As Boolean) As String()
+        If TypeOf x Is Rdataframe Then
+            Dim df As Rdataframe = x
+            Dim labels = df.getRowNames
+            Return labels
+        ElseIf x.GetType.ImplementInterface(Of ILabeledMatrix) Then
+            Return DirectCast(x, ILabeledMatrix).GetLabels.ToArray
+        ElseIf strict Then
+            err = Message.InCompatibleType(GetType(Rdataframe), x.GetType, env, message:=$"can not extract numeric matrix from {tag}!")
+        Else
+            err = Nothing
+        End If
+
+        Return Nothing
+    End Function
+
     Private Function getMatrix(x As Object, env As Environment, tag As String, <Out> ByRef err As Message) As Double()()
         If TypeOf x Is Rdataframe Then
             Dim mat As New List(Of Double())
@@ -1748,11 +1764,24 @@ Module stats
         End If
 
         Dim pco = MDS.fullmds(x, [dim]:=k)
+        Dim labels As String() = getLabels(d, env, "source d", Nothing, strict:=False)
+
+        If labels Is Nothing Then
+            labels = pco.Sequence(offSet:=1).Select(Function(i) $"r-{i}").ToArray
+        End If
+
+        Dim pos As New Rdataframe With {.rownames = labels}
+        Dim offset As Integer
+
+        For i As Integer = 0 To k - 1
+            offset = i
+            pos.add("D" & (i + 1), pco.Select(Function(r) r(offset)))
+        Next
 
         If _list Then
-            Return New list(slot("points") = pco)
+            Return New list(slot("points") = pos)
         Else
-            Return pco
+            Return pos
         End If
     End Function
 
