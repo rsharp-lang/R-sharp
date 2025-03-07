@@ -114,6 +114,15 @@ Module RMatrix
         Call RInternal.generic.add("readBin.LA_mat", GetType(Stream), AddressOf readMatrix)
     End Sub
 
+    ''' <summary>
+    ''' save matrix to binary file
+    ''' </summary>
+    ''' <param name="m"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    ''' 
+    <RGenericOverloads("writeBin")>
     Public Function saveMatrix(m As NumericMatrix, args As list, env As Environment) As Object
         Dim con As Stream = args!con
         Call m.Save(con)
@@ -121,6 +130,7 @@ Module RMatrix
         Return True
     End Function
 
+    <RGenericOverloads("readBin")>
     Public Function readMatrix(s As Stream, args As list, env As Environment) As Object
         Return Serialization.Load(s)
     End Function
