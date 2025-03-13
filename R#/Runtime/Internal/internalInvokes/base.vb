@@ -893,6 +893,11 @@ Namespace Runtime.Internal.Invokes
         ''' a POSIXct or POSIXlt or Date object; or an S4 object containing such 
         ''' an object.
         ''' </param>
+        ''' <param name="each">
+        ''' non-negative integer. Each element of x is repeated each times. Other 
+        ''' inputs will be coerced to an integer or double vector and the first 
+        ''' element taken. Treated as 1 if NA or invalid.
+        ''' </param>
         ''' <param name="times">an integer-valued vector giving the (non-negative) 
         ''' number of times to repeat each element if of length length(x), or to 
         ''' repeat the whole vector if of length 1. Negative or NA values are an 
@@ -902,15 +907,24 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("rep")>
         Public Function rep(<RRawVectorArgument>
                             x As Object,
-                            times As Integer,
+                            Optional times As Integer? = Nothing,
+                            Optional [each] As Integer? = Nothing,
                             Optional env As Environment = Nothing) As Object
 
             Dim out As New List(Of Object)
-            Dim vx = REnv.asVector(Of Object)(x)
+            Dim vx = REnv.asVector(Of Object)(x).AsObjectEnumerator.ToArray
 
-            For i As Integer = 1 To times
-                out.AddRange(vx.AsObjectEnumerator)
-            Next
+            If Not times Is Nothing Then
+                For i As Integer = 1 To times
+                    Call out.AddRange(vx)
+                Next
+            ElseIf Not [each] Is Nothing Then
+                For Each item As Object In vx
+                    Call out.AddRange(Repeats(item, times:=[each]))
+                Next
+            Else
+                Return Internal.debug.stop("the repeats `times` or `each` element repeats times parameter must be specific!", env)
+            End If
 
             Return REnv.TryCastGenericArray(out.ToArray, env)
         End Function
