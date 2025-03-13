@@ -910,10 +910,10 @@ Namespace Runtime.Internal.Invokes
                             Optional times As Integer? = Nothing,
                             Optional [each] As Integer? = Nothing,
                             Optional env As Environment = Nothing) As Object
-
+#Disable Warning
             Dim out As New List(Of Object)
             Dim vx = REnv.asVector(Of Object)(x).AsObjectEnumerator.ToArray
-
+#Enable Warning
             If Not times Is Nothing Then
                 For i As Integer = 1 To times
                     Call out.AddRange(vx)
@@ -946,7 +946,7 @@ Namespace Runtime.Internal.Invokes
                                 times As Integer,
                                 Optional env As Environment = Nothing) As Object
 
-            Return rep(x, times, env)
+            Return rep(x, times, , env)
         End Function
 
         ''' <summary>
