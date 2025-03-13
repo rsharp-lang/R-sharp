@@ -2289,6 +2289,9 @@ Module stats
     ''' 
     ''' @author Will_and_Sara
     ''' </summary>
+    ''' <remarks>
+    ''' 
+    ''' </remarks>
     <ExportAPI("product_moments")>
     Public Function ProductMoments(<RRawVectorArgument> x As Object) As ProductMoments
         Return New ProductMoments(CLRVector.asNumeric(x))
