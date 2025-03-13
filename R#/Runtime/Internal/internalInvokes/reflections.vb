@@ -371,6 +371,18 @@ Namespace Runtime.Internal.Invokes
             Return result
         End Function
 
+        <ExportAPI("str2lang")>
+        <RApiReturn(GetType(Expression))>
+        Public Function string2lang(s As String, Optional env As Environment = Nothing) As Object
+            Return parse(text:=s, env:=env)
+        End Function
+
+        <ExportAPI("str2expression")>
+        <RApiReturn(GetType(Expression))>
+        Public Function str2expression(<RRawVectorArgument> text As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of String, Expression)(text, Function(s) parse(text:=s, env:=env))
+        End Function
+
         ''' <summary>
         ''' ### Parse Expressions
         ''' 
