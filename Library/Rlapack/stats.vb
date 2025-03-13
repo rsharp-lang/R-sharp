@@ -1,82 +1,82 @@
 ﻿#Region "Microsoft.VisualBasic::f2b322d70e19e4fb221d5e612bdf3fb1, Library\Rlapack\stats.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1917
-    '    Code Lines: 1071 (55.87%)
-    ' Comment Lines: 634 (33.07%)
-    '    - Xml Docs: 91.48%
-    ' 
-    '   Blank Lines: 212 (11.06%)
-    '     File Size: 81.81 KB
+' Summaries:
 
 
-    ' Module stats
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: matrixDataFrame, matrixDataFrame2, printMatrix, printMvar, printTtest
-    '               printTwoSampleTTest
-    '     Enum p_adjust_methods
-    ' 
-    '         BH, bonferroni, BY, fdr, hochberg
-    '         holm, hommel, none
-    ' 
-    ' 
-    ' 
-    '  
-    ' 
-    '     Function: aov, asDist, beta, chisq_test, ChiSquare
-    '               combin, corr, corr_sign, corrTest, dataframeRow
-    '               dist, dnorm, ECDF, ecdf0, emd_dist
-    '               filterMissing, fisher_test, gamma, gammaCDF, GetDataSetCommon
-    '               getMatrix, getQuantileLevels, iqr_outliers, lbeta, lgamma
-    '               Lowess, mantel_test, median, moran_test, mul
-    '               oplsr, p_adjust, plsda, pnorm_func, PoissonDiskGenerator_func
-    '               (+2 Overloads) pow, prcomp, pt, quantile, safeCheck
-    '               spline, tabulateMode, ttest, ttestBatch, ttestImpl
-    '               varTest, z_score, z_scoreByColumn, z_scoreByRow
-    ' 
-    ' Enum SplineAlgorithms
-    ' 
-    '     Bezier, BSpline, CatmullRom, CubiSpline
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1917
+'    Code Lines: 1071 (55.87%)
+' Comment Lines: 634 (33.07%)
+'    - Xml Docs: 91.48%
+' 
+'   Blank Lines: 212 (11.06%)
+'     File Size: 81.81 KB
+
+
+' Module stats
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: matrixDataFrame, matrixDataFrame2, printMatrix, printMvar, printTtest
+'               printTwoSampleTTest
+'     Enum p_adjust_methods
+' 
+'         BH, bonferroni, BY, fdr, hochberg
+'         holm, hommel, none
+' 
+' 
+' 
+'  
+' 
+'     Function: aov, asDist, beta, chisq_test, ChiSquare
+'               combin, corr, corr_sign, corrTest, dataframeRow
+'               dist, dnorm, ECDF, ecdf0, emd_dist
+'               filterMissing, fisher_test, gamma, gammaCDF, GetDataSetCommon
+'               getMatrix, getQuantileLevels, iqr_outliers, lbeta, lgamma
+'               Lowess, mantel_test, median, moran_test, mul
+'               oplsr, p_adjust, plsda, pnorm_func, PoissonDiskGenerator_func
+'               (+2 Overloads) pow, prcomp, pt, quantile, safeCheck
+'               spline, tabulateMode, ttest, ttestBatch, ttestImpl
+'               varTest, z_score, z_scoreByColumn, z_scoreByRow
+' 
+' Enum SplineAlgorithms
+' 
+'     Bezier, BSpline, CatmullRom, CubiSpline
+' 
+'  
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -2111,6 +2111,15 @@ Module stats
     ''' # Calculate kurtosis using e1071 package
     ''' kurtosis_value &lt;- kurtosis(data);
     ''' print(kurtosis_value);
+    ''' 
+    ''' # in different algorithm type
+    ''' kurtosis(data,type =1);
+    ''' [1] -0.21875
+    ''' kurtosis(data,type =2);
+    ''' [1] 0.940625
+    ''' kurtosis(data,type =3);
+    ''' [1] -0.8706055
+    ''' 
     ''' # Manual calculation of excess kurtosis
     ''' n &lt;- length(data);
     ''' mean_data &lt;- mean(data);
@@ -2187,6 +2196,14 @@ Module stats
     ''' # Calculate skewness using e1071 package
     ''' skewness_value &lt;- skewness(data);
     ''' print(skewness_value);
+    ''' 
+    ''' skewness(data,type = 1);
+    ''' [1] 0.65625
+    ''' skewness(data,type = 2);
+    ''' [1] 0.8184876
+    ''' skewness(data,type = 3);
+    ''' [1] 0.5371325
+    ''' 
     ''' # Manual calculation of skewness
     ''' n &lt;- length(data);
     ''' mean_data &lt;- mean(data);
