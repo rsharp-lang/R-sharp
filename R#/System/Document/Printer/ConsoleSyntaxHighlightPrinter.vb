@@ -150,6 +150,11 @@ Namespace Development
             Call dev.WriteLine()
         End Sub
 
+        ''' <summary>
+        ''' html syntax highlights
+        ''' </summary>
+        ''' <param name="tokens"></param>
+        ''' <param name="dev"></param>
         <Extension>
         Private Sub PrintAsHtmlSpans(tokens As IEnumerable(Of Token), dev As TextWriter)
             Dim keyword As String = "color: blue;"
