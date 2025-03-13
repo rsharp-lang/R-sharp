@@ -2118,9 +2118,23 @@ Module stats
     ''' kurtosis_manual &lt;- sum((data - mean_data)^4) / ((n - 1) * sd_data^4) - 3;
     ''' print(kurtosis_manual);
     ''' </example>
+    ''' <remarks>
+    ''' If x contains missings and these are not removed, the kurtosis is NA.
+    '''
+    ''' Otherwise, write xi for the non-missing elements of x, n for their number, μ for their mean, s for their standard deviation, and 
+    ''' mr = ∑i (xi −μ) ^ r /n for the sample moments of order r.
+    '''
+    ''' Joanes and Gill (1998) discuss three methods for estimating kurtosis:
+    '''
+    ''' Type 1: g2 = m4/m2 ^ 2 −3. This is the typical definition used in many older textbooks.
+    ''' Type 2: G2 = ((n+1)*g2 +6)∗(n−1)/((n−2)(n−3)). Used in SAS and SPSS.
+    ''' Type 3: b2 = m4 /s ^ 4 −3 = (g2 +3)(1−1/n) ^ 2 −3. Used in MINITAB and BMDP.
+    '''
+    ''' Only G2 (corresponding to type = 2) is unbiased under normality.
+    ''' </remarks>
     <ExportAPI("kurtosis")>
-    Public Function kurtosis(<RRawVectorArgument> x As Object) As Object
-        Return CLRVector.asNumeric(x).Kurtosis
+    Public Function kurtosis(<RRawVectorArgument> x As Object, Optional type As AlgorithmType = AlgorithmType.Classical) As Object
+        Return CLRVector.asNumeric(x).Kurtosis(type)
     End Function
 
     ''' <summary>
@@ -2180,9 +2194,22 @@ Module stats
     ''' skewness_manual &lt;- sum((data - mean_data)^3) / ((n - 1) * sd_data^3);
     ''' print(skewness_manual);
     ''' </example>
+    ''' <remarks>
+    ''' If x contains missings and these are not removed, the skewness is NA.
+    ''' Otherwise, write xi for the non-missing elements of x, n for their number, μ for their mean, s for their standard deviation, and 
+    ''' mr =∑i (xi −μ) ^ r /n for the sample moments of order r.
+    '''
+    ''' Joanes and Gill (1998) discuss three methods for estimating skewness:
+    '''
+    ''' Type 1: g1 = m3 / m2 ^ (3/2). This is the typical definition used in many older textbooks.
+    ''' Type 2: G1 = g1 * sqrt(n(n−1)) /(n−2). Used in SAS and SPSS.
+    ''' Type 3: b1 = m3 /s^3 = g1 * ((n−1)/n) ^ (3/2) . Used in MINITAB and BMDP.
+    '''
+    ''' All three skewness measures are unbiased under normality.
+    ''' </remarks>
     <ExportAPI("skewness")>
-    Public Function skewness(<RRawVectorArgument> x As Object) As Object
-        Return CLRVector.asNumeric(x).Skewness
+    Public Function skewness(<RRawVectorArgument> x As Object, Optional type As AlgorithmType = AlgorithmType.Classical) As Object
+        Return CLRVector.asNumeric(x).Skewness(type)
     End Function
 
     ''' <summary>
