@@ -1,58 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::a122cda53b056e60de102a9a6ede6c1f, R#\Runtime\Internal\internalInvokes\reflections.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 439
-    '    Code Lines: 201 (45.79%)
-    ' Comment Lines: 199 (45.33%)
-    '    - Xml Docs: 84.42%
-    ' 
-    '   Blank Lines: 39 (8.88%)
-    '     File Size: 20.10 KB
+' Summaries:
 
 
-    '     Module reflections
-    ' 
-    '         Function: attr, attributes, eval, formals, getClass
-    '                   parse, sys_call, sys_calls
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 439
+'    Code Lines: 201 (45.79%)
+' Comment Lines: 199 (45.33%)
+'    - Xml Docs: 84.42%
+' 
+'   Blank Lines: 39 (8.88%)
+'     File Size: 20.10 KB
+
+
+'     Module reflections
+' 
+'         Function: attr, attributes, eval, formals, getClass
+'                   parse, sys_call, sys_calls
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -380,6 +381,13 @@ Namespace Runtime.Internal.Invokes
         ''' they were lines of a file. Other R objects will be coerced to 
         ''' character if possible.
         ''' </param>
+        ''' 
+        ''' <param name="file">
+        ''' a connection, or a character String giving the name Of a file Or a URL To read 
+        ''' the expressions from. If file Is "" And text Is missing Or NULL Then input 
+        ''' Is taken from the console.
+        ''' </param>
+        ''' 
         ''' <returns>An object of type "expression", with up to n elements if 
         ''' specified as a non-negative integer.
         ''' 
@@ -389,6 +397,7 @@ Namespace Runtime.Internal.Invokes
         ''' If encoding Is "latin1" Or "UTF-8", Or If text Is supplied With 
         ''' every element Of known encoding In a Latin-1 Or UTF-8 locale.
         ''' </returns>
+        ''' 
         ''' <remarks>
         ''' If text has length greater than zero (after coercion) it is used 
         ''' in preference to file.
@@ -400,7 +409,24 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("parse")>
         <RApiReturn(GetType(Expression))>
-        Public Function parse(text As String, Optional env As Environment = Nothing) As Object
+        Public Function parse(Optional text As String = Nothing,
+                              <RRawVectorArgument>
+                              Optional file As Object = Nothing,
+                              Optional env As Environment = Nothing) As Object
+
+            If Not file Is Nothing Then
+                Dim isfile As Boolean = False
+                Dim data = GetFileStream(file, FileAccess.Read, env, is_filepath:=isfile, suppress:=True)
+
+                If data Like GetType(Message) Then
+                    Return data.TryCast(Of Message)
+                End If
+
+                Using s As New StreamReader(data.TryCast(Of Stream))
+                    text = s.ReadToEnd
+                End Using
+            End If
+
             Dim opts As New SyntaxBuilderOptions(AddressOf Expression.CreateExpression, Function(c, s) New Scanner(c, s)) With {
                 .source = Rscript.AutoHandleScript(text)
             }
