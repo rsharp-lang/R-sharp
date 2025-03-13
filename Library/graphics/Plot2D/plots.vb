@@ -1184,7 +1184,7 @@ Module plots
             Return RInternal.debug.stop("the required dataset is nothing!", env)
         End If
 
-        Dim type As Type = REnv.MeasureArrayElementType(data)
+        Dim type As AlgorithmType = REnv.MeasureArrayElementType(data)
 
         size = InteropArgumentHelper.getSize(size, env)
         margin = InteropArgumentHelper.getPadding(margin)
