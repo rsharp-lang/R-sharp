@@ -2298,6 +2298,39 @@ Module stats
     End Function
 
     ''' <summary>
+    ''' ### Statistical Moments
+    ''' 
+    ''' This function computes the sample moment of specified order.
+    ''' </summary>
+    ''' <param name="x">a numeric vector of data.</param>
+    ''' <param name="order">order of the moment to be computed</param>
+    ''' <param name="central">a logical value - if central moments are to be computed.</param>
+    ''' <param name="absolute">a logical value - if absolute moments are to be computed.</param>
+    ''' <param name="na_rm">a logical value - remove NA values?</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("moment")>
+    Public Function moment(<RRawVectorArgument> x As Object,
+                           Optional order As Integer = 1,
+                           Optional central As Boolean = False,
+                           Optional absolute As Boolean = False,
+                           Optional na_rm As Boolean = False,
+                           Optional env As Environment = Nothing) As Object
+
+        Dim data As Double() = CLRVector.asNumeric(x)
+        Dim sample As New ProductMoments(If(na_rm, data.Where(Function(xi) Not xi.IsNaNImaginary).ToArray, data))
+
+        If central Then
+            Return sample.CentralMoment(order)
+        End If
+        If absolute Then
+            Return sample.AbsoluteMoment(order)
+        End If
+
+        Return sample.Moment(order)
+    End Function
+
+    ''' <summary>
     ''' ### Earth Mover's Distance
     ''' 
     ''' Implementation of the Fast Earth Mover's Algorithm by Ofir Pele and Michael Werman.
