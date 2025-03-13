@@ -2309,6 +2309,19 @@ Module stats
     ''' <param name="na_rm">a logical value - remove NA values?</param>
     ''' <param name="env"></param>
     ''' <returns></returns>
+    ''' <example>
+    ''' let data = c(2, 4, 4, 4, 5, 5, 7, 9);
+    ''' 
+    ''' moment(data, 2);
+    ''' # [1]  29
+    ''' moment(data, 2, central=TRUE);
+    ''' # [1]  4
+    ''' 
+    ''' moment(data, 3);
+    ''' # [1]  190.25
+    ''' moment(data, 3, central=TRUE);
+    ''' # [1]  5.25
+    ''' </example>
     <ExportAPI("moment")>
     Public Function moment(<RRawVectorArgument> x As Object,
                            Optional order As Integer = 1,
