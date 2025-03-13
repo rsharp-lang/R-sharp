@@ -2114,11 +2114,11 @@ Module stats
     ''' 
     ''' # in different algorithm type
     ''' kurtosis(data,type =1);
-    ''' [1] -0.21875
+    ''' # [1] -0.21875
     ''' kurtosis(data,type =2);
-    ''' [1] 0.940625
+    ''' # [1] 0.940625
     ''' kurtosis(data,type =3);
-    ''' [1] -0.8706055
+    ''' # [1] -0.8706055
     ''' 
     ''' # Manual calculation of excess kurtosis
     ''' n &lt;- length(data);
@@ -2198,11 +2198,11 @@ Module stats
     ''' print(skewness_value);
     ''' 
     ''' skewness(data,type = 1);
-    ''' [1] 0.65625
+    ''' # [1] 0.65625
     ''' skewness(data,type = 2);
-    ''' [1] 0.8184876
+    ''' # [1] 0.8184876
     ''' skewness(data,type = 3);
-    ''' [1] 0.5371325
+    ''' # [1] 0.5371325
     ''' 
     ''' # Manual calculation of skewness
     ''' n &lt;- length(data);
