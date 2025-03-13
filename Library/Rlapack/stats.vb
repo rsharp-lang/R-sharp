@@ -83,6 +83,7 @@
 Imports System.Drawing
 Imports System.IO
 Imports System.Runtime.CompilerServices
+Imports System.Runtime.InteropServices
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -92,6 +93,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.Framework.IO
 Imports Microsoft.VisualBasic.Data.GraphTheory
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
@@ -99,6 +101,7 @@ Imports Microsoft.VisualBasic.Math.Calculus
 Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
+Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix.MDSScale
 Imports Microsoft.VisualBasic.Math.Matrix
 Imports Microsoft.VisualBasic.Math.Quantile
 Imports Microsoft.VisualBasic.Math.Statistics
@@ -124,12 +127,6 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports std = System.Math
 Imports stdVector = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
-Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix.MDSScale
-Imports Microsoft.VisualBasic.Emit.Delegates
-Imports System.Runtime.InteropServices
-
-
-
 
 #If NET48 Then
 Imports Pen = System.Drawing.Pen
@@ -2059,6 +2056,133 @@ Module stats
         Call df.add("y", vx.Select(Function(vi) vi.y))
 
         Return df
+    End Function
+
+    ''' <summary>
+    ''' **Kurtosis** is a statistical measure that describes the "tailedness" of the probability distribution of a
+    ''' real-valued random variable. In simpler terms, it indicates the extent to which the tails of the distribution 
+    ''' differ from those of a normal distribution.
+    ''' 
+    ''' ### Key Points about Kurtosis:
+    ''' 
+    ''' 1. **Definition**:
+    ''' 
+    '''    - Kurtosis is the fourth standardized moment of a distribution.
+    '''    - It is calculated as the average of the squared deviations of the data from its mean, raised to the fourth power, standardized by the standard deviation raised to the fourth power.
+    '''    
+    ''' 2. **Types of Kurtosis**:
+    ''' 
+    '''    - **Mesokurtic**: Distributions with kurtosis similar to that of the normal distribution (kurtosis value of 3). The tails of a mesokurtic distribution are neither particularly fat nor particularly thin.
+    '''    - **Leptokurtic**: Distributions with positive kurtosis greater than 3. These distributions have "fat tails" and a sharp peak, indicating more frequent large deviations from the mean than a normal distribution.
+    '''    - **Platykurtic**: Distributions with kurtosis less than 3. These distributions have "thin tails" and a flatter peak, indicating fewer large deviations from the mean than a normal distribution.
+    '''    
+    ''' 3. **Excess Kurtosis**:
+    ''' 
+    '''    - Often, kurtosis is reported as "excess kurtosis," which is the kurtosis value minus 3. This adjustment makes the kurtosis of a normal distribution equal to 0.
+    '''    - Positive excess kurtosis indicates a leptokurtic distribution, while negative excess kurtosis indicates a platykurtic distribution.
+    '''    
+    ''' 4. **Interpretation**:
+    ''' 
+    '''    - High kurtosis in a data set is an indicator that data has heavy tails or outliers. This can affect the performance of statistical models and methods that assume normality.
+    '''    - Low kurtosis indicates that the data has light tails and lacks outliers.
+    '''    
+    ''' 5. **Applications**:
+    ''' 
+    '''    - In finance, kurtosis is used to describe the distribution of returns of an investment. A high kurtosis indicates a higher risk of extreme returns.
+    '''    - In data analysis, kurtosis helps in understanding the shape of the data distribution and identifying potential outliers.
+    '''    
+    ''' 6. **Calculation in R**:
+    ''' 
+    '''    - The `kurtosis()` function in the `e1071` package can be used to calculate kurtosis in R.
+    '''    - Alternatively, kurtosis can be calculated manually using the formula:
+    '''    
+    ''' ```R
+    ''' kurtosis &lt;- sum((data - mean(data))^4) / ((length(data) - 1) * sd(data)^4) - 3
+    ''' ```
+    ''' 
+    ''' kurtosis is a statistical measure for understanding the shape of a data distribution, particularly the behavior 
+    ''' of its tails. It is widely used in various fields, including finance, data analysis, and statistics.
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <returns></returns>
+    ''' <example>
+    ''' # Example data
+    ''' data &lt;- c(2, 4, 4, 4, 5, 5, 7, 9);
+    ''' # Calculate kurtosis using e1071 package
+    ''' kurtosis_value &lt;- kurtosis(data);
+    ''' print(kurtosis_value);
+    ''' # Manual calculation of excess kurtosis
+    ''' n &lt;- length(data);
+    ''' mean_data &lt;- mean(data);
+    ''' sd_data &lt;- sd(data);
+    ''' kurtosis_manual &lt;- sum((data - mean_data)^4) / ((n - 1) * sd_data^4) - 3;
+    ''' print(kurtosis_manual);
+    ''' </example>
+    <ExportAPI("kurtosis")>
+    Public Function kurtosis(<RRawVectorArgument> x As Object) As Object
+        Return CLRVector.asNumeric(x).Kurtosis
+    End Function
+
+    ''' <summary>
+    ''' **Skewness**
+    ''' 
+    ''' Skewness is a fundamental statistical measure used to describe the asymmetry of the probability distribution of a 
+    ''' real-valued random variable. It provides insights into the direction and extent of the deviation from a symmetric 
+    ''' distribution.
+    ''' 
+    ''' ### Key Aspects of Skewness:
+    ''' 
+    ''' 1. **Definition**:
+    ''' 
+    '''    - Skewness is the third standardized moment of a distribution.
+    '''    - It is calculated as the average of the cubed deviations of the data from its mean, standardized by the standard deviation raised to the third power.
+    '''    
+    ''' 2. **Types of Skewness**:
+    ''' 
+    '''    - **Zero Skewness**: Indicates a symmetric distribution where the mean, median, and mode are all equal.
+    '''    - **Positive Skewness (Right-Skewed)**: The tail on the right side of the distribution is longer or fatter. In this case, the mean is greater than the median.
+    '''    - **Negative Skewness (Left-Skewed)**: The tail on the left side of the distribution is longer or fatter. Here, the mean is less than the median.
+    '''    
+    ''' 3. **Interpretation**:
+    ''' 
+    '''    - Skewness values close to zero suggest a nearly symmetric distribution.
+    '''    - Positive values indicate right-skewed distributions, while negative values indicate left-skewed distributions.
+    '''    - The magnitude of the skewness value reflects the degree of asymmetry.
+    '''    
+    ''' 4. **Applications**:
+    ''' 
+    '''    - **Finance**: Used to analyze the distribution of returns on investments, helping investors understand the potential for extreme outcomes.
+    '''    - **Economics**: Assists in examining income distributions, enabling economists to assess income inequality.
+    '''    - **Natural Sciences**: Describes the distribution of experimental data in scientific research.
+    '''    
+    ''' 5. **Considerations**:
+    ''' 
+    '''    - Skewness is just one aspect of distribution shape and should be considered alongside other statistical measures like kurtosis for a comprehensive understanding.
+    '''    - For small sample sizes, the estimation of skewness can be unreliable.
+    '''    
+    ''' In essence, skewness is a statistical tool for understanding the asymmetry of data distributions, 
+    ''' with wide-ranging applications in various fields such as finance, economics, and the natural 
+    ''' sciences.
+    ''' 
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <returns></returns>
+    ''' <example>
+    ''' # Example data
+    ''' data &lt;- c(2, 4, 4, 4, 5, 5, 7, 9);
+    ''' # Calculate skewness using e1071 package
+    ''' skewness_value &lt;- skewness(data);
+    ''' print(skewness_value);
+    ''' # Manual calculation of skewness
+    ''' n &lt;- length(data);
+    ''' mean_data &lt;- mean(data);
+    ''' sd_data &lt;- sd(data);
+    ''' skewness_manual &lt;- sum((data - mean_data)^3) / ((n - 1) * sd_data^3);
+    ''' print(skewness_manual);
+    ''' </example>
+    <ExportAPI("skewness")>
+    Public Function skewness(<RRawVectorArgument> x As Object) As Object
+        Return CLRVector.asNumeric(x).Skewness
     End Function
 
     ''' <summary>
