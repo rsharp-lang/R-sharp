@@ -965,6 +965,20 @@ sample estimates:
         End Function
 
         ''' <summary>
+        ''' ### The Exponential Distribution
+        ''' 
+        ''' Density, distribution function, quantile function and random generation for the exponential 
+        ''' distribution with rate rate (i.e., mean 1/rate).
+        ''' </summary>
+        ''' <param name="n">number of observations. If length(n) > 1, the length is taken to be the number required.</param>
+        ''' <param name="rate">vector of rates.</param>
+        ''' <returns></returns>
+        <ExportAPI("rexp")>
+        Public Function rexp(n As Integer, Optional rate As Double = 1) As Double()
+            Return randf.ExponentialRandomNumbers(rate, n)
+        End Function
+
+        ''' <summary>
         ''' ### The Normal Distribution
         ''' 
         ''' Density, distribution function, quantile function and random generation for 
