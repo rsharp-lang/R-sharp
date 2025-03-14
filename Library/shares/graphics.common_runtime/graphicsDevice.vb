@@ -99,7 +99,7 @@ Public Structure graphicsDevice : Implements IsEmpty
             Select Case g.Driver
                 Case Drivers.WMF : Return ImageFormats.Wmf
                 Case Drivers.PDF : Return ImageFormats.Pdf
-                Case Drivers.PS : Return ImageFormats.Unknown
+                Case Drivers.PostScript : Return ImageFormats.Unknown
                 Case Drivers.SVG : Return ImageFormats.Svg
                 Case Drivers.GDI
 
