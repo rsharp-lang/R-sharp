@@ -387,7 +387,7 @@ Module graphics2DTools
         End If
     End Function
 
-    <ExportAPI("rectangle")>
+    <ExportAPI("rectangle_obj")>
     Public Function rectangle(location As PointF, size As SizeF) As RectangleF
         Return New RectangleF(location, size)
     End Function
