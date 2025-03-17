@@ -231,7 +231,7 @@ Namespace Runtime.Interop
         Public Shared ReadOnly Property list As RType = RType.GetRSharpType(GetType(list))
 
         ''' <summary>
-        ''' <see cref="Object"/>
+        ''' mapping to the clr <see cref="Object"/> type.
         ''' </summary>
         ''' <returns></returns>
         Friend Shared ReadOnly Property any As RType = GetRSharpType(GetType(Object))

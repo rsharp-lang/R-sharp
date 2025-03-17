@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::4adbfc2b363ce57d089db6a59ee7342d, R#\Runtime\Internal\internalInvokes\applys.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 649
-    '    Code Lines: 428 (65.95%)
-    ' Comment Lines: 135 (20.80%)
-    '    - Xml Docs: 82.96%
-    ' 
-    '   Blank Lines: 86 (13.25%)
-    '     File Size: 27.80 KB
+' Summaries:
 
 
-    '     Module applys
-    ' 
-    '         Function: apply, checkInternal, lapply, (+3 Overloads) lapplyGeneralIDictionary, lapplyGeneralSequence
-    '                   lapplyPipelineStream, lapplyRNameIndex, parLapply, parSapply, sapply
-    '                   sapplyList, sapplySequence
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 649
+'    Code Lines: 428 (65.95%)
+' Comment Lines: 135 (20.80%)
+'    - Xml Docs: 82.96%
+' 
+'   Blank Lines: 86 (13.25%)
+'     File Size: 27.80 KB
+
+
+'     Module applys
+' 
+'         Function: apply, checkInternal, lapply, (+3 Overloads) lapplyGeneralIDictionary, lapplyGeneralSequence
+'                   lapplyPipelineStream, lapplyRNameIndex, parLapply, parSapply, sapply
+'                   sapplyList, sapplySequence
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -340,11 +340,17 @@ Namespace Runtime.Internal.Invokes
         ''' In the case of functions like +, %*%, the function name must be 
         ''' backquoted or quoted.
         ''' </param>
+        ''' <param name="stream">
+        ''' run in lazy stream mode? default is not.
+        ''' </param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
         <ExportAPI("sapply")>
         <RApiReturn(GetType(vector))>
-        Public Function sapply(<RRawVectorArgument> X As Object, FUN As Object, envir As Environment) As Object
+        Public Function sapply(<RRawVectorArgument> X As Object, FUN As Object,
+                               Optional stream As Boolean = False,
+                               Optional envir As Environment = Nothing) As Object
+
             If X Is Nothing Then
                 Return New Object() {}
             End If
@@ -366,10 +372,10 @@ Namespace Runtime.Internal.Invokes
             If X.GetType.ImplementInterface(GetType(IDictionary)) Then
                 check = DirectCast(X, IDictionary).sapplyList(apply, nameVec, envir)
             Else
-                check = sapplySequence(X, apply, envir)
+                check = sapplySequence(X, apply, stream, envir)
             End If
 
-            If TypeOf check Is Message Then
+            If TypeOf check Is Message OrElse stream Then
                 Return check
             Else
                 arrayVec = check
@@ -384,9 +390,8 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
-        Private Function sapplySequence(x As Object, apply As RFunction, envir As Environment) As Object
+        Private Function sapplySequence(x As Object, apply As RFunction, stream As Boolean, envir As Environment) As Object
             Dim seq As New List(Of Object)
-            Dim value As Object
             Dim argsPreviews As InvokeParameter()
             Dim i As i32 = 1
             Dim pull As IEnumerable(Of Object)
@@ -399,14 +404,27 @@ Namespace Runtime.Internal.Invokes
                 pull = REnv.asVector(Of Object)(x).AsObjectEnumerator
             End If
 
-            For Each d As Object In pull
-                argsPreviews = invokeArgument(d, ++i)
-                value = apply.Invoke(envir, argsPreviews)
+            Dim populateOut As Func(Of IEnumerable(Of Object)) =
+                Iterator Function() As IEnumerable(Of Object)
+                    Dim value As Object
 
-                If TypeOf value Is ReturnValue Then
-                    value = DirectCast(value, ReturnValue).value.Evaluate(envir)
-                End If
+                    For Each d As Object In pull
+                        argsPreviews = invokeArgument(d, ++i)
+                        value = apply.Invoke(envir, argsPreviews)
 
+                        If TypeOf value Is ReturnValue Then
+                            value = DirectCast(value, ReturnValue).value.Evaluate(envir)
+                        End If
+
+                        Yield value
+                    Next
+                End Function
+
+            If stream Then
+                Return pipeline.CreateFromPopulator(populateOut())
+            End If
+
+            For Each value As Object In populateOut()
                 If Program.isException(value) Then
                     Return value
                 Else

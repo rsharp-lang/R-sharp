@@ -136,6 +136,11 @@ Namespace Runtime.Internal.Object
             elementType = type
         End Sub
 
+        Sub New(input As IEnumerable(Of Object))
+            pipeline = input
+            elementType = RType.any
+        End Sub
+
         ''' <summary>
         ''' Gets the R# error message data
         ''' </summary>
@@ -226,7 +231,11 @@ Namespace Runtime.Internal.Object
         ''' <typeparam name="T"></typeparam>
         ''' <param name="upstream">the upstream data</param>
         ''' <param name="finalize"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' </returns>
+        ''' <remarks>
+        ''' just a simple wrapper to the <see cref="pipeline"/> object constructor function.
+        ''' </remarks>
         <DebuggerStepThrough>
         Public Shared Function CreateFromPopulator(Of T)(upstream As IEnumerable(Of T), Optional finalize As Action = Nothing) As pipeline
             Return New pipeline(upstream, GetType(T)) With {
