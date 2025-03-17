@@ -307,6 +307,9 @@ Namespace Runtime.Internal.Object
                     Return upstream
                 ElseIf GetType(T).IsInterface AndAlso DirectCast(upstream, pipeline).elementType.raw.ImplementInterface(Of T) Then
                     Return upstream
+                ElseIf DirectCast(upstream, pipeline).elementType Is RType.any Then
+                    Call "the given upstream pipeline is a stream of generic object collection".Warning
+                    Return upstream
                 Else
                     Return Message.InCompatibleType(GetType(T), DirectCast(upstream, pipeline).elementType.raw, env,
                                                     suppress:=suppress,
