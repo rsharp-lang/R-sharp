@@ -393,6 +393,8 @@ Namespace Runtime.Internal.Invokes
 
             If TypeOf x Is tqdmList Then
                 pull = DirectCast(x, tqdmList).pullData
+            ElseIf TypeOf x Is pipeline Then
+                pull = DirectCast(x, pipeline).populates(Of Object)(envir)
             Else
                 pull = REnv.asVector(Of Object)(x).AsObjectEnumerator
             End If
