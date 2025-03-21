@@ -1483,6 +1483,15 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        <ExportAPI("utf8_decode")>
+        <RApiReturn(TypeCodes.string)>
+        Public Function utf8_decode(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            Return env.EvaluateFramework(Of String, String)(x,
+                eval:=Function(str)
+                          Return CString.Decode(str)
+                      End Function)
+        End Function
+
     End Module
 
     Public Class TextGrepLambda
