@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cdbda6a2f5f5b40f44ed08f4cf5ca898, R#\Runtime\Interop\RType.vb"
+﻿#Region "Microsoft.VisualBasic::82c0c33895df6155a73a32e92c1da51c, R#\Runtime\Interop\RType.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 98.25%
     ' 
     '   Blank Lines: 47 (11.27%)
-    '     File Size: 15.92 KB
+    '     File Size: 15.95 KB
 
 
     '     Interface IRType

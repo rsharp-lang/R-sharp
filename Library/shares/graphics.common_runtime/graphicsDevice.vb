@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::307f6a789db788720f0a5f7b57dbe20e, Library\shares\graphics.common_runtime\graphicsDevice.vb"
+﻿#Region "Microsoft.VisualBasic::ef4a09c8b7c3fca5564f394a853e7b01, Library\shares\graphics.common_runtime\graphicsDevice.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 96.97%
     ' 
     '   Blank Lines: 14 (11.11%)
-    '     File Size: 4.35 KB
+    '     File Size: 4.36 KB
 
 
     ' Structure graphicsDevice

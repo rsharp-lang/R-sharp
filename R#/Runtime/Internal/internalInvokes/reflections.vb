@@ -1,55 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::a122cda53b056e60de102a9a6ede6c1f, R#\Runtime\Internal\internalInvokes\reflections.vb"
+﻿#Region "Microsoft.VisualBasic::f60892a20b632aec385de675714a7d50, R#\Runtime\Internal\internalInvokes\reflections.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 439
-'    Code Lines: 201 (45.79%)
-' Comment Lines: 199 (45.33%)
-'    - Xml Docs: 84.42%
-' 
-'   Blank Lines: 39 (8.88%)
-'     File Size: 20.10 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module reflections
-' 
-'         Function: attr, attributes, eval, formals, getClass
-'                   parse, sys_call, sys_calls
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 477
+    '    Code Lines: 225 (47.17%)
+    ' Comment Lines: 207 (43.40%)
+    '    - Xml Docs: 83.57%
+    ' 
+    '   Blank Lines: 45 (9.43%)
+    '     File Size: 21.68 KB
+
+
+    '     Module reflections
+    ' 
+    '         Function: attr, attributes, eval, formals, getClass
+    '                   parse, str2expression, string2lang, sys_call, sys_calls
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

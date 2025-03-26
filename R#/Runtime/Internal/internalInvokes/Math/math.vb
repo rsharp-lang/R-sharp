@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1de8d48f9d5b7459cb36f7a8857c5c0a, R#\Runtime\Internal\internalInvokes\Math\math.vb"
+﻿#Region "Microsoft.VisualBasic::8d9aa1086cba6e64b5dc2d0dedef1260, R#\Runtime\Internal\internalInvokes\Math\math.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1415
-    '    Code Lines: 567 (40.07%)
-    ' Comment Lines: 721 (50.95%)
+    '   Total Lines: 1429
+    '    Code Lines: 571 (39.96%)
+    ' Comment Lines: 730 (51.08%)
     '    - Xml Docs: 88.63%
     ' 
-    '   Blank Lines: 127 (8.98%)
-    '     File Size: 63.67 KB
+    '   Blank Lines: 128 (8.96%)
+    '     File Size: 64.36 KB
 
 
     '     Module math
@@ -50,10 +50,10 @@
     '                   gcd, getRandom, isFinite, isInfinite, isNaN
     '                   lcm_r, log, log10, log2, max
     '                   mean, median, min, numericClassTags, pearson
-    '                   pow, prod, rnorm, root, round
-    '                   rsd, runif, (+2 Overloads) sample, sample_int, sd
-    '                   (+4 Overloads) shuffle, sign, sin, sqrt, sum
-    '                   trunc, var, weighted_mean
+    '                   pow, prod, rexp, rnorm, root
+    '                   round, rsd, runif, (+2 Overloads) sample, sample_int
+    '                   sd, (+4 Overloads) shuffle, sign, sin, sqrt
+    '                   sum, trunc, var, weighted_mean
     ' 
     '         Sub: set_seed
     '         Class corTestResult

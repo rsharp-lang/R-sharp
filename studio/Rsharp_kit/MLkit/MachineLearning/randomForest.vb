@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9c8e2fbeafae3759394b05f9abf8cf67, studio\Rsharp_kit\MLkit\MachineLearning\randomForest.vb"
+﻿#Region "Microsoft.VisualBasic::a56f59b32a1566352fd0d860a6568da8, studio\Rsharp_kit\MLkit\MachineLearning\randomForest.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 30
-    '    Code Lines: 23 (76.67%)
+    '   Total Lines: 29
+    '    Code Lines: 23 (79.31%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 7 (23.33%)
-    '     File Size: 945 B
+    '   Blank Lines: 6 (20.69%)
+    '     File Size: 941 B
 
 
     ' Module randomForest
@@ -50,7 +50,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
@@ -81,4 +80,3 @@ Public Module randomForest
     End Function
 
 End Module
-

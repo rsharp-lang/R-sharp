@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::44ecf213679d5b737bbbbdd1f3971f6b, R#\Runtime\Internal\objects\dataset\pipeline.vb"
+﻿#Region "Microsoft.VisualBasic::314ad119223a95de953af9b7e2107398, R#\Runtime\Internal\objects\dataset\pipeline.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 348
-    '    Code Lines: 233 (66.95%)
-    ' Comment Lines: 68 (19.54%)
-    '    - Xml Docs: 95.59%
+    '   Total Lines: 360
+    '    Code Lines: 240 (66.67%)
+    ' Comment Lines: 72 (20.00%)
+    '    - Xml Docs: 95.83%
     ' 
-    '   Blank Lines: 47 (13.51%)
-    '     File Size: 15.77 KB
+    '   Blank Lines: 48 (13.33%)
+    '     File Size: 16.32 KB
 
 
     '     Class pipeline
     ' 
     '         Properties: [pipeFinalize], isError, isMessage
     ' 
-    '         Constructor: (+3 Overloads) Sub New
+    '         Constructor: (+4 Overloads) Sub New
     ' 
     '         Function: (+2 Overloads) CreateFromPopulator, createVector, fromVector, getError, populates
     '                   ToString, TryCastGroupStream, TryCastObjectVector, TryCreatePipeline
