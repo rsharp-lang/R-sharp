@@ -236,6 +236,16 @@ Namespace Runtime.Components
             Me.m_val = value
         End Sub
 
+        ''' <summary>
+        ''' just wrap the clr runtime value
+        ''' </summary>
+        ''' <param name="wrap_val"></param>
+        Friend Sub New(wrap_val As Object)
+            Me.readonly = True
+            Me.m_val = wrap_val
+            Me.constraint = RType.TypeOf(wrap_val).mode
+        End Sub
+
         Public Function TryGetValueType() As TypeCodes
             If value Is Nothing Then
                 Return TypeCodes.generic

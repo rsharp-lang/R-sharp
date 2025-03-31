@@ -1,59 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::429885d014a44b3b5483caa8af4a83e3, R#\System\Document\CodeAnalysis\RlangTranslator.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 515
-    '    Code Lines: 402 (78.06%)
-    ' Comment Lines: 28 (5.44%)
-    '    - Xml Docs: 46.43%
-    ' 
-    '   Blank Lines: 85 (16.50%)
-    '     File Size: 22.25 KB
+' Summaries:
 
 
-    '     Class RlangTranslator
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: AssignNewSymbol, castLiteral, createFunction, CreateSymbols, GetAssignValue
-    '                   GetBinaryOp, getByref, GetElse, getExpressionLiteral, getForLoop
-    '                   getFormulaString, GetFunctionInvoke, GetIf, getMemberValueAssign, getNeg
-    '                   (+2 Overloads) GetScript, getSequence, GetSymbol, GetSymbolIndexSubset, GetUnaryNot
-    '                   (+2 Overloads) Literal, requirePkg, Vector
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 515
+'    Code Lines: 402 (78.06%)
+' Comment Lines: 28 (5.44%)
+'    - Xml Docs: 46.43%
+' 
+'   Blank Lines: 85 (16.50%)
+'     File Size: 22.25 KB
+
+
+'     Class RlangTranslator
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: AssignNewSymbol, castLiteral, createFunction, CreateSymbols, GetAssignValue
+'                   GetBinaryOp, getByref, GetElse, getExpressionLiteral, getForLoop
+'                   getFormulaString, GetFunctionInvoke, GetIf, getMemberValueAssign, getNeg
+'                   (+2 Overloads) GetScript, getSequence, GetSymbol, GetSymbolIndexSubset, GetUnaryNot
+'                   (+2 Overloads) Literal, requirePkg, Vector
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -68,6 +68,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Development.CodeAnalysis
@@ -478,37 +479,86 @@ Namespace Development.CodeAnalysis
                 End If
 
                 If val.value Is Nothing Then
-                    symbols.Add(name, "NULL")
+                    Call symbols.Add(name, "NULL")
                 Else
-                    Dim descriptor As String
-                    Dim castError As Boolean
-
-                    descriptor = castLiteral(val, val.typeCode, castError)
-
-                    If castError Then
-                        descriptor = castLiteral(val, val.TryGetValueType, castError)
-                    End If
-                    If castError Then
-                        If val.typeCode = TypeCodes.closure Then
-                            ' use the function name as symbol reference
-                            ' example as pass the function name as parameter value
-                            ' sapply(m,1,sd);
-                            ' descriptor = val.name
-
-                            Call $"closure symbol '{descriptor}' has been used as the parameter value.".Warning
-                            Call VBDebugger.WaitOutput()
-
-                            Return name
-                        Else
-                            Throw New NotImplementedException($"unable to cast data symbol({name}) of type: " & val.typeCode.ToString)
-                        End If
-                    End If
+                    Dim castError As Boolean = False
+                    Dim descriptor As String = castClrValue(val, name, castError, env)
 
                     Call symbols.Add(name, descriptor)
                 End If
             End If
 
             Return name
+        End Function
+
+        Private Function castClrValue(val As Symbol, name$, ByRef castError As Boolean, env As Environment) As String
+            If val.value Is Nothing Then
+                Return "NULL"
+            End If
+
+            Dim descriptor As String = castLiteral(val, val.typeCode, castError)
+
+            If castError Then
+                descriptor = castLiteral(val, val.TryGetValueType, castError)
+            End If
+            If castError AndAlso val.typeCode = TypeCodes.closure Then
+                ' use the function name as symbol reference
+                ' example as pass the function name as parameter value
+                ' sapply(m,1,sd);
+                ' descriptor = val.name
+
+                Call $"closure symbol '{descriptor}' has been used as the parameter value.".Warning
+                Call VBDebugger.WaitOutput()
+
+                Return name
+            End If
+            If castError AndAlso val.typeCode = TypeCodes.list Then
+                descriptor = castList(val, castError, env)
+            End If
+            If castError AndAlso val.typeCode = TypeCodes.dataframe Then
+                descriptor = castDataframe(val, castError, env)
+            End If
+            If castError Then
+                Throw New NotImplementedException($"unable to cast data symbol({name}) of type: " & val.typeCode.ToString)
+            Else
+                Return descriptor
+            End If
+        End Function
+
+        Private Function castDataframe(val As Symbol, ByRef castError As Boolean, env As Environment) As String
+            Dim fields As New List(Of String)
+            Dim df As dataframe = val.value
+
+            castError = False
+
+            For Each field As KeyValuePair(Of String, Array) In df.columns
+                Call fields.Add($"""{field.Key}"" = {castClrValue(New Symbol(field.Value), field.Key, castError, env)}")
+
+                If castError Then
+                    Exit For
+                End If
+            Next
+
+            Return $"data.frame({fields.JoinBy(",
+")})"
+        End Function
+
+        Private Function castList(val As Symbol, ByRef castError As Boolean, env As Environment) As String
+            Dim slots As New List(Of String)
+            Dim list As list = val.value
+
+            castError = False
+
+            For Each tuple As KeyValuePair(Of String, Object) In list.slots
+                Call slots.Add($"""{tuple.Key}"" = {castClrValue(New Symbol(tuple.Value), tuple.Key, castError, env)}")
+
+                If castError Then
+                    Exit For
+                End If
+            Next
+
+            Return $"list({slots.JoinBy(", 
+")})"
         End Function
 
         Private Shared Function castLiteral(val As Symbol, code As TypeCodes, ByRef castError As Boolean) As String
