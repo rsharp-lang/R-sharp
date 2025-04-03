@@ -854,6 +854,17 @@ Namespace Runtime.Internal.Invokes
                 Return debug.stop("the given delimiter for make string split should not be nothing!", env)
             End If
 
+            If Not TypeOf delimiter Is Regex Then
+                Dim deli_str = CLRVector.asCharacter(delimiter)
+                Dim decode_str = deli_str.Select(Function(s) CString.Decode(s)).ToArray
+
+                If decode_str.Length = 1 Then
+                    delimiter = decode_str(Scan0)
+                Else
+                    delimiter = decode_str
+                End If
+            End If
+
             If text.IsNullOrEmpty Then
                 Return Nothing
             ElseIf text.Length = 1 Then
