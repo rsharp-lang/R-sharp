@@ -1261,6 +1261,34 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' open a *.gz file for make file data read/write
+        ''' </summary>
+        ''' <param name="description$"></param>
+        ''' <returns>stream object for read/write data</returns>
+        <ExportAPI("gzfile")>
+        <RApiReturn(GetType(Stream))>
+        Public Function gzfile(description$, Optional open As FileMode = FileMode.OpenOrCreate, Optional env As Environment = Nothing) As Object
+            If open = FileMode.Open Then
+                If description.FileExists(True) Then
+                    Using file As Stream = description.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+                        Dim gz As New GZipStream(file, mode:=CompressionMode.Decompress)
+                        Dim data As New MemoryStream
+
+                        Call gz.CopyTo(data)
+                        Call data.Flush()
+                        Call data.Seek(Scan0, SeekOrigin.Begin)
+
+                        Return data
+                    End Using
+                Else
+                    Return Internal.debug.stop($"the given gzip file('{description}') is not existsed or zero byte size on your filesystem!", env)
+                End If
+            Else
+                Return Internal.debug.stop("write gzip file stream has not been implemented yet!", env)
+            End If
+        End Function
+
+        ''' <summary>
         ''' Functions to create, open and close connections, i.e., 
         ''' "generalized files", such as possibly compressed files, 
         ''' URLs, pipes, etc.
