@@ -120,8 +120,8 @@ Module FTP
     ''' <summary>
     ''' download file via ftp
     ''' </summary>
-    ''' <param name="ftp"></param>
-    ''' <param name="file"></param>
+    ''' <param name="ftp">the ftp server</param>
+    ''' <param name="file">the remote file on ftp server</param>
     ''' <param name="save">
     ''' a directory path or actual file path for save the given file that download from the remote ftp server.
     ''' </param>
