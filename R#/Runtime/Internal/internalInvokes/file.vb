@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::723f584ee29778f8c2b41839825104bc, R#\Runtime\Internal\internalInvokes\file.vb"
+﻿#Region "Microsoft.VisualBasic::6f8e8ac26dcec92710f2a93f7f4d8e05, R#\Runtime\Internal\internalInvokes\file.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1827
-    '    Code Lines: 1043 (57.09%)
-    ' Comment Lines: 597 (32.68%)
-    '    - Xml Docs: 88.27%
+    '   Total Lines: 1855
+    '    Code Lines: 1063 (57.30%)
+    ' Comment Lines: 602 (32.45%)
+    '    - Xml Docs: 88.37%
     ' 
-    '   Blank Lines: 187 (10.24%)
-    '     File Size: 83.05 KB
+    '   Blank Lines: 190 (10.24%)
+    '     File Size: 84.42 KB
 
 
     '     Enum endianness
@@ -57,12 +57,13 @@
     '                   dataUri, dir_exists, dirCopy, dirCreate, dirname
     '                   exists, file, file_allocate, file_ext, filecopy
     '                   fileExt, fileinfo, fileInfoByFile, filepath, filesize
-    '                   getRelativePath, GetSha1Hash, getwd, handleWriteLargeTextStream, isSystemDir
-    '                   listDirs, listFiles, loadListInternal, NextTempToken, normalizeFileName
-    '                   normalizePath, openDir, openGzip, openTargzip, openZip
-    '                   readBin, readBinOverloads, readFromFile, readFromStream, readLines
-    '                   readList, readText, Rhome, saveList, scanZipFiles
-    '                   setwd, tempdir, tempfile, writeBin, writeLines
+    '                   getRelativePath, GetSha1Hash, getwd, gzfile, handleWriteLargeTextStream
+    '                   isSystemDir, listDirs, listFiles, loadListInternal, NextTempToken
+    '                   normalizeFileName, normalizePath, openDir, openGzip, openTargzip
+    '                   openZip, readBin, readBinOverloads, readFromFile, readFromStream
+    '                   readLines, readList, readText, Rhome, saveList
+    '                   scanZipFiles, setwd, tempdir, tempfile, writeBin
+    '                   writeLines
     ' 
     '         Sub: fileRemove, fileRename, unlinks
     ' 
