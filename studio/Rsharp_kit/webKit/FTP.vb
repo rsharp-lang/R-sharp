@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::954310a4ae90d985beceeb0d52210c83, studio\Rsharp_kit\webKit\FTP.vb"
+﻿#Region "Microsoft.VisualBasic::01d2b594a9c2185e34247852fbde3fce, studio\Rsharp_kit\webKit\FTP.vb"
 
     ' Author:
     ' 
@@ -34,24 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 129
-    '    Code Lines: 87 (67.44%)
-    ' Comment Lines: 21 (16.28%)
+    '   Total Lines: 105
+    '    Code Lines: 70 (66.67%)
+    ' Comment Lines: 21 (20.00%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 21 (16.28%)
-    '     File Size: 4.74 KB
+    '   Blank Lines: 14 (13.33%)
+    '     File Size: 3.98 KB
 
 
     ' Module FTP
     ' 
     '     Function: ftpget, list_ftpdirs
-    ' 
-    ' Class FtpContext
-    ' 
-    '     Properties: password, server, username
-    ' 
-    '     Function: CreateRequest, ToString
     ' 
     ' /********************************************************************************/
 
@@ -62,6 +56,7 @@ Imports System.Net
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Net.WebClient
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -120,8 +115,8 @@ Module FTP
     ''' <summary>
     ''' download file via ftp
     ''' </summary>
-    ''' <param name="ftp"></param>
-    ''' <param name="file"></param>
+    ''' <param name="ftp">the ftp server</param>
+    ''' <param name="file">the remote file on ftp server</param>
     ''' <param name="save">
     ''' a directory path or actual file path for save the given file that download from the remote ftp server.
     ''' </param>
@@ -161,28 +156,3 @@ Module FTP
         Return True
     End Function
 End Module
-
-Public Class FtpContext
-
-    Public Property username As String
-    Public Property password As String
-    Public Property server As String
-
-    Public Function CreateRequest(dir As String) As FtpWebRequest
-        Dim ftpContext As String = $"ftp://{server}/{dir}"
-#Disable Warning SYSLIB0014 ' 类型或成员已过时
-        Dim request As FtpWebRequest = DirectCast(WebRequest.Create(ftpContext), FtpWebRequest)
-#Enable Warning SYSLIB0014 ' 类型或成员已过时
-
-        If Not (username.StringEmpty OrElse password.StringEmpty) Then
-            request.Credentials = New NetworkCredential(username, password)
-        End If
-
-        Return request
-    End Function
-
-    Public Overrides Function ToString() As String
-        Return $"{username Or "anonymous".AsDefault}@ftp://{server}"
-    End Function
-
-End Class

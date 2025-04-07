@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::723f584ee29778f8c2b41839825104bc, R#\Runtime\Internal\internalInvokes\file.vb"
+﻿#Region "Microsoft.VisualBasic::6f8e8ac26dcec92710f2a93f7f4d8e05, R#\Runtime\Internal\internalInvokes\file.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1827
-    '    Code Lines: 1043 (57.09%)
-    ' Comment Lines: 597 (32.68%)
-    '    - Xml Docs: 88.27%
+    '   Total Lines: 1855
+    '    Code Lines: 1063 (57.30%)
+    ' Comment Lines: 602 (32.45%)
+    '    - Xml Docs: 88.37%
     ' 
-    '   Blank Lines: 187 (10.24%)
-    '     File Size: 83.05 KB
+    '   Blank Lines: 190 (10.24%)
+    '     File Size: 84.42 KB
 
 
     '     Enum endianness
@@ -57,12 +57,13 @@
     '                   dataUri, dir_exists, dirCopy, dirCreate, dirname
     '                   exists, file, file_allocate, file_ext, filecopy
     '                   fileExt, fileinfo, fileInfoByFile, filepath, filesize
-    '                   getRelativePath, GetSha1Hash, getwd, handleWriteLargeTextStream, isSystemDir
-    '                   listDirs, listFiles, loadListInternal, NextTempToken, normalizeFileName
-    '                   normalizePath, openDir, openGzip, openTargzip, openZip
-    '                   readBin, readBinOverloads, readFromFile, readFromStream, readLines
-    '                   readList, readText, Rhome, saveList, scanZipFiles
-    '                   setwd, tempdir, tempfile, writeBin, writeLines
+    '                   getRelativePath, GetSha1Hash, getwd, gzfile, handleWriteLargeTextStream
+    '                   isSystemDir, listDirs, listFiles, loadListInternal, NextTempToken
+    '                   normalizeFileName, normalizePath, openDir, openGzip, openTargzip
+    '                   openZip, readBin, readBinOverloads, readFromFile, readFromStream
+    '                   readLines, readList, readText, Rhome, saveList
+    '                   scanZipFiles, setwd, tempdir, tempfile, writeBin
+    '                   writeLines
     ' 
     '         Sub: fileRemove, fileRename, unlinks
     ' 
@@ -1257,6 +1258,34 @@ Namespace Runtime.Internal.Invokes
                 Return file.LoadJsonFile(Of Dictionary(Of String, T()))(encoding)
             Else
                 Return file.LoadJsonFile(Of Dictionary(Of String, T))(encoding)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' open a *.gz file for make file data read/write
+        ''' </summary>
+        ''' <param name="description$"></param>
+        ''' <returns>stream object for read/write data</returns>
+        <ExportAPI("gzfile")>
+        <RApiReturn(GetType(Stream))>
+        Public Function gzfile(description$, Optional open As FileMode = FileMode.OpenOrCreate, Optional env As Environment = Nothing) As Object
+            If open = FileMode.Open Then
+                If description.FileExists(True) Then
+                    Using file As Stream = description.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+                        Dim gz As New GZipStream(file, mode:=CompressionMode.Decompress)
+                        Dim data As New MemoryStream
+
+                        Call gz.CopyTo(data)
+                        Call data.Flush()
+                        Call data.Seek(Scan0, SeekOrigin.Begin)
+
+                        Return data
+                    End Using
+                Else
+                    Return Internal.debug.stop($"the given gzip file('{description}') is not existsed or zero byte size on your filesystem!", env)
+                End If
+            Else
+                Return Internal.debug.stop("write gzip file stream has not been implemented yet!", env)
             End If
         End Function
 
