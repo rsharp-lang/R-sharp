@@ -1,71 +1,71 @@
 ﻿#Region "Microsoft.VisualBasic::e9f9c5456fb63b4ecf3af2eced0a68ec, R#\Runtime\Internal\internalInvokes\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1541
-    '    Code Lines: 808 (52.43%)
-    ' Comment Lines: 589 (38.22%)
-    '    - Xml Docs: 88.79%
-    ' 
-    '   Blank Lines: 144 (9.34%)
-    '     File Size: 72.64 KB
+' Summaries:
 
 
-    '     Module utils
-    ' 
-    '         Function: castTS, createAlternativeName, createCommandLine, createTimespan, data
-    '                   dataSearchByPackageDir, debugTool, description, FindSystemFile, GetInstalledPackages
-    '                   (+2 Overloads) getPackageSystemFile, head, installPackages, keyGroups, loadByName
-    '                   md5, memorySize, now, progress_bar, readFile
-    '                   setTqdmProgressBarlabel, system, systemFile, tqdm_wrap, wget_file
-    '                   workdir
-    ' 
-    '         Sub: cls, pause, sleep
-    '         Enum TimeSpanUnits
-    ' 
-    '             Days, Hours, Milliseconds, Minutes, Seconds
-    '             Ticks
-    ' 
-    ' 
-    ' 
-    '  
-    ' 
-    '     Function: create_zip, package_skeleton, sendMessage, unzipFile
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1541
+'    Code Lines: 808 (52.43%)
+' Comment Lines: 589 (38.22%)
+'    - Xml Docs: 88.79%
+' 
+'   Blank Lines: 144 (9.34%)
+'     File Size: 72.64 KB
+
+
+'     Module utils
+' 
+'         Function: castTS, createAlternativeName, createCommandLine, createTimespan, data
+'                   dataSearchByPackageDir, debugTool, description, FindSystemFile, GetInstalledPackages
+'                   (+2 Overloads) getPackageSystemFile, head, installPackages, keyGroups, loadByName
+'                   md5, memorySize, now, progress_bar, readFile
+'                   setTqdmProgressBarlabel, system, systemFile, tqdm_wrap, wget_file
+'                   workdir
+' 
+'         Sub: cls, pause, sleep
+'         Enum TimeSpanUnits
+' 
+'             Days, Hours, Milliseconds, Minutes, Seconds
+'             Ticks
+' 
+' 
+' 
+'  
+' 
+'     Function: create_zip, package_skeleton, sendMessage, unzipFile
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -574,19 +574,221 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("commandline")>
-        Public Function createCommandLine(<RListObjectArgument> argv As list, Optional env As Environment = Nothing) As String
+        <RApiReturn(GetType(String))>
+        Public Function createCommandLine(<RListObjectArgument> argv As list, Optional env As Environment = Nothing) As Object
+            Return createArgumentString(argv, env)
+        End Function
+
+        Private Function createArgumentString(argv As list, env As Environment) As Object
             If argv.length = 1 Then
+                ' list([...]);
                 Return CLRVector.asCharacter(argv.slots.First.Value) _
                     .Select(Function(str) str.CLIToken) _
-                    .JoinBy(" ")
+                    .JoinBy(" ") _
+                    .Replace(vbCr, " ") _
+                    .Replace(vbLf, " ") _
+                    .Trim
             Else
+                ' list(arg1 = ..., arg2 = ...);
                 Return argv.slots _
-                    .Values _
                     .Select(Function(a)
-                                Return any.ToString(REnv.single(a)).CLIToken
+                                Return a.Key.CLIToken & " " & any.ToString(REnv.single(a)).CLIToken
                             End Function) _
-                    .JoinBy(" ")
+                    .JoinBy(" ") _
+                    .Replace(vbCr, " ") _
+                    .Replace(vbLf, " ") _
+                    .Trim
             End If
+        End Function
+
+        Private Function createArgumentString(args As Object, env As Environment) As Object
+            If TypeOf args Is list Then
+                Return createArgumentString(DirectCast(args, list), env)
+            ElseIf TypeOf args Is dataframe Then
+                ' arg value
+                ' key value
+                Dim table As dataframe = DirectCast(args, dataframe)
+                Dim arg As String() = CLRVector.asCharacter(table.getBySynonym("arg", "args", "argv", "key"))
+                Dim vals As String() = CLRVector.asCharacter(table.getBySynonym("value"))
+                Dim cli As New List(Of String)
+
+                For i As Integer = 0 To arg.Length - 1
+                    Call cli.Add(arg(i).CLIToken)
+                    Call cli.Add(vals(i).CLIToken)
+                Next
+
+                Return cli.JoinBy(" ").Replace(vbCr, " ").Replace(vbLf, " ").Trim
+            ElseIf TypeOf args Is CommandLine Then
+                Return DirectCast(args, CommandLine).ToString
+            Else
+                Return CLRVector.asCharacter(args) _
+                    .Select(Function(s) s.CLIToken) _
+                    .JoinBy(" ") _
+                    .Replace(vbCr, " ") _
+                    .Replace(vbLf, " ") _
+                    .Trim
+            End If
+        End Function
+
+        ''' <summary>
+        ''' ### Invoke a System Command
+        ''' 
+        ''' ``system2`` invokes the OS command specified by command.
+        ''' </summary>
+        ''' <param name="command">the system command to be invoked, as a character string.</param>
+        ''' <param name="args">a character vector of arguments to command.</param>
+        ''' <param name="stdout">where output to ‘stdout’ or ‘stderr’ should be sent. 
+        ''' Possible values are "", to the R console (the default), NULL or FALSE 
+        ''' (discard output), TRUE (capture the output in a character vector) or a 
+        ''' character string naming a file.</param>
+        ''' <param name="stderr">where output to ‘stdout’ or ‘stderr’ should be sent. 
+        ''' Possible values are "", to the R console (the default), NULL or FALSE 
+        ''' (discard output), TRUE (capture the output in a character vector) or 
+        ''' a character string naming a file.</param>
+        ''' <param name="stdin">should input be diverted? "" means the default, alternatively 
+        ''' a character string naming a file. Ignored if input is supplied.</param>
+        ''' <param name="input">if a character vector is supplied, this is copied one
+        ''' string per line to a temporary file, and the standard input of command is 
+        ''' redirected to the file.</param>
+        ''' <param name="wait">a logical (not NA) indicating whether the R interpreter 
+        ''' should wait for the command to finish, or run it asynchronously. This will 
+        ''' be ignored (and the interpreter will always wait) if stdout = TRUE or stderr = TRUE. 
+        ''' When running the command asynchronously, no output will be displayed on the 
+        ''' Rgui console in Windows (it will be dropped, instead).</param>
+        ''' <param name="minimized">logical (not NA), indicates whether the command 
+        ''' window should be displayed initially as a minimized window.</param>
+        ''' <param name="invisible">logical (not NA), indicates whether the command
+        ''' window should be visible on the screen.</param>
+        ''' <param name="timeout">timeout in seconds, ignored if 0. This is a limit 
+        ''' for the elapsed time running command in a separate process. Fractions 
+        ''' of seconds are ignored.</param>
+        ''' <param name="env">character vector of name=value strings to set environment
+        ''' variables.</param>
+        ''' <returns>
+        ''' If stdout = TRUE or stderr = TRUE, a character vector giving the output of
+        ''' the command, one line per character string. (Output lines of more than 8095 
+        ''' bytes will be split.) If the command could not be run an R error is generated. 
+        ''' If command runs but gives a non-zero exit status this will be reported with 
+        ''' a warning and in the attribute "status" of the result: an attribute "errmsg" 
+        ''' may also be available.
+        '''
+        ''' In other cases, the return value is an error code (0 for success), given the 
+        ''' invisible attribute (so needs to be printed explicitly). If the command could 
+        ''' not be run for any reason, the value is 127 and a warning is issued (as from 
+        ''' R 3.5.0). Otherwise if wait = TRUE the value is the exit status returned by 
+        ''' the command, and if wait = FALSE it is 0 (the conventional success value).
+        '''
+        ''' If the command times out, a warning is issued and the exit status is 124.
+        '''
+        ''' Some Windows commands return out-of-range status values (e.g., -1) and so 
+        ''' only the bottom 16 bits of the value are used.
+        ''' </returns>
+        ''' <remarks>
+        ''' Unlike system, command is always quoted by shQuote, so it must be a single command without arguments.
+        '''
+        ''' For details of how command is found see system.
+        ''' 
+        ''' On Windows, env is only supported for commands such as R and make which accept 
+        ''' environment variables on their command line.
+        ''' 
+        ''' Some Unix commands (such as some implementations of ls) change their output if 
+        ''' they consider it to be piped or redirected: stdout = TRUE uses a pipe whereas 
+        ''' stdout = "some_file_name" uses redirection.
+        ''' 
+        ''' Because of the way it is implemented, on a Unix-alike stderr = TRUE implies 
+        ''' stdout = TRUE: a warning is given if this is not what was specified.
+        ''' 
+        ''' When timeout is non-zero, the command is terminated after the given number of 
+        ''' seconds. The termination works for typical commands, but is not guaranteed: 
+        ''' it is possible to write a program that would keep running after the time is 
+        ''' out. Timeouts can only be set with wait = TRUE.
+        ''' 
+        ''' system2 is a more portable and flexible interface than system. It allows redirection 
+        ''' of output without needing to invoke a shell on Windows, a portable way to set environment 
+        ''' variables for the execution of command, and finer control over the redirection of 
+        ''' stdout and stderr. Conversely, system (and shell on Windows) allows the invocation 
+        ''' of arbitrary command lines.
+        '''
+        ''' There is no guarantee that if stdout and stderr are both TRUE or the same file that 
+        ''' the two streams will be interleaved in order. This depends on both the buffering 
+        ''' used by the command and the OS.
+        ''' </remarks>
+        <ExportAPI("system2")>
+        Public Function system2(command$,
+                                <RRawVectorArgument>
+                                Optional args As Object = Nothing,
+                                Optional stdout$ = "",
+                                Optional stderr$ = "",
+                                Optional stdin$ = "",
+                                Optional input As Object = null,
+                                Optional wait As Boolean = True,
+                                Optional minimized As Boolean = False,
+                                Optional invisible As Boolean = True,
+                                Optional timeout As Single = 0,
+                                Optional clr As Boolean = False,
+                                Optional env As Environment = Nothing) As Object
+
+            Dim executative As String = command
+
+            args = createArgumentString(args, env)
+
+            If TypeOf args Is Message Then
+                Return args
+            End If
+
+            Dim arguments As String = CStr(args)
+            Dim inputStr As String() = CLRVector.asCharacter(input)
+            Dim std_out As String
+            Dim show_output_on_console As Boolean = stdout = "console" OrElse stdout = "std"
+
+            If env.globalEnvironment.debugMode Then
+                Call base.print("get app executative:", , env)
+                Call base.print(executative,, env)
+                Call base.print("commandline argument is:",, env)
+                Call base.print(arguments,, env)
+            End If
+
+            If Global.System.Environment.OSVersion.Platform = Global.System.PlatformID.Win32NT Then
+                If env.globalEnvironment.debugMode Then
+                    Call base.print($"run on windows {If(clr, ".NET/CLR", "naive")} environment!", , env)
+                End If
+
+                If clr Then
+                    Dim ps = App.Shell(executative, arguments, CLR:=clr, debug:=True, stdin:=inputStr.JoinBy(vbLf))
+
+                    ps.Run()
+                    std_out = ps.StandardOutput
+
+                    If show_output_on_console Then
+                        Call Console.WriteLine(ps.StandardOutput)
+                    End If
+                Else
+                    std_out = PipelineProcess.Call(executative, arguments, inputStr.JoinBy(vbLf))
+
+                    If show_output_on_console Then
+                        Call Console.WriteLine(std_out)
+                    End If
+                End If
+            ElseIf clr Then
+                If env.globalEnvironment.debugMode Then
+                    Call base.print("run on UNIX mono!", , env)
+                End If
+
+                std_out = UNIX.Shell(
+                    command:="mono",
+                    args:=$"{executative.CLIPath} {arguments}",
+                    verbose:=show_output_on_console,
+                    stdin:=inputStr.JoinBy(vbLf)
+                )
+            Else
+                If env.globalEnvironment.debugMode Then
+                    Call base.print("run a UNIX program.",, env)
+                End If
+
+                std_out = PipelineProcess.Call(executative, arguments, [in]:=inputStr.JoinBy(vbLf))
+            End If
+
+            Return std_out
         End Function
 
         ''' <summary>
@@ -689,61 +891,16 @@ Namespace Runtime.Internal.Invokes
                 .JoinBy(" ") _
                 .DoCall(AddressOf DelimiterParser.GetTokens)
             Dim executative As String = tokens(Scan0)
-            Dim arguments As String = tokens _
-                .Skip(1) _
-                .Select(Function(str) str.CLIToken) _
-                .JoinBy(" ")
-            Dim inputStr As String() = CLRVector.asCharacter(input)
-            Dim std_out As String
 
-            If env.globalEnvironment.debugMode Then
-                Call base.print("get app executative:", , env)
-                Call base.print(executative,, env)
-                Call base.print("commandline argument is:",, env)
-                Call base.print(arguments,, env)
-            End If
-
-            If Global.System.Environment.OSVersion.Platform = Global.System.PlatformID.Win32NT Then
-                If env.globalEnvironment.debugMode Then
-                    Call base.print($"run on windows {If(clr, ".NET/CLR", "naive")} environment!", , env)
-                End If
-
-                If clr Then
-                    Dim ps = App.Shell(executative, arguments, CLR:=clr, debug:=True, stdin:=inputStr.JoinBy(vbLf))
-
-                    ps.Run()
-                    std_out = ps.StandardOutput
-
-                    If show_output_on_console Then
-                        Call Console.WriteLine(ps.StandardOutput)
-                    End If
-                Else
-                    std_out = PipelineProcess.Call(executative, arguments, inputStr.JoinBy(vbLf))
-
-                    If show_output_on_console Then
-                        Call Console.WriteLine(std_out)
-                    End If
-                End If
-            ElseIf clr Then
-                If env.globalEnvironment.debugMode Then
-                    Call base.print("run on UNIX mono!", , env)
-                End If
-
-                std_out = UNIX.Shell(
-                    command:="mono",
-                    args:=$"{executative.CLIPath} {arguments}",
-                    verbose:=show_output_on_console,
-                    stdin:=inputStr.JoinBy(vbLf)
-                )
-            Else
-                If env.globalEnvironment.debugMode Then
-                    Call base.print("run a UNIX program.",, env)
-                End If
-
-                std_out = PipelineProcess.Call(executative, arguments, [in]:=inputStr.JoinBy(vbLf))
-            End If
-
-            Return std_out
+            Return system2(executative, tokens.Skip(1).ToArray,
+                           wait:=wait,
+                           timeout:=timeout,
+                           minimized:=minimized,
+                           invisible:=invisible,
+                           input:=input,
+                           clr:=clr,
+                           stdout:=If(show_output_on_console, "std", ""),
+                           env:=env)
         End Function
 
         ''' <summary>
