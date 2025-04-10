@@ -66,7 +66,6 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports r = System.Text.RegularExpressions.Regex
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -86,6 +85,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Return ExpressionTypes.SymbolRegexp
             End Get
         End Property
+
+        ' 20250410
+        ' $"regexp"(...) # drop is default = FALSE, which means for multiple string will returns a tuple list for all matches
+        ' $"regexp"(..., drop=TRUE) # drop is TRUE, which means regexp matches will returns a character vector for each
+        '                           # element with first matched, empty string will be returns if corresponding element
+        '                           # has no regexp matches.
 
         Public ReadOnly Property pattern As String
 
@@ -111,9 +116,22 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' </summary>
         ''' <param name="r"></param>
         ''' <param name="text"></param>
+        ''' <param name="drop">controls of the function evaluation result</param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
-        Public Shared Function Matches(r As Regex, text As Expression, env As Environment) As Object
+        ''' <returns>
+        ''' this function returns different result value based on the <paramref name="drop"/> option:
+        ''' 
+        ''' 1. drop = FALSE, for scalar string value, will returns a character vector that contains all matches result, 
+        '''                  for multiple string input, this function will returns a list that contains all regexp 
+        '''                  matches result for each elements string.
+        '''                  
+        ''' 2. drop = TRUE, for scalar string value, will returns a scalar character string of the first regexp matches
+        '''                 result. for multiple string input, this function will returns a character vector which is 
+        '''                 consist with the every first matches result of the multiple string input, empty string will 
+        '''                 be placed in the result vector if the corresponding input string element has no matches 
+        '''                 result.
+        ''' </returns>
+        Public Shared Function Matches(r As Regex, text As Expression, drop As Boolean, env As Environment) As Object
             Dim strData As Object = text.Evaluate(env)
 
             If Program.isException(strData) Then
@@ -137,8 +155,25 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End Try
 
             If inputs.Length = 1 Then
-                Return r.Matches(inputs(Scan0)).ToArray
+                Dim all As String() = r.Matches(inputs(Scan0)).ToArray
+
+                If drop Then
+                    ' just returns the first matche result if drop option is true
+                    Return all.ElementAtOrDefault(Scan0)
+                Else
+                    Return all
+                End If
+            ElseIf drop Then
+                ' product a character vector for first element hits
+                Return inputs _
+                    .Select(Function(str)
+                                Dim all = r.Matches(str).ToArray
+                                Dim first = all.ElementAtOrDefault(Scan0, [default]:="")
+                                Return first
+                            End Function) _
+                    .ToArray
             Else
+                ' product a list for all matches
                 Return inputs _
                     .SeqIterator _
                     .ToDictionary(Function(i) $"[[{i.i + 1}]]",
