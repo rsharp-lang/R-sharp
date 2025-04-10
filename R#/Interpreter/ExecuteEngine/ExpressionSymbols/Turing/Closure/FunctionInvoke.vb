@@ -210,6 +210,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Using env As New Environment(envir, stackFrame, isInherits:=True)
                 If TypeOf target Is Regex Then
                     ' regexp match
+
+
                     result = Regexp.Matches(target, parameters(Scan0), env)
                 ElseIf target Is Nothing AndAlso TypeOf funcName Is Literal Then
                     ' 可能是一个系统的内置函数

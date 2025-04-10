@@ -270,6 +270,25 @@ Namespace Runtime.Components
             Next
         End Function
 
+        Public Shared Function GetArgumentValue(args As Expression(), name$, offset%, [default] As Object, env As Environment) As Object
+            ' find by name at first
+            For Each arg As Expression In args
+                If TypeOf arg Is ValueAssignExpression Then
+                    If GetSymbolName(DirectCast(arg, ValueAssignExpression).targetSymbols(0)) = name Then
+                        Return DirectCast(arg, ValueAssignExpression).EvaluateValue(env)
+                    End If
+                End If
+            Next
+
+            Dim valExpr As Expression = args.ElementAtOrNull(offset)
+
+            If valExpr Is Nothing Then
+                Return [default]
+            Else
+                Return valExpr.Evaluate(env)
+            End If
+        End Function
+
         ''' <summary>
         ''' 
         ''' </summary>
