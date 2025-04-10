@@ -151,6 +151,22 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Return DoValueAssign(envir, value.Evaluate(envir))
         End Function
 
+        ''' <summary>
+        ''' evaluate the <see cref="value"/> expression as the clr runtime value.
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function EvaluateValue(env As Environment) As Object
+            Return value.Evaluate(env)
+        End Function
+
+        ''' <summary>
+        ''' set the given <paramref name="value"/> to <see cref="targetSymbols"/>.
+        ''' </summary>
+        ''' <param name="envir"></param>
+        ''' <param name="value"></param>
+        ''' <returns></returns>
         Public Function DoValueAssign(envir As Environment, value As Object) As Object
             If TypeOf value Is IfPromise Then
                 ' 如果是if分支返回的结果，则将if分支的赋值对象设置为

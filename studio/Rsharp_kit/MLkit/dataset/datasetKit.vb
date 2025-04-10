@@ -252,6 +252,27 @@ Module datasetKit
         Return MathDataSet.toDataframe(features, args, env)
     End Function
 
+    <ExportAPI("read.feature_frame")>
+    <RApiReturn(GetType(FeatureFrame))>
+    Public Function readDataframe(<RRawVectorArgument>
+                                  file As Object,
+                                  Optional deli As String = ",",
+                                  Optional verbose_progress As Boolean = True,
+                                  Optional env As Environment = Nothing) As Object
+
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env)
+
+        If s Like GetType(Message) Then
+            Return s.TryCast(Of Message)
+        End If
+
+        Return FeatureFrame.read_csv(
+            file:=s.TryCast(Of Stream),
+            delimiter:=deli,
+            verbose:=verbose_progress
+        )
+    End Function
+
     ''' <summary>
     ''' Sequence Graph Transform (SGT) — Sequence Embedding for Clustering, Classification, and Search
     ''' 
