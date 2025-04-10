@@ -280,6 +280,7 @@ Namespace Runtime.Components
                 End If
             Next
 
+            ' get parameter by offsets
             Dim valExpr As Expression = args.ElementAtOrNull(offset)
 
             If valExpr Is Nothing Then

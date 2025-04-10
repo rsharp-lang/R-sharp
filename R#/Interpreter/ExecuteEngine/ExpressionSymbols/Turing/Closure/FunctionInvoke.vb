@@ -210,9 +210,20 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             Using env As New Environment(envir, stackFrame, isInherits:=True)
                 If TypeOf target Is Regex Then
                     ' regexp match
+                    Dim drop_opt As Object = InvokeParameter.GetArgumentValue(parameters, "drop", 1, [default]:=False, envir)
 
+                    If Program.isException(drop_opt) Then
+                        Return drop_opt
+                    End If
 
-                    result = Regexp.Matches(target, parameters(Scan0), env)
+                    result = Regexp.Matches(
+                        r:=target,
+                        text:=parameters(Scan0),
+                        drop:=CLRVector _
+                            .asLogical(drop_opt) _
+                            .ElementAtOrDefault(Scan0, [default]:=False),
+                        env:=env
+                    )
                 ElseIf target Is Nothing AndAlso TypeOf funcName Is Literal Then
                     ' 可能是一个系统的内置函数
                     result = invokeRInternal(DirectCast(funcName, Literal).ValueStr, env)
@@ -496,7 +507,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         Private Function runOptions(env As Environment) As Object
             Dim names As String()
 
-            If parameters.Count = 1 Then
+            If parameters.Length = 1 Then
                 Dim firstInput = parameters(Scan0).Evaluate(env)
 
                 If firstInput.GetType Is GetType(list) Then
