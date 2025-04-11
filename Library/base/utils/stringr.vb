@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::bdd663518f65fe8fe9e51713582b0d0c, Library\base\utils\stringr.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 220
-    '    Code Lines: 146 (66.36%)
-    ' Comment Lines: 42 (19.09%)
-    '    - Xml Docs: 95.24%
-    ' 
-    '   Blank Lines: 32 (14.55%)
-    '     File Size: 8.12 KB
+' Summaries:
 
 
-    ' Module stringr
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asciiString, createRObj, fromXML, Levenshtein, multipleTextAlignment
-    '               shortest_common_superstring, unescapeRRawstring, unescapeRUnicode
-    '     Structure CharCompare
-    ' 
-    '         Function: GetSimilarityScore
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 220
+'    Code Lines: 146 (66.36%)
+' Comment Lines: 42 (19.09%)
+'    - Xml Docs: 95.24%
+' 
+'   Blank Lines: 32 (14.55%)
+'     File Size: 8.12 KB
+
+
+' Module stringr
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asciiString, createRObj, fromXML, Levenshtein, multipleTextAlignment
+'               shortest_common_superstring, unescapeRRawstring, unescapeRUnicode
+'     Structure CharCompare
+' 
+'         Function: GetSimilarityScore
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -67,6 +67,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.xml
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
+Imports Microsoft.VisualBasic.Text.Similarity
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -74,6 +75,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports RHtml = SMRUCC.Rsharp.Runtime.Internal.htmlPrinter
 Imports Rlang = Microsoft.VisualBasic.My.RlangInterop
+Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 ''' <summary>
 ''' Simple, Consistent Wrappers for Common String Operations
@@ -99,8 +101,35 @@ Module stringr
     ''' <param name="y$"></param>
     ''' <returns></returns>
     <ExportAPI("levenshtein")>
-    Public Function Levenshtein(x$, y$) As DistResult
-        Return LevenshteinDistance.ComputeDistance(x, y)
+    <RApiReturn(GetType(DistResult))>
+    Public Function Levenshtein(<RRawVectorArgument> x As Object, y$, Optional score As Boolean = True, Optional env As Environment = Nothing) As Object
+        Dim strs As String() = CLRVector.asCharacter(x)
+
+        If strs.IsNullOrEmpty Then
+            Return Nothing
+        End If
+
+        If strs.Length = 1 Then
+            If score Then
+                Return Evaluations.LevenshteinEvaluate(strs(0), y)
+            Else
+                Return LevenshteinDistance.ComputeDistance(strs(0), y)
+            End If
+        Else
+            ' returns a dataframe
+            Dim table As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+
+            Call table.add("x", strs)
+            Call table.add("y", {y})
+
+            If score Then
+                Call table.add("score", From str As String In strs Select Evaluations.LevenshteinEvaluate(str, y))
+            Else
+                Call table.add("score", From str As String In strs Select LevenshteinDistance.ComputeDistance(str, y))
+            End If
+
+            Return table
+        End If
     End Function
 
     ''' <summary>
