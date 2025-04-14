@@ -64,6 +64,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.Bootstrapping
+Imports Microsoft.VisualBasic.Data.Bootstrapping.LASSO
 Imports Microsoft.VisualBasic.Data.Bootstrapping.Multivariate
 Imports Microsoft.VisualBasic.Data.Framework.IO
 Imports Microsoft.VisualBasic.Language
@@ -598,6 +599,33 @@ theta = {objToString(thetaFunc, env:=env)}
     <ExportAPI("loess")>
     Public Function loess(formula As FormulaExpression, data As Object, Optional env As Environment = Nothing) As Object
         Throw New NotImplementedException
+    End Function
+
+    ''' <summary>
+    ''' lasso fit
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="y"></param>
+    ''' <param name="alpha"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("lasso")>
+    <RApiReturn(GetType(LassoFit))>
+    Public Function lasso_fit(x As Rdataframe, <RRawVectorArgument> y As Object, Optional alpha As Integer = 1, Optional env As Environment = Nothing) As Object
+        Dim yd As Double() = CLRVector.asNumeric(y)
+        Dim lasso As New LassoFitGenerator()
+        Dim i As i32 = 0
+
+        Call lasso.init(x.ncols, x.nrows)
+
+        For Each row As NamedCollection(Of Object) In x.forEachRow
+            Call lasso.setObservationValues(i, CLRVector.asFloat(row.value))
+            Call lasso.setTarget(++i, yd(i))
+        Next
+
+        Dim fit As LassoFit = lasso.fit(-1)
+
+        Return fit
     End Function
 
     ''' <summary>

@@ -112,6 +112,7 @@ Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.ANOVA
 Imports Microsoft.VisualBasic.Math.Statistics.Hypothesis.FishersExact
 Imports Microsoft.VisualBasic.Math.Statistics.Linq
+Imports Microsoft.VisualBasic.Math.Statistics.MomentFunctions
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp
 Imports SMRUCC.Rsharp.Interpreter
@@ -128,8 +129,6 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports std = System.Math
 Imports stdVector = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
-Imports Microsoft.VisualBasic.Math.Statistics.MomentFunctions
-
 
 #If NET48 Then
 Imports Pen = System.Drawing.Pen
