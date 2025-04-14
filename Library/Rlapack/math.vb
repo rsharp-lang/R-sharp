@@ -620,7 +620,7 @@ theta = {objToString(thetaFunc, env:=env)}
 
         For Each row As NamedCollection(Of Object) In x.forEachRow
             Call lasso.setObservationValues(i, CLRVector.asFloat(row.value))
-            Call lasso.setTarget(++i, yd(i))
+            Call lasso.setTarget(i, yd(++i))
         Next
 
         Dim fit As LassoFit = lasso.fit(-1)
