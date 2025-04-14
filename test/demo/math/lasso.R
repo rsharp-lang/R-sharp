@@ -6,4 +6,4 @@ print(data[,11]);
 
 let fit = lasso(data[,-11], data[,11]);
 
-str(as.list(fit));
+print(as.data.frame(fit));

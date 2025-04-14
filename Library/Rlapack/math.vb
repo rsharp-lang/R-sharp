@@ -139,7 +139,7 @@ Module math
 
     <RGenericOverloads("as.data.frame")>
     Private Function lassoResultTable(lasso As LassoFit, args As list, env As Environment) As Rdataframe
-
+        Return New Rdataframe With {.columns = lasso.toDataFrame}
     End Function
 
     ''' <summary>
@@ -622,7 +622,7 @@ theta = {objToString(thetaFunc, env:=env)}
         Dim lasso As New LassoFitGenerator()
         Dim i As i32 = 0
 
-        Call lasso.init(x.ncols, x.nrows)
+        Call lasso.init(x.colnames, x.nrows)
 
         For Each row As NamedCollection(Of Object) In x.forEachRow
             Call lasso.setObservationValues(i, CLRVector.asNumeric(row.value))
