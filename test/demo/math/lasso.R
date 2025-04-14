@@ -7,3 +7,5 @@ print(data[,11]);
 let fit = lasso(data[,-11], data[,11]);
 
 print(as.data.frame(fit));
+
+write.csv(as.data.frame(fit), file = file.path(@dir,"diabetes_lasso.csv"), row.names = FALSE);
