@@ -622,6 +622,11 @@ theta = {objToString(thetaFunc, env:=env)}
         Dim lasso As New LassoFitGenerator()
         Dim i As i32 = 0
 
+        LassoFitGenerator.tqdm_verbose = env.globalEnvironment _
+            .options _
+            .getOption("tqdm_progress", [default]:="true", env) _
+            .ParseBoolean
+
         Call lasso.init(x.colnames, x.nrows)
 
         For Each row As NamedCollection(Of Object) In x.forEachRow
