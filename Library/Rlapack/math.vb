@@ -113,6 +113,7 @@ Module math
     Sub New()
         REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(ODEsOut), AddressOf create_deSolve_DataFrame)
         REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(DataBinBox(Of Double)()), AddressOf getBinTable)
+        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(LassoFit), AddressOf lassoResultTable)
 
         REnv.Internal.generic.add("summary", GetType(lmCall), AddressOf summaryFit)
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of lmCall)(Function(o) o.ToString)
@@ -134,6 +135,11 @@ Module math
         Else
             Return bin.Raw.Max
         End If
+    End Function
+
+    <RGenericOverloads("as.data.frame")>
+    Private Function lassoResultTable(lasso As LassoFit, args As list, env As Environment) As Rdataframe
+
     End Function
 
     ''' <summary>
@@ -619,12 +625,11 @@ theta = {objToString(thetaFunc, env:=env)}
         Call lasso.init(x.ncols, x.nrows)
 
         For Each row As NamedCollection(Of Object) In x.forEachRow
-            Call lasso.setObservationValues(i, CLRVector.asFloat(row.value))
+            Call lasso.setObservationValues(i, CLRVector.asNumeric(row.value))
             Call lasso.setTarget(i, yd(++i))
         Next
 
         Dim fit As LassoFit = lasso.fit(-1)
-
         Return fit
     End Function
 
