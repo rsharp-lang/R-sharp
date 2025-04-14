@@ -1264,7 +1264,7 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' open a *.gz file for make file data read/write
         ''' </summary>
-        ''' <param name="description$"></param>
+        ''' <param name="description"></param>
         ''' <returns>stream object for read/write data</returns>
         <ExportAPI("gzfile")>
         <RApiReturn(GetType(Stream))>
