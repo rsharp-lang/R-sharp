@@ -1,71 +1,71 @@
-﻿#Region "Microsoft.VisualBasic::e9f9c5456fb63b4ecf3af2eced0a68ec, R#\Runtime\Internal\internalInvokes\utils.vb"
+﻿#Region "Microsoft.VisualBasic::019f6f5ca3788c80dd6e21d70bf4ebe2, R#\Runtime\Internal\internalInvokes\utils.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 1541
-'    Code Lines: 808 (52.43%)
-' Comment Lines: 589 (38.22%)
-'    - Xml Docs: 88.79%
-' 
-'   Blank Lines: 144 (9.34%)
-'     File Size: 72.64 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module utils
-' 
-'         Function: castTS, createAlternativeName, createCommandLine, createTimespan, data
-'                   dataSearchByPackageDir, debugTool, description, FindSystemFile, GetInstalledPackages
-'                   (+2 Overloads) getPackageSystemFile, head, installPackages, keyGroups, loadByName
-'                   md5, memorySize, now, progress_bar, readFile
-'                   setTqdmProgressBarlabel, system, systemFile, tqdm_wrap, wget_file
-'                   workdir
-' 
-'         Sub: cls, pause, sleep
-'         Enum TimeSpanUnits
-' 
-'             Days, Hours, Milliseconds, Minutes, Seconds
-'             Ticks
-' 
-' 
-' 
-'  
-' 
-'     Function: create_zip, package_skeleton, sendMessage, unzipFile
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 1698
+    '    Code Lines: 868 (51.12%)
+    ' Comment Lines: 676 (39.81%)
+    '    - Xml Docs: 88.02%
+    ' 
+    '   Blank Lines: 154 (9.07%)
+    '     File Size: 81.64 KB
+
+
+    '     Module utils
+    ' 
+    '         Function: castTS, createAlternativeName, (+2 Overloads) createArgumentString, createCommandLine, createTimespan
+    '                   data, dataSearchByPackageDir, debugTool, description, FindSystemFile
+    '                   GetInstalledPackages, (+2 Overloads) getPackageSystemFile, head, installPackages, keyGroups
+    '                   loadByName, md5, memorySize, now, progress_bar
+    '                   readFile, setTqdmProgressBarlabel, system, system2, systemFile
+    '                   tqdm_wrap, wget_file, workdir
+    ' 
+    '         Sub: cls, pause, sleep
+    '         Enum TimeSpanUnits
+    ' 
+    '             Days, Hours, Milliseconds, Minutes, Seconds
+    '             Ticks
+    ' 
+    ' 
+    ' 
+    '  
+    ' 
+    '     Function: create_zip, package_skeleton, sendMessage, unzipFile
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

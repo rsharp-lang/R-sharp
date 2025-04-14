@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::26f0e525451e4b7e8d3a531729b32f36, studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
+﻿#Region "Microsoft.VisualBasic::5777705aba9d5fbef0f386040327e770, studio\Rsharp_kit\MLkit\dataset\datasetKit.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1129
-    '    Code Lines: 791 (70.06%)
-    ' Comment Lines: 209 (18.51%)
+    '   Total Lines: 1150
+    '    Code Lines: 808 (70.26%)
+    ' Comment Lines: 209 (18.17%)
     '    - Xml Docs: 93.78%
     ' 
-    '   Blank Lines: 129 (11.43%)
-    '     File Size: 47.30 KB
+    '   Blank Lines: 133 (11.57%)
+    '     File Size: 48.08 KB
 
 
     ' Module datasetKit
@@ -50,10 +50,11 @@
     '               dataDescription, demoMatrix, dimensionRange, EmbeddingRender, Encoding
     '               estimate_alphabets, factorEncoder, fit_embedding, fitSgt, get_feature
     '               getDataSetDimension, getMNISTImageSize, getMNISTRawDataset, getNormalizeMatrix, mapEncoder
-    '               mapLambda, project_features, q_factors, readMNISTLabelledVector, readModelDataset
-    '               readSampleSet, sample_id, sampledataDataSet, SampleList, SGT
-    '               sort_samples, sortById, split_training_test, Tabular, TakeSubset
-    '               toDataframe, toFeatureSet, toMatrix, writeMLDataset, writeSampleSet
+    '               mapLambda, project_features, q_factors, readDataframe, readMNISTLabelledVector
+    '               readModelDataset, readSampleSet, sample_id, sampledataDataSet, SampleList
+    '               SGT, sort_samples, sortById, split_training_test, Tabular
+    '               TakeSubset, toDataframe, toFeatureSet, toMatrix, writeMLDataset
+    '               writeSampleSet
     ' 
     ' /********************************************************************************/
 

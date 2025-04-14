@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7ae7ab18ffa1f259c8ef4a147d8c9a90, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssignExpression.vb"
+﻿#Region "Microsoft.VisualBasic::1ddc30ac2d09082cf69bde57faa1968d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\ValueAssignExpression.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 372
-    '    Code Lines: 266 (71.51%)
-    ' Comment Lines: 51 (13.71%)
-    '    - Xml Docs: 62.75%
+    '   Total Lines: 388
+    '    Code Lines: 270 (69.59%)
+    ' Comment Lines: 62 (15.98%)
+    '    - Xml Docs: 69.35%
     ' 
-    '   Blank Lines: 55 (14.78%)
-    '     File Size: 15.60 KB
+    '   Blank Lines: 56 (14.43%)
+    '     File Size: 16.24 KB
 
 
     '     Class ValueAssignExpression
@@ -50,8 +50,8 @@
     ' 
     '         Constructor: (+3 Overloads) Sub New
     '         Function: assignSymbol, assignTuples, doValueAssign, DoValueAssign, Evaluate
-    '                   GetSymbol, getSymbols, setFromDataFrame, setFromObjectList, setFromVector
-    '                   ToString
+    '                   EvaluateValue, GetSymbol, getSymbols, setFromDataFrame, setFromObjectList
+    '                   setFromVector, ToString
     ' 
     ' 
     ' /********************************************************************************/

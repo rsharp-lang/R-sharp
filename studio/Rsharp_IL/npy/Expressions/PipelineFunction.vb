@@ -1,56 +1,56 @@
-﻿#Region "Microsoft.VisualBasic::e56680189dff08a1c970df216fe00009, studio\Rsharp_IL\npy\Expressions\PipelineFunction.vb"
+﻿#Region "Microsoft.VisualBasic::90b88e0f7159fca91bfa7b664e242d1b, studio\Rsharp_IL\npy\Expressions\PipelineFunction.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 90
-'    Code Lines: 70 (77.78%)
-' Comment Lines: 7 (7.78%)
-'    - Xml Docs: 42.86%
-' 
-'   Blank Lines: 13 (14.44%)
-'     File Size: 3.41 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Class PipelineFunction
-' 
-'     Properties: callFunc, expressionName, pipeNextInvoke, type
-' 
-'     Constructor: (+1 Overloads) Sub New
-'     Function: doPipNextInvoke, Evaluate, ToString
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 104
+    '    Code Lines: 82 (78.85%)
+    ' Comment Lines: 7 (6.73%)
+    '    - Xml Docs: 42.86%
+    ' 
+    '   Blank Lines: 15 (14.42%)
+    '     File Size: 3.98 KB
+
+
+    ' Class PipelineFunction
+    ' 
+    '     Properties: callFunc, expressionName, pipeNextInvoke, type
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    '     Function: doPipNextInvoke, Evaluate, ToString
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

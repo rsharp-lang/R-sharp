@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0cc867cabb3501aa5d2d31338ddb6e33, R#\Language\Syntax\SyntaxImplements\FunctionInvokeSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::b89a066448deeb44279bcfce221abd42, R#\Language\Syntax\SyntaxImplements\FunctionInvokeSyntax.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 138
-    '    Code Lines: 109 (78.99%)
-    ' Comment Lines: 12 (8.70%)
+    '   Total Lines: 137
+    '    Code Lines: 108 (78.83%)
+    ' Comment Lines: 12 (8.76%)
     '    - Xml Docs: 41.67%
     ' 
-    '   Blank Lines: 17 (12.32%)
-    '     File Size: 5.64 KB
+    '   Blank Lines: 17 (12.41%)
+    '     File Size: 5.61 KB
 
 
     '     Module FunctionInvokeSyntax

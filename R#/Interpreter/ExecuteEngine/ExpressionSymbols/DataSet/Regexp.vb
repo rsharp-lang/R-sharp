@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0b3456dc5239ae10dd97540414ed9c6e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Regexp.vb"
+﻿#Region "Microsoft.VisualBasic::9fb0627ecf4659fbb4d151c407bf6132, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Regexp.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 97
-    '    Code Lines: 69 (71.13%)
-    ' Comment Lines: 15 (15.46%)
-    '    - Xml Docs: 100.00%
+    '   Total Lines: 132
+    '    Code Lines: 81 (61.36%)
+    ' Comment Lines: 36 (27.27%)
+    '    - Xml Docs: 72.22%
     ' 
-    '   Blank Lines: 13 (13.40%)
-    '     File Size: 3.53 KB
+    '   Blank Lines: 15 (11.36%)
+    '     File Size: 5.80 KB
 
 
     '     Class Regexp

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fb729e0e67a8166c8434e65b323301c7, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
+﻿#Region "Microsoft.VisualBasic::4497643a2018732f29e289b6e5c5b939, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\FunctionInvoke.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 471
-    '    Code Lines: 284 (60.30%)
-    ' Comment Lines: 135 (28.66%)
+    '   Total Lines: 484
+    '    Code Lines: 295 (60.95%)
+    ' Comment Lines: 135 (27.89%)
     '    - Xml Docs: 67.41%
     ' 
-    '   Blank Lines: 52 (11.04%)
-    '     File Size: 19.52 KB
+    '   Blank Lines: 54 (11.16%)
+    '     File Size: 20.06 KB
 
 
     '     Class FunctionInvoke
