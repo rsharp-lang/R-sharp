@@ -621,12 +621,23 @@ Namespace Runtime.Internal.Invokes
             ElseIf TypeOf args Is CommandLine Then
                 Return DirectCast(args, CommandLine).ToString
             Else
-                Return CLRVector.asCharacter(args) _
-                    .Select(Function(s) s.CLIToken) _
-                    .JoinBy(" ") _
-                    .Replace(vbCr, " ") _
-                    .Replace(vbLf, " ") _
-                    .Trim
+                Dim strs As String() = CLRVector.asCharacter(args)
+
+                If strs.IsNullOrEmpty Then
+                    Return ""
+                ElseIf strs.Length = 1 Then
+                    ' is already been a commandline argument string
+                    ' returns directly
+                    Return strs(0)
+                Else
+                    ' input a string array, needs to be processed as argument string
+                    Return strs _
+                        .Select(Function(s) s.CLIToken) _
+                        .JoinBy(" ") _
+                        .Replace(vbCr, " ") _
+                        .Replace(vbLf, " ") _
+                        .Trim
+                End If
             End If
         End Function
 
