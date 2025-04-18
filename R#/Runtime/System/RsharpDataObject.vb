@@ -121,14 +121,26 @@ Namespace Runtime.Components
         ''' </summary>
         ''' <param name="name"></param>
         ''' <param name="val"></param>
+        ''' <example>
+        ''' <code>
+        ''' Dim obj As New RsharpDataObject
+        ''' obj.setAttribute("name", "value")
+        ''' </code>
+        ''' </example>
+        ''' <returns>this function returns the object itself for the chaining call</returns>
+        ''' <remarks>
+        ''' this function will create a new dictionary object if the attribute data is not initialized
+        ''' </remarks>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Sub setAttribute(name As String, val As Object)
+        Public Function setAttribute(name As String, val As Object) As RsharpDataObject
             If m_attributes Is Nothing Then
                 m_attributes = New Dictionary(Of String, Object)
             End If
 
             m_attributes(name) = val
-        End Sub
+
+            Return Me
+        End Function
 
         ''' <summary>
         ''' Get all attribute name that tagged with current symbol object.
