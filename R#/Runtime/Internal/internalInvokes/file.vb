@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6f8e8ac26dcec92710f2a93f7f4d8e05, R#\Runtime\Internal\internalInvokes\file.vb"
+﻿#Region "Microsoft.VisualBasic::601c369f72485cfc8c593663893ff00b, R#\Runtime\Internal\internalInvokes\file.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1855
-    '    Code Lines: 1063 (57.30%)
-    ' Comment Lines: 602 (32.45%)
+    '   Total Lines: 1878
+    '    Code Lines: 1081 (57.56%)
+    ' Comment Lines: 602 (32.06%)
     '    - Xml Docs: 88.37%
     ' 
-    '   Blank Lines: 190 (10.24%)
-    '     File Size: 84.42 KB
+    '   Blank Lines: 195 (10.38%)
+    '     File Size: 85.33 KB
 
 
     '     Enum endianness
@@ -53,6 +53,8 @@
     ' 
     '     Module file
     ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
     '         Function: [erase], basename, buffer, bytes, close
     '                   dataUri, dir_exists, dirCopy, dirCreate, dirname
     '                   exists, file, file_allocate, file_ext, filecopy
@@ -60,10 +62,10 @@
     '                   getRelativePath, GetSha1Hash, getwd, gzfile, handleWriteLargeTextStream
     '                   isSystemDir, listDirs, listFiles, loadListInternal, NextTempToken
     '                   normalizeFileName, normalizePath, openDir, openGzip, openTargzip
-    '                   openZip, readBin, readBinOverloads, readFromFile, readFromStream
-    '                   readLines, readList, readText, Rhome, saveList
-    '                   scanZipFiles, setwd, tempdir, tempfile, writeBin
-    '                   writeLines
+    '                   openZip, readBin, readBinDataframe, readBinOverloads, readFromFile
+    '                   readFromStream, readLines, readList, readText, Rhome
+    '                   saveList, scanZipFiles, setwd, tempdir, tempfile
+    '                   writeBin, writeBinDataframe, writeLines
     ' 
     '         Sub: fileRemove, fileRename, unlinks
     ' 

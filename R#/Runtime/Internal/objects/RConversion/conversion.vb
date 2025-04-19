@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2955b19828ad788ad5278f03f3995620, R#\Runtime\Internal\objects\RConversion\conversion.vb"
+﻿#Region "Microsoft.VisualBasic::6bfbed6bc83b34aefce212339bac2f3b, R#\Runtime\Internal\objects\RConversion\conversion.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1426
-    '    Code Lines: 848 (59.47%)
-    ' Comment Lines: 438 (30.72%)
-    '    - Xml Docs: 77.17%
+    '   Total Lines: 1427
+    '    Code Lines: 848 (59.43%)
+    ' Comment Lines: 439 (30.76%)
+    '    - Xml Docs: 76.99%
     ' 
-    '   Blank Lines: 140 (9.82%)
-    '     File Size: 64.46 KB
+    '   Blank Lines: 140 (9.81%)
+    '     File Size: 64.48 KB
 
 
     '     Module RConversion

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::019f6f5ca3788c80dd6e21d70bf4ebe2, R#\Runtime\Internal\internalInvokes\utils.vb"
+﻿#Region "Microsoft.VisualBasic::ba7c9f6e1037406f9fb515800fe16585, R#\Runtime\Internal\internalInvokes\utils.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1698
-    '    Code Lines: 868 (51.12%)
-    ' Comment Lines: 676 (39.81%)
-    '    - Xml Docs: 88.02%
+    '   Total Lines: 1709
+    '    Code Lines: 875 (51.20%)
+    ' Comment Lines: 679 (39.73%)
+    '    - Xml Docs: 87.63%
     ' 
-    '   Blank Lines: 154 (9.07%)
-    '     File Size: 81.64 KB
+    '   Blank Lines: 155 (9.07%)
+    '     File Size: 82.10 KB
 
 
     '     Module utils

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::33498dc60eb61f1651c47e749a762050, R#\Runtime\Serialize\bufferObjects\dataframeBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::8977ffe9078e926989741c9667fa1a48, R#\Runtime\Serialize\bufferObjects\dataframeBuffer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 131
-    '    Code Lines: 108 (82.44%)
-    ' Comment Lines: 0 (0.00%)
-    '    - Xml Docs: 0.00%
+    '   Total Lines: 135
+    '    Code Lines: 108 (80.00%)
+    ' Comment Lines: 4 (2.96%)
+    '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 23 (17.56%)
-    '     File Size: 4.70 KB
+    '   Blank Lines: 23 (17.04%)
+    '     File Size: 4.84 KB
 
 
     '     Class dataframeBuffer
