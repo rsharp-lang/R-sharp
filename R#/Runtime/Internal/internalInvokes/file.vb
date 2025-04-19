@@ -122,6 +122,11 @@ Namespace Runtime.Internal.Invokes
     <Package("file")>
     Public Module file
 
+        Sub New()
+            Call generic.add("writeBin", GetType(dataframe), AddressOf writeBinDataframe)
+            Call generic.add("readBin.dataframe", GetType(Stream), AddressOf readBinDataframe)
+        End Sub
+
         ''' <summary>
         ''' # Generate SHA1 checksum of a file
         ''' </summary>
@@ -1510,6 +1515,24 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Return out
+        End Function
+
+        <RGenericOverloads("writeBin")>
+        Private Function writeBinDataframe(dataframe As dataframe, args As list, env As Environment) As Object
+            Dim con As Stream = args!con
+            Dim buffer As New dataframeBuffer(dataframe, env)
+
+            Call buffer.Serialize(con)
+            Call con.Flush()
+
+            Return True
+        End Function
+
+        <RGenericOverloads("readBin.dataframe")>
+        Private Function readBinDataframe(s As Stream, args As list, env As Environment) As Object
+            Dim buffer As New dataframeBuffer(s)
+            Dim df As dataframe = buffer.getFrame
+            Return df
         End Function
 
         ''' <summary>

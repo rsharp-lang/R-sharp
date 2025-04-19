@@ -93,6 +93,10 @@ Namespace Runtime.Serialize
             Call MyBase.New(data)
         End Sub
 
+        ''' <summary>
+        ''' write dataframe value to binary file
+        ''' </summary>
+        ''' <param name="buffer"></param>
         Public Overrides Sub Serialize(buffer As Stream)
             Dim colnames As String() = dataframe.colnames
             Dim rownames As String() = dataframe.getRowNames
