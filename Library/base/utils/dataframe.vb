@@ -606,7 +606,11 @@ ReturnTable:
     ''' <param name="envir"></param>
     ''' <returns></returns>
     <ExportAPI("dataset.vector")>
-    Public Function vector(dataset As Array, col$, <RByRefValueAssign> Optional values As Array = Nothing, Optional envir As Environment = Nothing) As Object
+    Public Function vector(dataset As Array, col$,
+                           <RByRefValueAssign>
+                           Optional values As Array = Nothing,
+                           Optional envir As Environment = Nothing) As Object
+
         If dataset Is Nothing OrElse dataset.Length = 0 Then
             Return Nothing
         End If
@@ -787,6 +791,7 @@ ReturnTable:
     ''' <param name="mode"></param>
     ''' <returns></returns>
     <ExportAPI("read.dataframe")>
+    <RApiReturn(GetType(Rdataframe))>
     Public Function readDataSet(file$,
                                 Optional mode As DataModes = DataModes.numeric,
                                 Optional toRObj As Boolean = False,
