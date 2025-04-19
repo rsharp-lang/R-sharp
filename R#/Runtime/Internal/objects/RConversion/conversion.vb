@@ -361,7 +361,7 @@ Namespace Runtime.Internal.Object.Converts
             If x Is Nothing Then
                 Return x
             ElseIf TypeOf x Is dataframe Then
-                ' clone object
+                ' clone dataframe object
                 Dim raw As dataframe = x
                 Dim clone As New dataframe With {
                     .columns = raw.columns _
@@ -373,7 +373,8 @@ Namespace Runtime.Internal.Object.Converts
                 }
 
                 Return clone
-            ElseIf x.GetType.IsArray AndAlso DirectCast(x, Array).Length = 0 Then
+            ElseIf base.length(x) = 0 Then
+                ' check for general collection size
                 Return Nothing
             End If
 

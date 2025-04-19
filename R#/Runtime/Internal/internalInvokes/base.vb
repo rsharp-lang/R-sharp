@@ -2422,6 +2422,7 @@ RE0:
             If type.IsArray Then
                 Return DirectCast(x, Array).Length
             ElseIf type.ImplementInterface(GetType(RIndex)) Then
+                ' list/vector
                 Return DirectCast(x, RIndex).length
             ElseIf type.ImplementInterface(GetType(IDictionary)) Then
                 Return DirectCast(x, IDictionary).Count
@@ -2431,6 +2432,8 @@ RE0:
                 Return DirectCast(x, Group).length
             ElseIf type Is GetType(collectionSet) Then
                 Return DirectCast(x, collectionSet).Length
+            ElseIf type.ImplementInterface(Of IList) Then
+                Return DirectCast(x, IList).Count
             Else
                 Return 1
             End If
