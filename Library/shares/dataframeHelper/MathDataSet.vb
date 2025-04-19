@@ -1,5 +1,6 @@
 ﻿#If MATH_DATASET Then
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Data.Framework
 Imports SMRUCC.Rsharp.Runtime
@@ -17,6 +18,8 @@ Module MathDataSet
     ''' <param name="args"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
+    ''' 
+    <Extension>
     Friend Function toDataframe(features As FeatureFrame, args As list, env As Environment) As Rdataframe
         Return New Rdataframe With {
             .columns = features.features _

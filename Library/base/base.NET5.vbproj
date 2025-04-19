@@ -17,6 +17,7 @@
     <Product>R# language</Product>
     <Description>R# language internal base package, includes build-in functions for handling basic data file formats</Description>
     <PackageTags>netcdf;hdf5;json;xlsx;csv;txt;r-sharp</PackageTags>
+    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -64,7 +65,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
-    <DefineConstants>write_csv=1,UNIX=1</DefineConstants>
+    <DefineConstants>MATH_DATASET=1,write_csv=1,UNIX=1</DefineConstants>
     <DefineTrace>true</DefineTrace>
     <OutputPath>../../App\</OutputPath>
   </PropertyGroup>

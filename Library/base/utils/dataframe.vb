@@ -1,64 +1,65 @@
 ﻿#Region "Microsoft.VisualBasic::df912b561b9c8ea5af10f1a3b5414797, Library\base\utils\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 800
-    '    Code Lines: 592 (74.00%)
-    ' Comment Lines: 106 (13.25%)
-    '    - Xml Docs: 87.74%
-    ' 
-    '   Blank Lines: 102 (12.75%)
-    '     File Size: 31.01 KB
+' Summaries:
 
 
-    ' Module dataframe
-    ' 
-    '     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
-    '               colnames, column, create_tableFrame, createEntityRow, CreateRowObject
-    '               dataframeTable, deserialize, field_vector, loadDataframe, measureColumnVector
-    '               openCsv, parseDataframe, parseRow, printRowVector, printTable
-    '               project, rawToDataFrame, readCsvRaw, readDataSet, rows
-    '               rowToString, RowToString, stripCommentRows, to_dataframe, transpose
-    '               vector
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 800
+'    Code Lines: 592 (74.00%)
+' Comment Lines: 106 (13.25%)
+'    - Xml Docs: 87.74%
+' 
+'   Blank Lines: 102 (12.75%)
+'     File Size: 31.01 KB
+
+
+' Module dataframe
+' 
+'     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
+'               colnames, column, create_tableFrame, createEntityRow, CreateRowObject
+'               dataframeTable, deserialize, field_vector, loadDataframe, measureColumnVector
+'               openCsv, parseDataframe, parseRow, printRowVector, printTable
+'               project, rawToDataFrame, readCsvRaw, readDataSet, rows
+'               rowToString, RowToString, stripCommentRows, to_dataframe, transpose
+'               vector
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
@@ -72,6 +73,7 @@ Imports Microsoft.VisualBasic.Data.Framework
 Imports Microsoft.VisualBasic.Data.Framework.IO
 Imports Microsoft.VisualBasic.Data.Framework.IO.CSVFile
 Imports Microsoft.VisualBasic.Data.Framework.StorageProvider.Reflection
+Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
@@ -764,6 +766,9 @@ ReturnTable:
     ''' <summary>
     ''' load clr object from R# dataframe object
     ''' </summary>
+    ''' <param name="type">
+    ''' the clr type description of the taarget clr object <see cref="Type"/>
+    ''' </param>
     ''' <returns></returns>
     ''' 
     <ExportAPI("load.dataframe")>
@@ -787,13 +792,15 @@ ReturnTable:
     ''' <summary>
     ''' Read dataframe
     ''' </summary>
-    ''' <param name="file">the csv file</param>
-    ''' <param name="mode"></param>
+    ''' <param name="file">the csv file/scibasic binary dataframe file</param>
+    ''' <param name="mode">
+    ''' the data mode for read the general dataframe file, this parameter value only works for the csv text file.
+    ''' </param>
     ''' <returns></returns>
     <ExportAPI("read.dataframe")>
     <RApiReturn(GetType(Rdataframe))>
     Public Function readDataSet(file$,
-                                Optional mode As DataModes = DataModes.numeric,
+                                Optional mode As DataModes = DataModes.any,
                                 Optional toRObj As Boolean = False,
                                 Optional silent As Boolean = True,
                                 Optional strict As Boolean = False,
@@ -843,12 +850,29 @@ ReturnTable:
                     Return data
                 End If
             Case Else
-                dataframe = utils.read_csv(file)
+                Dim is_csv As Boolean = False
+
+                Using s As Stream = file.Open(FileMode.Open, doClear:=False, [readOnly]:=True, aggressive:=False)
+                    is_csv = s.CheckMagicNumber(FrameWriter.magic)
+                End Using
+
+                If is_csv Then
+                    dataframe = utils.read_csv(file)
+                Else
+                    dataframe = FrameReader.ReadFeatures(file).toDataframe(list.empty, env)
+                End If
         End Select
 
         Return dataframe
     End Function
 
+    ''' <summary>
+    ''' create a new entity row object
+    ''' </summary>
+    ''' <param name="id"></param>
+    ''' <param name="properties"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("entityRow")>
     Public Function createEntityRow(id As String,
                                     <RListObjectArgument>
