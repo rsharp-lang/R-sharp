@@ -36,7 +36,9 @@ Module MathDataSet
     ''' </summary>
     ''' <param name="x"></param>
     ''' <param name="env"></param>
-    ''' <returns></returns>
+    ''' <returns>
+    ''' this function may returns an error message if vectro data type cast error
+    ''' </returns>
     Public Function toFeatureSet(x As Rdataframe, Optional env As Environment = Nothing) As Object
         Dim featureSet As New Dictionary(Of String, FeatureVector)
         Dim general As Array

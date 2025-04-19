@@ -95,6 +95,7 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports Rsharp = SMRUCC.Rsharp
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
+Imports FeatureFrame = Microsoft.VisualBasic.Data.Framework.DataFrame
 
 ''' <summary>
 ''' The sciBASIC.NET dataframe api
@@ -494,6 +495,11 @@ ReturnTable:
         End If
     End Function
 
+    ''' <summary>
+    ''' cast the given array data as a single <see cref="RowObject"/>
+    ''' </summary>
+    ''' <param name="vals"></param>
+    ''' <returns></returns>
     <ExportAPI("row")>
     Public Function CreateRowObject(Optional vals As Array = Nothing) As RowObject
         Return New RowObject(vals.AsObjectEnumerator.Select(AddressOf any.ToString))
@@ -676,6 +682,12 @@ ReturnTable:
         Return New CharacterTable(pull.populates(Of EntityObject)(env))
     End Function
 
+    ''' <summary>
+    ''' get field string vector
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="colname"></param>
+    ''' <returns></returns>
     <ExportAPI("field_vector")>
     Public Function field_vector(x As CharacterTable, colname As String) As String()
         Return x(colname)
@@ -787,6 +799,52 @@ ReturnTable:
         Dim generic As Array = REnv.TryCastGenericArray(seq, env)
 
         Return generic
+    End Function
+
+    ''' <summary>
+    ''' write the given data as scibasic binary dataframe file
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="file"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("write.dataframe")>
+    Public Function writeDataframe(<RRawVectorArgument> x As Object, file As Object, Optional env As Environment = Nothing) As Object
+        Dim auto_close As Boolean = False
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env, is_filepath:=auto_close)
+        Dim frame As FeatureFrame
+
+        If s Like GetType(Message) Then
+            Return s.TryCast(Of Message)
+        End If
+
+        If x Is Nothing Then
+            frame = New FeatureFrame With {
+                .features = New Dictionary(Of String, FeatureVector),
+                .rownames = {}
+            }
+        ElseIf TypeOf x Is FeatureFrame Then
+            frame = DirectCast(x, FeatureFrame)
+        ElseIf TypeOf x Is Rdataframe Then
+            Dim cast = MathDataSet.toFeatureSet(DirectCast(x, Rdataframe), env)
+
+            If TypeOf cast Is Message Then
+                Return cast
+            Else
+                frame = DirectCast(cast, FeatureFrame)
+            End If
+        ElseIf TypeOf x Is vec OrElse x.GetType.IsArray Then
+
+        End If
+
+        Call frame.WriteFrame(s)
+        Call s.TryCast(Of Stream).Flush()
+
+        If auto_close Then
+            Call s.TryCast(Of Stream).Dispose()
+        End If
+
+        Return True
     End Function
 
     ''' <summary>
