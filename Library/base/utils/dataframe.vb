@@ -834,7 +834,19 @@ ReturnTable:
                 frame = DirectCast(cast, FeatureFrame)
             End If
         ElseIf TypeOf x Is vec OrElse x.GetType.IsArray Then
+            Dim source = CLRVector.asObject(x).TryCastGenericArray(env)
 
+            If TypeOf source Is Message Then
+                Return source
+            End If
+
+            Dim type As Type = source _
+                .GetType _
+                .GetElementType
+
+            frame = CLRVector.asObject(source).StreamToFrame(type)
+        Else
+            Return RInternal.debug.stop($"unsure how to cast object with type '{x.GetType.FullName}' to dataframe", env)
         End If
 
         Call frame.WriteFrame(s)
