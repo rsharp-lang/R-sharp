@@ -142,6 +142,7 @@ Partial Module CLI
 
                 If Not err Is Nothing Then
                     Call App.LogException(err)
+                    Call VBDebugger.PrintException(err.Message, enableRedirect:=False)
                     Return 500
                 End If
             Else
@@ -155,6 +156,7 @@ Partial Module CLI
 
                             If Not err Is Nothing Then
                                 Call App.LogException(err)
+                                Call VBDebugger.PrintException(err.Message, enableRedirect:=False)
                                 Return 500
                             End If
                         End If
