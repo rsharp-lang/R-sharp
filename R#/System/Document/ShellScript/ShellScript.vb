@@ -296,6 +296,11 @@ Namespace Development.CommandLine
                 Case GetType(ArgumentValue)
                     ' do nothing 
 
+                Case GetType(DotNetObject)
+                    ' 20250421
+                    ' do nothing
+                    ' [x]::xxx no way to add commandlinee argument getter
+
                 Case Else
                     Throw New NotImplementedException(expr.GetType.FullName)
             End Select
