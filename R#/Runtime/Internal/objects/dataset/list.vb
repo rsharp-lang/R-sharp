@@ -598,8 +598,40 @@ Namespace Runtime.Internal.Object
             Return i.Select(AddressOf getByIndex).ToArray
         End Function
 
+        ''' <summary>
+        ''' set value by index
+        ''' </summary>
+        ''' <param name="i">1-based index</param>
+        ''' <param name="value">any kind of the clr runtime value to store in this tuple list that associated with this index.</param>
+        ''' <param name="envir"></param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' the given index value <paramref name="i"/> should be a integer value from 1-based.
+        ''' </remarks>
+        ''' 
+        ''' <exception cref="NotImplementedException"></exception>
         Public Function setByIndex(i As Integer, value As Object, envir As Environment) As Object Implements RIndex.setByIndex
-            Throw New NotImplementedException()
+            ' 1-base to 0-base
+            i = i - 1
+
+            If i < slots.Count Then
+                ' value replace
+                Dim names As Dictionary(Of String, Object).KeyCollection = _slots.Keys
+                Dim key As String = names.ElementAt(i)
+
+                _slots(key) = value
+            Else
+                ' fill empty
+                Dim nsize = _slots.Count
+
+                For offset As Integer = nsize + 1 To i
+                    _slots.Add($"[[{offset}]]", Nothing)
+                Next
+
+                _slots($"[[{i + 1}]]") = value
+            End If
+
+            Return value
         End Function
 
         Public Function setByindex(i() As Integer, value As Array, envir As Environment) As Object Implements RIndex.setByindex

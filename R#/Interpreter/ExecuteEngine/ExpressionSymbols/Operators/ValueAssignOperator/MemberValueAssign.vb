@@ -165,6 +165,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End If
 
             ' character name index
+            Dim indexMode As RType = RType.TypeOf(index)
             Dim indexStr As String() = CLRVector.asCharacter(index)
             Dim result As Object
 
@@ -249,7 +250,11 @@ invalid_index:
             If symbolIndex.indexType = SymbolIndexers.nameIndex Then
                 ' a[[x]] <- v
                 ' a$x <- v
-                result = DirectCast(targetObj, RNameIndex).setByName(indexStr(Scan0), value, envir)
+                If indexMode.mode = TypeCodes.string Then
+                    result = DirectCast(targetObj, RNameIndex).setByName(indexStr(Scan0), value, envir)
+                Else
+                    result = DirectCast(targetObj, RIndex).setByIndex(CLRVector.asInteger(index)(Scan0), value, envir)
+                End If
 
                 If indexStr.Length > 1 Then
                     envir.AddMessage($"'{symbolIndex.index}' contains multiple index, only use first index key value...")
