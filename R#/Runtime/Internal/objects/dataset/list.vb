@@ -1,64 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::337be90c9ace8aa036f3545378b1476a, R#\Runtime\Internal\objects\dataset\list.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 692
-    '    Code Lines: 374 (54.05%)
-    ' Comment Lines: 229 (33.09%)
-    '    - Xml Docs: 91.27%
-    ' 
-    '   Blank Lines: 89 (12.86%)
-    '     File Size: 25.67 KB
+' Summaries:
 
 
-    '     Class list
-    ' 
-    '         Properties: data, is_empty, length, slots
-    ' 
-    '         Constructor: (+10 Overloads) Sub New
-    ' 
-    '         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) empty, (+2 Overloads) getByIndex
-    '                   (+2 Overloads) getByName, getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue
-    '                   GetVector, hasName, hasNames, listOf, namedValues
-    '                   set_empty, setByindex, setByIndex, (+2 Overloads) setByName, setNames
-    '                   slotKeys, subset, ToString
-    ' 
-    '         Sub: (+3 Overloads) add, unique_add
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 692
+'    Code Lines: 374 (54.05%)
+' Comment Lines: 229 (33.09%)
+'    - Xml Docs: 91.27%
+' 
+'   Blank Lines: 89 (12.86%)
+'     File Size: 25.67 KB
+
+
+'     Class list
+' 
+'         Properties: data, is_empty, length, slots
+' 
+'         Constructor: (+10 Overloads) Sub New
+' 
+'         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) empty, (+2 Overloads) getByIndex
+'                   (+2 Overloads) getByName, getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue
+'                   GetVector, hasName, hasNames, listOf, namedValues
+'                   set_empty, setByindex, setByIndex, (+2 Overloads) setByName, setNames
+'                   slotKeys, subset, ToString
+' 
+'         Sub: (+3 Overloads) add, unique_add
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -138,24 +138,49 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <param name="list"></param>
         Sub New(list As list)
-            slots = New Dictionary(Of String, Object)(list.slots)
+            If list Is Nothing OrElse list.slots Is Nothing Then
+                Call EmptyListWarningMessage.Warning
+
+                ' create empty list
+                slots = New Dictionary(Of String, Object)
+            Else
+                slots = New Dictionary(Of String, Object)(list.slots)
+            End If
+
             elementType = list.elementType
         End Sub
 
         Sub New(list As Dictionary(Of String, Object))
-            _slots = list
+            _slots = If(list, New Dictionary(Of String, Object))
+
+            If list Is Nothing Then
+                Call EmptyListWarningMessage.Warning
+            End If
         End Sub
 
+        Public Const EmptyListWarningMessage As String = "the source tuple list value for make value copy is nothing!"
+
         Sub New(list As IDictionary(Of String, Object))
-            _slots = New Dictionary(Of String, Object)(list)
+            If list Is Nothing Then
+                Call EmptyListWarningMessage.Warning
+
+                ' create empty list
+                _slots = New Dictionary(Of String, Object)
+            Else
+                _slots = New Dictionary(Of String, Object)(list)
+            End If
         End Sub
 
         Sub New(table As IDictionary)
             _slots = New Dictionary(Of String, Object)
 
-            For Each itemKey In table.Keys
-                _slots(itemKey.ToString) = table(itemKey)
-            Next
+            If table IsNot Nothing Then
+                For Each itemKey In table.Keys
+                    _slots(itemKey.ToString) = table(itemKey)
+                Next
+            Else
+                Call EmptyListWarningMessage.Warning
+            End If
         End Sub
 
         ''' <summary>
