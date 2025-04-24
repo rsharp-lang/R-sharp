@@ -351,6 +351,8 @@ Namespace Runtime.Internal.Object
             Return data.All(Function(a) a Is Nothing OrElse RType.TypeOf(a).mode = elementMode)
         End Function
 
+        Const BlankIntegerIndex As String = "\[\[\d+\]\]"
+
         ''' <summary>
         ''' this function may returns nothing if all index names are default index, example as: [[1]]
         ''' </summary>
@@ -369,10 +371,14 @@ Namespace Runtime.Internal.Object
             End If
 
             ' [[1]]
-            If names.All(Function(s) s.IsPattern("\d+") OrElse s.IsPattern("\[\[\d+\]\]")) Then
+            If names.All(Function(s) s.IsPattern(BlankIntegerIndex)) Then
                 Return Nothing
             Else
-                Return names
+                Return names _
+                    .Select(Function(s)
+                                Return If(s.IsPattern(BlankIntegerIndex), "", s)
+                            End Function) _
+                    .ToArray
             End If
         End Function
 

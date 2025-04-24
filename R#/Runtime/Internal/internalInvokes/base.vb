@@ -1872,6 +1872,7 @@ RE0:
                     value = slot.Evaluate(envir)
                 Else
                     key = i + 1
+                    key = $"[[{key}]]"
                     value = slot.Evaluate(envir)
                 End If
 
