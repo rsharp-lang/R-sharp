@@ -161,7 +161,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
 
             ' get a function object for do aggregate
-            Dim fx As Func(Of IEnumerable(Of Double), Double) = aggregate_func(FUN)
+            Dim fx As Func(Of IEnumerable(Of Double), Double) = aggregate_func(FUN, env)
 
             If x Is Nothing AndAlso by Is Nothing Then
                 Return New AggregateFunction(fx)
