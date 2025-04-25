@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.Expressions
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
@@ -67,6 +68,8 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.[Interface]
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Linq
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -209,14 +212,37 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return result
         End Function
 
-        Private Function aggregate_func(fun As Object) As Func(Of IEnumerable(Of Double), Double)
+        Private Function aggregate_func(fun As Object, env As Environment) As Func(Of IEnumerable(Of Double), Double)
             Dim assign As ValueAssignExpression = fun
             Dim value As Expression = assign.value
             Dim name As String = ValueAssignExpression.GetSymbol(value)
             Dim flag As Aggregates = anys.Expressions.ParseFlag(name)
 
             If flag = Aggregates.Invalid Then
-                Throw New InvalidCastException($"unknow method name '{name}' for parsed as the aggregate function!")
+                ' may be other typeo of the algorithm function
+                Dim clr_val As Object = value.Evaluate(env)
+                Dim invalidMsg As String = $"unknow method name '{name}' for parsed as the aggregate function!"
+
+                If clr_val Is Nothing Then
+                    Throw New InvalidCastException(invalidMsg)
+                End If
+
+                If TypeOf clr_val Is Message Then
+                    Throw DirectCast(clr_val, Message).ToCLRException
+                ElseIf TypeOf clr_val Is AggregateFunction Then
+                    Return DirectCast(clr_val, AggregateFunction).aggregate
+                ElseIf clr_val.GetType.ImplementInterface(Of RFunction) Then
+                    Dim f As RFunction = DirectCast(clr_val, RFunction)
+                    Dim args = f.getArguments.ToArray
+
+                    If args.Length = 1 Then
+                        Return Function(x) CLRVector.asNumeric(f.Invoke(env, InvokeParameter.CreateLiterals(x))).FirstOrDefault
+                    Else
+                        Throw New InvalidCastException(invalidMsg)
+                    End If
+                Else
+                    Throw New InvalidCastException(invalidMsg)
+                End If
             Else
                 Return anys.Expressions.GetAggregateFunction(flag)
             End If
