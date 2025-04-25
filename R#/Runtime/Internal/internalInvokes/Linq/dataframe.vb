@@ -216,7 +216,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim flag As Aggregates = anys.Expressions.ParseFlag(name)
 
             If flag = Aggregates.Invalid Then
-                Throw New NotImplementedException
+                Throw New InvalidCastException($"unknow method name '{name}' for parsed as the aggregate function!")
             Else
                 Return anys.Expressions.GetAggregateFunction(flag)
             End If
