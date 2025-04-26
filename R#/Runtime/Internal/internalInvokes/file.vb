@@ -1297,6 +1297,44 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' check of the target gz file data is corrupted or not
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' true for no error in gzfile, false means the given gz file is corrupted
+        ''' </returns>
+        <ExportAPI("gz_check")>
+        Public Function gzcheck(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
+            Dim auto_close As Boolean = False
+            Dim s = GetFileStream(file, FileAccess.Read, env, is_filepath:=auto_close)
+
+            If s Like GetType(Message) Then
+                Return s.TryCast(Of Message)
+            End If
+
+            Try
+                Using fileStream As Stream = s.TryCast(Of Stream)
+                    Using gzipStream As New GZipStream(fileStream, CompressionMode.Decompress)
+                        ' 尝试完整读取解压后的数据
+                        Dim buffer(4096) As Byte
+                        While gzipStream.Read(buffer, 0, buffer.Length) > 0
+                        End While
+                    End Using
+                End Using
+                Return True
+            Catch ex As InvalidDataException
+                Return False
+            Catch ex As Exception
+                Return False
+            Finally
+                If auto_close Then
+                    Call s.TryCast(Of Stream).Dispose()
+                End If
+            End Try
+        End Function
+
+        ''' <summary>
         ''' Functions to create, open and close connections, i.e., 
         ''' "generalized files", such as possibly compressed files, 
         ''' URLs, pipes, etc.
