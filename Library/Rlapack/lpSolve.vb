@@ -259,4 +259,14 @@ Module lpSolve
                             Optional env As Environment = Nothing) As Object
         Throw New NotImplementedException
     End Function
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x">the cost matrix for the assignments</param>
+    ''' <returns></returns>
+    <ExportAPI("solve_LSAP")>
+    Public Function solve_LSAP(x As Object) As Object
+
+    End Function
 End Module
