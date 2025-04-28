@@ -167,8 +167,16 @@ Public Module base
     <ExportAPI("string_motif")>
     Public Function string_motif(<RRawVectorArgument> x As Object,
                                  Optional threshold As Double = 0.3,
-                                 Optional any As Char = "-"c) As Object
+                                 Optional any As Char = "-"c,
+                                 Optional trim As Boolean = True) As Object
 
-        Return CommonTagParser.StringMotif(CLRVector.asCharacter(x), threshold, any)
+        Dim motif As String = CommonTagParser.StringMotif(CLRVector.asCharacter(x), threshold, any)
+        If trim Then
+            motif = motif.Trim(any)
+            motif = motif.Replace(any & any, any)
+            motif = motif.Replace(any & any, any)
+            motif = motif.Replace(any & any, any)
+        End If
+        Return motif
     End Function
 End Module
