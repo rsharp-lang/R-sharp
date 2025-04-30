@@ -114,8 +114,10 @@ Module package
     ''' <param name="dir"></param>
     ''' <param name="env"></param>
     <ExportAPI("loadPackage")>
-    Public Sub loadPackage(dir As String, Optional env As Environment = Nothing)
-        Call PackageLoader2.LoadPackage(LibDir.FromLocalFileSystem(dir), dir.BaseName, env.globalEnvironment)
+    Public Sub loadPackage(dir As String, Optional quietly As Boolean = False, Optional env As Environment = Nothing)
+        Call PackageLoader2.LoadPackage(LibDir.FromLocalFileSystem(dir), dir.BaseName,
+                                        quietly:=quietly,
+                                        env:=env.globalEnvironment)
     End Sub
 
     ''' <summary>
@@ -142,10 +144,15 @@ Module package
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("attach")>
-    Public Function attach(package As String, Optional env As Environment = Nothing) As Object
+    Public Function attach(package As String,
+                           Optional quietly As Boolean = False,
+                           Optional env As Environment = Nothing) As Object
+
         If package.ExtensionSuffix("zip") Then
             If package.FileExists Then
-                Return base.attachPackageFile(env.globalEnvironment.Rscript, zip:=package)
+                Return base.attachPackageFile(env.globalEnvironment.Rscript,
+                                              zip:=package,
+                                              quietly:=quietly)
             ElseIf package.First = "@" Then
                 ' source from github
                 Return github.hotLoad(package.Substring(1))
