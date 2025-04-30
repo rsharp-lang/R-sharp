@@ -294,7 +294,7 @@ Module Program
 
             For Each packageRef As String In packageList
                 If packageRef.FileExists Then
-                    Call R.attachPackageFile(zip:=packageRef)
+                    Call R.attachPackageFile(zip:=packageRef, quietly:=False)
                 ElseIf packageRef.DirectoryExists Then
                     Dim err As Message = PackageLoader2.Hotload(packageRef.GetDirectoryFullPath, R.globalEnvir)
 
@@ -320,7 +320,7 @@ Module Program
 
             For Each packageFile As String In pkg_attach.ListFiles("*.zip")
                 Call Console.WriteLine($" ...{packageFile.FileName}")
-                Call R.attachPackageFile(zip:=packageFile)
+                Call R.attachPackageFile(zip:=packageFile, quietly:=False)
             Next
         End If
 

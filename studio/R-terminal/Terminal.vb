@@ -242,7 +242,7 @@ RE0:
                 Dim pkgName As String = CStr(x).GetTagValue(":").Value
 
                 If Not globalPkg.hasNamespace(pkgName) Then
-                    Dim err = base.library(pkgName, env)
+                    Dim err = base.library(pkgName, quietly:=False, env)
 
                     If RProgram.isException(err) Then
                         Return err
