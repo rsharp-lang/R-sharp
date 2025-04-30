@@ -1217,7 +1217,9 @@ Namespace Runtime.Internal.Invokes
             Dim values As NamedValue(Of String)() = [string] _
                 .SafeQuery _
                 .Select(Function(str)
-                            Return str.GetTagValue(delimiter, trim:=trim_value)
+                            Return str.GetTagValue(delimiter,
+                                                   trim:=trim_value,
+                                                   failureNoName:=True)
                         End Function) _
                 .ToArray
 
@@ -1245,7 +1247,7 @@ Namespace Runtime.Internal.Invokes
                 Return vec
             Else
                 Dim vec As vector = vector.asVector(values.Values)
-                Call vec.setNames(values.Keys, env)
+                Call vec.setNamesSafe(values.Keys, env)
                 Return vec
             End If
         End Function

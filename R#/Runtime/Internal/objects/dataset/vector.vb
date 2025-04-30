@@ -65,6 +65,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.Vectorization
@@ -331,6 +332,10 @@ Namespace Runtime.Internal.Object
             End If
 
             Return names
+        End Function
+
+        Public Function setNamesSafe(names As IEnumerable(Of String), env As Environment) As Object
+            Return setNames(names.SafeQuery.Select(Function(name) If(name, "")).UniqueNames, env)
         End Function
 
         ''' <summary>
