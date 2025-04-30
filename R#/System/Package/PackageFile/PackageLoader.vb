@@ -294,7 +294,10 @@ Namespace Development.Package.File
         ''' </summary>
         ''' <param name="dir">the local physical filesystem</param>
         ''' <param name="env"></param>
-        Public Function LoadPackage(dir As IFileSystemEnvironment, packageName As String, env As GlobalEnvironment) As Message
+        ''' <param name="quietly">
+        ''' options for mute the package loader banner display
+        ''' </param>
+        Public Function LoadPackage(dir As IFileSystemEnvironment, packageName As String, quietly As Boolean, env As GlobalEnvironment) As Message
             Dim result As New Value(Of Message)
 
             If Not result = PackageNamespace.Check(dir, packageName, env) Is Nothing Then
@@ -345,7 +348,7 @@ Namespace Development.Package.File
             End If
 
             ' 3. run '.onLoad'
-            If Not (result = pkgEnv.callOnLoad(pkg:=[namespace])) Is Nothing Then
+            If Not (result = pkgEnv.callOnLoad(quietly, pkg:=[namespace])) Is Nothing Then
                 Return result
             End If
 
@@ -404,10 +407,17 @@ Namespace Development.Package.File
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' call package initilization loader function
+        ''' </summary>
+        ''' <param name="env"></param>
+        ''' <param name="pkg"></param>
+        ''' <returns></returns>
         <Extension>
-        Private Function callOnLoad(env As PackageEnvironment, pkg As PackageNamespace) As Message
+        Private Function callOnLoad(env As PackageEnvironment, quietly As Boolean, pkg As PackageNamespace) As Message
             Dim onLoad As String = $"{pkg.libPath}/.onload"
             Dim result As Object = Nothing
+            Dim silent As New InvokeParameter("quietly", quietly, index:=0)
 
             If onLoad.FileExists Then
                 Using bin As New BinaryReader(onLoad.OpenReadonly(retryOpen:=5, verbose:=env.verboseOption))
@@ -416,7 +426,7 @@ Namespace Development.Package.File
                         .DoCall(Function(func)
                                     Return DirectCast(func, DeclareNewFunction)
                                 End Function) _
-                        .Invoke(env, params:={})
+                        .Invoke(env, params:={silent})
                 End Using
             End If
 

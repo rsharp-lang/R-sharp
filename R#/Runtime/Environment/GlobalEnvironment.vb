@@ -280,7 +280,7 @@ Namespace Runtime
         ''' load library module
         ''' </summary>
         ''' <param name="packageName">the library package name</param>
-        ''' <param name="silent">suppress of print message?</param>
+        ''' <param name="silent">quietly option, suppress of print message?</param>
         ''' <param name="ignoreMissingStartupPackages">debug used only</param>
         ''' <returns>
         ''' this function returns an error message object instance if
@@ -317,7 +317,9 @@ Namespace Runtime
             End If
 
             If (Not RzipPackageFolder.StringEmpty) AndAlso $"{RzipPackageFolder}/package/index.json".FileExists Then
-                Return PackageLoader2.LoadPackage(Libdir.FromLocalFileSystem(RzipPackageFolder), packageName, [global])
+                Return PackageLoader2.LoadPackage(Libdir.FromLocalFileSystem(RzipPackageFolder), packageName,
+                                                  quietly:=silent,
+                                                  env:=[global])
             ElseIf package Is Nothing Then
                 If Not ignoreMissingStartupPackages Then
                     Return MissingPackage(packageName, exception)

@@ -252,7 +252,9 @@ Namespace Runtime
             Else
                 ' load target package directory
                 ' for attatch all of the upstream dependency symbols
-                Call PackageLoader2.LoadPackage(Directory.FromLocalFileSystem(libdir), [namespace], env.globalEnvironment)
+                Call PackageLoader2.LoadPackage(Directory.FromLocalFileSystem(libdir), [namespace],
+                                                quietly:=False,
+                                                env:=env.globalEnvironment)
             End If
 
             Dim symbolFile As String = $"{libdir}/lib/src/{symbols(symbolName)}"
