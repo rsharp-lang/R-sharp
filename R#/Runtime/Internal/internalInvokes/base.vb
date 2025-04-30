@@ -3699,7 +3699,10 @@ RE0:
         ''' are searched before the libraries.
         ''' </remarks>
         <ExportAPI("library")>
-        Public Function library(package As String, env As Environment) As Object
+        Public Function library(package As String,
+                                Optional quietly As Boolean = False,
+                                Optional env As Environment = Nothing) As Object
+
             Dim require As Expression
 
             If package.DirectoryExists Then
@@ -3715,7 +3718,7 @@ RE0:
                     Return meta
                 End If
             ElseIf package.FileExists Then
-                Return env.globalEnvironment.Rscript.attachPackageFile(zip:=package)
+                Return env.globalEnvironment.Rscript.attachPackageFile(zip:=package, quietly)
             ElseIf package.IndexOf(":"c) > -1 OrElse package.IndexOf("/"c) > -1 Then
                 With package.StringSplit("[:/]+")
                     require = New [Imports](.Last, .First)
@@ -3750,12 +3753,13 @@ RE0:
         ''' <param name="zip">the file path to the zip package</param>
         ''' <returns></returns>
         <Extension>
-        Public Function attachPackageFile(R As RInterpreter, zip As String) As Object
+        Public Function attachPackageFile(R As RInterpreter, zip As String, quietly As Boolean) As Object
             Dim mount_zip_fs As New ZipStream(zip, is_readonly:=True)
             ' maybe in format like: packageName_version
             Dim guess_pkgName As String = zip.BaseName
-            Dim err As Message = PackageLoader2.LoadPackage(mount_zip_fs, guess_pkgName, R.globalEnvir)
-
+            Dim err As Message = PackageLoader2.LoadPackage(mount_zip_fs, guess_pkgName,
+                                                            quietly:=quietly,
+                                                            env:=R.globalEnvir)
             Return err
         End Function
     End Module

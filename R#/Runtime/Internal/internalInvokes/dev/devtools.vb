@@ -66,6 +66,7 @@
 Imports System.Threading
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.Repository
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.ValueTypes
@@ -265,8 +266,14 @@ Namespace Runtime.Internal.Invokes
         ''' by default is load all script in current directory.
         ''' </summary>
         ''' <param name="dir">The script source directory, by default is current workspace.</param>
+        ''' <param name="quietly">
+        ''' silent mode? default is verbose mode(show the package loading banner information)
+        ''' </param>
         <ExportAPI("flash_load")>
-        Public Function flash_load(<RDefaultExpression> Optional dir As String = "~getwd()", Optional env As GlobalEnvironment = Nothing) As Object
+        Public Function flash_load(<RDefaultExpression> Optional dir As String = "~getwd()",
+                                   Optional quietly As Boolean = False,
+                                   Optional env As GlobalEnvironment = Nothing) As Object
+
             Dim Rlist As String() = dir _
                 .EnumerateFiles("*.r", "*.R") _
                 .Select(Function(path) path.GetFullPath) _
@@ -288,9 +295,10 @@ Namespace Runtime.Internal.Invokes
             Next
 
             Dim zzz As String = $"{dir}/zzz.R"
+            Dim silent As New NamedValue(Of Object)("quietly", quietly)
 
             If zzz.FileExists Then
-                Call env.doCall(".onLoad")
+                Call env.doCall(".onLoad", silent)
             End If
 
             Return invisible.NULL

@@ -195,6 +195,7 @@ Namespace Development.Package.File
             Dim sourceMaps As New List(Of StackFrame)
 
             For Each symbol As NamedValue(Of Expression) In GetPackageSymbols()
+                ' deal with the package loader special function
                 If symbol.Name = ".onLoad" Then
                     onLoad = symbol.Value
 
