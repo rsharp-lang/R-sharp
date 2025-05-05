@@ -52,7 +52,6 @@
 #End Region
 
 Imports System.ComponentModel
-Imports System.IO
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Zip
 Imports Microsoft.VisualBasic.CommandLine
