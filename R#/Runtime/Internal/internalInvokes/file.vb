@@ -1860,9 +1860,9 @@ Namespace Runtime.Internal.Invokes
         ''' character vectors, containing file names or paths.
         ''' </param>
         <ExportAPI("file.remove")>
-        Public Sub fileRemove(x As String(),
-                              Optional verbose As Boolean? = Nothing,
-                              Optional env As Environment = Nothing)
+        Public Function fileRemove(x As String(),
+                                   Optional verbose As Boolean? = Nothing,
+                                   Optional env As Environment = Nothing) As Object
 
             Dim println As Action(Of Object)
 
@@ -1875,9 +1875,17 @@ Namespace Runtime.Internal.Invokes
             End If
 
             For Each file As String In x.SafeQuery
+                If file.DirectoryExists Then
+                    If isSystemDir(file) Then
+                        Return Internal.debug.stop({$"system directory: '{file}' is not allowed to erase!", "dir: " & file}, env)
+                    End If
+                End If
+
                 Call file.DeleteFile(verbose:=println, strictFile:=False)
             Next
-        End Sub
+
+            Return Nothing
+        End Function
 
         ''' <summary>
         ''' Delete files or directories
@@ -1888,9 +1896,9 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         ''' <param name="x"></param>
         <ExportAPI("unlink")>
-        Public Sub unlinks(x As String(), Optional env As Environment = Nothing)
-            Call fileRemove(x, env:=env)
-        End Sub
+        Public Function unlinks(x As String(), Optional env As Environment = Nothing) As Object
+            Return fileRemove(x, env:=env)
+        End Function
 
         ''' <summary>
         ''' delete all contents in target directory
