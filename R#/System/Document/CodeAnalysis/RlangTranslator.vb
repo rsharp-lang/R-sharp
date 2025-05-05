@@ -481,6 +481,9 @@ Namespace Development.CodeAnalysis
 
                 If val.value Is Nothing Then
                     Call symbols.Add(name, "NULL")
+                ElseIf val.typeCode = TypeCodes.closure Then
+                    ' make ignores of the R internal function
+                    ' do nothing
                 Else
                     Dim castError As Boolean = False
                     Dim descriptor As String = castClrValue(val, name, castError, env)
