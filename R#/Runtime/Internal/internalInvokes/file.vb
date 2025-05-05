@@ -1914,43 +1914,57 @@ Namespace Runtime.Internal.Invokes
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' Check of the given directory path is a system internal directory
+        ''' or not.
+        ''' 
+        ''' The system directories are:
+        ''' + Windows: c:\, c:/, c:, c:\program files, c:\program files (x86), c:\windows, c:\windows\system32, c:\windows\syswow64
+        ''' + Linux: /bin, /boot, /dev, /etc, /home, /lib, /lib64, /media, /mnt, /opt, /root, /run, /sbin, /srv, /sys, /usr, /var
+        ''' </summary>
+        ''' <param name="dir"></param>
+        ''' <returns></returns>
         <ExportAPI("is.sysdir")>
         Public Function isSystemDir(dir As String) As Boolean
+            ' is the root directory '/'
             If dir.IsPattern("/+") Then
                 Return True
-            Else
-                Select Case dir.ToLower
-                    Case "c:\",
-                         "c:/",
-                         "c:",
-                         "c:\program files",
-                         "c:\program files (x86)",
-                         "c:\windows",
-                         "c:\windows\system32",
-                         "c:\windows\syswow64"
-                        Return True
-                    Case "/bin",
-                         "/boot",
-                         "/dev",
-                         "/etc",
-                         "/home",
-                         "/lib",
-                         "/lib64",
-                         "/media",
-                         "/mnt",
-                         "/opt",
-                         "/root",
-                         "/run",
-                         "/sbin",
-                         "/srv",
-                         "/sys",
-                         "/usr",
-                         "/var"
-                        Return True
-                    Case Else
-                        Return False
-                End Select
             End If
+
+            Select Case dir.ToLower
+                ' windows
+                Case "c:\",
+                     "c:/",
+                     "c:",
+                     "c:\program files",
+                     "c:\program files (x86)",
+                     "c:\windows",
+                     "c:\windows\system32",
+                     "c:\windows\syswow64"
+                    Return True
+                    ' linux
+                Case "/bin",
+                     "/boot",
+                     "/dev",
+                     "/etc",
+                     "/home",
+                     "/lib",
+                     "/lib64",
+                     "/media",
+                     "/mnt",
+                     "/opt",
+                     "/root",
+                     "/run",
+                     "/sbin",
+                     "/srv",
+                     "/sys",
+                     "/usr",
+                     "/var"
+                    Return True
+                Case Else
+                    ' is not a system directory
+                    Return False
+            End Select
         End Function
 
         ''' <summary>
