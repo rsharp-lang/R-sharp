@@ -1871,13 +1871,11 @@ Namespace Runtime.Internal.Invokes
             If verbose Then
                 println = env.WriteLineHandler
             Else
-                println = Sub(any)
-                              ' do nothing
-                          End Sub
+                println = AddressOf App.DoNothing
             End If
 
             For Each file As String In x.SafeQuery
-                Call file.DeleteFile(verbose:=println)
+                Call file.DeleteFile(verbose:=println, strictFile:=False)
             Next
         End Sub
 
