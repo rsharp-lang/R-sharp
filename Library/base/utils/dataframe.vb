@@ -1,61 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::9cdbd73d56b40e7ddf86b314e8384b73, Library\base\utils\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 899
-    '    Code Lines: 648 (72.08%)
-    ' Comment Lines: 136 (15.13%)
-    '    - Xml Docs: 90.44%
-    ' 
-    '   Blank Lines: 115 (12.79%)
-    '     File Size: 34.60 KB
+' Summaries:
 
 
-    ' Module dataframe
-    ' 
-    '     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
-    '               colnames, column, create_tableFrame, createEntityRow, CreateRowObject
-    '               dataframeTable, deserialize, field_vector, loadDataframe, measureColumnVector
-    '               openCsv, parseDataframe, parseRow, printRowVector, printTable
-    '               project, rawToDataFrame, readCsvRaw, readDataSet, rows
-    '               rowToString, RowToString, stripCommentRows, to_dataframe, transpose
-    '               vector, writeDataframe
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 899
+'    Code Lines: 648 (72.08%)
+' Comment Lines: 136 (15.13%)
+'    - Xml Docs: 90.44%
+' 
+'   Blank Lines: 115 (12.79%)
+'     File Size: 34.60 KB
+
+
+' Module dataframe
+' 
+'     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
+'               colnames, column, create_tableFrame, createEntityRow, CreateRowObject
+'               dataframeTable, deserialize, field_vector, loadDataframe, measureColumnVector
+'               openCsv, parseDataframe, parseRow, printRowVector, printTable
+'               project, rawToDataFrame, readCsvRaw, readDataSet, rows
+'               rowToString, RowToString, stripCommentRows, to_dataframe, transpose
+'               vector, writeDataframe
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -71,6 +71,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Data.Framework
 Imports Microsoft.VisualBasic.Data.Framework.IO
+Imports Microsoft.VisualBasic.Data.Framework.IO.ArffFile
 Imports Microsoft.VisualBasic.Data.Framework.IO.CSVFile
 Imports Microsoft.VisualBasic.Data.Framework.StorageProvider.Reflection
 Imports Microsoft.VisualBasic.Data.IO
@@ -88,6 +89,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports ASCII = Microsoft.VisualBasic.Text.ASCII
 Imports csv = Microsoft.VisualBasic.Data.Framework.IO.File
+Imports FeatureFrame = Microsoft.VisualBasic.Data.Framework.DataFrame
 Imports Idataframe = Microsoft.VisualBasic.Data.Framework.IO.DataFrameResolver
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -95,7 +97,6 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports RPrinter = SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports Rsharp = SMRUCC.Rsharp
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
-Imports FeatureFrame = Microsoft.VisualBasic.Data.Framework.DataFrame
 
 ''' <summary>
 ''' The sciBASIC.NET dataframe api
@@ -545,6 +546,16 @@ ReturnTable:
         Return df
     End Function
 
+    ''' <summary>
+    ''' parse the given arff data file as clr dataframe object
+    ''' </summary>
+    ''' <param name="text"></param>
+    ''' <returns></returns>
+    <ExportAPI("parse_arff")>
+    Public Function parseArffText(text As String) As FeatureFrame
+        Return ArffReader.LoadDataFrame(New MemoryStream(Encoding.UTF8.GetBytes(text)))
+    End Function
+
     <ExportAPI("append.cells")>
     Public Function appendCells(row As RowObject, cells As Array) As RowObject
         row.AddRange(cells.AsObjectEnumerator.Select(AddressOf any.ToString))
@@ -860,13 +871,26 @@ ReturnTable:
     End Function
 
     ''' <summary>
-    ''' Read dataframe
+    ''' Read dataframe in various file formats
     ''' </summary>
-    ''' <param name="file">the csv file/scibasic binary dataframe file</param>
+    ''' <param name="file">the csv/arff/scibasic binary dataframe file</param>
     ''' <param name="mode">
     ''' the data mode for read the general dataframe file, this parameter value only works for the csv text file.
     ''' </param>
     ''' <returns></returns>
+    ''' <example>
+    ''' require(dataframe);
+    ''' 
+    ''' # read binary dataframe data
+    ''' df = read.dataframe(file = "./data.dat");
+    ''' # read csv file
+    ''' df = read.dataframe(file = "./data.csv", mode = "any");
+    ''' # read numeric matrix in csv file format
+    ''' df = read.dataframe(file = "./data.csv", mode = "numeric");
+    ''' # read arff dataframe file
+    ''' # the field data type has already been defined inside the arff attributes elements
+    ''' df = read.dataframe(file = "./data.arff");
+    ''' </example>
     <ExportAPI("read.dataframe")>
     <RApiReturn(GetType(Rdataframe))>
     Public Function readDataSet(file$,
@@ -890,50 +914,77 @@ ReturnTable:
 
         Select Case mode
             Case DataModes.numeric
-                Dim data = DataSet.LoadDataSet(file, silent:=silent).ToArray
+                Dim parsed = numericLoader(file, toRObj, silent, dataframe)
 
-                If toRObj Then
-                    Dim allKeys$() = data.PropertyNames
-
-                    dataframe.rownames = data.Select(Function(r) r.ID).ToArray
-                    dataframe.columns = allKeys _
-                        .ToDictionary(Function(key) key,
-                                      Function(key)
-                                          Return DirectCast(data.Select(Function(r) r(key)).ToArray, Array)
-                                      End Function)
-                Else
-                    Return data
+                If Not toRObj Then
+                    Return parsed
                 End If
             Case DataModes.character
-                Dim data = EntityObject.LoadDataSet(file, silent:=silent).ToArray
+                Dim parsed = characterLoader(file, toRObj, silent, dataframe)
 
-                If toRObj Then
-                    Dim allKeys$() = data.PropertyNames
-
-                    dataframe.rownames = data.Select(Function(r) r.ID).ToArray
-                    dataframe.columns = allKeys _
-                        .ToDictionary(Function(key) key,
-                                      Function(key)
-                                          Return DirectCast(data.Select(Function(r) r(key)).ToArray, Array)
-                                      End Function)
-                Else
-                    Return data
+                If Not toRObj Then
+                    Return parsed
                 End If
             Case Else
-                Dim is_csv As Boolean = False
+                Dim is_txt As Boolean = False
 
                 Using s As Stream = file.Open(FileMode.Open, doClear:=False, [readOnly]:=True, aggressive:=False)
-                    is_csv = s.CheckMagicNumber(FrameWriter.magic)
+                    ' check of the binary magic header
+                    is_txt = s.CheckMagicNumber(FrameWriter.magic)
                 End Using
 
-                If is_csv Then
-                    dataframe = utils.read_csv(file)
+                If is_txt Then
+                    If file.ExtensionSuffix("arff") Then
+                        dataframe = FeatureFrame _
+                            .read_arff(file) _
+                            .toDataframe(list.empty, env)
+                    Else
+                        dataframe = utils.read_csv(file)
+                    End If
                 Else
                     dataframe = FrameReader.ReadFeatures(file).toDataframe(list.empty, env)
                 End If
         End Select
 
         Return dataframe
+    End Function
+
+    Private Function characterLoader(file As String, toRObj As Boolean, silent As Boolean, ByRef dataframe As Rdataframe) As EntityObject()
+        Dim data = EntityObject.LoadDataSet(file, silent:=silent).ToArray
+
+        If toRObj Then
+            Dim allKeys$() = data.PropertyNames
+
+            dataframe.rownames = data.Select(Function(r) r.ID).ToArray
+            dataframe.columns = allKeys _
+                .ToDictionary(Function(key) key,
+                              Function(key)
+                                  Return DirectCast(data.Select(Function(r) r(key)).ToArray, Array)
+                              End Function)
+        Else
+            Return data
+        End If
+
+        Return Nothing
+    End Function
+
+    Private Function numericLoader(file As String, toRObj As Boolean, silent As Boolean, ByRef dataframe As Rdataframe) As DataSet()
+        Dim data = DataSet.LoadDataSet(file, silent:=silent).ToArray
+
+        If toRObj Then
+            Dim allKeys$() = data.PropertyNames
+
+            dataframe.rownames = data.Select(Function(r) r.ID).ToArray
+            dataframe.columns = allKeys _
+                .ToDictionary(Function(key) key,
+                              Function(key)
+                                  Return DirectCast(data.Select(Function(r) r(key)).ToArray, Array)
+                              End Function)
+        Else
+            Return data
+        End If
+
+        Return Nothing
     End Function
 
     ''' <summary>
