@@ -812,7 +812,19 @@ ReturnTable:
         Return generic
     End Function
 
+    ''' <summary>
+    ''' Writes the given data object to an ARFF (Attribute-Relation File Format) file or stream.
+    ''' </summary>
+    ''' <param name="x">The data object to write. Can be a FeatureFrame, Rdataframe, array, vector, or Nothing.</param>
+    ''' <param name="file">Target file path or writable stream object. If a path is provided, the stream will be automatically closed after writing.</param>
+    ''' <param name="env">The R runtime environment for error handling and stream operations.</param>
+    ''' <returns>Returns True on success. Returns error Message object if file/stream creation or data conversion fails.</returns>
+    ''' <example>
+    ''' df = data.frame(x = 1:5, labels = ["A","B","C","D","E"]);
+    ''' write.arff(df, file = "./data.arff");
+    ''' </example>
     <ExportAPI("write.arff")>
+    <RApiReturn(GetType(Boolean))>
     Public Function write_arff(x As Object, file As Object, Optional env As Environment = Nothing) As Object
         Dim auto_close As Boolean = False
         Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env, is_filepath:=auto_close)
@@ -834,6 +846,17 @@ ReturnTable:
         Return True
     End Function
 
+    ''' <summary>
+    ''' Converts various object types to a standardized FeatureFrame structure.
+    ''' </summary>
+    ''' <param name="x">Input object to convert. Supported types:
+    ''' - Nothing: Creates empty FeatureFrame
+    ''' - FeatureFrame: Direct cast
+    ''' - Rdataframe: Converts using feature set conversion
+    ''' - Array/Vector: Creates FeatureFrame from element type
+    ''' - Other types: Returns type conversion error</param>
+    ''' <param name="env">R environment for error handling during conversion.</param>
+    ''' <returns>Returns FeatureFrame on success, or Message object containing conversion error details.</returns>
     Public Function anyToFeatureFrame(x As Object, env As Environment) As Object
         Dim frame As FeatureFrame
 
@@ -872,12 +895,13 @@ ReturnTable:
     End Function
 
     ''' <summary>
-    ''' write the given data as arff or scibasic binary dataframe file
+    ''' Writes dataframe to file in either ARFF text format or SciBasic binary format.
     ''' </summary>
-    ''' <param name="x"></param>
-    ''' <param name="file">a file path to the local file to save or any kind of the resource connection for save the dataframe to a stream.</param>
-    ''' <param name="env"></param>
-    ''' <returns></returns>
+    ''' <param name="x">Input data object convertible to FeatureFrame (dataframe, array, etc.)</param>
+    ''' <param name="file">Target file path or writable stream object.</param>
+    ''' <param name="arff">Boolean flag indicating whether to use ARFF format (True) or binary format (False)</param>
+    ''' <param name="env">R environment for stream operations and error reporting.</param>
+    ''' <returns>True on success, error Message on failure.</returns>
     ''' <example>
     ''' require(dataframe);
     ''' 
@@ -925,13 +949,18 @@ ReturnTable:
     End Function
 
     ''' <summary>
-    ''' Read dataframe in various file formats
+    ''' Reads dataframe from various file formats including ARFF, CSV, and SciBasic binary.
     ''' </summary>
-    ''' <param name="file">the csv/arff/scibasic binary dataframe file</param>
-    ''' <param name="mode">
-    ''' the data mode for read the general dataframe file, this parameter value only works for the csv text file.
-    ''' </param>
-    ''' <returns></returns>
+    ''' <param name="file">Path to data file. Supported extensions: .arff, .csv, .dat</param>
+    ''' <param name="mode">Data parsing mode:
+    ''' - Numeric: Enforce numeric matrix conversion (CSV only)
+    ''' - Character: Preserve text data (CSV only)
+    ''' - Any: Auto-detect based on file content</param>
+    ''' <param name="toRObj">Convert result to Rdataframe object when True (default), return raw DataSet otherwise</param>
+    ''' <param name="silent">Suppress file format detection messages when True</param>
+    ''' <param name="strict">Throw error instead of warning for missing files when True</param>
+    ''' <param name="env">R environment for error handling and message reporting</param>
+    ''' <returns>Rdataframe by default. Returns DataSet array when toRObj=False for numeric/character modes.</returns>
     ''' <example>
     ''' require(dataframe);
     ''' 
@@ -1003,6 +1032,10 @@ ReturnTable:
         Return dataframe
     End Function
 
+    ' Private helper methods with internal documentation
+    ''' <summary>
+    ''' (Internal) Loads character data from file and converts to Rdataframe structure
+    ''' </summary>
     Private Function characterLoader(file As String, toRObj As Boolean, silent As Boolean, ByRef dataframe As Rdataframe) As EntityObject()
         Dim data = EntityObject.LoadDataSet(file, silent:=silent).ToArray
 
@@ -1022,6 +1055,9 @@ ReturnTable:
         Return Nothing
     End Function
 
+    ''' <summary>
+    ''' (Internal) Loads numeric data from file and converts to Rdataframe structure
+    ''' </summary>
     Private Function numericLoader(file As String, toRObj As Boolean, silent As Boolean, ByRef dataframe As Rdataframe) As DataSet()
         Dim data = DataSet.LoadDataSet(file, silent:=silent).ToArray
 
