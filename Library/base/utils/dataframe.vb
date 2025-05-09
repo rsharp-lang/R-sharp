@@ -812,22 +812,30 @@ ReturnTable:
         Return generic
     End Function
 
-    ''' <summary>
-    ''' write the given data as scibasic binary dataframe file
-    ''' </summary>
-    ''' <param name="x"></param>
-    ''' <param name="file"></param>
-    ''' <param name="env"></param>
-    ''' <returns></returns>
-    <ExportAPI("write.dataframe")>
-    Public Function writeDataframe(<RRawVectorArgument> x As Object, file As Object, Optional env As Environment = Nothing) As Object
+    <ExportAPI("write.arff")>
+    Public Function write_arff(x As Object, file As Object, Optional env As Environment = Nothing) As Object
         Dim auto_close As Boolean = False
         Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env, is_filepath:=auto_close)
-        Dim frame As FeatureFrame
+        Dim pull_df As Object = anyToFeatureFrame(x, env)
 
         If s Like GetType(Message) Then
             Return s.TryCast(Of Message)
+        ElseIf TypeOf pull_df Is Message Then
+            Return pull_df
         End If
+
+        Call FeatureFrame.write_arff(DirectCast(pull_df, FeatureFrame), s)
+        Call s.TryCast(Of Stream).Flush()
+
+        If auto_close Then
+            Call s.TryCast(Of Stream).Dispose()
+        End If
+
+        Return True
+    End Function
+
+    Public Function anyToFeatureFrame(x As Object, env As Environment) As Object
+        Dim frame As FeatureFrame
 
         If x Is Nothing Then
             frame = New FeatureFrame With {
@@ -860,7 +868,53 @@ ReturnTable:
             Return RInternal.debug.stop($"unsure how to cast object with type '{x.GetType.FullName}' to dataframe", env)
         End If
 
-        Call frame.WriteFrame(s)
+        Return frame
+    End Function
+
+    ''' <summary>
+    ''' write the given data as arff or scibasic binary dataframe file
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="file">a file path to the local file to save or any kind of the resource connection for save the dataframe to a stream.</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    ''' <example>
+    ''' require(dataframe);
+    ''' 
+    ''' df = data.frame(x = 1:5, b = ["aaa" "b233" "c444" "d55" "e5"]);
+    ''' 
+    ''' # write binary dataframe file
+    ''' write.dataframe(df, file = "./test.dat");
+    ''' 
+    ''' # write arff dataframe text file
+    ''' write.dataframe(df, file = "./test.arff", arff = TRUE);
+    ''' # equals to the function
+    ''' write.arff(df, file = "./test.arff");
+    ''' </example>
+    <ExportAPI("write.dataframe")>
+    Public Function writeDataframe(<RRawVectorArgument> x As Object, file As Object,
+                                   Optional arff As Boolean = False,
+                                   Optional env As Environment = Nothing) As Object
+
+        Dim auto_close As Boolean = False
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env, is_filepath:=auto_close)
+        Dim frame As FeatureFrame
+        Dim pull_df As Object = anyToFeatureFrame(x, env)
+
+        If s Like GetType(Message) Then
+            Return s.TryCast(Of Message)
+        ElseIf TypeOf pull_df Is Message Then
+            Return pull_df
+        End If
+
+        frame = DirectCast(pull_df, FeatureFrame)
+
+        If arff Then
+            Call FeatureFrame.write_arff(frame, s)
+        Else
+            Call frame.WriteFrame(s)
+        End If
+
         Call s.TryCast(Of Stream).Flush()
 
         If auto_close Then
