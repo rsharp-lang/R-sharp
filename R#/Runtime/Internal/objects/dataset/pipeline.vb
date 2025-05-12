@@ -304,6 +304,7 @@ Namespace Runtime.Internal.Object
 
             If TypeOf upstream Is pipeline Then
                 If DirectCast(upstream, pipeline).elementType Like GetType(T) Then
+                    ' the given upstream object is already been a pipeline of T
                     Return upstream
                 ElseIf GetType(T).IsInterface AndAlso DirectCast(upstream, pipeline).elementType.raw.ImplementInterface(Of T) Then
                     Return upstream
