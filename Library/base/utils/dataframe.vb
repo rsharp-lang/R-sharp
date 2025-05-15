@@ -1,61 +1,62 @@
-﻿#Region "Microsoft.VisualBasic::9cdbd73d56b40e7ddf86b314e8384b73, Library\base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::3182ba7b93070c6c9afcda0562933fd9, Library\base\utils\dataframe.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 899
-'    Code Lines: 648 (72.08%)
-' Comment Lines: 136 (15.13%)
-'    - Xml Docs: 90.44%
-' 
-'   Blank Lines: 115 (12.79%)
-'     File Size: 34.60 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module dataframe
-' 
-'     Function: appendCells, appendRow, AsDataframeRaw, asIndexList, cells
-'               colnames, column, create_tableFrame, createEntityRow, CreateRowObject
-'               dataframeTable, deserialize, field_vector, loadDataframe, measureColumnVector
-'               openCsv, parseDataframe, parseRow, printRowVector, printTable
-'               project, rawToDataFrame, readCsvRaw, readDataSet, rows
-'               rowToString, RowToString, stripCommentRows, to_dataframe, transpose
-'               vector, writeDataframe
-' 
-'     Sub: Main
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 1040
+    '    Code Lines: 705 (67.79%)
+    ' Comment Lines: 203 (19.52%)
+    '    - Xml Docs: 90.64%
+    ' 
+    '   Blank Lines: 132 (12.69%)
+    '     File Size: 41.04 KB
+
+
+    ' Module dataframe
+    ' 
+    '     Function: anyToFeatureFrame, appendCells, appendRow, AsDataframeRaw, asIndexList
+    '               cells, characterLoader, colnames, column, create_tableFrame
+    '               createEntityRow, CreateRowObject, dataframeTable, deserialize, field_vector
+    '               loadDataframe, measureColumnVector, numericLoader, openCsv, parseArffText
+    '               parseDataframe, parseRow, printRowVector, printTable, project
+    '               rawToDataFrame, readCsvRaw, readDataSet, rows, rowToString
+    '               RowToString, stripCommentRows, to_dataframe, transpose, vector
+    '               write_arff, writeDataframe
+    ' 
+    '     Sub: Main
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

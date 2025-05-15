@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::601c369f72485cfc8c593663893ff00b, R#\Runtime\Internal\internalInvokes\file.vb"
+﻿#Region "Microsoft.VisualBasic::10f614fef390861c8b9163f140fc58d1, R#\Runtime\Internal\internalInvokes\file.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1878
-    '    Code Lines: 1081 (57.56%)
-    ' Comment Lines: 602 (32.06%)
-    '    - Xml Docs: 88.37%
+    '   Total Lines: 1936
+    '    Code Lines: 1111 (57.39%)
+    ' Comment Lines: 624 (32.23%)
+    '    - Xml Docs: 87.98%
     ' 
-    '   Blank Lines: 195 (10.38%)
-    '     File Size: 85.33 KB
+    '   Blank Lines: 201 (10.38%)
+    '     File Size: 87.73 KB
 
 
     '     Enum endianness
@@ -58,16 +58,17 @@
     '         Function: [erase], basename, buffer, bytes, close
     '                   dataUri, dir_exists, dirCopy, dirCreate, dirname
     '                   exists, file, file_allocate, file_ext, filecopy
-    '                   fileExt, fileinfo, fileInfoByFile, filepath, filesize
-    '                   getRelativePath, GetSha1Hash, getwd, gzfile, handleWriteLargeTextStream
-    '                   isSystemDir, listDirs, listFiles, loadListInternal, NextTempToken
-    '                   normalizeFileName, normalizePath, openDir, openGzip, openTargzip
-    '                   openZip, readBin, readBinDataframe, readBinOverloads, readFromFile
-    '                   readFromStream, readLines, readList, readText, Rhome
-    '                   saveList, scanZipFiles, setwd, tempdir, tempfile
-    '                   writeBin, writeBinDataframe, writeLines
+    '                   fileExt, fileinfo, fileInfoByFile, filepath, fileRemove
+    '                   filesize, getRelativePath, GetSha1Hash, getwd, gzcheck
+    '                   gzfile, handleWriteLargeTextStream, isSystemDir, listDirs, listFiles
+    '                   loadListInternal, NextTempToken, normalizeFileName, normalizePath, openDir
+    '                   openGzip, openTargzip, openZip, readBin, readBinDataframe
+    '                   readBinOverloads, readFromFile, readFromStream, readLines, readList
+    '                   readText, Rhome, saveList, scanZipFiles, setwd
+    '                   tempdir, tempfile, unlinks, writeBin, writeBinDataframe
+    '                   writeLines
     ' 
-    '         Sub: fileRemove, fileRename, unlinks
+    '         Sub: fileRename
     ' 
     ' 
     ' /********************************************************************************/

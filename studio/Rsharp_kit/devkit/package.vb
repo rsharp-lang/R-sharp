@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d9b3e37a6afdd2d56dffb8383e843b1b, studio\Rsharp_kit\devkit\package.vb"
+﻿#Region "Microsoft.VisualBasic::48f38b9a5ccc5867f7c55e3e9e89abd5, studio\Rsharp_kit\devkit\package.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 161
-    '    Code Lines: 112 (69.57%)
-    ' Comment Lines: 30 (18.63%)
+    '   Total Lines: 168
+    '    Code Lines: 118 (70.24%)
+    ' Comment Lines: 30 (17.86%)
     '    - Xml Docs: 90.00%
     ' 
-    '   Blank Lines: 19 (11.80%)
-    '     File Size: 6.13 KB
+    '   Blank Lines: 20 (11.90%)
+    '     File Size: 6.47 KB
 
 
     ' Module package

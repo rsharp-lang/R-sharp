@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::77ea7d318a90127b4911b466b70e5b6c, R#\Runtime\Internal\internalInvokes\Linq\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::dd39dc0c3b3653780c2d124e032e6506, R#\Runtime\Internal\internalInvokes\Linq\dataframe.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 541
-    '    Code Lines: 336 (62.11%)
-    ' Comment Lines: 136 (25.14%)
-    '    - Xml Docs: 80.88%
+    '   Total Lines: 567
+    '    Code Lines: 358 (63.14%)
+    ' Comment Lines: 137 (24.16%)
+    '    - Xml Docs: 80.29%
     ' 
-    '   Blank Lines: 69 (12.75%)
-    '     File Size: 23.35 KB
+    '   Blank Lines: 72 (12.70%)
+    '     File Size: 24.72 KB
 
 
     '     Module dataframe_methods

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::072d0f6cf46b05a786d37b7eb8a43bb5, R#\Runtime\Internal\objects\dataset\vector.vb"
+﻿#Region "Microsoft.VisualBasic::811b680f418f2a97b985ece014e57a10, R#\Runtime\Internal\objects\dataset\vector.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 430
-    '    Code Lines: 310 (72.09%)
-    ' Comment Lines: 53 (12.33%)
+    '   Total Lines: 435
+    '    Code Lines: 314 (72.18%)
+    ' Comment Lines: 53 (12.18%)
     '    - Xml Docs: 94.34%
     ' 
-    '   Blank Lines: 67 (15.58%)
-    '     File Size: 16.13 KB
+    '   Blank Lines: 68 (15.63%)
+    '     File Size: 16.43 KB
 
 
     '     Class vector
@@ -51,7 +51,7 @@
     ' 
     '         Function: asVector, fromScalar, (+2 Overloads) getByIndex, getByName, getNames
     '                   hasName, isVectorOf, loadGenericCollection, setByindex, setByIndex
-    '                   setNames, ToString
+    '                   setNames, setNamesSafe, ToString
     ' 
     '         Sub: setNames
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ceb573b49dfaa36e4ce93f16801c82b2, R#\Runtime\Environment\GlobalEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::6f5092552f110cd25cca21d936b475c5, R#\Runtime\Environment\GlobalEnvironment.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 320
-    '    Code Lines: 200 (62.50%)
-    ' Comment Lines: 75 (23.44%)
+    '   Total Lines: 322
+    '    Code Lines: 202 (62.73%)
+    ' Comment Lines: 75 (23.29%)
     '    - Xml Docs: 97.33%
     ' 
-    '   Blank Lines: 45 (14.06%)
-    '     File Size: 13.25 KB
+    '   Blank Lines: 45 (13.98%)
+    '     File Size: 13.39 KB
 
 
     '     Class GlobalEnvironment

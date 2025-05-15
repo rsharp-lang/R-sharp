@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ee6474c66a5779db2a8388deedbca18f, Library\Rlapack\lpSolve.vb"
+﻿#Region "Microsoft.VisualBasic::33d5039224eb1452a7fae060225e21b0, Library\Rlapack\lpSolve.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 208
-    '    Code Lines: 172 (82.69%)
-    ' Comment Lines: 11 (5.29%)
-    '    - Xml Docs: 100.00%
+    '   Total Lines: 218
+    '    Code Lines: 175 (80.28%)
+    ' Comment Lines: 16 (7.34%)
+    '    - Xml Docs: 93.75%
     ' 
-    '   Blank Lines: 25 (12.02%)
-    '     File Size: 8.98 KB
+    '   Blank Lines: 27 (12.39%)
+    '     File Size: 9.24 KB
 
 
     ' Module lpSolve
     ' 
     '     Function: alignVector, GetSymbols, GetVector, isSimple, linprog
-    '               lp, lpMax, lpMin
+    '               lp, lpMax, lpMin, solve_LSAP
     ' 
     ' /********************************************************************************/
 

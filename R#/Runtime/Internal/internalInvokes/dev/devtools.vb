@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::19c1a46d7566a13f12be3d7fe254fd6d, R#\Runtime\Internal\internalInvokes\dev\devtools.vb"
+﻿#Region "Microsoft.VisualBasic::d7b29ce6381299efa79728f6a7d083e0, R#\Runtime\Internal\internalInvokes\dev\devtools.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 339
-    '    Code Lines: 212 (62.54%)
-    ' Comment Lines: 85 (25.07%)
-    '    - Xml Docs: 91.76%
+    '   Total Lines: 347
+    '    Code Lines: 216 (62.25%)
+    ' Comment Lines: 88 (25.36%)
+    '    - Xml Docs: 92.05%
     ' 
-    '   Blank Lines: 42 (12.39%)
-    '     File Size: 14.77 KB
+    '   Blank Lines: 43 (12.39%)
+    '     File Size: 15.17 KB
 
 
     '     Class NoInspector

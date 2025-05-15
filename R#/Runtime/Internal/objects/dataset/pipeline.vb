@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::314ad119223a95de953af9b7e2107398, R#\Runtime\Internal\objects\dataset\pipeline.vb"
+﻿#Region "Microsoft.VisualBasic::e7ff8084a3d7d186a6c0b67f78096a07, R#\Runtime\Internal\objects\dataset\pipeline.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 360
-    '    Code Lines: 240 (66.67%)
-    ' Comment Lines: 72 (20.00%)
-    '    - Xml Docs: 95.83%
+    '   Total Lines: 361
+    '    Code Lines: 240 (66.48%)
+    ' Comment Lines: 73 (20.22%)
+    '    - Xml Docs: 94.52%
     ' 
-    '   Blank Lines: 48 (13.33%)
-    '     File Size: 16.32 KB
+    '   Blank Lines: 48 (13.30%)
+    '     File Size: 16.40 KB
 
 
     '     Class pipeline

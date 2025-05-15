@@ -1,64 +1,64 @@
-﻿#Region "Microsoft.VisualBasic::337be90c9ace8aa036f3545378b1476a, R#\Runtime\Internal\objects\dataset\list.vb"
+﻿#Region "Microsoft.VisualBasic::7c8df7ef26f9558645cc938aa5ff844c, R#\Runtime\Internal\objects\dataset\list.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 692
-'    Code Lines: 374 (54.05%)
-' Comment Lines: 229 (33.09%)
-'    - Xml Docs: 91.27%
-' 
-'   Blank Lines: 89 (12.86%)
-'     File Size: 25.67 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class list
-' 
-'         Properties: data, is_empty, length, slots
-' 
-'         Constructor: (+10 Overloads) Sub New
-' 
-'         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) empty, (+2 Overloads) getByIndex
-'                   (+2 Overloads) getByName, getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue
-'                   GetVector, hasName, hasNames, listOf, namedValues
-'                   set_empty, setByindex, setByIndex, (+2 Overloads) setByName, setNames
-'                   slotKeys, subset, ToString
-' 
-'         Sub: (+3 Overloads) add, unique_add
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 755
+    '    Code Lines: 409 (54.17%)
+    ' Comment Lines: 246 (32.58%)
+    '    - Xml Docs: 89.43%
+    ' 
+    '   Blank Lines: 100 (13.25%)
+    '     File Size: 27.98 KB
+
+
+    '     Class list
+    ' 
+    '         Properties: data, is_empty, length, slots
+    ' 
+    '         Constructor: (+10 Overloads) Sub New
+    ' 
+    '         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) empty, (+2 Overloads) getByIndex
+    '                   (+2 Overloads) getByName, getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue
+    '                   GetVector, hasName, hasNames, listOf, namedValues
+    '                   set_empty, setByindex, setByIndex, (+2 Overloads) setByName, setNames
+    '                   slotKeys, subset, ToString
+    ' 
+    '         Sub: (+3 Overloads) add, unique_add
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

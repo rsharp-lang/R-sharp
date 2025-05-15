@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1adcd88b9e9625f74b31ad1e149f7a3e, R#\System\Package\PackageFile\NuGet\WriteNuGetZip.vb"
+﻿#Region "Microsoft.VisualBasic::e3466eff0a87d3af24c520fd2cfc134b, R#\System\Package\PackageFile\NuGet\WriteNuGetZip.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 447
-    '    Code Lines: 362 (80.98%)
-    ' Comment Lines: 8 (1.79%)
-    '    - Xml Docs: 37.50%
+    '   Total Lines: 448
+    '    Code Lines: 362 (80.80%)
+    ' Comment Lines: 9 (2.01%)
+    '    - Xml Docs: 33.33%
     ' 
-    '   Blank Lines: 77 (17.23%)
-    '     File Size: 18.35 KB
+    '   Blank Lines: 77 (17.19%)
+    '     File Size: 18.42 KB
 
 
     '     Class NuGetZip
