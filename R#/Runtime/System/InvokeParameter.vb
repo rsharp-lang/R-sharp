@@ -165,7 +165,7 @@ Namespace Runtime.Components
         ''' example as: name = $1, and the index must be 1
         ''' </param>
         ''' <param name="runtimeValue"></param>
-        ''' <param name="index"></param>
+        ''' <param name="index">1-based offset of the invoke arguments</param>
         ''' <remarks>
         ''' combine <paramref name="name"/> and <paramref name="runtimeValue"/> for 
         ''' create an expressin of <see cref="ValueAssignExpression"/>.
