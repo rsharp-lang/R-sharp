@@ -210,12 +210,26 @@ Namespace Language.Syntax.SyntaxParser
                     ElseIf list.Length = 1 AndAlso (list(0).name = TokenType.identifier OrElse list(0).name = TokenType.keyword) Then
                         Call buf.Add(New SyntaxResult(New SymbolReference(list(0))))
                     Else
-                        syntaxResult = opts.ParseExpression(list, opts)
+                        If buf.Last Like GetType(SyntaxResult) AndAlso TypeOf buf.Last.TryCast(Of SyntaxResult).expression Is SymbolReference Then
+                            If DirectCast(buf.Last.TryCast(Of SyntaxResult).expression, SymbolReference).symbol = "function" Then
+                                list = {New Token(TokenType.keyword, "function")}.JoinIterates(list).ToArray
+                                syntaxResult = opts.ParseExpression(list, opts)
 
-                        If syntaxResult.isException Then
-                            Return syntaxResult
+                                If syntaxResult.isException Then
+                                    Return syntaxResult
+                                Else
+                                    Call buf.RemoveAt(buf.Count - 1)
+                                    Call buf.Add(syntaxResult)
+                                End If
+                            End If
                         Else
-                            Call buf.Add(syntaxResult)
+                            syntaxResult = opts.ParseExpression(list, opts)
+
+                            If syntaxResult.isException Then
+                                Return syntaxResult
+                            Else
+                                Call buf.Add(syntaxResult)
+                            End If
                         End If
                     End If
                 Else
