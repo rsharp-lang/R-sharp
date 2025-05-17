@@ -212,7 +212,9 @@ Namespace Language.Syntax.SyntaxParser
                     Else
                         If buf.Last Like GetType(SyntaxResult) AndAlso TypeOf buf.Last.TryCast(Of SyntaxResult).expression Is SymbolReference Then
                             If DirectCast(buf.Last.TryCast(Of SyntaxResult).expression, SymbolReference).symbol = "function" Then
-                                list = {New Token(TokenType.keyword, "function")}.JoinIterates(list).ToArray
+                                Dim anonymousKey As New Token(TokenType.keyword, "function") With {.span = list(0).span}
+
+                                list = {anonymousKey}.JoinIterates(list).ToArray
                                 syntaxResult = opts.ParseExpression(list, opts)
 
                                 If syntaxResult.isException Then
