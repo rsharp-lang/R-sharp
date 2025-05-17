@@ -1,67 +1,68 @@
 ﻿#Region "Microsoft.VisualBasic::7c8df7ef26f9558645cc938aa5ff844c, R#\Runtime\Internal\objects\dataset\list.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 755
-    '    Code Lines: 409 (54.17%)
-    ' Comment Lines: 246 (32.58%)
-    '    - Xml Docs: 89.43%
-    ' 
-    '   Blank Lines: 100 (13.25%)
-    '     File Size: 27.98 KB
+' Summaries:
 
 
-    '     Class list
-    ' 
-    '         Properties: data, is_empty, length, slots
-    ' 
-    '         Constructor: (+10 Overloads) Sub New
-    ' 
-    '         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) empty, (+2 Overloads) getByIndex
-    '                   (+2 Overloads) getByName, getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue
-    '                   GetVector, hasName, hasNames, listOf, namedValues
-    '                   set_empty, setByindex, setByIndex, (+2 Overloads) setByName, setNames
-    '                   slotKeys, subset, ToString
-    ' 
-    '         Sub: (+3 Overloads) add, unique_add
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 755
+'    Code Lines: 409 (54.17%)
+' Comment Lines: 246 (32.58%)
+'    - Xml Docs: 89.43%
+' 
+'   Blank Lines: 100 (13.25%)
+'     File Size: 27.98 KB
+
+
+'     Class list
+' 
+'         Properties: data, is_empty, length, slots
+' 
+'         Constructor: (+10 Overloads) Sub New
+' 
+'         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) empty, (+2 Overloads) getByIndex
+'                   (+2 Overloads) getByName, getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue
+'                   GetVector, hasName, hasNames, listOf, namedValues
+'                   set_empty, setByindex, setByIndex, (+2 Overloads) setByName, setNames
+'                   slotKeys, subset, ToString
+' 
+'         Sub: (+3 Overloads) add, unique_add
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Collections.Specialized
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
@@ -168,6 +169,19 @@ Namespace Runtime.Internal.Object
                 _slots = New Dictionary(Of String, Object)
             Else
                 _slots = New Dictionary(Of String, Object)(list)
+            End If
+        End Sub
+
+        Sub New(list As NameValueCollection)
+            ' create empty list
+            _slots = New Dictionary(Of String, Object)
+
+            If list Is Nothing Then
+                Call EmptyListWarningMessage.Warning
+            Else
+                For Each name As String In list.Keys
+                    _slots(name) = list(name)
+                Next
             End If
         End Sub
 
