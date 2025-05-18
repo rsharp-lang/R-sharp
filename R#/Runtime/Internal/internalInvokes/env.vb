@@ -704,7 +704,7 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.debug.stop("Missing the special `@dir` annotation symbol, this function only works for the script file, do not used inside the package!", env)
             End If
 
-            Return Invokes.file.filepath({workdir, file},, env)
+            Return Invokes.file.filepath(InvokeParameter.CreateLiterals(workdir, file),, env)
         End Function
     End Module
 End Namespace
