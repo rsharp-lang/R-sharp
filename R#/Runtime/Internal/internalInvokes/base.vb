@@ -121,6 +121,8 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 Imports std = System.Math
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
+
 
 #If NET48 Then
 Imports Image = System.Drawing.Image
@@ -2924,7 +2926,7 @@ RE0:
         <ExportAPI("options")>
         Public Function options(<RListObjectArgument> opts As Object, envir As Environment) As Object
             Dim configs As Options = envir.globalEnvironment.options
-            Dim values As list
+            Dim values As list = Nothing
             Dim type As Type = opts.GetType
 
             If type Is GetType(String()) Then
@@ -2949,36 +2951,52 @@ RE0:
                 ' get all options
                 values = RConversion.asList(configs.getAllConfigs, New InvokeParameter() {}, envir)
             Else
-                values = New list With {
-                    .slots = New Dictionary(Of String, Object)
-                }
+                Dim err = setOptionsParameters(envir, values, DirectCast(opts, InvokeParameter()))
 
-                ' invoke parameters
-                For Each value As InvokeParameter In DirectCast(opts, InvokeParameter())
-                    Dim name As String = value.name
-                    Dim cfgValue As Object = value.Evaluate(envir)
-
-                    If Program.isException(cfgValue) Then
-                        Return cfgValue
-                    End If
-
-                    Dim vec As Array = REnv.asVector(Of Object)(cfgValue)
-
-                    If vec.Length > 0 Then
-                        cfgValue = vec.GetValue(Scan0)
-                    Else
-                        cfgValue = Nothing
-                    End If
-
-                    Try
-                        values.slots(name) = configs.setOption(name, any.ToString(cfgValue), envir)
-                    Catch ex As Exception
-                        Return Internal.debug.stop(ex, envir)
-                    End Try
-                Next
+                If Not err Is Nothing Then
+                    Return err
+                End If
             End If
 
             Return values
+        End Function
+
+        Private Function setOptionsParameters(env As Environment, ByRef values As list, opts As InvokeParameter()) As Object
+            Dim configs As Options = env.globalEnvironment.options
+
+            If opts.TryCount = 1 AndAlso TypeOf opts(0).value Is SymbolReference Then
+                Return base.options(opts(0).Evaluate(env), env)
+            End If
+
+            values = New list With {
+                .slots = New Dictionary(Of String, Object)
+            }
+
+            ' invoke parameters
+            For Each value As InvokeParameter In opts
+                Dim name As String = value.name
+                Dim cfgValue As Object = value.Evaluate(env)
+
+                If Program.isException(cfgValue) Then
+                    Return cfgValue
+                End If
+
+                Dim vec As Array = REnv.asVector(Of Object)(cfgValue)
+
+                If vec.Length > 0 Then
+                    cfgValue = vec.GetValue(Scan0)
+                Else
+                    cfgValue = Nothing
+                End If
+
+                Try
+                    values.slots(name) = configs.setOption(name, any.ToString(cfgValue), env)
+                Catch ex As Exception
+                    Return Internal.debug.stop(ex, env)
+                End Try
+            Next
+
+            Return Nothing
         End Function
 
         ''' <summary>
