@@ -67,6 +67,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -686,6 +687,24 @@ Namespace Runtime.Internal.Invokes
             Next
 
             Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' get the absolute file path that relative to the current script folder
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        <ExportAPI("relative_work")>
+        Public Function relative_work(file As String, Optional env As Environment = Nothing) As Object
+            Dim dir As New ScriptFolder()
+            Dim workdir As String = CStr(dir.Evaluate(env))
+
+            If workdir Is Nothing Then
+                Return Internal.debug.stop("Missing the special `@dir` annotation symbol, this function only works for the script file, do not used inside the package!", env)
+            End If
+
+            Return Invokes.file.filepath({workdir, file},, env)
         End Function
     End Module
 End Namespace
