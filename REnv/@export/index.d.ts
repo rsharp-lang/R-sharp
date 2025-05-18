@@ -55,6 +55,12 @@ declare namespace REnv {
    */
    function http_get(url: any, streamTo: any, interval?: any, filetype?: any): object;
    /**
+   */
+   function include(file: any): object;
+   /**
+   */
+   function include_jsonconfig(file: any): object;
+   /**
      * @param direction default value Is ``1``.
    */
    function paletteer_c(palette: any, n: any, direction?: any): object;
