@@ -269,7 +269,7 @@ Namespace Runtime.Internal.Invokes
         ''' + ``REnv`` means get all symbols inside the R# internal runtime
         ''' + ``Activator`` means get all attached clr types full name
         ''' + ``/xxx/xxx`` a directory path on the file system, will list all files inside the specific directory
-        ''' + 
+        ''' + ``Function`` means get all attached function objects from the runtime
         ''' </remarks>
         <ExportAPI("ls")>
         <RApiReturn(GetType(String))>
@@ -312,12 +312,16 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <Extension>
-        Private Function listOptionItems(opt As NamedValue(Of String), name$, env As Environment)
+        Private Function listOptionItems(opt As NamedValue(Of String), name$, env As Environment) As Object
             Dim globalEnv As GlobalEnvironment = env.globalEnvironment
             Dim pkgMgr As PackageManager = globalEnv.packages
 
             If opt.Value = "REnv" Then
                 Return Internal.invoke.ls
+            ElseIf opt.Value = "Function" Then
+                Return env.EnumerateAllFunctions _
+                    .Select(Function(f) f.value) _
+                    .ToArray
             ElseIf opt.Value = "Activator" Then
                 Dim names As Array = globalEnv.types.Keys.ToArray
                 Dim fullName As Array = DirectCast(names, String()) _
