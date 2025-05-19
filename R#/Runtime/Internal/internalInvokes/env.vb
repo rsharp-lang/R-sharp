@@ -65,8 +65,10 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Package
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -241,6 +243,17 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("output_device")>
         Private Function getOutputDevice(env As Environment) As String
             Return env.globalEnvironment.stdout.env.ToString.ToLower
+        End Function
+
+        ''' <summary>
+        ''' Get the help document of the target runtime function
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("docs")>
+        <RApiReturn(GetType(Document))>
+        Public Function docs(x As SymbolExpression) As Object
+            Return x.TryGetHelpDocument
         End Function
 
         ''' <summary>
