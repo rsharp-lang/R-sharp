@@ -118,6 +118,12 @@ Public Class RoxygenDocument
                 Continue For
             ElseIf line.StartsWith("#'") Then
                 buffer.Add(line.Substring(2).Trim)
+            ElseIf Strings.InStr(line, "function") < 1 Then
+                ' 20250519
+                ' is attribute data
+                ' example as [@app "xxxx"]
+                ' skip this line
+                Continue For
             ElseIf buffer > 0 Then
                 Dim name As String() = line.Trim _
                     .Split _
