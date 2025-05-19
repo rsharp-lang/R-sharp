@@ -262,9 +262,19 @@ Namespace Runtime.Internal.Invokes
         ''' Mostly there for back compatibility.
         ''' </param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' ``name`` input of the ls function:
+        ''' 
+        ''' + pattern like ``package:xxx`` means get all symbols inside the specific R# package
+        ''' + ``REnv`` means get all symbols inside the R# internal runtime
+        ''' + ``Activator`` means get all attached clr types full name
+        ''' + ``/xxx/xxx`` a directory path on the file system, will list all files inside the specific directory
+        ''' + 
+        ''' </remarks>
         <ExportAPI("ls")>
         <RApiReturn(GetType(String))>
         Private Function ls(<RSymbolTextArgument> Optional name$ = Nothing, Optional envir As Environment = Nothing) As Object
+            ' package:xxx
             Dim opt As NamedValue(Of String) = name.GetTagValue(":", trim:=True)
             Dim globalEnv As GlobalEnvironment = envir.globalEnvironment
             Dim pkgMgr As PackageManager = globalEnv.packages
@@ -278,23 +288,27 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Select Case opt.Name.ToLower
-                Case "package"
-                    ' list all of the function api names in current package
-                    Dim ex As Exception = Nothing
-                    Dim package As Package = pkgMgr.FindPackage(opt.Value, envir.globalEnvironment, ex)
+                Case "package" : Return listOfPackageSymbols(opt.Value, pkgMgr, envir)
 
-                    If package Is Nothing Then
-                        If Not ex Is Nothing Then
-                            Return debug.stop(New Exception("missing required package for query..." & "package: " & opt.Value, ex), envir)
-                        Else
-                            Return debug.stop({"missing required package for query...", "package: " & opt.Value}, envir)
-                        End If
-                    Else
-                        Return package.ls
-                    End If
                 Case Else
                     Return debug.stop(New NotSupportedException(name), envir)
             End Select
+        End Function
+
+        Private Function listOfPackageSymbols(pkgname$, pkgMgr As PackageManager, envir As Environment) As Object
+            ' list all of the function api names in current package
+            Dim ex As Exception = Nothing
+            Dim package As Package = pkgMgr.FindPackage(pkgname, envir.globalEnvironment, ex)
+
+            If package Is Nothing Then
+                If Not ex Is Nothing Then
+                    Return debug.stop(New Exception("missing required package for query..." & "package: " & pkgname, ex), envir)
+                Else
+                    Return debug.stop({"missing required package for query...", "package: " & pkgname}, envir)
+                End If
+            Else
+                Return package.ls
+            End If
         End Function
 
         <Extension>
