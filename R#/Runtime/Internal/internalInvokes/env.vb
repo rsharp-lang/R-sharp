@@ -257,43 +257,43 @@ Namespace Runtime.Internal.Invokes
         ''' listing the available objects. Defaults to the current environment. 
         ''' Although called name for back compatibility, in fact this argument 
         ''' can specify the environment in any form.</param>
-        ''' <param name="env">
+        ''' <param name="envir">
         ''' an alternative argument to name for specifying the environment. 
         ''' Mostly there for back compatibility.
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("ls")>
         <RApiReturn(GetType(String))>
-        Private Function ls(<RSymbolTextArgument> Optional name$ = Nothing, Optional env As Environment = Nothing) As Object
+        Private Function ls(<RSymbolTextArgument> Optional name$ = Nothing, Optional envir As Environment = Nothing) As Object
             Dim opt As NamedValue(Of String) = name.GetTagValue(":", trim:=True)
-            Dim globalEnv As GlobalEnvironment = env.globalEnvironment
+            Dim globalEnv As GlobalEnvironment = envir.globalEnvironment
             Dim pkgMgr As PackageManager = globalEnv.packages
 
             If name.StringEmpty Then
                 ' list all of the objects in current 
                 ' R# runtime environment
-                Return env.GetSymbolsNames.ToArray
+                Return envir.GetSymbolsNames.ToArray
             ElseIf opt.Name.StringEmpty Then
-                Return opt.listOptionItems(name, env)
+                Return opt.listOptionItems(name, envir)
             End If
 
             Select Case opt.Name.ToLower
                 Case "package"
                     ' list all of the function api names in current package
                     Dim ex As Exception = Nothing
-                    Dim package As Package = pkgMgr.FindPackage(opt.Value, env.globalEnvironment, ex)
+                    Dim package As Package = pkgMgr.FindPackage(opt.Value, envir.globalEnvironment, ex)
 
                     If package Is Nothing Then
                         If Not ex Is Nothing Then
-                            Return debug.stop(New Exception("missing required package for query..." & "package: " & opt.Value, ex), env)
+                            Return debug.stop(New Exception("missing required package for query..." & "package: " & opt.Value, ex), envir)
                         Else
-                            Return debug.stop({"missing required package for query...", "package: " & opt.Value}, env)
+                            Return debug.stop({"missing required package for query...", "package: " & opt.Value}, envir)
                         End If
                     Else
                         Return package.ls
                     End If
                 Case Else
-                    Return debug.stop(New NotSupportedException(name), env)
+                    Return debug.stop(New NotSupportedException(name), envir)
             End Select
         End Function
 
