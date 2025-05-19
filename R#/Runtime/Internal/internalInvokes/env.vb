@@ -252,8 +252,12 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("docs")>
         <RApiReturn(GetType(Document))>
-        Public Function docs(x As SymbolExpression) As Object
-            Return x.TryGetHelpDocument
+        Public Function docs(x As Object) As Object
+            If TypeOf x Is SymbolExpression Then
+                Return DirectCast(x, SymbolExpression).TryGetHelpDocument
+            Else
+                Return Nothing
+            End If
         End Function
 
         ''' <summary>
