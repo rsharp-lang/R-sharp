@@ -121,6 +121,23 @@ Namespace Runtime.Serialize
             Return vec
         End Function
 
+        Public Shared Function FromArray(array As Array, env As Environment) As vectorBuffer
+            Dim generic = REnv.TryCastGenericArray(array, env)
+
+            If TypeOf generic Is Message Then
+                Return generic
+            End If
+
+            Dim buffer As New vectorBuffer With {
+                .names = {},
+                .type = generic.GetType.GetElementType.FullName,
+                .unit = "",
+                .env = env,
+                .vector = generic
+            }
+            Return buffer
+        End Function
+
         Public Shared Function CreateBuffer(vector As vector, env As Environment) As vectorBuffer
             Dim buffer As New vectorBuffer With {
                 .names = If(vector.getNames, {}),

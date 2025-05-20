@@ -435,8 +435,6 @@ Namespace Runtime
 
         ''' <summary>
         ''' This function make sure the return array is not a generic type array
-        ''' 
-        ''' (返回错误消息或者结果向量)
         ''' </summary>
         ''' <param name="vec"></param>
         ''' <param name="env"></param>
@@ -446,6 +444,9 @@ Namespace Runtime
         ''' Andalso this function will returns nothing if the input <paramref name="vec"/>
         ''' is nothing.
         ''' </returns>
+        ''' <remarks>
+        ''' 返回错误消息或者结果向量
+        ''' </remarks>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Public Function TryCastGenericArray(vec As Array, env As Environment) As Object

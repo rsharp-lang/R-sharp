@@ -101,6 +101,10 @@ Namespace Runtime.Serialize
             End Using
         End Sub
 
+        Sub New(image As Image)
+            bitmap = image
+        End Sub
+
         Public Overrides Sub Serialize(buffer As Stream)
             Dim data As Byte() = getGZip()
 

@@ -74,6 +74,12 @@ Namespace Runtime.Serialize
             End Get
         End Property
 
+        Public Shared ReadOnly Property [nothing] As BufferObject
+            Get
+                Return New NullObject
+            End Get
+        End Property
+
         Public Overrides Sub Serialize(buffer As Stream)
             ' do nothing/no value
         End Sub

@@ -228,15 +228,22 @@ Namespace Runtime.Interop
             GetType(Char), GetType(Char())
         }
 
+        ''' <summary>
+        ''' R tuple list/JSON object
+        ''' </summary>
+        ''' <returns></returns>
         Public Shared ReadOnly Property list As RType = RType.GetRSharpType(GetType(list))
-
         ''' <summary>
         ''' mapping to the clr <see cref="Object"/> type.
         ''' </summary>
         ''' <returns></returns>
-        Friend Shared ReadOnly Property any As RType = GetRSharpType(GetType(Object))
-
-        Friend Shared ReadOnly Property closure As RType = GetRSharpType(GetType(RFunction))
+        Public Shared ReadOnly Property any As RType = GetRSharpType(GetType(Object))
+        ''' <summary>
+        ''' R runtime function
+        ''' </summary>
+        ''' <returns></returns>
+        Public Shared ReadOnly Property closure As RType = GetRSharpType(GetType(RFunction))
+        Public Shared ReadOnly Property character As RType = GetRSharpType(GetType(String))
 
         Private Sub New(raw As Type)
             Me.raw = GetUnderlyingType(raw)

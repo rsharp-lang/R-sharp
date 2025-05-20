@@ -97,6 +97,11 @@ Namespace Runtime.Serialize
             End Using
         End Sub
 
+        Sub New(text As String, Optional mime As String = "plain/text")
+            Me.text = text
+            Me.mime = mime
+        End Sub
+
         Public Overrides Sub Serialize(buffer As Stream)
             Dim data As Byte() = Encodings.UTF8.CodePage.GetBytes(text)
             Dim mime As Byte() = Encoding.ASCII.GetBytes(If(Me.mime, "plain/text"))
