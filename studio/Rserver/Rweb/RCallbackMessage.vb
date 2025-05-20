@@ -70,8 +70,14 @@ Imports csv = Microsoft.VisualBasic.Data.Framework.IO.File
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.[Object].dataframe
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
-Module RCallbackMessage
+Public Module RCallbackMessage
 
+    ''' <summary>
+    ''' send as html message
+    ''' </summary>
+    ''' <param name="message"></param>
+    ''' <param name="response"></param>
+    ''' <param name="showError"></param>
     Private Sub sendRStudioErrDebugMessage(message As Message, response As HttpResponse, showError As Boolean)
         Dim err As String
 
@@ -89,6 +95,14 @@ Module RCallbackMessage
         End If
     End Sub
 
+    ''' <summary>
+    ''' send as image file
+    ''' </summary>
+    ''' <param name="result"></param>
+    ''' <param name="request"></param>
+    ''' <param name="response"></param>
+    ''' <param name="debug"></param>
+    ''' <param name="showErr"></param>
     <Extension>
     Private Sub sendImage(result As bitmapBuffer, request As HttpRequest, response As HttpResponse, debug As Boolean, showErr As Boolean)
         Dim bytes As Byte() = result.Serialize
@@ -111,6 +125,14 @@ Module RCallbackMessage
         End Using
     End Sub
 
+    ''' <summary>
+    ''' send as html/text
+    ''' </summary>
+    ''' <param name="text"></param>
+    ''' <param name="request"></param>
+    ''' <param name="response"></param>
+    ''' <param name="debug"></param>
+    ''' <param name="showErr"></param>
     <Extension>
     Private Sub sendText(text As textBuffer, request As HttpRequest, response As HttpResponse, debug As Boolean, showErr As Boolean)
         Dim bytes As Byte() = Encoding.UTF8.GetBytes(text.text)
@@ -127,6 +149,14 @@ Module RCallbackMessage
         Call response.Write(bytes)
     End Sub
 
+    ''' <summary>
+    ''' send as csv file
+    ''' </summary>
+    ''' <param name="df"></param>
+    ''' <param name="request"></param>
+    ''' <param name="response"></param>
+    ''' <param name="debug"></param>
+    ''' <param name="showErr"></param>
     <Extension>
     Private Sub sendDataframe(df As dataframeBuffer, request As HttpRequest, response As HttpResponse, debug As Boolean, showErr As Boolean)
         Dim env As Environment = New RInterpreter().globalEnvir
@@ -163,6 +193,14 @@ Module RCallbackMessage
         End If
     End Sub
 
+    ''' <summary>
+    ''' send as json
+    ''' </summary>
+    ''' <param name="vec"></param>
+    ''' <param name="request"></param>
+    ''' <param name="response"></param>
+    ''' <param name="debug"></param>
+    ''' <param name="showErr"></param>
     <Extension>
     Private Sub sendVector(vec As vectorBuffer, request As HttpRequest, response As HttpResponse, debug As Boolean, showErr As Boolean)
         Dim vector As vector = vec.getVector
@@ -178,6 +216,14 @@ Module RCallbackMessage
         End If
     End Sub
 
+    ''' <summary>
+    ''' send as json
+    ''' </summary>
+    ''' <param name="list"></param>
+    ''' <param name="request"></param>
+    ''' <param name="response"></param>
+    ''' <param name="debug"></param>
+    ''' <param name="showErr"></param>
     <Extension>
     Private Sub sendListObject(list As listBuffer, request As HttpRequest, response As HttpResponse, debug As Boolean, showErr As Boolean)
         Dim tuples As list = list.listData
@@ -193,6 +239,14 @@ Module RCallbackMessage
         End If
     End Sub
 
+    ''' <summary>
+    ''' file download
+    ''' </summary>
+    ''' <param name="raw"></param>
+    ''' <param name="request"></param>
+    ''' <param name="response"></param>
+    ''' <param name="debug"></param>
+    ''' <param name="showErr"></param>
     <Extension>
     Private Sub sendRawdata(raw As rawBuffer, request As HttpRequest, response As HttpResponse, debug As Boolean, showErr As Boolean)
         Dim bytes As Byte() = raw.buffer.ToArray
