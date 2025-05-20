@@ -314,18 +314,29 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         Private Function fileInfoByFile(filepath As String) As Object
-            Dim fileInfoObj As New FileInfo(filepath)
             Dim data As New Dictionary(Of String, Object)
 
-            For Each [property] As PropertyInfo In fileInfoObj _
-                .GetType _
-                .GetProperties(PublicProperty) _
-                .Where(Function(p)
-                           Return p.GetIndexParameters.IsNullOrEmpty
-                       End Function)
+            If filepath.FileExists Then
+                Dim fileInfo As New FileInfo(filepath)
 
-                Call data.Add([property].Name, [property].GetValue(fileInfoObj))
-            Next
+                Call data.Add("name", fileInfo.Name)
+                Call data.Add("ctime", fileInfo.CreationTime)
+                Call data.Add("mtime", fileInfo.LastWriteTime)
+                Call data.Add("atime", fileInfo.LastAccessTime)
+                Call data.Add("isdir", False)
+                Call data.Add("size", fileInfo.Length)
+                Call data.Add("mime", If(FileMimeType(filepath)?.MIMEType, MIME.Unknown))
+            ElseIf filepath.DirectoryExists Then
+                Dim dirinfo As New DirectoryInfo(filepath)
+
+                Call data.Add("name", dirinfo.Name)
+                Call data.Add("ctime", dirinfo.CreationTime)
+                Call data.Add("mtime", dirinfo.LastWriteTime)
+                Call data.Add("atime", dirinfo.LastAccessTime)
+                Call data.Add("isdir", True)
+            Else
+                Call data.Add("name", filepath.BaseName)
+            End If
 
             Return New list With {.slots = data}
         End Function
