@@ -184,6 +184,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             _funcName = newName
         End Sub
 
+        ''' <summary>
+        ''' get the parameter arguments of current function object
+        ''' </summary>
+        ''' <returns>
+        ''' this function will nenver returns nothing
+        ''' </returns>
         Public Iterator Function getArguments() As IEnumerable(Of NamedValue(Of Expression)) Implements RFunction.getArguments
             For Each arg As DeclareNewSymbol In Me.parameters
                 For Each name As String In arg.names
