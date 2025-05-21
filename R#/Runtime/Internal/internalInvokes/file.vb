@@ -152,11 +152,11 @@ Namespace Runtime.Internal.Invokes
         ''' for instance, C:/foo/bar/ and D:/foo/, the method 
         ''' returns pathname as is.
         ''' </remarks>
-        <ExportAPI("getRelativePath")>
+        <ExportAPI("relative_path")>
         Public Function getRelativePath(pathname As String(), <RDefaultExpression> Optional relativeTo As Object = "~getwd()") As String()
             Return pathname _
                 .SafeQuery _
-                .Select(Function(path) RelativePath(relativeTo, path, appendParent:=False)) _
+                .Select(Function(path) RelativePath(relativeTo, path, appendParent:=False, fixZipPath:=True)) _
                 .ToArray
         End Function
 
