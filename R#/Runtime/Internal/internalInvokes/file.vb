@@ -161,7 +161,7 @@ Namespace Runtime.Internal.Invokes
                                                 appendParent:=False,
                                                 fixZipPath:=True
                                 ) _
-                                .StringReplace("[\]+", "/")
+                                .StringReplace("(\\+)|([/]{2,})", "/")
                         End Function) _
                 .ToArray
         End Function
