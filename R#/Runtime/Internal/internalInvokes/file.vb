@@ -296,20 +296,23 @@ Namespace Runtime.Internal.Invokes
         ''' 
         ''' </returns>
         <ExportAPI("file.info")>
-        Public Function fileinfo(<RRawVectorArgument> files As Object, Optional env As Environment = Nothing) As Object
+        Public Function fileinfo(<RRawVectorArgument> files As Object,
+                                 Optional clr_obj As Boolean = False,
+                                 Optional env As Environment = Nothing) As Object
+
             Dim fileList As String() = CLRVector.asCharacter(files)
 
             If fileList.IsNullOrEmpty Then
                 Return Nothing
             ElseIf fileList.Length = 1 Then
-                Return fileInfoByFile(fileList(Scan0))
+                Return fileInfoByFile(fileList(Scan0), clr_obj)
             Else
                 Return fileList _
                     .Select(Function(path) path.GetFullPath) _
                     .Distinct _
                     .ToDictionary(Function(filepath) filepath,
                                   Function(filepath)
-                                      Return fileInfoByFile(filepath)
+                                      Return fileInfoByFile(filepath, clr_obj)
                                   End Function) _
                     .DoCall(Function(slots)
                                 Return New list With {
@@ -319,11 +322,15 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
-        Private Function fileInfoByFile(filepath As String) As Object
+        Private Function fileInfoByFile(filepath As String, clr_obj As Boolean) As Object
             Dim data As New Dictionary(Of String, Object)
 
             If filepath.FileExists Then
                 Dim fileInfo As New FileInfo(filepath)
+
+                If clr_obj Then
+                    Return fileInfo
+                End If
 
                 Call data.Add("name", fileInfo.Name)
                 Call data.Add("ctime", fileInfo.CreationTime)
@@ -335,11 +342,17 @@ Namespace Runtime.Internal.Invokes
             ElseIf filepath.DirectoryExists Then
                 Dim dirinfo As New DirectoryInfo(filepath)
 
+                If clr_obj Then
+                    Return dirinfo
+                End If
+
                 Call data.Add("name", dirinfo.Name)
                 Call data.Add("ctime", dirinfo.CreationTime)
                 Call data.Add("mtime", dirinfo.LastWriteTime)
                 Call data.Add("atime", dirinfo.LastAccessTime)
                 Call data.Add("isdir", True)
+            ElseIf clr_obj Then
+                Return Nothing
             Else
                 Call data.Add("name", filepath.BaseName)
             End If
