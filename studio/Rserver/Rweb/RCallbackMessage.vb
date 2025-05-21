@@ -181,7 +181,7 @@ Public Module RCallbackMessage
                 file:=ms,
                 encoding:=Encoding.UTF8,
                 tsv:=df.tsv,
-                silent:=False,
+                silent:=Not debug,
                 autoCloseFile:=False
             )
 
