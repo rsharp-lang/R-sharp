@@ -156,7 +156,13 @@ Namespace Runtime.Internal.Invokes
         Public Function getRelativePath(pathname As String(), <RDefaultExpression> Optional relativeTo As Object = "~getwd()") As String()
             Return pathname _
                 .SafeQuery _
-                .Select(Function(path) RelativePath(relativeTo, path, appendParent:=False, fixZipPath:=True)) _
+                .Select(Function(path)
+                            Return RelativePath(relativeTo, path,
+                                                appendParent:=False,
+                                                fixZipPath:=True
+                                ) _
+                                .StringReplace("[\]+", "/")
+                        End Function) _
                 .ToArray
         End Function
 
