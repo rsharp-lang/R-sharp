@@ -94,9 +94,7 @@ Module Program
         Dim port As Integer = args("/port") Or 80
         Dim attach As String = args("--attach")
         Dim parent As String = args("--parent")
-        Dim localfs As New WebFileSystemListener() With {
-            .fs = New FileSystem(wwwroot)
-        }
+        Dim localfs As New WebFileSystemListener(New FileSystem(wwwroot))
         Dim localhost As New HttpSocket(
             app:=AddressOf localfs.WebHandler,
             port:=port
@@ -104,11 +102,11 @@ Module Program
 
         If Not attach.StringEmpty Then
             If attach.DirectoryExists Then
-                Call localfs.fs _
+                Call localfs.fs(0) _
                     .AttachFolder(attach) _
                     .ToArray
             Else
-                Call localfs.fs _
+                Call localfs.fs(0) _
                     .AttachFolder(New StreamPack(
                         buffer:=attach.Open(FileMode.Open, doClear:=False, [readOnly]:=True),
                         [readonly]:=True
