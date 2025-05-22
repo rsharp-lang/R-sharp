@@ -63,10 +63,13 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Net.Http
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports R_graphics.Common.Runtime
 Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
@@ -76,14 +79,8 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports R_graphics.Common.Runtime
-Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
-Imports Microsoft.VisualBasic.Imaging.Drawing2D.Shapes
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports Microsoft.VisualBasic.Linq
-
-
-
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 #If NET48 Then
 Imports Microsoft.VisualBasic.Drawing
