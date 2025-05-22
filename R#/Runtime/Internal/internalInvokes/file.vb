@@ -255,6 +255,7 @@ Namespace Runtime.Internal.Invokes
                                  Optional fsep As String = "/",
                                  Optional env As Environment = Nothing) As Object
 
+            ' convert the invoke parameter to runtime values
             Dim array As Object = base.c(x, env)
 
             If TypeOf array Is Message Then
