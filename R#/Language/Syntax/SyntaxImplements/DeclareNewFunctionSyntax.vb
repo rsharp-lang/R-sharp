@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.TokenIcer
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
@@ -98,7 +99,21 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
         <Extension>
         Public Function DeclareAnnotatedFunction(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim attrs = code(0).SplitByTopLevelDelimiter(TokenType.close,, "]")
+            Dim func = DeclareNewFunction(New List(Of Token())(code.Skip(1)), opts)
 
+            For Each attr As Token() In attrs
+                If attr.Length = 1 OrElse attr(0).name = TokenType.close Then
+                    Continue For
+                End If
+
+                Dim attrName As String = attr(1).text
+                Dim attrVals As String() = attr.Skip(2).Select(Function(a) a.text).ToArray
+
+                Call DirectCast(func.expression, SymbolExpression).AddCustomAttribute(attrName, attrVals)
+            Next
+
+            Return func
         End Function
 
         ''' <summary>

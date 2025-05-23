@@ -182,6 +182,10 @@ Namespace Interpreter.ExecuteEngine
         ''' Just set value, this function use for the package parser
         ''' </summary>
         ''' <param name="attrs"></param>
+        ''' <remarks>
+        ''' use the <see cref="AddCustomAttribute(String, String())"/> if want to 
+        ''' add a specific single attribute data
+        ''' </remarks>
         Friend Sub SetAttributes(attrs As Dictionary(Of String, String()))
             If attributes Is Nothing Then
                 attributes = New Dictionary(Of String, String())
