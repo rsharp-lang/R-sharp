@@ -261,7 +261,7 @@ Namespace Runtime.Internal.Invokes
             If TypeOf array Is Message Then
                 Return array
             Else
-                Return DirectCast(array, Array) _
+                Dim path As String = DirectCast(array, Array) _
                     .AsObjectEnumerator _
                     .Select(Function(c)
                                 If c Is Nothing Then
@@ -273,6 +273,12 @@ Namespace Runtime.Internal.Invokes
                                 End If
                             End Function) _
                     .JoinBy(fsep)
+
+                If path.CheckUNCNetworkPath Then
+                    Return path
+                Else
+                    Return path.StringReplace("[/]{2,}", "/")
+                End If
             End If
         End Function
 
