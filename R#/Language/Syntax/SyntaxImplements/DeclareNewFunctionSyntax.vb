@@ -1,57 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::3f648e5aa5ddd4f3b488df0706547d12, R#\Language\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 157
-    '    Code Lines: 119 (75.80%)
-    ' Comment Lines: 16 (10.19%)
-    '    - Xml Docs: 56.25%
-    ' 
-    '   Blank Lines: 22 (14.01%)
-    '     File Size: 6.76 KB
+' Summaries:
 
 
-    '     Module DeclareNewFunctionSyntax
-    ' 
-    '         Function: DeclareAnonymousFunction, DeclareNewFunction, getParameters, ReturnValue
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 157
+'    Code Lines: 119 (75.80%)
+' Comment Lines: 16 (10.19%)
+'    - Xml Docs: 56.25%
+' 
+'   Blank Lines: 22 (14.01%)
+'     File Size: 6.76 KB
+
+
+'     Module DeclareNewFunctionSyntax
+' 
+'         Function: DeclareAnonymousFunction, DeclareNewFunction, getParameters, ReturnValue
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -64,6 +65,41 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
     Module DeclareNewFunctionSyntax
+
+        <Extension>
+        Public Function CheckAnnotatedFunction(code As List(Of Token())) As Boolean
+            If code.Count < 5 Then
+                Return False
+            End If
+
+            ' [@attr "xxxx"]
+            ' [@attr2]
+            ' const xxx = function() {
+            '     ...
+            ' }
+            Dim func_keyword = code(code.Count - 2)
+
+            If func_keyword.Length <> 1 OrElse Not func_keyword(0).isKeyword("function") Then
+                Return False
+            End If
+
+            Dim attrs = code(0)
+
+            If attrs.Length < 3 Then
+                Return False
+            ElseIf attrs.First.name <> TokenType.open OrElse attrs.Last.name <> TokenType.close Then
+                Return False
+            ElseIf attrs.First.text <> "[" OrElse attrs.Last.text <> "]" Then
+                Return False
+            End If
+
+            Return True
+        End Function
+
+        <Extension>
+        Public Function DeclareAnnotatedFunction(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
+
+        End Function
 
         ''' <summary>
         ''' 

@@ -441,6 +441,8 @@ Namespace Language.Syntax.SyntaxParser
 Binary:
             If code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "~") Then
                 Return FormulaExpressionSyntax.GetExpressionLiteral(code, opts)
+            ElseIf code.CheckAnnotatedFunction Then
+                Return code.DeclareAnnotatedFunction(opts)
             Else
                 Return code.ParseBinaryExpression(opts)
             End If
