@@ -19,8 +19,8 @@ const walkFiles = function(vbproj, refer, banner, proj_folder) {
         v$function = append(v$function, [stat]::function);
         v$property = append(v$property, [stat]::properties);
 
-        v$files    = append(v$files, getRelativePath(file, root));
-        v$projList = append(v$projList, getRelativePath(refer, proj_folder));
+        v$files    = append(v$files, relative_path(file, root));
+        v$projList = append(v$projList, relative_path(refer, proj_folder));
     }
 
     print("-----------------------------");
@@ -93,7 +93,7 @@ const processSingle = function(refer, banner, proj_folder, stat = list()) {
         stat$property  = append(stat$property, sum(v$property));
 
         stat$files    = append(stat$files, "<project>");
-        stat$projList = append(stat$projList, getRelativePath(refer, proj_folder));
+        stat$projList = append(stat$projList, relative_path(refer, proj_folder));
     }
 
     print("~done!");
