@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b61d0d7fdf56f8668cc2eb710e6d6c97, R#\Runtime\Serialize\bufferObjects\textBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::537c43ed6077e7e5562840973c913809, R#\Runtime\Serialize\bufferObjects\textBuffer.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 84
-    '    Code Lines: 60 (71.43%)
-    ' Comment Lines: 8 (9.52%)
+    '   Total Lines: 89
+    '    Code Lines: 64 (71.91%)
+    ' Comment Lines: 8 (8.99%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 16 (19.05%)
-    '     File Size: 2.64 KB
+    '   Blank Lines: 17 (19.10%)
+    '     File Size: 2.79 KB
 
 
     '     Class textBuffer
     ' 
     '         Properties: code, mime, text
     ' 
-    '         Constructor: (+3 Overloads) Sub New
+    '         Constructor: (+4 Overloads) Sub New
     ' 
     '         Function: getValue
     ' 

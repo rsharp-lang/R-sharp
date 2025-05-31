@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b5614a59b15e0f4696026cce6135b52d, R#\Runtime\System\InvokeParameter.vb"
+﻿#Region "Microsoft.VisualBasic::6150175675e424d18cd0234bc06acd5d, R#\Runtime\System\InvokeParameter.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 81.25%
     ' 
     '   Blank Lines: 43 (12.61%)
-    '     File Size: 13.39 KB
+    '     File Size: 13.43 KB
 
 
     '     Class InvokeParameter

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::62162482cbc46ac13cef5b6a094063c5, R#\Runtime\Serialize\BufferObject.vb"
+﻿#Region "Microsoft.VisualBasic::3e0084a9db71bfc778cf5bf6a7096ce9, R#\Runtime\Serialize\BufferObject.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 61
-    '    Code Lines: 39 (63.93%)
-    ' Comment Lines: 7 (11.48%)
+    '   Total Lines: 67
+    '    Code Lines: 44 (65.67%)
+    ' Comment Lines: 7 (10.45%)
     '    - Xml Docs: 71.43%
     ' 
-    '   Blank Lines: 15 (24.59%)
-    '     File Size: 1.76 KB
+    '   Blank Lines: 16 (23.88%)
+    '     File Size: 1.93 KB
 
 
     '     Class NullObject
     ' 
-    '         Properties: code
+    '         Properties: [nothing], code
     ' 
     '         Function: getValue
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0a3c35976cdacb21645fb85e6340188a, R#\Runtime\Internal\internalInvokes\env.vb"
+﻿#Region "Microsoft.VisualBasic::6b352794e94d3a059a9e8b6e568939ae, R#\Runtime\Internal\internalInvokes\env.vb"
 
     ' Author:
     ' 
@@ -34,22 +34,23 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 633
-    '    Code Lines: 310 (48.97%)
-    ' Comment Lines: 266 (42.02%)
-    '    - Xml Docs: 87.22%
+    '   Total Lines: 687
+    '    Code Lines: 337 (49.05%)
+    ' Comment Lines: 287 (41.78%)
+    '    - Xml Docs: 87.46%
     ' 
-    '   Blank Lines: 57 (9.00%)
-    '     File Size: 28.94 KB
+    '   Blank Lines: 63 (9.17%)
+    '     File Size: 31.36 KB
 
 
     '     Module env
     ' 
     '         Function: [exit], [get], [gettype], [set], [typeof]
-    '                   CallClrMemberFunction, CallInternal, CallMemberFunction, doCall, environment
-    '                   exists, getCallLambda, getCurrentTrace, getOutputDevice, globalenv
-    '                   listOptionItems, lockBinding, ls, objects, objectSize
-    '                   rm, traceback, unlockBinding
+    '                   CallClrMemberFunction, CallInternal, CallMemberFunction, doCall, docs
+    '                   environment, exists, getCallLambda, getCurrentTrace, getOutputDevice
+    '                   globalenv, listOfPackageSymbols, listOptionItems, lockBinding, ls
+    '                   objects, objectSize, relative_work, rm, traceback
+    '                   unlockBinding
     ' 
     ' 
     ' /********************************************************************************/

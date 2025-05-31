@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4b47bdc4880f3b2c3829bdfdee7961a1, R#\Interpreter\ExecuteEngine\SymbolExpression.vb"
+﻿#Region "Microsoft.VisualBasic::a51cbdef4d9868fc86dc7c900dfa9f5c, R#\Interpreter\ExecuteEngine\SymbolExpression.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 139
-    '    Code Lines: 74 (53.24%)
-    ' Comment Lines: 49 (35.25%)
-    '    - Xml Docs: 95.92%
+    '   Total Lines: 143
+    '    Code Lines: 74 (51.75%)
+    ' Comment Lines: 53 (37.06%)
+    '    - Xml Docs: 96.23%
     ' 
-    '   Blank Lines: 16 (11.51%)
-    '     File Size: 5.10 KB
+    '   Blank Lines: 16 (11.19%)
+    '     File Size: 5.28 KB
 
 
     '     Class SymbolExpression

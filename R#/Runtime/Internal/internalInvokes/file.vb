@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::10f614fef390861c8b9163f140fc58d1, R#\Runtime\Internal\internalInvokes\file.vb"
+﻿#Region "Microsoft.VisualBasic::67ce9402b8ba6ee2c6a780edafcf00ea, R#\Runtime\Internal\internalInvokes\file.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1936
-    '    Code Lines: 1111 (57.39%)
-    ' Comment Lines: 624 (32.23%)
-    '    - Xml Docs: 87.98%
+    '   Total Lines: 1973
+    '    Code Lines: 1142 (57.88%)
+    ' Comment Lines: 625 (31.68%)
+    '    - Xml Docs: 87.84%
     ' 
-    '   Blank Lines: 201 (10.38%)
-    '     File Size: 87.73 KB
+    '   Blank Lines: 206 (10.44%)
+    '     File Size: 89.29 KB
 
 
     '     Enum endianness

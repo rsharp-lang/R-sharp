@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::818a433737744de24434606d99c39d28, R#\Runtime\Serialize\bufferObjects\vectorBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::14abecad44acf0432a9fedb7d95b9f47, R#\Runtime\Serialize\bufferObjects\vectorBuffer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 274
-    '    Code Lines: 203 (74.09%)
-    ' Comment Lines: 15 (5.47%)
+    '   Total Lines: 291
+    '    Code Lines: 217 (74.57%)
+    ' Comment Lines: 15 (5.15%)
     '    - Xml Docs: 73.33%
     ' 
-    '   Blank Lines: 56 (20.44%)
-    '     File Size: 9.77 KB
+    '   Blank Lines: 59 (20.27%)
+    '     File Size: 10.34 KB
 
 
     '     Class vectorBuffer
@@ -50,7 +50,8 @@
     ' 
     '         Constructor: (+3 Overloads) Sub New
     ' 
-    '         Function: CreateBuffer, getValue, getVector, ParseListArray, safeGetType
+    '         Function: CreateBuffer, FromArray, getValue, getVector, ParseListArray
+    '                   safeGetType
     ' 
     '         Sub: loadBuffer, Serialize
     ' 

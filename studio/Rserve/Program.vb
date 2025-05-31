@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b146f665987c94623bd7fbe61f5c97b3, studio\Rserve\Program.vb"
+﻿#Region "Microsoft.VisualBasic::f3b773399dc865b58630a835ebf6689d, studio\Rserve\Program.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 186
-    '    Code Lines: 152 (81.72%)
-    ' Comment Lines: 11 (5.91%)
+    '   Total Lines: 184
+    '    Code Lines: 150 (81.52%)
+    ' Comment Lines: 11 (5.98%)
     '    - Xml Docs: 81.82%
     ' 
-    '   Blank Lines: 23 (12.37%)
-    '     File Size: 8.40 KB
+    '   Blank Lines: 23 (12.50%)
+    '     File Size: 8.37 KB
 
 
     ' Module Program

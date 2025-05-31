@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ec2000d2904316bc151ae052acc30b2d, R#\Language\Syntax\SyntaxImplements\FunctionAcceptorSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::2d7ceeb78e1a574c7546b6499791a373, R#\Language\Syntax\SyntaxImplements\FunctionAcceptorSyntax.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 66
-    '    Code Lines: 55 (83.33%)
+    '   Total Lines: 64
+    '    Code Lines: 53 (82.81%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 11 (16.67%)
-    '     File Size: 2.79 KB
+    '   Blank Lines: 11 (17.19%)
+    '     File Size: 2.72 KB
 
 
     '     Module FunctionAcceptorSyntax

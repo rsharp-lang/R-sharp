@@ -1,54 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::3f648e5aa5ddd4f3b488df0706547d12, R#\Language\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::603ae28760c97166b138d39e85066b4b, R#\Language\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 157
-'    Code Lines: 119 (75.80%)
-' Comment Lines: 16 (10.19%)
-'    - Xml Docs: 56.25%
-' 
-'   Blank Lines: 22 (14.01%)
-'     File Size: 6.76 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module DeclareNewFunctionSyntax
-' 
-'         Function: DeclareAnonymousFunction, DeclareNewFunction, getParameters, ReturnValue
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 208
+    '    Code Lines: 154 (74.04%)
+    ' Comment Lines: 21 (10.10%)
+    '    - Xml Docs: 42.86%
+    ' 
+    '   Blank Lines: 33 (15.87%)
+    '     File Size: 8.62 KB
+
+
+    '     Module DeclareNewFunctionSyntax
+    ' 
+    '         Function: CheckAnnotatedFunction, DeclareAnnotatedFunction, DeclareAnonymousFunction, DeclareNewFunction, getParameters
+    '                   ReturnValue
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
