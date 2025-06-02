@@ -33,11 +33,14 @@ const rlang_interop = function(code,
     source = NULL, 
     debug = FALSE, 
     workdir = NULL, 
-    print_code = FALSE) {
+    print_code = FALSE, 
+    native_R = getOption("native_rexec")) {
 
     let code_save = tempfile(fileext = ".R");
     let script_code = transform_rlang_source(code, source, 
             debug = debug);
+
+    writeLines(script_code, con = code_save);
 
     if (!debug) {
         let current_wd = getwd();
@@ -55,10 +58,19 @@ const rlang_interop = function(code,
         print("run script at workspace:");
         print(getwd());
         print(code_save);
-        print(`Rscript "${code_save}"`);
+        print(`Rscript "${code_save}"`);        
 
-        writeLines(script_code, con = code_save);
-        system(`/usr/lib/R/bin/Rscript "${code_save}"`);
+        if (nchar(native_R) == 0) {
+            if ((Sys.info()[['sysname']]) != "Win32NT") {
+                # ubuntu linux
+                system2("/usr/lib/R/bin/Rscript", code_save);
+            } else {
+                # window environment
+                system2("C:\\Program Files\\R\\R-4.5.0\\bin\\x64\\Rscript.exe", code_save);
+            } 
+        } else {
+            system2(native_R, code_save);
+        }
 
         if (change_wd) {
             setwd(current_wd);
