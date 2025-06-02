@@ -1,16 +1,18 @@
-﻿.TH RLANG_INTEROP 1 2025-May "" "helper function for R# interop with R language"
+﻿.TH RLANG_INTEROP 1 2025-Jun "" "helper function for R# interop with R language"
 .SH NAME
 rlang_interop \- rlang_interop(code,
     <i>source</i> = <span style='color: blue !important;'>NULL</span>,
     <i>debug</i> = <span style='color: blue !important;'>FALSE</span>,
     <i>workdir</i> = <span style='color: blue !important;'>NULL</span>,
-    <i>print.code</i> = <span style='color: blue !important;'>FALSE</span>)
+    <i>print.code</i> = <span style='color: blue !important;'>FALSE</span>,
+    <i>native.R</i> = 'getOption'('native_rexec'))
 .SH SYNOPSIS
 \fIrlang_interop(code,
     <i>source</i> = <span style='color: blue !important;'>NULL</span>,
     <i>debug</i> = <span style='color: blue !important;'>FALSE</span>,
     <i>workdir</i> = <span style='color: blue !important;'>NULL</span>,
-    <i>print.code</i> = <span style='color: blue !important;'>FALSE</span>)\fR
+    <i>print.code</i> = <span style='color: blue !important;'>FALSE</span>,
+    <i>native.R</i> = 'getOption'('native_rexec'))\fR
 .SH OPTIONS
 .PP
 \fBcode\fB \fR\- . a closure expresion for invoke R function
@@ -26,6 +28,9 @@ rlang_interop \- rlang_interop(code,
 .PP
 .PP
 \fBprint.code\fB \fR\- FALSE. 
+.PP
+.PP
+\fBnative.R\fB \fR\- 'getOption'('native_rexec'). 
 .PP
 .SH FILES
 .PP

@@ -102,8 +102,9 @@ declare namespace REnv {
      * @param debug default value Is ``false``.
      * @param workdir default value Is ``null``.
      * @param print_code default value Is ``false``.
+     * @param native_R default value Is ``Call "getOption"("native_rexec")``.
    */
-   function rlang_interop(code: any, source?: any, debug?: any, workdir?: any, print_code?: any): object;
+   function rlang_interop(code: any, source?: any, debug?: any, workdir?: any, print_code?: any, native_R?: any): object;
    /**
    */
    function sacurine(): object;
