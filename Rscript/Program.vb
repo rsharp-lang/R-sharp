@@ -243,9 +243,16 @@ Module Program
             For Each packageRef As String In packageList
                 If packageRef.DirectoryExists Then
                     Dim libdir2 As Libdir = Libdir.FromLocalFileSystem(packageRef)
-                    Dim err As Message = PackageLoader2.LoadPackage(libdir2, packageRef.BaseName,
-                                                                    quietly:=False,
-                                                                    env:=R.globalEnvir)
+                    Dim err As Message
+
+                    If libdir2.FileExists(PackageLoader2.RpkgIndexJSON, True) Then
+                        err = PackageLoader2.LoadPackage(libdir2, packageRef.BaseName,
+                                                         quietly:=False,
+                                                         env:=R.globalEnvir)
+                    Else
+                        err = PackageLoader2.Hotload(libdir2, R.globalEnvir)
+                    End If
+
                     If Not err Is Nothing Then
                         Return handleResult(err, R.globalEnvir, Nothing)
                     End If
