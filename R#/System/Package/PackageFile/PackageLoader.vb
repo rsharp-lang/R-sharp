@@ -177,7 +177,8 @@ Namespace Development.Package.File
                                   Return dll.FileName
                               End Function)
 #Else
-            Return projDir.EnumerateFiles("/assembly", "*.dll") _
+            Return projDir _
+                .EnumerateFiles("/assembly", "*.dll") _
                 .ToDictionary(Function(dll)
                                   Return dll.FileName
                               End Function)
@@ -243,7 +244,7 @@ Namespace Development.Package.File
             Call VBDebugger.EchoLine($"R# package '{meta.Package}' hot load:")
 
             ' 1. load R symbols from the package source
-            For Each script As String In "{projDir}/R".ListFiles("*.R")
+            For Each script As String In projDir.GetFiles("/R", "*.R")
                 If Not ([error] = temp.buildRscript(script, loading)) Is Nothing Then
                     Return [error]
                 End If
