@@ -177,8 +177,8 @@ Namespace Development.Package.File
                 Return Internal.debug.stop({$"package '{packageName}' is not installed!", $"package: {packageName}"}, env)
             End If
 
-            If Not dir.FileExists($"/package/index.json") Then Return Internal.debug.stop("missing package index file!", env)
-            If Not dir.FileExists($"/CHECKSUM") Then Return Internal.debug.stop("no package checksum data!", env)
+            If Not dir.FileExists($"/package/index.json") Then Return Internal.debug.stop({"missing package index file(/package/index.json)!", "package_source: " & dir.ToString}, env)
+            If Not dir.FileExists($"/CHECKSUM") Then Return Internal.debug.stop({"no package checksum data(/CHECKSUM)!", "package_source: " & dir.ToString}, env)
 
             Return Nothing
         End Function
