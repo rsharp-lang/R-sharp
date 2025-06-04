@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::07087abc44d38fb13aec697f0c32e602, studio\Rserver\Rweb\Rweb.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 172
-    '    Code Lines: 129 (75.00%)
-    ' Comment Lines: 15 (8.72%)
-    '    - Xml Docs: 80.00%
-    ' 
-    '   Blank Lines: 28 (16.28%)
-    '     File Size: 6.06 KB
+' Summaries:
 
 
-    ' Class Rweb
-    ' 
-    '     Properties: access, config, fs, NextRequestId, Processor
-    '                 TcpPort
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: callback, getHttpProcessor, ParseJSON, Run
-    ' 
-    '     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest, SetAccessControl, SetFileSystem
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 172
+'    Code Lines: 129 (75.00%)
+' Comment Lines: 15 (8.72%)
+'    - Xml Docs: 80.00%
+' 
+'   Blank Lines: 28 (16.28%)
+'     File Size: 6.06 KB
+
+
+' Class Rweb
+' 
+'     Properties: access, config, fs, NextRequestId, Processor
+'                 TcpPort
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: callback, getHttpProcessor, ParseJSON, Run
+' 
+'     Sub: handleGETRequest, handleOtherMethod, handlePOSTRequest, SetAccessControl, SetFileSystem
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -73,6 +73,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Parallel
 Imports SMRUCC.Rsharp.Development
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Serialize
 
 ''' <summary>
@@ -163,26 +164,26 @@ Public Class Rweb : Inherits HttpServer
     End Function
 
     Public Shared Function ParseJSON(json As String, Optional rawClr As Boolean = True) As Dictionary(Of String, Object)
-        Dim raw As JsonElement = RJSON.ParseJSONinternal(json, raw:=rawClr, strict_vector_syntax:=False, Nothing)
+        Dim raw As Object = RJSON.ParseJSONinternal(json, raw:=rawClr, strict_vector_syntax:=False, Nothing)
+        Dim obj As New Dictionary(Of String, Object)
 
         If raw Is Nothing Then
-            Return New Dictionary(Of String, Object)
+            Return obj
         End If
 
         If TypeOf raw Is JsonObject Then
-            Dim obj As New Dictionary(Of String, Object)
             Dim list As JsonObject = DirectCast(raw, JsonObject)
 
             For Each name As String In list.ObjectKeys
                 Call obj.Add(name, list(name))
             Next
-
-            Return obj
+        ElseIf TypeOf raw Is list Then
+            obj = New Dictionary(Of String, Object)(DirectCast(raw, list).slots)
         Else
-            Return New Dictionary(Of String, Object) From {
-                {"data", raw}
-            }
+            obj("data") = raw
         End If
+
+        Return obj
     End Function
 
     Public Overrides Sub handlePOSTRequest(p As HttpProcessor, inputData As String)
