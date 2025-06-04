@@ -169,17 +169,18 @@ Namespace Development.Package.File
             End If
         End Function
 
-        Private Function FindAllDllFiles(projDir As String) As Dictionary(Of String, String)
+        Private Function FindAllDllFiles(projDir As IFileSystemEnvironment) As Dictionary(Of String, String)
 #If NETCOREAPP Then
-            Return ($"{projDir}/assembly/{CreatePackage.getRuntimeTags}/") _
-                .EnumerateFiles("*.dll") _
+            Return projDir _
+                .EnumerateFiles($"/assembly/{CreatePackage.getRuntimeTags}/", "*.dll") _
                 .ToDictionary(Function(dll)
                                   Return dll.FileName
                               End Function)
 #Else
-            Return ($"{projDir}/assembly") _
-                .EnumerateFiles("*.dll") _
-                .ToDictionary(Function(dll) dll.FileName)
+            Return projDir.EnumerateFiles("/assembly", "*.dll") _
+                .ToDictionary(Function(dll)
+                                  Return dll.FileName
+                              End Function)
 #End If
         End Function
 
@@ -222,17 +223,17 @@ Namespace Development.Package.File
                 .symbols = New Dictionary(Of String, Expression)
             }
 
-            meta = DESCRIPTION.Parse($"{projDir}/DESCRIPTION")
+            meta = DESCRIPTION.ParseDocument(projDir.ReadAllText("DESCRIPTION"))
 
             If meta.Package.StringEmpty Then
                 Return Internal.debug.stop(
-                    message:=$"invalid project source folder: {projDir}, please check of the DESCRIPTION is file exists or not, or is invalid file format?",
+                    message:=$"invalid project source folder: {projDir}, please check of the DESCRIPTION Is file exists Or Not, Or Is invalid file format?",
                     envir:=env
                 )
             End If
 
             Dim pkg As New PackageNamespace With {
-                .libPath = Directory.FromLocalFileSystem(projDir),
+                .libPath = projDir,
                 .meta = meta,
                 .assembly = FindAllDllFiles(projDir)
             }
@@ -242,7 +243,7 @@ Namespace Development.Package.File
             Call VBDebugger.EchoLine($"R# package '{meta.Package}' hot load:")
 
             ' 1. load R symbols from the package source
-            For Each script As String In $"{projDir}/R".ListFiles("*.R")
+            For Each script As String In "{projDir}/R".ListFiles("*.R")
                 If Not ([error] = temp.buildRscript(script, loading)) Is Nothing Then
                     Return [error]
                 End If
