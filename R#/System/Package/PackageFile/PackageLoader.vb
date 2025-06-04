@@ -1,61 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::17e6619f370824bbfe61b77c5b0a30ce, R#\System\Package\PackageFile\PackageLoader.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 385
-    '    Code Lines: 237 (61.56%)
-    ' Comment Lines: 94 (24.42%)
-    '    - Xml Docs: 65.96%
-    ' 
-    '   Blank Lines: 54 (14.03%)
-    '     File Size: 15.94 KB
+' Summaries:
 
 
-    '     Module PackageLoader2
-    ' 
-    '         Function: callOnLoad, CheckPackage, FindAllDllFiles, GetPackageDirectory, (+2 Overloads) GetPackageIndex
-    '                   GetPackageName, Hotload, loadDependency, LoadPackage
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 385
+'    Code Lines: 237 (61.56%)
+' Comment Lines: 94 (24.42%)
+'    - Xml Docs: 65.96%
+' 
+'   Blank Lines: 54 (14.03%)
+'     File Size: 15.94 KB
+
+
+'     Module PackageLoader2
+' 
+'         Function: callOnLoad, CheckPackage, FindAllDllFiles, GetPackageDirectory, (+2 Overloads) GetPackageIndex
+'                   GetPackageName, Hotload, loadDependency, LoadPackage
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
 Imports System.IO.Compression
 Imports System.Runtime.CompilerServices
+Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -195,14 +196,32 @@ Namespace Development.Package.File
         ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
-        Public Function Hotload(projDir As String, env As GlobalEnvironment, Optional ByRef meta As DESCRIPTION = Nothing) As Message
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function Hotload(projDir As String, env As GlobalEnvironment, <Out> Optional ByRef meta As DESCRIPTION = Nothing) As Message
+            Return Hotload(Directory.FromLocalFileSystem(projDir.GetDirectoryFullPath), env, meta)
+        End Function
+
+        ''' <summary>
+        ''' 程序包调试，测试用api
+        ''' 
+        ''' 在启动的时候对未进行编译的程序包进行热加载
+        ''' </summary>
+        ''' <param name="projDir">
+        ''' the package source project directory, which is should be un-build...
+        ''' for load the package directory which is installed into the R library
+        ''' folder, use the method <see cref="PackageLoader2.LoadPackage"/>
+        ''' instead.
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        Public Function Hotload(projDir As IFileSystemEnvironment, env As GlobalEnvironment, <Out> Optional ByRef meta As DESCRIPTION = Nothing) As Message
             Dim [error] As New Value(Of Message)
             Dim onload As DeclareNewFunction
             Dim temp As New PackageModel With {
                 .symbols = New Dictionary(Of String, Expression)
             }
 
-            projDir = projDir.GetDirectoryFullPath
             meta = DESCRIPTION.Parse($"{projDir}/DESCRIPTION")
 
             If meta.Package.StringEmpty Then
@@ -288,6 +307,7 @@ Namespace Development.Package.File
         ''' "r-sharp-help"
         ''' </summary>
         Public Const RsharpHelp As String = "r-sharp-help"
+        Public Const RpkgIndexJSON As String = "/package/man/index.json"
 
         ''' <summary>
         ''' attach installed package
@@ -309,7 +329,7 @@ Namespace Development.Package.File
             Dim symbolExpression As Expression
             Dim symbols As New List(Of RFunction)
             Dim pkgEnv As PackageEnvironment = env.attachedNamespace.Add([namespace])
-            Dim helpIndex = dir.ReadAllText($"/package/man/index.json").LoadJSON(Of Dictionary(Of String, Document))
+            Dim helpIndex = dir.ReadAllText(RpkgIndexJSON).LoadJSON(Of Dictionary(Of String, Document))
 
             If helpIndex Is Nothing Then
                 helpIndex = New Dictionary(Of String, Document)

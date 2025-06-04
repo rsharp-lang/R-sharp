@@ -57,6 +57,7 @@
 #End Region
 
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language.[Default]
@@ -160,8 +161,19 @@ Namespace Development.Package.File
             }
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="file">the file path to the package document description file</param>
+        ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function Parse(file As String) As DESCRIPTION
-            Dim meta As Dictionary(Of String, String) = file.SolveListStream.ParseTagData
+            Return ParseDocument(file.ReadAllText)
+        End Function
+
+        Public Shared Function ParseDocument(str As String) As DESCRIPTION
+            Dim meta As Dictionary(Of String, String) = str.LineTokens.ParseTagData
             Dim index As New DESCRIPTION With {
                 .meta = New Dictionary(Of String, String)
             }
