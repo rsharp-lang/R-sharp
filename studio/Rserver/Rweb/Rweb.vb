@@ -162,7 +162,7 @@ Public Class Rweb : Inherits HttpServer
         End Using
     End Function
 
-    Private Shared Function ParseJSON(json As String) As Dictionary(Of String, Object)
+    Public Shared Function ParseJSON(json As String) As Dictionary(Of String, Object)
         Dim raw As JsonElement = RJSON.ParseJSONinternal(json, raw:=True, strict_vector_syntax:=False, Nothing)
 
         If raw Is Nothing Then
