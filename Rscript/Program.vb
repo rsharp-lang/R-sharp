@@ -139,7 +139,7 @@ Module Program
                     If libdir2.FileExists(PackageLoader2.RpkgIndexJSON, True) Then
                         err = PackageLoader2.LoadPackage(libdir2, packageRef.BaseName, quietly:=False, env:=R.globalEnvir)
                     Else
-                        err = PackageLoader2.Hotload(packageRef.GetDirectoryFullPath, R.globalEnvir)
+                        err = PackageLoader2.Hotload(libdir2, R.globalEnvir)
                     End If
 
                     If Not err Is Nothing Then
