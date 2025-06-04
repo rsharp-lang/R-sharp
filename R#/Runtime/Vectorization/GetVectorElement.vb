@@ -269,6 +269,8 @@ Namespace Runtime.Vectorization
         Public Shared Function Create(Of T)(x As Object) As GetVectorElement
             If x Is Nothing Then
                 Return New GetVectorElement(vec:=Nothing, GetType(T))
+            ElseIf TypeOf x Is T() Then
+                Return New GetVectorElement(vec:=DirectCast(x, T()), GetType(T))
             ElseIf TypeOf x Is GetVectorElement AndAlso DirectCast(x, GetVectorElement).elementType Is GetType(T) Then
                 Return DirectCast(x, GetVectorElement)
             Else
