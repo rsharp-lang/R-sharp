@@ -129,9 +129,19 @@ Public Class RoxygenDocument
                     .Split _
                     .Where(Function(s) Not s.StringEmpty) _
                     .ToArray
-                Dim newLines = buffer.PopAll _
+                Dim newLines As String() = buffer.PopAll _
                     .Where(Function(str) Not str.StringEmpty) _
-                    .DoCall(AddressOf continuteLines)
+                    .ToArray
+                Dim title As String = newLines(0)
+                Dim func_name As String = If(name(1) = "=", name(0), name(1))
+
+                If title.StartsWith("@") Then
+                    ' no title
+                    title = func_name
+                    newLines = continuteLines(newLines)
+                Else
+                    newLines = newLines.Skip(1).DoCall(AddressOf continuteLines)
+                End If
 
                 If newLines.Length = 0 Then
                     Continue For
@@ -140,8 +150,8 @@ Public Class RoxygenDocument
                 ' const xxx as function -> name(1)
                 ' xxx = function -> name(0)
                 Yield New NamedValue(Of Document) With {
-                    .Name = If(name(1) = "=", name(0), name(1)),
-                    .Value = ParseDocument(newLines)
+                    .Name = func_name,
+                    .Value = ParseDocument(title, newLines)
                 }
             End If
         Next
@@ -171,8 +181,7 @@ Public Class RoxygenDocument
         Return list.ToArray
     End Function
 
-    Private Shared Function ParseDocument(lines As String()) As Document
-        Dim title As String = lines(Scan0).Trim
+    Private Shared Function ParseDocument(title As String, lines As String()) As Document
         Dim tagsData As Dictionary(Of String, String()) = lines _
             .Skip(1) _
             .Select(Function(line)
@@ -202,7 +211,9 @@ Public Class RoxygenDocument
 
                             Return val
                         End Function) _
-                .ToArray
+                .ToArray,
+            .examples = tagsData.TryGetValue("@examples").JoinBy(vbCrLf),
+            .see_also = tagsData.TryGetValue("@seealso").JoinBy(vbCrLf)
         }
     End Function
 End Class
