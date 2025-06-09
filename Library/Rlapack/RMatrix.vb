@@ -62,6 +62,7 @@
 Imports System.IO
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.GraphTheory
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -210,7 +211,28 @@ Module RMatrix
                                          Optional cost As String = Nothing,
                                          Optional env As Environment = Nothing) As Object
 
-        If TypeOf x Is dataframe AndAlso a IsNot Nothing AndAlso b IsNot Nothing Then
+        If TypeOf x Is dataframe AndAlso a IsNot Nothing AndAlso b IsNot Nothing AndAlso cost IsNot Nothing Then
+            Dim targets As String() = CLRVector.asCharacter(DirectCast(x, dataframe)(a))
+            Dim assign As String() = CLRVector.asCharacter(DirectCast(x, dataframe)(b))
+            Dim costs As Double() = CLRVector.asNumeric(DirectCast(x, dataframe)(cost))
+            Dim costMatrix(targets.Length - 1, assign.Length - 1) As Double
+            Dim maxCost As Double = costs.Max * 1000
+            Dim assignments As Integer()
+
+            For i As Integer = 0 To targets.Length - 1
+                For j As Integer = 0 To assign.Length - 1
+                    If i = j Then
+                        costMatrix(i, j) = costs(i)
+                    Else
+                        costMatrix(i, j) = maxCost
+                    End If
+                Next
+            Next
+
+            assignments = HungarianAlgorithm.FindAssignments(costMatrix)
+
+            Dim assignIndex As New List(Of Integer)
+
         Else
             Dim m = matrix_extractor(x, env)
             Dim data As NumericMatrix
