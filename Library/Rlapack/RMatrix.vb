@@ -216,8 +216,10 @@ Module RMatrix
             Dim targets As String() = CLRVector.asCharacter(DirectCast(x, dataframe)(a))
             Dim assign As String() = CLRVector.asCharacter(DirectCast(x, dataframe)(b))
             Dim costs As Double() = CLRVector.asNumeric(DirectCast(x, dataframe)(cost))
+            Dim targetIndex = targets.SeqIterator.GroupBy(Function(i) i.value).ToDictionary(Function(i) i.Key, Function(i) i.Select(Function(j) j.i).ToArray)
+            Dim assignIndex = assign.SeqIterator.GroupBy(Function(i) i.value).ToDictionary(Function(i) i.Key, Function(i) i.Select(Function(j) j.i).ToArray)
             Dim costMatrix(targets.Length - 1, assign.Length - 1) As Double
-            Dim maxCost As Double = costs.Max * 1000
+            Dim maxCost As Double = costs.Max * 1.25
             Dim assignments As Integer()
 
             For i As Integer = 0 To targets.Length - 1
@@ -225,14 +227,20 @@ Module RMatrix
                     If i = j Then
                         costMatrix(i, j) = costs(i)
                     Else
-                        costMatrix(i, j) = maxCost
+                        a = targets(i)
+                        b = assign(j)
+
+                        Dim ai = targetIndex(a)
+                        Dim bj = assignIndex(b)
+
+
                     End If
                 Next
             Next
 
             assignments = HungarianAlgorithm.FindAssignments(costMatrix)
 
-            Dim assignIndex As New List(Of Integer)
+
 
         Else
             Dim m = matrix_extractor(x, env)
