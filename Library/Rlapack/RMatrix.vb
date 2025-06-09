@@ -222,31 +222,53 @@ Module RMatrix
             Dim maxCost As Double = costs.Max * 1.25
             Dim assignments As Integer()
 
-            For i As Integer = 0 To targets.Length - 1
-                For j As Integer = 0 To assign.Length - 1
-                    If i = j Then
-                        costMatrix(i, j) = costs(i)
+            targets = targetIndex.Keys.ToArray
+            assign = assignIndex.Keys.ToArray
+
+            For i As Integer = 0 To targetIndex.Count - 1
+                a = targets(i)
+
+                For j As Integer = 0 To assignIndex.Count - 1
+                    b = assign(j)
+
+                    Dim ai = targetIndex(a)
+                    Dim bj = assignIndex(b)
+                    Dim it = ai.Intersect(bj).ToArray
+
+                    If it.Any Then
+                        costMatrix(i, j) = it.Select(Function(o) costs(o)).Average
                     Else
-                        a = targets(i)
-                        b = assign(j)
-
-                        Dim ai = targetIndex(a)
-                        Dim bj = assignIndex(b)
-                        Dim it = ai.Intersect(bj).ToArray
-
-                        If it.Any Then
-                            costMatrix(i, j) = it.Select(Function(o) costs(o)).Average
-                        Else
-                            costMatrix(i, j) = maxCost
-                        End If
+                        costMatrix(i, j) = maxCost
                     End If
                 Next
             Next
 
+            Dim offsets As New List(Of Integer)
+
             assignments = HungarianAlgorithm.FindAssignments(costMatrix)
 
+            For i As Integer = 0 To assignments.Length - 1
+                a = targets(i)
+                i = assignments(i)
 
+                If i < 0 Then
+                    Continue For
+                End If
 
+                b = assign(i)
+
+                Dim offset = targetIndex(a).Intersect(assignIndex(b)).OrderBy(Function(j) costs(j)).DefaultFirst([default]:=-1)
+
+                If offset < 0 Then
+                    Continue For
+                End If
+
+                Call offsets.Add(offset)
+            Next
+
+            Return DirectCast(x, dataframe) _
+                .sliceByRow(offsets.ToArray, env) _
+                .Value
         Else
             Dim m = matrix_extractor(x, env)
             Dim data As NumericMatrix
