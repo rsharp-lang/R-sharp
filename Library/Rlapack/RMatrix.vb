@@ -188,6 +188,7 @@ Module RMatrix
     End Function
 
     <ExportAPI("hungarian_assignments")>
+    <RApiReturn(TypeCodes.integer)>
     Public Function HungarianAssignments(<RRawVectorArgument> cost As Object, Optional env As Environment = Nothing) As Object
         Dim m = matrix_extractor(cost, env)
         Dim data As NumericMatrix
@@ -199,6 +200,7 @@ Module RMatrix
         End If
 
         Dim assignments = HungarianAlgorithm.FindAssignments(data)
+        Return assignments
     End Function
 
     ''' <summary>
