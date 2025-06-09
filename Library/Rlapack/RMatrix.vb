@@ -193,7 +193,8 @@ Module RMatrix
     ''' </summary>
     ''' <param name="x">
     ''' A numeric matrix of the cost for the assignment, for this input data type function returns an integer vector for indicates the assignments,
-    ''' or a dataframe that contains the problems for make the assignment, the parameter a and b should not be nothing.
+    ''' or a dataframe that contains the problems for make the assignment, the parameter a, b and cost should not be nothing, then this function 
+    ''' returns a subset of the input dataframe as the assignment result..
     ''' </param>
     ''' <param name="a">the field name for get assign target.</param>
     ''' <param name="b">the field name for get another assign target.</param>
