@@ -218,7 +218,7 @@ Module RMatrix
             Dim costs As Double() = CLRVector.asNumeric(DirectCast(x, dataframe)(cost))
             Dim targetIndex = targets.SeqIterator.GroupBy(Function(i) i.value).ToDictionary(Function(i) i.Key, Function(i) i.Select(Function(j) j.i).ToArray)
             Dim assignIndex = assign.SeqIterator.GroupBy(Function(i) i.value).ToDictionary(Function(i) i.Key, Function(i) i.Select(Function(j) j.i).ToArray)
-            Dim costMatrix(targets.Length - 1, assign.Length - 1) As Double
+            Dim costMatrix(targetIndex.Count - 1, assignIndex.Count - 1) As Double
             Dim maxCost As Double = costs.Max * 1.25
             Dim assignments As Integer()
 
@@ -232,8 +232,13 @@ Module RMatrix
 
                         Dim ai = targetIndex(a)
                         Dim bj = assignIndex(b)
+                        Dim it = ai.Intersect(bj).ToArray
 
-
+                        If it.Any Then
+                            costMatrix(i, j) = it.Select(Function(o) costs(o)).Average
+                        Else
+                            costMatrix(i, j) = maxCost
+                        End If
                     End If
                 Next
             Next
