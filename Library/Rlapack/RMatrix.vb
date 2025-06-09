@@ -187,20 +187,43 @@ Module RMatrix
         End If
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x">
+    ''' A numeric matrix of the cost for the assignment, for this input data type function returns an integer vector for indicates the assignments,
+    ''' or a dataframe that contains the problems for make the assignment, the parameter a and b should not be nothing.
+    ''' </param>
+    ''' <param name="a">the field name for get assign target.</param>
+    ''' <param name="b">the field name for get another assign target.</param>
+    ''' <param name="cost">
+    ''' the field name for the cost value(lower is better). if the dataframe contains the score data(higher is better), 
+    ''' then you can convert the score to cost via formula: 10/(score+0.1)
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("hungarian_assignments")>
     <RApiReturn(TypeCodes.integer)>
-    Public Function HungarianAssignments(<RRawVectorArgument> cost As Object, Optional env As Environment = Nothing) As Object
-        Dim m = matrix_extractor(cost, env)
-        Dim data As NumericMatrix
+    Public Function HungarianAssignments(<RRawVectorArgument> x As Object,
+                                         Optional a As String = Nothing,
+                                         Optional b As String = Nothing,
+                                         Optional cost As String = Nothing,
+                                         Optional env As Environment = Nothing) As Object
 
-        If m Like GetType(Message) Then
-            Return m.TryCast(Of Message)
+        If TypeOf x Is dataframe AndAlso a IsNot Nothing AndAlso b IsNot Nothing Then
         Else
-            data = m.TryCast(Of NumericMatrix)
-        End If
+            Dim m = matrix_extractor(x, env)
+            Dim data As NumericMatrix
 
-        Dim assignments = HungarianAlgorithm.FindAssignments(data)
-        Return assignments
+            If m Like GetType(Message) Then
+                Return m.TryCast(Of Message)
+            Else
+                data = m.TryCast(Of NumericMatrix)
+            End If
+
+            Dim assignments = HungarianAlgorithm.FindAssignments(data)
+            Return assignments
+        End If
     End Function
 
     ''' <summary>
