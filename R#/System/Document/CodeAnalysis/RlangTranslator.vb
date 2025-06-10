@@ -168,7 +168,7 @@ Namespace Development.CodeAnalysis
                 Case GetType(Literal) : Return Literal(line, env)
                 Case GetType(IfBranch) : Return GetIf(line, env)
                 Case GetType(ElseBranch) : Return GetElse(line, env)
-                Case GetType(BinaryExpression), GetType(BinaryInExpression)
+                Case GetType(BinaryExpression), GetType(BinaryInExpression), GetType(BinaryOrExpression)
                     Return GetBinaryOp(line, env)
                 Case GetType(SymbolIndexer) : Return GetSymbolIndexSubset(line, env)
                 Case GetType(Operators.UnaryNot) : Return GetUnaryNot(line, env)
@@ -359,8 +359,8 @@ Namespace Development.CodeAnalysis
         End Function
 
         Private Function GetBinaryOp(bin As IBinaryExpression, env As Environment) As String
-            Dim binaryLeft = TypeOf bin.left Is BinaryExpression OrElse TypeOf bin.left Is BinaryInExpression OrElse TypeOf bin.left Is UnaryNumeric
-            Dim binaryRight = TypeOf bin.right Is BinaryExpression OrElse TypeOf bin.right Is BinaryInExpression OrElse TypeOf bin.right Is UnaryNumeric
+            Dim binaryLeft = TypeOf bin.left Is BinaryExpression OrElse TypeOf bin.left Is BinaryInExpression OrElse TypeOf bin.left Is UnaryNumeric OrElse TypeOf bin.left Is BinaryOrExpression
+            Dim binaryRight = TypeOf bin.right Is BinaryExpression OrElse TypeOf bin.right Is BinaryInExpression OrElse TypeOf bin.right Is UnaryNumeric OrElse TypeOf bin.right Is BinaryOrExpression
             Dim left = GetScript(bin.left, env)
             Dim right = GetScript(bin.right, env)
             Dim op As String = bin.operator
