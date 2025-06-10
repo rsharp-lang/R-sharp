@@ -1,67 +1,68 @@
 ﻿#Region "Microsoft.VisualBasic::768193542945c569d3d523a51f96934c, Library\Rlapack\RMatrix.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 770
-    '    Code Lines: 442 (57.40%)
-    ' Comment Lines: 228 (29.61%)
-    '    - Xml Docs: 87.72%
-    ' 
-    '   Blank Lines: 100 (12.99%)
-    '     File Size: 29.65 KB
+' Summaries:
 
 
-    ' Module RMatrix
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: (+3 Overloads) add, asInteger, asMatrix, createTable, (+3 Overloads) division
-    '               dot, eigen, fromGraph, gauss, gauss_solve
-    '               Matrix, matrix_extractor, (+5 Overloads) multiply, nmf_decompose, nmf_matrix
-    '               one, parse, readMatrix, rowPack, saveMatrix
-    '               (+3 Overloads) substract, sum_all, zero
-    ' 
-    '     Sub: extractVector
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 770
+'    Code Lines: 442 (57.40%)
+' Comment Lines: 228 (29.61%)
+'    - Xml Docs: 87.72%
+' 
+'   Blank Lines: 100 (12.99%)
+'     File Size: 29.65 KB
+
+
+' Module RMatrix
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: (+3 Overloads) add, asInteger, asMatrix, createTable, (+3 Overloads) division
+'               dot, eigen, fromGraph, gauss, gauss_solve
+'               Matrix, matrix_extractor, (+5 Overloads) multiply, nmf_decompose, nmf_matrix
+'               one, parse, readMatrix, rowPack, saveMatrix
+'               (+3 Overloads) substract, sum_all, zero
+' 
+'     Sub: extractVector
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.IO
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.GraphTheory
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -69,6 +70,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Solvers
+Imports Microsoft.VisualBasic.Math.SignalProcessing.HungarianAlgorithm
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.BinaryDumping
 Imports SMRUCC.Rsharp
@@ -183,6 +185,102 @@ Module RMatrix
             Return SparseGraph.CreateMatrix(DirectCast(g, SparseGraph.ISparseGraph).GetGraph, keys)
         Else
             Return Message.InCompatibleType(GetType(SparseGraph), g.GetType, env)
+        End If
+    End Function
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="x">
+    ''' A numeric matrix of the cost for the assignment, for this input data type function returns an integer vector for indicates the assignments,
+    ''' or a dataframe that contains the problems for make the assignment, the parameter a, b and cost should not be nothing, then this function 
+    ''' returns a subset of the input dataframe as the assignment result..
+    ''' </param>
+    ''' <param name="a">the field name for get assign target.</param>
+    ''' <param name="b">the field name for get another assign target.</param>
+    ''' <param name="cost">
+    ''' the field name for the cost value(lower is better). if the dataframe contains the score data(higher is better), 
+    ''' then you can convert the score to cost via formula: 10/(score+0.1)
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("hungarian_assignments")>
+    <RApiReturn(TypeCodes.integer)>
+    Public Function HungarianAssignments(<RRawVectorArgument> x As Object,
+                                         Optional a As String = Nothing,
+                                         Optional b As String = Nothing,
+                                         Optional cost As String = Nothing,
+                                         Optional env As Environment = Nothing) As Object
+
+        If TypeOf x Is dataframe AndAlso a IsNot Nothing AndAlso b IsNot Nothing AndAlso cost IsNot Nothing Then
+            Dim targets As String() = CLRVector.asCharacter(DirectCast(x, dataframe)(a))
+            Dim assign As String() = CLRVector.asCharacter(DirectCast(x, dataframe)(b))
+            Dim costs As Double() = CLRVector.asNumeric(DirectCast(x, dataframe)(cost))
+            Dim targetIndex = targets.SeqIterator.GroupBy(Function(i) i.value).ToDictionary(Function(i) i.Key, Function(i) i.Select(Function(j) j.i).ToArray)
+            Dim assignIndex = assign.SeqIterator.GroupBy(Function(i) i.value).ToDictionary(Function(i) i.Key, Function(i) i.Select(Function(j) j.i).ToArray)
+            Dim costMatrix(targetIndex.Count - 1, assignIndex.Count - 1) As Double
+            Dim maxCost As Double = costs.Max * 1.25
+            Dim assignments As Integer()
+
+            targets = targetIndex.Keys.ToArray
+            assign = assignIndex.Keys.ToArray
+
+            For i As Integer = 0 To targetIndex.Count - 1
+                a = targets(i)
+
+                For j As Integer = 0 To assignIndex.Count - 1
+                    b = assign(j)
+
+                    Dim ai = targetIndex(a)
+                    Dim bj = assignIndex(b)
+                    Dim it = ai.Intersect(bj).ToArray
+
+                    If it.Any Then
+                        costMatrix(i, j) = it.Select(Function(o) costs(o)).Average
+                    Else
+                        costMatrix(i, j) = maxCost
+                    End If
+                Next
+            Next
+
+            Dim offsets As New List(Of Integer)
+
+            assignments = HungarianAlgorithm.FindAssignments(costMatrix)
+
+            For i As Integer = 0 To assignments.Length - 1
+                a = targets(i)
+                i = assignments(i)
+
+                If i < 0 Then
+                    Continue For
+                End If
+
+                b = assign(i)
+
+                Dim offset = targetIndex(a).Intersect(assignIndex(b)).OrderBy(Function(j) costs(j)).DefaultFirst([default]:=-1)
+
+                If offset < 0 Then
+                    Continue For
+                End If
+
+                Call offsets.Add(offset)
+            Next
+
+            Return DirectCast(x, dataframe) _
+                .sliceByRow(offsets.ToArray, env) _
+                .Value
+        Else
+            Dim m = matrix_extractor(x, env)
+            Dim data As NumericMatrix
+
+            If m Like GetType(Message) Then
+                Return m.TryCast(Of Message)
+            Else
+                data = m.TryCast(Of NumericMatrix)
+            End If
+
+            Dim assignments = HungarianAlgorithm.FindAssignments(data)
+            Return assignments
         End If
     End Function
 
