@@ -591,7 +591,17 @@ Namespace Runtime.Internal.Invokes
                 ' list(arg1 = ..., arg2 = ...);
                 Return argv.slots _
                     .Select(Function(a)
-                                Return a.Key.CLIToken & " " & any.ToString(REnv.single(a)).CLIToken
+                                Dim argVal As Object = REnv.single(a.Value)
+
+                                ' for optional flag, example as:
+                                ' 
+                                ' --f means --f=true, if --f=false, then this argument option should be missing? 
+                                '
+                                If TypeOf argVal Is Boolean AndAlso Not CBool(argVal) Then
+                                    Return ""
+                                Else
+                                    Return a.Key.CLIToken & " " & any.ToString(argVal).CLIToken
+                                End If
                             End Function) _
                     .JoinBy(" ") _
                     .Replace(vbCr, " ") _
