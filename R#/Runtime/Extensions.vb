@@ -290,5 +290,14 @@ Namespace Runtime
                 Return opt
             End If
         End Function
+
+        <Extension>
+        Public Function debugOption(env As Environment, Optional opt As Boolean? = Nothing) As Boolean
+            If opt Is Nothing Then
+                Return env.globalEnvironment.options.getOption("debug", Boolean.FalseString).ParseBoolean
+            Else
+                Return opt
+            End If
+        End Function
     End Module
 End Namespace
