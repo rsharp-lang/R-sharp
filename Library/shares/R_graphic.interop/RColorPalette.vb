@@ -233,6 +233,7 @@ Module RColorPalette
 
         ElseIf type.IsArray Then
             colorSet = UnsafeTryCastGenericArray(colorSet)
+            type = colorSet.GetType
 
             If type.GetElementType Is GetType(String) Then
                 Dim array As String() = DirectCast(colorSet, String())
