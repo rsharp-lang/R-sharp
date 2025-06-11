@@ -58,7 +58,9 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -194,10 +196,36 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                              Optional args As list = Nothing,
                              Optional env As Environment = Nothing) As Object
 
+            If data Is Nothing Then
+                Return Nothing
+            End If
+
             If TypeOf data Is dataframe Then
                 Return melt_dataframe(data, na_rm, value_name, args, env)
             ElseIf TypeOf data Is list Then
                 Return melt_list(data, na_rm, value_name, args, env)
+            ElseIf data.GetType.ImplementInterface(Of INumericMatrix) Then
+                Dim matrix As Double()() = DirectCast(data, INumericMatrix).ArrayPack
+                Dim varnames As String() = If(CLRVector.asCharacter(args.getByName("varnames")), {"X", "Y"})
+                Dim x As New List(Of Integer)
+                Dim y As New List(Of Integer)
+                Dim value As New List(Of Double)
+
+                For i As Integer = 0 To matrix(0).Length - 1
+                    For j As Integer = 0 To matrix.Length - 1
+                        Call x.Add(i + 1)
+                        Call y.Add(j + 1)
+                        Call value.Add(matrix(j)(i))
+                    Next
+                Next
+
+                Return New dataframe With {
+                    .columns = New Dictionary(Of String, Array) From {
+                        {varnames(0), x.ToArray},
+                        {varnames(1), y.ToArray},
+                        {value_name, value.ToArray}
+                    }
+                }
             Else
                 Return melt_array(REnv.asVector(Of Object)(data), na_rm, value_name, args, env)
             End If
