@@ -417,6 +417,8 @@
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
 
     <PackageReference Include="System.Runtime" Version="4.3.1" />
+
+    <PackageReference Include="System.Security.Permissions" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
