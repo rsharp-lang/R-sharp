@@ -1165,7 +1165,7 @@ Namespace Runtime.Internal.Invokes
                     Call text.SaveTo(CStr(con), encoding, newLine:=sep)
                 Else
                     ' save to a virtual filesystem
-                    Dim s As Stream = fs.OpenFile(CStr(con), access:=FileAccess.ReadWrite)
+                    Dim s As Stream = fs.OpenFile(CStr(con), access:=FileAccess.Write)
                     Dim wr As New StreamWriter(s, encoding) With {.NewLine = sep}
 
                     For Each line As String In text
