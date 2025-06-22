@@ -1,66 +1,66 @@
 ﻿#Region "Microsoft.VisualBasic::ef0ff783a88b5eaae11b8bf8871032b1, R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1004
-    '    Code Lines: 520 (51.79%)
-    ' Comment Lines: 372 (37.05%)
-    '    - Xml Docs: 87.90%
-    ' 
-    '   Blank Lines: 112 (11.16%)
-    '     File Size: 40.46 KB
+' Summaries:
 
 
-    '     Interface IdataframeReader
-    ' 
-    '         Function: getColumn, getRow, getRowNames
-    ' 
-    '     Class dataframe
-    ' 
-    '         Properties: colnames, columns, empty, ncols, nrows
-    '                     rownames
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: (+3 Overloads) add, checkColumnNames, (+2 Overloads) Create, (+3 Overloads) CreateDataFrame, (+2 Overloads) delete
-    '                   detach, FilterByRowIndex, forEachRow, GetByRowIndex, getBySynonym
-    '                   getKeyByIndex, getNames, getRowIndex, getRowList, getRowNames
-    '                   GetRowNumbers, (+2 Overloads) getVector, hasName, projectByColumn, setNames
-    '                   (+2 Overloads) sliceByRow, subsetColData, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1004
+'    Code Lines: 520 (51.79%)
+' Comment Lines: 372 (37.05%)
+'    - Xml Docs: 87.90%
+' 
+'   Blank Lines: 112 (11.16%)
+'     File Size: 40.46 KB
+
+
+'     Interface IdataframeReader
+' 
+'         Function: getColumn, getRow, getRowNames
+' 
+'     Class dataframe
+' 
+'         Properties: colnames, columns, empty, ncols, nrows
+'                     rownames
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: (+3 Overloads) add, checkColumnNames, (+2 Overloads) Create, (+3 Overloads) CreateDataFrame, (+2 Overloads) delete
+'                   detach, FilterByRowIndex, forEachRow, GetByRowIndex, getBySynonym
+'                   getKeyByIndex, getNames, getRowIndex, getRowList, getRowNames
+'                   GetRowNumbers, (+2 Overloads) getVector, hasName, projectByColumn, setNames
+'                   (+2 Overloads) sliceByRow, subsetColData, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -75,6 +75,7 @@ Imports Microsoft.VisualBasic.My.JavaScript
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -656,6 +657,17 @@ Namespace Runtime.Internal.Object
             Else
                 Return Internal.debug.stop(New NotImplementedException(indexType.FullName), env)
             End If
+        End Function
+
+        Public Iterator Function getRowList() As IEnumerable(Of list)
+            Dim rows As list = Me.listByRows
+
+            For Each row As KeyValuePair(Of String, Object) In rows.slots
+                Dim rowList As list = DirectCast(row.Value, list)
+                rowList.slots(".row.names") = row.Key
+                rowList.setAttribute("rowname", row.Key)
+                Yield rowList
+            Next
         End Function
 
         ''' <summary>
