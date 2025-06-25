@@ -185,6 +185,10 @@ Namespace Runtime.Internal.Object
             End If
         End Sub
 
+        ''' <summary>
+        ''' Create tuple list from a general dictionary set, dictionary value type could be anything
+        ''' </summary>
+        ''' <param name="table"></param>
         Sub New(table As IDictionary)
             _slots = New Dictionary(Of String, Object)
 
