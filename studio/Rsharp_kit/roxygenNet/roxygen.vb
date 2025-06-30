@@ -154,7 +154,8 @@ Public Module roxygen
             Catch ex As Exception
                 Return RInternal.debug.stop({
                     $"script syntax parser error: {ex.Message}",
-                    $"RSCRIPT: {Rscript}"
+                    $"RSCRIPT: {Rscript}",
+                    $"clr source: {ex.StackTrace}"
                 }, env)
             End Try
         Next
