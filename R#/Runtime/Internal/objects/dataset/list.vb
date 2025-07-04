@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0eaac757feeb637a656c34dfb2302213, R#\Runtime\Internal\objects\dataset\list.vb"
+﻿#Region "Microsoft.VisualBasic::0bc97dd43294b0b68f2144f5ef0f0e0c, R#\Runtime\Internal\objects\dataset\list.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 769
-    '    Code Lines: 420 (54.62%)
-    ' Comment Lines: 247 (32.12%)
-    '    - Xml Docs: 89.07%
+    '   Total Lines: 773
+    '    Code Lines: 420 (54.33%)
+    ' Comment Lines: 251 (32.47%)
+    '    - Xml Docs: 89.24%
     ' 
-    '   Blank Lines: 102 (13.26%)
-    '     File Size: 28.42 KB
+    '   Blank Lines: 102 (13.20%)
+    '     File Size: 28.61 KB
 
 
     '     Class list

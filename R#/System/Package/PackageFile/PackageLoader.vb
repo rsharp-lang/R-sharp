@@ -1,55 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::17e6619f370824bbfe61b77c5b0a30ce, R#\System\Package\PackageFile\PackageLoader.vb"
+﻿#Region "Microsoft.VisualBasic::a4b31cb577f62b7dd5e031fad56ace18, R#\System\Package\PackageFile\PackageLoader.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 385
-'    Code Lines: 237 (61.56%)
-' Comment Lines: 94 (24.42%)
-'    - Xml Docs: 65.96%
-' 
-'   Blank Lines: 54 (14.03%)
-'     File Size: 15.94 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module PackageLoader2
-' 
-'         Function: callOnLoad, CheckPackage, FindAllDllFiles, GetPackageDirectory, (+2 Overloads) GetPackageIndex
-'                   GetPackageName, Hotload, loadDependency, LoadPackage
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 407
+    '    Code Lines: 244 (59.95%)
+    ' Comment Lines: 108 (26.54%)
+    '    - Xml Docs: 68.52%
+    ' 
+    '   Blank Lines: 55 (13.51%)
+    '     File Size: 17.00 KB
+
+
+    '     Module PackageLoader2
+    ' 
+    '         Function: callOnLoad, CheckPackage, FindAllDllFiles, GetPackageDirectory, (+2 Overloads) GetPackageIndex
+    '                   GetPackageName, (+2 Overloads) Hotload, loadDependency, LoadPackage
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

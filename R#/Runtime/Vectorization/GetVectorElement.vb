@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6ab27798c244a8a8b9c87d5310bf4401, R#\Runtime\Vectorization\GetVectorElement.vb"
+﻿#Region "Microsoft.VisualBasic::14b64b230b2207f2857540de789f2597, R#\Runtime\Vectorization\GetVectorElement.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 316
-    '    Code Lines: 202 (63.92%)
-    ' Comment Lines: 76 (24.05%)
+    '   Total Lines: 318
+    '    Code Lines: 204 (64.15%)
+    ' Comment Lines: 76 (23.90%)
     '    - Xml Docs: 84.21%
     ' 
-    '   Blank Lines: 38 (12.03%)
-    '     File Size: 11.88 KB
+    '   Blank Lines: 38 (11.95%)
+    '     File Size: 12.00 KB
 
 
     '     Class GetVectorElement

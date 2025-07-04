@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e58bf4218537fc3eb35ad97ca9707bf3, R#\System\Document\CodeAnalysis\RlangTranslator.vb"
+﻿#Region "Microsoft.VisualBasic::c3ee9eed74743c425fea30ccc20922d5, R#\System\Document\CodeAnalysis\RlangTranslator.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 43.33%
     ' 
     '   Blank Lines: 96 (16.90%)
-    '     File Size: 24.20 KB
+    '     File Size: 24.32 KB
 
 
     '     Class RlangTranslator

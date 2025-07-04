@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::af3e9b98c18d4e929c97639d5b232674, R#\System\Package\PackageFile\DESCRIPTION.vb"
+﻿#Region "Microsoft.VisualBasic::2bad21f49a7d437c1a6c8ab5dc7d1e98, R#\System\Package\PackageFile\DESCRIPTION.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 130
-    '    Code Lines: 73 (56.15%)
-    ' Comment Lines: 46 (35.38%)
-    '    - Xml Docs: 100.00%
+    '   Total Lines: 142
+    '    Code Lines: 78 (54.93%)
+    ' Comment Lines: 52 (36.62%)
+    '    - Xml Docs: 96.15%
     ' 
-    '   Blank Lines: 11 (8.46%)
-    '     File Size: 4.92 KB
+    '   Blank Lines: 12 (8.45%)
+    '     File Size: 5.37 KB
 
 
     '     Class DESCRIPTION
@@ -49,7 +49,7 @@
     '                     Maintainer, meta, Package, Title, Type
     '                     Version
     ' 
-    '         Function: Parse, toList, ToString
+    '         Function: Parse, ParseDocument, toList, ToString
     ' 
     ' 
     ' /********************************************************************************/

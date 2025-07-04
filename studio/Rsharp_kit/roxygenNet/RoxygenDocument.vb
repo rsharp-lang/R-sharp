@@ -1,53 +1,53 @@
-﻿#Region "Microsoft.VisualBasic::cbb8945e54339e6f022cef04d94bf49c, studio\Rsharp_kit\roxygenNet\RoxygenDocument.vb"
+﻿#Region "Microsoft.VisualBasic::c091ec754abc833ffc45188736cecaae, studio\Rsharp_kit\roxygenNet\RoxygenDocument.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 155
-'    Code Lines: 119 (76.77%)
-' Comment Lines: 16 (10.32%)
-'    - Xml Docs: 62.50%
-' 
-'   Blank Lines: 20 (12.90%)
-'     File Size: 6.06 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Class RoxygenDocument
-' 
-'     Function: continuteLines, ParseDocument, ParseDocuments, SplitBlocks
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 175
+    '    Code Lines: 134 (76.57%)
+    ' Comment Lines: 17 (9.71%)
+    '    - Xml Docs: 58.82%
+    ' 
+    '   Blank Lines: 24 (13.71%)
+    '     File Size: 6.91 KB
+
+
+    ' Class RoxygenDocument
+    ' 
+    '     Function: continuteLines, ParseDocument, ParseDocuments, SplitBlocks
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
