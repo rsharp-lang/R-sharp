@@ -472,7 +472,8 @@
 
     <PackageReference Include="System.Security.Permissions" Version="8.0.0" />
   </ItemGroup>
-
+  
+  
   <ItemGroup>
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\..\R#\Rsharp-netcore5.vbproj" />
