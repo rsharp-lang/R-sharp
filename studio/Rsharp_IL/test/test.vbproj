@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>test</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Platforms>AnyCPU;x64</Platforms>
     <StartupObject>test.test</StartupObject>
   </PropertyGroup>
@@ -15,7 +15,6 @@
     <ProjectReference Include="..\njl\njl.vbproj" />
     <ProjectReference Include="..\npy\npy.vbproj" />
     <ProjectReference Include="..\nsas\nsas.vbproj" />
-    <ProjectReference Include="..\nts\nts.vbproj" />
   </ItemGroup>
 
 </Project>
