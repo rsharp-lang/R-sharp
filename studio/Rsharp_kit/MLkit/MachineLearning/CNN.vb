@@ -665,8 +665,9 @@ Module CNNTools
 
         alg = alg.SetKernel(cnn_val)
         cnn_val = New Trainer(alg:=alg,
-                              log:=Sub(s) base.print(s,, env),
-                              verbose:=verbose, action:=callback) _
+                              log:=Sub(s) VBDebugger.EchoLine(s),
+                              verbose:=verbose,
+                              action:=callback) _
             .train(dataset, max_loops)
 
         Return New CNNFunction With {.cnn = cnn_val}
