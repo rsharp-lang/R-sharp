@@ -63,6 +63,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic
 Imports Microsoft.VisualBasic.Drawing
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.Driver
@@ -84,7 +85,6 @@ Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
 Imports bitmapBuffer = SMRUCC.Rsharp.Runtime.Serialize.bitmapBuffer
 Imports Image = Microsoft.VisualBasic.Imaging.Image
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
-
 
 ''' <summary>
 ''' The R# Graphics Devices and Support for Colours and Fonts
@@ -937,5 +937,61 @@ break:
         Else
             Return list
         End If
+    End Function
+
+    ''' <summary>
+    ''' Display images in ansii escape sequences
+    ''' </summary>
+    ''' <param name="image">
+    ''' the clr image object or a file path of the image file.
+    ''' 
+    ''' If this parameter is a file path, then the image will be loaded
+    ''' from the given file path, otherwise, if this parameter is a clr
+    ''' image object, then this function will try to display it in the
+    ''' ansii escape sequences.
+    ''' </param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    ''' <example>
+    ''' grDevices::display("https://raw.githubusercontent.com/sciBASIC/sciBASIC.NET/master/Library/graphics/graphics.png");
+    ''' grDevices::display("C:\Users\user\Pictures\image.png");
+    ''' 
+    ''' # display a clr image object
+    ''' grDevices::display(image);
+    ''' </example>
+    <ExportAPI("display")>
+    Public Function display(image As Object,
+                            Optional width As Integer? = Nothing,
+                            Optional c256_color As Boolean = False,
+                            Optional env As Environment = Nothing) As Object
+
+        If image Is Nothing Then
+            Return False
+        End If
+        If width Is Nothing OrElse width <= 0 Then
+            width = Console.WindowWidth - 1
+        End If
+
+        If TypeOf image Is String Then
+            Dim filePath As String = NetFile.GetMapPath(DirectCast(image, String))
+
+            If Not filePath.FileExists Then
+                Return RInternal.debug.stop(New FileNotFoundException(filePath), env)
+            Else
+                image = Microsoft.VisualBasic.Imaging.Image.FromFile(filePath)
+            End If
+        End If
+
+        If TypeOf image Is Image Then
+            If c256_color Then
+                ANSI.useTrueColor = False
+            End If
+
+            Call Console.WriteLine(ANSI.GenerateImagePreview(DirectCast(image, Image), width))
+        Else
+            Return Message.InCompatibleType(GetType(Image), image.GetType, env)
+        End If
+
+        Return True
     End Function
 End Module
