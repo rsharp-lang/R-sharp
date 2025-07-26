@@ -432,7 +432,7 @@ Public Module utils
                     Dim key = any.ToString(row_names.data.GetValue(Scan0))
 
                     If dataframe.columns.ContainsKey(key) Then
-                        dataframe.rownames = dataframe.columns(key)
+                        dataframe.rownames = CLRVector.asCharacter(dataframe.columns(key))
                         dataframe.columns.Remove(key)
                     ElseIf key = "" Then
                         ' 20210912
