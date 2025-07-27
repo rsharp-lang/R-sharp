@@ -241,12 +241,25 @@ Namespace Runtime.Interop
             Return parameterVals
         End Function
 
+        ''' <summary>
+        ''' try to resolve the argument parameter list
+        ''' </summary>
+        ''' <param name="values"></param>
+        ''' <param name="env"></param>
+        ''' <param name="lazy"></param>
+        ''' <returns>
+        ''' should be a tuple list for the additional parameters, or error message
+        ''' </returns>
         Private Shared Function TryCastListObjectsInternal(values As Object, env As Environment, lazy As Boolean) As Object
             Dim list As New list With {
                 .slots = New Dictionary(Of String, Object)
             }
             Dim value As Object
             Dim listArgsSlotKey As String
+
+            If TypeOf values Is list Then
+                Return values
+            End If
 
             ' push arguments to the list at here
             ' the symbol name is not so importants?
