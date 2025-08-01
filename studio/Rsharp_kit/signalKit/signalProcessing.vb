@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::e2b73eee812812bba799ca3c2c59f958, studio\Rsharp_kit\signalKit\signalProcessing.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 442
-    '    Code Lines: 318 (71.95%)
-    ' Comment Lines: 68 (15.38%)
-    '    - Xml Docs: 94.12%
-    ' 
-    '   Blank Lines: 56 (12.67%)
-    '     File Size: 18.63 KB
+' Summaries:
 
 
-    ' Module signalProcessing
-    ' 
-    '     Function: asGeneral, asMatrix, FindAllSignalPeaks, Gaussian, gaussian_bin
-    '               gaussian_fit, gaussian_peak, gaussPeaks, peakTable, plotPeaksDecomposition
-    '               printSignalDf, resampler_f, writeCDF
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 442
+'    Code Lines: 318 (71.95%)
+' Comment Lines: 68 (15.38%)
+'    - Xml Docs: 94.12%
+' 
+'   Blank Lines: 56 (12.67%)
+'     File Size: 18.63 KB
+
+
+' Module signalProcessing
+' 
+'     Function: asGeneral, asMatrix, FindAllSignalPeaks, Gaussian, gaussian_bin
+'               gaussian_fit, gaussian_peak, gaussPeaks, peakTable, plotPeaksDecomposition
+'               printSignalDf, resampler_f, writeCDF
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -71,12 +71,13 @@ Imports Microsoft.VisualBasic.Math.SignalProcessing.EmGaussian
 Imports Microsoft.VisualBasic.Math.SignalProcessing.PeakFinding
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports RDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
-Imports SMRUCC.Rsharp.Runtime.Components
+Imports Microsoft.VisualBasic.ComponentModel.TagData
 
 
 #If NET48 Then
@@ -249,6 +250,13 @@ Module signalProcessing
         Return df
     End Function
 
+    ''' <summary>
+    ''' Find all signal peaks from a given time signal data
+    ''' </summary>
+    ''' <param name="signal"></param>
+    ''' <param name="baseline">the quantile threshold value for measure the noise baseline</param>
+    ''' <param name="cutoff"></param>
+    ''' <returns></returns>
     <ExportAPI("findpeaks")>
     Public Function FindAllSignalPeaks(signal As GeneralSignal,
                                        Optional baseline As Double = 0.65,
@@ -262,26 +270,49 @@ Module signalProcessing
     ''' <summary>
     ''' Create a new general signal
     ''' </summary>
-    ''' <param name="measure"></param>
+    ''' <param name="x"></param>
     ''' <param name="signals"></param>
-    ''' <param name="title$"></param>
+    ''' <param name="title"></param>
     ''' <param name="meta"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("as.signal")>
     <RApiReturn(GetType(GeneralSignal))>
-    Public Function asGeneral(measure As Double(), <RRawVectorArgument> signals As Object,
+    Public Function asGeneral(<RRawVectorArgument> x As Object,
+                              <RRawVectorArgument>
+                              Optional signals As Object = Nothing,
                               Optional title$ = "general signal",
                               <RListObjectArgument>
                               Optional meta As list = Nothing,
-                              Optional env As Environment = Nothing) As GeneralSignal
+                              Optional env As Environment = Nothing) As Object
+
+        If signals Is Nothing Then
+            Dim sig = pipeline.TryCreatePipeline(Of ITimeSignal)(x, env)
+
+            If sig.isError Then
+                Return sig.getError
+            End If
+
+            Dim sigData As ITimeSignal() = sig _
+                .populates(Of ITimeSignal)(env) _
+                .ToArray
+
+            Return New GeneralSignal With {
+                .description = title,
+                .measureUnit = "n/a",
+                .Measures = sigData.X,
+                .meta = meta.AsGeneric(Of String)(env),
+                .reference = App.NextTempName,
+                .Strength = sigData.Y
+            }
+        End If
 
         Dim peaks As pipeline = pipeline.TryCreatePipeline(Of Variable)(signals, env)
 
         If peaks.isError Then
             Return New GeneralSignal With {
                 .description = title,
-                .Measures = CLRVector.asNumeric(measure),
+                .Measures = CLRVector.asNumeric(x),
                 .measureUnit = "n/a",
                 .meta = meta.AsGeneric(Of String)(env),
                 .reference = App.NextTempName,
@@ -289,13 +320,14 @@ Module signalProcessing
             }
         Else
             Dim gauss As Variable() = peaks.populates(Of Variable)(env).ToArray
-            Dim sig As GeneralSignal = gauss.Compose(measure)
+            Dim sig As GeneralSignal = gauss.Compose(x)
 
             Return sig
         End If
     End Function
 
     <ExportAPI("gaussian_bin")>
+    <RApiReturn(TypeCodes.double)>
     Public Function gaussian_bin(sig As GeneralSignal, Optional max As Integer = 100) As Object
         Return sig.TimeBins(max)
     End Function
