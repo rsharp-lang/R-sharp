@@ -584,6 +584,16 @@ Namespace Runtime.Vectorization
             Return asLogical(x:=CObj(v))
         End Function
 
+        Public Function asScalarLogical(x As Object) As Boolean
+            Dim vec = asLogical(x)
+
+            If vec.IsNullOrEmpty Then
+                Return False
+            End If
+
+            Return vec(0)
+        End Function
+
         ''' <summary>
         ''' NULL -> false
         ''' </summary>

@@ -524,10 +524,17 @@ Namespace Runtime.Internal.Object
         ''' <param name="reverse">
         ''' only works for the character index
         ''' </param>
+        ''' <param name="strict">
+        ''' the strict option for the dataframe column projection, this option has different behaviours for deal with the missing data column:
+        ''' 
+        ''' for strict mode, an error exception will generates for break the program executation
+        ''' for non-strict mode, the missing column will be added with all element vector is NULL
+        ''' </param>
         ''' <returns>dataframe</returns>
         Public Function projectByColumn(selector As Array, env As Environment,
                                         Optional fullSize As Boolean = False,
-                                        Optional reverse As Boolean = False) As Object
+                                        Optional reverse As Boolean = False,
+                                        Optional strict As Boolean = True) As Object
 
             Dim indexType As Type = MeasureRealElementType(selector)
             Dim projections As New Dictionary(Of String, Array)

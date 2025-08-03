@@ -361,13 +361,25 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Function
 
         Private Function getColumn(obj As dataframe, indexer As Array, envir As Environment) As Object
+            Dim opts As Dictionary(Of String, Expression) = getOptions()
+            Dim strict As Expression = opts.TryGetValue("strict", [default]:=Literal.TRUE)
+            Dim strictVal As Object = strict.Evaluate(envir)
+
+            If TypeOf strictVal Is Message Then
+                Return strictVal
+            End If
+
             If indexer.Length = 0 Then
                 Return Nothing
             ElseIf indexer.Length = 1 Then
                 Return takeColumnVector(obj, indexer, envir)
             Else
                 ' dataframe projection
-                Return obj.projectByColumn(indexer, envir, reverse:=is_Removes)
+                Return obj.projectByColumn(
+                    indexer, envir,
+                    reverse:=is_Removes,
+                    strict:=CLRVector.asScalarCharacter(strictVal)
+                )
             End If
         End Function
 
