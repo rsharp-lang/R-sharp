@@ -649,7 +649,7 @@ Namespace Runtime.Internal.Object
                     If (i = rowNames.IndexOf(name)) = -1 Then
                         Return Internal.debug.stop({$"missing row '{name}' in the given dataframe...", $"rowname: {name}"}, env)
                     Else
-                        index.Add(i)
+                        Call index.Add(i)
                     End If
                 Next
 

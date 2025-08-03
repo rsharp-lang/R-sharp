@@ -99,6 +99,20 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End Get
         End Property
 
+        ''' <summary>
+        ''' check all elements inside this vector is literal value or not?
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property isLiteral As Boolean
+            Get
+                If values.IsNullOrEmpty Then
+                    Return False
+                End If
+
+                Return values.All(Function(xi) TypeOf xi Is Literal)
+            End Get
+        End Property
+
         Friend ReadOnly values As Expression()
 
         Sub New(values As Expression(), type As TypeCodes)
