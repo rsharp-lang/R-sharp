@@ -538,6 +538,7 @@ Namespace Runtime.Internal.Object
 
             Dim indexType As Type = MeasureRealElementType(selector)
             Dim projections As New Dictionary(Of String, Array)
+            Dim nrows As Integer = Me.nrows
 
             If indexType Like RType.characters Then
                 ' reverse selection: only takes the columns that not in the given selector index
@@ -557,10 +558,14 @@ Namespace Runtime.Internal.Object
                     projections(key) = getVector(key, fullSize)
 
                     If projections(key) Is Nothing Then
-                        Return Internal.debug.stop({
-                            $"Error in `[.data.frame`(x, ,'{key}'): undefined columns selected",
-                            $"column: {key}"
-                        }, env)
+                        If strict Then
+                            Return Internal.debug.stop({
+                                $"Error in `[.data.frame`(x, ,'{key}'): undefined columns selected",
+                                $"column: {key}"
+                            }, env)
+                        Else
+                            projections(key) = New Object(nrows - 1) {}
+                        End If
                     End If
                 Next
             ElseIf indexType Like RType.integers Then
@@ -582,7 +587,7 @@ Namespace Runtime.Internal.Object
                     projections(key) = getVector(key, fullSize)
                 Next
             Else
-                Throw New InvalidCastException
+                Throw New InvalidCastException($"Unknown dataframe column index type: {indexType.FullName}")
             End If
 
             Return New dataframe With {
