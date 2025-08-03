@@ -311,6 +311,8 @@ Namespace Runtime.Internal.Object
                 ElseIf DirectCast(upstream, pipeline).elementType Is RType.any Then
                     Call "the given upstream pipeline is a stream of generic object collection. some type cast maybe failure!".Warning
                     Return upstream
+                ElseIf DirectCast(upstream, pipeline).elementType.raw.IsInheritsFrom(GetType(T), False) Then
+                    Return upstream
                 Else
                     Return Message.InCompatibleType(GetType(T), DirectCast(upstream, pipeline).elementType.raw, env,
                                                     suppress:=suppress,
