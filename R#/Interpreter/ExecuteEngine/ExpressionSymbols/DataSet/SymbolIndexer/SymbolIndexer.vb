@@ -182,7 +182,36 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
         End Function
 
+        Private Function getIndex() As Expression
+            If TypeOf index Is VectorLiteral Then
+                If DirectCast(index, VectorLiteral).Skip(1).Any(Function(e) TypeOf e Is ValueAssignExpression) Then
+                    Return DirectCast(index, VectorLiteral).First
+                End If
+            End If
+
+            Return index
+        End Function
+
+        Private Function getOptions() As Dictionary(Of String, Expression)
+            If TypeOf index Is VectorLiteral Then
+                If DirectCast(index, VectorLiteral).Skip(1).Any(Function(e) TypeOf e Is ValueAssignExpression) Then
+                    Dim opts As New Dictionary(Of String, Expression)
+
+                    For Each item In DirectCast(index, VectorLiteral).Skip(1)
+                        With DirectCast(item, ValueAssignExpression)
+                            Call opts.Add(ValueAssignExpression.GetSymbol(.targetSymbols(0)), .value)
+                        End With
+                    Next
+
+                    Return opts
+                End If
+            End If
+
+            Return Nothing
+        End Function
+
         Private Function getBySymbolIndex(obj As Object, envir As Environment) As Object
+            Dim index As Expression = getIndex()
             Dim indexerRaw As Object = If(is_Removes, DirectCast(index, UnaryNumeric).numeric, index).Evaluate(envir)
             Dim indexer As Array
             Dim objType As Type = obj.GetType
