@@ -1147,13 +1147,17 @@ RE0:
         <ExportAPI("as.double")>
         <RApiReturn(GetType(Double))>
         Public Function asDouble(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
-            If x Is Nothing Then
-                Return x
-            ElseIf x.GetType.ImplementInterface(Of ICTypeVector) Then
-                Return DirectCast(x, ICTypeVector).ToNumeric
-            Else
-                Return REnv.asVector(x, GetType(Double), env)
-            End If
+            'If x Is Nothing Then
+            '    Return x
+            'ElseIf x.GetType.ImplementInterface(Of ICTypeVector) Then
+            '    Return DirectCast(x, ICTypeVector).ToNumeric
+            'Else
+            '    Return REnv.asVector(x, GetType(Double), env)
+            'End If
+
+            ' 20250805
+            ' as.double is an alias of as.numeric?
+            Return asNumeric(x, env)
         End Function
 
         ''' <summary>
@@ -1185,48 +1189,69 @@ RE0:
                 Return REnv.CTypeOfList(Of Double)(x, env)
             ElseIf TypeOf x Is Double() Then
                 Return New vector(x, RType.GetRSharpType(GetType(Double)))
-            ElseIf TypeOf x Is Integer() OrElse TypeOf x Is Long() OrElse TypeOf x Is Single() OrElse TypeOf x Is Short() Then
-                Return New vector(DirectCast(x, Array).AsObjectEnumerator.Select(Function(d) CDbl(d)).ToArray, RType.GetRSharpType(GetType(Double)))
-            ElseIf TypeOf x Is vector AndAlso DirectCast(x, vector).elementType Like RType.floats Then
-                Return New vector(DirectCast(x, vector))
+            ElseIf TypeOf x Is Integer() OrElse
+                TypeOf x Is Long() OrElse
+                TypeOf x Is Single() OrElse
+                TypeOf x Is Short() Then
+
+                Return New vector(DirectCast(x, Array) _
+                    .AsObjectEnumerator _
+                    .Select(Function(d) CDbl(d)) _
+                    .ToArray, RType.GetRSharpType(GetType(Double)))
+            ElseIf TypeOf x Is Boolean Then
+                Return If(CBool(x), 1.0, 0.0)
+            ElseIf TypeOf x Is Boolean() Then
+                Return DirectCast(x, Boolean()).Select(Function(b) If(b, 1.0, 0.0)).ToArray
+            ElseIf TypeOf x Is vector Then
+                Dim vec = DirectCast(x, vector)
+
+                If vec.elementType Like RType.floats Then
+                    Return New vector(DirectCast(x, vector))
+                ElseIf vec.elementType Like RType.integers Then
+                    Return New vector(vec.data.AsObjectEnumerator.Select(Function(i) CDbl(i)))
+                ElseIf vec.elementType Like RType.characters Then
+                    Return New vector(vec.data.AsObjectEnumerator.Select(Function(s) CStr(s).ParseDouble))
+                ElseIf vec.elementType Like RType.logicals Then
+                    Return New vector(vec.data.AsObjectEnumerator.Select(Function(b) If(CBool(b), 1.0, 0.0)))
+                End If
             ElseIf x.GetType.ImplementInterface(Of IVector) Then
                 Return New vector(DirectCast(x, IVector).Data)
             ElseIf x.GetType.ImplementInterface(Of ICTypeVector) Then
                 Return New vector(DirectCast(x, ICTypeVector).ToNumeric)
-            Else
-                Dim data As Object() = pipeline _
+            End If
+
+            Dim data As Object() = pipeline _
                     .TryCreatePipeline(Of Object)(x, env) _
                     .populates(Of Object)(env) _
                     .ToArray
-                Dim type As Type = REnv.MeasureRealElementType(data)
+            Dim type As Type = REnv.MeasureRealElementType(data)
 
-                If type Is GetType(String) Then
-                    ' parse string to double
-                    Return data _
-                        .Select(Function(obj) CStr(obj).ParseDouble) _
-                        .ToArray
-                ElseIf type.ImplementInterface(Of Value(Of Double).IValueOf) Then
-                    Return data _
-                        .Select(Function(d) DirectCast(d, Value(Of Double).IValueOf).Value) _
-                        .ToArray
-                Else
-                    Dim dbls As New List(Of Double)
-                    Dim i As Integer = 0
+            If type Is GetType(String) Then
+                ' parse string to double
+                Return data _
+                    .Select(Function(obj) CStr(obj).ParseDouble) _
+                    .ToArray
+            ElseIf type.ImplementInterface(Of Value(Of Double).IValueOf) Then
+                Return data _
+                    .Select(Function(d) DirectCast(d, Value(Of Double).IValueOf).Value) _
+                    .ToArray
+            Else
+                Dim dbls As New List(Of Double)
+                Dim i As Integer = 0
 
-                    For Each item As Object In data.populateNumeric(env)
-                        If Program.isException(item) Then
-                            Return item
-                        Else
-                            ' due to the reason of gdi+ size contains two number after the
-                            ' ``populateNumeric`` data converson, so the original dbls size
-                            ' will not equals to the result vector
-                            ' change from the vector array to type list of double
-                            Call dbls.Add(CDbl(item))
-                        End If
-                    Next
+                For Each item As Object In data.populateNumeric(env)
+                    If Program.isException(item) Then
+                        Return item
+                    Else
+                        ' due to the reason of gdi+ size contains two number after the
+                        ' ``populateNumeric`` data converson, so the original dbls size
+                        ' will not equals to the result vector
+                        ' change from the vector array to type list of double
+                        Call dbls.Add(CDbl(item))
+                    End If
+                Next
 
-                    Return dbls.ToArray
-                End If
+                Return dbls.ToArray
             End If
         End Function
 
@@ -1253,6 +1278,8 @@ RE0:
                         Yield .Width
                         Yield .Height
                     End With
+                ElseIf TypeOf item Is Boolean Then
+                    Yield If(CBool(item), 1.0, 0.0)
                 ElseIf item.GetType.ImplementInterface(GetType(Value(Of Double).IValueOf)) Then
                     Yield DirectCast(item, Value(Of Double).IValueOf).Value
                 Else
