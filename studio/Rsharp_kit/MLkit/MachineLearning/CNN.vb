@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bf38dc2a088d01982461da642ec1fdcb, studio\Rsharp_kit\MLkit\MachineLearning\CNN.vb"
+﻿#Region "Microsoft.VisualBasic::0c50031ead5364451dcadb2d13de1d5a, studio\Rsharp_kit\MLkit\MachineLearning\CNN.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 794
-    '    Code Lines: 499 (62.85%)
-    ' Comment Lines: 207 (26.07%)
+    '   Total Lines: 795
+    '    Code Lines: 500 (62.89%)
+    ' Comment Lines: 207 (26.04%)
     '    - Xml Docs: 96.14%
     ' 
-    '   Blank Lines: 88 (11.08%)
-    '     File Size: 32.36 KB
+    '   Blank Lines: 88 (11.07%)
+    '     File Size: 32.39 KB
 
 
     ' Module CNNTools

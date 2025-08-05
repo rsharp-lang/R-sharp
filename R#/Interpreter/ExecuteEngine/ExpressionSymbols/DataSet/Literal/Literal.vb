@@ -71,6 +71,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
     ''' <summary>
     ''' the literal value expression in R# 
     ''' </summary>
+    ''' <remarks>
+    ''' the number/boolean/character/integer/byte
+    ''' </remarks>
     Public Class Literal : Inherits Expression
 
         Public Overrides ReadOnly Property type As TypeCodes

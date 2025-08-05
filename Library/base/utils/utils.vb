@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::953c2396b2fe58372ad414f34d610282, Library\base\utils\utils.vb"
+﻿#Region "Microsoft.VisualBasic::bc9572e56ce581621617a1386c1b9af7, Library\base\utils\utils.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 87.23%
     ' 
     '   Blank Lines: 68 (10.45%)
-    '     File Size: 27.68 KB
+    '     File Size: 27.70 KB
 
 
     ' Module utils

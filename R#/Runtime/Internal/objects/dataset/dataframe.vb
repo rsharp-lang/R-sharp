@@ -524,13 +524,21 @@ Namespace Runtime.Internal.Object
         ''' <param name="reverse">
         ''' only works for the character index
         ''' </param>
+        ''' <param name="strict">
+        ''' the strict option for the dataframe column projection, this option has different behaviours for deal with the missing data column:
+        ''' 
+        ''' for strict mode, an error exception will generates for break the program executation
+        ''' for non-strict mode, the missing column will be added with all element vector is NULL
+        ''' </param>
         ''' <returns>dataframe</returns>
         Public Function projectByColumn(selector As Array, env As Environment,
                                         Optional fullSize As Boolean = False,
-                                        Optional reverse As Boolean = False) As Object
+                                        Optional reverse As Boolean = False,
+                                        Optional strict As Boolean = True) As Object
 
             Dim indexType As Type = MeasureRealElementType(selector)
             Dim projections As New Dictionary(Of String, Array)
+            Dim nrows As Integer = Me.nrows
 
             If indexType Like RType.characters Then
                 ' reverse selection: only takes the columns that not in the given selector index
@@ -550,10 +558,14 @@ Namespace Runtime.Internal.Object
                     projections(key) = getVector(key, fullSize)
 
                     If projections(key) Is Nothing Then
-                        Return Internal.debug.stop({
-                            $"Error in `[.data.frame`(x, ,'{key}'): undefined columns selected",
-                            $"column: {key}"
-                        }, env)
+                        If strict Then
+                            Return Internal.debug.stop({
+                                $"Error in `[.data.frame`(x, ,'{key}'): undefined columns selected",
+                                $"column: {key}"
+                            }, env)
+                        Else
+                            projections(key) = New Object(nrows - 1) {}
+                        End If
                     End If
                 Next
             ElseIf indexType Like RType.integers Then
@@ -575,7 +587,7 @@ Namespace Runtime.Internal.Object
                     projections(key) = getVector(key, fullSize)
                 Next
             Else
-                Throw New InvalidCastException
+                Throw New InvalidCastException($"Unknown dataframe column index type: {indexType.FullName}")
             End If
 
             Return New dataframe With {
@@ -649,7 +661,7 @@ Namespace Runtime.Internal.Object
                     If (i = rowNames.IndexOf(name)) = -1 Then
                         Return Internal.debug.stop({$"missing row '{name}' in the given dataframe...", $"rowname: {name}"}, env)
                     Else
-                        index.Add(i)
+                        Call index.Add(i)
                     End If
                 Next
 

@@ -229,9 +229,40 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                                         ByRef indexType As SymbolIndexers,
                                         opts As SyntaxBuilderOptions)
             If blocks(0).isComma Then
+                Dim cols = blocks.Skip(1).First
+                Dim options As New List(Of SyntaxResult)
                 ' x[, a] by columns
                 indexType = SymbolIndexers.dataframeColumns
-                index = opts.ParseExpression(blocks.Skip(1).IteratesALL, opts)
+                index = opts.ParseExpression(cols, opts)
+
+                For Each t In blocks.Skip(3)
+                    If t.isComma Then
+                        Continue For
+                    End If
+
+                    Call options.Add(opts.ParseExpression(t, opts))
+                Next
+
+                If options.Any Then
+                    Dim vec As New List(Of Expression)
+
+                    If index.isException Then
+                        Return
+                    Else
+                        Call vec.Add(index.expression)
+                    End If
+
+                    For Each o As SyntaxResult In options
+                        If o.isException Then
+                            index = o
+                            Return
+                        Else
+                            Call vec.Add(o.expression)
+                        End If
+                    Next
+
+                    index = New SyntaxResult(New VectorLiteral(vec))
+                End If
             ElseIf blocks = 2 AndAlso blocks(1).isComma Then
                 ' x[a, ] by row
                 indexType = SymbolIndexers.dataframeRows

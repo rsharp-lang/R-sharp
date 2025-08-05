@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::fabb4b426ea234bd70db6c21ebb1cbf2, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 794
-    '    Code Lines: 587 (73.93%)
-    ' Comment Lines: 114 (14.36%)
-    '    - Xml Docs: 42.98%
-    ' 
-    '   Blank Lines: 93 (11.71%)
-    '     File Size: 34.55 KB
+' Summaries:
 
 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: CheckRemoves, doListSubset, emptyIndexError, Evaluate, getByIndex
-    '                   getByName, getBySymbolIndex, getColumn, getDataframeRowRange, groupSubset
-    '                   listSubset, streamView, takeColumnVector, ToString, translateInteger2keys
-    '                   translateLogical2keys, vectorSubset
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 794
+'    Code Lines: 587 (73.93%)
+' Comment Lines: 114 (14.36%)
+'    - Xml Docs: 42.98%
+' 
+'   Blank Lines: 93 (11.71%)
+'     File Size: 34.55 KB
+
+
+'     Class SymbolIndexer
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: CheckRemoves, doListSubset, emptyIndexError, Evaluate, getByIndex
+'                   getByName, getBySymbolIndex, getColumn, getDataframeRowRange, groupSubset
+'                   listSubset, streamView, takeColumnVector, ToString, translateInteger2keys
+'                   translateLogical2keys, vectorSubset
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -100,7 +100,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End Get
         End Property
 
+        ''' <summary>
+        ''' index value for get subset from symbol <see cref="x"/>
+        ''' </summary>
         Friend index As Expression
+        ''' <summary>
+        ''' target symbol x
+        ''' </summary>
         Friend symbol As Expression
 
         ''' <summary>
@@ -140,6 +146,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' </summary>
         ''' <returns></returns>
         Private Function CheckRemoves() As Boolean
+            Dim index = Me.index
+
+            If TypeOf index Is VectorLiteral Then
+                If DirectCast(index, VectorLiteral).Skip(1).Any(Function(e) TypeOf e Is ValueAssignExpression) Then
+                    index = DirectCast(index, VectorLiteral).First
+                End If
+            End If
+
             If TypeOf index Is UnaryNumeric AndAlso DirectCast(index, UnaryNumeric).operator = "-" Then
                 ' index = DirectCast(index, UnaryNumeric).numeric
                 Return True
@@ -168,7 +182,36 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
         End Function
 
+        Private Function getIndex() As Expression
+            If TypeOf index Is VectorLiteral Then
+                If DirectCast(index, VectorLiteral).Skip(1).Any(Function(e) TypeOf e Is ValueAssignExpression) Then
+                    Return DirectCast(index, VectorLiteral).First
+                End If
+            End If
+
+            Return index
+        End Function
+
+        Private Function getOptions() As Dictionary(Of String, Expression)
+            If TypeOf index Is VectorLiteral Then
+                If DirectCast(index, VectorLiteral).Skip(1).Any(Function(e) TypeOf e Is ValueAssignExpression) Then
+                    Dim opts As New Dictionary(Of String, Expression)
+
+                    For Each item In DirectCast(index, VectorLiteral).Skip(1)
+                        With DirectCast(item, ValueAssignExpression)
+                            Call opts.Add(ValueAssignExpression.GetSymbol(.targetSymbols(0)), .value)
+                        End With
+                    Next
+
+                    Return opts
+                End If
+            End If
+
+            Return Nothing
+        End Function
+
         Private Function getBySymbolIndex(obj As Object, envir As Environment) As Object
+            Dim index As Expression = getIndex()
             Dim indexerRaw As Object = If(is_Removes, DirectCast(index, UnaryNumeric).numeric, index).Evaluate(envir)
             Dim indexer As Array
             Dim objType As Type = obj.GetType
@@ -318,13 +361,25 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Function
 
         Private Function getColumn(obj As dataframe, indexer As Array, envir As Environment) As Object
+            Dim opts As Dictionary(Of String, Expression) = getOptions()
+            Dim strict As Expression = opts.TryGetValue("strict", [default]:=Literal.TRUE)
+            Dim strictVal As Object = strict.Evaluate(envir)
+
+            If TypeOf strictVal Is Message Then
+                Return strictVal
+            End If
+
             If indexer.Length = 0 Then
                 Return Nothing
             ElseIf indexer.Length = 1 Then
                 Return takeColumnVector(obj, indexer, envir)
             Else
                 ' dataframe projection
-                Return obj.projectByColumn(indexer, envir, reverse:=is_Removes)
+                Return obj.projectByColumn(
+                    indexer, envir,
+                    reverse:=is_Removes,
+                    strict:=CLRVector.asScalarCharacter(strictVal)
+                )
             End If
         End Function
 
