@@ -111,6 +111,11 @@ Namespace Runtime.Vectorization
                 .ToArray
         End Function
 
+        ''' <summary>
+        ''' cast any to int(64 bit)
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
         Public Function asLong(x As Object) As Long()
             If x Is Nothing Then
                 Return Nothing
@@ -292,6 +297,8 @@ Namespace Runtime.Vectorization
                 Return DirectCast(x, Long()).Select(Function(l) l.ToString).ToArray
             ElseIf typeof_x Is GetType(Integer()) Then
                 Return DirectCast(x, Integer()).Select(Function(i) i.ToString).ToArray
+            ElseIf typeof_x Is GetType(Boolean()) Then
+                Return DirectCast(x, Boolean()).Select(Function(f) f.ToString.ToUpper).ToArray
             ElseIf typeof_x.IsArray Then
                 ' force cast any object to string
                 Dim objs = DirectCast(x, Array) _
@@ -394,8 +401,14 @@ Namespace Runtime.Vectorization
                 End If
             End If
 
+            If TypeOf x Is Boolean Then
+                Return {If(CBool(x), 1, 0)}
+            End If
+
             If TypeOf x Is Integer() Then
                 Return x
+            ElseIf TypeOf x Is Boolean() Then
+                Return DirectCast(x, Boolean()).Select(Function(f) If(f, 1, 0)).ToArray
             ElseIf DataFramework.IsNumericCollection(x.GetType) Then
                 Return (From xi As Object
                         In DirectCast(x, IEnumerable).AsQueryable
@@ -456,10 +469,16 @@ Namespace Runtime.Vectorization
                 Return DirectCast(x, ICTypeVector).ToFloat
             End If
 
+            If TypeOf x Is Boolean Then
+                Return New Single() {If(CBool(x), 1.0, 0.0)}
+            End If
+
             If TypeOf x Is Double() Then
                 Return DirectCast(x, Double()).Select(Function(d) CSng(d)).ToArray
             ElseIf TypeOf x Is Single() Then
                 Return DirectCast(x, Single())
+            ElseIf TypeOf x Is Boolean() Then
+                Return DirectCast(x, Boolean()).Select(Function(f) If(f, 1.0F, 0.0F)).ToArray
             ElseIf DataFramework.IsNumericCollection(x.GetType) Then
                 Return (From xi As Object
                         In DirectCast(x, IEnumerable).AsQueryable
@@ -504,6 +523,8 @@ Namespace Runtime.Vectorization
                 x = DirectCast(x, list).slots.Values.ToArray
             ElseIf TypeOf x Is String Then
                 Return New Double() {Val(x)}
+            ElseIf TypeOf x Is Boolean Then
+                Return New Double() {If(CBool(x), 1.0, 0.0)}
             ElseIf TypeOf x Is TimeSpan Then
                 Return New Double() {DirectCast(x, TimeSpan).TotalMilliseconds}
             ElseIf TypeOf x Is Date Then
