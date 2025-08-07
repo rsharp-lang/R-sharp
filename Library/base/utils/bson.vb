@@ -130,7 +130,7 @@ Module bson
 
         Dim json = as_bson(x, maskReadonly, enumToStr, unixTimestamp, args, env)
 
-        Call MIME.application.json.BSON.WriteBuffer(DirectCast(json, JsonObject), stream)
+        Call MIME.application.json.BSON.SafeWriteBuffer(json, stream)
 
         If file Is Nothing Then
             Return DirectCast(stream, MemoryStream).ToArray
