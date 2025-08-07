@@ -19,9 +19,44 @@ Module bson
 
     End Function
 
+    ''' <summary>
+    ''' cast any object to bson model
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI>
-    Public Function as_bson(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing)
+    Public Function as_bson(<RRawVectorArgument> x As Object,
+                            Optional maskReadonly As Boolean = False,
+                            Optional enumToStr As Boolean = True,
+                            Optional unixTimestamp As Boolean = True,
+                            <RListObjectArgument>
+                            Optional args As list = Nothing,
+                            Optional env As Environment = Nothing) As Object
 
+        Dim opts As New JSONSerializerOptions With {
+            .indent = False,
+            .maskReadonly = maskReadonly,
+            .enumToString = enumToStr,
+            .unixTimestamp = unixTimestamp
+        }
+        Dim encoder As Encoder = Encoder.CreateEncoderWithOptions(args, env)
+        Dim err As Message = Nothing
+        Dim json As JsonElement
+
+        If x Is Nothing Then
+            Return RInternal.debug.stop("the given object data can not be nothing!", env)
+        Else
+            json = opts.GetJsonLiteralRaw(x, encoder, err, env)
+        End If
+
+        If Not err Is Nothing Then
+            Return err
+        ElseIf Not TypeOf json Is JsonObject Then
+            Return RInternal.debug.stop($"the given json data model must be an object! ({json.GetType.Name} was given...)", env)
+        End If
+
+        Return json
     End Function
 
     ''' <summary>
@@ -93,27 +128,7 @@ Module bson
             End If
         End If
 
-        Dim opts As New JSONSerializerOptions With {
-            .indent = False,
-            .maskReadonly = maskReadonly,
-            .enumToString = enumToStr,
-            .unixTimestamp = unixTimestamp
-        }
-        Dim encoder As Encoder = Encoder.CreateEncoderWithOptions(args, env)
-        Dim err As Message = Nothing
-        Dim json As JsonElement
-
-        If x Is Nothing Then
-            Return RInternal.debug.stop("the given object data can not be nothing!", env)
-        Else
-            json = opts.GetJsonLiteralRaw(x, encoder, err, env)
-        End If
-
-        If Not err Is Nothing Then
-            Return err
-        ElseIf Not TypeOf json Is JsonObject Then
-            Return RInternal.debug.stop($"the given json data model must be an object! ({json.GetType.Name} was given...)", env)
-        End If
+        Dim json = as_bson(x, maskReadonly, enumToStr, unixTimestamp, args, env)
 
         Call MIME.application.json.BSON.WriteBuffer(DirectCast(json, JsonObject), stream)
 
