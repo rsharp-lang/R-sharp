@@ -130,7 +130,11 @@ Module bson
 
         Dim json = as_bson(x, maskReadonly, enumToStr, unixTimestamp, args, env)
 
-        Call MIME.application.json.BSON.SafeWriteBuffer(json, stream)
+        If TypeOf json Is Message Then
+            Return json
+        Else
+            Call MIME.application.json.BSON.SafeWriteBuffer(json, stream)
+        End If
 
         If file Is Nothing Then
             Return DirectCast(stream, MemoryStream).ToArray
