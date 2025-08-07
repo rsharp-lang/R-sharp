@@ -52,7 +52,7 @@ Module bson
 
         If Not err Is Nothing Then
             Return err
-        ElseIf Not TypeOf json Is JsonObject Then
+        ElseIf Not (TypeOf json Is JsonObject OrElse TypeOf json Is JsonArray) Then
             Return RInternal.debug.stop($"the given json data model must be an object! ({json.GetType.Name} was given...)", env)
         End If
 
