@@ -245,6 +245,12 @@ Namespace Runtime.Interop
         Public Shared ReadOnly Property closure As RType = GetRSharpType(GetType(RFunction))
         Public Shared ReadOnly Property character As RType = GetRSharpType(GetType(String))
 
+        Public ReadOnly Property is_any As Boolean
+            Get
+                Return Me Is any
+            End Get
+        End Property
+
         Private Sub New(raw As Type)
             Me.raw = GetUnderlyingType(raw)
             Me.names = populateNames _

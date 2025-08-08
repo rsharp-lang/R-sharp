@@ -69,6 +69,7 @@ Module bson
     <ExportAPI("parse_bson")>
     Public Function parseBSON(<RRawVectorArgument> buffer As Object,
                               Optional raw As Boolean = False,
+                              Optional what As Object = Nothing,
                               Optional env As Environment = Nothing) As Object
 
         Dim bytes As pipeline = pipeline.TryCreatePipeline(Of Byte)(buffer, env, suppress:=True)
@@ -86,8 +87,31 @@ Module bson
 
         Dim json As JsonObject = New MIME.application.json.BSON.Decoder(bufStream).decodeDocument
 
+        If Not what Is Nothing Then
+            what = env.globalEnvironment.GetType(what)
+
+            If what IsNot Nothing AndAlso DirectCast(what, RType).is_any Then
+                what = Nothing
+            End If
+        End If
+
         If raw Then
             Return json
+        ElseIf Not what Is Nothing Then
+            With DirectCast(what, RType)
+                If json.isArray Then
+                    Dim array As Array = Array.CreateInstance(.raw, json.size)
+                    Dim offset = json.ObjectKeys
+
+                    For i As Integer = 0 To offset.Length - 1
+                        array(i) = json(offset(i)).CreateObject(.raw, decodeMetachar:=False)
+                    Next
+
+                    Return array
+                Else
+                    Return json.CreateObject(.raw, decodeMetachar:=False)
+                End If
+            End With
         Else
             Return json.createRObj(env, decodeMetachar:=False)
         End If
