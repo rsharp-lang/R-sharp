@@ -166,6 +166,13 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     Call vector_combines.Add(row)
                 Next
 
+                ' all element is empty
+                ' returns nothing
+                If vector_combines.IsNullOrEmpty Then
+                    Call "all elements dataframe to combine is empty, nothing will be returns!".Warning
+                    Return Nothing
+                End If
+
                 ' cast the row array collection as matrix
                 Dim mat As New dataframe With {
                     .columns = New Dictionary(Of String, Array),
