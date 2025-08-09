@@ -61,7 +61,8 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
-    <OutputPath>../../../App\</OutputPath>
+    <OutputPath>../../../../../../Moira\assembly\bin\Rstudio\library</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='gcmodeller_desktop|x64'">

@@ -74,8 +74,7 @@
     <OutputPath>../../App\</OutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CFD_win32|x64'">
-    <DocumentationFile>base.xml</DocumentationFile>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CFD_win32|x64'">    
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>
@@ -83,8 +82,10 @@
     <DefineDebug>false</DefineDebug>
     <DefineConstants>MATH_DATASET=1,write_csv=1,UNIX=1</DefineConstants>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>../../App\</OutputPath>
+    <OutputPath>../../../../../Moira\assembly\bin\Rstudio\library</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
+  
   <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net8.0-windows' ">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DefineConstants>MATH_DATASET=1,write_csv=1,UNIX=1</DefineConstants>
