@@ -317,6 +317,7 @@ Public Module Parallel
                              Optional debug As Boolean? = Nothing,
                              Optional ignoreError As Boolean? = Nothing,
                              Optional verbose As Boolean? = Nothing,
+                             Optional slaveParallel As Boolean = False,
                              <RListObjectArgument>
                              Optional ___argvSet_____ As list = Nothing,
                              Optional env As Environment = Nothing) As Object
@@ -353,7 +354,7 @@ Public Module Parallel
         Dim taskList As IEnumerable(Of Func(Of SeqValue(Of Object))) = host.produceTask
         Dim engine As New ThreadTask(Of SeqValue(Of Object))(
             task:=taskList,
-            debugMode:=debug,
+            debugMode:=debug OrElse Not slaveParallel,
             verbose:=env.globalEnvironment.debugMode
         )
 
