@@ -7,7 +7,7 @@
     <AssemblyName>Rscript</AssemblyName>
     <ApplicationIcon>R#.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64</Platforms>
-    <Configurations>Debug;Release;Rsharp_app_release;PlantMAT;NPSearch;mzkit_win32;gcmodeller_desktop;RsharpDev</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;PlantMAT;CFD_win32;mzkit_win32;gcmodeller_desktop;RsharpDev</Configurations>
     <StartupObject>Rsharp.NetCore5.Program</StartupObject>
 	  <RuntimeIdentifiers>win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
 	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -386,6 +386,18 @@
     <Optimize>False</Optimize>
     <DebugType>full</DebugType>
     <DefineDebug>False</DefineDebug>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net8.0|x64'">
+    <DocumentationFile>Rscript.xml</DocumentationFile>
+    <OutputPath>../../../../Moira/assembly/bin/Rstudio/bin</OutputPath>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
