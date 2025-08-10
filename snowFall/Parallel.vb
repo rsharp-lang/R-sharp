@@ -213,9 +213,14 @@ Public Module Parallel
 
         resp = New TcpRequest(hostName:=localMaster, remotePort:=CInt(port)).SetVerbose(False).SendMessage(req)
 
+        ' 0000 0000 1 0000 ....
+        ' 0123 4567 8 9...
+        '              012 3... 
+
         Dim uuid As Integer = BitConverter.ToInt32(resp.ChunkBuffer, Scan0)
         Dim masterPort As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 4)
-        Dim size As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 8)
+        Dim compress As Boolean = If(resp.ChunkBuffer(8) = 1, True, False)
+        Dim size As Integer = BitConverter.ToInt32(resp.ChunkBuffer, 9)
 
         Call VBDebugger.EchoLine($"{current_taskName}uuid={uuid}")
         Call VBDebugger.EchoLine($"{current_taskName}remote_environment={masterPort}")
@@ -227,7 +232,8 @@ Public Module Parallel
         Dim root As New RemoteEnvironment(
             uuid:=uuid,
             master:=IPEndPoint.CreateLocal(masterPort, host:=localMaster),
-            parent:=env
+            parent:=env,
+            compress:=compress
         )
 
         Call VBDebugger.EchoLine($"{current_taskName}create root environment:")
@@ -245,7 +251,7 @@ Public Module Parallel
             .Description = .Package
         }
 
-        Call Array.ConstrainedCopy(resp.ChunkBuffer, 12, buffer, Scan0, size)
+        Call Array.ConstrainedCopy(resp.ChunkBuffer, 13, buffer, Scan0, size)
 
         Using file As New MemoryStream(buffer), reader As New BinaryReader(file)
             Call BlockReader.Read(reader).Parse(fake, expr:=closure)
@@ -324,6 +330,7 @@ Public Module Parallel
                              Optional ignoreError As Boolean? = Nothing,
                              Optional verbose As Boolean? = Nothing,
                              Optional slaveParallel As Boolean = False,
+                             Optional compress As Boolean = True,
                              <RListObjectArgument>
                              Optional ___argvSet_____ As list = Nothing,
                              Optional env As Environment = Nothing) As Object
@@ -350,7 +357,7 @@ Public Module Parallel
             End If
         End If
 
-        Dim host As RunParallel = RunParallel.Initialize(task, ___argvSet_____, debug, verbose, env)
+        Dim host As RunParallel = RunParallel.Initialize(task, ___argvSet_____, debug, verbose, compress:=compress, env)
 
         If host.error IsNot Nothing Then
             Return host.error

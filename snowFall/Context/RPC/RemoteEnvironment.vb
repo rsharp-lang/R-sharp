@@ -86,8 +86,9 @@ Namespace Context.RPC
         ''' </summary>
         ReadOnly missing404 As New Index(Of String)
         ReadOnly verbose As Boolean = False
+        ReadOnly compress As Boolean = True
 
-        Sub New(uuid As Integer, master As IPEndPoint, parent As Environment)
+        Sub New(uuid As Integer, compress As Boolean, master As IPEndPoint, parent As Environment)
             Call MyBase.New(
                 parent:=parent,
                 stackName:=$"snowfall_prallel_RPC_slave_node%&H{uuid.ToHexString}@{master.ToString}",
@@ -96,6 +97,7 @@ Namespace Context.RPC
 
             Me.uuid = uuid
             Me.master = master
+            Me.compress = compress
         End Sub
 
         ''' <summary>
@@ -147,8 +149,12 @@ Namespace Context.RPC
                 Try
                     If resp.Protocol = HTTP_RFC.RFC_NOT_FOUND Then
                         Return buffer404(name)
-                    Else
+                    ElseIf compress Then
                         Using buffer As MemoryStream = resp.ChunkBuffer.UnZipStream
+                            Return loadRemoteSymbol(name, buffer, symbols, verbose)
+                        End Using
+                    Else
+                        Using buffer As New MemoryStream(resp.ChunkBuffer)
                             Return loadRemoteSymbol(name, buffer, symbols, verbose)
                         End Using
                     End If

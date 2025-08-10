@@ -107,6 +107,8 @@ Namespace Context.RPC
 
         Public Shared ReadOnly Property Protocol As Long = New ProtocolAttribute(GetType(Protocols)).EntryPoint
 
+        Public Property compress As Boolean = True
+
         ''' <summary>
         ''' 
         ''' </summary>
@@ -262,8 +264,10 @@ Namespace Context.RPC
                 End If
 
                 Return New DataPipe(NetResponse.RFC_NOT_FOUND)
-            Else
+            ElseIf compress Then
                 Return New DataPipe(New MemoryStream(data).Zip)
+            Else
+                Return New DataPipe(data)
             End If
         End Function
 

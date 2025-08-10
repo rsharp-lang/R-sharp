@@ -179,7 +179,9 @@ Public Class RunParallel
                 debugPort:=debugPort,
                 debug:=debug,
                 slave_debug:=slaveDebug
-            )
+            ) With {
+                .compression = master.compress
+            }
 
             Call Thread.Sleep(500)
             Call master.Register(index, slave:=bootstrap)
@@ -240,13 +242,16 @@ Public Class RunParallel
                                       argv As list,
                                       debug As Boolean,
                                       verbose As Boolean,
+                                      compress As Boolean,
                                       env As Environment) As RunParallel
 
         Dim parallelBase As New MasterContext(
             env:=env,
             verbose:=argv.getValue("debug", env, [default]:=False),
             port:=argv.getValue("master", env, -1)
-        )
+        ) With {
+            .compress = compress
+        }
         Dim println = env.WriteLineHandler
 
         If verbose Then

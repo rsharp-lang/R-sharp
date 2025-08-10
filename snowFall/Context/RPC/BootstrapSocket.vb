@@ -100,6 +100,8 @@ Namespace Context.RPC
         ''' <returns></returns>
         Public ReadOnly Property NotAvaiable As Boolean = False
 
+        Public Property compression As Boolean = True
+
         ''' <summary>
         ''' Create a new socket and start the tcp socket services
         ''' </summary>
@@ -293,6 +295,7 @@ Namespace Context.RPC
 
             Call payload.AddRange(BitConverter.GetBytes(uuid))
             Call payload.AddRange(BitConverter.GetBytes(masterPort))
+            Call payload.Add(CByte(If(compression, 1, 0)))
             Call payload.AddRange(BitConverter.GetBytes(closure.Length))
             Call payload.AddRange(closure)
 
