@@ -158,6 +158,12 @@ Public Module Parallel
         }
     End Function
 
+    ''' <summary>
+    ''' debug test for the loader of the get remote symbol error dump file
+    ''' </summary>
+    ''' <param name="payload"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("parseSymbolPayload")>
     Public Function testParseSymbol(<RRawVectorArgument> payload As Object, Optional env As Environment = Nothing) As Object
 #Disable Warning

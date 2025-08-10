@@ -149,7 +149,7 @@ Namespace Context.RPC
                         If resp.Protocol = HTTP_RFC.RFC_NOT_FOUND Then
                             Return buffer404(name)
                         Else
-                            Return loadRemoteSymbol(name, buffer)
+                            Return loadRemoteSymbol(name, buffer, symbols, verbose)
                         End If
                     End Using
                 Catch ex As Exception
@@ -182,7 +182,7 @@ Namespace Context.RPC
         ''' <param name="name"></param>
         ''' <param name="buffer"></param>
         ''' <returns></returns>
-        Private Function loadRemoteSymbol(name As String, buffer As MemoryStream) As Symbol
+        Public Shared Function loadRemoteSymbol(name As String, buffer As MemoryStream, ByRef symbols As SymbolSet, Optional verbose As Boolean = True) As Symbol
             Dim value As Symbol
 
             Try
