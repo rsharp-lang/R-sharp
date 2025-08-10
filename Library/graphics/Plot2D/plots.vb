@@ -852,7 +852,8 @@ Module plots
             ' 2D
             Return PieChart.Plot(
                 data:=data,
-                size:=InteropArgumentHelper.getSize(size, env)
+                size:=InteropArgumentHelper.getSize(size, env),
+                driver:=env.getDriver
             )
         End If
     End Function
