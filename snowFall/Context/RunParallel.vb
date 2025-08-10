@@ -95,9 +95,10 @@ Public Class RunSequential : Inherits RunParallel
                                                 argv As list,
                                                 debug As Boolean,
                                                 verbose As Boolean,
+                                                compress As Boolean,
                                                 env As Environment) As RunParallel
 
-        Dim base = RunParallel.Initialize(task, argv, debug, verbose, env)
+        Dim base = RunParallel.Initialize(task, argv, debug, verbose, compress, env)
 
         Return New RunSequential(base) With {
             .taskExpr = task
