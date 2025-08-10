@@ -194,6 +194,13 @@ Namespace Runtime.Interop
         Public ReadOnly Property getCount As PropertyInfo
         Public ReadOnly Property getItem As PropertyInfo
 
+        Public ReadOnly Property is_numeric As Boolean
+            Get
+                Dim clr As Type = GetRawElementType()
+                Return clr Like integers OrElse clr Like floats
+            End Get
+        End Property
+
         ''' <summary>
         ''' include single element and array element, example as:
         ''' 

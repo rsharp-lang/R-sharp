@@ -807,6 +807,7 @@ Module plots
         If x Is Nothing Then
             Return RInternal.debug.stop("the requred x data object can not be nothing!", env)
         ElseIf TypeOf x Is list Then
+            ' a collection of [name => number]
             For Each tag As NamedValue(Of Object) In DirectCast(x, list).namedValues
                 data += New FractionData With {
                     .Name = tag.Name,
@@ -815,16 +816,31 @@ Module plots
                 }
             Next
         ElseIf TypeOf x Is vector Then
-            Dim names As String() = DirectCast(x, vector).getNames
-            Dim vec As Double() = CLRVector.asNumeric(x)
+            Dim v As vector = DirectCast(x, vector)
 
-            For i As Integer = 0 To names.Length - 1
-                data += New FractionData With {
-                    .Name = names(i),
-                    .Color = ++colors,
-                    .Value = vec(i)
-                }
-            Next
+            If v.elementType.is_numeric Then
+                Dim names As String() = DirectCast(x, vector).getNames
+                Dim vec As Double() = CLRVector.asNumeric(x)
+
+                For i As Integer = 0 To names.Length - 1
+                    data += New FractionData With {
+                        .Name = names(i),
+                        .Color = ++colors,
+                        .Value = vec(i)
+                    }
+                Next
+            Else
+                Dim chars As String() = CLRVector.asCharacter(x)
+                Dim factors = chars.GroupBy(Function(s) s)
+
+                For Each factor As IGrouping(Of String, String) In factors
+                    data += New FractionData With {
+                        .Name = factor.Key,
+                        .Color = ++colors,
+                        .Value = factor.Count
+                    }
+                Next
+            End If
         Else
             Return Message.InCompatibleType(GetType(vector), x.GetType, env)
         End If
