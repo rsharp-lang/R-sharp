@@ -88,7 +88,7 @@ Public Class RunSequential : Inherits RunParallel
     End Sub
 
     Public Overrides Function taskFactory(index As Integer) As Object
-
+        Throw New NotImplementedException
     End Function
 
     Public Overloads Shared Function Initialize(task As Expression,
