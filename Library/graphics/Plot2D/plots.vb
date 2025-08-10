@@ -830,17 +830,10 @@ Module plots
                     }
                 Next
             Else
-                Dim chars As String() = CLRVector.asCharacter(x)
-                Dim factors = chars.GroupBy(Function(s) s)
-
-                For Each factor As IGrouping(Of String, String) In factors
-                    data += New FractionData With {
-                        .Name = factor.Key,
-                        .Color = ++colors,
-                        .Value = factor.Count
-                    }
-                Next
+                data = New List(Of FractionData)(CLRVector.asCharacter(x).charPie(colors))
             End If
+        ElseIf TypeOf x Is String() Then
+            data = New List(Of FractionData)(CLRVector.asCharacter(x).charPie(colors))
         Else
             Return Message.InCompatibleType(GetType(vector), x.GetType, env)
         End If
@@ -862,6 +855,19 @@ Module plots
                 size:=InteropArgumentHelper.getSize(size, env)
             )
         End If
+    End Function
+
+    <Extension>
+    Private Iterator Function charPie(chars As String(), colors As LoopArray(Of Color)) As IEnumerable(Of FractionData)
+        Dim factors = chars.GroupBy(Function(s) s)
+
+        For Each factor As IGrouping(Of String, String) In factors
+            Yield New FractionData With {
+                .Name = factor.Key,
+                .Color = ++colors,
+                .Value = factor.Count
+            }
+        Next
     End Function
 
     ''' <summary>
