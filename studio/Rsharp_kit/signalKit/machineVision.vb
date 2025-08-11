@@ -50,6 +50,7 @@ Public Module machineVision
     <RApiReturn(GetType(BitmapBuffer))>
     Public Function ostuFilter(image As Object,
                                Optional flip As Boolean = False,
+                               Optional factor As Double = 0.65,
                                Optional env As Environment = Nothing) As Object
 
         If image Is Nothing Then
@@ -62,6 +63,6 @@ Public Module machineVision
             Return buffer.TryCast(Of Message)
         End If
 
-        Return Thresholding.ostuFilter(buffer, flip)
+        Return Thresholding.ostuFilter(buffer, flip, factor)
     End Function
 End Module

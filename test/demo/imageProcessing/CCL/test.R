@@ -4,7 +4,7 @@ imports "machineVision" from "signalKit";
 setwd(@dir);
 
 let raw = readImage("—Pngtree—five chickens in different colors_3632916.jpg");
-let bin = machineVision::ostu(raw);
+let bin = machineVision::ostu(raw, factor = 0.8);
 let shapes = machineVision::ccl(bin);
 
 print(`find ${length(shapes)} shapes.`);
