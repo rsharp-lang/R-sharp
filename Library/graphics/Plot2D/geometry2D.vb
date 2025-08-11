@@ -123,7 +123,8 @@ Module geometry2D
         Dim colors = RColorPalette.getColorSet(args.getBySynonyms("colors", "colorset", "colorSet"), "paper")
         Dim size = InteropArgumentHelper.getSize(args.getBySynonyms("size"), env)
         Dim scatter As Boolean = CLRVector.asScalarLogical(args.getBySynonyms("scatter"))
-        Dim theme As New Theme With {.colorSet = colors}
+        Dim padding As String = InteropArgumentHelper.getPadding(args!padding, "padding: 10% 10% 15% 20%;")
+        Dim theme As New Theme With {.colorSet = colors, .padding = padding}
         Dim driver As Drivers = env.getDriver
 
         If polygons.IsNullOrEmpty Then

@@ -27,11 +27,15 @@ Public Module machineVision
             Return buffer.TryCast(Of Message)
         End If
 
+        Dim shapes As Polygon2D()
+
         If two_pass Then
-            Return CCLabeling.TwoPassProcess(buffer).ToArray
+            shapes = CCLabeling.TwoPassProcess(buffer).ToArray
         Else
-            Return CCLabeling.Process(buffer).ToArray
+            shapes = CCLabeling.Process(buffer).ToArray
         End If
+
+        Return shapes.OrderByDescending(Function(a) a.length).Take(30).ToArray
     End Function
 
     Private Function bitmapCommon(image As Object, env As Environment) As [Variant](Of BitmapBuffer, Message)
