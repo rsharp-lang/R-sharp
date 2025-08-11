@@ -490,6 +490,8 @@ Partial Module grDevices
                 write:=Sub(stream)
                            If image.GetType.ImplementInterface(Of SaveGdiBitmap) Then
                                Call DirectCast(image, SaveGdiBitmap).Save(stream, format)
+                           ElseIf TypeOf image Is BitmapBuffer Then
+                               Call DirectCast(image, BitmapBuffer).Save(stream)
                            Else
 #If NET48 Then
                                Call DirectCast(image, Image).Save(stream, format.GetFormat)
