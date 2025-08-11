@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Filters
 Imports Microsoft.VisualBasic.Imaging.Math2D
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Math.MachineVision.CCL
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
@@ -47,7 +48,10 @@ Public Module machineVision
 
     <ExportAPI("ostu")>
     <RApiReturn(GetType(BitmapBuffer))>
-    Public Function ostuFilter(image As Object, Optional flip As Boolean = False, Optional env As Environment = Nothing) As Object
+    Public Function ostuFilter(image As Object,
+                               Optional flip As Boolean = False,
+                               Optional env As Environment = Nothing) As Object
+
         If image Is Nothing Then
             Return Nothing
         End If
