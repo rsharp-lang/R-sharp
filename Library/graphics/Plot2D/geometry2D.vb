@@ -70,7 +70,9 @@ Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Canvas
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
 Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.DataMining.DensityQuery
+Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Math2D.ConcaveHull
+Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Imaging.LayoutModel
 Imports Microsoft.VisualBasic.Imaging.Math2D
 Imports Microsoft.VisualBasic.Math
@@ -120,9 +122,19 @@ Module geometry2D
         Dim colors = RColorPalette.getColorSet(args.getBySynonyms("colors", "colorset", "colorSet"), "paper")
         Dim size = InteropArgumentHelper.getSize(args.getBySynonyms("size"), env)
         Dim theme As New Theme With {.colorSet = colors}
-        Dim app As New FillPolygons(polygons, theme)
+        Dim driver As Drivers = env.getDriver
 
-        Return app.Plot(size)
+        If polygons.IsNullOrEmpty Then
+            Return g.GraphicsPlots(
+                size.SizeParser, "padding:0px", "white",
+                plotAPI:=Sub(ByRef gfx, rect)
+
+                         End Sub,
+                driver:=driver)
+        Else
+            Dim app As New FillPolygons(polygons, theme)
+            Return app.Plot(size, driver:=driver)
+        End If
     End Function
 
     ''' <summary>
