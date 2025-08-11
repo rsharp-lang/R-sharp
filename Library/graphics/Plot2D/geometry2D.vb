@@ -112,8 +112,9 @@ Module geometry2D
     Private Function fillPolygonGroups(polygons As PolygonGroup(), args As list, env As Environment) As Object
         Dim colors = RColorPalette.getColorSet(args.getBySynonyms("colors", "colorset", "colorSet"), "paper")
         Dim size = InteropArgumentHelper.getSize(args.getBySynonyms("size"), env)
+        Dim scatter As Boolean = CLRVector.asScalarLogical(args.getBySynonyms("scatter"))
         Dim theme As New Theme With {.colorSet = colors}
-        Dim app As New FillPolygons(polygons, theme)
+        Dim app As New FillPolygons(polygons, scatter, theme)
 
         Return app.Plot(size)
     End Function
@@ -121,6 +122,7 @@ Module geometry2D
     Private Function fillPolygons(polygons As Polygon2D(), args As list, env As Environment) As Object
         Dim colors = RColorPalette.getColorSet(args.getBySynonyms("colors", "colorset", "colorSet"), "paper")
         Dim size = InteropArgumentHelper.getSize(args.getBySynonyms("size"), env)
+        Dim scatter As Boolean = CLRVector.asScalarLogical(args.getBySynonyms("scatter"))
         Dim theme As New Theme With {.colorSet = colors}
         Dim driver As Drivers = env.getDriver
 
@@ -132,7 +134,7 @@ Module geometry2D
                          End Sub,
                 driver:=driver)
         Else
-            Dim app As New FillPolygons(polygons, theme)
+            Dim app As New FillPolygons(polygons, scatter, theme)
             Return app.Plot(size, driver:=driver)
         End If
     End Function
