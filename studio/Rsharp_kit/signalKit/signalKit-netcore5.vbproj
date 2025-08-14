@@ -79,6 +79,7 @@
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data\BinaryData\netCDF\netCDF.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data\DataFrame\dataframework-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\Math\Math.NET5.vbproj" />
+    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\Mathematica\SignalProcessing\MachineVision\MachineVision.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\Mathematica\SignalProcessing\Signal.IO\signal_io-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\Mathematica\SignalProcessing\SignalProcessing\signalprocessing-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\Mathematica\SignalProcessing\wav\wav\waveFile-netcore5.vbproj" />

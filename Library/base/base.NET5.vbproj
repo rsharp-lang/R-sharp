@@ -5,7 +5,7 @@
     <TargetFrameworks>net8.0-windows;net8.0</TargetFrameworks>
     <AssemblyName>base</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
-    <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32;gcmodeller_desktop</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32;gcmodeller_desktop;CFD_win32</Configurations>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -44,6 +44,10 @@
     <DocumentationFile>base.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CFD_win32|AnyCPU'">
+    <DocumentationFile>base.xml</DocumentationFile>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|AnyCPU'">
     <DocumentationFile>base.xml</DocumentationFile>
   </PropertyGroup>
@@ -69,6 +73,19 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>../../App\</OutputPath>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CFD_win32|x64'">    
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineConstants>MATH_DATASET=1,write_csv=1,UNIX=1</DefineConstants>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>../../../../../Moira\assembly\bin\Rstudio\library</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  
   <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net8.0-windows' ">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DefineConstants>MATH_DATASET=1,write_csv=1,UNIX=1</DefineConstants>
@@ -138,7 +155,15 @@
     <DefineConstants>write_csv=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net6.0|x64'">
+    <DefineConstants>write_csv=1,UNIX=1</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net6.0-windows|x64'">
+    <DefineConstants>write_csv=1,UNIX=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net6.0-windows|x64'">
     <DefineConstants>write_csv=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 

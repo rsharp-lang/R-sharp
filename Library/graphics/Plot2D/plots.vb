@@ -807,6 +807,7 @@ Module plots
         If x Is Nothing Then
             Return RInternal.debug.stop("the requred x data object can not be nothing!", env)
         ElseIf TypeOf x Is list Then
+            ' a collection of [name => number]
             For Each tag As NamedValue(Of Object) In DirectCast(x, list).namedValues
                 data += New FractionData With {
                     .Name = tag.Name,
@@ -815,16 +816,24 @@ Module plots
                 }
             Next
         ElseIf TypeOf x Is vector Then
-            Dim names As String() = DirectCast(x, vector).getNames
-            Dim vec As Double() = CLRVector.asNumeric(x)
+            Dim v As vector = DirectCast(x, vector)
 
-            For i As Integer = 0 To names.Length - 1
-                data += New FractionData With {
-                    .Name = names(i),
-                    .Color = ++colors,
-                    .Value = vec(i)
-                }
-            Next
+            If v.elementType.is_numeric Then
+                Dim names As String() = DirectCast(x, vector).getNames
+                Dim vec As Double() = CLRVector.asNumeric(x)
+
+                For i As Integer = 0 To names.Length - 1
+                    data += New FractionData With {
+                        .Name = names(i),
+                        .Color = ++colors,
+                        .Value = vec(i)
+                    }
+                Next
+            Else
+                data = New List(Of FractionData)(CLRVector.asCharacter(x).charPie(colors))
+            End If
+        ElseIf TypeOf x Is String() Then
+            data = New List(Of FractionData)(CLRVector.asCharacter(x).charPie(colors))
         Else
             Return Message.InCompatibleType(GetType(vector), x.GetType, env)
         End If
@@ -843,9 +852,23 @@ Module plots
             ' 2D
             Return PieChart.Plot(
                 data:=data,
-                size:=InteropArgumentHelper.getSize(size, env)
+                size:=InteropArgumentHelper.getSize(size, env),
+                driver:=env.getDriver
             )
         End If
+    End Function
+
+    <Extension>
+    Private Iterator Function charPie(chars As String(), colors As LoopArray(Of Color)) As IEnumerable(Of FractionData)
+        Dim factors = chars.GroupBy(Function(s) s)
+
+        For Each factor As IGrouping(Of String, String) In factors
+            Yield New FractionData With {
+                .Name = factor.Key,
+                .Color = ++colors,
+                .Value = factor.Count
+            }
+        Next
     End Function
 
     ''' <summary>

@@ -77,8 +77,34 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports snowFall.Context.RPC
 Imports R = snowFall.RscriptCommandLine.Rscript
-Imports Rset = SMRUCC.Rsharp.Runtime.Internal.Invokes.set
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+
+Public Class RunSequential : Inherits RunParallel
+
+    Public Property taskExpr As Expression
+
+    Private Sub New(clone As RunParallel)
+        Call MyBase.New(clone)
+    End Sub
+
+    Public Overrides Function taskFactory(index As Integer) As Object
+        Throw New NotImplementedException
+    End Function
+
+    Public Overloads Shared Function Initialize(task As Expression,
+                                                argv As list,
+                                                debug As Boolean,
+                                                verbose As Boolean,
+                                                compress As Boolean,
+                                                env As Environment) As RunParallel
+
+        Dim base = RunParallel.Initialize(task, argv, debug, verbose, compress, env)
+
+        Return New RunSequential(base) With {
+            .taskExpr = task
+        }
+    End Function
+End Class
 
 ''' <summary>
 ''' context_analysis -> symbols -> serialization -> parallel_slave
@@ -104,7 +130,20 @@ Public Class RunParallel
     Public Property debug As Boolean = False
     Public Property slaveDebug As Boolean = False
 
-    Private Sub New()
+    Protected Sub New(clone As RunParallel)
+        Me.error = clone.error
+        Me.master = clone.master
+        Me.seqSet = clone.seqSet
+        Me.taskNames = clone.taskNames
+        Me.size = clone.size
+        Me.worker = clone.worker
+        Me.task = clone.task
+        Me.debugPort = clone.debugPort
+        Me.debug = clone.debug
+        Me.slaveDebug = clone.slaveDebug
+    End Sub
+
+    Protected Sub New()
         worker = R.FromEnvironment(App.HOME)
 
 #If NETCOREAPP Then
@@ -128,7 +167,7 @@ Public Class RunParallel
     ''' A zero-based task index
     ''' </param>
     ''' <returns></returns>
-    Public Function taskFactory(index As Integer) As Object
+    Public Overridable Function taskFactory(index As Integer) As Object
         Dim result As Object = Nothing
         Dim bootstrap As BootstrapSocket = Nothing
         Dim println = master.env.WriteLineHandler
@@ -141,7 +180,9 @@ Public Class RunParallel
                 debugPort:=debugPort,
                 debug:=debug,
                 slave_debug:=slaveDebug
-            )
+            ) With {
+                .compression = master.compress
+            }
 
             Call Thread.Sleep(500)
             Call master.Register(index, slave:=bootstrap)
@@ -202,13 +243,16 @@ Public Class RunParallel
                                       argv As list,
                                       debug As Boolean,
                                       verbose As Boolean,
+                                      compress As Boolean,
                                       env As Environment) As RunParallel
 
         Dim parallelBase As New MasterContext(
             env:=env,
             verbose:=argv.getValue("debug", env, [default]:=False),
             port:=argv.getValue("master", env, -1)
-        )
+        ) With {
+            .compress = compress
+        }
         Dim println = env.WriteLineHandler
 
         If verbose Then

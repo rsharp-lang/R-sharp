@@ -5,12 +5,11 @@
     <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
     <AssemblyName>Rserve</AssemblyName>
-    <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32;gcmodeller_desktop</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32;gcmodeller_desktop;CFD_win32</Configurations>
     <OutputType>Exe</OutputType>
     <StartupObject>Rserve.Program</StartupObject>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-	  <RuntimeIdentifiers>win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>	  
 	  <Deterministic>false</Deterministic>
 	  <DefineConstants>netcore5=1</DefineConstants>
 	  <Title>R http services</Title>
@@ -42,6 +41,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|AnyCPU'">
     <DocumentationFile>Rserve.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -66,7 +66,8 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net6.0-windows' ">
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='CFD_win32|net8.0-windows'">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   
@@ -87,7 +88,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
     
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0-windows|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net8.0-windows|x64'">
     <DocumentationFile>Rserve.xml</DocumentationFile>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
@@ -108,6 +109,17 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <DefineConstants>netcore5=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net8.0-windows|x64'">
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DefineConstants>netcore5=1</DefineConstants>
+    <OutputPath>../../../../../Moira\assembly\bin\Rstudio\bin</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

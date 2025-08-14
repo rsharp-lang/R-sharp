@@ -194,6 +194,13 @@ Namespace Runtime.Interop
         Public ReadOnly Property getCount As PropertyInfo
         Public ReadOnly Property getItem As PropertyInfo
 
+        Public ReadOnly Property is_numeric As Boolean
+            Get
+                Dim clr As Type = GetRawElementType()
+                Return clr Like integers OrElse clr Like floats
+            End Get
+        End Property
+
         ''' <summary>
         ''' include single element and array element, example as:
         ''' 
@@ -244,6 +251,12 @@ Namespace Runtime.Interop
         ''' <returns></returns>
         Public Shared ReadOnly Property closure As RType = GetRSharpType(GetType(RFunction))
         Public Shared ReadOnly Property character As RType = GetRSharpType(GetType(String))
+
+        Public ReadOnly Property is_any As Boolean
+            Get
+                Return Me Is any
+            End Get
+        End Property
 
         Private Sub New(raw As Type)
             Me.raw = GetUnderlyingType(raw)

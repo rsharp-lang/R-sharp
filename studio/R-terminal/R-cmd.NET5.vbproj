@@ -102,21 +102,9 @@
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net6.0-windows|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net8.0-windows|x64'">
     <DocumentationFile>R#.xml</DocumentationFile>
-    <OutputPath>../../../../../CFD\assembly\bin\Rstudio\bin/</OutputPath>
-    <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <Optimize>false</Optimize>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <DefineDebug>false</DefineDebug>
-    <DefineTrace>true</DefineTrace>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='PlantMAT|net6.0-windows|x64'">
-    <DocumentationFile>R#.xml</DocumentationFile>
-    <OutputPath>../../../../../CFD\assembly\bin\Rstudio\bin/</OutputPath>
+    <OutputPath>../../../../../Moira\assembly\bin\Rstudio\bin/</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>
@@ -143,125 +131,6 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net6.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net6.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='PlantMAT|net6.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Desktop|net6.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit|net6.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net6.0|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net6.0|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='PlantMAT|net6.0|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Desktop|net6.0|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit|net6.0|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net5.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net5.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='PlantMAT|net5.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net5.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Desktop|net5.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit|net5.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net5.0|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Desktop|net5.0|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit|net5.0|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net5.0|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
@@ -335,85 +204,7 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net6.0-windows|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net6.0-windows|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='PlantMAT|net6.0-windows|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0-windows|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Desktop|net6.0-windows|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit|net6.0-windows|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0-windows|AnyCPU'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net6.0-windows|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net6.0-windows|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='PlantMAT|net6.0-windows|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0-windows|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Desktop|net6.0-windows|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit|net6.0-windows|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0-windows|x64'">
-    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'gcmodeller_desktop|net6.0-windows' ">
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Desktop|net6.0-windows'">
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
+ 
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0-windows|x64'">
       <RemoveIntegerChecks>true</RemoveIntegerChecks>

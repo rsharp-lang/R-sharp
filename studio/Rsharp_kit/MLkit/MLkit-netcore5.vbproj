@@ -5,7 +5,7 @@
     <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
     <AssemblyName>MLkit</AssemblyName>
-    <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32;gcmodeller_desktop</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32;gcmodeller_desktop;CFD_win32</Configurations>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Title>MLkit: R# machine learning toolkit library</Title>
@@ -21,6 +21,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|AnyCPU'">
+    <DocumentationFile>MLkit.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CFD_win32|AnyCPU'">
     <DocumentationFile>MLkit.xml</DocumentationFile>
   </PropertyGroup>
 
@@ -46,6 +50,19 @@
     <DefineTrace>true</DefineTrace>
     <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
     <OutputPath>../../../App\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CFD_win32|x64'">
+    <DocumentationFile>MLkit.xml</DocumentationFile>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
+    <OutputPath>../../../../../../Moira\assembly\bin\Rstudio\library</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='gcmodeller_desktop|x64'">
@@ -104,7 +121,28 @@
     <DefineConstants>DATAMINING_DATASET=1,MATH_DATASET=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
+
+
+
+
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net6.0|x64'">
+    <RemoveIntegerChecks>True</RemoveIntegerChecks>
+    <Optimize>False</Optimize>
+    <DebugType>full</DebugType>
+    <DefineTrace>True</DefineTrace>
+    <DefineConstants>DATAMINING_DATASET=1,MATH_DATASET=1,UNIX=1</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net6.0-windows|x64'">
+    <RemoveIntegerChecks>True</RemoveIntegerChecks>
+    <Optimize>False</Optimize>
+    <DebugType>full</DebugType>
+    <DefineTrace>True</DefineTrace>
+    <DefineConstants>DATAMINING_DATASET=1,MATH_DATASET=1,UNIX=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net6.0-windows|x64'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
     <Optimize>False</Optimize>
     <DebugType>full</DebugType>
