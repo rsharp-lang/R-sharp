@@ -1,71 +1,72 @@
 ﻿#Region "Microsoft.VisualBasic::38e254c49923fbb7a91a887afaf35814, Library\graphics\Plot2D\geometry2D.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 210
-    '    Code Lines: 157 (74.76%)
-    ' Comment Lines: 26 (12.38%)
-    '    - Xml Docs: 96.15%
-    ' 
-    '   Blank Lines: 27 (12.86%)
-    '     File Size: 8.47 KB
+' Summaries:
 
 
-    ' Class PolygonGroup
-    ' 
-    '     Properties: label, size, subregions
-    ' 
-    ' Module geometry2D
-    ' 
-    '     Function: ConcaveHull, density2D, fillPolygonGroups, fillPolygons, Kdtest
-    ' 
-    '     Sub: Main
-    ' 
-    ' Class PointAccess
-    ' 
-    '     Function: activate, getByDimension, GetDimensions, metric, nodeIs
-    ' 
-    '     Sub: setByDimensin
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 210
+'    Code Lines: 157 (74.76%)
+' Comment Lines: 26 (12.38%)
+'    - Xml Docs: 96.15%
+' 
+'   Blank Lines: 27 (12.86%)
+'     File Size: 8.47 KB
+
+
+' Class PolygonGroup
+' 
+'     Properties: label, size, subregions
+' 
+' Module geometry2D
+' 
+'     Function: ConcaveHull, density2D, fillPolygonGroups, fillPolygons, Kdtest
+' 
+'     Sub: Main
+' 
+' Class PointAccess
+' 
+'     Function: activate, getByDimension, GetDimensions, metric, nodeIs
+' 
+'     Sub: setByDimensin
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Canvas
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
 Imports Microsoft.VisualBasic.Data.visualize.Network
@@ -85,19 +86,6 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
-
-Public Class PolygonGroup
-
-    Public Property label As String
-    Public Property subregions As Polygon2D()
-
-    Public ReadOnly Property size As Integer
-        Get
-            Return subregions.TryCount
-        End Get
-    End Property
-
-End Class
 
 <Package("geometry2D")>
 <RTypeExport("polygon_group", GetType(PolygonGroup))>
