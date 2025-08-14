@@ -81,6 +81,8 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+Imports Microsoft.VisualBasic.Drawing
+
 
 #If NET48 Then
 Imports Microsoft.VisualBasic.Drawing
@@ -111,7 +113,23 @@ Partial Module grDevices
 
     Sub Main()
         makeDataframe.addHandler(GetType(Color()), AddressOf colorTable)
+
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of Bitmap)(Function(o) bitmapStr(o))
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of Image)(Function(o) ImageStr(o))
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of BitmapBuffer)(Function(o) bitmapBufferStr(o))
     End Sub
+
+    Private Function bitmapStr(bmp As Bitmap) As String
+        Return ANSI.GenerateImagePreview(bmp, terminalWidth:=Console.WindowWidth - 1)
+    End Function
+
+    Private Function ImageStr(bmp As Image) As String
+        Return ANSI.GenerateImagePreview(bmp, terminalWidth:=Console.WindowWidth - 1)
+    End Function
+
+    Private Function bitmapBufferStr(bmp As BitmapBuffer) As String
+        Return ANSI.GenerateImagePreview(New Bitmap(bmp), terminalWidth:=Console.WindowWidth - 1)
+    End Function
 
     Private Function colorTable(raster As Color(), args As list, env As Environment) As dataframe
         Dim df As New dataframe With {
