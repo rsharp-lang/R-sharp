@@ -3460,6 +3460,10 @@ RE0:
         ''' logical, indicating whether Or Not strings (characters) should be 
         ''' printed with surrounding quotes.
         ''' 
+        ''' #### color
+        ''' character, set the color of this message to print on the console by using the 
+        ''' asni escape sequence. this option only supports on the string vector message
+        ''' 
         ''' #### max.print
         ''' integer, the max number of elements to print. this parameter value
         ''' will overrides the max.print options from the options function.
@@ -3501,6 +3505,7 @@ RE0:
             Dim maxWidth As Integer = args.getValue("max.width", env, 200)
             ' display the syntax highlights of the R# runtime expression object?
             Dim highlights As Boolean = args.getValue("syntax.highlight", env, [default]:=True)
+            Dim color As String = CLRVector.asScalarCharacter(args.getByName("color"))
 
             ' keeps pretty print in multiple threading environment
             Static dummy As New Object
@@ -3519,7 +3524,8 @@ RE0:
                         .quot = quot,
                         .fields = fields,
                         .maxWidth = maxWidth,
-                        .syntax = highlights
+                        .syntax = highlights,
+                        .color = color
                     }.doPrintInternal(x, x.GetType, env)
                 End SyncLock
             End If
@@ -3546,6 +3552,7 @@ RE0:
             ''' <returns></returns>
             Public Property fields As String()
             Public Property syntax As Boolean = True
+            Public Property color As String = Nothing
 
         End Class
 
@@ -3599,20 +3606,75 @@ RE0:
             Return x
         End Function
 
-        <ExportAPI("factors")>
-        Public Function factors(x As String()) As Integer()
-            Dim index As New Index(Of String)(base:=1)
-            Dim i As New List(Of Integer)
+        ''' <summary>
+        ''' The function factor is used to encode a vector as a factor (the terms ‘category’ and ‘enumerated type’
+        ''' are also used for factors). If argument ordered is TRUE, the factor levels are assumed to be ordered. 
+        ''' For compatibility with S there is also a function ordered.
+        ''' </summary>
+        ''' <param name="x">a vector of data, usually taking a small number of distinct values.</param>
+        ''' <param name="levels">an optional vector of the unique values (as character strings) that x might have taken. 
+        ''' The default is the unique set of values taken by as.character(x), sorted into increasing order of x.
+        ''' Note that this set can be specified as smaller than sort(unique(x)).</param>
+        ''' <param name="labels">either an optional character vector of labels for the levels (in the same order
+        ''' as levels after removing those in exclude), or a character string of length 1. Duplicated values in 
+        ''' labels can be used to map different values of x to the same factor level.</param>
+        ''' <param name="exclude">a vector Of values To be excluded When forming the Set Of levels. This may be 
+        ''' factor With the same level Set As x Or should be a character.</param>
+        ''' <param name="ordered">logical flag To determine If the levels should be regarded As ordered 
+        ''' (In the order given).</param>
+        ''' <param name="nmax">an upper bound on the number of levels; see ‘Details’.</param>
+        ''' <returns>a vector with elements data encoded as factor. factor returns an object of class "factor" which 
+        ''' has a set of integer codes the length of x with a "levels" attribute of mode character and unique (!anyDuplicated(.)) 
+        ''' entries. If argument ordered is true (or ordered() is used) the result has class c("ordered", "factor"). 
+        ''' Undocumentedly for a long time, factor(x) loses all attributes(x) but "names", and resets "levels" 
+        ''' and "class".
+        ''' 
+        ''' Applying factor to an ordered or unordered factor returns a factor (of the same type) with just the 
+        ''' levels which occur: see also [.factor for a more transparent way to achieve this.</returns>
+        ''' <remarks>
+        ''' The type of the vector x is not restricted; it only must have an as.character method and be sortable (by order).
+        ''' Ordered factors differ from factors only In their Class, but methods And the model-fitting functions 
+        ''' treat the two classes quite differently.
+        ''' The encoding Of the vector happens As follows. First all the values In exclude are removed from levels. 
+        ''' If x[i] equals levels[j], Then the i-th element Of the result Is j. If no match Is found For x[i] In 
+        ''' levels (which will happen For excluded values) Then the i-th element Of the result Is Set To NA.
+        ''' Normally the 'levels’ used as an attribute of the result are the reduced set of levels after removing 
+        ''' those in exclude, but this can be altered by supplying labels. This should either be a set of new 
+        ''' labels for the levels, or a character string, in which case the levels are that character string with 
+        ''' a sequence number appended.
+        ''' factor(x, exclude = NULL) applied to a factor without NAs Is a no-operation unless there are unused 
+        ''' levels in that case, a factor with the reduced level set Is returned. If exclude Is used, since R 
+        ''' version 3.4.0, excluding non-existing character levels Is equivalent to excluding nothing, And when 
+        ''' exclude Is a character vector, that Is applied to the levels of x. Alternatively, exclude can be factor 
+        ''' with the same level set as x And will exclude the levels present in exclude.
+        ''' The codes Of a factor may contain NA. For a numeric x, Set exclude = NULL To make NA an extra level 
+        ''' (prints As &lt;NA>); by Default, this Is the last level.
+        ''' If NA Is a level, the way To Set a code To be missing (As opposed To the code Of the missing level) 
+        ''' Is To use Is.na On the left-hand-side Of an assignment (As In Is.na(f)[i] &lt;- True; indexing inside 
+        ''' Is.na does Not work). Under those circumstances missing values are currently printed As &lt;NA>, i.e.,
+        ''' identical To entries Of level NA.
+        ''' Is.factor Is generic: you can write methods To handle specific classes Of objects, see InternalMethods.
+        ''' Where levels Is Not supplied, unique Is called. Since factors typically have quite a small number Of 
+        ''' levels, For large vectors x it Is helpful To supply nmax As an upper bound On the number Of unique 
+        ''' values.
+        ''' When using c to combine a (possibly ordered) factor with other objects, if all objects are (possibly 
+        ''' ordered) factors, the result will be a factor with levels the union of the level sets of the elements, 
+        ''' in the order the levels occur in the level sets of the elements (which means that if all the elements 
+        ''' have the same level set, that Is the level set of the result), equivalent to how unlist operates on a 
+        ''' list of factor objects.
+        ''' </remarks>
+        <ExportAPI("factor")>
+        Public Function factors(x As String(),
+                                <RRawVectorArgument> Optional levels As Object = Nothing,
+                                <RRawVectorArgument> Optional labels As Object = Nothing,
+                                <RRawVectorArgument> Optional exclude As Object = Nothing,
+                                Optional ordered As Boolean = True,
+                                Optional nmax As Integer? = Nothing) As Object
 
-            For Each str As String In x
-                If index.IndexOf(str) = -1 Then
-                    Call index.Add(str)
-                End If
+            Dim factor As factor = factor.CreateFactor(x, CLRVector.asCharacter(exclude), ordered, nmax)
+            Dim ints = factor.asFactor(x, factor)
 
-                Call i.Add(index.IndexOf(str))
-            Next
-
-            Return i.ToArray
+            Return ints
         End Function
 
         ''' <summary>

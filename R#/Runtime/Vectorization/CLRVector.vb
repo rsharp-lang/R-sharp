@@ -235,6 +235,13 @@ Namespace Runtime.Vectorization
                 .ToArray
         End Function
 
+        ''' <summary>
+        ''' get the first element in the input vector as character
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns>
+        ''' this function will returns nothing if the input data is null
+        ''' </returns>
         Public Function asScalarCharacter(x As Object) As String
             Dim str = CLRVector.asCharacter(x)
 
