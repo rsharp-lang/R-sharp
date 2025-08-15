@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::730e6018b9edd57cc612038c470404a5, Library\graphics\Plot2D\plots.vb"
+﻿#Region "Microsoft.VisualBasic::915b9854dfc6b9200d3bfae517dc43cb, Library\graphics\Plot2D\plots.vb"
 
     ' Author:
     ' 
@@ -34,23 +34,23 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1264
-    '    Code Lines: 992 (78.48%)
-    ' Comment Lines: 146 (11.55%)
-    '    - Xml Docs: 85.62%
+    '   Total Lines: 1287
+    '    Code Lines: 1011 (78.55%)
+    ' Comment Lines: 147 (11.42%)
+    '    - Xml Docs: 85.03%
     ' 
-    '   Blank Lines: 126 (9.97%)
-    '     File Size: 57.89 KB
+    '   Blank Lines: 129 (10.02%)
+    '     File Size: 58.84 KB
 
 
     ' Module plots
     ' 
-    '     Function: barplot, ContourPlot, CreateSerial, doViolinPlot, findNumberVector
-    '               measureDataTable, modelWithClass, modelWithoutClass, plot_binBox, plot_categoryBars
-    '               plot_corHeatmap, plot_deSolveResult, plot_hclust, plot_heatmap, plotArray
-    '               plotContourLayers, plotFormula, plotLinearYFit, plotLmCall, plotODEResult
-    '               plotPieChart, PlotPolygon, plotSerials, plotVector, printImage
-    '               UpSetPlot
+    '     Function: barplot, charPie, ContourPlot, CreateSerial, doViolinPlot
+    '               findNumberVector, measureDataTable, modelWithClass, modelWithoutClass, plot_binBox
+    '               plot_categoryBars, plot_corHeatmap, plot_deSolveResult, plot_hclust, plot_heatmap
+    '               plotArray, plotContourLayers, plotFormula, plotLinearYFit, plotLmCall
+    '               plotODEResult, plotPieChart, PlotPolygon, plotSerials, plotVector
+    '               printImage, UpSetPlot
     ' 
     '     Sub: Main, TryGetClassData
     ' 

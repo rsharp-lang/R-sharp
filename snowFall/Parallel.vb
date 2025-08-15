@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cbecfe44984e8df0b0daa4ca76ed47c0, snowFall\Parallel.vb"
+﻿#Region "Microsoft.VisualBasic::0d45a4c2326ee55289d01cfa3e60d34b, snowFall\Parallel.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 405
-    '    Code Lines: 257 (63.46%)
-    ' Comment Lines: 95 (23.46%)
-    '    - Xml Docs: 75.79%
+    '   Total Lines: 419
+    '    Code Lines: 261 (62.29%)
+    ' Comment Lines: 104 (24.82%)
+    '    - Xml Docs: 75.00%
     ' 
-    '   Blank Lines: 53 (13.09%)
-    '     File Size: 16.27 KB
+    '   Blank Lines: 54 (12.89%)
+    '     File Size: 16.88 KB
 
 
     ' Module Parallel

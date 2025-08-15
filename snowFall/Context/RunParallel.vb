@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d1727d3478dac7a736354456f7dff5e6, snowFall\Context\RunParallel.vb"
+﻿#Region "Microsoft.VisualBasic::28b2d15bed466c2287a2c4bcda1677f6, snowFall\Context\RunParallel.vb"
 
     ' Author:
     ' 
@@ -34,21 +34,28 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 307
-    '    Code Lines: 232 (75.57%)
-    ' Comment Lines: 37 (12.05%)
+    '   Total Lines: 351
+    '    Code Lines: 268 (76.35%)
+    ' Comment Lines: 37 (10.54%)
     '    - Xml Docs: 83.78%
     ' 
-    '   Blank Lines: 38 (12.38%)
-    '     File Size: 12.19 KB
+    '   Blank Lines: 46 (13.11%)
+    '     File Size: 13.69 KB
 
 
+    ' Class RunSequential
+    ' 
+    '     Properties: taskExpr
+    ' 
+    '     Constructor: (+1 Overloads) Sub New
+    '     Function: Initialize, taskFactory
+    ' 
     ' Class RunParallel
     ' 
     '     Properties: [error], debug, debugPort, master, seqSet
     '                 size, slaveDebug, task, taskNames, worker
     ' 
-    '     Constructor: (+1 Overloads) Sub New
+    '     Constructor: (+2 Overloads) Sub New
     ' 
     '     Function: getSymbol, Initialize, readSymbolSet, setTaskNames, taskFactory
     ' 

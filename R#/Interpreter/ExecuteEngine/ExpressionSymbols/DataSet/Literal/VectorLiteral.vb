@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9b339de01109efe7f4a5263dff050ab0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\VectorLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::37cae21639341be8293c12f64201fe27, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\VectorLiteral.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 132
-    '    Code Lines: 90 (68.18%)
-    ' Comment Lines: 18 (13.64%)
-    '    - Xml Docs: 72.22%
+    '   Total Lines: 146
+    '    Code Lines: 98 (67.12%)
+    ' Comment Lines: 22 (15.07%)
+    '    - Xml Docs: 77.27%
     ' 
-    '   Blank Lines: 24 (18.18%)
-    '     File Size: 4.64 KB
+    '   Blank Lines: 26 (17.81%)
+    '     File Size: 5.09 KB
 
 
     '     Class VectorLiteral
     ' 
-    '         Properties: expressionName, length, type
+    '         Properties: expressionName, isLiteral, length, type
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: Evaluate, FromArray, GetEnumerator, IEnumerable_GetEnumerator, ToArray

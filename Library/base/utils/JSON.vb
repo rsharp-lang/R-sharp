@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d18cfe1d8933059d571ac6909bbfcf0b, Library\base\utils\JSON.vb"
+﻿#Region "Microsoft.VisualBasic::85bcc3157db7f72555abae65672668ef, Library\base\utils\JSON.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 443
-    '    Code Lines: 288 (65.01%)
-    ' Comment Lines: 99 (22.35%)
-    '    - Xml Docs: 94.95%
+    '   Total Lines: 339
+    '    Code Lines: 215 (63.42%)
+    ' Comment Lines: 82 (24.19%)
+    '    - Xml Docs: 93.90%
     ' 
-    '   Blank Lines: 56 (12.64%)
-    '     File Size: 17.62 KB
+    '   Blank Lines: 42 (12.39%)
+    '     File Size: 13.73 KB
 
 
     ' Module JSON
     ' 
     '     Function: buildObject, fromJSON, json_decode, json_encode, loadClrObjectFromJson
-    '               parseBSON, (+2 Overloads) read_jsonl, unescape, writeBSON
+    '               (+2 Overloads) read_jsonl, unescape
     ' 
     ' 
     ' /********************************************************************************/

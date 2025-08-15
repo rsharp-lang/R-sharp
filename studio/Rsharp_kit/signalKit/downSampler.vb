@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::591889fdfb5255b02a701c4f8fd58a12, studio\Rsharp_kit\signalKit\downSampler.vb"
+﻿#Region "Microsoft.VisualBasic::5e76357fb069b15a052d051619e1ae87, studio\Rsharp_kit\signalKit\downSampler.vb"
 
     ' Author:
     ' 
@@ -34,12 +34,12 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 88
-    '    Code Lines: 52 (59.09%)
-    ' Comment Lines: 23 (26.14%)
+    '   Total Lines: 87
+    '    Code Lines: 52 (59.77%)
+    ' Comment Lines: 23 (26.44%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 13 (14.77%)
+    '   Blank Lines: 12 (13.79%)
     '     File Size: 2.70 KB
 
 
@@ -51,7 +51,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.TagData
@@ -140,4 +139,3 @@ Module downSampler
     End Function
 
 End Module
-

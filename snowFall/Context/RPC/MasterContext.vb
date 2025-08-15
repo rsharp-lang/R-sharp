@@ -1,61 +1,61 @@
-﻿#Region "Microsoft.VisualBasic::06b4b7b0e256ce2f3539aab659213459, snowFall\Context\RPC\MasterContext.vb"
+﻿#Region "Microsoft.VisualBasic::a4c6103526b5ebed08c0e5878ab58294, snowFall\Context\RPC\MasterContext.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 249
-'    Code Lines: 158 (63.45%)
-' Comment Lines: 51 (20.48%)
-'    - Xml Docs: 62.75%
-' 
-'   Blank Lines: 40 (16.06%)
-'     File Size: 9.47 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class MasterContext
-' 
-'         Properties: port, Protocol
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: GetSymbol, pop, popLoopSymbol, (+2 Overloads) popSymbol, PostResult
-'                   SetSymbolLogTempDir, ToString
-' 
-'         Sub: (+2 Overloads) Dispose, push, Register, Run
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 255
+    '    Code Lines: 163 (63.92%)
+    ' Comment Lines: 51 (20.00%)
+    '    - Xml Docs: 62.75%
+    ' 
+    '   Blank Lines: 41 (16.08%)
+    '     File Size: 9.68 KB
+
+
+    '     Class MasterContext
+    ' 
+    '         Properties: compress, port, Protocol
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: GetSymbol, pop, popLoopSymbol, (+2 Overloads) popSymbol, PostResult
+    '                   SetSymbolLogTempDir, ToString
+    ' 
+    '         Sub: (+2 Overloads) Dispose, push, Register, Run
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

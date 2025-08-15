@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bd2f8b90f28f2c1716ad7e91792eca56, snowFall\Context\RPC\BootstrapSocket.vb"
+﻿#Region "Microsoft.VisualBasic::b522a0de8887b822959ac2d759212659, snowFall\Context\RPC\BootstrapSocket.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 268
-    '    Code Lines: 157 (58.58%)
-    ' Comment Lines: 68 (25.37%)
+    '   Total Lines: 271
+    '    Code Lines: 159 (58.67%)
+    ' Comment Lines: 68 (25.09%)
     '    - Xml Docs: 54.41%
     ' 
-    '   Blank Lines: 43 (16.04%)
-    '     File Size: 9.53 KB
+    '   Blank Lines: 44 (16.24%)
+    '     File Size: 9.65 KB
 
 
     '     Class BootstrapSocket
     ' 
-    '         Properties: NotAvaiable, port
+    '         Properties: compression, NotAvaiable, port
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 

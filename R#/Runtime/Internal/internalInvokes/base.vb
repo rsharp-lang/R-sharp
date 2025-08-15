@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a44aeb1472ee97bdf0e0aaafb0148baf, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::6f4f75f3e7740e47c4b17f27b92b0d09, R#\Runtime\Internal\internalInvokes\base.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 3706
-    '    Code Lines: 1620 (43.71%)
-    ' Comment Lines: 1781 (48.06%)
-    '    - Xml Docs: 83.49%
+    '   Total Lines: 3746
+    '    Code Lines: 1614 (43.09%)
+    ' Comment Lines: 1830 (48.85%)
+    '    - Xml Docs: 83.88%
     ' 
-    '   Blank Lines: 305 (8.23%)
-    '     File Size: 166.31 KB
+    '   Blank Lines: 302 (8.06%)
+    '     File Size: 171.52 KB
 
 
     '     Module base
@@ -49,24 +49,25 @@
     '                   append, appendFinal, appendOfList, appendOfVector, (+3 Overloads) argumentList
     '                   as_array, attachPackageFile, autoDispose, c, cat
     '                   cbind, character, checkDimensionsAgree, colnames, columnVector
-    '                   commandArgs, doPrintInternal, dQuote, factor, factors
-    '                   getOption, getPosition, ifelse, ifelseScalar, ifelseVector
-    '                   ints, is_array, isDataframe, isEmpty, isEmptyArray
-    '                   isFALSE, isFunction, isList, isNA, isNull
-    '                   isRVector, isTRUE, join_data, length, library
-    '                   logical, makeNames, names, ncol, neg
-    '                   nrow, numeric, objectAddInvoke, options, options_flush
-    '                   print, range, raws, rbind, Rdataframe
-    '                   rep, rep_int, rep_len, replace, Rlist
-    '                   Robj_dimension, rownames, rowwise, seq, setOptionsParameters
-    '                   sink, sink_number, source, sQuote, str
-    '                   summary, t, uniqueNames, unitOfT, ValueAt
-    '                   warning, year
+    '                   commandArgs, doPrintInternal, dQuote, factors, getOption
+    '                   getPosition, ifelse, ifelseScalar, ifelseVector, ints
+    '                   is_array, isDataframe, isEmpty, isEmptyArray, isFALSE
+    '                   isFunction, isList, isNA, isNull, isRVector
+    '                   isTRUE, join_data, length, library, logical
+    '                   makeNames, names, ncol, neg, nrow
+    '                   numeric, objectAddInvoke, options, options_flush, print
+    '                   range, raws, rbind, Rdataframe, rep
+    '                   rep_int, rep_len, replace, Rlist, Robj_dimension
+    '                   rownames, rowwise, seq, setOptionsParameters, sink
+    '                   sink_number, source, sQuote, str, summary
+    '                   t, uniqueNames, unitOfT, ValueAt, warning
+    '                   year
     ' 
     '         Sub: println_message, warnings
     '         Class PrinterOptions
     ' 
-    '             Properties: fields, maxPrint, maxWidth, quot, syntax
+    '             Properties: color, fields, maxPrint, maxWidth, quot
+    '                         syntax
     ' 
     ' 
     ' 

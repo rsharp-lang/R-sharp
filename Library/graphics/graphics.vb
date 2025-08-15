@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8e52bcfc4e0e9110e4ec4e52dc88f668, Library\graphics\graphics.vb"
+﻿#Region "Microsoft.VisualBasic::99a571d5da9157781e5a08dca6565f9e, Library\graphics\graphics.vb"
 
     ' Author:
     ' 
@@ -34,21 +34,22 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 740
-    '    Code Lines: 443 (59.86%)
-    ' Comment Lines: 215 (29.05%)
+    '   Total Lines: 760
+    '    Code Lines: 458 (60.26%)
+    ' Comment Lines: 215 (28.29%)
     '    - Xml Docs: 82.79%
     ' 
-    '   Blank Lines: 82 (11.08%)
-    '     File Size: 30.70 KB
+    '   Blank Lines: 87 (11.45%)
+    '     File Size: 31.70 KB
 
 
     ' Module grDevices
     ' 
-    '     Function: arrow, bitmap, colorTable, devCur, devOff
-    '               drawText, getImageObject, isBase64StringOrFile, OpenNewBitmapDevice, plot
-    '               png, rasterFont, rasterImage, rasterPixels, readImage
-    '               resizeImage, setCurrentDev, thumbnail, wmf
+    '     Function: arrow, bitmap, bitmapBufferStr, bitmapStr, colorTable
+    '               devCur, devOff, drawText, getImageObject, ImageStr
+    '               isBase64StringOrFile, OpenNewBitmapDevice, plot, png, rasterFont
+    '               rasterImage, rasterPixels, readImage, resizeImage, setCurrentDev
+    '               thumbnail, wmf
     ' 
     '     Sub: Main
     ' 
