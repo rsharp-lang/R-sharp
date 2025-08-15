@@ -216,7 +216,7 @@ Module Manifold
                                    Optional customMapCutoff As Double? = Nothing,
                                    Optional debug As Boolean = False,
                                    Optional KDsearch As Boolean = False,
-                                   Optional spectral_cos As Boolean = True,
+                                   Optional method As DistanceFunction = DistanceFunction.Cosine,
                                    Optional setOpMixRatio As Double = 1,
                                    Optional minDist As Double = 0.1F,
                                    Optional spread As Double = 1,
@@ -226,13 +226,7 @@ Module Manifold
         Dim labels As String()
         Dim matrix As Double()()
         Dim report As RunSlavePipeline.SetProgressEventHandler
-        Dim dist As DistanceCalculation
-
-        If spectral_cos Then
-            dist = AddressOf DistanceFunctions.SpectralSimilarity
-        Else
-            dist = AddressOf DistanceFunctions.CosineForNormalizedVectors
-        End If
+        Dim dist As DistanceCalculation = DistanceFunctions.GetFunction(method)
 
         If TypeOf data Is Rdataframe Then
             labels = DirectCast(data, Rdataframe).getRowNames
