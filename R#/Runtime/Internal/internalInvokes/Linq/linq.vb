@@ -1767,7 +1767,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     ElseIf Not strict Then
                         ' skip of the missing data field in the select function
                         ' when set strict parameter value to TRUE
-                        Call warning(message, env)
+                        Call warning(message, , env)
                         Continue For
                     End If
 
