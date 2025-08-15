@@ -3239,6 +3239,10 @@ RE0:
         ''' character (And which are pasted together with 
         ''' no separator) Or a single condition object.
         ''' </param>
+        ''' <param name="immediate_">
+        ''' logical, indicating if the warning should be output immediately, 
+        ''' even if getOption("warn") &lt;= 0. NB: this is not respected for condition objects.
+        ''' </param>
         ''' <param name="envir"></param>
         ''' <returns>
         ''' The warning message as character string, invisibly.
@@ -3248,7 +3252,27 @@ RE0:
         ''' </remarks>
         <ExportAPI("warning")>
         <DebuggerStepThrough>
-        Public Function warning(<RRawVectorArgument> message As Object, Optional envir As Environment = Nothing) As Message
+        Public Function warning(<RRawVectorArgument> message As Object,
+                                Optional immediate_ As Boolean = False,
+                                Optional envir As Environment = Nothing) As Message
+
+            If immediate_ Then
+                Dim msg_str As String() = CLRVector.asCharacter(message)
+                Dim warn As New ConsoleFormat With {
+                    .Background = AnsiColor.Black,
+                    .Bold = True,
+                    .Foreground = AnsiColor.Yellow
+                }
+                Dim dev = envir.globalEnvironment.stdout
+
+                For Each str As String In msg_str
+                    Dim text As New TextSpan With {.text = "Warning: " & str, .style = warn}
+                    Dim code As String = text
+
+                    Call dev.WriteLine(code)
+                Next
+            End If
+
             Dim msg As Message = debug.CreateMessageInternal(message, envir, level:=MSG_TYPES.WRN)
             envir.messages.Add(msg)
             App.LogFile.log(MSG_TYPES.WRN, msg.message.JoinBy(vbCrLf), "rsharp_warning")
