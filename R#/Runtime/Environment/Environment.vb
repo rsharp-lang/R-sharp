@@ -411,7 +411,9 @@ Namespace Runtime
                 .CreateMessageInternal(message, Me, level) _
                 .DoCall(AddressOf messages.Add)
 
-            If globalEnvironment.verboseOption Then
+            ' 20250816 globalEnvironment may be nothing while on the
+            ' environment setup and initialization
+            If globalEnvironment IsNot Nothing AndAlso globalEnvironment.verboseOption Then
                 Call base.print(message,, Me)
             End If
         End Sub
@@ -423,7 +425,7 @@ Namespace Runtime
         Public Sub AddMessage(msg As Message)
             Call messages.Add(msg)
 
-            If globalEnvironment.verboseOption Then
+            If globalEnvironment IsNot Nothing AndAlso globalEnvironment.verboseOption Then
                 Call base.print(msg,, Me)
             End If
         End Sub
