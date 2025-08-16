@@ -95,7 +95,7 @@ Public Class RunSequential : Inherits RunParallel
         Call MyBase.New(clone)
     End Sub
 
-    Public Overrides Function taskFactory(index As Integer) As Object
+    Public Overrides Function taskFactory(index As Integer, t0 As Date) As Object
         Throw New NotImplementedException
     End Function
 
