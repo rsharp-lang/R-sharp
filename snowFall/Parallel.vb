@@ -321,6 +321,9 @@ Public Module Parallel
     ''' make a such long name in weird and strange string 
     ''' pattern to avoid such bug.
     ''' </param>
+    ''' <param name="slaveParallel">
+    ''' config as false or config as debug mode or set n_threads to less than 1 for config as run in sequential model(local process debug mode)
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("parallel")>
@@ -329,7 +332,7 @@ Public Module Parallel
                              Optional debug As Boolean? = Nothing,
                              Optional ignoreError As Boolean? = Nothing,
                              Optional verbose As Boolean? = Nothing,
-                             Optional slaveParallel As Boolean = False,
+                             Optional slaveParallel As Boolean = True,
                              Optional compress As Boolean = True,
                              <RListObjectArgument>
                              Optional ___argvSet_____ As list = Nothing,
