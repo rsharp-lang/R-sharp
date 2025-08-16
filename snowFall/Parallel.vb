@@ -460,12 +460,11 @@ Public Module Parallel
 
     <Extension>
     Private Iterator Function produceTask(run As RunParallel) As IEnumerable(Of Func(Of SeqValue(Of Object)))
+        Dim t0 As Date = Now
+
         For i As Integer = 0 To run.size - 1
             Dim index As Integer = i
-            Dim x As Func(Of SeqValue(Of Object)) =
-                Function()
-                    Return New SeqValue(Of Object)(index, run.taskFactory(index))
-                End Function
+            Dim x As Func(Of SeqValue(Of Object)) = Function() New SeqValue(Of Object)(index, run.taskFactory(index, t0))
 
             Yield x
         Next

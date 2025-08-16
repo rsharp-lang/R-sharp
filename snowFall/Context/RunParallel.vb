@@ -74,6 +74,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Language.[Default]
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
 Imports SMRUCC.Rsharp.Development.Package.File
@@ -174,7 +175,7 @@ Public Class RunParallel
     ''' A zero-based task index
     ''' </param>
     ''' <returns></returns>
-    Public Overridable Function taskFactory(index As Integer) As Object
+    Public Overridable Function taskFactory(index As Integer, t0 As Date) As Object
         Dim result As Object = Nothing
         Dim bootstrap As BootstrapSocket = Nothing
         Dim println = master.env.WriteLineHandler
@@ -203,6 +204,8 @@ Public Class RunParallel
             End If
         Loop
 
+        Static AppHome As [Default](Of String) = App.HOME.AsDefault
+
         Dim tempfile As String = If(debug,
             TempFileSystem.GetAppSysTempFile(".log", $"{App.PID}.{bootstrap.GetHashCode}.{index}", $"task_{index}___-"),
             Nothing
@@ -212,7 +215,7 @@ Public Class RunParallel
             [delegate]:="Parallel::slave",
             redirect_stdout:=tempfile
         )
-        Dim SetDllDirectory As String = master.env.globalEnvironment.options.getOption("SetDllDirectory") Or App.HOME.AsDefault
+        Dim SetDllDirectory As String = master.env.globalEnvironment.options.getOption("SetDllDirectory") Or AppHome
         Dim SetTaskName As String = If(taskNames.IsNullOrEmpty, "", $"--task ""{taskNames(index)}""")
         Dim process As RunSlavePipeline = worker.CreateSlave($"{task} {SetTaskName} --SetDllDirectory {SetDllDirectory.CLIPath}")
 
@@ -222,7 +225,7 @@ Public Class RunParallel
 
         Call bootstrap.Run(process)
         Call getResult(uuid:=index, result)
-        Call println($"get parallel result from node_#{index}!")
+        Call println($"get parallel result from node_#{index}! (cost {StringFormats.ReadableElapsedTime(Now - t0)})")
 
         Return result
     End Function
