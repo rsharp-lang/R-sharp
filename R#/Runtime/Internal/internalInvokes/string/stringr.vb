@@ -1214,10 +1214,11 @@ Namespace Runtime.Internal.Invokes
                                  Optional union_list As Boolean = False,
                                  Optional env As Environment = Nothing) As Object
 
+            Dim decode_delimiter = CLangStringFormatProvider.sprintf(delimiter)
             Dim values As NamedValue(Of String)() = [string] _
                 .SafeQuery _
                 .Select(Function(str)
-                            Return str.GetTagValue(delimiter,
+                            Return str.GetTagValue(decode_delimiter,
                                                    trim:=trim_value,
                                                    failureNoName:=True)
                         End Function) _
