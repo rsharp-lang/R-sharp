@@ -341,45 +341,75 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             If sequence Is Nothing Then
                 Return Nothing
             ElseIf nvec.GetType.GetElementType Like RType.integers Then
-                Dim nscalar As Integer = nvec.AsObjectEnumerator.Select(Function(o) CInt(o)).First
-
-                If TypeOf sequence Is list Then
-                    Dim list As list = DirectCast(sequence, list)
-                    Dim names As String() = list.getNames.Take(nscalar).ToArray
-                    Dim subset As New list With {
-                        .slots = names _
-                            .ToDictionary(Function(key) key,
-                                          Function(key)
-                                              Return list.slots(key)
-                                          End Function)
-                    }
-
-                    Return subset
-                ElseIf TypeOf sequence Is pipeline Then
-                    Return DirectCast(sequence, pipeline) _
-                        .populates(Of Object)(env) _
-                        .Take(nscalar) _
-                        .DoCall(Function(seq)
-                                    Return New pipeline(seq, DirectCast(sequence(), pipeline).elementType)
-                                End Function)
-                Else
-                    Return ObjectSet.GetObjectSet(sequence, env).Take(nscalar).ToArray
-                End If
+                Return take_int_index(sequence, CLRVector.asInteger(nvec), env)
             ElseIf nvec.GetType.GetElementType Like RType.characters Then
-                If TypeOf sequence Is dataframe Then
-                    Dim colnames As String() = nvec
-
-                    If colnames.Length = 1 Then
-                        ' get column vector
-                        Return DirectCast(sequence, dataframe).getColumnVector(colnames(Scan0))
-                    Else
-                        Throw New NotImplementedException
-                    End If
-                Else
-                    Return Message.InCompatibleType(GetType(dataframe), sequence.GetType(), env)
-                End If
+                Return take_chr_index(sequence, CLRVector.asCharacter(nvec), env)
             Else
-                Throw New NotImplementedException
+                Throw New NotImplementedException("unknown index type: " & nvec.GetType.FullName)
+            End If
+        End Function
+
+        Private Function take_chr_index(sequence As Object, nvec As String(), env As Environment) As Object
+            If TypeOf sequence Is dataframe Then
+                Dim colnames As String() = nvec
+
+                If colnames.Length = 1 Then
+                    ' get column vector
+                    Return DirectCast(sequence, dataframe).getColumnVector(colnames(Scan0))
+                Else
+                    Throw New NotImplementedException
+                End If
+            ElseIf TypeOf sequence Is list Then
+                ' make list subset by names
+                Dim subset As list = [Object].list.empty
+                Dim source As list = DirectCast(sequence, list)
+
+                For Each name As String In nvec
+                    subset.slots(name) = source.getByName(name)
+                Next
+
+                Return subset
+            Else
+                Dim type As RType = RType.TypeOf(sequence)
+
+                If type.raw Like RType.characters Then
+                    ' make string matches
+                    Dim seq_chars = CLRVector.asCharacter(sequence)
+                    Dim index As Index(Of String) = nvec.Indexing
+
+                    Return seq_chars _
+                        .Where(Function(str) str Like index) _
+                        .ToArray
+                End If
+
+                Return Message.InCompatibleType(GetType(dataframe), sequence.GetType(), env)
+            End If
+        End Function
+
+        Private Function take_int_index(sequence As Object, nvec As Integer(), env As Environment) As Object
+            Dim nscalar As Integer = nvec.First
+
+            If TypeOf sequence Is list Then
+                Dim list As list = DirectCast(sequence, list)
+                Dim names As String() = list.getNames.Take(nscalar).ToArray
+                Dim subset As New list With {
+                    .slots = names _
+                        .ToDictionary(Function(key) key,
+                                      Function(key)
+                                          Return list.slots(key)
+                                      End Function)
+                }
+
+                Return subset
+            ElseIf TypeOf sequence Is pipeline Then
+                Return DirectCast(sequence, pipeline) _
+                    .populates(Of Object)(env) _
+                    .Take(nscalar) _
+                    .DoCall(Function(seq)
+                                Return New pipeline(seq, DirectCast(sequence(), pipeline).elementType)
+                            End Function)
+            Else
+                Return ObjectSet.GetObjectSet(sequence, env).Take(nscalar).ToArray
             End If
         End Function
 
