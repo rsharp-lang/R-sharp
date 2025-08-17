@@ -146,7 +146,7 @@ Namespace Development.Package.File
         ''' </param>
         Sub New(dir As IFileSystemEnvironment)
             meta = dir.ReadAllText("/package/index.json").LoadJSON(Of DESCRIPTION)
-            checksum = dir.ReadAllText("/CHECKSUM").ReadFirstLine
+            checksum = dir.ReadAllText("/CHECKSUM").LineTokens.FirstOrDefault
             libPath = dir
             assembly = dir.ReadAllText($"/package/manifest/assembly.json").LoadJSON(Of Dictionary(Of String, String))
             dependency = dir.ReadAllText($"/package/manifest/dependency.json").LoadJSON(Of Dependency())
