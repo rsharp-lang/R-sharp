@@ -159,6 +159,11 @@ Module Manifold
         Return table
     End Function
 
+    <ExportAPI("global_set_maxTreeDepth")>
+    Public Sub setMaxTreeDepth(maxDepth As Integer)
+        Call Umap.SetMaxTreeDepth(maxDepth)
+    End Sub
+
     ''' <summary>
     ''' UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction
     ''' </summary>
