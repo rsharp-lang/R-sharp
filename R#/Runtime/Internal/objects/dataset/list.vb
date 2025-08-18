@@ -110,6 +110,10 @@ Namespace Runtime.Internal.Object
             End Get
         End Property
 
+        ''' <summary>
+        ''' check of the data <see cref="slots"/> is null or empty or not?
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property is_empty As Boolean
             Get
                 Return slots.IsNullOrEmpty
