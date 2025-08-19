@@ -54,6 +54,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting.TokenIcer
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Language.TokenIcer
@@ -73,7 +74,17 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
             If funcInvoke.isException Then
                 Return funcInvoke
             Else
-                Return DirectCast(funcInvoke.expression, FunctionInvoke).FunctionAcceptorInvoke(code(2), opts)
+                Dim invoke As FunctionInvoke = TryCast(funcInvoke.expression, FunctionInvoke)
+
+                If funcInvoke.expression IsNot Nothing AndAlso invoke Is Nothing Then
+                    Dim msg As String = $"expression {funcInvoke.expression.GetType.Name} can not be convert to function invoke!"
+                    Dim start As CodeSpan = tokens.First.span
+                    Dim ends As CodeSpan = tokens.Last.span
+
+                    Return New SyntaxResult(SyntaxError.CreateError(opts, msg, start, ends))
+                Else
+                    Return invoke.FunctionAcceptorInvoke(code(2), opts)
+                End If
             End If
         End Function
 
