@@ -12,7 +12,9 @@ http_get \- http_get(url, streamTo,
 \fBurl\fB \fR\- . 
 .PP
 .PP
-\fBstreamTo\fB \fR\- . 
+\fBstreamTo\fB \fR\- . A lambda function that accept a url and a parameter of file cache location.
+this parameter should run http get request from the remote server and then
+save file to local cache.
 .PP
 .PP
 \fBinterval\fB \fR\- 3. 
@@ -22,7 +24,10 @@ http_get \- http_get(url, streamTo,
 .PP
 .SH DETAILS
 .PP
-using of the http get function required of set options of ``http.cache_dir`` at first! The ``http.cache_dir`` could a directory folder path to the local filesystem, or a reference symbol name in the global environment for get a filesystem wrapper object.
+using of the http get function required of set options of
+``http.cache_dir`` at first! The ``http.cache_dir`` could a directory folder
+path to the local filesystem, or a reference symbol name in the global environment
+for get a filesystem wrapper object.
 .PP
 .SH FILES
 .PP
