@@ -201,6 +201,15 @@ Public Class RoxygenDocument
                           Function(g)
                               Return g.Select(Function(t) t.Value).ToArray
                           End Function)
+        Dim desc As String = lines(0)
+
+        If tagsData.ContainsKey("@description") Then
+            tagsData("@description") = {desc}
+        Else
+            tagsData("@description") = {desc, ""} _
+                .JoinIterates(tagsData("@description")) _
+                .ToArray
+        End If
 
         Return New Document With {
             .author = tagsData.TryGetValue("@author"),
