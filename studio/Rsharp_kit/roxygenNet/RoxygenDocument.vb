@@ -202,6 +202,7 @@ Public Class RoxygenDocument
                               Return g.Select(Function(t) t.Value).ToArray
                           End Function)
         Dim desc As String = lines(0)
+        Dim example_code As String = tagsData.TryGetValue("@examples").JoinBy(vbCrLf)
 
         If tagsData.ContainsKey("@description") Then
             tagsData("@description") = {desc}
@@ -230,7 +231,7 @@ Public Class RoxygenDocument
                             Return val
                         End Function) _
                 .ToArray,
-            .examples = tagsData.TryGetValue("@examples").JoinBy(vbCrLf),
+            .examples = example_code,
             .see_also = tagsData.TryGetValue("@seealso").JoinBy(vbCrLf)
         }
     End Function
