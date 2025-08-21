@@ -179,7 +179,7 @@ Public Class RoxygenDocument
 
                 continuteLine = line
             Else
-                continuteLine = continuteLine & " " & line
+                continuteLine = continuteLine & vbCrLf & line
             End If
         Next
 
