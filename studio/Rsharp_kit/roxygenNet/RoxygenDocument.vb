@@ -178,6 +178,8 @@ Public Class RoxygenDocument
                 End If
 
                 continuteLine = line
+            ElseIf continuteLine Is Nothing Then
+                continuteLine = line
             Else
                 continuteLine = continuteLine & vbCrLf & line
             End If
@@ -194,7 +196,13 @@ Public Class RoxygenDocument
         Dim tagsData As Dictionary(Of String, String()) = lines _
             .Skip(1) _
             .Select(Function(line)
-                        Return line.GetTagValue(, trim:=True)
+                        Dim try_space = line.GetTagValue(, trim:=True)
+
+                        If try_space.Name.LineTokens.Length > 1 Then
+                            Return line.GetTagValue(vbLf, trim:=True)
+                        Else
+                            Return try_space
+                        End If
                     End Function) _
             .GroupBy(Function(a) a.Name) _
             .ToDictionary(Function(a) a.Key,
