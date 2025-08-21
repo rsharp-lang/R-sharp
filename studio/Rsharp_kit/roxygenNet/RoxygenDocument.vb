@@ -194,8 +194,21 @@ Public Class RoxygenDocument
     End Function
 
     Private Shared Function ParseDocument(title As String, lines As String()) As Document
+        Dim desc As String
+
+        If lines.IsNullOrEmpty Then
+            ' no document content
+            Return New Document With {
+                .title = title
+            }
+        ElseIf lines(0).StartsWith("@") Then
+            desc = ""
+        Else
+            desc = lines(0)
+            lines = lines.Skip(1).ToArray
+        End If
+
         Dim tagsData As Dictionary(Of String, String()) = lines _
-            .Skip(1) _
             .Select(Function(line)
                         Dim try_space = line.GetTagValue(, trim:=True)
 
@@ -212,7 +225,6 @@ Public Class RoxygenDocument
                           Function(g)
                               Return g.Select(Function(t) t.Value).ToArray
                           End Function)
-        Dim desc As String = lines(0)
         Dim example_code As String = tagsData.TryGetValue("@examples").JoinBy(vbCrLf)
 
         If example_code.StartsWith("\dontrun{") AndAlso example_code.EndsWith("}"c) Then
