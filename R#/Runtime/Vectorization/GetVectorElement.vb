@@ -108,6 +108,7 @@ Namespace Runtime.Vectorization
         Default Public ReadOnly Property item(i As Integer) As Object
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
+                ' invoke of the cached getter function
                 Return m_get(i)
             End Get
         End Property
