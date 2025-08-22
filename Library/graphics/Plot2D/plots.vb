@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::915b9854dfc6b9200d3bfae517dc43cb, Library\graphics\Plot2D\plots.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1287
-    '    Code Lines: 1011 (78.55%)
-    ' Comment Lines: 147 (11.42%)
-    '    - Xml Docs: 85.03%
-    ' 
-    '   Blank Lines: 129 (10.02%)
-    '     File Size: 58.84 KB
+' Summaries:
 
 
-    ' Module plots
-    ' 
-    '     Function: barplot, charPie, ContourPlot, CreateSerial, doViolinPlot
-    '               findNumberVector, measureDataTable, modelWithClass, modelWithoutClass, plot_binBox
-    '               plot_categoryBars, plot_corHeatmap, plot_deSolveResult, plot_hclust, plot_heatmap
-    '               plotArray, plotContourLayers, plotFormula, plotLinearYFit, plotLmCall
-    '               plotODEResult, plotPieChart, PlotPolygon, plotSerials, plotVector
-    '               printImage, UpSetPlot
-    ' 
-    '     Sub: Main, TryGetClassData
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1287
+'    Code Lines: 1011 (78.55%)
+' Comment Lines: 147 (11.42%)
+'    - Xml Docs: 85.03%
+' 
+'   Blank Lines: 129 (10.02%)
+'     File Size: 58.84 KB
+
+
+' Module plots
+' 
+'     Function: barplot, charPie, ContourPlot, CreateSerial, doViolinPlot
+'               findNumberVector, measureDataTable, modelWithClass, modelWithoutClass, plot_binBox
+'               plot_categoryBars, plot_corHeatmap, plot_deSolveResult, plot_hclust, plot_heatmap
+'               plotArray, plotContourLayers, plotFormula, plotLinearYFit, plotLmCall
+'               plotODEResult, plotPieChart, PlotPolygon, plotSerials, plotVector
+'               printImage, UpSetPlot
+' 
+'     Sub: Main, TryGetClassData
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -1049,6 +1049,24 @@ Module plots
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
         Dim showLegend As Boolean = args.getValue(Of Boolean)({"showLegend", "legend", "legend.show"}, env, [default]:=True)
         Dim showAxis As Boolean = args.getValue(Of Boolean)({"show.axis", "axis.show"}, env, [default]:=True)
+        Dim convexHull As Object = args.getBySynonyms("convexHull")
+        Dim convexHullList = CLRVector.asCharacter(convexHull)
+
+        If Not convexHullList.IsNullOrEmpty Then
+            If convexHullList.Length = 1 AndAlso (convexHullList(0).ToLower = "true" OrElse convexHullList(0).ToLower = "false") Then
+                If convexHullList(0).ParseBoolean Then
+                    ' use all serials as convex hull
+                    convexHullList = serials _
+                        .Select(Function(s)
+                                    Return s.title
+                                End Function) _
+                        .ToArray
+                Else
+                    ' no convex hull
+                    convexHullList = {}
+                End If
+            End If
+        End If
 
         If args.CheckGraphicsDeviceExists Then
             ' draw on current graphics context
@@ -1067,7 +1085,7 @@ Module plots
                 title:=title,
                 legendSplit:=args.getValue(Of Integer)("legend.block", env),
                 ablines:=args.getValue(Of Line())("abline", env),
-                hullConvexList:=args.getValue(Of String())("convexHull", env),
+                hullConvexList:=convexHullList,
                 XtickFormat:=args.getValue("x.format", env, "F2"),
                 YtickFormat:=args.getValue("y.format", env, "F2"),
                 interplot:=spline,
@@ -1094,7 +1112,7 @@ Module plots
                 title:=title,
                 legendSplit:=args.getValue(Of Integer)("legend.block", env),
                 ablines:=args.getValue(Of Line())("abline", env),
-                hullConvexList:=args.getValue(Of String())("convexHull", env),
+                hullConvexList:=convexHullList,
                 XtickFormat:=args.getValue("x.format", env, "F2"),
                 YtickFormat:=args.getValue("y.format", env, "F2"),
                 interplot:=spline,
