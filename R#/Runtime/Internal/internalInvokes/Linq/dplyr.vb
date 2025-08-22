@@ -55,6 +55,7 @@
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
+Imports Microsoft.VisualBasic.ComponentModel.DataStructures
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -268,6 +269,40 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             End If
 
             Return binds
+        End Function
+
+        <ExportAPI("venn_exclusives")>
+        Public Function VennExclusiveSet(<RListObjectArgument> x As list, Optional env As Environment = Nothing) As Object
+            If x Is Nothing OrElse x.length = 0 Then
+                Return Nothing
+            End If
+
+            If x.length = 1 Then
+                If TypeOf x.data.First Is list Then
+                    Return VennExclusiveSet(DirectCast(x.data.First, list), env)
+                Else
+                    ' just one group, itself is already a exclusive set
+                    Return x
+                End If
+            End If
+
+            Dim groups As New Dictionary(Of String, String())
+            Dim common As String() = Nothing
+
+            For Each name As String In x.slotKeys
+                Call groups.Add(name, CLRVector.asCharacter(x.getByName(name)))
+            Next
+
+            Dim venn = groups.VennExclusiveSet(common)
+            Dim result As list = [Object].list.empty
+
+            For Each group In venn.Keys
+                Call result.add(group, venn(group))
+            Next
+
+            Call result.setAttribute("common", common)
+
+            Return result
         End Function
     End Module
 End Namespace
