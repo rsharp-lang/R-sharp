@@ -1,61 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::ee21e409f4ebe054d672253c50b7e8e9, Library\Rlapack\RMatrix.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 868
-    '    Code Lines: 506 (58.29%)
-    ' Comment Lines: 244 (28.11%)
-    '    - Xml Docs: 88.11%
-    ' 
-    '   Blank Lines: 118 (13.59%)
-    '     File Size: 33.98 KB
+' Summaries:
 
 
-    ' Module RMatrix
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: (+3 Overloads) add, asInteger, asMatrix, createTable, (+3 Overloads) division
-    '               dot, eigen, fromGraph, gauss, gauss_solve
-    '               HungarianAssignments, Matrix, matrix_extractor, (+5 Overloads) multiply, nmf_decompose
-    '               nmf_matrix, one, parse, readMatrix, rowPack
-    '               saveMatrix, (+3 Overloads) substract, sum_all, zero
-    ' 
-    '     Sub: extractVector
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 868
+'    Code Lines: 506 (58.29%)
+' Comment Lines: 244 (28.11%)
+'    - Xml Docs: 88.11%
+' 
+'   Blank Lines: 118 (13.59%)
+'     File Size: 33.98 KB
+
+
+' Module RMatrix
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: (+3 Overloads) add, asInteger, asMatrix, createTable, (+3 Overloads) division
+'               dot, eigen, fromGraph, gauss, gauss_solve
+'               HungarianAssignments, Matrix, matrix_extractor, (+5 Overloads) multiply, nmf_decompose
+'               nmf_matrix, one, parse, readMatrix, rowPack
+'               saveMatrix, (+3 Overloads) substract, sum_all, zero
+' 
+'     Sub: extractVector
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -68,6 +68,7 @@ Imports Microsoft.VisualBasic.Data.GraphTheory
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Solvers
 Imports Microsoft.VisualBasic.Math.SignalProcessing.HungarianAlgorithm
@@ -571,9 +572,18 @@ Module RMatrix
         Return sum
     End Function
 
+    ''' <summary>
+    ''' supports convert the dataframe/generalmatrix/list of vector/vector of vector to matrix object
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Private Function matrix_extractor(x As Object, env As Environment) As [Variant](Of NumericMatrix, Message)
         Dim data As NumericMatrix
 
+        If x Is Nothing Then
+            Return RInternal.debug.stop("missing input data for matrix conversion!", env)
+        End If
         If TypeOf x Is dataframe Then
             Dim cols As New List(Of Double())
             Dim df As dataframe = DirectCast(x, dataframe)
@@ -585,6 +595,8 @@ Module RMatrix
             data = New NumericMatrix(cols)
         ElseIf x.GetType.ImplementInterface(Of GeneralMatrix) Then
             data = New NumericMatrix(DirectCast(x, GeneralMatrix).RowVectors)
+        ElseIf x.GetType.ImplementInterface(Of INumericMatrix) Then
+            data = New NumericMatrix(DirectCast(x, INumericMatrix))
         ElseIf TypeOf x Is list Then
             data = New NumericMatrix(rows:=
                 From row
