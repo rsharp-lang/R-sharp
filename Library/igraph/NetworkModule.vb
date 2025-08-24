@@ -352,57 +352,8 @@ Public Module NetworkModule
     ''' <param name="fromPoint"></param>
     ''' <returns></returns>
     <ExportAPI("subgraphFromPoint")>
-    Public Function extractAdjacenciesSubNetwork(g As NetworkGraph, fromPoint As String) As NetworkGraph
-        Dim target As node = g.GetElementByID(fromPoint)
-        Dim connected As node() = target.adjacencies _
-            .EnumerateAllEdges _
-            .Select(Function(e) e.Iterate2Nodes) _
-            .IteratesALL _
-            .Where(Function(d) Not d Is target) _
-            .GroupBy(Function(d) d.label) _
-            .Select(Function(d) d.First) _
-            .ToArray
-        Dim subnet As New NetworkGraph
-
-        Call subnet.CreateNode(target.label, target.data)
-
-        For Each V As node In connected
-            Call subnet.CreateNode(V.label, V.data)
-        Next
-
-        For Each directLink As Edge In target.adjacencies.EnumerateAllEdges
-            Call subnet.CreateEdge(
-                subnet.GetElementByID(directLink.U.label),
-                subnet.GetElementByID(directLink.V.label),
-                directLink.weight,
-                directLink.data
-            )
-        Next
-
-        ' add edges between the connected nodes
-        Dim duplicated As New Index(Of String)
-
-        For Each x As node In connected
-            For Each y As node In connected
-                For Each link As Edge In g.GetEdges(x, y)
-                    Dim key As String = {link.U.label, link.V.label}.OrderBy(Function(str) str).JoinBy("+")
-
-                    If key Like duplicated Then
-                        Continue For
-                    Else
-                        Call duplicated.Add(key)
-                        Call subnet.CreateEdge(
-                            subnet.GetElementByID(link.U.label),
-                            subnet.GetElementByID(link.V.label),
-                            link.weight,
-                            link.data
-                        )
-                    End If
-                Next
-            Next
-        Next
-
-        Return subnet
+    Public Function extractAdjacenciesSubNetwork(g As NetworkGraph, fromPoint As String(), Optional radius As Integer = 1) As NetworkGraph
+        Return g.TakeSubGraph(fromPoint, radius)
     End Function
 
     ''' <summary>
