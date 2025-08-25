@@ -245,7 +245,7 @@ Module dataframeTools
         ElseIf TypeOf data Is Idataframe Then
             dataframe = data
         Else
-            Return Message.InCompatibleType(GetType(DataFrame), data.GetType, env)
+            Return Message.InCompatibleType(GetType(Rdataframe), data.GetType, env)
         End If
 
         Dim schema As RType = env.globalEnvironment.GetType(type)
