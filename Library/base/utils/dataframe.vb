@@ -103,7 +103,7 @@ Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 ''' The sciBASIC.NET dataframe api
 ''' </summary>
 <Package("dataframe", Category:=APICategories.UtilityTools, Publisher:="xie.guigang@gcmodeller.org")>
-Module dataframe
+Module dataframeTools
 
     Friend Sub Main()
         Call RPrinter.AttachConsoleFormatter(Of DataSet)(AddressOf RowToString)
@@ -245,7 +245,7 @@ Module dataframe
         ElseIf TypeOf data Is Idataframe Then
             dataframe = data
         Else
-            Return Message.InCompatibleType(GetType(dataframe), data.GetType, env)
+            Return Message.InCompatibleType(GetType(DataFrame), data.GetType, env)
         End If
 
         Dim schema As RType = env.globalEnvironment.GetType(type)
