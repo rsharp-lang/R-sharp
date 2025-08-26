@@ -244,7 +244,7 @@ Module Layouts
         End If
 
         If Not showProgress Then
-            Call "Do force directed layout...".__INFO_ECHO
+            Call "Do force directed layout...".info
         End If
 
         Call g.doForceLayout(
