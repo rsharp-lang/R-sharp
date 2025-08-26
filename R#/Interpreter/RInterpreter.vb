@@ -584,8 +584,8 @@ Namespace Interpreter
             Next
 
             If debug AndAlso arguments.Length > 0 Then
-                Call "Initialize of the environment with pre-define symbols:".__DEBUG_ECHO
-                Call arguments.Keys.GetJson.__INFO_ECHO
+                Call "Initialize of the environment with pre-define symbols:".debug
+                Call arguments.Keys.GetJson.info
 
                 If arguments.Any(Function(a) a.Name = "!script") Then
                     Dim magic As vbObject = arguments _

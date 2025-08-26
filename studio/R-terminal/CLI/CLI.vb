@@ -136,7 +136,7 @@ R# ""$app"" $cli".Replace("{script}", script.FileName)
         If [module].FileExists Then
             For Each pkg As Package In PackageLoader.ParsePackages(dll:=[module])
                 Call env.Invoke("unixMan", pkg, out, env.globalEnvir)
-                Call $"load: {pkg.info.Namespace}".__INFO_ECHO
+                Call $"load: {pkg.info.Namespace}".info
             Next
         Else
             ' run build for all installed package modules

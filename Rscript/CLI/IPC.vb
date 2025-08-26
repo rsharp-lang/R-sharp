@@ -348,7 +348,7 @@ Partial Module CLI
         Dim data As RequestStream
 
         For i As Integer = 0 To retryTimes
-            Call $"push callback data '{buffer.code.Description}' to [{master}] [{packageData.Length} bytes]".__INFO_ECHO
+            Call $"push callback data '{buffer.code.Description}' to [{master}] [{packageData.Length} bytes]".info
 
             data = New TcpRequest(master).SetTimeOut(TimeSpan.FromMilliseconds(timeoutMS)).SendMessage(request)
 
@@ -362,7 +362,7 @@ Partial Module CLI
             If Not timeout Then
                 Exit For
             Else
-                Call "operation timeout, retry...".__DEBUG_ECHO
+                Call "operation timeout, retry...".debug
             End If
         Next
 

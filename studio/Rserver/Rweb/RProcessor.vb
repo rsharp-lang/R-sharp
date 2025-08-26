@@ -226,7 +226,7 @@ Public Class RProcessor
                     .app_path = Rweb
                 }
 
-                Call $"task '{request_id}' will be running in background.".__DEBUG_ECHO
+                Call $"task '{request_id}' will be running in background.".debug
                 Call task.CommitTask()
                 Call response.WriteHTML(request_id)
             Else
@@ -291,7 +291,7 @@ Public Class RProcessor
         If result Is Nothing Then
             Call $"unsure for empty result:: [{request_id}]...".Warning
         Else
-            Call $"get callback from slave process [{request_id}] -> {result.code.Description}".__INFO_ECHO
+            Call $"get callback from slave process [{request_id}] -> {result.code.Description}".info
         End If
 
         SyncLock requestPostback
@@ -332,7 +332,7 @@ Public Class RProcessor
 
         Static empty_args As String = "{}".Base64String(gzip:=True)
 
-        ' Call rawjson.__DEBUG_ECHO
+        ' Call rawjson.debug
 
         ' --slave /exec <script.R> /args <json_base64> /request-id <request_id> /PORT=<port_number> [/MASTER=<ip, default=localhost> /entry=<function_name, default=NULL>]
         Dim arguments As String = Rslave.GetslaveModeCommandLine(

@@ -442,7 +442,7 @@ Module SVMkit
                     End Function)
 
         For Each topic As (Model As SVMModel, topic$) In allocated
-            Call $"trainSVMModel::{topic.topic}".__INFO_ECHO
+            Call $"trainSVMModel::{topic.topic}".info
             result(topic.topic) = topic.Model
         Next
 

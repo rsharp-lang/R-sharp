@@ -376,7 +376,7 @@ Namespace Development.Package
                 End With
 
                 Call names.Add(pkg.namespace)
-                Call $"load: {pkg.info.Namespace}".__INFO_ECHO
+                Call $"load: {pkg.info.Namespace}".info
             Next
 
             pkgDb.assemblies = packageIndex.Values.ToArray
