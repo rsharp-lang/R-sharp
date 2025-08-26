@@ -156,7 +156,7 @@ Public Class Rweb : Inherits HttpServer
         Using bytes As New MemoryStream(request.ChunkBuffer)
             Dim data As IPCBuffer = IPCBuffer.ParseBuffer(bytes)
 
-            Call $"accept callback data: {data.ToString}".__DEBUG_ECHO
+            Call $"accept callback data: {data.ToString}".debug
             Call Processor.SaveResponse(data.requestId, data.buffer)
 
             Return New DataPipe(NetResponse.RFC_OK)
