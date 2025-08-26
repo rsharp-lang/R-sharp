@@ -659,7 +659,7 @@ Namespace Runtime.Internal.Object
                 ' index is zero-based
                 For Each name As String In indexNames
                     If (i = rowNames.IndexOf(name)) = -1 Then
-                        Return Internal.debug.stop({$"missing row '{name}' in the given dataframe...", $"rowname: {name}"}, env)
+                        Return Internal.debug.stop({$"missing row with name '{name}' in the given dataframe...", $"rowname: {name}"}, env)
                     Else
                         Call index.Add(i)
                     End If
