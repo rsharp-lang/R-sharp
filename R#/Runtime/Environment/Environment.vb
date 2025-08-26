@@ -115,7 +115,7 @@ Namespace Runtime
         ''' </returns>
         Public ReadOnly Property stackTrace As StackFrame()
             Get
-                Return debug.getEnvironmentStack(Me)
+                Return Internal.debug.getEnvironmentStack(Me)
             End Get
         End Property
 

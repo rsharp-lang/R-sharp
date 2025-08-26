@@ -249,7 +249,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                     $"commandline: " & commandline
                 },
                 .level = MSG_TYPES.WRN,
-                .environmentStack = debug.getEnvironmentStack(envir),
+                .environmentStack = Internal.debug.getEnvironmentStack(envir),
                 .trace = devtools.ExceptionData.GetCurrentStackTrace
             }
         End Function

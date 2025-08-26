@@ -118,7 +118,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                         $"missing value where TRUE/FALSE needed"
                     },
                     .level = MSG_TYPES.ERR,
-                    .environmentStack = debug.getEnvironmentStack(envir),
+                    .environmentStack = Internal.debug.getEnvironmentStack(envir),
                     .trace = devtools.ExceptionData.GetCurrentStackTrace
                 }
             ElseIf Program.isException(test) Then

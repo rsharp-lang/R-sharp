@@ -317,7 +317,7 @@ RE0:
                     Call typeCast.AddCType(objType, type, Function(o) Conversion.CTypeDynamic(o, type))
                     Return castResult
                 Catch ex As Exception
-                    Return debug.stop(ex, env)
+                    Return Internal.debug.stop(ex, env)
                 End Try
             End If
         End Function
@@ -329,12 +329,12 @@ RE0:
                 If REnum.hasName(obj) Then
                     Return REnum.GetByName(obj)
                 Else
-                    Return debug.stop($"Can not convert string '{obj}' to enum type: {REnum.raw.FullName}", env)
+                    Return Internal.debug.stop($"Can not convert string '{obj}' to enum type: {REnum.raw.FullName}", env)
                 End If
             ElseIf obj.GetType.GetRTypeCode = TypeCodes.integer Then
                 Return REnum.getByIntVal(obj)
             Else
-                Return debug.stop($"Can not convert type '{obj.GetType.FullName}' to enum type: {REnum.raw.FullName}", env)
+                Return Internal.debug.stop($"Can not convert type '{obj.GetType.FullName}' to enum type: {REnum.raw.FullName}", env)
             End If
         End Function
 
