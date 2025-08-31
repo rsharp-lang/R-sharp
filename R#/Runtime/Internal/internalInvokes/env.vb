@@ -728,11 +728,16 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' get the absolute file path that relative to the current script folder
         ''' </summary>
-        ''' <param name="file"></param>
+        ''' <param name="file">
+        ''' this function will returns current script folder if this parameter is missing
+        ''' </param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' returns the given <paramref name="file"/> its full path which is 
+        ''' relative to the folder of current running script file.
+        ''' </returns>
         <ExportAPI("relative_work")>
-        Public Function relative_work(file As String, Optional env As Environment = Nothing) As Object
+        Public Function relative_work(Optional file As String = Nothing, Optional env As Environment = Nothing) As Object
             Dim dir As New ScriptFolder()
             Dim workdir As String = CStr(dir.Evaluate(env))
 
@@ -740,7 +745,11 @@ Namespace Runtime.Internal.Invokes
                 Return Internal.debug.stop("Missing the special `@dir` annotation symbol, this function only works for the script file, do not used inside the package!", env)
             End If
 
-            Return Invokes.file.filepath(InvokeParameter.CreateLiterals(workdir, file),, env)
+            If file.StringEmpty Then
+                Return workdir
+            Else
+                Return Invokes.file.filepath(InvokeParameter.CreateLiterals(workdir, file),, env)
+            End If
         End Function
     End Module
 End Namespace
