@@ -436,9 +436,9 @@ Module plots
                 Dim levels As New DoubleRange(0, 30)
 
                 If args.hasName("colorSet") AndAlso Not args!colorSet Is Nothing Then
-                    colorsMap = RColorPalette.getColors(args!colorSet, levels.Max, Nothing)
+                    colorsMap = RColorPalette.getColors(args!colorSet, levels.Max + 1, Nothing)
                 Else
-                    colorsMap = RColorPalette.getColors("viridis", levels.Max, Nothing)
+                    colorsMap = RColorPalette.getColors("viridis", levels.Max + 1, Nothing)
                 End If
 
                 colorSet = Function(i)
