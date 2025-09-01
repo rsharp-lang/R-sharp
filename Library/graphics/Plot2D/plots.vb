@@ -435,6 +435,10 @@ Module plots
                 Dim scaler As New DoubleRange(mapScaler)
                 Dim levels As New DoubleRange(0, 30)
 
+                If scaler.Length = 0 Then
+                    Return RInternal.debug.stop("scatter point color heatmap mapping range should be greater than zero!", env)
+                End If
+
                 If args.hasName("colorSet") AndAlso Not args!colorSet Is Nothing Then
                     colorsMap = RColorPalette.getColors(args!colorSet, levels.Max + 1, Nothing)
                 Else
