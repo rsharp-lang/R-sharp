@@ -420,13 +420,37 @@ Module plots
         Else
             Dim colorSet As Func(Of Integer, String)
             Dim maxy As Double = y.Max
+            Dim mapScaler As Double() = CLRVector.asNumeric(args.getBySynonyms("scaler", "heatmap"))
 
-            If args.hasName("colorSet") AndAlso Not args!colorSet Is Nothing Then
-                Dim colorsMap As String() = RColorPalette.getColors(args!colorSet, x.Length, Nothing)
+            If mapScaler.IsNullOrEmpty Then
+                If args.hasName("colorSet") AndAlso Not args!colorSet Is Nothing Then
+                    Dim colorsMap As String() = RColorPalette.getColors(args!colorSet, x.Length, Nothing)
 
-                colorSet = Function(i) colorsMap(i)
+                    colorSet = Function(i) colorsMap(i)
+                Else
+                    colorSet = Function() Nothing
+                End If
             Else
-                colorSet = Function() Nothing
+                Dim colorsMap As String() = Nothing
+                Dim scaler As New DoubleRange(mapScaler)
+                Dim levels As New DoubleRange(0, 30)
+
+                If scaler.Length = 0 Then
+                    Return RInternal.debug.stop("scatter point color heatmap mapping range should be greater than zero!", env)
+                End If
+
+                If args.hasName("colorSet") AndAlso Not args!colorSet Is Nothing Then
+                    colorsMap = RColorPalette.getColors(args!colorSet, levels.Max + 1, Nothing)
+                Else
+                    colorsMap = RColorPalette.getColors("viridis", levels.Max + 1, Nothing)
+                End If
+
+                colorSet = Function(i)
+                               Dim value As Double = mapScaler(i)
+                               Dim offset As Integer = scaler.ScaleMapping(value, levels)
+
+                               Return colorsMap(offset)
+                           End Function
             End If
 
             line = New SerialData() With {
