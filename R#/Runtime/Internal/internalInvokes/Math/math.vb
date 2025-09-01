@@ -1,78 +1,79 @@
 ﻿#Region "Microsoft.VisualBasic::8d9aa1086cba6e64b5dc2d0dedef1260, R#\Runtime\Internal\internalInvokes\Math\math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1429
-    '    Code Lines: 571 (39.96%)
-    ' Comment Lines: 730 (51.08%)
-    '    - Xml Docs: 88.63%
-    ' 
-    '   Blank Lines: 128 (8.96%)
-    '     File Size: 64.36 KB
+' Summaries:
 
 
-    '     Module math
-    ' 
-    '         Function: abs, ceiling, cluster1D, cor, cor_test
-    '                   cos, diff, exp, fit, floor
-    '                   gcd, getRandom, isFinite, isInfinite, isNaN
-    '                   lcm_r, log, log10, log2, max
-    '                   mean, median, min, numericClassTags, pearson
-    '                   pow, prod, rexp, rnorm, root
-    '                   round, rsd, runif, (+2 Overloads) sample, sample_int
-    '                   sd, (+4 Overloads) shuffle, sign, sin, sqrt
-    '                   sum, trunc, var, weighted_mean
-    ' 
-    '         Sub: set_seed
-    '         Class corTestResult
-    ' 
-    '             Properties: cor, df, prob2, pvalue, t
-    '                         z
-    ' 
-    '             Function: ToString
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1429
+'    Code Lines: 571 (39.96%)
+' Comment Lines: 730 (51.08%)
+'    - Xml Docs: 88.63%
+' 
+'   Blank Lines: 128 (8.96%)
+'     File Size: 64.36 KB
+
+
+'     Module math
+' 
+'         Function: abs, ceiling, cluster1D, cor, cor_test
+'                   cos, diff, exp, fit, floor
+'                   gcd, getRandom, isFinite, isInfinite, isNaN
+'                   lcm_r, log, log10, log2, max
+'                   mean, median, min, numericClassTags, pearson
+'                   pow, prod, rexp, rnorm, root
+'                   round, rsd, runif, (+2 Overloads) sample, sample_int
+'                   sd, (+4 Overloads) shuffle, sign, sin, sqrt
+'                   sum, trunc, var, weighted_mean
+' 
+'         Sub: set_seed
+'         Class corTestResult
+' 
+'             Properties: cor, df, prob2, pvalue, t
+'                         z
+' 
+'             Function: ToString
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Language.Java
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
@@ -419,6 +420,26 @@ Namespace Runtime.Internal.Invokes
             Return CLRVector.asNumeric(x) _
                 .Select(Function(d) std.Log(d, newBase)) _
                 .ToArray
+        End Function
+
+        ''' <summary>
+        ''' Computes log(1+x) without losing precision for small values of x.
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("log1p")>
+        Public Function log1p(<RRawVectorArgument> x As Object) As Double()
+            Return CLRVector.asNumeric(x).SafeQuery.Select(Function(xi) JavaMath.log1p(xi)).ToArray
+        End Function
+
+        ''' <summary>
+        ''' Computes log(1-x) without losing precision for small values of x.
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        <ExportAPI("log1m")>
+        Public Function log1m(<RRawVectorArgument> x As Object) As Double()
+            Return CLRVector.asNumeric(x).SafeQuery.Select(Function(xi) JavaMath.log1m(xi)).ToArray
         End Function
 
         ''' <summary>
@@ -1449,7 +1470,7 @@ sample estimates:
                 Case "euclid" : gcd_f = Function(ai, bi, nil) VBMath.EuclidGcd(CInt(ai), CInt(bi))
                 Case "stein" : gcd_f = Function(ai, bi, nil) VBMath.SteinGcd(CInt(a), CInt(b))
                 Case Else
-                    Call $"unknown method '{CLRVector.asCharacter(method).First}', euclid will be used by default.".Warning
+                    Call $"unknown method '{CLRVector.asCharacter(method).First}', euclid will be used by default.".warning
                     gcd_f = Function(ai, bi, nil) VBMath.EuclidGcd(CInt(ai), CInt(bi))
             End Select
 
