@@ -2,10 +2,10 @@
 <html>
 
 <head>
-    <title>translate R# code to Rscript text</title>
+    <title>Translate R# code to native R script text</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-    <link rel="stylesheet" type="text/css" href="https://rdocumentation.rsharp.net/assets/page.css">
+    <link rel="stylesheet" type="text/css" href="../../_assets/page.css">
 </head>
 
 <body>
@@ -18,11 +18,11 @@
             </tr>
         </table>
 
-        <h2>translate R# code to Rscript text</h2>
+        <h2>Translate R# code to native R script text</h2>
 
         <h3>Description</h3>
 
-        
+        <p>This function converts R# managed closure expressions to executable native R code.</p>
 
         <h3>Usage</h3>
 
@@ -36,12 +36,26 @@
 
         <table>
             
+<dt>code</dt>
+<dd><p><p>The R# managed closure expression code to be translated to native R code.</p></p></dd>
+
+
+<dt>source</dt>
+<dd><p><p>External dependency native R script file paths required for the translation.</p></p></dd>
+
+
+<dt>debug</dt>
+<dd><p><p>Logical indicating whether to debug the translation process (default: FALSE).</p></p></dd>
+
         </table>
 
 
         <h3 style="display: block;">Details</h3>
 
-        <p>this function could be used for generates script for run in docker container</p>
+        <p>This function is particularly useful for generating R scripts that can be executed
+in environments like Docker containers or other isolated systems where R# might
+not be available. The translation process preserves the functionality of the
+original R# code while making it compatible with standard R interpreters. <a href='@ref' title='9'>9</a></p>
 
         <h3 style="display: block">Authors</h3>
 
@@ -49,7 +63,8 @@
 
         <h3>Value</h3>
 
-        <p>this function build rscript text from a given R# closure code</p>
+        <p>A character string containing the complete native R script code that can be executed
+by an R interpreter, including all dependency loading and the translated code.</p>
 
         <h3 style="display: none;">Examples</h3>
 
@@ -62,8 +77,8 @@
     </div>
 </body>
 
-<script type="text/javascript" src="https://rdocumentation.rsharp.net/assets/R_syntax.js"></script>
-<script type="text/javascript" src="https://rdocumentation.rsharp.net/assets/highlights.js"></script>
+<script type="text/javascript" src="../../_assets/R_syntax.js"></script>
+<script type="text/javascript" src="../../_assets/highlights.js"></script>
 <script type="text/javascript">r_highlights("example_r");</script>
 
 </html>

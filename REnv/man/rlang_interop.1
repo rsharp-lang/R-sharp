@@ -1,4 +1,4 @@
-﻿.TH RLANG_INTEROP 1 2025-Aug "" "helper function for R# interop with R language"
+﻿.TH RLANG_INTEROP 1 2025-Sep "" "Helper function for R# language interoperability with R language"
 .SH NAME
 rlang_interop \- rlang_interop(code,
     <i>source</i> = <span style='color: blue !important;'>NULL</span>,
@@ -13,19 +13,25 @@ rlang_interop \- rlang_interop(code,
     <i>workdir</i> = <span style='color: blue !important;'>NULL</span>,
     <i>print.code</i> = <span style='color: blue !important;'>FALSE</span>,
     <i>native.R</i> = 'getOption'('native_rexec'))\fR
+.SH DESCRIPTION
+.PP
+
+
+This function facilitates interoperability between R# and native R
+by translating R# closure expressions to native R code and executing it.
+.PP
 .SH OPTIONS
 .PP
-\fBcode\fB \fR\- . a closure expresion for invoke R function
+\fBcode\fB \fR\- . An R# managed closure expression to be converted and executed as native R code.
 .PP
 .PP
-\fBsource\fB \fR\- NULL. the source file paths for provides the
-runtime environment for the specific input code.
+\fBsource\fB \fR\- NULL. External dependency script file paths required for the execution environment.
 .PP
 .PP
-\fBdebug\fB \fR\- FALSE. 
+\fBdebug\fB \fR\- FALSE. Logical indicating whether to debug the translation process (default: FALSE).
 .PP
 .PP
-\fBworkdir\fB \fR\- NULL. 
+\fBworkdir\fB \fR\- NULL. Working directory for executing the R script (default: current directory).
 .PP
 .PP
 \fBprint.code\fB \fR\- FALSE. 
@@ -33,9 +39,20 @@ runtime environment for the specific input code.
 .PP
 \fBnative.R\fB \fR\- 'getOption'('native_rexec'). 
 .PP
+.SH VALUE
+.PP
+The result of executing the translated native R code, typically the output
+of the R script execution.
+.PP
+.SH DETAILS
+.PP
+This function enables R# code to leverage native R functionality by
+translating R# expressions to native R code and executing it through Rscript.
+It handles both Windows and Linux environments automatically.
+.PP
 .SH FILES
 .PP
-SMRUCC/R#.declare_function.rlang_interop at rlang.R:line 32
+SMRUCC/R#.declare_function.rlang_interop at rlang.R:line 20
 .PP
 .SH COPYRIGHT
 Copyright © xieguigang <xie.guigang@gcmodeller.org>, MIT Licensed 2025

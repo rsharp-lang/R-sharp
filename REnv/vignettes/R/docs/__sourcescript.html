@@ -2,10 +2,10 @@
 <html>
 
 <head>
-    <title>An internal helper function for attach the dependency scripts</title>
+    <title>An internal helper function for attaching dependency scripts</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-    <link rel="stylesheet" type="text/css" href="https://rdocumentation.rsharp.net/assets/page.css">
+    <link rel="stylesheet" type="text/css" href="../../_assets/page.css">
 </head>
 
 <body>
@@ -18,11 +18,12 @@
             </tr>
         </table>
 
-        <h2>An internal helper function for attach the dependency scripts</h2>
+        <h2>An internal helper function for attaching dependency scripts</h2>
 
         <h3>Description</h3>
 
-        
+        <p>This function processes a collection of R script files or directories,
+generating source commands for all identified R script files.</p>
 
         <h3>Usage</h3>
 
@@ -35,15 +36,18 @@
         <table>
             
 <dt>source</dt>
-<dd><p><p>a collection of the source scripts filepath for
-load inside the context.</p></p></dd>
+<dd><p><p>A character vector of file paths or directory paths containing
+R scripts to be loaded. If a directory path is provided, all
+.R and .r files within it (recursively) will be included.</p></p></dd>
 
         </table>
 
 
-        <h3 style="display: none;">Details</h3>
+        <h3 style="display: block;">Details</h3>
 
-        
+        <p>This function handles both individual R script files and directories.
+For directories, it recursively scans for all files with .R or .r extensions.
+File paths are normalized to ensure consistency across different platforms.</p>
 
         <h3 style="display: block">Authors</h3>
 
@@ -51,7 +55,9 @@ load inside the context.</p></p></dd>
 
         <h3>Value</h3>
 
-        This function has no value returns.
+        <p>A character string containing source commands for all identified
+R script files, or a message indicating no dependencies were required.
+The returned string can be evaluated to load all dependency scripts.</p>
 
         <h3 style="display: none;">Examples</h3>
 
@@ -64,8 +70,8 @@ load inside the context.</p></p></dd>
     </div>
 </body>
 
-<script type="text/javascript" src="https://rdocumentation.rsharp.net/assets/R_syntax.js"></script>
-<script type="text/javascript" src="https://rdocumentation.rsharp.net/assets/highlights.js"></script>
+<script type="text/javascript" src="../../_assets/R_syntax.js"></script>
+<script type="text/javascript" src="../../_assets/highlights.js"></script>
 <script type="text/javascript">r_highlights("example_r");</script>
 
 </html>

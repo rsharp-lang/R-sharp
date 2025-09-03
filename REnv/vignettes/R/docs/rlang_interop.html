@@ -2,10 +2,10 @@
 <html>
 
 <head>
-    <title>helper function for R# interop with R language</title>
+    <title>Helper function for R# language interoperability with R language</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-    <link rel="stylesheet" type="text/css" href="https://rdocumentation.rsharp.net/assets/page.css">
+    <link rel="stylesheet" type="text/css" href="../../_assets/page.css">
 </head>
 
 <body>
@@ -18,11 +18,12 @@
             </tr>
         </table>
 
-        <h2>helper function for R# interop with R language</h2>
+        <h2>Helper function for R# language interoperability with R language</h2>
 
         <h3>Description</h3>
 
-        
+        <p>This function facilitates interoperability between R# and native R
+by translating R# closure expressions to native R code and executing it.</p>
 
         <h3>Usage</h3>
 
@@ -40,19 +41,36 @@
         <table>
             
 <dt>code</dt>
-<dd><p><p>a closure expresion for invoke R function</p></p></dd>
+<dd><p><p>An R# managed closure expression to be converted and executed as native R code.</p></p></dd>
 
 
 <dt>source</dt>
-<dd><p><p>the source file paths for provides the
-runtime environment for the specific input code.</p></p></dd>
+<dd><p><p>External dependency script file paths required for the execution environment.</p></p></dd>
+
+
+<dt>debug</dt>
+<dd><p><p>Logical indicating whether to debug the translation process (default: FALSE).</p></p></dd>
+
+
+<dt>workdir</dt>
+<dd><p><p>Working directory for executing the R script (default: current directory).</p></p></dd>
+
+
+<dt>print.code</dt>
+<dd><p><p>Logical indicating whether to print the generated R code (default: FALSE).</p></p></dd>
+
+
+<dt>native.R</dt>
+<dd><p><p>Path to custom Rscript executable (default: from options or system default).</p></p></dd>
 
         </table>
 
 
-        <h3 style="display: none;">Details</h3>
+        <h3 style="display: block;">Details</h3>
 
-        
+        <p>This function enables R# code to leverage native R functionality by
+translating R# expressions to native R code and executing it through Rscript.
+It handles both Windows and Linux environments automatically.</p>
 
         <h3 style="display: block">Authors</h3>
 
@@ -60,7 +78,8 @@ runtime environment for the specific input code.</p></p></dd>
 
         <h3>Value</h3>
 
-        This function has no value returns.
+        <p>The result of executing the translated native R code, typically the output
+of the R script execution.</p>
 
         <h3 style="display: none;">Examples</h3>
 
@@ -73,8 +92,8 @@ runtime environment for the specific input code.</p></p></dd>
     </div>
 </body>
 
-<script type="text/javascript" src="https://rdocumentation.rsharp.net/assets/R_syntax.js"></script>
-<script type="text/javascript" src="https://rdocumentation.rsharp.net/assets/highlights.js"></script>
+<script type="text/javascript" src="../../_assets/R_syntax.js"></script>
+<script type="text/javascript" src="../../_assets/highlights.js"></script>
 <script type="text/javascript">r_highlights("example_r");</script>
 
 </html>

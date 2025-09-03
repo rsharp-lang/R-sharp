@@ -1,16 +1,36 @@
-﻿.TH __SOURCESCRIPT 1 2025-Aug "" "An internal helper function for attach the dependency scripts"
+﻿.TH __SOURCESCRIPT 1 2025-Sep "" "An internal helper function for attaching dependency scripts"
 .SH NAME
 __sourcescript \- __sourcescript(source)
 .SH SYNOPSIS
 \fI__sourcescript(source)\fR
+.SH DESCRIPTION
+.PP
+
+
+This function processes a collection of R script files or directories,
+generating source commands for all identified R script files.
+.PP
 .SH OPTIONS
 .PP
-\fBsource\fB \fR\- . a collection of the source scripts filepath for
-load inside the context.
+\fBsource\fB \fR\- . A character vector of file paths or directory paths containing
+R scripts to be loaded. If a directory path is provided, all
+.R and .r files within it (recursively) will be included.
+.PP
+.SH VALUE
+.PP
+A character string containing source commands for all identified
+R script files, or a message indicating no dependencies were required.
+The returned string can be evaluated to load all dependency scripts.
+.PP
+.SH DETAILS
+.PP
+This function handles both individual R script files and directories.
+For directories, it recursively scans for all files with .R or .r extensions.
+File paths are normalized to ensure consistency across different platforms.
 .PP
 .SH FILES
 .PP
-SMRUCC/R#.declare_function.__sourcescript at dependecy.R:line 6
+SMRUCC/R#.declare_function.__sourcescript at dependecy.R:line 18
 .PP
 .SH COPYRIGHT
 Copyright © xieguigang <xie.guigang@gcmodeller.org>, MIT Licensed 2025

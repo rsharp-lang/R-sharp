@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>A general method for Http get request</title>
+    <title>Execute native R script from current R# process</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <link rel="stylesheet" type="text/css" href="../../_assets/page.css">
@@ -13,43 +13,49 @@
 
         <table style="width: 100%;">
             <tr>
-                <td>http_get {REnv}</td>
+                <td>rlang_call {REnv}</td>
                 <td style="text-align: right;">R Documentation</td>
             </tr>
         </table>
 
-        <h2>A general method for Http get request</h2>
+        <h2>Execute native R script from current R# process</h2>
 
         <h3>Description</h3>
 
-        
+        <p>This function executes a native R script file using the system's Rscript executable.</p>
 
         <h3>Usage</h3>
 
         <div style="width: 100%; padding-left: 3%; color: black;">
-            <pre><code class='language-R' style="color: black; font-weight:normal;"><strong>http_get</strong>(<i>url</i>, <i>streamTo</i>,
-    <i>interval</i> = <span style='color: green;'>3</span>,
-    <i>filetype</i> = <span style='color: brown;'><strong>'html'</strong></span>);</code></pre>
+            <pre><code class='language-R' style="color: black; font-weight:normal;"><strong>rlang_call</strong>(<i>code.save</i>,
+    <i>workdir</i> = <span style='color: blue !important;'>NULL</span>,
+    <i>native.R</i> = 'getOption'('native_rexec'));</code></pre>
         </div>
 
         <h3>Arguments</h3>
 
         <table>
             
-<dt>streamTo</dt>
-<dd><p><p>A lambda function that accept a url and a parameter of file cache location.
-this parameter should run http get request from the remote server and then
-save file to local cache.</p></p></dd>
+<dt>code.save</dt>
+<dd><p><p>File path to the target native R script file to be executed.</p></p></dd>
+
+
+<dt>workdir</dt>
+<dd><p><p>Working directory for executing the R script (default: current directory).</p></p></dd>
+
+
+<dt>native.R</dt>
+<dd><p><p>Path to custom Rscript executable (default: from options or system default).</p></p></dd>
 
         </table>
 
 
         <h3 style="display: block;">Details</h3>
 
-        <p>using of the http get function required of set options of
-<code>http.cache_dir</code> at first! The <code>http.cache_dir</code> could a directory folder
-path to the local filesystem, or a reference symbol name in the global environment
-for get a filesystem wrapper object.</p>
+        <p>The function automatically detects the operating system and uses the
+appropriate Rscript executable path for Windows or Linux systems.
+It temporarily changes the working directory if specified, then restores
+the original directory after execution.</p>
 
         <h3 style="display: block">Authors</h3>
 
@@ -57,7 +63,8 @@ for get a filesystem wrapper object.</p>
 
         <h3>Value</h3>
 
-        This function has no value returns.
+        <p>This function returns nothing explicitly, but executes the R script and
+may produce output, side effects, or results based on the script's contents.</p>
 
         <h3 style="display: none;">Examples</h3>
 

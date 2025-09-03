@@ -1,4 +1,4 @@
-﻿.TH TRANSFORM_RLANG_SOURCE 1 2025-Aug "" "translate R# code to Rscript text"
+﻿.TH TRANSFORM_RLANG_SOURCE 1 2025-Sep "" "Translate R# code to native R script text"
 .SH NAME
 transform_rlang_source \- transform_rlang_source(code,
     <i>source</i> = <span style='color: blue !important;'>NULL</span>,
@@ -7,27 +7,37 @@ transform_rlang_source \- transform_rlang_source(code,
 \fItransform_rlang_source(code,
     <i>source</i> = <span style='color: blue !important;'>NULL</span>,
     <i>debug</i> = <span style='color: blue !important;'>FALSE</span>)\fR
+.SH DESCRIPTION
+.PP
+
+
+This function converts R# managed closure expressions to executable native R code.
+.PP
 .SH OPTIONS
 .PP
-\fBcode\fB \fR\- . 
+\fBcode\fB \fR\- . The R# managed closure expression code to be translated to native R code.
 .PP
 .PP
-\fBsource\fB \fR\- NULL. 
+\fBsource\fB \fR\- NULL. External dependency native R script file paths required for the translation.
 .PP
 .PP
-\fBdebug\fB \fR\- FALSE. 
+\fBdebug\fB \fR\- FALSE. Logical indicating whether to debug the translation process (default: FALSE).
 .PP
 .SH VALUE
 .PP
-this function build rscript text from a given R# closure code
+A character string containing the complete native R script code that can be executed
+by an R interpreter, including all dependency loading and the translated code.
 .PP
 .SH DETAILS
 .PP
-this function could be used for generates script for run in docker container
+This function is particularly useful for generating R scripts that can be executed
+in environments like Docker containers or other isolated systems where R# might
+not be available. The translation process preserves the functionality of the
+original R# code while making it compatible with standard R interpreters. [9](@ref)
 .PP
 .SH FILES
 .PP
-SMRUCC/R#.declare_function.transform_rlang_source at rlang.R:line 6
+SMRUCC/R#.declare_function.transform_rlang_source at translate.R:line 17
 .PP
 .SH COPYRIGHT
 Copyright © xieguigang <xie.guigang@gcmodeller.org>, MIT Licensed 2025
