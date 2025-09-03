@@ -3,11 +3,15 @@
 #' @param source a collection of the source scripts filepath for 
 #'    load inside the context.
 #' 
+#' @return the script text for load external source scripts
+#' 
 const __sourcescript = function(source) {
     let rscripts = [];
 
     for(let handle in source) {
         if (!file.exists(handle)) {
+            # try used as directory path
+            # scan all R script file inside this directory folder
             handle <- list.files(handle, pattern = ["*.R" "*.r"], 
                 recursive = TRUE);
         } else {
@@ -20,6 +24,7 @@ const __sourcescript = function(source) {
     if (length(rscripts) == 0) {
         "# no dependecy rscript was required!";
     } else {
+        # generates the script lines of source("xxx.R");
         paste(`source("${rscripts}");`, sep = "\n");
     }
 }
