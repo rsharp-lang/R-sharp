@@ -70,6 +70,7 @@ const rlang_call = function(script_code, workdir = NULL, native_R = getOption("n
     writeLines(script_code, con = code_save);
 
     if (change_wd) {
+        dir.create(workdir);
         setwd(workdir);
     }
 
