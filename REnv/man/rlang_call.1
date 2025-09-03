@@ -1,10 +1,10 @@
 ﻿.TH RLANG_CALL 1 2025-Sep "" "Execute native R script from current R# process"
 .SH NAME
-rlang_call \- rlang_call(code.save,
+rlang_call \- rlang_call(script.code,
     <i>workdir</i> = <span style='color: blue !important;'>NULL</span>,
     <i>native.R</i> = 'getOption'('native_rexec'))
 .SH SYNOPSIS
-\fIrlang_call(code.save,
+\fIrlang_call(script.code,
     <i>workdir</i> = <span style='color: blue !important;'>NULL</span>,
     <i>native.R</i> = 'getOption'('native_rexec'))\fR
 .SH DESCRIPTION
@@ -15,7 +15,7 @@ This function executes a native R script file using the system's Rscript executa
 .PP
 .SH OPTIONS
 .PP
-\fBcode.save\fB \fR\- . 
+\fBscript.code\fB \fR\- . 
 .PP
 .PP
 \fBworkdir\fB \fR\- NULL. Working directory for executing the R script (default: current directory).
@@ -37,7 +37,7 @@ the original directory after execution.
 .PP
 .SH FILES
 .PP
-SMRUCC/R#.declare_function.rlang_call at rlang.R:line 68
+SMRUCC/R#.declare_function.rlang_call at rlang.R:line 65
 .PP
 .SH COPYRIGHT
 Copyright © xieguigang <xie.guigang@gcmodeller.org>, MIT Licensed 2025
