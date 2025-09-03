@@ -23,15 +23,12 @@ const rlang_interop = function(code,
     workdir = NULL, 
     print_code = FALSE, 
     native_R = getOption("native_rexec")) {
-
-    let code_save = tempfile(fileext = ".R");
+    
     # make translate of the managed R# closure expression
     # to the native R code
     let script_code = transform_rlang_source(
         code, source, 
-        debug = debug);
-
-    writeLines(script_code, con = code_save);
+        debug = debug);    
 
     if (print_code) {
         cat("\n\n");
@@ -40,8 +37,8 @@ const rlang_interop = function(code,
     }
 
     if (!debug) {
-        code_save |> rlang_call(
-            workdir = workdir, 
+        script_code |> rlang_call(
+            workdir  = workdir, 
             native_R = native_R
         );
     }
@@ -53,7 +50,7 @@ const rlang_interop = function(code,
 #' 
 #' @description This function executes a native R script file using the system's Rscript executable.
 #' 
-#' @param code_save File path to the target native R script file to be executed.
+#' @param script_code File path to the target native R script file to be executed.
 #' @param workdir Working directory for executing the R script (default: current directory).
 #' @param native_R Path to custom Rscript executable (default: from options or system default).
 #' 
@@ -65,10 +62,13 @@ const rlang_interop = function(code,
 #'          It temporarily changes the working directory if specified, then restores
 #'          the original directory after execution. 
 #'  
-const rlang_call = function(code_save, workdir = NULL, native_R = getOption("native_rexec")) {
+const rlang_call = function(script_code, workdir = NULL, native_R = getOption("native_rexec")) {
+    let code_save = tempfile(fileext = ".R");
     let current_wd = getwd();
     let change_wd = nchar(workdir) > 0;
     
+    writeLines(script_code, con = code_save);
+
     if (change_wd) {
         setwd(workdir);
     }
