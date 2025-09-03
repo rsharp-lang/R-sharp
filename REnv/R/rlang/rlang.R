@@ -1,8 +1,21 @@
-#' helper function for R# language interop with R language
+#' Helper function for R# language interoperability with R language
 #' 
-#' @param code a R# managed closure expresion code for invoke native R function
-#' @param source the source file paths for provides the 
-#'    runtime environment for the specific input code. 
+#' @description This function facilitates interoperability between R# and native R
+#'              by translating R# closure expressions to native R code and executing it.
+#' 
+#' @param code An R# managed closure expression to be converted and executed as native R code.
+#' @param source External dependency script file paths required for the execution environment.
+#' @param debug Logical indicating whether to debug the translation process (default: FALSE).
+#' @param workdir Working directory for executing the R script (default: current directory).
+#' @param print_code Logical indicating whether to print the generated R code (default: FALSE).
+#' @param native_R Path to custom Rscript executable (default: from options or system default).
+#' 
+#' @return The result of executing the translated native R code, typically the output
+#'         of the R script execution.
+#' 
+#' @details This function enables R# code to leverage native R functionality by
+#'          translating R# expressions to native R code and executing it through Rscript.
+#'          It handles both Windows and Linux environments automatically. 
 #' 
 const rlang_interop = function(code, 
     source = NULL, 
@@ -32,15 +45,25 @@ const rlang_interop = function(code,
             native_R = native_R
         );
     }
+
+    invisible(NULL);
 }
 
-#' make native R script call from current R# process
+#' Execute native R script from current R# process
 #' 
-#' @param code_save the file path to the target native rscript file
-#' @param workdir the workspace directory path for run the native rscript file. leaves blank means use current workdir.
-#' @param native_R the custom Rscript program location for run the native rscripr file
+#' @description This function executes a native R script file using the system's Rscript executable.
 #' 
-#' @return this function returns nothing
+#' @param code_save File path to the target native R script file to be executed.
+#' @param workdir Working directory for executing the R script (default: current directory).
+#' @param native_R Path to custom Rscript executable (default: from options or system default).
+#' 
+#' @return This function returns nothing explicitly, but executes the R script and
+#'         may produce output, side effects, or results based on the script's contents.
+#' 
+#' @details The function automatically detects the operating system and uses the
+#'          appropriate Rscript executable path for Windows or Linux systems.
+#'          It temporarily changes the working directory if specified, then restores
+#'          the original directory after execution. 
 #'  
 const rlang_call = function(code_save, workdir = NULL, native_R = getOption("native_rexec")) {
     let current_wd = getwd();
