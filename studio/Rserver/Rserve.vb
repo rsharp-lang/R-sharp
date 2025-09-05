@@ -1,58 +1,3 @@
-﻿#Region "Microsoft.VisualBasic::d8aec9cc0e9d442693bfdf5fee801390, studio\Rserver\Rserver.vb"
-
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    ' /********************************************************************************/
-
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 242
-    '    Code Lines: 131 (54.13%)
-    ' Comment Lines: 88 (36.36%)
-    '    - Xml Docs: 55.68%
-    ' 
-    '   Blank Lines: 23 (9.50%)
-    '     File Size: 10.50 KB
-
-
-    ' Class Rserve
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: FromEnvironment
-    ' 
-    ' 
-    ' /********************************************************************************/
-
-#End Region
-
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine
@@ -60,7 +5,7 @@ Imports Microsoft.VisualBasic.CommandLine.InteropService
 Imports Microsoft.VisualBasic.ApplicationServices
 
 ' Microsoft VisualBasic CommandLine Code AutoGenerator
-' assembly: ..\net6.0\Rserve.dll
+' assembly: ..\net8.0\Rserve.dll
 
 ' 
 '  // 
@@ -95,7 +40,7 @@ Imports Microsoft.VisualBasic.ApplicationServices
 '    3. Using command "Rserve /i" for enter interactive console mode.
 '    4. Using command "Rserve /STACK:xxMB" for adjust the application stack size, example as '/STACK:64MB'.
 
-Namespace RscriptCommandLine
+Namespace CLI
 
 
 ''' <summary>
@@ -148,7 +93,7 @@ Public Function GetlistenCommandLine(Optional wwwroot As String = "", Optional a
     If Not port.StringEmpty Then
             Call CLI.Append("/port " & """" & port & """ ")
     End If
-     Call CLI.Append($"/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
+     Call CLI.Append($"/@set internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
 Return CLI.ToString()
@@ -176,7 +121,7 @@ Public Function GetrunSessionCommandLine(Optional port As String = "8848", Optio
     If Not workspace.StringEmpty Then
             Call CLI.Append("--workspace " & """" & workspace & """ ")
     End If
-     Call CLI.Append($"/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
+     Call CLI.Append($"/@set internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
 Return CLI.ToString()
@@ -184,7 +129,7 @@ End Function
 
 ''' <summary>
 ''' ```bash
-''' --start [--port &lt;port number, default=7452&gt; --tcp &lt;port_number, default=3838&gt; --Rweb &lt;directory, default=./Rweb&gt; --wwwroot &lt;directory, default=null&gt; --startups &lt;packageNames, default=&quot;&quot;&gt; --show_error --n_threads &lt;max_threads, default=8&gt; --config &lt;config_file, default=null&gt; --parent &lt;parent_pid, default=&quot;&quot;&gt;]
+''' --start [--port &lt;port number, default=7452&gt; --tcp &lt;port_number, default=3838&gt; --Rweb &lt;directory, default=./Rweb&gt; --wwwroot &lt;directory, default=null&gt; --startups &lt;packageNames, default=&quot;&quot;&gt; --show_error --n_threads &lt;max_threads, default=8&gt; --access_rule &lt;access_control.json&gt; --config &lt;config_file, default=null&gt; --parent &lt;parent_pid, default=&quot;&quot;&gt;]
 ''' ```
 ''' Start R# web services, host R# script with http get request.
 ''' </summary>
@@ -212,6 +157,7 @@ Public Function start(Optional port As String = "7452",
                          Optional wwwroot As String = "null", 
                          Optional startups As String = "", 
                          Optional n_threads As String = "8", 
+                         Optional access_rule As String = "", 
                          Optional config As String = "null", 
                          Optional parent As String = "", 
                          Optional show_error As Boolean = False) As Integer
@@ -221,6 +167,7 @@ Dim cli = GetstartCommandLine(port:=port,
                          wwwroot:=wwwroot, 
                          startups:=startups, 
                          n_threads:=n_threads, 
+                         access_rule:=access_rule, 
                          config:=config, 
                          parent:=parent, 
                          show_error:=show_error, internal_pipelineMode:=True)
@@ -233,6 +180,7 @@ Public Function GetstartCommandLine(Optional port As String = "7452",
                          Optional wwwroot As String = "null", 
                          Optional startups As String = "", 
                          Optional n_threads As String = "8", 
+                         Optional access_rule As String = "", 
                          Optional config As String = "null", 
                          Optional parent As String = "", 
                          Optional show_error As Boolean = False, Optional internal_pipelineMode As Boolean = True) As String
@@ -256,6 +204,9 @@ Public Function GetstartCommandLine(Optional port As String = "7452",
     If Not n_threads.StringEmpty Then
             Call CLI.Append("--n_threads " & """" & n_threads & """ ")
     End If
+    If Not access_rule.StringEmpty Then
+            Call CLI.Append("--access_rule " & """" & access_rule & """ ")
+    End If
     If Not config.StringEmpty Then
             Call CLI.Append("--config " & """" & config & """ ")
     End If
@@ -265,7 +216,7 @@ Public Function GetstartCommandLine(Optional port As String = "7452",
     If show_error Then
         Call CLI.Append("--show_error ")
     End If
-     Call CLI.Append($"/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
+     Call CLI.Append($"/@set internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
 Return CLI.ToString()
@@ -273,7 +224,7 @@ End Function
 
 ''' <summary>
 ''' ```bash
-''' /make.config --export &lt;file_path_to_save.ini&gt;
+''' /make.config --export &lt;dir_path_to_save settings.ini&gt;
 ''' ```
 ''' export the default configuration file for the http server core.
 ''' </summary>
@@ -288,10 +239,11 @@ Public Function GetmakeconfigCommandLine(export As String, Optional internal_pip
     Dim CLI As New StringBuilder("/make.config")
     Call CLI.Append(" ")
     Call CLI.Append("--export " & """" & export & """ ")
-     Call CLI.Append($"/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
+     Call CLI.Append($"/@set internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
 Return CLI.ToString()
 End Function
 End Class
 End Namespace
+

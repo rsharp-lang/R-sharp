@@ -1,58 +1,3 @@
-﻿#Region "Microsoft.VisualBasic::f79e5a4957284345b96f3c9726de7643, studio\Rserver\RscriptInterop\Rscript.vb"
-
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    ' /********************************************************************************/
-
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 304
-    '    Code Lines: 169 (55.59%)
-    ' Comment Lines: 110 (36.18%)
-    '    - Xml Docs: 59.09%
-    ' 
-    '   Blank Lines: 25 (8.22%)
-    '     File Size: 13.87 KB
-
-
-    ' Class Rscript
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: FromEnvironment
-    ' 
-    ' 
-    ' /********************************************************************************/
-
-#End Region
-
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.CommandLine
@@ -60,7 +5,7 @@ Imports Microsoft.VisualBasic.CommandLine.InteropService
 Imports Microsoft.VisualBasic.ApplicationServices
 
 ' Microsoft VisualBasic CommandLine Code AutoGenerator
-' assembly: ..\net6.0\Rscript.dll
+' assembly: ..\net8.0\Rscript.dll
 
 ' 
 '  // 
@@ -100,7 +45,7 @@ Imports Microsoft.VisualBasic.ApplicationServices
 '    3. Using command "Rscript /i" for enter interactive console mode.
 '    4. Using command "Rscript /STACK:xxMB" for adjust the application stack size, example as '/STACK:64MB'.
 
-Namespace RscriptCommandLine
+Namespace CLI
 
 
 ''' <summary>
@@ -155,7 +100,7 @@ Public Function GetCompileCommandLine(Optional src As String = "./", Optional sa
     If skip_src_build Then
         Call CLI.Append("--skip-src-build ")
     End If
-     Call CLI.Append($"/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
+     Call CLI.Append($"/@set internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
 Return CLI.ToString()
@@ -181,7 +126,7 @@ Public Function GetCheckCommandLine(target As String, Optional debug As Boolean 
     If debug Then
         Call CLI.Append("--debug ")
     End If
-     Call CLI.Append($"/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
+     Call CLI.Append($"/@set internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
 Return CLI.ToString()
@@ -189,7 +134,7 @@ End Function
 
 ''' <summary>
 ''' ```bash
-''' --lambda &lt;delegate_name&gt; [--request &lt;/path/to/del_func_parameters.json, default=&quot;./.r_env/run.json&quot;&gt; --SetDllDirectory &lt;dll_directory&gt; --attach &lt;pkg_directory&gt;]
+''' --lambda &lt;delegate_name&gt; [--request &lt;/path/to/del_func_parameters.json, default=&quot;./.r_env/run.json&quot;&gt; --SetDllDirectory &lt;dll_directory&gt; --attach &lt;pkg_directory&gt; --debug]
 ''' ```
 ''' Execute R# function with parameters
 ''' </summary>
@@ -204,7 +149,7 @@ Public Function GetexecLambdaCommandLine(term As String, Optional internal_pipel
     Dim CLI As New StringBuilder("--lambda")
     Call CLI.Append(" ")
     Call CLI.Append($"{term}")
-     Call CLI.Append($"/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
+     Call CLI.Append($"/@set internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
 Return CLI.ToString()
@@ -256,7 +201,7 @@ Public Function GetparallelModeCommandLine(master As String,
     If Not redirect_stdout.StringEmpty Then
             Call CLI.Append("--redirect_stdout " & """" & redirect_stdout & """ ")
     End If
-     Call CLI.Append($"/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
+     Call CLI.Append($"/@set internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
 Return CLI.ToString()
@@ -264,7 +209,7 @@ End Function
 
 ''' <summary>
 ''' ```bash
-''' --slave /exec &lt;script.R&gt; /argvs &lt;json_base64&gt; /request-id &lt;request_id&gt; /PORT=&lt;port_number&gt; [ /timeout=&lt;timeout in ms, default=1000&gt; /retry=&lt;retry_times, default=5&gt; /MASTER=&lt;ip, default=localhost&gt; /entry=&lt;function_name, default=run&gt; --debug --startups &lt;packageNames, default=&quot;&quot;&gt;  --attach &lt;debug_pkg_dir&gt; ]
+''' --slave /exec &lt;script.R&gt; /argvs &lt;json_base64&gt; /request-id &lt;request_id&gt; /PORT=&lt;port_number&gt; [ /timeout=&lt;timeout in ms, default=1000&gt; /retry=&lt;retry_times, default=5&gt; /MASTER=&lt;ip, default=localhost&gt; /entry=&lt;function_name, default=run&gt; --debug --startups &lt;packageNames, default=&quot;&quot;&gt;  --attach &lt;debug_pkg_dir&gt; --std_in &lt;input_type: opt/arg&gt; ]
 ''' ```
 ''' Create a R# cluster node for run background or parallel task.
 ''' This IPC command will run a R# script file that specified by the ``/exec`` argument,
@@ -287,6 +232,15 @@ End Function
 ''' </param>
 ''' <param name="startups"> A list of package names for load during the current slave process startup.
 ''' </param>
+''' <param name="std_in"> Should this IPC slave node open the standard input for read the input data? 
+'''                             There are two kind of data operation: 
+''' 
+'''                     opt - for use the std input data for ``options`` function set global options data; 
+'''                     arg - for use the std input data as the function parameter value.
+'''               
+'''               the standard input data is encoded in multipart form data.
+'''               
+''' </param>
 Public Function slaveMode(exec As String, 
                              argvs As String, 
                              request_id As String, 
@@ -297,6 +251,7 @@ Public Function slaveMode(exec As String,
                              Optional entry As String = "run", 
                              Optional startups As String = "", 
                              Optional attach As String = "", 
+                             Optional std_in As String = "", 
                              Optional debug As Boolean = False) As Integer
 Dim cli = GetslaveModeCommandLine(exec:=exec, 
                              argvs:=argvs, 
@@ -308,6 +263,7 @@ Dim cli = GetslaveModeCommandLine(exec:=exec,
                              entry:=entry, 
                              startups:=startups, 
                              attach:=attach, 
+                             std_in:=std_in, 
                              debug:=debug, internal_pipelineMode:=True)
     Dim proc As IIORedirectAbstract = RunDotNetApp(cli)
     Return proc.Run()
@@ -322,6 +278,7 @@ Public Function GetslaveModeCommandLine(exec As String,
                              Optional entry As String = "run", 
                              Optional startups As String = "", 
                              Optional attach As String = "", 
+                             Optional std_in As String = "", 
                              Optional debug As Boolean = False, Optional internal_pipelineMode As Boolean = True) As String
     Dim CLI As New StringBuilder("--slave")
     Call CLI.Append(" ")
@@ -347,13 +304,17 @@ Public Function GetslaveModeCommandLine(exec As String,
     If Not attach.StringEmpty Then
             Call CLI.Append("--attach " & """" & attach & """ ")
     End If
+    If Not std_in.StringEmpty Then
+            Call CLI.Append("--std_in " & """" & std_in & """ ")
+    End If
     If debug Then
         Call CLI.Append("--debug ")
     End If
-     Call CLI.Append($"/@set --internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
+     Call CLI.Append($"/@set internal_pipeline={internal_pipelineMode.ToString.ToUpper()} ")
 
 
 Return CLI.ToString()
 End Function
 End Class
 End Namespace
+
