@@ -84,7 +84,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports snowFall.Context.RPC
-Imports R = snowFall.RscriptCommandLine.Rscript
+Imports R = snowFall.CLI.Rscript
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Public Class RunSequential : Inherits RunParallel

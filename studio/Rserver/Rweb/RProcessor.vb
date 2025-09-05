@@ -328,7 +328,7 @@ Public Class RProcessor
         Dim port As Integer = localRServer.TcpPort
         Dim master As String = "localhost"
         Dim entry As String = "run"
-        Dim Rslave = RscriptCommandLine.Rscript.FromEnvironment(directory:=App.HOME)
+        Dim Rslave = CLI.Rscript.FromEnvironment(directory:=App.HOME)
 
         Static empty_args As String = "{}".Base64String(gzip:=True)
 
