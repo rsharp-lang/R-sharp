@@ -897,8 +897,13 @@ RE0:
             Dim add As MethodInfo = buffer.GetType.GetMethod("Add", BindingFlags.Public Or BindingFlags.Instance)
             Dim source As IEnumerator = DirectCast(obj, IEnumerable).GetEnumerator
 
-            source.MoveNext()
-            source = source.Current
+            Call source.MoveNext()
+
+            If source.Current.GetType Is generic Then
+                Call add.Invoke(buffer, {source.Current})
+            Else
+                source = source.Current
+            End If
 
             ' get element count by list
             Do While source.MoveNext
