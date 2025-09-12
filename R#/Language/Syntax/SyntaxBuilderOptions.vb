@@ -73,7 +73,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Language.Syntax.SyntaxParser
 
-    Public Delegate Function GetLanguageScanner(buffer As CharPtr, stringInterpolateParser As Boolean) As Scanner
+    Public Delegate Function GetLanguageScanner(buffer As CharPtr, stringInterpolateParser As Boolean) As SMRUCC.Rsharp.Language.TokenIcer.Scanner
     Public Delegate Function ParseExpression(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
 
     Public Class SyntaxBuilderOptions
