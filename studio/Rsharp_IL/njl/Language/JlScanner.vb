@@ -54,11 +54,10 @@
 
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Text.Parser
-Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Namespace Language
 
-    Public Class JlScanner : Inherits Scanner
+    Public Class JlScanner : Inherits SMRUCC.Rsharp.Language.TokenIcer.Scanner
 
         Shared ReadOnly jlKeywords As String() = {
             "baremodule", "begin", "break", "catch", "const",

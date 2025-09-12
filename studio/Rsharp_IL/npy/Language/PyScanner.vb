@@ -60,7 +60,7 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Namespace Language
 
-    Public Class PyScanner : Inherits Scanner
+    Public Class PyScanner : Inherits SMRUCC.Rsharp.Language.TokenIcer.Scanner
 
         Shared ReadOnly pyKeywords As String() = {
             "and", "as", "assert", "break", "class", "continue", "def", "elif", "else", "except", "false", "finally",
