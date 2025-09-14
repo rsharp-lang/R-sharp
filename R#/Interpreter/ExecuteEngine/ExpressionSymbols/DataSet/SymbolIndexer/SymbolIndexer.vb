@@ -319,11 +319,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         Dim rawIndex As Object = indexVec.values(Scan0).Evaluate(env)
                         Dim rowIndex = data.getRowIndex(rawIndex)
 
-                        If rowIndex Is Nothing Then
+                        If rowIndex Is Nothing OrElse CInt(rowIndex) < 0 Then
                             ' which means the indexVec is empty, no element
                             ' the original R language returns an empty dataframe
                             ' returns nothing at here. and also echo warning message
-                            Call env.AddMessage("the required row index is nothing!")
+                            Call env.AddMessage($"the required row index '{indexVec.values(Scan0).ToString}' is invalid(is nothing or else index select no row data)!")
 
                             If drop Then
                                 Return Internal.Object.list.empty
