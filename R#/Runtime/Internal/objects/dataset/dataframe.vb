@@ -784,9 +784,9 @@ Namespace Runtime.Internal.Object
                     With DirectCast(any, Boolean()) _
                         .Select(Function(flag, i) (flag, i)) _
                         .Where(Function(a) a.flag) _
-                        .FirstOrDefault((False, -1))
+                        .FirstOrDefault((False, -2))
 
-                        any = .Item2
+                        any = .Item2 + 1
                     End With
                 Else
                     any = DirectCast(any, Array).GetValue(Scan0)
@@ -800,6 +800,10 @@ Namespace Runtime.Internal.Object
                 Return getRowNames.IndexOf(rowname)
             ElseIf any.GetType Like RType.integers Then
                 ' R# index integer is from base 1
+                If CInt(any) < 0 Then
+                    Return -1
+                End If
+
                 Return CInt(any) - 1
             Else
                 Return -1
