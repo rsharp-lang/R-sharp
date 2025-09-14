@@ -316,7 +316,8 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
                     If TypeOf opt.targetSymbols(Scan0) Is Literal AndAlso DirectCast(opt.targetSymbols(Scan0), Literal) = "drop" Then
                         Dim drop As Boolean = CLRVector.asLogical(opt.value.Evaluate(env))(Scan0)
-                        Dim rowIndex = data.getRowIndex(indexVec.values(Scan0).Evaluate(env))
+                        Dim rawIndex As Object = indexVec.values(Scan0).Evaluate(env)
+                        Dim rowIndex = data.getRowIndex(rawIndex)
 
                         If rowIndex Is Nothing Then
                             ' which means the indexVec is empty, no element

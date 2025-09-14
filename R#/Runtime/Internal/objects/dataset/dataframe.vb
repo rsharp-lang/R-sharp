@@ -1,66 +1,66 @@
 ﻿#Region "Microsoft.VisualBasic::b51c1e19e5cc48b91289a7f9edd0094a, R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1028
-    '    Code Lines: 536 (52.14%)
-    ' Comment Lines: 378 (36.77%)
-    '    - Xml Docs: 87.83%
-    ' 
-    '   Blank Lines: 114 (11.09%)
-    '     File Size: 41.75 KB
+' Summaries:
 
 
-    '     Interface IdataframeReader
-    ' 
-    '         Function: getColumn, getRow, getRowNames
-    ' 
-    '     Class dataframe
-    ' 
-    '         Properties: colnames, columns, empty, ncols, nrows
-    '                     rownames
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: (+3 Overloads) add, checkColumnNames, (+2 Overloads) Create, (+3 Overloads) CreateDataFrame, (+2 Overloads) delete
-    '                   detach, FilterByRowIndex, forEachRow, GetByRowIndex, getBySynonym
-    '                   getKeyByIndex, getNames, getRowIndex, (+2 Overloads) getRowList, getRowNames
-    '                   GetRowNumbers, (+2 Overloads) getVector, hasName, projectByColumn, setNames
-    '                   (+2 Overloads) sliceByRow, subsetColData, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1028
+'    Code Lines: 536 (52.14%)
+' Comment Lines: 378 (36.77%)
+'    - Xml Docs: 87.83%
+' 
+'   Blank Lines: 114 (11.09%)
+'     File Size: 41.75 KB
+
+
+'     Interface IdataframeReader
+' 
+'         Function: getColumn, getRow, getRowNames
+' 
+'     Class dataframe
+' 
+'         Properties: colnames, columns, empty, ncols, nrows
+'                     rownames
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: (+3 Overloads) add, checkColumnNames, (+2 Overloads) Create, (+3 Overloads) CreateDataFrame, (+2 Overloads) delete
+'                   detach, FilterByRowIndex, forEachRow, GetByRowIndex, getBySynonym
+'                   getKeyByIndex, getNames, getRowIndex, (+2 Overloads) getRowList, getRowNames
+'                   GetRowNumbers, (+2 Overloads) getVector, hasName, projectByColumn, setNames
+'                   (+2 Overloads) sliceByRow, subsetColData, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -758,16 +758,41 @@ Namespace Runtime.Internal.Object
         ''' <param name="any"></param>
         ''' <returns></returns>
         Public Function getRowIndex(any As Object) As Integer?
-            If TypeOf any Is Array Then
-                any = DirectCast(any, Array).GetValue(Scan0)
-            ElseIf TypeOf any Is vector Then
+            If any Is Nothing Then
+                Return -1
+            End If
+
+            If TypeOf any Is vector Then
                 Dim vec As vector = any
 
                 If vec.length = 0 Then
                     Return Nothing
                 Else
-                    any = vec.data.GetValue(Scan0)
+                    any = vec.data
                 End If
+            ElseIf TypeOf any Is list Then
+                any = DirectCast(any, list).data.ToArray
+            ElseIf TypeOf any Is dataframe Then
+                Throw New InvalidCastException($"A dataframe can not be used as the dataframe row index!")
+            End If
+
+            If TypeOf any Is Array Then
+                any = REnv.UnsafeTryCastGenericArray(any)
+
+                If TypeOf any Is Boolean() Then
+                    ' use the first true
+                    With DirectCast(any, Boolean()) _
+                        .Select(Function(flag, i) (flag, i)) _
+                        .Where(Function(a) a.flag) _
+                        .FirstOrDefault((False, -1))
+
+                        any = .Item2
+                    End With
+                Else
+                    any = DirectCast(any, Array).GetValue(Scan0)
+                End If
+            ElseIf Not DataFramework.IsPrimitive(any.GetType, autoCastEnum:=True) Then
+                Throw New InvalidCastException($"A clr object of type '{any.GetType.FullName}' can not be used as the dataframe row index!")
             End If
 
             If any.GetType Like RType.characters Then
