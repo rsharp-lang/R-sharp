@@ -132,9 +132,16 @@ Public Module InteropArgumentHelper
         ElseIf TypeOf obj Is Double() OrElse TypeOf obj Is Integer() OrElse TypeOf obj Is Long() Then
             With CLRVector.asNumeric(obj)
                 If .Length >= 3 Then
-                    Return New Point3D(.GetValue(0), .GetValue(1), .GetValue(2))
+                    Dim x As Double = .GetValue(0)
+                    Dim y As Double = .GetValue(1)
+                    Dim z As Double = .GetValue(2)
+
+                    Return New Point3D(x, y, z)
                 ElseIf .Length = 2 Then
-                    Return New Point3D(.GetValue(0), .GetValue(1), 0)
+                    Dim x As Double = .GetValue(0)
+                    Dim y As Double = .GetValue(1)
+
+                    Return New Point3D(x, y, 0.0)
                 Else
                     Return Nothing
                 End If
