@@ -85,6 +85,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash
@@ -1447,7 +1448,7 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("file")>
         Public Function file(description$,
-                             Optional open As FileMode = FileMode.OpenOrCreate,
+                             Optional open As FileModeDescriptor = FileModeDescriptor.Open,
                              Optional truncate As Boolean = False,
                              Optional repo As IFileSystemEnvironment = Nothing) As Stream
 
@@ -1474,7 +1475,7 @@ Namespace Runtime.Internal.Invokes
                     Return description.Open(open, doClear:=truncate)
                 ElseIf open = FileMode.Append Then
                     If description.FileExists Then
-                        Dim exists_file As New FileStream(description, open)
+                        Dim exists_file As New FileStream(description, CType(CInt(open), FileMode))
                         ' seek to end of file for append mode
                         exists_file.Seek(exists_file.Length, SeekOrigin.Begin)
                         Return exists_file
