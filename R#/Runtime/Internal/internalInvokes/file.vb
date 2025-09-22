@@ -999,6 +999,8 @@ Namespace Runtime.Internal.Invokes
                            Do While assert()
                                If Not (line = text.ReadLine) Is Nothing Then
                                    Yield CType(line, String)
+                               Else
+                                   Exit Do
                                End If
                            Loop
                        End Function() _
@@ -1010,6 +1012,8 @@ Namespace Runtime.Internal.Invokes
                 Do While assert()
                     If Not (line = text.ReadLine) Is Nothing Then
                         Call lines.Add(line)
+                    Else
+                        Exit Do
                     End If
                 Loop
 
