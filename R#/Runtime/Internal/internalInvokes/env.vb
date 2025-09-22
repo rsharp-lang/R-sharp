@@ -737,12 +737,23 @@ Namespace Runtime.Internal.Invokes
         ''' relative to the folder of current running script file.
         ''' </returns>
         <ExportAPI("relative_work")>
-        Public Function relative_work(Optional file As String = Nothing, Optional env As Environment = Nothing) As Object
+        Public Function relative_work(Optional file As String = Nothing,
+                                      Optional strict As Boolean? = Nothing,
+                                      Optional env As Environment = Nothing) As Object
+
             Dim dir As New ScriptFolder()
             Dim workdir As String = CStr(dir.Evaluate(env))
 
             If workdir Is Nothing Then
-                Return Internal.debug.stop("Missing the special `@dir` annotation symbol, this function only works for the script file, do not used inside the package!", env)
+                Dim msg As String = "Missing the special `@dir` annotation symbol, 'relative_work' function only works for the script file, do not used inside the package!"
+
+                If env.strictOption(opt:=strict) Then
+                    Return Internal.debug.stop(msg, env)
+                Else
+                    msg = msg & " use current work folder as the relative workdir!"
+                    msg.warning
+                    workdir = App.CurrentDirectory
+                End If
             End If
 
             If file.StringEmpty Then
