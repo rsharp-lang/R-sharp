@@ -2010,7 +2010,7 @@ Namespace Runtime.Internal.Invokes
                 Call file.DeleteFile
             Next
             For Each folder As String In dir.ListDirectory(fsOptions.SearchAllSubDirectories)
-                Call Directory.Delete(folder)
+                Call Global.System.IO.Directory.Delete(folder, recursive:=True)
             Next
 
             Return Nothing
