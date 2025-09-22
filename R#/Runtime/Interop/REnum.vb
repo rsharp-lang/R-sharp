@@ -71,7 +71,11 @@ Namespace Runtime.Interop
     ''' </summary>
     Public Class REnum
 
-        Public Property raw As Type
+        ''' <summary>
+        ''' the source clr type of current enum object
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property raw As Type
 
         ReadOnly namedValues As New Dictionary(Of String, Object)
         ReadOnly intValues As New Dictionary(Of String, Object)
@@ -128,12 +132,18 @@ Namespace Runtime.Interop
                                   Return flag.GetValue(Nothing).ToString
                               End Function)
             Dim int As Long
+            Dim name_str As String
+            Dim desc_str As String
 
             For Each flag As [Enum] In values
                 int = CLng(members(flag.ToString).GetValue(Nothing))
                 intValues.Add("T" & int, flag)
-                namedValues.Add(flag.ToString.ToLower, flag)
-                namedIntegers.Add(flag.ToString.ToLower, int)
+                name_str = flag.ToString.ToLower
+                namedValues.Add(name_str, flag)
+                namedIntegers.Add(name_str, int)
+                desc_str = flag.Description.ToLower
+                namedValues.Add(desc_str, flag)
+                namedIntegers.Add(desc_str, int)
             Next
         End Sub
 
@@ -141,6 +151,13 @@ Namespace Runtime.Interop
             Return namedValues.ContainsKey(name.ToLower)
         End Function
 
+        ''' <summary>
+        ''' get enum value by enum name or enum description text
+        ''' </summary>
+        ''' <param name="name">
+        ''' case ignored enum name or enum description text
+        ''' </param>
+        ''' <returns></returns>
         Public Function GetByName(name As String) As Object
             Return namedValues.TryGetValue(name.ToLower)
         End Function
