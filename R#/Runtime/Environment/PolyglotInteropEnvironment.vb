@@ -178,11 +178,12 @@ Namespace Runtime
 
     Public Class SymbolPrefixTree
 
+        ReadOnly parent As SymbolPrefixTree
         ReadOnly tree As New Dictionary(Of String, SymbolPrefixTree)
         ReadOnly name As String
         ReadOnly libs As Type()
 
-        Dim closure As Expression
+        Dim closure As RMethodInfo
 
         Default Public ReadOnly Property GetByName(name As String) As Object
             Get
@@ -194,12 +195,17 @@ Namespace Runtime
             Me.name = name
         End Sub
 
+        Private Sub New(name As String, parent As SymbolPrefixTree)
+            Me.name = name
+            Me.parent = parent
+        End Sub
+
         Sub New(name As String, libs As Type())
             Me.name = name
             Me.libs = libs
         End Sub
 
-        Public Sub setNodeClosure(expr As Expression)
+        Public Sub setNodeClosure(expr As RMethodInfo)
             closure = expr
         End Sub
 
@@ -208,8 +214,16 @@ Namespace Runtime
         End Function
 
         Public Sub add(name As String)
-            Call tree.Add(name, New SymbolPrefixTree(name))
+            Call tree.Add(name, New SymbolPrefixTree(name, parent:=Me))
         End Sub
+
+        Public Overrides Function ToString() As String
+            If parent Is Nothing Then
+                Return name
+            Else
+                Return $"{parent}.{name}"
+            End If
+        End Function
 
     End Class
 End Namespace
