@@ -3844,5 +3844,44 @@ RE0:
                                                             env:=R.globalEnvir)
             Return err
         End Function
+
+        ''' <summary>
+        ''' ### Function Exit Code
+        ''' 
+        ''' ``on.exit`` records the expression given as its argument as needing to be executed when the 
+        ''' current function exits (either naturally or as the result of an error). This is useful for 
+        ''' resetting graphical parameters or performing other cleanup actions.
+        ''' 
+        ''' If no expression Is provided, i.e., the Call Is on.exit(), Then the current on.exit code Is 
+        ''' removed.
+        ''' </summary>
+        ''' <param name="expr">an expression to be executed.</param>
+        ''' <param name="add">if TRUE, add expr to be executed after any previously set expressions 
+        ''' (or before if after is FALSE); otherwise (the default) expr will overwrite any previously 
+        ''' set expressions.</param>
+        ''' <param name="after">if add is TRUE and after is FALSE, then expr will be added on top of 
+        ''' the expressions that were already registered. The resulting last in first out order is 
+        ''' useful for freeing or closing resources in reverse order.</param>
+        ''' <returns>Invisible NULL.</returns>
+        ''' <remarks>
+        ''' The expr argument passed to on.exit is recorded without evaluation. If it is not subsequently 
+        ''' removed/replaced by another on.exit call in the same function, it is evaluated in the evaluation 
+        ''' frame of the function when it exits (including during standard error handling). Thus any 
+        ''' functions or variables in the expression will be looked for in the function and its environment 
+        ''' at the time of exit: to capture the current value in expr use substitute or similar.
+        '''
+        ''' If multiple On.Exit expressions are Set Using add = True Then all expressions will be run 
+        ''' even If one signals an Error.
+        '''
+        ''' This Is a 'special’ primitive function: it only evaluates the arguments add and after.
+        ''' </remarks>
+        <ExportAPI("on.exit")>
+        Public Function on_exit(<RLazyExpression> expr As Expression,
+                                Optional add As Boolean = False,
+                                Optional after As Boolean = True,
+                                Optional env As Environment = Nothing) As Object
+
+            Return __invisible(Nothing)
+        End Function
     End Module
 End Namespace
