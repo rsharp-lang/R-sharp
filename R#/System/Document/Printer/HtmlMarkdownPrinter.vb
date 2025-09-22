@@ -90,7 +90,7 @@ Namespace Development
                         Dim desc As String = DirectCast(value, [Enum]).Description
                         Dim toStr As String = value.ToString
 
-                        Call markdown.WriteLine($"{indent_space}{If(desc.StringEmpty, "", $"[{desc}]")}{toStr} = {[enum].IntValue(value)};")
+                        Call markdown.WriteLine($"{indent_space}{If(desc.StringEmpty, "", $"[{desc}] ")}{toStr} = {[enum].IntValue(value)};")
                     Next
 
                     Call markdown.WriteLine($"{New String(" "c, 2)}}}")
