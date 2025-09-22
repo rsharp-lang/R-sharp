@@ -1810,7 +1810,7 @@ Namespace Runtime.Internal.Invokes
                                  <RDefaultExpression>
                                  Optional tmpdir$ = "~tempdir()",
                                  <RRawVectorArgument>
-                                 Optional fileext As Object = ".tmp",
+                                 Optional fileext As Object = "",
                                  Optional env As Environment = Nothing) As Object
 
             Dim patterns As String() = CLRVector.asCharacter(pattern)
