@@ -103,7 +103,7 @@ Namespace Runtime
             Dim t As String() = symbol.Split("."c)
 
             If t.Length = 1 Then
-                funcSymbols(symbol) = New Symbol(func)
+                Call TryGetInteropSymbol(symbol).setNodeClosure(func)
             Else
                 ' add to symbols
                 Call AddInteropSymbol(t, func)
@@ -224,6 +224,10 @@ Namespace Runtime
                 Return $"{parent}.{name}"
             End If
         End Function
+
+        Public Shared Narrowing Operator CType(tree As SymbolPrefixTree) As RMethodInfo
+            Return tree.closure
+        End Operator
 
     End Class
 End Namespace

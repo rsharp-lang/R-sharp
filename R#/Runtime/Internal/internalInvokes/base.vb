@@ -3566,6 +3566,10 @@ RE0:
             Dim globalEnv As GlobalEnvironment = env.globalEnvironment
             Dim maxPrint As Integer = opts.maxPrint
 
+            If TypeOf x Is SymbolPrefixTree Then
+                x = CType(DirectCast(x, SymbolPrefixTree), RMethodInfo)
+            End If
+
             If TypeOf x Is invisible Then
                 x = DirectCast(x, invisible).value
 
