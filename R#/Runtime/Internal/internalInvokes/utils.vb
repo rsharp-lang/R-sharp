@@ -812,6 +812,53 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### Quote Strings for Use in OS Shells
+        ''' 
+        ''' Quote a string to be passed to an operating system shell.
+        ''' </summary>
+        ''' <param name="string">a character vector, usually of length one.</param>
+        ''' <param name="type">character: the type of shell quoting. Partial matching is supported. 
+        ''' "cmd" and "cmd2" refer to the Windows shell. "cmd" is the default under Windows.
+        ''' </param>
+        ''' <returns>A character vector of the same length as string.</returns>
+        ''' <remarks>
+        ''' The default type of quoting supported under Unix-alikes is that for the Bourne shell sh. 
+        ''' If the string does not contain single quotes, we can just surround it with single quotes.
+        ''' Otherwise, the string is surrounded in double quotes, which suppresses all special 
+        ''' meanings of metacharacters except dollar, backquote and backslash, so these (and of course
+        ''' double quote) are preceded by backslash. This type of quoting is also appropriate for 
+        ''' bash, ksh and zsh.
+        ''' 
+        ''' The other type of quoting is for the C-shell (csh and tcsh). Once again, if the string 
+        ''' does not contain single quotes, we can just surround it with single quotes. If it does 
+        ''' contain single quotes, we can use double quotes provided it does not contain dollar or 
+        ''' backquote (and we need to escape backslash, exclamation mark and double quote). As a last
+        ''' resort, we need to split the string into pieces not containing single quotes (some may 
+        ''' be empty) and surround each with single quotes, and the single quotes with double quotes.
+        ''' 
+        ''' In Windows, command line interpretation is done by the application as well as the shell.
+        ''' It may depend on the compiler used: Microsoft's rules for the C run-time are given at
+        ''' https://learn.microsoft.com/en-us/cpp/c-language/parsing-c-command-line-arguments?view=msvc-160. 
+        ''' It may depend on the whim of the programmer of the application: check its documentation. 
+        ''' The type = "cmd" prepares the string for parsing as an argument by the Microsoft's rules 
+        ''' and makes shQuote safe for use with many applications when used with system or system2. 
+        ''' It surrounds the string by double quotes and escapes internal double quotes by a 
+        ''' backslash. Any trailing backslashes and backslashes that were originally before double 
+        ''' quotes are doubled.
+        ''' 
+        ''' The Windows cmd.exe shell (used by default with shell) uses type = "cmd2" quoting: 
+        ''' special characters are prefixed with "^". In some cases, two types of quoting should 
+        ''' be used: first for the application, and then type = "cmd2" for cmd.exe. 
+        ''' </remarks>
+        <ExportAPI("shQuote")>
+        Public Function shQuote(<RRawVectorArgument> [string] As Object, Optional type As Object = "sh|csh|cmd|cmd2") As Object
+            Return CLRVector.asCharacter([string]) _
+                .SafeQuery _
+                .Select(Function(str) str.CLIToken) _
+                .ToArray
+        End Function
+
+        ''' <summary>
         ''' ### Invoke a System Command
         ''' 
         ''' ``system`` invokes the OS command specified by ``command``.
