@@ -109,9 +109,22 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             program = New Program(code)
         End Sub
 
+        Public Const FunctionExitCode = "$(on.exit)"
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Return program.Execute(envir)
+            Dim result As Object = program.Execute(envir)
+            Dim on_exit As Expression = TryCast(envir.acceptorArguments.TryGetValue(FunctionExitCode, mute:=True), Expression)
+
+            If Not on_exit Is Nothing Then
+                Dim result2 As Object = on_exit.Evaluate(envir)
+
+                If Program.isException(result2) Then
+                    Return result2
+                End If
+            End If
+
+            Return result
         End Function
 
         Public Iterator Function EnumerateCodeLines() As IEnumerable(Of Expression)

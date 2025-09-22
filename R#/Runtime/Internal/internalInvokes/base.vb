@@ -3880,7 +3880,7 @@ RE0:
                                 Optional add As Boolean = False,
                                 Optional after As Boolean = True,
                                 Optional env As Environment = Nothing) As Object
-
+            env.acceptorArguments(ClosureExpression.FunctionExitCode) = expr
             Return __invisible(Nothing)
         End Function
     End Module
