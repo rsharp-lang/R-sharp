@@ -3360,8 +3360,10 @@ RE0:
                 msg &= vbLf
             End If
 
-            Call env.globalEnvironment.stdout.Write(msg)
-            Call env.globalEnvironment.stdout.Flush()
+            Dim stdout As RContentOutput = env.globalEnvironment.stdout
+
+            Call stdout.Write(msg)
+            Call stdout.Flush()
         End Sub
 
         ''' <summary>
