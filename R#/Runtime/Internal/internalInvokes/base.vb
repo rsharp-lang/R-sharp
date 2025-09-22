@@ -3881,6 +3881,7 @@ RE0:
                                 Optional after As Boolean = True,
                                 Optional env As Environment = Nothing) As Object
             env = env.parent
+            env = env.parent
             env.acceptorArguments(ClosureExpression.FunctionExitCode) = expr
 
             Return __invisible(Nothing)

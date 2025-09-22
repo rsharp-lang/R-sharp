@@ -122,6 +122,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 If Program.isException(result2) Then
                     Return result2
                 End If
+
+                If TypeOf result Is RsharpDataObject Then
+                    Call DirectCast(result, RsharpDataObject).setAttribute("on.exit", result2)
+                End If
             End If
 
             Return result
