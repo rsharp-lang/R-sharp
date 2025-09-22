@@ -3568,6 +3568,7 @@ RE0:
 
             If TypeOf x Is SymbolPrefixTree Then
                 x = CType(DirectCast(x, SymbolPrefixTree), RMethodInfo)
+                type = x.GetType
             End If
 
             If TypeOf x Is invisible Then

@@ -142,7 +142,7 @@ Namespace Runtime
                     Call modObj.add(ti)
                 End If
 
-                Dim value = modObj(ti)
+                Dim value As Object = modObj.GetByName(ti)
 
                 If Not TypeOf value Is SymbolPrefixTree Then
                     modObj.add(ti)
@@ -187,7 +187,11 @@ Namespace Runtime
 
         Default Public ReadOnly Property GetByName(name As String) As Object
             Get
-                Return If(tree.ContainsKey(name), tree(name), closure)
+                If tree.ContainsKey(name) Then
+                    Return tree(name)
+                Else
+                    Return closure
+                End If
             End Get
         End Property
 
