@@ -977,7 +977,14 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         Private Function readFromStream(con As Stream, n As Integer, stream As Boolean) As Object
-            Dim text As New StreamReader(con)
+            ' 20250922 there is a bug about the streamreader object:
+            ' it is buffered reader: for example if the given stream length is 15, but contains 5 lines of text data,
+            ' then this buffered stream reader will read 1024 bytes at once, the stream position will be move to 15.
+            ' in this function call we just needs read (n=1) one line of text data, but the stream position is in 15 now,
+            ' so next time we try to read the stream, which its position is in 15 bytes, which is the end of file,
+            ' this function it will return nothing.
+            ' we use the unbuffered stream reader at here for avoid such problem.
+            Dim text As New UnbufferedStreamReader(con)
             Dim line As Value(Of String) = ""
             Dim assert As Func(Of Boolean)
 
