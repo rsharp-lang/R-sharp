@@ -578,7 +578,16 @@ Namespace Runtime.Internal.Invokes
             Return createArgumentString(argv, env)
         End Function
 
+        ''' <summary>
+        ''' build commandline argument string from a tuple list object
+        ''' </summary>
+        ''' <param name="argv"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Private Function createArgumentString(argv As list, env As Environment) As Object
+            If argv.length = 1 AndAlso TypeOf argv.data.First Is list Then
+                argv = DirectCast(argv.data.First, list)
+            End If
             If argv.length = 1 Then
                 ' list([...]);
                 Return CLRVector.asCharacter(argv.slots.First.Value) _
@@ -599,6 +608,9 @@ Namespace Runtime.Internal.Invokes
                                 '
                                 If TypeOf argVal Is Boolean AndAlso Not CBool(argVal) Then
                                     Return ""
+                                ElseIf a.Key.IsPattern("\[\[\d+\]\]") Then
+                                    ' this is a unnamed argument
+                                    Return any.ToString(argVal).CLIToken
                                 Else
                                     Return a.Key.CLIToken & " " & any.ToString(argVal).CLIToken
                                 End If
@@ -610,6 +622,12 @@ Namespace Runtime.Internal.Invokes
             End If
         End Function
 
+        ''' <summary>
+        ''' generates commandline arguments string from different types of input data
+        ''' </summary>
+        ''' <param name="args"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Private Function createArgumentString(args As Object, env As Environment) As Object
             If TypeOf args Is list Then
                 Return createArgumentString(DirectCast(args, list), env)
