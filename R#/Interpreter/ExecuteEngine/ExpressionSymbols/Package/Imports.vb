@@ -429,8 +429,8 @@ load:       Return LoadLibrary(filepath, env, names)
         Private Shared Sub hook_jsEnv_Internal(globalEnv As GlobalEnvironment, symbolName As String, ParamArray libs As Type())
             Dim symbol As Symbol = globalEnv.polyglot.interop.FindSymbol(symbolName)
 
-            If symbol IsNot Nothing AndAlso symbol.typeCode = TypeCodes.list Then
-                Dim interopTarget As list = DirectCast(symbol.value, list)
+            If symbol IsNot Nothing AndAlso symbol.typeCode = TypeCodes.clr_delegate Then
+                Dim interopTarget As SymbolPrefixTree = DirectCast(symbol.value, SymbolPrefixTree)
 
                 If interopTarget.hasName(PolyglotInteropEnvironment.pkg_ref_libs) Then
                     libs = DirectCast(interopTarget.getByName(PolyglotInteropEnvironment.pkg_ref_libs), Type()) _

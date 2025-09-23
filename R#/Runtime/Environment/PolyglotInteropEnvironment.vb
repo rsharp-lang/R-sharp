@@ -94,7 +94,7 @@ Namespace Runtime
                 name:=symbol,
                 value:=hook_jsEnv(libs),
                 [readonly]:=True,
-                mode:=TypeCodes.list,
+                mode:=TypeCodes.clr_delegate,
                 [overrides]:=True
             )
         End Sub
@@ -129,7 +129,6 @@ Namespace Runtime
         End Sub
 
         Public Const pkg_ref_libs = "$_pkg_ref@-<libs!!!!!>*"
-        Public Const js_special_call = "$_js_special_calls?*"
 
         Private Shared Sub hook_interop_tree(env As SymbolPrefixTree, t As String(), target_obj As Object)
             Dim modObj As SymbolPrefixTree = env
@@ -189,6 +188,8 @@ Namespace Runtime
             Get
                 If tree.ContainsKey(name) Then
                     Return tree(name)
+                ElseIf name = PolyglotInteropEnvironment.pkg_ref_libs Then
+                    Return libs
                 Else
                     Return closure
                 End If
