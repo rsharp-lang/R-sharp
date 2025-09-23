@@ -764,6 +764,7 @@ Namespace Runtime.Internal.Invokes
                                 Optional invisible As Boolean = True,
                                 Optional timeout As Single = 0,
                                 Optional clr As Boolean = False,
+                                Optional verbose As Boolean? = False,
                                 Optional env As Environment = Nothing) As Object
 
             Dim executative As String = command
@@ -784,6 +785,9 @@ Namespace Runtime.Internal.Invokes
                 Call base.print(executative,, env)
                 Call base.print("commandline argument is:",, env)
                 Call base.print(arguments,, env)
+            End If
+            If env.verboseOption(opt:=verbose) Then
+                Call VBDebugger.EchoLine($"# {executative.CLIPath} {arguments}")
             End If
 
             If Global.System.Environment.OSVersion.Platform = Global.System.PlatformID.Win32NT Then
