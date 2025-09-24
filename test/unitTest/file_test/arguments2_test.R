@@ -9,3 +9,12 @@ let receptor_cmd <- list(
 );
 
 str(receptor_cmd);
+
+str(list(
+    prepare_receptor,
+    prepare_receptor,
+    "-r" = shQuote("input one"),
+    "-o" = shQuote("output one"),
+    "-A" = "hydrogens",
+    "-U" = "nphs_lps_waters" # 删除非极性氢、配体和水分子
+));

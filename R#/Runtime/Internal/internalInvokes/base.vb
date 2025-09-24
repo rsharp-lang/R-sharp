@@ -1902,12 +1902,19 @@ RE0:
             For i As Integer = 0 To parameters.Length - 1
                 slot = parameters(i)
 
+                If slot.haveSymbolName(True) AndAlso
+                    slot.name = ".symbol_names" AndAlso
+                    slot.isSymbolAssign Then
+
+                    Continue For
+                End If
+
                 If slot.haveSymbolName(hasObjectList:=listSymbolNames) Then
-                    ' 不支持tuple
-                    key = slot.name
-                    value = slot.Evaluate(envir)
-                Else
-                    key = i + 1
+                        ' 不支持tuple
+                        key = slot.name
+                        value = slot.Evaluate(envir)
+                    Else
+                        key = i + 1
                     key = $"[[{key}]]"
                     value = slot.Evaluate(envir)
                 End If
