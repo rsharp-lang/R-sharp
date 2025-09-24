@@ -1821,32 +1821,88 @@ RE0:
         ''' 
         ''' Functions to construct, coerce and check for both kinds of ``R#`` lists.
         ''' </summary>
-        ''' <param name="slots">objects, possibly named.</param>
+        ''' <param name="slots">objects, possibly named.
+        ''' ``.symbol_names`` options could be used in this parameter list for indicated
+        ''' that the list function should use the symbol name as the tuple slot name if
+        ''' the given slot value is not a value assigned expression but it is a symbol
+        ''' reference expression.
+        ''' </param>
         ''' <param name="envir"></param>
         ''' <returns>
         ''' 
         ''' </returns>
+        ''' <remarks>
+        ''' Almost all lists in R internally are Generic Vectors, whereas traditional dotted pair lists (as in LISP)
+        ''' remain available but rarely seen by users (except as formals of functions).
+        ''' 
+        ''' The arguments to list or pairlist are of the form value or tag = value. The functions return a list or 
+        ''' dotted pair list composed of its arguments with each value either tagged or untagged, depending on how 
+        ''' the argument was specified.
+        ''' 
+        ''' alist handles its arguments as if they described function arguments. So the values are not evaluated, 
+        ''' and tagged arguments with no value are allowed whereas list simply ignores them. alist is most often 
+        ''' used in conjunction with formals.
+        ''' 
+        ''' as.list attempts to coerce its argument to a list. For functions, this returns the concatenation of the 
+        ''' list of formal arguments and the function body. For expressions, the list of constituent elements is 
+        ''' returned. as.list is generic, and as the default method calls as.vector(mode = "list") for a non-list, 
+        ''' methods for as.vector may be invoked. as.list turns a factor into a list of one-element factors, keeping
+        ''' names. Other attributes may be dropped unless the argument already is a list or expression. (This is 
+        ''' inconsistent with functions such as as.character which always drop attributes, and is for efficiency since
+        ''' lists can be expensive to copy.)
+        ''' 
+        ''' is.list returns TRUE if and only if its argument is a list or a pairlist of length > 0. is.pairlist returns
+        ''' TRUE if and only if the argument is a pairlist (or NULL which is a pairlist, see below).
+        ''' 
+        ''' The "environment" method for as.list copies the name-value pairs (for names not beginning with a dot) from
+        ''' an environment to a named list. The user can request that all named objects are copied. Unless sorted = TRUE,
+        ''' the list is in no particular order (the order depends on the order of creation of objects and whether the 
+        ''' environment is hashed). No enclosing environments are searched. (Objects copied are duplicated so this 
+        ''' can be an expensive operation.) Note that there is an inverse operation, the as.environment() method for 
+        ''' list objects.
+        ''' 
+        ''' An empty pairlist, pairlist() is the same as NULL. This is different from list(): some but not all operations 
+        ''' will promote an empty pairlist to an empty list.
+        ''' 
+        ''' as.pairlist is implemented as as.vector(x, "pairlist"), and hence will dispatch methods for the generic 
+        ''' function as.vector. Lists are copied element-by-element into a pairlist and the names of the list used as 
+        ''' tags for the pairlist: the return value for other types of argument is undocumented.
+        ''' 
+        ''' list, is.list and is.pairlist are primitive functions.
+        ''' </remarks>
         <ExportAPI("list")>
         <RApiReturn(GetType(list))>
-        Public Function Rlist(<RListObjectArgument, RRawVectorArgument>
-                              slots As Object,
-                              Optional envir As Environment = Nothing) As Object
-
+        Public Function Rlist(<RListObjectArgument, RRawVectorArgument> slots As Object, Optional envir As Environment = Nothing) As Object
             Dim list As New Dictionary(Of String, Object)
             Dim slot As InvokeParameter
             Dim key As String
             Dim value As Object
             Dim parameters As InvokeParameter() = slots
             Dim uniqKeys As New Dictionary(Of String, Integer)
+            ' .symbol_names = TRUE
+            ' default use the symbol name as the tuple key
+            Dim listSymbolNames As Boolean = True
 
             If parameters Is Nothing Then
                 parameters = {}
+            Else
+                Dim checkSymbolName = parameters _
+                    .Where(Function(a)
+                               Return a.haveSymbolName(True) AndAlso
+                                    a.name = ".symbol_names" AndAlso
+                                    a.isSymbolAssign
+                           End Function) _
+                    .FirstOrDefault
+
+                If checkSymbolName IsNot Nothing Then
+                    listSymbolNames = CLRVector.asScalarLogical(checkSymbolName.Evaluate(envir))
+                End If
             End If
 
             For i As Integer = 0 To parameters.Length - 1
                 slot = parameters(i)
 
-                If slot.haveSymbolName(hasObjectList:=True) Then
+                If slot.haveSymbolName(hasObjectList:=listSymbolNames) Then
                     ' 不支持tuple
                     key = slot.name
                     value = slot.Evaluate(envir)
