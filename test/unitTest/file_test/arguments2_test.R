@@ -10,6 +10,8 @@ let receptor_cmd <- list(
 
 str(receptor_cmd);
 
+options(list.symbol_names = FALSE);
+
 str(list(
     prepare_receptor,
     prepare_receptor,

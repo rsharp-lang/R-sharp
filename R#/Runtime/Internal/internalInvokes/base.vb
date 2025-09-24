@@ -1879,35 +1879,18 @@ RE0:
             Dim value As Object
             Dim parameters As InvokeParameter() = slots
             Dim uniqKeys As New Dictionary(Of String, Integer)
-            ' .symbol_names = TRUE
+            ' list.symbol_names = TRUE
             ' default use the symbol name as the tuple key
-            Dim listSymbolNames As Boolean = True
+            Dim listSymbolNames As Boolean = envir.globalEnvironment.options _
+                .getOption("list.symbol_names", [default]:="TRUE") _
+                .ParseBoolean
 
             If parameters Is Nothing Then
                 parameters = {}
-            Else
-                Dim checkSymbolName = parameters _
-                    .Where(Function(a)
-                               Return a.haveSymbolName(True) AndAlso
-                                    a.name = ".symbol_names" AndAlso
-                                    a.isSymbolAssign
-                           End Function) _
-                    .FirstOrDefault
-
-                If checkSymbolName IsNot Nothing Then
-                    listSymbolNames = CLRVector.asScalarLogical(checkSymbolName.Evaluate(envir))
-                End If
             End If
 
             For i As Integer = 0 To parameters.Length - 1
                 slot = parameters(i)
-
-                If slot.haveSymbolName(True) AndAlso
-                    slot.name = ".symbol_names" AndAlso
-                    slot.isSymbolAssign Then
-
-                    Continue For
-                End If
 
                 If slot.haveSymbolName(hasObjectList:=listSymbolNames) Then
                         ' 不支持tuple
