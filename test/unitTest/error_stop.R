@@ -1,0 +1,1 @@
+stop("error of the operation:", "error message");

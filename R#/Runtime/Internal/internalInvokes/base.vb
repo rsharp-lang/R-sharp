@@ -3266,11 +3266,37 @@ RE0:
         ''' will be ignored, With a warning.
         ''' </remarks>
         <ExportAPI("stop")>
-        Public Function [stop](<RRawVectorArgument>
+        Public Function [stop](<RRawVectorArgument, RListObjectArgument>
                                Optional message As Object = "unexpected error",
                                Optional envir As Environment = Nothing) As Message
 
-            Return debug.stop(message, envir)
+            Dim clr_ex As Exception = Nothing
+            Dim rs_msg As String() = Nothing
+
+            If message IsNot Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception)) Then
+                ' call directly from a clr function
+                clr_ex = message
+            Else
+                Dim list As InvokeParameter() = DirectCast(message, InvokeParameter())
+
+                If list.TryCount = 1 Then
+                    Dim first As Object = list(0).Evaluate(envir)
+
+                    If first IsNot Nothing AndAlso first.GetType.IsInheritsFrom(GetType(Exception)) Then
+                        clr_ex = first
+                    Else
+                        rs_msg = CLRVector.asCharacter(first)
+                    End If
+                Else
+                    rs_msg = CLRVector.asCharacter(list.Select(Function(a) a.Evaluate(envir)).ToArray)
+                End If
+            End If
+
+            If clr_ex Is Nothing Then
+                Return debug.stop(rs_msg, envir)
+            Else
+                Return debug.stop(clr_ex, envir)
+            End If
         End Function
 
         ''' <summary>
