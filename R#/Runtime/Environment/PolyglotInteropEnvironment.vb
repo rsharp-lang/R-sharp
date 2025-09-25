@@ -61,6 +61,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports SMRUCC.Rsharp.Development.Package
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -93,7 +94,7 @@ Namespace Runtime
                 name:=symbol,
                 value:=hook_jsEnv(libs),
                 [readonly]:=True,
-                mode:=TypeCodes.list,
+                mode:=TypeCodes.clr_delegate,
                 [overrides]:=True
             )
         End Sub
@@ -102,16 +103,16 @@ Namespace Runtime
             Dim t As String() = symbol.Split("."c)
 
             If t.Length = 1 Then
-                funcSymbols(symbol) = New Symbol(func)
+                Call TryGetInteropSymbol(symbol).setNodeClosure(func)
             Else
                 ' add to symbols
                 Call AddInteropSymbol(t, func)
             End If
         End Sub
 
-        Private Function TryGetInteropSymbol(s0 As String) As list
+        Private Function TryGetInteropSymbol(s0 As String) As SymbolPrefixTree
             If Not symbols.CheckSymbolExists(s0) Then
-                Dim empty_list As New list With {.slots = New Dictionary(Of String, Object)}
+                Dim empty_list As New SymbolPrefixTree(s0)
                 Dim interop_symbol As New Symbol(s0, empty_list, TypeCodes.list, [readonly]:=True)
 
                 Call symbols.Add(interop_symbol)
@@ -121,41 +122,36 @@ Namespace Runtime
         End Function
 
         Private Sub AddInteropSymbol(ref As String(), rfunc As RMethodInfo)
-            Dim tree As list = TryGetInteropSymbol(ref(Scan0))
+            Dim tree As SymbolPrefixTree = TryGetInteropSymbol(ref(Scan0))
             Dim walk = ref.Skip(1).ToArray
 
             Call hook_interop_tree(env:=tree, t:=walk, target_obj:=rfunc)
         End Sub
 
         Public Const pkg_ref_libs = "$_pkg_ref@-<libs!!!!!>*"
-        Public Const js_special_call = "$_js_special_calls?*"
 
-        Private Shared Sub hook_interop_tree(env As list, t As String(), target_obj As Object)
-            Dim modObj As list = env
-            Dim interop_target As String = t.Last
+        Private Shared Sub hook_interop_tree(env As SymbolPrefixTree, t As String(), target_obj As Object)
+            Dim modObj As SymbolPrefixTree = env
 
             ' 20230508 the last token in the R# name is the 
             ' function object itself, do not include into the
             ' tree path
-            For Each ti As String In t.Take(t.Length - 1)
+            For Each ti As String In t
                 If Not modObj.hasName(ti) Then
-                    Call modObj.add(ti, New list With {
-                       .slots = New Dictionary(Of String, Object)
-                    })
+                    Call modObj.add(ti)
                 End If
 
-                Dim value = modObj.getByName(ti)
+                Dim value As Object = modObj.GetByName(ti)
 
-                If Not TypeOf value Is list Then
-                    modObj.slots(ti) = New list With {.slots = New Dictionary(Of String, Object)}
-                    modObj = modObj.slots(ti)
-                    modObj.add(js_special_call, value)
+                If Not TypeOf value Is SymbolPrefixTree Then
+                    modObj.add(ti)
+                    modObj.setNodeClosure(value)
                 Else
                     modObj = value
                 End If
             Next
 
-            modObj.slots(interop_target) = target_obj
+            Call modObj.setNodeClosure(target_obj)
         End Sub
 
         ''' <summary>
@@ -163,12 +159,8 @@ Namespace Runtime
         ''' </summary>
         ''' <param name="libs"></param>
         ''' <returns></returns>
-        Public Shared Function hook_jsEnv(ParamArray libs As Type()) As list
-            Dim env As New list With {
-                .slots = New Dictionary(Of String, Object) From {
-                    {pkg_ref_libs, libs}
-                }
-            }
+        Public Shared Function hook_jsEnv(ParamArray libs As Type()) As SymbolPrefixTree
+            Dim env As New SymbolPrefixTree(pkg_ref_libs, libs)
 
             For Each type As Type In libs
                 For Each func As NamedValue(Of MethodInfo) In ImportsPackage.GetAllApi(type)
@@ -181,5 +173,66 @@ Namespace Runtime
 
             Return env
         End Function
+    End Class
+
+    Public Class SymbolPrefixTree
+
+        ReadOnly parent As SymbolPrefixTree
+        ReadOnly tree As New Dictionary(Of String, SymbolPrefixTree)
+        ReadOnly name As String
+        ReadOnly libs As Type()
+
+        Dim closure As RMethodInfo
+
+        Default Public ReadOnly Property GetByName(name As String) As Object
+            Get
+                If tree.ContainsKey(name) Then
+                    Return tree(name)
+                ElseIf name = PolyglotInteropEnvironment.pkg_ref_libs Then
+                    Return libs
+                Else
+                    Return closure
+                End If
+            End Get
+        End Property
+
+        Sub New(name As String)
+            Me.name = name
+        End Sub
+
+        Private Sub New(name As String, parent As SymbolPrefixTree)
+            Me.name = name
+            Me.parent = parent
+        End Sub
+
+        Sub New(name As String, libs As Type())
+            Me.name = name
+            Me.libs = libs
+        End Sub
+
+        Public Sub setNodeClosure(expr As RMethodInfo)
+            closure = expr
+        End Sub
+
+        Public Function hasName(name As String) As Boolean
+            Return tree.ContainsKey(name)
+        End Function
+
+        Public Sub add(name As String)
+            Call tree.Add(name, New SymbolPrefixTree(name, parent:=Me))
+        End Sub
+
+        Public Overrides Function ToString() As String
+            If parent Is Nothing Then
+                Return name
+            Else
+                Return $"{parent}.{name}"
+            End If
+        End Function
+
+        Public Shared Narrowing Operator CType(tree As SymbolPrefixTree) As RMethodInfo
+            Return tree.closure
+        End Operator
+
     End Class
 End Namespace

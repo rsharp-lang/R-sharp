@@ -149,26 +149,28 @@ Namespace Runtime.Internal
         Private Sub New()
         End Sub
 
+        Private Shared Sub MakeIndex(baseModule As Type)
+            For Each m As RMethodInfo In ImportsPackage _
+               .GetAllApi(baseModule, includesInternal:=True) _
+               .Select(Function(mi) New RMethodInfo(mi))
+
+                If index.ContainsKey(m.name) Then
+                    Throw New DuplicateNameException($"duplicated function with name: '{m.name}'!")
+                End If
+
+                Call index.Add(m.name, m)
+            Next
+        End Sub
+
         ''' <summary>
         ''' load an internal package module
         ''' </summary>
         ''' <param name="baseModule"></param>
         Public Shared Sub pushEnvir(baseModule As Type)
-            Call ImportsPackage _
-               .GetAllApi(baseModule, includesInternal:=True) _
-               .Select(Function(m)
-                           Return New RMethodInfo(m)
-                       End Function) _
-               .DoEach(Sub(m)
-                           If index.ContainsKey(m.name) Then
-                               Throw New DuplicateNameException($"duplicated function with name: '{m.name}'!")
-                           End If
-
-                           Call index.Add(m.name, m)
-                       End Sub)
-
             ' run main function
             Dim main As MethodInfo = RunDllEntryPoint.GetDllMainFunc(dll:=baseModule,)
+
+            Call MakeIndex(baseModule)
 
             If Not main Is Nothing Then
                 Call main.Invoke(Nothing, {})

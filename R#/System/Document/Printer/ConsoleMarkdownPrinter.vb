@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::d126e2282af1fe4c69c2c6f8ddfe2206, R#\System\Document\Printer\ConsoleMarkdownPrinter.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 202
-    '    Code Lines: 146 (72.28%)
-    ' Comment Lines: 13 (6.44%)
-    '    - Xml Docs: 69.23%
-    ' 
-    '   Blank Lines: 43 (21.29%)
-    '     File Size: 7.33 KB
+' Summaries:
 
 
-    '     Module ConsoleMarkdownPrinter
-    ' 
-    '         Function: getMarkdownDocs, TryGetHelpDocument
-    ' 
-    '         Sub: printConsole, (+2 Overloads) printDocs, printFuncBody, PrintText
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 202
+'    Code Lines: 146 (72.28%)
+' Comment Lines: 13 (6.44%)
+'    - Xml Docs: 69.23%
+' 
+'   Blank Lines: 43 (21.29%)
+'     File Size: 7.33 KB
+
+
+'     Module ConsoleMarkdownPrinter
+' 
+'         Function: getMarkdownDocs, TryGetHelpDocument
+' 
+'         Sub: printConsole, (+2 Overloads) printDocs, printFuncBody, PrintText
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -89,6 +89,7 @@ Namespace Development
                 .Select(Function(par) par.type.raw) _
                 .GroupBy(Function(type) type.FullName) _
                 .ToArray
+            Dim indent_space As New String(" "c, 6)
 
             If enums.Length > 0 Then
                 Call Console.WriteLine(" where have enum values:")
@@ -98,7 +99,10 @@ Namespace Development
                     Call Console.WriteLine($"{New String(" "c, 2)}let {[enum].name} as integer = {{")
 
                     For Each value As Object In [enum].values
-                        Call Console.WriteLine($"{New String(" "c, 6)}{value.ToString} = {[enum].IntValue(value)};")
+                        Dim desc As String = DirectCast(value, [Enum]).Description
+                        Dim toStr As String = value.ToString
+
+                        Call Console.WriteLine($"{indent_space}{If(desc.StringEmpty, "", $"[{desc}] ")}{toStr} = {[enum].IntValue(value)};")
                     Next
 
                     Call Console.WriteLine($"{New String(" "c, 2)}}}")
@@ -166,7 +170,7 @@ Namespace Development
             Call Console.WriteLine()
 
             For Each param As NamedValue In help.parameters.SafeQuery
-                Call markdown.DoPrint($"``{param.name}``: " & If(param.text, "").Trim(" "c, Ascii.CR, Ascii.LF), 3)
+                Call markdown.DoPrint($"``{param.name}``: " & If(param.text, "").Trim(" "c, ASCII.CR, ASCII.LF), 3)
             Next
 
             Call Console.WriteLine()

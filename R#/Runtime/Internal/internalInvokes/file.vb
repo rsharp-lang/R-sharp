@@ -1,77 +1,77 @@
 ﻿#Region "Microsoft.VisualBasic::a2dd673a7c8aa669ed19bae613917de9, R#\Runtime\Internal\internalInvokes\file.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1973
-    '    Code Lines: 1142 (57.88%)
-    ' Comment Lines: 625 (31.68%)
-    '    - Xml Docs: 87.84%
-    ' 
-    '   Blank Lines: 206 (10.44%)
-    '     File Size: 89.28 KB
+' Summaries:
 
 
-    '     Enum endianness
-    ' 
-    '         big, little
-    ' 
-    '  
-    ' 
-    ' 
-    ' 
-    '     Module file
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: [erase], basename, buffer, bytes, close
-    '                   dataUri, dir_exists, dirCopy, dirCreate, dirname
-    '                   exists, file, file_allocate, file_ext, filecopy
-    '                   fileExt, fileinfo, fileInfoByFile, filepath, fileRemove
-    '                   filesize, getRelativePath, GetSha1Hash, getwd, gzcheck
-    '                   gzfile, handleWriteLargeTextStream, isSystemDir, listDirs, listFiles
-    '                   loadListInternal, NextTempToken, normalizeFileName, normalizePath, openDir
-    '                   openGzip, openTargzip, openZip, readBin, readBinDataframe
-    '                   readBinOverloads, readFromFile, readFromStream, readLines, readList
-    '                   readText, Rhome, saveList, scanZipFiles, setwd
-    '                   tempdir, tempfile, unlinks, writeBin, writeBinDataframe
-    '                   writeLines
-    ' 
-    '         Sub: fileRename
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1973
+'    Code Lines: 1142 (57.88%)
+' Comment Lines: 625 (31.68%)
+'    - Xml Docs: 87.84%
+' 
+'   Blank Lines: 206 (10.44%)
+'     File Size: 89.28 KB
+
+
+'     Enum endianness
+' 
+'         big, little
+' 
+'  
+' 
+' 
+' 
+'     Module file
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: [erase], basename, buffer, bytes, close
+'                   dataUri, dir_exists, dirCopy, dirCreate, dirname
+'                   exists, file, file_allocate, file_ext, filecopy
+'                   fileExt, fileinfo, fileInfoByFile, filepath, fileRemove
+'                   filesize, getRelativePath, GetSha1Hash, getwd, gzcheck
+'                   gzfile, handleWriteLargeTextStream, isSystemDir, listDirs, listFiles
+'                   loadListInternal, NextTempToken, normalizeFileName, normalizePath, openDir
+'                   openGzip, openTargzip, openZip, readBin, readBinDataframe
+'                   readBinOverloads, readFromFile, readFromStream, readLines, readList
+'                   readText, Rhome, saveList, scanZipFiles, setwd
+'                   tempdir, tempfile, unlinks, writeBin, writeBinDataframe
+'                   writeLines
+' 
+'         Sub: fileRename
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -85,6 +85,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.UnixBash
@@ -441,7 +442,7 @@ Namespace Runtime.Internal.Invokes
                         Call result.Add(True)
                     Else
                         If verbose Then
-                            Call $"[file copy error] {App.GetLastError.Message}".Warning
+                            Call $"[file copy error] {App.GetLastError.Message}".warning
                         End If
                         Call result.Add(from(i))
                     End If
@@ -887,7 +888,7 @@ Namespace Runtime.Internal.Invokes
                                   Optional mode$ = "0777") As Boolean
 
             If showWarnings AndAlso path.DirectoryExists Then
-                Call $"in dir.create(""{path}"") : '{path}' already exists".Warning
+                Call $"in dir.create(""{path}"") : '{path}' already exists".warning
             End If
 
             Call path.MakeDir
@@ -909,7 +910,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' Read Text Lines from a Connection
+        ''' ### Read Text Lines from a Connection
         ''' 
         ''' Read some or all text lines from a connection.
         ''' </summary>
@@ -926,14 +927,15 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("readLines")>
         <RApiReturn(GetType(String))>
-        Public Function readLines(con As Object,
+        Public Function readLines(<RDefaultExpression> Optional con As Object = "~stdin()",
+                                  Optional n As Integer = -1,
                                   Optional encoding As Encodings = Encodings.UTF8,
                                   Optional stream As Boolean = False,
                                   Optional strict As Boolean? = Nothing,
                                   Optional env As Environment = Nothing) As Object
 
             If TypeOf con Is Stream Then
-                Return readFromStream(DirectCast(con, Stream), stream)
+                Return readFromStream(DirectCast(con, Stream), n, stream)
             ElseIf TypeOf con Is WebResponseResult Then
                 ' read web result html text into multuple text lines
                 Return DirectCast(con, WebResponseResult).html.LineTokens
@@ -942,7 +944,7 @@ Namespace Runtime.Internal.Invokes
 
                 If env.globalEnvironment.strictOption(strict) Then
                     If Not p.fs.FileExists(p.filepath) Then
-                        Call $"the specific file '{p.filepath}' for read text lines is missing from filesystem: {p.fs.ToString}".Warning
+                        Call $"the specific file '{p.filepath}' for read text lines is missing from filesystem: {p.fs.ToString}".warning
                         Return New String() {}
                     End If
                 End If
@@ -974,15 +976,38 @@ Namespace Runtime.Internal.Invokes
             Return filepath.ReadAllLines(encoding.CodePage)
         End Function
 
-        Private Function readFromStream(con As Stream, stream As Boolean) As Object
-            Dim text As New StreamReader(con)
+        Private Function readFromStream(con As Stream, n As Integer, stream As Boolean) As Object
+            ' 20250922 there is a bug about the streamreader object:
+            ' it is buffered reader: for example if the given stream length is 15, but contains 5 lines of text data,
+            ' then this buffered stream reader will read 1024 bytes at once, the stream position will be move to 15.
+            ' in this function call we just needs read (n=1) one line of text data, but the stream position is in 15 now,
+            ' so next time we try to read the stream, which its position is in 15 bytes, which is the end of file,
+            ' this function it will return nothing.
+            ' we use the unbuffered stream reader at here for avoid such problem.
+            Dim text As New UnbufferedStreamReader(con)
             Dim line As Value(Of String) = ""
+            Dim assert As Func(Of Boolean)
+
+            If n < 0 Then
+                assert = Function() True
+            Else
+                assert = Function()
+                             If n > 0 Then
+                                 n -= 1
+                                 Return True
+                             Else
+                                 Return False
+                             End If
+                         End Function
+            End If
 
             If stream Then
                 Return Iterator Function() As IEnumerable(Of String)
-                           Do While True
+                           Do While assert()
                                If Not (line = text.ReadLine) Is Nothing Then
                                    Yield CType(line, String)
+                               Else
+                                   Exit Do
                                End If
                            Loop
                        End Function() _
@@ -991,9 +1016,11 @@ Namespace Runtime.Internal.Invokes
             Else
                 Dim lines As New List(Of String)
 
-                Do While True
+                Do While assert()
                     If Not (line = text.ReadLine) Is Nothing Then
                         Call lines.Add(line)
+                    Else
+                        Exit Do
                     End If
                 Loop
 
@@ -1371,6 +1398,48 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <returns>
+        ''' stdin(), stdout() and stderr() return connection objects.
+        ''' </returns>
+        ''' <remarks>
+        ''' stdin(), stdout() and stderr() are standard connections corresponding to input, output and error on the console 
+        ''' respectively (and not necessarily to file streams). They are text-mode connections of class "terminal" which 
+        ''' cannot be opened or closed, and are read-only, write-only and write-only respectively. The stdout() and stderr() 
+        ''' connections can be re-directed by sink (and in some circumstances the output from stdout() can be split: see the 
+        ''' help page).
+        ''' 
+        ''' The encoding For stdin() When redirected can be Set by the command-line flag --encoding.
+        ''' 
+        ''' nullfile() returns filename of the null device ("/dev/null" on Unix, "nul:" on Windows).
+        ''' 
+        ''' showConnections returns a matrix Of information. If a connection Object has been lost Or forgotten, getConnection 
+        ''' will take a row number from the table And Return a connection Object For that connection, which can be used To 
+        ''' close the connection, For example. However, If there Is no R level Object referring To the connection it will be 
+        ''' closed automatically at the Next garbage collection (except For gzcon connections).
+        ''' 
+        ''' closeAllConnections closes(And destroys) all user connections, restoring all sink diversions As it does so.
+        ''' 
+        ''' isatty returns True If the connection Is one Of the Class "terminal" connections And it Is apparently connected To 
+        ''' a terminal, otherwise False. This may Not be reliable In embedded applications, including GUI consoles.
+        ''' 
+        ''' getAllConnections returns a sequence Of Integer connection descriptors For use With getConnection, corresponding 
+        ''' To the row names Of the table returned by showConnections(all = True).
+        ''' 
+        ''' stdin() refers to the ‘console’ and not to the C-level ‘stdin’ of the process. The distinction matters in GUI 
+        ''' consoles (which may not have an active ‘stdin’, and if they do it may not be connected to console input), and also 
+        ''' in embedded applications. If you want access to the C-level file stream ‘stdin’, use file("stdin").
+        ''' 
+        ''' When R Is reading a script from a file, the file Is the 'console’: this is traditional usage to allow in-line 
+        ''' data (see ‘An Introduction to R’ for an example).
+        ''' </remarks>
+        <ExportAPI("stdin")>
+        Public Function stdin_dev() As Stream
+            Return Console.OpenStandardInput
+        End Function
+
+        ''' <summary>
         ''' Functions to create, open and close connections, i.e., 
         ''' "generalized files", such as possibly compressed files, 
         ''' URLs, pipes, etc.
@@ -1390,7 +1459,7 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("file")>
         Public Function file(description$,
-                             Optional open As FileMode = FileMode.OpenOrCreate,
+                             Optional open As FileModeDescriptor = FileModeDescriptor.Open,
                              Optional truncate As Boolean = False,
                              Optional repo As IFileSystemEnvironment = Nothing) As Stream
 
@@ -1398,7 +1467,7 @@ Namespace Runtime.Internal.Invokes
                 ' read from console stdinput
                 ' can not truncated
                 If truncate Then
-                    Call $"you can'nt truncate the standard input stream.".Warning
+                    Call $"you can'nt truncate the standard input stream.".warning
                 End If
 
                 Return Console.OpenStandardInput
@@ -1406,7 +1475,7 @@ Namespace Runtime.Internal.Invokes
                 ' write to console stdoutput
                 ' can not truncated
                 If truncate Then
-                    Call $"you can'nt truncate the standard output stream.".Warning
+                    Call $"you can'nt truncate the standard output stream.".warning
                 End If
 
                 Return Console.OpenStandardOutput
@@ -1417,7 +1486,7 @@ Namespace Runtime.Internal.Invokes
                     Return description.Open(open, doClear:=truncate)
                 ElseIf open = FileMode.Append Then
                     If description.FileExists Then
-                        Dim exists_file As New FileStream(description, open)
+                        Dim exists_file As New FileStream(description, CType(CInt(open), FileMode))
                         ' seek to end of file for append mode
                         exists_file.Seek(exists_file.Length, SeekOrigin.Begin)
                         Return exists_file
@@ -1810,7 +1879,7 @@ Namespace Runtime.Internal.Invokes
                                  <RDefaultExpression>
                                  Optional tmpdir$ = "~tempdir()",
                                  <RRawVectorArgument>
-                                 Optional fileext As Object = ".tmp",
+                                 Optional fileext As Object = "",
                                  Optional env As Environment = Nothing) As Object
 
             Dim patterns As String() = CLRVector.asCharacter(pattern)
@@ -1952,7 +2021,7 @@ Namespace Runtime.Internal.Invokes
                 Call file.DeleteFile
             Next
             For Each folder As String In dir.ListDirectory(fsOptions.SearchAllSubDirectories)
-                Call Directory.Delete(folder)
+                Call Global.System.IO.Directory.Delete(folder, recursive:=True)
             Next
 
             Return Nothing
