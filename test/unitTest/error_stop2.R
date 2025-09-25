@@ -1,0 +1,1 @@
+stop(c("error of the operation:", "error message"));

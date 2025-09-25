@@ -764,6 +764,7 @@ Namespace Runtime.Internal.Invokes
                                 Optional invisible As Boolean = True,
                                 Optional timeout As Single = 0,
                                 Optional clr As Boolean = False,
+                                Optional shell As Boolean = False,
                                 Optional verbose As Boolean? = False,
                                 Optional env As Environment = Nothing) As Object
 
@@ -777,7 +778,7 @@ Namespace Runtime.Internal.Invokes
 
             Dim arguments As String = CStr(args)
             Dim inputStr As String() = CLRVector.asCharacter(input)
-            Dim std_out As String
+            Dim std_out As String = Nothing
             Dim show_output_on_console As Boolean = stdout = "console" OrElse stdout = "std"
 
             If env.globalEnvironment.debugMode Then
@@ -827,7 +828,17 @@ Namespace Runtime.Internal.Invokes
                     Call base.print("run a UNIX program.",, env)
                 End If
 
-                std_out = PipelineProcess.Call(executative, arguments, [in]:=inputStr.JoinBy(vbLf))
+                If shell Then
+                    Call PipelineProcess.ExecSub(
+                        app:=executative,
+                        args:=arguments,
+                        onReadLine:=AddressOf App.DoNothing,
+                        [in]:=inputStr.JoinBy(vbLf),
+                        shell:=True
+                    )
+                Else
+                    std_out = PipelineProcess.Call(executative, arguments, [in]:=inputStr.JoinBy(vbLf))
+                End If
             End If
 
             Return std_out
