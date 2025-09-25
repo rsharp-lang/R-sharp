@@ -114,7 +114,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim result As Object = program.Execute(envir)
-            Dim on_exit As Expression = TryCast(envir.acceptorArguments.TryGetValue(FunctionExitCode, mute:=True), Expression)
+            Dim runtime = envir.acceptorArguments
+            ' 20250925
+            ' on.exit flag must be removed from the current runtime
+            ' or deadloop will be enterdue to the reason of this
+            ' flag always exists inside current environment stack
+            Dim on_exit As Expression = TryCast(runtime.TryPopOut(FunctionExitCode), Expression)
 
             If Not on_exit Is Nothing Then
                 Dim result2 As Object = on_exit.Evaluate(envir)
