@@ -826,6 +826,7 @@ Namespace Runtime.Internal.Invokes
             Else
                 If env.globalEnvironment.debugMode Then
                     Call base.print("run a UNIX program.",, env)
+                    Call base.print($"use shell run: {shell.ToString.ToLower}",, env)
                 End If
 
                 If shell Then
