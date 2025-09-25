@@ -3288,7 +3288,10 @@ RE0:
                         rs_msg = CLRVector.asCharacter(first)
                     End If
                 Else
-                    rs_msg = CLRVector.asCharacter(list.Select(Function(a) a.Evaluate(envir)).ToArray)
+                    rs_msg = list _
+                        .Select(Function(a) CLRVector.asCharacter(a.Evaluate(envir))) _
+                        .IteratesALL _
+                        .ToArray
                 End If
             End If
 
