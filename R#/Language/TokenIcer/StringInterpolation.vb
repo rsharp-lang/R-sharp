@@ -71,7 +71,7 @@ Namespace Language.TokenIcer
 
         Dim code As CharPtr
         Dim buffer As New List(Of Char)
-        Dim escape As Scanner.Escapes
+        Dim escape As Escapes
         Dim opts As SyntaxBuilderOptions
 
         Public ReadOnly Property isEscapeSplash As Boolean
@@ -91,7 +91,7 @@ Namespace Language.TokenIcer
 
             code = [string]
             buffer *= 0
-            escape = New Scanner.Escapes With {.[string] = True}
+            escape = New Escapes With {.[string] = True}
 
             Do While Not code
                 If Not (token = walkChar(++code)) Is Nothing Then
