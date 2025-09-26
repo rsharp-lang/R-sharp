@@ -107,22 +107,6 @@ Namespace Language.TokenIcer
         Protected ReadOnly nullLiteral As New Index(Of String)(RNullLiteral)
         Protected ReadOnly shortOperators As New Index(Of Char)(RshortOperators)
 
-        Friend Class Escapes
-
-            Friend comment, [string] As Boolean
-            Friend stringEscape As Char
-
-            Public Overrides Function ToString() As String
-                If comment Then
-                    Return "comment"
-                ElseIf [string] Then
-                    Return $"{stringEscape}string{stringEscape}"
-                Else
-                    Return "code"
-                End If
-            End Function
-        End Class
-
         Private ReadOnly Property lastCharIsEscapeSplash As Boolean
             Get
                 Return buffer.GetLastOrDefault = "\"c
