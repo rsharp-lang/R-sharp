@@ -53,6 +53,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Emit.Marshal
 Imports Microsoft.VisualBasic.Language
@@ -60,7 +61,7 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Namespace Language.Syntax.SyntaxParser
 
-    Module Splitter
+    Public Module Splitter
 
         Public Function CheckOfStackOpenClosePair(open As Token, close As Token) As Boolean
             If Not (open.name = TokenType.open AndAlso close.name = TokenType.close) Then
@@ -77,9 +78,10 @@ Namespace Language.Syntax.SyntaxParser
         End Function
 
         <Extension>
-        Friend Function SplitByTopLevelDelimiter(tokens As IEnumerable(Of Token), delimiter As TokenType, ' <Out> ByRef [error] As Exception,
+        Public Function SplitByTopLevelDelimiter(tokens As IEnumerable(Of Token), delimiter As TokenType,
                                                  Optional includeKeyword As Boolean = False,
                                                  Optional tokenText$ = Nothing,
+                                                 <Out>
                                                  Optional ByRef err As Exception = Nothing) As List(Of Token())
             Dim blocks As New List(Of Token())
             Dim buf As New List(Of Token)
@@ -126,7 +128,10 @@ Namespace Language.Syntax.SyntaxParser
                 ' If isDelimiter(t) OrElse (includeKeyword AndAlso (t.name = TokenType.keyword AndAlso (Not i.Current Is Nothing) AndAlso i.Current.name <> TokenType.open)) Then
                 If isDelimiter(t) OrElse (includeKeyword AndAlso t.name = TokenType.keyword) Then
                     If (includeKeyword AndAlso t.name = TokenType.keyword) Then
-                        If (Not i.Current Is Nothing) AndAlso i.Current.name = TokenType.open AndAlso t.text Like LINQKeywords Then
+                        If (Not i.Current Is Nothing) AndAlso
+                            i.Current.name = TokenType.open AndAlso
+                            t.text Like LINQKeywords Then
+
                             GoTo Skip
                         End If
                     End If
