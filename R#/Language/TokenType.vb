@@ -131,5 +131,10 @@ Namespace Language
         ''' 右边的括号与大括号
         ''' </summary>
         close
+
+        ''' <summary>
+        ''' ... line continue token for matlab/octave language
+        ''' </summary>
+        lineContinue
     End Enum
 End Namespace
