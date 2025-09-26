@@ -26,6 +26,13 @@
         ''' </summary>
         Public isBlockComment As Boolean
 
+        Public Sub reset()
+            comment = False
+            [string] = False
+            stringEscape = Nothing
+            isBlockComment = False
+        End Sub
+
         Public Overrides Function ToString() As String
             If comment Then
                 Return "comment"
