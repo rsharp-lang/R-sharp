@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6f4f75f3e7740e47c4b17f27b92b0d09, R#\Runtime\Internal\internalInvokes\base.vb"
+﻿#Region "Microsoft.VisualBasic::bfb27897ebe5429b8dfce673b1535e87, R#\Runtime\Internal\internalInvokes\base.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 3746
-    '    Code Lines: 1614 (43.09%)
-    ' Comment Lines: 1830 (48.85%)
-    '    - Xml Docs: 83.88%
+    '   Total Lines: 3894
+    '    Code Lines: 1670 (42.89%)
+    ' Comment Lines: 1911 (49.08%)
+    '    - Xml Docs: 83.78%
     ' 
-    '   Blank Lines: 302 (8.06%)
-    '     File Size: 171.52 KB
+    '   Blank Lines: 313 (8.04%)
+    '     File Size: 180.14 KB
 
 
     '     Module base
@@ -55,13 +55,13 @@
     '                   isFunction, isList, isNA, isNull, isRVector
     '                   isTRUE, join_data, length, library, logical
     '                   makeNames, names, ncol, neg, nrow
-    '                   numeric, objectAddInvoke, options, options_flush, print
-    '                   range, raws, rbind, Rdataframe, rep
-    '                   rep_int, rep_len, replace, Rlist, Robj_dimension
-    '                   rownames, rowwise, seq, setOptionsParameters, sink
-    '                   sink_number, source, sQuote, str, summary
-    '                   t, uniqueNames, unitOfT, ValueAt, warning
-    '                   year
+    '                   numeric, objectAddInvoke, on_exit, options, options_flush
+    '                   print, range, raws, rbind, Rdataframe
+    '                   rep, rep_int, rep_len, replace, Rlist
+    '                   Robj_dimension, rownames, rowwise, seq, setOptionsParameters
+    '                   sink, sink_number, source, sQuote, str
+    '                   summary, t, uniqueNames, unitOfT, ValueAt
+    '                   warning, year
     ' 
     '         Sub: println_message, warnings
     '         Class PrinterOptions

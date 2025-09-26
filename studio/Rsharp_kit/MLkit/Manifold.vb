@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2355bccadb8d6199c91d3419011af313, studio\Rsharp_kit\MLkit\Manifold.vb"
+﻿#Region "Microsoft.VisualBasic::0603056fa9761bb032c9fd66ebc50e01, studio\Rsharp_kit\MLkit\Manifold.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 327
-    '    Code Lines: 221 (67.58%)
-    ' Comment Lines: 68 (20.80%)
+    '   Total Lines: 332
+    '    Code Lines: 225 (67.77%)
+    ' Comment Lines: 68 (20.48%)
     '    - Xml Docs: 95.59%
     ' 
-    '   Blank Lines: 38 (11.62%)
-    '     File Size: 13.79 KB
+    '   Blank Lines: 39 (11.75%)
+    '     File Size: 13.94 KB
 
 
     ' Module Manifold
@@ -48,7 +48,7 @@
     '     Function: asGraph, exportUmapTable, loadUMAP, saveUMAP, saveUMAP_1
     '               umapProjection
     ' 
-    '     Sub: Main
+    '     Sub: Main, setMaxTreeDepth
     ' 
     ' /********************************************************************************/
 

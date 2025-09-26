@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a989c20321af62af828d1a63e5693f17, R#\Runtime\Environment\PolyglotInteropEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::286bea2c4244fe04d17f7da27494233f, R#\Runtime\Environment\PolyglotInteropEnvironment.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 127
-    '    Code Lines: 92 (72.44%)
-    ' Comment Lines: 13 (10.24%)
+    '   Total Lines: 180
+    '    Code Lines: 132 (73.33%)
+    ' Comment Lines: 13 (7.22%)
     '    - Xml Docs: 61.54%
     ' 
-    '   Blank Lines: 22 (17.32%)
-    '     File Size: 4.72 KB
+    '   Blank Lines: 35 (19.44%)
+    '     File Size: 6.14 KB
 
 
     '     Class PolyglotInteropEnvironment
@@ -50,6 +50,14 @@
     '         Function: hook_jsEnv, TryGetInteropSymbol
     ' 
     '         Sub: (+3 Overloads) AddInteropSymbol, hook_interop_tree
+    ' 
+    '     Class SymbolPrefixTree
+    ' 
+    '         Constructor: (+3 Overloads) Sub New
+    ' 
+    '         Function: hasName, ToString
+    ' 
+    '         Sub: add, setNodeClosure
     ' 
     ' 
     ' /********************************************************************************/

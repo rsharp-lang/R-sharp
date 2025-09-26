@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9af7205c6bd8b3e1c2abe628a6b52e92, studio\Rsharp_IL\njl\Language\JlScanner.vb"
+﻿#Region "Microsoft.VisualBasic::36ce58f333ac4f38b09a6e9cebac6719, studio\Rsharp_IL\njl\Language\JlScanner.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 30
-    '    Code Lines: 24 (80.00%)
+    '   Total Lines: 29
+    '    Code Lines: 23 (79.31%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 6 (20.00%)
-    '     File Size: 1.06 KB
+    '   Blank Lines: 6 (20.69%)
+    '     File Size: 1.05 KB
 
 
     '     Class JlScanner

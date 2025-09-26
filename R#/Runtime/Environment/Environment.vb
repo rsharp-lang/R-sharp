@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::74a0b95f96c6021dc9b88c487e4da212, R#\Runtime\Environment\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::174d06796b59715b6a6b4685f6a90389, R#\Runtime\Environment\Environment.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 873
-    '    Code Lines: 437 (50.06%)
-    ' Comment Lines: 331 (37.92%)
-    '    - Xml Docs: 62.84%
+    '   Total Lines: 875
+    '    Code Lines: 437 (49.94%)
+    ' Comment Lines: 333 (38.06%)
+    '    - Xml Docs: 62.46%
     ' 
-    '   Blank Lines: 105 (12.03%)
-    '     File Size: 37.97 KB
+    '   Blank Lines: 105 (12.00%)
+    '     File Size: 38.18 KB
 
 
     '     Class Environment

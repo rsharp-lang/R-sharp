@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3182ba7b93070c6c9afcda0562933fd9, Library\base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::cb2cc0ce34d1aa166c9f2f314461db75, Library\base\utils\dataframe.vb"
 
     ' Author:
     ' 
@@ -40,10 +40,10 @@
     '    - Xml Docs: 90.64%
     ' 
     '   Blank Lines: 132 (12.69%)
-    '     File Size: 41.04 KB
+    '     File Size: 41.05 KB
 
 
-    ' Module dataframe
+    ' Module dataframeTools
     ' 
     '     Function: anyToFeatureFrame, appendCells, appendRow, AsDataframeRaw, asIndexList
     '               cells, characterLoader, colnames, column, create_tableFrame

@@ -1,60 +1,60 @@
-﻿#Region "Microsoft.VisualBasic::915b9854dfc6b9200d3bfae517dc43cb, Library\graphics\Plot2D\plots.vb"
+﻿#Region "Microsoft.VisualBasic::067fb2e8148d8fae7f4595559215f90a, Library\graphics\Plot2D\plots.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 1287
-'    Code Lines: 1011 (78.55%)
-' Comment Lines: 147 (11.42%)
-'    - Xml Docs: 85.03%
-' 
-'   Blank Lines: 129 (10.02%)
-'     File Size: 58.84 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module plots
-' 
-'     Function: barplot, charPie, ContourPlot, CreateSerial, doViolinPlot
-'               findNumberVector, measureDataTable, modelWithClass, modelWithoutClass, plot_binBox
-'               plot_categoryBars, plot_corHeatmap, plot_deSolveResult, plot_hclust, plot_heatmap
-'               plotArray, plotContourLayers, plotFormula, plotLinearYFit, plotLmCall
-'               plotODEResult, plotPieChart, PlotPolygon, plotSerials, plotVector
-'               printImage, UpSetPlot
-' 
-'     Sub: Main, TryGetClassData
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 1329
+    '    Code Lines: 1046 (78.71%)
+    ' Comment Lines: 149 (11.21%)
+    '    - Xml Docs: 83.89%
+    ' 
+    '   Blank Lines: 134 (10.08%)
+    '     File Size: 60.79 KB
+
+
+    ' Module plots
+    ' 
+    '     Function: barplot, charPie, ContourPlot, CreateSerial, doViolinPlot
+    '               findNumberVector, measureDataTable, modelWithClass, modelWithoutClass, plot_binBox
+    '               plot_categoryBars, plot_corHeatmap, plot_deSolveResult, plot_hclust, plot_heatmap
+    '               plotArray, plotContourLayers, plotFormula, plotLinearYFit, plotLmCall
+    '               plotODEResult, plotPieChart, PlotPolygon, plotSerials, plotVector
+    '               printImage, UpSetPlot
+    ' 
+    '     Sub: Main, TryGetClassData
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

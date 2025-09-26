@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::848b9c08f02b9751d2a4579175d094ba, Library\base\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::a04897c18b7de30012256de831a06d64, Library\base\zzz.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 1 (14.29%)
-    '     File Size: 132 B
+    '     File Size: 137 B
 
 
     ' Class zzz

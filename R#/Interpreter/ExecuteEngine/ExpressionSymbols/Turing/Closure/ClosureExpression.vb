@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::17a3c48837337b8d75b7b0f805aab289, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ClosureExpression.vb"
+﻿#Region "Microsoft.VisualBasic::074b0894bc656e995be2b901c6a4c3c2, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\ClosureExpression.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 87
-    '    Code Lines: 65 (74.71%)
-    ' Comment Lines: 9 (10.34%)
-    '    - Xml Docs: 100.00%
+    '   Total Lines: 109
+    '    Code Lines: 78 (71.56%)
+    ' Comment Lines: 13 (11.93%)
+    '    - Xml Docs: 69.23%
     ' 
-    '   Blank Lines: 13 (14.94%)
-    '     File Size: 3.08 KB
+    '   Blank Lines: 18 (16.51%)
+    '     File Size: 3.99 KB
 
 
     '     Class ClosureExpression

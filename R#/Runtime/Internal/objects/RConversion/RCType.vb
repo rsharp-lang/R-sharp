@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9a220db09d8495a7d42e64b2435e7a0f, R#\Runtime\Internal\objects\RConversion\RCType.vb"
+﻿#Region "Microsoft.VisualBasic::04e414727d7fa6c0e80d5376a0e3e61e, R#\Runtime\Internal\objects\RConversion\RCType.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 38.30%
     ' 
     '   Blank Lines: 41 (13.62%)
-    '     File Size: 14.34 KB
+    '     File Size: 14.37 KB
 
 
     '     Class RCType

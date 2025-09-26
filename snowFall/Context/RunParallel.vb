@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::28b2d15bed466c2287a2c4bcda1677f6, snowFall\Context\RunParallel.vb"
+﻿#Region "Microsoft.VisualBasic::d2e99bf76733ce4da8e1ee173ba857d6, snowFall\Context\RunParallel.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 351
-    '    Code Lines: 268 (76.35%)
-    ' Comment Lines: 37 (10.54%)
+    '   Total Lines: 354
+    '    Code Lines: 270 (76.27%)
+    ' Comment Lines: 37 (10.45%)
     '    - Xml Docs: 83.78%
     ' 
-    '   Blank Lines: 46 (13.11%)
-    '     File Size: 13.69 KB
+    '   Blank Lines: 47 (13.28%)
+    '     File Size: 13.86 KB
 
 
     ' Class RunSequential

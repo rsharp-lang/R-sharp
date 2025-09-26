@@ -1,54 +1,54 @@
-﻿#Region "Microsoft.VisualBasic::0d45a4c2326ee55289d01cfa3e60d34b, snowFall\Parallel.vb"
+﻿#Region "Microsoft.VisualBasic::6ea5c6b0620255bcf6ebf5d8082cd63d, snowFall\Parallel.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 419
-'    Code Lines: 261 (62.29%)
-' Comment Lines: 104 (24.82%)
-'    - Xml Docs: 75.00%
-' 
-'   Blank Lines: 54 (12.89%)
-'     File Size: 16.88 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module Parallel
-' 
-'     Function: detectCores, makeCluster, parallel, produceTask, runSlaveNode
-'               snowFall, SnowflakeIdGenerator_func, testParseSymbol, worker
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 426
+    '    Code Lines: 262 (61.50%)
+    ' Comment Lines: 107 (25.12%)
+    '    - Xml Docs: 75.70%
+    ' 
+    '   Blank Lines: 57 (13.38%)
+    '     File Size: 17.25 KB
+
+
+    ' Module Parallel
+    ' 
+    '     Function: detectCores, makeCluster, parallel, produceTask, runSlaveNode
+    '               snowFall, SnowflakeIdGenerator_func, testParseSymbol, worker
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

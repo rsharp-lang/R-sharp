@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cae034d15a51bf2352e460657a4a19cb, Library\base\utils\bson.vb"
+﻿#Region "Microsoft.VisualBasic::384438df6433a9c89dc32523049f6b2f, Library\base\utils\bson.vb"
 
     ' Author:
     ' 
@@ -225,4 +225,3 @@ Module bson
     End Function
 
 End Module
-

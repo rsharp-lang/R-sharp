@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6128f76d95163fa41cfbc5d6d24cbff7, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
+﻿#Region "Microsoft.VisualBasic::749f24b82ce94acea5209a03c4957e86, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1717
-    '    Code Lines: 974 (56.73%)
-    ' Comment Lines: 554 (32.27%)
-    '    - Xml Docs: 88.45%
+    '   Total Lines: 1747
+    '    Code Lines: 995 (56.95%)
+    ' Comment Lines: 556 (31.83%)
+    '    - Xml Docs: 88.13%
     ' 
-    '   Blank Lines: 189 (11.01%)
-    '     File Size: 76.77 KB
+    '   Blank Lines: 196 (11.22%)
+    '     File Size: 77.93 KB
 
 
     '     Module linq
@@ -53,8 +53,8 @@
     '                   reverse, rotate_left, rotate_right, runFilterPipeline, runWhichFilter
     '                   skip, sort, sortByKeyFunction, sortByKeyValue, split
     '                   splitByPartitionSize, splitCollection, splitList, splitVector, take
-    '                   tryKeyBy, unique, where, whichGenericClrSet, whichMax
-    '                   whichMin
+    '                   take_chr_index, take_int_index, tryKeyBy, unique, where
+    '                   whichGenericClrSet, whichMax, whichMin
     '         Class SplitPredicateFunction
     ' 
     '             Function: AssertEquals, AssertThat, GetPredicate

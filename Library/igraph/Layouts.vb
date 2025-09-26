@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cc2f37b67cf34e377827125fbcf99fd1, Library\igraph\Layouts.vb"
+﻿#Region "Microsoft.VisualBasic::a357c5e0da002a5b7886e716b1e9af27, Library\igraph\Layouts.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 100.00%
     ' 
     '   Blank Lines: 23 (9.54%)
-    '     File Size: 10.44 KB
+    '     File Size: 10.43 KB
 
 
     ' Module Layouts

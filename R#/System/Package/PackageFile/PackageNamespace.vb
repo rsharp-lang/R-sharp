@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1f9c1acece0998cc0396d896ff0d817b, R#\System\Package\PackageFile\PackageNamespace.vb"
+﻿#Region "Microsoft.VisualBasic::4a01a5d8c850fddf5fa93ce0d97d7418, R#\System\Package\PackageFile\PackageNamespace.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 87.72%
     ' 
     '   Blank Lines: 26 (13.20%)
-    '     File Size: 8.46 KB
+    '     File Size: 8.47 KB
 
 
     '     Class PackageNamespace

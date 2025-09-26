@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3d658ba89b7fb55bb8e3a3a55e732d75, R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::32d46d80ef8966a36fad11c59ab460e1, R#\Interpreter\RInterpreter.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 73.68%
     ' 
     '   Blank Lines: 104 (14.29%)
-    '     File Size: 29.69 KB
+    '     File Size: 29.68 KB
 
 
     '     Class RInterpreter

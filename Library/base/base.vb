@@ -1,53 +1,53 @@
-﻿#Region "Microsoft.VisualBasic::7262809644e7537740a9154a2b692b07, Library\base\base.vb"
+﻿#Region "Microsoft.VisualBasic::52f883eed7091262938ababfe7900e28, Library\base\base.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 129
-'    Code Lines: 73 (56.59%)
-' Comment Lines: 37 (28.68%)
-'    - Xml Docs: 91.89%
-' 
-'   Blank Lines: 19 (14.73%)
-'     File Size: 4.70 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module base
-' 
-'     Function: impute, loadMsgPack, ParseTtl, string_motif
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 162
+    '    Code Lines: 95 (58.64%)
+    ' Comment Lines: 43 (26.54%)
+    '    - Xml Docs: 93.02%
+    ' 
+    '   Blank Lines: 24 (14.81%)
+    '     File Size: 5.94 KB
+
+
+    ' Module base
+    ' 
+    '     Function: impute, loadMsgPack, ParseTtl, readSasXptDataframe, string_motif
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

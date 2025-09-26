@@ -1,77 +1,77 @@
-﻿#Region "Microsoft.VisualBasic::a2dd673a7c8aa669ed19bae613917de9, R#\Runtime\Internal\internalInvokes\file.vb"
+﻿#Region "Microsoft.VisualBasic::e5df03a50bb22fcfd20d086e33b3505f, R#\Runtime\Internal\internalInvokes\file.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 1973
-'    Code Lines: 1142 (57.88%)
-' Comment Lines: 625 (31.68%)
-'    - Xml Docs: 87.84%
-' 
-'   Blank Lines: 206 (10.44%)
-'     File Size: 89.28 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Enum endianness
-' 
-'         big, little
-' 
-'  
-' 
-' 
-' 
-'     Module file
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: [erase], basename, buffer, bytes, close
-'                   dataUri, dir_exists, dirCopy, dirCreate, dirname
-'                   exists, file, file_allocate, file_ext, filecopy
-'                   fileExt, fileinfo, fileInfoByFile, filepath, fileRemove
-'                   filesize, getRelativePath, GetSha1Hash, getwd, gzcheck
-'                   gzfile, handleWriteLargeTextStream, isSystemDir, listDirs, listFiles
-'                   loadListInternal, NextTempToken, normalizeFileName, normalizePath, openDir
-'                   openGzip, openTargzip, openZip, readBin, readBinDataframe
-'                   readBinOverloads, readFromFile, readFromStream, readLines, readList
-'                   readText, Rhome, saveList, scanZipFiles, setwd
-'                   tempdir, tempfile, unlinks, writeBin, writeBinDataframe
-'                   writeLines
-' 
-'         Sub: fileRename
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 2040
+    '    Code Lines: 1163 (57.01%)
+    ' Comment Lines: 669 (32.79%)
+    '    - Xml Docs: 86.25%
+    ' 
+    '   Blank Lines: 208 (10.20%)
+    '     File Size: 93.59 KB
+
+
+    '     Enum endianness
+    ' 
+    '         big, little
+    ' 
+    '  
+    ' 
+    ' 
+    ' 
+    '     Module file
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: [erase], basename, buffer, bytes, close
+    '                   dataUri, dir_exists, dirCopy, dirCreate, dirname
+    '                   exists, file, file_allocate, file_ext, filecopy
+    '                   fileExt, fileinfo, fileInfoByFile, filepath, fileRemove
+    '                   filesize, getRelativePath, GetSha1Hash, getwd, gzcheck
+    '                   gzfile, handleWriteLargeTextStream, isSystemDir, listDirs, listFiles
+    '                   loadListInternal, NextTempToken, normalizeFileName, normalizePath, openDir
+    '                   openGzip, openTargzip, openZip, readBin, readBinDataframe
+    '                   readBinOverloads, readFromFile, readFromStream, readLines, readList
+    '                   readText, Rhome, saveList, scanZipFiles, setwd
+    '                   stdin_dev, tempdir, tempfile, unlinks, writeBin
+    '                   writeBinDataframe, writeLines
+    ' 
+    '         Sub: fileRename
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

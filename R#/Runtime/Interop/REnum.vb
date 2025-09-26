@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::547a3c2b52018c756a7eba0e28cc5a90, R#\Runtime\Interop\REnum.vb"
+﻿#Region "Microsoft.VisualBasic::ddc3341018541cefe2ace4160c196358, R#\Runtime\Interop\REnum.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 111
-    '    Code Lines: 83 (74.77%)
-    ' Comment Lines: 7 (6.31%)
-    '    - Xml Docs: 42.86%
+    '   Total Lines: 128
+    '    Code Lines: 89 (69.53%)
+    ' Comment Lines: 18 (14.06%)
+    '    - Xml Docs: 77.78%
     ' 
-    '   Blank Lines: 21 (18.92%)
-    '     File Size: 3.77 KB
+    '   Blank Lines: 21 (16.41%)
+    '     File Size: 4.43 KB
 
 
     '     Class REnum

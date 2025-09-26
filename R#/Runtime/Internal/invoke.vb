@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::76ae1dff183719a0b0389408e7e2defa, R#\Runtime\Internal\invoke.vb"
+﻿#Region "Microsoft.VisualBasic::cbb9c15868bd29385d539fdea5d417c9, R#\Runtime\Internal\invoke.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 193
-    '    Code Lines: 134 (69.43%)
-    ' Comment Lines: 40 (20.73%)
+    '   Total Lines: 195
+    '    Code Lines: 134 (68.72%)
+    ' Comment Lines: 40 (20.51%)
     '    - Xml Docs: 92.50%
     ' 
-    '   Blank Lines: 19 (9.84%)
-    '     File Size: 8.19 KB
+    '   Blank Lines: 21 (10.77%)
+    '     File Size: 8.17 KB
 
 
     '     Class invoke
@@ -52,7 +52,7 @@
     '         Function: [stop], getAllInternals, getFunction, invalidParameter, invokeInternals
     '                   isRInternal, missingParameter
     ' 
-    '         Sub: pushEnvir
+    '         Sub: MakeIndex, pushEnvir
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e6c453b651908ea1eff29d94d4a55a9b, studio\Rsharp_kit\signalKit\machineVision.vb"
+﻿#Region "Microsoft.VisualBasic::da315198c8a641bff8e04cca598f03cc, studio\Rsharp_kit\signalKit\machineVision.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 72
-    '    Code Lines: 58 (80.56%)
+    '   Total Lines: 71
+    '    Code Lines: 58 (81.69%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 14 (19.44%)
-    '     File Size: 2.53 KB
+    '   Blank Lines: 13 (18.31%)
+    '     File Size: 2.52 KB
 
 
     ' Module machineVision
@@ -50,7 +50,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Imaging
@@ -123,4 +122,3 @@ Public Module machineVision
         Return Thresholding.ostuFilter(buffer, flip, factor)
     End Function
 End Module
-

@@ -1,54 +1,54 @@
-﻿#Region "Microsoft.VisualBasic::77df31e27a3bbee384d6d665db44f37c, R#\System\Document\Printer\HtmlMarkdownPrinter.vb"
+﻿#Region "Microsoft.VisualBasic::963308fdef4c20428b31adde2f52764e, R#\System\Document\Printer\HtmlMarkdownPrinter.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 77
-'    Code Lines: 59 (76.62%)
-' Comment Lines: 0 (0.00%)
-'    - Xml Docs: 0.00%
-' 
-'   Blank Lines: 18 (23.38%)
-'     File Size: 2.98 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module HtmlMarkdownPrinter
-' 
-'         Sub: printHtml, printMarkdownDocs
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 81
+    '    Code Lines: 62 (76.54%)
+    ' Comment Lines: 0 (0.00%)
+    '    - Xml Docs: 0.00%
+    ' 
+    '   Blank Lines: 19 (23.46%)
+    '     File Size: 3.20 KB
+
+
+    '     Module HtmlMarkdownPrinter
+    ' 
+    '         Sub: printHtml, printMarkdownDocs
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

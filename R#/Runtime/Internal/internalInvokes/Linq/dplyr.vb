@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::df327c77ecd240c6e6c927c2f2828ce5, R#\Runtime\Internal\internalInvokes\Linq\dplyr.vb"
+﻿#Region "Microsoft.VisualBasic::9ed16a4b4b858506918017ee11130374, R#\Runtime\Internal\internalInvokes\Linq\dplyr.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 219
-    '    Code Lines: 136 (62.10%)
-    ' Comment Lines: 48 (21.92%)
-    '    - Xml Docs: 68.75%
+    '   Total Lines: 254
+    '    Code Lines: 162 (63.78%)
+    ' Comment Lines: 49 (19.29%)
+    '    - Xml Docs: 67.35%
     ' 
-    '   Blank Lines: 35 (15.98%)
-    '     File Size: 8.72 KB
+    '   Blank Lines: 43 (16.93%)
+    '     File Size: 9.99 KB
 
 
     '     Module dplyr
     ' 
-    '         Function: bind_rows
+    '         Function: bind_rows, VennExclusiveSet
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4b2b3b80cded19bc7837f1879b5b20b9, studio\Rsharp_IL\npy\Language\PyScanner.vb"
+﻿#Region "Microsoft.VisualBasic::af689483ed673cb5cf47d3e6b5ed53e8, studio\Rsharp_IL\npy\Language\PyScanner.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 10 (21.28%)
-    '     File Size: 1.70 KB
+    '     File Size: 1.74 KB
 
 
     '     Class PyScanner

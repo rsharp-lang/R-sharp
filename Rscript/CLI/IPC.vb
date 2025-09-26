@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::54e68c03eab7b206fec8f29595da0de8, Rscript\CLI\IPC.vb"
+﻿#Region "Microsoft.VisualBasic::64c184cfa5350996398f9631fca9e721, Rscript\CLI\IPC.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 69.57%
     ' 
     '   Blank Lines: 44 (13.54%)
-    '     File Size: 13.61 KB
+    '     File Size: 13.59 KB
 
 
     ' Module CLI

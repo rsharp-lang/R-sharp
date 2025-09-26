@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cf6c516e7064f1fc436e01def76bf8f8, R#\System\Package\PackageManager.vb"
+﻿#Region "Microsoft.VisualBasic::4aeeba7658e737ae57950fcd6f9ffaa5, R#\System\Package\PackageManager.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 39.86%
     ' 
     '   Blank Lines: 64 (15.02%)
-    '     File Size: 20.67 KB
+    '     File Size: 20.66 KB
 
 
     '     Class PackageManager

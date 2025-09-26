@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::23319830e9c7cd048cf9f0ae5b01f137, R#\Language\Syntax\SyntaxBuilderOptions.vb"
+﻿#Region "Microsoft.VisualBasic::372986979206d9cc7cd6377596b22489, R#\Language\Syntax\SyntaxBuilderOptions.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 100.00%
     ' 
     '   Blank Lines: 19 (17.27%)
-    '     File Size: 3.98 KB
+    '     File Size: 4.02 KB
 
 
     '     Delegate Function
