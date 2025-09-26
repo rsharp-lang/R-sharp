@@ -8,6 +8,24 @@
         Public comment, [string] As Boolean
         Public stringEscape As Char
 
+        ''' <summary>
+        ''' apply for the block comment in other language parser, example as:
+        ''' 
+        ''' 1. javascript/typescript 
+        ''' 
+        ''' /**
+        '''  *
+        '''  *
+        ''' */
+        ''' 
+        ''' 2. matlab/octave language
+        ''' 
+        ''' %{
+        ''' ...
+        ''' %}
+        ''' </summary>
+        Public isBlockComment As Boolean
+
         Public Overrides Function ToString() As String
             If comment Then
                 Return "comment"
