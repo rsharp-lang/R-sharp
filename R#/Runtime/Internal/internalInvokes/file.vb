@@ -1087,7 +1087,7 @@ Namespace Runtime.Internal.Invokes
         Public Function writeLines(<RRawVectorArgument>
                                    text As Object,
                                    Optional con As Object = Nothing,
-                                   Optional sep$ = vbCrLf,
+                                   Optional sep$ = vbLf,
                                    Optional fs As IFileSystemEnvironment = Nothing,
                                    Optional encoding As Encodings = Encodings.UTF8WithoutBOM,
                                    Optional env As Environment = Nothing) As Object
