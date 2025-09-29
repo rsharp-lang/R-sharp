@@ -86,7 +86,7 @@ Namespace Development.Components
                 Return
             End If
 
-            For Each key As String In Tqdm.Wrap(list.slotKeys, bar:=bar)
+            For Each key As String In Tqdm.Wrap(list.slotKeys, bar:=bar, wrap_console:=App.EnableTqdm)
                 If d <= 1 OrElse (n Mod d = 0) Then
                     Call bar.SetLabel(key)
                 End If
