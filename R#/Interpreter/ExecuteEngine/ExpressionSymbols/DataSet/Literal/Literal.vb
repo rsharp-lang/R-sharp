@@ -166,6 +166,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Friend Sub New()
         End Sub
 
+        ''' <summary>
+        ''' create literal from a language token
+        ''' </summary>
+        ''' <param name="token"></param>
         Sub New(token As Token)
             Me.value = token.literal
 
