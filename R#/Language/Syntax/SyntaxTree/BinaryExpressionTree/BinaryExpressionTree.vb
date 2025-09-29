@@ -549,11 +549,11 @@ Namespace Language.Syntax.SyntaxParser
         ''' the expression change is generated via the <paramref name="buf"/> parameter
         ''' </remarks>
         <Extension>
-        Private Function processOperators(buf As List(Of [Variant](Of SyntaxResult, String)),
-                                          oplist As List(Of String),
-                                          operators$(),
-                                          test As Func(Of String, String, Boolean),
-                                          opts As SyntaxBuilderOptions) As SyntaxResult
+        Public Function processOperators(buf As List(Of [Variant](Of SyntaxResult, String)),
+                                         oplist As List(Of String),
+                                         operators$(),
+                                         test As Func(Of String, String, Boolean),
+                                         opts As SyntaxBuilderOptions) As SyntaxResult
             If buf = 1 Then
                 Return Nothing
             End If
