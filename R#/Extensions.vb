@@ -363,7 +363,7 @@ Public Module Extensions
             Dim populator As IEnumerable(Of T)
 
             If tqdm Then
-                populator = TqdmWrapper.Wrap(cast)
+                populator = TqdmWrapper.Wrap(cast, wrap_console:=App.EnableTqdm)
             Else
                 populator = cast
             End If
