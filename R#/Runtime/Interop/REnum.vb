@@ -137,13 +137,13 @@ Namespace Runtime.Interop
 
             For Each flag As [Enum] In values
                 int = CLng(members(flag.ToString).GetValue(Nothing))
-                intValues.Add("T" & int, flag)
+                intValues("T" & int) = flag
                 name_str = flag.ToString.ToLower
-                namedValues.Add(name_str, flag)
-                namedIntegers.Add(name_str, int)
+                namedValues(name_str) = flag
+                namedIntegers(name_str) = int
                 desc_str = flag.Description.ToLower
-                namedValues.Add(desc_str, flag)
-                namedIntegers.Add(desc_str, int)
+                namedValues(desc_str) = flag
+                namedIntegers(desc_str) = int
             Next
         End Sub
 
