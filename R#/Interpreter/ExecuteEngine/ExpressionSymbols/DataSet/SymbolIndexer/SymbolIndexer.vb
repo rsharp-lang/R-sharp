@@ -676,6 +676,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Return subset
         End Function
 
+        <CodeAnalysis.SuppressMessage("Reliability", "CA2022:Avoid inexact read with 'Stream.Read'", Justification:="<Pending>")>
         Private Shared Function streamView(read As Stream, offset As Long()) As Byte()
             If offset _
                 .SlideWindows(2) _

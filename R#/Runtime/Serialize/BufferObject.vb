@@ -118,6 +118,7 @@ Namespace Runtime.Serialize
 
         Protected MustOverride Sub loadBuffer(stream As Stream)
 
+        <CodeAnalysis.SuppressMessage("Reliability", "CA2022:Avoid inexact read with 'Stream.Read'", Justification:="<Pending>")>
         Public Shared Function SubStream(stream As Stream, from As Long, length As Integer) As MemoryStream
             Dim buffer As Byte() = New Byte(length - 1) {}
 

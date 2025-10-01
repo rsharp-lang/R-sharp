@@ -124,6 +124,7 @@ Namespace Runtime.Serialize
             }
         End Function
 
+        <CodeAnalysis.SuppressMessage("Reliability", "CA2022:Avoid inexact read with 'Stream.Read'", Justification:="<Pending>")>
         Public Shared Function MeasureBufferMagic(raw As Stream) As BufferObjects
             Dim magic As Byte() = New Byte(3) {}
 

@@ -131,6 +131,7 @@ Namespace Runtime.Serialize
             Return getList()
         End Function
 
+        <CodeAnalysis.SuppressMessage("Reliability", "CA2022:Avoid inexact read with 'Stream.Read'", Justification:="<Pending>")>
         Protected Overrides Sub loadBuffer(stream As Stream)
             Dim bytes As Byte() = New Byte(4 - 1) {}
             Dim tmpstr As String

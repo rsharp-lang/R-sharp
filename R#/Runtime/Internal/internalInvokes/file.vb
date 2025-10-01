@@ -1537,6 +1537,7 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("readBin")>
+        <CodeAnalysis.SuppressMessage("Reliability", "CA2022:Avoid inexact read with 'Stream.Read'", Justification:="<Pending>")>
         Public Function readBin(<RRawVectorArgument> con As Object, what As Object,
                                 Optional n As Integer = 1,
                                 Optional size As Integer = NA_integer_,

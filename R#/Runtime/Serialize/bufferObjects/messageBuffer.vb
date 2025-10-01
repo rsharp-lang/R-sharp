@@ -180,6 +180,7 @@ Namespace Runtime.Serialize
             Return GetErrorMessage()
         End Function
 
+        <CodeAnalysis.SuppressMessage("Reliability", "CA2022:Avoid inexact read with 'Stream.Read'", Justification:="<Pending>")>
         Protected Overrides Sub loadBuffer(buffer As Stream)
             Dim level As MSG_TYPES
             Dim int_buf As Byte() = New Byte(3) {}

@@ -258,6 +258,7 @@ Namespace Runtime.Serialize
             Return getVector()
         End Function
 
+        <CodeAnalysis.SuppressMessage("Reliability", "CA2022:Avoid inexact read with 'Stream.Read'", Justification:="<Pending>")>
         Protected Overrides Sub loadBuffer(bytes As Stream)
             Dim raw As Byte() = New Byte(2 * Marshal.SizeOf(GetType(Integer)) - 1) {}
             Dim text As Encoding = Encodings.UTF8.CodePage

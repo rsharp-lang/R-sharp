@@ -138,6 +138,7 @@ Namespace Runtime.Serialize
             Next
         End Sub
 
+        <CodeAnalysis.SuppressMessage("Reliability", "CA2022:Avoid inexact read with 'Stream.Read'", Justification:="<Pending>")>
         Protected Overrides Sub loadBuffer(stream As Stream)
             Dim colnames As String()
             Dim rownames As String()

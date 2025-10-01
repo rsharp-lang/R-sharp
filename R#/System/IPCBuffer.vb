@@ -84,6 +84,7 @@ Namespace Development
             Return $"[{requestId}] {buffer.code.Description} in {chunksize} bytes"
         End Function
 
+        <Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2022:Avoid inexact read with 'Stream.Read'", Justification:="<Pending>")>
         Public Shared Function ParseBuffer(buffer As Stream) As IPCBuffer
             Dim int_size As Byte() = New Byte(3) {}
             Dim sizeof As Integer
