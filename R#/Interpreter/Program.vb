@@ -70,6 +70,9 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Interpreter
 
+    ''' <summary>
+    ''' is a collection of the expresion object, represents the parser result of a R script file
+    ''' </summary>
     Public Class Program : Implements IEnumerable(Of Expression)
 
         ReadOnly execQueue As Expression()
