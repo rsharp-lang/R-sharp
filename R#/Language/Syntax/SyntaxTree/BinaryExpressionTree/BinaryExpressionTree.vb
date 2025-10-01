@@ -600,7 +600,15 @@ Namespace Language.Syntax.SyntaxParser
             Return Nothing
         End Function
 
-        Friend Function CreateBinary(a As Expression, b As Expression, opToken As String, opts As SyntaxBuilderOptions) As Expression
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="a">the left</param>
+        ''' <param name="b">the right</param>
+        ''' <param name="opToken">the operator</param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
+        Public Function CreateBinary(a As Expression, b As Expression, opToken As String, opts As SyntaxBuilderOptions) As Expression
             If opToken = "in" Then
                 Return New BinaryInExpression(a, b)
             ElseIf opToken = "between" Then

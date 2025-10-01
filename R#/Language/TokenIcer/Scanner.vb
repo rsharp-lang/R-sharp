@@ -74,10 +74,16 @@ Imports Microsoft.VisualBasic.Text.Parser
 
 Namespace Language.TokenIcer
 
+    Public Interface IScanner
+
+        Function GetTokens() As IEnumerable(Of Token)
+
+    End Interface
+
     ''' <summary>
     ''' The token scanner
     ''' </summary>
-    Public Class Scanner
+    Public Class Scanner : Implements IScanner
 
         Dim code As CharPtr
         Dim buffer As New CharBuffer
@@ -134,7 +140,7 @@ Namespace Language.TokenIcer
             Me.tokenStringMode = tokenStringMode
         End Sub
 
-        Public Overridable Iterator Function GetTokens() As IEnumerable(Of Token)
+        Public Overridable Iterator Function GetTokens() As IEnumerable(Of Token) Implements IScanner.GetTokens
             Dim token As New Value(Of Token)
             Dim start As Integer = 0
 

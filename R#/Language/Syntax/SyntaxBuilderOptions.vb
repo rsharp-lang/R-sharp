@@ -76,9 +76,15 @@ Namespace Language.Syntax.SyntaxParser
     Public Delegate Function GetLanguageScanner(buffer As CharPtr, stringInterpolateParser As Boolean) As SMRUCC.Rsharp.Language.TokenIcer.Scanner
     Public Delegate Function ParseExpression(tokens As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As SyntaxResult
 
+    ''' <summary>
+    ''' Syntax tree parser configuration
+    ''' </summary>
     Public Class SyntaxBuilderOptions
 
         Public debug As Boolean = False
+        ''' <summary>
+        ''' the source script text
+        ''' </summary>
         Public source As Rscript
         Public [error] As String
         ''' <summary>
