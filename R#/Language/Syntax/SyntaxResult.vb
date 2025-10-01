@@ -74,6 +74,10 @@ Namespace Language.Syntax.SyntaxParser
     Public Class SyntaxResult
 
         Public ReadOnly [error] As SyntaxError
+
+        ''' <summary>
+        ''' the successful parsed expression model.
+        ''' </summary>
         Public ReadOnly expression As RExpression
 
         ''' <summary>
@@ -103,6 +107,12 @@ Namespace Language.Syntax.SyntaxParser
             Me.error = [error]
         End Sub
 
+        ''' <summary>
+        ''' Create syntax error on current script file code span
+        ''' </summary>
+        ''' <param name="err"></param>
+        ''' <param name="opts"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function CreateError(err As String, opts As SyntaxBuilderOptions) As SyntaxResult
             Return CreateError(New SyntaxErrorException(err), opts)

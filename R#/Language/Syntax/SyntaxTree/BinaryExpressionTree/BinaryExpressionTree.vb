@@ -1,55 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::3d6eab5cd918d2682bc1e6775931d0b8, R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 575
-    '    Code Lines: 423 (73.57%)
-    ' Comment Lines: 70 (12.17%)
-    '    - Xml Docs: 48.57%
-    ' 
-    '   Blank Lines: 82 (14.26%)
-    '     File Size: 25.91 KB
+' Summaries:
 
 
-    '     Module BinaryExpressionTree
-    ' 
-    '         Function: CreateBinary, CreateBinaryExpression, joinNegatives, joinRemaining, MeasureCurrentLine
-    '                   (+2 Overloads) ParseBinaryExpression, ParseInvokeInternal, processOperators
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 575
+'    Code Lines: 423 (73.57%)
+' Comment Lines: 70 (12.17%)
+'    - Xml Docs: 48.57%
+' 
+'   Blank Lines: 82 (14.26%)
+'     File Size: 25.91 KB
+
+
+'     Module BinaryExpressionTree
+' 
+'         Function: CreateBinary, CreateBinaryExpression, joinNegatives, joinRemaining, MeasureCurrentLine
+'                   (+2 Overloads) ParseBinaryExpression, ParseInvokeInternal, processOperators
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -397,22 +397,22 @@ Namespace Language.Syntax.SyntaxParser
             End If
 
             ' 算数操作符以及字符串操作符按照操作符的优先度进行构建
-            If Not (syntaxResult = buf.processOperators(oplist, operatorPriority, test:=Function(op, o) op.IndexOf(o) > -1, opts)) Is Nothing Then
+            If Not (syntaxResult = buf.ProcessOperators(oplist, operatorPriority, test:=Function(op, o) op.IndexOf(o) > -1, opts)) Is Nothing Then
                 Return syntaxResult
             End If
 
             ' 然后处理字符串操作符
-            If Not (syntaxResult = buf.processOperators(oplist, {"&"}, test:=Function(op, o) op = o, opts)) Is Nothing Then
+            If Not (syntaxResult = buf.ProcessOperators(oplist, {"&"}, test:=Function(op, o) op = o, opts)) Is Nothing Then
                 Return syntaxResult
             End If
 
             ' 之后处理比较操作符
-            If Not (syntaxResult = buf.processOperators(oplist, comparisonOperators, test:=Function(op, o) op = o, opts)) Is Nothing Then
+            If Not (syntaxResult = buf.ProcessOperators(oplist, comparisonOperators, test:=Function(op, o) op = o, opts)) Is Nothing Then
                 Return syntaxResult
             End If
 
             ' 最后处理逻辑操作符
-            If Not (syntaxResult = buf.processOperators(oplist, logicalOperators, test:=Function(op, o) op = o, opts)) Is Nothing Then
+            If Not (syntaxResult = buf.ProcessOperators(oplist, logicalOperators, test:=Function(op, o) op = o, opts)) Is Nothing Then
                 Return syntaxResult
             End If
 
@@ -549,7 +549,7 @@ Namespace Language.Syntax.SyntaxParser
         ''' the expression change is generated via the <paramref name="buf"/> parameter
         ''' </remarks>
         <Extension>
-        Public Function processOperators(buf As List(Of [Variant](Of SyntaxResult, String)),
+        Public Function ProcessOperators(buf As List(Of [Variant](Of SyntaxResult, String)),
                                          oplist As List(Of String),
                                          operators$(),
                                          test As Func(Of String, String, Boolean),
