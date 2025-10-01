@@ -439,7 +439,7 @@ Namespace Runtime.Internal.Invokes
                 End Using
             End If
 
-            Dim opts As New SyntaxBuilderOptions(AddressOf Expression.CreateExpression, Function(c, s) New Scanner(c, s)) With {
+            Dim opts As New RscriptSyntaxBuilderOptions() With {
                 .source = Rscript.AutoHandleScript(text)
             }
             Dim result As Expression() = opts.source _

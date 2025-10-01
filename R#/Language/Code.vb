@@ -79,7 +79,7 @@ Namespace Language
 
         Public Function ParseVector(expr As String) As VectorLiteral
             Dim tokens As Token() = ParseScript(expr)
-            Dim opt As New SyntaxBuilderOptions(AddressOf Expression.CreateExpression, Function(c, s) New Scanner(c, s)) With {
+            Dim opt As New RscriptSyntaxBuilderOptions() With {
                 .debug = False,
                 .source = Rscript.FromText(expr)
             }

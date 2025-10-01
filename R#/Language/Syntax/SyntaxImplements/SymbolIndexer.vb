@@ -96,7 +96,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     .Take(tokens.Length - 2) _
                     .ToArray
 
-                index = opts.UsingVectorBuilder(Function(opt) opts.ParseExpression(tokens, opt))
+                index = opts.UsingVectorBuilder(Of RscriptSyntaxBuilderOptions)(Function(opt) opts.ParseExpression(tokens))
 
                 If index.isException Then
                     Return index
