@@ -101,7 +101,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Property
 
         ''' <summary>
-        ''' index value for get subset from symbol <see cref="x"/>
+        ''' index value for get subset from <see cref="symbol"/>. 
         ''' </summary>
         Friend index As Expression
         ''' <summary>

@@ -69,7 +69,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                 .Skip(1) _
                 .IteratesALL _
                 .SplitByTopLevelDelimiter(Language.TokenType.close)
-            test = opts.ParseExpression(code(Scan0).Skip(1), opts)
+            test = opts.ParseExpression(code(Scan0).Skip(1))
 
             If test.isException Then
                 Return test

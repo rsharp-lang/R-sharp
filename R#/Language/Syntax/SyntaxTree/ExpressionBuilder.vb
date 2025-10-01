@@ -108,7 +108,7 @@ Namespace Language.Syntax.SyntaxParser
                         .Skip(1) _
                         .IteratesALL _
                         .DoCall(Function(tokens)
-                                    Return opts.ParseExpression(tokens, opts)
+                                    Return opts.ParseExpression(tokens)
                                 End Function)
 
                     If evaluate.isException Then
@@ -475,7 +475,7 @@ Binary:
         ''' <param name="opts"></param>
         ''' <returns></returns>
         Friend Function parseSymbolIndex(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim first As SyntaxResult = opts.ParseExpression(code(Scan0), opts)
+            Dim first As SyntaxResult = opts.ParseExpression(code(Scan0))
 
             If first.isException Then
                 Return first

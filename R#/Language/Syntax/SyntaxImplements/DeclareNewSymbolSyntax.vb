@@ -242,7 +242,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
         ''' <param name="funcParameter"></param>
         ''' <returns></returns>
         Public Function DeclareNewSymbol(symbol As Token(), value As Token(), opts As SyntaxBuilderOptions, funcParameter As Boolean) As SyntaxResult
-            Dim valSyntaxTemp As SyntaxResult = opts.ParseExpression(value, opts)
+            Dim valSyntaxTemp As SyntaxResult = opts.ParseExpression(value)
 
             If valSyntaxTemp.isException Then
                 Return valSyntaxTemp
