@@ -133,7 +133,7 @@ Namespace Interpreter
                                                          Optional debug As Boolean = False,
                                                          Optional keepsCommentLines As Boolean = False) As SyntaxBuilderOptions
 
-            Return New SyntaxBuilderOptions(AddressOf Expression.CreateExpression, Function(c, s) New Scanner(c, s)) With {
+            Return New RscriptSyntaxBuilderOptions() With {
                 .keepsCommentLines = keepsCommentLines,
                 .debug = debug,
                 .source = rscript
@@ -150,7 +150,10 @@ Namespace Interpreter
         ''' this function returns nothing if syntax error
         ''' </returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function CreateProgram(Rscript As Rscript, Optional debug As Boolean = False, Optional ByRef error$ = Nothing) As Program
+        Public Shared Function CreateProgram(Rscript As Rscript,
+                                             Optional debug As Boolean = False,
+                                             Optional ByRef error$ = Nothing) As Program
+
             Dim opts As SyntaxBuilderOptions = GetRLanguageDefaultOption(Rscript, debug)
             Dim exec As Expression() = Rscript _
                 .GetExpressions(opts) _
