@@ -181,7 +181,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     Continue For
                 End If
 
-                syntaxTemp = block.DoCall(Function(code) opts.ParseExpression(code, opts))
+                syntaxTemp = block.DoCall(Function(code) opts.ParseExpression(code))
 
                 If syntaxTemp.isException Then
                     Return syntaxTemp
@@ -255,8 +255,8 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
         End Function
 
         Public Function SequenceLiteral(from As Token(), [to] As Token(), steps As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim fromSyntax = opts.ParseExpression(from, opts)
-            Dim toSyntax = opts.ParseExpression([to], opts)
+            Dim fromSyntax = opts.ParseExpression(from)
+            Dim toSyntax = opts.ParseExpression([to])
             Dim sourceMap As StackFrame = opts.GetStackTrace(from(Scan0), "sequence")
 
             If fromSyntax.isException Then
@@ -281,7 +281,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     stackFrame:=sourceMap
                 )
             Else
-                Dim stepsSyntax As SyntaxResult = opts.ParseExpression(steps, opts)
+                Dim stepsSyntax As SyntaxResult = opts.ParseExpression(steps)
 
                 If stepsSyntax.isException Then
                     Return stepsSyntax

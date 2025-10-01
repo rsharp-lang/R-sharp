@@ -123,7 +123,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
         ''' ``a[x]``
         ''' </param>
         Public Function SymbolIndexer(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim symbol As SyntaxResult = {tokens(Scan0)}.DoCall(Function(code) opts.ParseExpression(code, opts))
+            Dim symbol As SyntaxResult = {tokens(Scan0)}.DoCall(Function(code) opts.ParseExpression(code))
 
             If symbol.isException Then
                 Return symbol
@@ -164,7 +164,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
         ''' <param name="ref"></param>
         ''' <param name="indexer"></param>
         Public Function SymbolIndexer(ref As Token(), indexer As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim symbol As SyntaxResult = opts.ParseExpression(ref, opts)
+            Dim symbol As SyntaxResult = opts.ParseExpression(ref)
             Dim index As SyntaxResult = Nothing
             Dim indexType As SymbolIndexers
 
@@ -213,7 +213,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     indexType = SymbolIndexers.vectorIndex
                 End If
 
-                index = opts.ParseExpression(tokens, opts)
+                index = opts.ParseExpression(tokens)
             End If
         End Sub
 
@@ -233,14 +233,14 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                 Dim options As New List(Of SyntaxResult)
                 ' x[, a] by columns
                 indexType = SymbolIndexers.dataframeColumns
-                index = opts.ParseExpression(cols, opts)
+                index = opts.ParseExpression(cols)
 
                 For Each t In blocks.Skip(3)
                     If t.isComma Then
                         Continue For
                     End If
 
-                    Call options.Add(opts.ParseExpression(t, opts))
+                    Call options.Add(opts.ParseExpression(t))
                 Next
 
                 If options.Any Then
@@ -266,7 +266,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
             ElseIf blocks = 2 AndAlso blocks(1).isComma Then
                 ' x[a, ] by row
                 indexType = SymbolIndexers.dataframeRows
-                index = opts.ParseExpression(blocks(Scan0), opts)
+                index = opts.ParseExpression(blocks(Scan0))
             Else
                 Dim elements As New List(Of Expression)
 
@@ -276,7 +276,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                 For Each result As SyntaxResult In blocks _
                     .Where(Function(t) Not t.isComma) _
                     .Select(Function(tokens)
-                                Return opts.ParseExpression(tokens, opts)
+                                Return opts.ParseExpression(tokens)
                             End Function)
 
                     If result.isException Then

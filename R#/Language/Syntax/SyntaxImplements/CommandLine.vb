@@ -124,10 +124,10 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                 name = tokens _
                     .Skip(1) _
                     .DoCall(Function(code)
-                                Return opts.ParseExpression(code, opts)
+                                Return opts.ParseExpression(code)
                             End Function)
             Else
-                name = opts.ParseExpression(tokens, opts)
+                name = opts.ParseExpression(tokens)
             End If
 
             If name.isException Then

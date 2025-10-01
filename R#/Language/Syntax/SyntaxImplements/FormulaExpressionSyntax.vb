@@ -63,7 +63,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
         Public Function RunParse(target As Token, formula As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim y As String = target.text
-            Dim expression As SyntaxResult = opts.ParseExpression(formula, opts)
+            Dim expression As SyntaxResult = opts.ParseExpression(formula)
 
             If expression.isException Then
                 Return expression
@@ -74,7 +74,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
         Public Function RunParse(code As Token()(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim y As String = code(Scan0)(Scan0).text
-            Dim expression As SyntaxResult = opts.ParseExpression(code.Skip(2).IteratesALL, opts)
+            Dim expression As SyntaxResult = opts.ParseExpression(code.Skip(2).IteratesALL)
 
             If expression.isException Then
                 Return expression
@@ -87,7 +87,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
             Dim literalTokens As Token() = code.IteratesALL.Skip(1).ToArray
             Dim stackName As String = $"[expression_literal] {literalTokens.Select(Function(a) a.text).JoinBy("")}"
             Dim stackFrame As StackFrame = opts.GetStackTrace(code(Scan0)(Scan0), stackName)
-            Dim literal As SyntaxResult = opts.ParseExpression(literalTokens, opts)
+            Dim literal As SyntaxResult = opts.ParseExpression(literalTokens)
 
             If literal.isException Then
                 Return literal

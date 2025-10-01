@@ -149,7 +149,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                 Else
                     Dim valueSyntax As SyntaxResult =
                         .DoCall(Function(tokens)
-                                    Return opts.ParseExpression(tokens, opts)
+                                    Return opts.ParseExpression(tokens)
                                 End Function)
 
                     If valueSyntax.isException Then

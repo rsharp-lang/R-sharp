@@ -140,14 +140,14 @@ Namespace Language.Syntax.SyntaxParser
 
         <Extension>
         Public Function ParseDotNetmember(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim obj = code(0).Skip(1).Take(code(0).Length - 2).DoCall(Function(i) opts.ParseExpression(i, opts))
+            Dim obj = code(0).Skip(1).Take(code(0).Length - 2).DoCall(Function(i) opts.ParseExpression(i))
             Dim t = code(2)
 
             If t.Length = 1 AndAlso t(Scan0).name = TokenType.keyword Then
                 t(Scan0).name = TokenType.identifier
             End If
 
-            Dim target As SyntaxResult = opts.ParseExpression(t, opts)
+            Dim target As SyntaxResult = opts.ParseExpression(t)
 
             If obj.isException Then
                 Return obj
@@ -304,7 +304,7 @@ Namespace Language.Syntax.SyntaxParser
                     opts:=opts
                 )
             Else
-                Dim target As SyntaxResult = opts.ParseExpression(invokeTarget, opts)
+                Dim target As SyntaxResult = opts.ParseExpression(invokeTarget)
 
                 If target.isException Then
                     Return target

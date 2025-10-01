@@ -109,7 +109,7 @@ Namespace Language.Syntax.SyntaxParser
                 ElseIf tokenBlocks = 2 Then
                     ' UnaryNumeric
                     Dim unaryOp = tokenBlocks(Scan0)(Scan0).text
-                    Dim operon = opts.ParseExpression(tokenBlocks(1), opts)
+                    Dim operon = opts.ParseExpression(tokenBlocks(1))
 
                     If operon.isException Then
                         Return operon
@@ -126,7 +126,7 @@ Namespace Language.Syntax.SyntaxParser
                 If ++index Mod 2 = 0 Then
                     ' should be an operator token
                     If tokenBlocks(i).isOperator("+", "-") Then
-                        syntaxResult = opts.ParseExpression(tokenBlocks(i + 1), opts)
+                        syntaxResult = opts.ParseExpression(tokenBlocks(i + 1))
 
                         If syntaxResult.isException Then
                             Return syntaxResult
@@ -158,7 +158,7 @@ Namespace Language.Syntax.SyntaxParser
                             delta += 1
                         Next
 
-                        syntaxResult = opts.ParseExpression(pull, opts)
+                        syntaxResult = opts.ParseExpression(pull)
 
                         If syntaxResult.isException Then
                             Return syntaxResult
@@ -187,7 +187,7 @@ Namespace Language.Syntax.SyntaxParser
                                 Call buf.Add(parse)
                             End If
                         Else
-                            syntaxResult = opts.ParseExpression(list, opts)
+                            syntaxResult = opts.ParseExpression(list)
 
                             If syntaxResult.isException Then
                                 Return syntaxResult
@@ -215,7 +215,7 @@ Namespace Language.Syntax.SyntaxParser
                                 Dim anonymousKey As New Token(TokenType.keyword, "function") With {.span = list(0).span}
 
                                 list = {anonymousKey}.JoinIterates(list).ToArray
-                                syntaxResult = opts.ParseExpression(list, opts)
+                                syntaxResult = opts.ParseExpression(list)
 
                                 If syntaxResult.isException Then
                                     Return syntaxResult
@@ -225,7 +225,7 @@ Namespace Language.Syntax.SyntaxParser
                                 End If
                             End If
                         Else
-                            syntaxResult = opts.ParseExpression(list, opts)
+                            syntaxResult = opts.ParseExpression(list)
 
                             If syntaxResult.isException Then
                                 Return syntaxResult
@@ -272,7 +272,7 @@ Namespace Language.Syntax.SyntaxParser
             If buf.Count = 0 Then
                 ' maybe just wrap with the ()
                 ' example as x = (a / b);
-                Return opts.ParseExpression(list, opts)
+                Return opts.ParseExpression(list)
 
                 ' maybe a function invoke expression
                 ' example as x(...)
@@ -295,7 +295,7 @@ Namespace Language.Syntax.SyntaxParser
                 End If
 
                 For Each par As Token() In subblocks
-                    temp = opts.ParseExpression(par, opts)
+                    temp = opts.ParseExpression(par)
 
                     If temp.isException Then
                         Return temp
@@ -312,7 +312,7 @@ Namespace Language.Syntax.SyntaxParser
 
                 Return New SyntaxResult(calls)
             Else
-                Return opts.ParseExpression(list, opts)
+                Return opts.ParseExpression(list)
             End If
         End Function
 
@@ -334,7 +334,7 @@ Namespace Language.Syntax.SyntaxParser
                             Return buf(Scan0).TryCast(Of SyntaxResult)
                         End If
                     ElseIf unary = (TokenType.operator, "!") Then
-                        Dim value As SyntaxResult = opts.ParseExpression(tokenBlocks(1), opts)
+                        Dim value As SyntaxResult = opts.ParseExpression(tokenBlocks(1))
 
                         If value.isException Then
                             Return value

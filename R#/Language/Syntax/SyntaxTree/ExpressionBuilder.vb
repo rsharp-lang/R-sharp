@@ -234,7 +234,7 @@ Namespace Language.Syntax.SyntaxParser
                     Dim tag As Token = item(Scan0)
 
                     item = item.Skip(1).ToArray
-                    expr = opts.ParseExpression(item, opts)
+                    expr = opts.ParseExpression(item)
 
                     If expr.isException Then
                         Return expr
@@ -288,7 +288,7 @@ Namespace Language.Syntax.SyntaxParser
                 ElseIf code(1).First = (TokenType.open, "[") AndAlso code(1).Last = (TokenType.close, "]") AndAlso code(2).isOperator("<-", "=") Then
                     ' a[xxx] = xxx
                     Dim symbolIndex As SyntaxResult = SymbolIndexerSyntax.SymbolIndexer(code(0).JoinIterates(code(1)).ToArray, opts)
-                    Dim val As SyntaxResult = opts.ParseExpression(code.Skip(3).IteratesALL, opts)
+                    Dim val As SyntaxResult = opts.ParseExpression(code.Skip(3).IteratesALL)
 
                     If symbolIndex.isException Then
                         Return symbolIndex
@@ -305,7 +305,7 @@ Namespace Language.Syntax.SyntaxParser
                     Return SyntaxImplements.FunctionInvoke(code.IteratesALL.ToArray, opts)
                 ElseIf code(Scan0).Length = 1 AndAlso code(Scan0)(Scan0) = (TokenType.operator, "!") Then
                     ' not xxxx
-                    Dim valExpression As SyntaxResult = opts.ParseExpression(code(1), opts)
+                    Dim valExpression As SyntaxResult = opts.ParseExpression(code(1))
 
                     If valExpression.isException Then
                         Return valExpression
@@ -367,8 +367,8 @@ Namespace Language.Syntax.SyntaxParser
                         Return code.ParseDotNetmember(opts)
                     End If
 
-                    Dim left As SyntaxResult = opts.ParseExpression(code(0), opts)
-                    Dim right As SyntaxResult = opts.ParseExpression(code(2), opts)
+                    Dim left As SyntaxResult = opts.ParseExpression(code(0))
+                    Dim right As SyntaxResult = opts.ParseExpression(code(2))
 
                     If left.isException Then
                         Return left
@@ -518,7 +518,7 @@ Binary:
                     .Skip(2) _
                     .IteratesALL _
                     .DoCall(Function(tokens)
-                                Return opts.ParseExpression(tokens, opts)
+                                Return opts.ParseExpression(tokens)
                             End Function)
 
                 If vals.isException Then
@@ -569,7 +569,7 @@ Binary:
                     End If
                 End With
             Else
-                With opts.ParseExpression(target, opts)
+                With opts.ParseExpression(target)
                     If .isException Then
                         Return .ByRef
                     Else
@@ -578,7 +578,7 @@ Binary:
                 End With
             End If
 
-            Dim valExpression As SyntaxResult = opts.ParseExpression(value, opts)
+            Dim valExpression As SyntaxResult = opts.ParseExpression(value)
 
             If valExpression.isException Then
                 Return valExpression
@@ -599,7 +599,7 @@ Binary:
             For Each token As SyntaxResult In tokenBlocks _
                 .Where(Function(t) Not t.isComma) _
                 .Select(Function(tokens)
-                            Return opts.ParseExpression(tokens, opts)
+                            Return opts.ParseExpression(tokens)
                         End Function)
 
                 Yield token

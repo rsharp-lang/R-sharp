@@ -133,7 +133,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                                 Return SyntaxImplements.ValueAssign(parts, opts)
                             Else
                                 ' is a value expression
-                                Return opts.ParseExpression(param, opts)
+                                Return opts.ParseExpression(param)
                             End If
                         End Function)
 

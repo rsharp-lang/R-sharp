@@ -135,7 +135,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                 Dim closure As SyntaxResult = .Skip(2) _
                                               .IteratesALL _
                                               .DoCall(Function(code)
-                                                          Return opts.ParseExpression(code, opts)
+                                                          Return opts.ParseExpression(code)
                                                       End Function)
 
                 If parameter.isException Then

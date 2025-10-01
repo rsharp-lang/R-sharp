@@ -79,7 +79,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                         .Take(part.Length - 2) _
                         .Where(Function(t) t.name <> TokenType.delimiter) _
                         .DoCall(Function(code)
-                                    Return opts.ParseExpression(code, opts)
+                                    Return opts.ParseExpression(code)
                                 End Function)
 
                     If syntaxTemp.isException Then

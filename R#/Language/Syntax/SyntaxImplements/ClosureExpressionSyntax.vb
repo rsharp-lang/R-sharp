@@ -157,7 +157,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
                     Dim name As Token = member(Scan0)
                     Dim value As Token() = member.Skip(2).ToArray
-                    Dim valExpr = opts.ParseExpression(value, opts)
+                    Dim valExpr = opts.ParseExpression(value)
 
                     If valExpr.isException Then
                         Return valExpr
