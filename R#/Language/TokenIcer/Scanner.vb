@@ -74,8 +74,15 @@ Imports Microsoft.VisualBasic.Text.Parser
 
 Namespace Language.TokenIcer
 
+    ''' <summary>
+    ''' An abstract script text tokenlicer
+    ''' </summary>
     Public Interface IScanner
 
+        ''' <summary>
+        ''' parse the given script text as language tokens
+        ''' </summary>
+        ''' <returns></returns>
         Function GetTokens() As IEnumerable(Of Token)
 
     End Interface
