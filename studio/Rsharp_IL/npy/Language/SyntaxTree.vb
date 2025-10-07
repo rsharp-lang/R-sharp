@@ -75,6 +75,17 @@ Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser.SyntaxImplements
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports Rscript = SMRUCC.Rsharp.Runtime.Components.Rscript
 
+Public Class PythonSyntaxBuilderOptions : Inherits SyntaxBuilderOptions
+
+    Public Overrides Function ParseExpression(tokens As IEnumerable(Of Token)) As SyntaxResult
+        Return ParsePythonLine(tokens, Me)
+    End Function
+
+    Public Overrides Function NewScanner(buffer As Microsoft.VisualBasic.Text.Parser.CharPtr, stringInterpolateParser As Boolean) As IScanner
+        Return New PyScanner(buffer, stringInterpolateParser)
+    End Function
+End Class
+
 Public Class SyntaxTree
 
     ReadOnly script As Rscript
@@ -98,7 +109,7 @@ Public Class SyntaxTree
         Me.debug = debug
         Me.script = script
         Me.scanner = New PyScanner(script.script)
-        Me.opts = New SyntaxBuilderOptions(AddressOf ParsePythonLine, Function(c, s) New PyScanner(c, s)) With {
+        Me.opts = New PythonSyntaxBuilderOptions() With {
             .source = script,
             .debug = debug,
             .pipelineSymbols = {"."}

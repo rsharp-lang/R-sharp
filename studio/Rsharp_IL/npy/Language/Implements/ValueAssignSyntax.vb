@@ -75,10 +75,10 @@ Namespace Language.Implementation
             Dim symbolNames = DeclareNewSymbolSyntax.getNames(target, opts)
 
             If symbolNames Like GetType(SyntaxErrorException) Then
-                Dim targetExpr = opts.ParseExpression(target, opts)
+                Dim targetExpr = opts.ParseExpression(target)
 
                 If Not targetExpr.isException Then
-                    Dim valueData = opts.ParseExpression(value, opts)
+                    Dim valueData = opts.ParseExpression(value)
 
                     If valueData.isException Then
                         Return valueData
@@ -142,7 +142,7 @@ Namespace Language.Implementation
                     End If
                 End If
             Else
-                Dim valueExpr As SyntaxResult = opts.ParseExpression(value, opts)
+                Dim valueExpr As SyntaxResult = opts.ParseExpression(value)
 
                 If valueExpr.isException Then
                     Return valueExpr

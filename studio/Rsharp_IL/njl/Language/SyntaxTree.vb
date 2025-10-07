@@ -74,6 +74,17 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Language
 
+    Public Class JuliaSyntaxBuilderOptions : Inherits SyntaxBuilderOptions
+
+        Public Overrides Function ParseExpression(tokens As IEnumerable(Of Token)) As SyntaxResult
+            Return ParseJuliaLine(tokens, Me)
+        End Function
+
+        Public Overrides Function NewScanner(buffer As Microsoft.VisualBasic.Text.Parser.CharPtr, stringInterpolateParser As Boolean) As IScanner
+            Return New JlScanner(buffer, stringInterpolateParser)
+        End Function
+    End Class
+
     Public Class SyntaxTree
 
         ReadOnly script As Rscript
@@ -97,7 +108,7 @@ Namespace Language
             Me.debug = debug
             Me.script = script
             Me.scanner = New JlScanner(script.script)
-            Me.opts = New SyntaxBuilderOptions(AddressOf ParseJuliaLine, Function(c, s) New JlScanner(c, s)) With {
+            Me.opts = New JuliaSyntaxBuilderOptions() With {
                 .source = script,
                 .debug = debug
             }
@@ -164,7 +175,7 @@ Namespace Language
         End Sub
 
         Private Sub startAcceptorDefine(line As TokenLine)
-            Dim expr = opts.ParseExpression(line.tokens.Take(line.length - 1), opts)
+            Dim expr = opts.ParseExpression(line.tokens.Take(line.length - 1))
 
             If expr.isException Then
                 Throw New InvalidProgramException
@@ -209,7 +220,7 @@ Namespace Language
                                 .Where(Function(t)
                                            Return Not (t.Length = 1 AndAlso t(0).name = TokenType.comma)
                                        End Function) _
-                                .Select(Function(t) opts.ParseExpression(t, opts)) _
+                                .Select(Function(t) opts.ParseExpression(t)) _
                                 .ToArray
             Dim require As New Require(pkgNames.Select(Function(name) name.expression))
 
@@ -217,7 +228,7 @@ Namespace Language
         End Sub
 
         Private Sub importModule(line As TokenLine)
-            Dim nameRef = opts.ParseExpression(line.tokens.Skip(1), opts)
+            Dim nameRef = opts.ParseExpression(line.tokens.Skip(1))
             Dim nameStr As SymbolReference = nameRef.expression
             Dim names As String() = nameStr.symbol.Split("."c)
             Dim moduleName As String = names(0)
@@ -228,7 +239,7 @@ Namespace Language
         End Sub
 
         Private Sub includeFile(line As TokenLine)
-            Dim script = opts.ParseExpression(line.tokens.Skip(1), opts)
+            Dim script = opts.ParseExpression(line.tokens.Skip(1))
             Dim import As New [Imports](Nothing, script.expression, opts.source.source)
 
             Call current.Add(import)
@@ -264,7 +275,7 @@ Namespace Language
         End Sub
 
         Private Sub startIfDefine(line As TokenLine)
-            Dim test = opts.ParseExpression(line.tokens.Skip(1), opts)
+            Dim test = opts.ParseExpression(line.tokens.Skip(1))
 
             If test.isException Then
                 Throw New NotImplementedException
@@ -284,7 +295,7 @@ Namespace Language
         Private Sub startUsingDefine(line As TokenLine)
             Dim arg = line(-1)
             Dim auto = line.tokens.Take(line.length - 2).ToArray
-            Dim autoExpr = opts.ParseExpression(auto, opts)
+            Dim autoExpr = opts.ParseExpression(auto)
 
             If autoExpr.isException Then
                 Throw New NotImplementedException
@@ -319,7 +330,7 @@ Namespace Language
                         Case "if" : Call startIfDefine(line)
                         Case "return"
 
-                            Call current.Add(New ReturnValue(opts.ParseExpression(line.tokens.Skip(1), opts).expression))
+                            Call current.Add(New ReturnValue(opts.ParseExpression(line.tokens.Skip(1)).expression))
 
                         Case Else
                             Throw New NotImplementedException(line.ToString)
@@ -333,7 +344,7 @@ Namespace Language
                     ' }
                     Call startUsingDefine(line)
                 Else
-                    Dim expr = opts.ParseExpression(line.tokens, opts)
+                    Dim expr = opts.ParseExpression(line.tokens)
 
                     If expr.isException Then
                         Throw New InvalidProgramException

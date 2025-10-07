@@ -101,11 +101,11 @@ Public Module InternalParser
                     blocks(Scan0).First.name = TokenType.identifier AndAlso
                     blocks(Scan0)(1).name = TokenType.open Then
 
-                    Dim chain As FunctionInvoke = opts.ParseExpression(blocks.Take(2).IteratesALL, opts).expression
+                    Dim chain As FunctionInvoke = opts.ParseExpression(blocks.Take(2).IteratesALL).expression
                     Dim pipNext As SyntaxResult
 
                     For Each block In blocks.Skip(2).SlideWindows(2, offset:=2)
-                        pipNext = opts.ParseExpression(block.IteratesALL, opts)
+                        pipNext = opts.ParseExpression(block.IteratesALL)
 
                         If pipNext.isException Then
                             Return pipNext
