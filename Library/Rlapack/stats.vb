@@ -1460,7 +1460,7 @@ Module stats
     ''' - Cleveland, William S. 1981. "Lowess: A program for smoothing scatterplots by robust locally weighted regression." _American Statistician_ 35 (1) 54–55. doi:[10.2307/2683591](https://doi.org/10.2307/2683591).
     ''' </remarks>
     <ExportAPI("lowess")>
-    Public Function Lowess(<RRawVectorArgument> x As Object,
+    Public Function Lowess(<RRawVectorArgument> x As Object, <RRawVectorArgument> Optional y As Object = Nothing,
                            Optional f As Double = 2 / 3,
                            Optional nsteps As Integer = 3,
                            Optional env As Environment = Nothing) As Object
@@ -1477,8 +1477,11 @@ Module stats
                 px = CLRVector.asFloat(!x)
                 py = CLRVector.asFloat(!y)
             End With
+        ElseIf Not y Is Nothing Then
+            px = CLRVector.asFloat(x)
+            py = CLRVector.asFloat(y)
         Else
-            Return RInternal.debug.stop("", env)
+            Return RInternal.debug.stop("x should be a dataframe that contains the [x,y] point data to fit!", env)
         End If
 
         Dim fit = px.Select(Function(xi, i) New PointF(xi, py(i))).Lowess(f, nsteps)
