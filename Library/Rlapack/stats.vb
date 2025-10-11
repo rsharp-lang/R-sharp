@@ -1444,6 +1444,21 @@ Module stats
         End If
     End Function
 
+    ''' <summary>
+    ''' Locally-weighted polynomial regression via the LOWESS algorithm.
+    ''' </summary>
+    ''' <param name="x">should be a dataframe that contains the point data: x - ordered x-axis values (abscissa values); y - corresponding y-axis values (ordinate values)</param>
+    ''' <param name="f">smoother span (proportion of points which influence smoothing at each value)</param>
+    ''' <param name="nsteps">number of iterations in the robust fit</param>
+    ''' <returns>
+    ''' sorted x-values and fitted values
+    ''' </returns>
+    ''' <remarks>
+    ''' Calculates fitted values using a nearest neighbor function and robust locally weighted regression of degree one with the tricube weight function.
+    ''' 
+    ''' - Cleveland, William S. 1979. "Robust Locally and Smoothing Weighted Regression Scatterplots." _Journal of the American Statistical Association_ 74 (368): 829–36. doi:[10.1080/01621459.1979.10481038](https://doi.org/10.1080/01621459.1979.10481038).
+    ''' - Cleveland, William S. 1981. "Lowess: A program for smoothing scatterplots by robust locally weighted regression." _American Statistician_ 35 (1) 54–55. doi:[10.2307/2683591](https://doi.org/10.2307/2683591).
+    ''' </remarks>
     <ExportAPI("lowess")>
     Public Function Lowess(<RRawVectorArgument> x As Object,
                            Optional f As Double = 2 / 3,
@@ -1470,6 +1485,7 @@ Module stats
         Dim result As New Rdataframe With {
             .columns = New Dictionary(Of String, Array) From {
                 {"x", fit.x},
+                {"y.fit", fit.yfit},
                 {"y", fit.y}
             }
         }
