@@ -1,63 +1,63 @@
 ﻿#Region "Microsoft.VisualBasic::d216681f3185da9380b8e2d6e03e9d4b, Library\Rlapack\models\lmCall.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 167
-    '    Code Lines: 137 (82.04%)
-    ' Comment Lines: 0 (0.00%)
-    '    - Xml Docs: 0.00%
-    ' 
-    '   Blank Lines: 30 (17.96%)
-    '     File Size: 5.42 KB
+' Summaries:
 
 
-    ' Class lmCall
-    ' 
-    '     Properties: data, equation, factors, formula, lm
-    '                 name, R2, summary, variables, weights
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: CreateFormulaCall, Predicts, ToString, weightLmString, weightLmSummary
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 167
+'    Code Lines: 137 (82.04%)
+' Comment Lines: 0 (0.00%)
+'    - Xml Docs: 0.00%
+' 
+'   Blank Lines: 30 (17.96%)
+'     File Size: 5.42 KB
+
+
+' Class lmCall
+' 
+'     Properties: data, equation, factors, formula, lm
+'                 name, R2, summary, variables, weights
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: CreateFormulaCall, Predicts, ToString, weightLmString, weightLmSummary
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
-Imports System.Security.Principal
 Imports Microsoft.VisualBasic.Data.Bootstrapping
+Imports Microsoft.VisualBasic.Data.Bootstrapping.Logistic
 Imports Microsoft.VisualBasic.Data.Bootstrapping.Multivariate
 Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine

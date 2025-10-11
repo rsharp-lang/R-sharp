@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::13d416d1bab499baa47b706ae23038b2, Library\Rlapack\math.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1192
-    '    Code Lines: 739 (62.00%)
-    ' Comment Lines: 311 (26.09%)
-    '    - Xml Docs: 87.78%
-    ' 
-    '   Blank Lines: 142 (11.91%)
-    '     File Size: 49.38 KB
+' Summaries:
 
 
-    ' Module math
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: asFormula, asLmcall, binomial, bootstrap, create_deSolve_DataFrame
-    '               curve_fit, DiffEntropy, getBinTable, getMax, getMin
-    '               Gini, glm, Hist, lasso_fit, lassoResultTable
-    '               lm, loess, predict, RamerDouglasPeucker, (+2 Overloads) RK4
-    '               scale_x, sim, ssm, summaryFit
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1192
+'    Code Lines: 739 (62.00%)
+' Comment Lines: 311 (26.09%)
+'    - Xml Docs: 87.78%
+' 
+'   Blank Lines: 142 (11.91%)
+'     File Size: 49.38 KB
+
+
+' Module math
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: asFormula, asLmcall, binomial, bootstrap, create_deSolve_DataFrame
+'               curve_fit, DiffEntropy, getBinTable, getMax, getMin
+'               Gini, glm, Hist, lasso_fit, lassoResultTable
+'               lm, loess, predict, RamerDouglasPeucker, (+2 Overloads) RK4
+'               scale_x, sim, ssm, summaryFit
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -65,6 +65,7 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.Bootstrapping
 Imports Microsoft.VisualBasic.Data.Bootstrapping.LASSO
+Imports Microsoft.VisualBasic.Data.Bootstrapping.Logistic
 Imports Microsoft.VisualBasic.Data.Bootstrapping.Multivariate
 Imports Microsoft.VisualBasic.Data.Framework.IO
 Imports Microsoft.VisualBasic.Language
