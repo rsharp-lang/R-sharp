@@ -9,3 +9,13 @@ let y = [
     32, 48, 52, 56, 64, 66, 54, 70, 92, 93, 120, 85
 ];
 let out = lowess( x, y );
+
+print(out);
+
+x = c(out$x,out$x);
+y = c(out$y,out$y.fit);
+tag = c(rep("y", times = nrow(out)), rep("y fit", times = nrow(out)));
+
+bitmap(file = relative_work("lowess(x,y).png")) {
+    plot(x,y,class = tag, fill = "white");
+}
