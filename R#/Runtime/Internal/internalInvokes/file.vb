@@ -626,6 +626,14 @@ Namespace Runtime.Internal.Invokes
                 Else
                     listfile = DirectCast(dir, ZipFolder).scanZipFiles("*.*")
                 End If
+            ElseIf dir.GetType.ImplementInterface(GetType(IFileSystemEnvironment)) Then
+                Dim dir_fs As IFileSystemEnvironment = DirectCast(dir, IFileSystemEnvironment)
+
+                If wildcard Then
+                    listfile = If(recursive, dir_fs.GetFiles("/", pattern), dir_fs.EnumerateFiles("/", pattern)).ToArray
+                Else
+                    listfile = If(recursive, dir_fs.GetFiles("/"), dir_fs.EnumerateFiles("/")).ToArray
+                End If
             Else
                 Dim dirStr As String = any.ToString(dir)
                 Dim match As String() = If(wildcard, pattern, {"*.*"})
