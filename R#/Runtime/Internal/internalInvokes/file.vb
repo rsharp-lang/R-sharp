@@ -491,13 +491,20 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("dir.open")>
-        Public Function openDir(dir As String, Optional env As Environment = Nothing) As FileIO.Directory
-            If Not dir.DirectoryExists Then
-                Call env.AddMessage($"target directory: {dir.GetDirectoryFullPath} is not found on the file system...")
-                Call dir.MakeDir
-            End If
+        Public Function openDir(dir As String,
+                                Optional fs As IFileSystemEnvironment = Nothing,
+                                Optional env As Environment = Nothing) As IFileSystemEnvironment
 
-            Return FileIO.Directory.FromLocalFileSystem(dir)
+            If fs Is Nothing Then
+                If Not dir.DirectoryExists Then
+                    Call env.AddMessage($"target directory: {dir.GetDirectoryFullPath} is not found on the file system...")
+                    Call dir.MakeDir
+                End If
+
+                Return FileIO.Directory.FromLocalFileSystem(dir)
+            Else
+                Return New FileSystemView(fs, dir)
+            End If
         End Function
 
         ''' <summary>
