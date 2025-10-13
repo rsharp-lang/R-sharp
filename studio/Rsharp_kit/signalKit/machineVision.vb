@@ -119,6 +119,21 @@ Public Module machineVision
             Return buffer.TryCast(Of Message)
         End If
 
-        Return Thresholding.ostuFilter(buffer, flip, factor)
+        Return Thresholding.ostuFilter(buffer, flip, factor:=factor)
+    End Function
+
+    <ExportAPI("threshold")>
+    Public Function threshold(image As Object, Optional env As Environment = Nothing) As Object
+        If image Is Nothing Then
+            Return Nothing
+        End If
+
+        Dim buffer = bitmapCommon(image, env)
+
+        If buffer Like GetType(Message) Then
+            Return buffer.TryCast(Of Message)
+        Else
+            Return Thresholding.otsuThreshold(buffer.TryCast(Of BitmapBuffer))
+        End If
     End Function
 End Module
