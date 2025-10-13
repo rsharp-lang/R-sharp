@@ -488,8 +488,11 @@ Namespace Runtime.Internal.Invokes
         ''' Open an interface to a specific local filesystem location
         ''' </summary>
         ''' <param name="dir"></param>
+        ''' <param name="fs">
+        ''' the logical filesystem view
+        ''' </param>
         ''' <param name="env"></param>
-        ''' <returns></returns>
+        ''' <returns>a directory model</returns>
         <ExportAPI("dir.open")>
         Public Function openDir(dir As String,
                                 Optional fs As IFileSystemEnvironment = Nothing,
