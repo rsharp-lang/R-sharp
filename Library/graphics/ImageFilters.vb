@@ -182,4 +182,11 @@ Module ImageFilters
 
         Return c
     End Function
+
+    <ExportAPI("adjust_contrast")>
+    Public Function adjust_contrast(img As Image, contrast As Double) As Bitmap
+        Dim target As New Bitmap(img)
+        Call target.AdjustContrast(contrast)
+        Return target
+    End Function
 End Module
