@@ -69,6 +69,9 @@ Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
 Imports Image = Microsoft.VisualBasic.Imaging.Image
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
+''' <summary>
+''' Image filters function
+''' </summary>
 <Package("filter")>
 Module ImageFilters
 
