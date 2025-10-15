@@ -252,6 +252,15 @@ Namespace Runtime.Internal.Object
             Next
         End Sub
 
+        Sub New(data As Array, names As String())
+            elementType = RType.TypeOf(data)
+            slots = New Dictionary(Of String, Object)
+
+            For i As Integer = 0 To names.Length - 1
+                slots(names(i)) = data(i)
+            Next
+        End Sub
+
         ''' <summary>
         ''' add key-value directly 
         ''' </summary>
