@@ -1251,18 +1251,21 @@ theta = {objToString(thetaFunc, env:=env)}
     End Function
 
     ''' <summary>
-    ''' NNLS Non-Negative Least-Squares algorithm
+    ''' #### NNLS Non-Negative Least-Squares algorithm
+    ''' 
+    ''' Solves the non-negative least squares problem: Minimizes ``||Ax - b||^2`` subject to ``x >= 0``.
     ''' </summary>
-    ''' <param name="A"></param>
-    ''' <param name="b"></param>
-    ''' <param name="tolerance"></param>
+    ''' <param name="A">The design matrix (m x n).</param>
+    ''' <param name="b">The observation vector (m).</param>
+    ''' <param name="tolerance">The convergence tolerance.</param>
     ''' <param name="env"></param>
-    ''' <returns></returns>
+    ''' <returns>The non-negative solution vector x (n).</returns>
     <ExportAPI("nnls")>
     Public Function nnls(<RRawVectorArgument> A As Object,
                          <RRawVectorArgument> b As Object,
                          Optional tolerance As Double = 0.00000001,
                          Optional env As Environment = Nothing) As Object
+
         Dim X As Double(,)
 
         If TypeOf A Is dataframe Then
