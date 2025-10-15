@@ -61,6 +61,7 @@ Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.Bootstrapping
@@ -1247,5 +1248,32 @@ theta = {objToString(thetaFunc, env:=env)}
         Else
             Return result
         End If
+    End Function
+
+    ''' <summary>
+    ''' NNLS Non-Negative Least-Squares algorithm
+    ''' </summary>
+    ''' <param name="A"></param>
+    ''' <param name="b"></param>
+    ''' <param name="tolerance"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("nnls")>
+    Public Function nnls(<RRawVectorArgument> A As Object,
+                         <RRawVectorArgument> b As Object,
+                         Optional tolerance As Double = 0.00000001,
+                         Optional env As Environment = Nothing) As Object
+        Dim X As Double(,)
+
+        If TypeOf A Is dataframe Then
+            X = DirectCast(A, dataframe) _
+                .forEachRow _
+                .Select(Function(r) CLRVector.asNumeric(r)) _
+                .ToMatrix
+        Else
+            Return Message.InCompatibleType(GetType(dataframe), A.GetType, env)
+        End If
+
+        Return NonNegativeLeastSquares.Solve(X, CLRVector.asNumeric(b), tolerance:=tolerance)
     End Function
 End Module
