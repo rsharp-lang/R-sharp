@@ -694,17 +694,26 @@ Namespace Runtime.Internal.Invokes
         <RApiReturn(GetType(String()))>
         Public Function listDirs(Optional dir$ = "./",
                                  Optional fullNames As Boolean = True,
-                                 Optional recursive As Boolean = True) As Object
+                                 Optional recursive As Boolean = True,
+                                 Optional fs As IFileSystemEnvironment = Nothing) As Object
 
-            If Not dir.DirectoryExists Then
-                Return {}
+            If fs Is Nothing Then
+                If Not dir.DirectoryExists Then
+                    Return {}
+                Else
+                    Dim level As fsOptions = If(recursive, fsOptions.SearchAllSubDirectories, fsOptions.SearchTopLevelOnly)
+                    Dim dirs$() = dir _
+                        .ListDirectory(level, fullNames) _
+                        .ToArray
+
+                    Return dirs
+                End If
+            End If
+
+            If recursive Then
+                Return fs.GetFiles(dir & "/").Select(Function(file) file.ParentPath).Distinct.ToArray
             Else
-                Dim level As fsOptions = If(recursive, fsOptions.SearchAllSubDirectories, fsOptions.SearchTopLevelOnly)
-                Dim dirs$() = dir _
-                    .ListDirectory(level, fullNames) _
-                    .ToArray
-
-                Return dirs
+                Return fs.GetFiles(dir & "/").Select(Function(file) file.ParentPath).Distinct.ToArray
             End If
         End Function
 
