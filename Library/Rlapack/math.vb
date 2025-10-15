@@ -1271,7 +1271,7 @@ theta = {objToString(thetaFunc, env:=env)}
         If TypeOf A Is dataframe Then
             X = DirectCast(A, dataframe) _
                 .forEachRow _
-                .Select(Function(r) CLRVector.asNumeric(r)) _
+                .Select(Function(r) CLRVector.asNumeric(r.value)) _
                 .ToMatrix
         Else
             Return Message.InCompatibleType(GetType(dataframe), A.GetType, env)
