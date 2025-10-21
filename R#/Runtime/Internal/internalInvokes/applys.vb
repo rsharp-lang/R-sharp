@@ -141,7 +141,7 @@ Namespace Runtime.Internal.Invokes
             ElseIf TypeOf x Is dataframe Then
                 Return doApply.apply(DirectCast(x, dataframe), margin, FUN, env)
             Else
-                Return debug.stop(New InvalidProgramException, env)
+                Return debug.stop(New InvalidProgramException("the given data x should be a dataframe object!"), env)
             End If
         End Function
 
@@ -310,7 +310,7 @@ Namespace Runtime.Internal.Invokes
             If FUN Is Nothing Then
                 Return Internal.debug.stop({"Missing apply function!"}, env)
             ElseIf Not FUN.GetType.ImplementInterface(GetType(RFunction)) Then
-                Return Internal.debug.stop({"Target is not a function!"}, env)
+                Return Internal.debug.stop({"Target is not a function!", $"typeof(FUN)={FUN.GetType.FullName}"}, env)
             End If
 
             If Program.isException(X) Then
