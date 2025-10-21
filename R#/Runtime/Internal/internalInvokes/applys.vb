@@ -305,6 +305,8 @@ Namespace Runtime.Internal.Invokes
         Public Function checkInternal(X As Object, ByRef FUN As Object, env As Environment) As Object
             If TypeOf FUN Is MethodInfo Then
                 FUN = New RMethodInfo("call_clr", DirectCast(FUN, MethodInfo), Nothing)
+            ElseIf TypeOf FUN Is SymbolPrefixTree Then
+                FUN = DirectCast(FUN, SymbolPrefixTree)("*")
             End If
 
             If FUN Is Nothing Then
