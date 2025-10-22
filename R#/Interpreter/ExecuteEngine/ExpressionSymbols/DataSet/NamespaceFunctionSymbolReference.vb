@@ -140,11 +140,11 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
 
             Dim globalEnv As GlobalEnvironment = env.globalEnvironment
-            Dim method As Symbol = globalEnv.FindFunction($"{[namespace]}::{funcName}")
+            Dim method As Symbol = globalEnv.FindFunctionWithNamespaceRestrict([namespace], funcName)
 
             If method IsNot Nothing AndAlso method.value IsNot Nothing Then
                 If method.value.GetType.ImplementInterface(Of INamespaceReferenceSymbol) Then
-                    If DirectCast(method.value, INamespaceReferenceSymbol).namespace = [namespace] Then
+                    If DirectCast(method.value, INamespaceReferenceSymbol).namespace = [namespace] OrElse [namespace] = ".Internal" Then
                         Return method.value
                     End If
                 End If

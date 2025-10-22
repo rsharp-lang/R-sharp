@@ -490,22 +490,37 @@ Namespace Runtime
             End If
         End Function
 
+        Public Function FindFunctionWithNamespaceRestrict(pkgName As String, symbolName As String) As Symbol
+            If pkgName = ".Internal" Then
+                Dim fun As RFunction = Internal.invoke.getFunction(symbolName)
+
+                If fun Is Nothing Then
+                    Return Nothing
+                Else
+                    Return New Symbol(fun, True)
+                End If
+            Else
+                Dim attaches As SymbolNamespaceSolver = globalEnvironment.attachedNamespace
+                Dim funcSymbol As RFunction = attaches.FindSymbol(pkgName, symbolName)
+
+                If funcSymbol Is Nothing Then
+                    funcSymbol = attaches.FindPackageSymbol(pkgName, symbolName, Me)
+                End If
+
+                If funcSymbol Is Nothing Then
+                    Return Nothing
+                Else
+                    Return New Symbol(symbolName, funcSymbol)
+                End If
+            End If
+        End Function
+
         Public Function FindFunctionWithNamespaceRestrict(name As String) As Symbol
             Dim tokens As String() = Microsoft.VisualBasic.Strings.Split(name, "::")
             Dim pkgName As String = tokens(Scan0)
             Dim symbolName As String = tokens(1)
-            Dim attaches As SymbolNamespaceSolver = globalEnvironment.attachedNamespace
-            Dim funcSymbol As RFunction = attaches.FindSymbol(pkgName, symbolName)
 
-            If funcSymbol Is Nothing Then
-                funcSymbol = attaches.FindPackageSymbol(pkgName, symbolName, Me)
-            End If
-
-            If funcSymbol Is Nothing Then
-                Return Nothing
-            Else
-                Return New Symbol(symbolName, funcSymbol)
-            End If
+            Return FindFunctionWithNamespaceRestrict(pkgName, symbolName)
         End Function
 
         ''' <summary>
