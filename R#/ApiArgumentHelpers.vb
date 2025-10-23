@@ -95,10 +95,7 @@ Public Module ApiArgumentHelpers
     ''' the traceback tag
     ''' </param>
     ''' <returns></returns>
-    Public Function GetNamedValueTuple(Of T)(value As Object,
-                                             env As Environment,
-                                             <CallerMemberName>
-                                             Optional api$ = Nothing) As [Variant](Of NamedValue(Of T), Message)
+    Public Function GetNamedValueTuple(Of T)(value As Object, env As Environment, <CallerMemberName> Optional api$ = Nothing) As [Variant](Of NamedValue(Of T), Message)
         If value Is Nothing Then
             Return Nothing
         End If

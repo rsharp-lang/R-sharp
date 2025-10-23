@@ -1,65 +1,66 @@
 ﻿#Region "Microsoft.VisualBasic::bb867329e0de5780b07e777ded9cdeab, Library\graphics\Plot2D\geometry2D.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 213
-    '    Code Lines: 163 (76.53%)
-    ' Comment Lines: 26 (12.21%)
-    '    - Xml Docs: 96.15%
-    ' 
-    '   Blank Lines: 24 (11.27%)
-    '     File Size: 9.03 KB
+' Summaries:
 
 
-    ' Module geometry2D
-    ' 
-    '     Function: ConcaveHull, density2D, fillPolygonGroups, fillPolygons, Kdtest
-    ' 
-    '     Sub: Main
-    ' 
-    ' Class PointAccess
-    ' 
-    '     Function: activate, getByDimension, GetDimensions, metric, nodeIs
-    ' 
-    '     Sub: setByDimensin
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 213
+'    Code Lines: 163 (76.53%)
+' Comment Lines: 26 (12.21%)
+'    - Xml Docs: 96.15%
+' 
+'   Blank Lines: 24 (11.27%)
+'     File Size: 9.03 KB
+
+
+' Module geometry2D
+' 
+'     Function: ConcaveHull, density2D, fillPolygonGroups, fillPolygons, Kdtest
+' 
+'     Sub: Main
+' 
+' Class PointAccess
+' 
+'     Function: activate, getByDimension, GetDimensions, metric, nodeIs
+' 
+'     Sub: setByDimensin
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.ChartPlots
@@ -85,6 +86,7 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 <Package("geometry2D")>
 <RTypeExport("polygon_group", GetType(PolygonGroup))>
+<RTypeExport("geo_transform", GetType(Transform))>
 Module geometry2D
 
     Public Sub Main()
@@ -234,6 +236,47 @@ Module geometry2D
         }
 
         Return DrawKDTree.Plot(tree2, query, k:=knn, size:=$"{sizeVal.Width},{sizeVal.Height}", padding:="padding: 50px 50px 50px 50px;")
+    End Function
+
+    ''' <summary>
+    ''' Create a 2D geometric transformation argument object.
+    ''' </summary>
+    ''' <param name="theta"></param>
+    ''' <param name="translate"></param>
+    ''' <param name="scale"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("transform")>
+    <RApiReturn(GetType(Transform))>
+    Public Function transform(Optional theta As Double = 0,
+                              <RRawVectorArgument(TypeCodes.double)>
+                              Optional translate As Object = Nothing,
+                              <RRawVectorArgument(TypeCodes.double)>
+                              Optional scale As Object = Nothing,
+                              Optional env As Environment = Nothing) As Object
+
+        If theta = 0.0 AndAlso translate Is Nothing AndAlso scale Is Nothing Then
+            Call env.AddMessage("empty 2D geometric transformation information!", MSG_TYPES.WRN)
+
+            Return New Transform() With {
+                .ty = 0,
+                .tx = 0,
+                .theta = 0,
+                .scaley = 1,
+                .scalex = 1
+            }
+        End If
+
+        Dim translate_vec As Double() = CLRVector.asNumeric(translate)
+        Dim scale_vec As Double() = CLRVector.asNumeric(scale)
+
+        Return New Transform With {
+            .theta = theta,
+            .scalex = If(scale_vec.IsNullOrEmpty, 1.0, scale_vec(0)),
+            .scaley = If(scale_vec.IsNullOrEmpty OrElse scale_vec.Length = 1, .scalex, scale_vec(1)),
+            .tx = If(translate_vec.IsNullOrEmpty, 0.0, translate_vec(0)),
+            .ty = If(translate_vec.IsNullOrEmpty OrElse translate_vec.Length = 1, .tx, translate_vec(1))
+        }
     End Function
 
 End Module
