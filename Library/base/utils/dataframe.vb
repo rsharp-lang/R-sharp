@@ -813,6 +813,11 @@ ReturnTable:
         Return generic
     End Function
 
+    <ExportAPI("read.arff")>
+    Public Function read_arff_f(file As String, Optional env As Environment = Nothing) As Object
+        Return FeatureFrame.read_arff(file).toDataframe(list.empty, env)
+    End Function
+
     ''' <summary>
     ''' Writes the given data object to an ARFF (Attribute-Relation File Format) file or stream.
     ''' </summary>
