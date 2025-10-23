@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fcc945c635cca8646b7698c80999c2f9, studio\Rsharp_IL\npy\Language\InternalParser.vb"
+﻿#Region "Microsoft.VisualBasic::566047969a691d9ebf00fd89efc6c02d, studio\Rsharp_IL\npy\Language\InternalParser.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 25 (16.89%)
-    '     File Size: 6.69 KB
+    '     File Size: 6.68 KB
 
 
     ' Module InternalParser

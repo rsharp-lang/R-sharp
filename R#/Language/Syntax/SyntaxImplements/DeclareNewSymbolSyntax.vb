@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::03d68dc0ff0e764f765cc7d7ef91ad91, R#\Language\Syntax\SyntaxImplements\DeclareNewSymbolSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::de6c656307f5d4caee3f4ecd28a8840e, R#\Language\Syntax\SyntaxImplements\DeclareNewSymbolSyntax.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 65.79%
     ' 
     '   Blank Lines: 47 (15.46%)
-    '     File Size: 12.19 KB
+    '     File Size: 12.16 KB
 
 
     '     Module DeclareNewSymbolSyntax

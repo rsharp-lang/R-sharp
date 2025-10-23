@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::71b8b51bbdf7c8e82d54fdaab668ca6d, studio\Rsharp_IL\npy\Language\SyntaxTree.vb"
+﻿#Region "Microsoft.VisualBasic::391d9a9059512b7e08e423f526be39f8, studio\Rsharp_IL\npy\Language\SyntaxTree.vb"
 
     ' Author:
     ' 
@@ -34,15 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 386
-    '    Code Lines: 312 (80.83%)
-    ' Comment Lines: 19 (4.92%)
+    '   Total Lines: 397
+    '    Code Lines: 320 (80.60%)
+    ' Comment Lines: 19 (4.79%)
     '    - Xml Docs: 36.84%
     ' 
-    '   Blank Lines: 55 (14.25%)
-    '     File Size: 14.38 KB
+    '   Blank Lines: 58 (14.61%)
+    '     File Size: 14.80 KB
 
 
+    ' Class PythonSyntaxBuilderOptions
+    ' 
+    '     Function: NewScanner, ParseExpression
+    ' 
     ' Class SyntaxTree
     ' 
     '     Constructor: (+1 Overloads) Sub New

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cc84ad6327aa16f4f6b8916f80dfcf11, R#\Language\Syntax\SyntaxImplements\FormulaExpressionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::4d9ca1e329a99060674af4be7df895f8, R#\Language\Syntax\SyntaxImplements\FormulaExpressionSyntax.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 12 (21.82%)
-    '     File Size: 2.34 KB
+    '     File Size: 2.32 KB
 
 
     '     Module FormulaExpressionSyntax

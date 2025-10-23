@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a6acd05258b84c41348dddc732b93c70, R#\Language\Syntax\SyntaxImplements\CommandLine.vb"
+﻿#Region "Microsoft.VisualBasic::1b903b94765346f830d5c5fe64921c6a, R#\Language\Syntax\SyntaxImplements\CommandLine.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 80.95%
     ' 
     '   Blank Lines: 17 (14.17%)
-    '     File Size: 4.64 KB
+    '     File Size: 4.63 KB
 
 
     '     Module CommandLineSyntax

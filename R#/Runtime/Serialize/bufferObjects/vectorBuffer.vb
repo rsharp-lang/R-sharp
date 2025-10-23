@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::14abecad44acf0432a9fedb7d95b9f47, R#\Runtime\Serialize\bufferObjects\vectorBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::575601e44d7d57f1b370173f4f8f60cd, R#\Runtime\Serialize\bufferObjects\vectorBuffer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 291
-    '    Code Lines: 217 (74.57%)
-    ' Comment Lines: 15 (5.15%)
+    '   Total Lines: 292
+    '    Code Lines: 218 (74.66%)
+    ' Comment Lines: 15 (5.14%)
     '    - Xml Docs: 73.33%
     ' 
-    '   Blank Lines: 59 (20.27%)
-    '     File Size: 10.34 KB
+    '   Blank Lines: 59 (20.21%)
+    '     File Size: 10.47 KB
 
 
     '     Class vectorBuffer

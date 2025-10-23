@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e7846f9da0dc3ea002f95a658dcb2217, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::d150ed543e5cc109bf04ca94a554dbb7, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 850
-    '    Code Lines: 627 (73.76%)
-    ' Comment Lines: 120 (14.12%)
+    '   Total Lines: 851
+    '    Code Lines: 628 (73.80%)
+    ' Comment Lines: 120 (14.10%)
     '    - Xml Docs: 45.83%
     ' 
-    '   Blank Lines: 103 (12.12%)
-    '     File Size: 36.88 KB
+    '   Blank Lines: 103 (12.10%)
+    '     File Size: 37.02 KB
 
 
     '     Class SymbolIndexer

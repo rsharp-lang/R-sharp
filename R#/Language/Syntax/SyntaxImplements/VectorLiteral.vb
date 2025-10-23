@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b2cd970053bb67e06a981980690c5b2c, R#\Language\Syntax\SyntaxImplements\VectorLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::ffcfef443ca6eb8904c8342ef41dfd80, R#\Language\Syntax\SyntaxImplements\VectorLiteral.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 35.71%
     ' 
     '   Blank Lines: 34 (13.93%)
-    '     File Size: 10.87 KB
+    '     File Size: 10.84 KB
 
 
     '     Module VectorLiteralSyntax

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::286bea2c4244fe04d17f7da27494233f, R#\Runtime\Environment\PolyglotInteropEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::3d021b5e97880919abfaed0be94a0456, R#\Runtime\Environment\PolyglotInteropEnvironment.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 180
-    '    Code Lines: 132 (73.33%)
-    ' Comment Lines: 13 (7.22%)
+    '   Total Lines: 178
+    '    Code Lines: 130 (73.03%)
+    ' Comment Lines: 13 (7.30%)
     '    - Xml Docs: 61.54%
     ' 
-    '   Blank Lines: 35 (19.44%)
-    '     File Size: 6.14 KB
+    '   Blank Lines: 35 (19.66%)
+    '     File Size: 6.05 KB
 
 
     '     Class PolyglotInteropEnvironment

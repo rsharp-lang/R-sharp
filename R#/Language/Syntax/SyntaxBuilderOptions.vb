@@ -1,66 +1,69 @@
-﻿#Region "Microsoft.VisualBasic::372986979206d9cc7cd6377596b22489, R#\Language\Syntax\SyntaxBuilderOptions.vb"
+﻿#Region "Microsoft.VisualBasic::34c4588e0fe820597e12116d56cec3d7, R#\Language\Syntax\SyntaxBuilderOptions.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 110
-'    Code Lines: 80 (72.73%)
-' Comment Lines: 11 (10.00%)
-'    - Xml Docs: 100.00%
-' 
-'   Blank Lines: 19 (17.27%)
-'     File Size: 4.02 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Delegate Function
-' 
-' 
-'     Delegate Function
-' 
-' 
-'     Class SyntaxBuilderOptions
-' 
-'         Properties: fromSpan, haveSyntaxErr, isPythonPipelineSymbol, toSpan
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Function: Clone, GetStackTrace, SetCurrentRange, UsingVectorBuilder
-' 
-' 
-' 
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 123
+    '    Code Lines: 85 (69.11%)
+    ' Comment Lines: 17 (13.82%)
+    '    - Xml Docs: 100.00%
+    ' 
+    '   Blank Lines: 21 (17.07%)
+    '     File Size: 4.74 KB
+
+
+    '     Delegate Function
+    ' 
+    ' 
+    '     Delegate Function
+    ' 
+    ' 
+    '     Class RscriptSyntaxBuilderOptions
+    ' 
+    '         Function: NewScanner, ParseExpression
+    ' 
+    '     Class SyntaxBuilderOptions
+    ' 
+    '         Properties: fromSpan, haveSyntaxErr, isPythonPipelineSymbol, toSpan
+    ' 
+    '         Function: Clone, GetStackTrace, SetCurrentRange, UsingVectorBuilder
+    ' 
+    ' 
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

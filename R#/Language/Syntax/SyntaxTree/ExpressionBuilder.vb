@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c46ecb5c10a0c18035727398d764ae06, R#\Language\Syntax\SyntaxTree\ExpressionBuilder.vb"
+﻿#Region "Microsoft.VisualBasic::13e81d5dbafdaf1796d9ac63dbddc346, R#\Language\Syntax\SyntaxTree\ExpressionBuilder.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 26.09%
     ' 
     '   Blank Lines: 75 (13.44%)
-    '     File Size: 25.98 KB
+    '     File Size: 25.91 KB
 
 
     '     Module ExpressionBuilder

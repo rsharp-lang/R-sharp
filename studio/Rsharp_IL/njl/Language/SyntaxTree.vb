@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::68303ac82e035c56704c0cfa2deaf4ea, studio\Rsharp_IL\njl\Language\SyntaxTree.vb"
+﻿#Region "Microsoft.VisualBasic::06686b583337ac70377e09d43f3521a8, studio\Rsharp_IL\njl\Language\SyntaxTree.vb"
 
     ' Author:
     ' 
@@ -34,15 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 297
-    '    Code Lines: 231 (77.78%)
-    ' Comment Lines: 16 (5.39%)
+    '   Total Lines: 308
+    '    Code Lines: 239 (77.60%)
+    ' Comment Lines: 16 (5.19%)
     '    - Xml Docs: 68.75%
     ' 
-    '   Blank Lines: 50 (16.84%)
-    '     File Size: 11.47 KB
+    '   Blank Lines: 53 (17.21%)
+    '     File Size: 11.87 KB
 
 
+    '     Class JuliaSyntaxBuilderOptions
+    ' 
+    '         Function: NewScanner, ParseExpression
+    ' 
     '     Class SyntaxTree
     ' 
     '         Constructor: (+1 Overloads) Sub New

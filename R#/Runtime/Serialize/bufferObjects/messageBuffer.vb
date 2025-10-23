@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0d0798bd76aa6087b787f32773ca345e, R#\Runtime\Serialize\bufferObjects\messageBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::1b09452e65c24c8719e2fcee1768cd05, R#\Runtime\Serialize\bufferObjects\messageBuffer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 153
-    '    Code Lines: 116 (75.82%)
-    ' Comment Lines: 3 (1.96%)
+    '   Total Lines: 154
+    '    Code Lines: 117 (75.97%)
+    ' Comment Lines: 3 (1.95%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 34 (22.22%)
-    '     File Size: 5.42 KB
+    '   Blank Lines: 34 (22.08%)
+    '     File Size: 5.55 KB
 
 
     '     Class messageBuffer

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bbf126672e513db0ca4fd9cf00d94c57, R#\Language\Syntax\SyntaxImplements\ClosureExpressionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::0bf444b88d2d752f2f02fb7dbeac426c, R#\Language\Syntax\SyntaxImplements\ClosureExpressionSyntax.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 43.75%
     ' 
     '   Blank Lines: 29 (20.28%)
-    '     File Size: 5.25 KB
+    '     File Size: 5.24 KB
 
 
     '     Module ClosureExpressionSyntax

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ddc3341018541cefe2ace4160c196358, R#\Runtime\Interop\REnum.vb"
+﻿#Region "Microsoft.VisualBasic::3e12db765348fcd8a9f6629bc3f58e6c, R#\Runtime\Interop\REnum.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 77.78%
     ' 
     '   Blank Lines: 21 (16.41%)
-    '     File Size: 4.43 KB
+    '     File Size: 4.41 KB
 
 
     '     Class REnum

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a89b53e515b101678522530008910121, R#\GlobalSuppressions.vb"
+﻿#Region "Microsoft.VisualBasic::cc51e5264707c69a5b8c98ca87ca5024, R#\GlobalSuppressions.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 14
-    '    Code Lines: 8 (57.14%)
-    ' Comment Lines: 4 (28.57%)
+    '   Total Lines: 15
+    '    Code Lines: 9 (60.00%)
+    ' Comment Lines: 4 (26.67%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 2 (14.29%)
-    '     File Size: 2.15 KB
+    '   Blank Lines: 2 (13.33%)
+    '     File Size: 2.44 KB
 
 
     ' 

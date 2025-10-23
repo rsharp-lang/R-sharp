@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d95f3c8cca9d18fbf66b80756303ebdf, R#\System\IPCBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::3bc0fae663e5e519f2257e38baf2250c, R#\System\IPCBuffer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 68
-    '    Code Lines: 54 (79.41%)
+    '   Total Lines: 69
+    '    Code Lines: 55 (79.71%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 14 (20.59%)
-    '     File Size: 2.39 KB
+    '   Blank Lines: 14 (20.29%)
+    '     File Size: 2.54 KB
 
 
     '     Class IPCBuffer

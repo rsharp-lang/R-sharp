@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::603ae28760c97166b138d39e85066b4b, R#\Language\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::e25c227877397e06bf6aae3fc8f1649e, R#\Language\Syntax\SyntaxImplements\DeclareNewFunctionSyntax.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 42.86%
     ' 
     '   Blank Lines: 33 (15.87%)
-    '     File Size: 8.62 KB
+    '     File Size: 8.61 KB
 
 
     '     Module DeclareNewFunctionSyntax

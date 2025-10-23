@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ca0eef3758e871dde21f9661493ba581, R#\Runtime\Serialize\Buffer.vb"
+﻿#Region "Microsoft.VisualBasic::69af3cb6abeeadbde6c410ce0b276e5e, R#\Runtime\Serialize\Buffer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 88
-    '    Code Lines: 67 (76.14%)
-    ' Comment Lines: 7 (7.95%)
+    '   Total Lines: 89
+    '    Code Lines: 68 (76.40%)
+    ' Comment Lines: 7 (7.87%)
     '    - Xml Docs: 42.86%
     ' 
-    '   Blank Lines: 14 (15.91%)
-    '     File Size: 3.71 KB
+    '   Blank Lines: 14 (15.73%)
+    '     File Size: 3.84 KB
 
 
     '     Class Buffer

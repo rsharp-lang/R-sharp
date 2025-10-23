@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::53ed043037ddf0395002c1243f103feb, R#\Language\Syntax\SyntaxImplements\IfBranchSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::224247c6ebc2ba240abb9a872ae4846b, R#\Language\Syntax\SyntaxImplements\IfBranchSyntax.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 66.67%
     ' 
     '   Blank Lines: 24 (15.00%)
-    '     File Size: 6.73 KB
+    '     File Size: 6.68 KB
 
 
     '     Module IfBranchSyntax

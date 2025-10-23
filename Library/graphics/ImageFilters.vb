@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a838387430b1ac91e40478ea54c6a8d2, Library\graphics\ImageFilters.vb"
+﻿#Region "Microsoft.VisualBasic::a95fa4d91612e35e8142dc16b6317c04, Library\graphics\ImageFilters.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 131
-    '    Code Lines: 104 (79.39%)
-    ' Comment Lines: 8 (6.11%)
+    '   Total Lines: 141
+    '    Code Lines: 110 (78.01%)
+    ' Comment Lines: 11 (7.80%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 19 (14.50%)
-    '     File Size: 5.01 KB
+    '   Blank Lines: 20 (14.18%)
+    '     File Size: 5.31 KB
 
 
     ' Module ImageFilters
     ' 
-    '     Function: Diffusion, Emboss, gaussBlurEffect, HqxScalesF, Pencil
-    '               RTCPGray_func, RTCPWeight, Sharp, Soften, WoodCarving
+    '     Function: adjust_contrast, Diffusion, Emboss, gaussBlurEffect, HqxScalesF
+    '               Pencil, RTCPGray_func, RTCPWeight, Sharp, Soften
+    '               WoodCarving
     ' 
     ' /********************************************************************************/
 

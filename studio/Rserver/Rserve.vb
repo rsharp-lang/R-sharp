@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::77507982c47cb7abc8de33c890c4020a, studio\Rserver\Rserve.vb"
+﻿#Region "Microsoft.VisualBasic::340a98496991829560b18619e34218a3, studio\Rserver\Rserve.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 249
-    '    Code Lines: 137 (55.02%)
-    ' Comment Lines: 88 (35.34%)
+    '   Total Lines: 248
+    '    Code Lines: 137 (55.24%)
+    ' Comment Lines: 88 (35.48%)
     '    - Xml Docs: 55.68%
     ' 
-    '   Blank Lines: 24 (9.64%)
-    '     File Size: 10.84 KB
+    '   Blank Lines: 23 (9.27%)
+    '     File Size: 10.83 KB
 
 
     ' Class Rserve
@@ -301,5 +301,3 @@ Return CLI.ToString()
 End Function
 End Class
 End Namespace
-
-

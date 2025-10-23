@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e8d009cffc6555a250c93aa88c70ea90, R#\Interpreter\ExecuteEngine\Linq\Syntax\SyntaxImplements.vb"
+﻿#Region "Microsoft.VisualBasic::6f9cdd33143dc5031df9fb1e902a39b9, R#\Interpreter\ExecuteEngine\Linq\Syntax\SyntaxImplements.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 84.09%
     ' 
     '   Blank Lines: 80 (15.50%)
-    '     File Size: 22.32 KB
+    '     File Size: 22.30 KB
 
 
     '     Module SyntaxImplements

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d7801329434d48be16b8039993ec60ff, R#\Runtime\Serialize\bufferObjects\listBuffer.vb"
+﻿#Region "Microsoft.VisualBasic::a5e601ec8e66bb7672cbd3667d8132f2, R#\Runtime\Serialize\bufferObjects\listBuffer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 110
-    '    Code Lines: 83 (75.45%)
-    ' Comment Lines: 4 (3.64%)
+    '   Total Lines: 111
+    '    Code Lines: 84 (75.68%)
+    ' Comment Lines: 4 (3.60%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 23 (20.91%)
-    '     File Size: 3.68 KB
+    '   Blank Lines: 23 (20.72%)
+    '     File Size: 3.81 KB
 
 
     '     Class listBuffer

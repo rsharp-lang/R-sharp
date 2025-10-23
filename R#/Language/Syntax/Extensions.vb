@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6ce64b17ec04847e8789688cd045c626, R#\Language\Syntax\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::27b5bc54e7180cb2df359022689a127b, R#\Language\Syntax\Extensions.vb"
 
     ' Author:
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::951a79ba093710f6b631b33bd82bb901, R#\Language\TokenIcer\StringInterpolation.vb"
+﻿#Region "Microsoft.VisualBasic::ba9a319ccf2b65557d1eb4b7c4501ccf, R#\Language\TokenIcer\StringInterpolation.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 50.00%
     ' 
     '   Blank Lines: 20 (21.05%)
-    '     File Size: 3.17 KB
+    '     File Size: 3.16 KB
 
 
     '     Class StringInterpolation

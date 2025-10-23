@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::79221d243423bc6a986ede2cddd4f1db, studio\Rserver\RscriptInterop\Rscript.vb"
+﻿#Region "Microsoft.VisualBasic::3169ced2288782abf0e13efcfdb14ea1, studio\Rserver\RscriptInterop\Rscript.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 320
-    '    Code Lines: 175 (54.69%)
-    ' Comment Lines: 119 (37.19%)
+    '   Total Lines: 319
+    '    Code Lines: 175 (54.86%)
+    ' Comment Lines: 119 (37.30%)
     '    - Xml Docs: 59.66%
     ' 
-    '   Blank Lines: 26 (8.12%)
-    '     File Size: 14.70 KB
+    '   Blank Lines: 25 (7.84%)
+    '     File Size: 14.69 KB
 
 
     ' Class Rscript
@@ -372,5 +372,3 @@ Return CLI.ToString()
 End Function
 End Class
 End Namespace
-
-

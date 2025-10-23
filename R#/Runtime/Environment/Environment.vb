@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::174d06796b59715b6a6b4685f6a90389, R#\Runtime\Environment\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::03647b69a4b220ea014d663f4803b0c9, R#\Runtime\Environment\Environment.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 875
-    '    Code Lines: 437 (49.94%)
-    ' Comment Lines: 333 (38.06%)
+    '   Total Lines: 890
+    '    Code Lines: 449 (50.45%)
+    ' Comment Lines: 333 (37.42%)
     '    - Xml Docs: 62.46%
     ' 
-    '   Blank Lines: 105 (12.00%)
-    '     File Size: 38.18 KB
+    '   Blank Lines: 108 (12.13%)
+    '     File Size: 38.77 KB
 
 
     '     Class Environment
@@ -51,7 +51,7 @@
     '         Constructor: (+5 Overloads) Sub New
     ' 
     '         Function: asRVector, AssignSymbol, EnumerateAllFunctions, EnumerateAllSymbols, Evaluate
-    '                   FindFunction, FindFunctionWithNamespaceRestrict, FindSymbol, GetAcceptorArguments, GetEnumerator
+    '                   FindFunction, (+2 Overloads) FindFunctionWithNamespaceRestrict, FindSymbol, GetAcceptorArguments, GetEnumerator
     '                   GetSymbolsNames, GetValue, IEnumerable_GetEnumerator, Push, ToString
     '                   WriteLineHandler
     ' 

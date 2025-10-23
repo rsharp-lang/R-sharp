@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f3f5df2738fae9ce2a0620198cd2d78c, R#\Language\Syntax\SyntaxResult.vb"
+﻿#Region "Microsoft.VisualBasic::b414776b2faa03f2a2f2daaf9a2483c9, R#\Language\Syntax\SyntaxResult.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 104
-    '    Code Lines: 64 (61.54%)
-    ' Comment Lines: 22 (21.15%)
+    '   Total Lines: 114
+    '    Code Lines: 64 (56.14%)
+    ' Comment Lines: 31 (27.19%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 18 (17.31%)
-    '     File Size: 3.96 KB
+    '   Blank Lines: 19 (16.67%)
+    '     File Size: 4.28 KB
 
 
     '     Class SyntaxResult

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6d129f585d23804339eebcbba61f0982, Library\Rlapack\stats.vb"
+﻿#Region "Microsoft.VisualBasic::99669111a02d837ab49dbd6752df5395, Library\Rlapack\stats.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 2297
-    '    Code Lines: 1148 (49.98%)
-    ' Comment Lines: 920 (40.05%)
-    '    - Xml Docs: 87.93%
+    '   Total Lines: 2316
+    '    Code Lines: 1152 (49.74%)
+    ' Comment Lines: 935 (40.37%)
+    '    - Xml Docs: 88.02%
     ' 
-    '   Blank Lines: 229 (9.97%)
-    '     File Size: 101.72 KB
+    '   Blank Lines: 229 (9.89%)
+    '     File Size: 103.23 KB
 
 
     ' Module stats

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5a2718267afb35043292b9acb96f6df4, R#\Language\Syntax\SyntaxImplements\RequireSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::6e3d6f9b61571853119d0a3651f9636c, R#\Language\Syntax\SyntaxImplements\RequireSyntax.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 10 (11.49%)
-    '     File Size: 3.70 KB
+    '     File Size: 3.68 KB
 
 
     '     Module RequireSyntax

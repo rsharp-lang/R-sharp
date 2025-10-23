@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2ff165ec5c3cc8ead8c47c7411a788e9, R#\Language\Code.vb"
+﻿#Region "Microsoft.VisualBasic::0984683c6ad724aa90611fdcf6bc8edf, R#\Language\Code.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 83.33%
     ' 
     '   Blank Lines: 12 (14.46%)
-    '     File Size: 3.12 KB
+    '     File Size: 3.06 KB
 
 
     '     Module Code

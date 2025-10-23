@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b3c65c3beb59e4f78cd29f1c0885b69d, R#\Language\TokenType.vb"
+﻿#Region "Microsoft.VisualBasic::0ee3324dfc9b9397f0ac72e47094ecfd, R#\Language\TokenType.vb"
 
     ' Author:
     ' 
@@ -34,22 +34,22 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 73
-    '    Code Lines: 26 (35.62%)
-    ' Comment Lines: 39 (53.42%)
+    '   Total Lines: 78
+    '    Code Lines: 27 (34.62%)
+    ' Comment Lines: 42 (53.85%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 8 (10.96%)
-    '     File Size: 1.67 KB
+    '   Blank Lines: 9 (11.54%)
+    '     File Size: 1.81 KB
 
 
     '     Enum TokenType
     ' 
     '         [operator], annotation, booleanLiteral, cliShellInvoke, close
     '         comma, comment, delimiter, identifier, iif
-    '         integerLiteral, invalid, keyword, missingLiteral, newLine
-    '         numberLiteral, open, regexp, sequence, stringInterpolation
-    '         stringLiteral, terminator
+    '         integerLiteral, invalid, keyword, lineContinue, missingLiteral
+    '         newLine, numberLiteral, open, regexp, sequence
+    '         stringInterpolation, stringLiteral, terminator
     ' 
     '  
     ' 
