@@ -1307,18 +1307,30 @@ Module plots
         ElseIf TypeOf polygon Is list Then
             Dim names As String() = DirectCast(polygon, list).getNames
             Dim pathData = names.Select(AddressOf DirectCast(polygon, list).getByName).ToArray
-            Dim poly As pipeline = pipeline.TryCreatePipeline(Of GeneralPath)(pathData, env)
+            Dim poly As pipeline = pipeline.TryCreatePipeline(Of GeneralPath)(pathData, env, suppress:=True)
 
             If Not poly.isError Then
                 Return New PolygonPlot2D(poly.populates(Of GeneralPath)(env), theme, names, reverse).Plot
             End If
 
+            poly = pipeline.TryCreatePipeline(Of Math2D.Polygon2D)(pathData, env)
+
+            If Not poly.isError Then
+                Return New PolygonPlot2D(poly.populates(Of Math2D.Polygon2D)(env).Select(Function(p) New GeneralPath(p)), theme, names, reverse).Plot
+            End If
+
             Return poly.getError
         Else
-            Dim poly As pipeline = pipeline.TryCreatePipeline(Of GeneralPath)(polygon, env)
+            Dim poly As pipeline = pipeline.TryCreatePipeline(Of GeneralPath)(polygon, env, suppress:=True)
 
             If Not poly.isError Then
                 Return New PolygonPlot2D(poly.populates(Of GeneralPath)(env), theme, reverse:=reverse).Plot
+            End If
+
+            poly = pipeline.TryCreatePipeline(Of Math2D.Polygon2D)(polygon, env)
+
+            If Not poly.isError Then
+                Return New PolygonPlot2D(poly.populates(Of Math2D.Polygon2D)(env).Select(Function(p) New GeneralPath(p)), theme, reverse:=reverse).Plot
             End If
 
             Return poly.getError
