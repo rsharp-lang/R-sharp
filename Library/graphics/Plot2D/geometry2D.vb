@@ -141,6 +141,7 @@ Module geometry2D
     Public Function ConcaveHull(<RRawVectorArgument>
                                 pts As Object,
                                 Optional as_polygon As Boolean = False,
+                                Optional r As Double = -1,
                                 Optional env As Environment = Nothing) As Object
         If pts Is Nothing Then
             Return Nothing
@@ -150,7 +151,7 @@ Module geometry2D
             Dim x As Double() = CLRVector.asNumeric(df.getVector("x"))
             Dim y As Double() = CLRVector.asNumeric(df.getVector("y"))
             Dim points As PointF() = x.Select(Function(xi, i) New PointF(xi, y(i))).ToArray
-            Dim polygon As PointF() = points.ConcaveHull
+            Dim polygon As PointF() = points.ConcaveHull(r)
 
             If as_polygon Then
                 Return New Polygon2D(polygon)
