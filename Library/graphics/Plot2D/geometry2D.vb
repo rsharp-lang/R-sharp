@@ -183,6 +183,11 @@ Module geometry2D
         End If
     End Function
 
+    <ExportAPI("rasterize")>
+    Public Function Rasterize(polygon As Polygon2D, Optional resolution As Double = -1) As RasterData
+        Return Rasterizer.Rasterize(polygon, If(resolution < 0, Rasterizer.EstimateResolution(polygon, size:=500), resolution))
+    End Function
+
     ''' <summary>
     ''' Create a new 2d polygon shape object by given points data.
     ''' </summary>
@@ -192,18 +197,35 @@ Module geometry2D
     ''' <returns></returns>
     <ExportAPI("polygon2D")>
     <RApiReturn(GetType(Polygon2D))>
-    Public Function createPolygon2D(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object, Optional env As Environment = Nothing) As Object
-        Dim xvec As Double() = CLRVector.asNumeric(x)
-        Dim yvec As Double() = CLRVector.asNumeric(y)
+    Public Function createPolygon2D(<RRawVectorArgument> x As Object,
+                                    <RRawVectorArgument>
+                                    Optional y As Object = Nothing,
+                                    Optional raster_n As Integer = 0,
+                                    Optional env As Environment = Nothing) As Object
 
-        If xvec.TryCount <> yvec.TryCount Then
-            Return RInternal.debug.stop($"the size of the x({xvec.TryCount}) vector is not equals to the size of the y({yvec.TryCount}) vector!", env)
-        ElseIf xvec.TryCount = 0 OrElse yvec.TryCount = 0 Then
-            Call "empty polygon shape data.".warning
-            Return Nothing
+        If y Is Nothing AndAlso TypeOf x Is RasterData Then
+            Return DirectCast(x, RasterData).GetRasterPolygon(raster_n)
+        ElseIf y Is Nothing AndAlso TypeOf x Is dataframe Then
+            With DirectCast(x, dataframe)
+                If .hasName("x") AndAlso .hasName("y") Then
+                    Return New Polygon2D(CLRVector.asNumeric(!x), CLRVector.asNumeric(!y))
+                Else
+                    Return RInternal.debug.stop("invalid dataframe object, missing the required data fields: x and y!", env)
+                End If
+            End With
+        Else
+            Dim xvec As Double() = CLRVector.asNumeric(x)
+            Dim yvec As Double() = CLRVector.asNumeric(y)
+
+            If xvec.TryCount <> yvec.TryCount Then
+                Return RInternal.debug.stop($"the size of the x({xvec.TryCount}) vector is not equals to the size of the y({yvec.TryCount}) vector!", env)
+            ElseIf xvec.TryCount = 0 OrElse yvec.TryCount = 0 Then
+                Call "empty polygon shape data.".warning
+                Return Nothing
+            End If
+
+            Return New Polygon2D(xvec, yvec)
         End If
-
-        Return New Polygon2D(xvec, yvec)
     End Function
 
     ''' <summary>
