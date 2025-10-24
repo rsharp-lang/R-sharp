@@ -57,6 +57,7 @@ Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Filters
 Imports Microsoft.VisualBasic.Imaging.Math2D
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Math.MachineVision
 Imports Microsoft.VisualBasic.Math.MachineVision.CCL
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
@@ -88,6 +89,22 @@ Public Module machineVision
         End If
 
         Return shapes.OrderByDescending(Function(a) a.length).Take(30).ToArray
+    End Function
+
+    ''' <summary>
+    ''' Aligns a source polygon to a target polygon using RANSAC.
+    ''' </summary>
+    ''' <param name="x">The polygon to be transformed.</param>
+    ''' <param name="y">The polygon to align to.</param>
+    ''' <param name="iterations">The number of RANSAC iterations.</param>
+    ''' <param name="distanceThreshold">The distance threshold to consider a point an inlier.</param>
+    ''' <returns>The best-fit Transform object.</returns>
+    <ExportAPI("RANSAC")>
+    Public Function RANSAC(x As Polygon2D, y As Polygon2D,
+                           Optional iterations As Integer = 1000,
+                           Optional distanceThreshold As Double = 0.1) As Transform
+
+        Return RANSACPointAlignment.AlignPolygons(x, y, iterations, distanceThreshold)
     End Function
 
     Private Function bitmapCommon(image As Object, env As Environment) As [Variant](Of BitmapBuffer, Message)
