@@ -75,6 +75,7 @@ Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Imaging.LayoutModel
 Imports Microsoft.VisualBasic.Imaging.Math2D
 Imports Microsoft.VisualBasic.Math
+Imports Microsoft.VisualBasic.Math.Calculus.ODESolver
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports SMRUCC.Rsharp.Runtime
@@ -128,7 +129,7 @@ Module geometry2D
     End Function
 
     ''' <summary>
-    ''' 
+    ''' alpha shapes algorithm method
     ''' </summary>
     ''' <param name="pts">
     ''' + for dataframe object, data fields x and y should be exists
@@ -138,33 +139,48 @@ Module geometry2D
     ''' A set of point data which could be used for build a polygon object
     ''' </returns>
     <ExportAPI("concaveHull")>
+    <RApiReturn(GetType(Polygon2D))>
     Public Function ConcaveHull(<RRawVectorArgument>
                                 pts As Object,
                                 Optional as_polygon As Boolean = False,
                                 Optional r As Double = -1,
                                 Optional env As Environment = Nothing) As Object
+
+        Dim x As Double(), y As Double()
+
         If pts Is Nothing Then
             Return Nothing
         End If
         If TypeOf pts Is dataframe Then
-            Dim df As dataframe = pts
-            Dim x As Double() = CLRVector.asNumeric(df.getVector("x"))
-            Dim y As Double() = CLRVector.asNumeric(df.getVector("y"))
-            Dim points As PointF() = x.Select(Function(xi, i) New PointF(xi, y(i))).ToArray
-            Dim polygon As PointF() = points.ConcaveHull(r)
-
-            If as_polygon Then
-                Return New Polygon2D(polygon)
-            Else
-                Return New dataframe With {
-                    .columns = New Dictionary(Of String, Array) From {
-                        {"x", points.X.ToArray},
-                        {"y", points.Y.ToArray}
-                    }
-                }
-            End If
+            With DirectCast(pts, dataframe)
+                x = CLRVector.asNumeric(.getVector("x"))
+                y = CLRVector.asNumeric(.getVector("y"))
+            End With
+        ElseIf TypeOf pts Is Polygon2D Then
+            With DirectCast(pts, Polygon2D)
+                x = .xpoints
+                y = .ypoints
+            End With
         Else
             Return Message.InCompatibleType(GetType(dataframe), pts.GetType, env)
+        End If
+
+        Dim points As PointF() = x _
+            .Select(Function(xi, i)
+                        Return New PointF(xi, y(i))
+                    End Function) _
+            .ToArray
+        Dim polygon As PointF() = points.ConcaveHull(r)
+
+        If as_polygon Then
+            Return New Polygon2D(polygon)
+        Else
+            Return New dataframe With {
+                .columns = New Dictionary(Of String, Array) From {
+                    {"x", points.X.ToArray},
+                    {"y", points.Y.ToArray}
+                }
+            }
         End If
     End Function
 
