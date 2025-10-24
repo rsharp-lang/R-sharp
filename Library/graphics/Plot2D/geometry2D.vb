@@ -359,6 +359,11 @@ Module geometry2D
         }
     End Function
 
+    <ExportAPI("geo_transform")>
+    <RApiReturn(GetType(Polygon2D))>
+    Public Function geo_transform(x As Polygon2D, transform As Transform) As Object
+        Return transform.ApplyTo(x)
+    End Function
 End Module
 
 Public Class PointAccess : Inherits KdNodeAccessor(Of Point2D)
