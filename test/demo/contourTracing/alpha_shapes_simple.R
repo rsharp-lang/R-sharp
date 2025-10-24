@@ -1,6 +1,6 @@
 let x = runif(500,20 , 900);
 let y = runif(500,20, 900);
-let outline = data.frame(x, y) |> concaveHull(r = 5, as.polygon = TRUE);
+let outline = data.frame(x, y) |> concaveHull(as.polygon = TRUE);
 
 print(outline);
 
