@@ -168,6 +168,29 @@ Module geometry2D
     End Function
 
     ''' <summary>
+    ''' Create a new 2d polygon shape object by given points data.
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="y"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("polygon2D")>
+    <RApiReturn(GetType(Polygon2D))>
+    Public Function createPolygon2D(<RRawVectorArgument> x As Object, <RRawVectorArgument> y As Object, Optional env As Environment = Nothing) As Object
+        Dim xvec As Double() = CLRVector.asNumeric(x)
+        Dim yvec As Double() = CLRVector.asNumeric(y)
+
+        If xvec.TryCount <> yvec.TryCount Then
+            Return RInternal.debug.stop($"the size of the x({xvec.TryCount}) vector is not equals to the size of the y({yvec.TryCount}) vector!", env)
+        ElseIf xvec.TryCount = 0 OrElse yvec.TryCount = 0 Then
+            Call "empty polygon shape data.".warning
+            Return Nothing
+        End If
+
+        Return New Polygon2D(xvec, yvec)
+    End Function
+
+    ''' <summary>
     ''' Evaluate the density value of a set of 2d points.
     ''' </summary>
     ''' <param name="x"></param>
