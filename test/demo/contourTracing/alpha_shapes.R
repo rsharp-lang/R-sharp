@@ -4,7 +4,7 @@ require(graphics2D);
 setwd(@dir);
 
 let outline = function(data) {
-	data.frame(x = data$X, y= data$Y) |> concaveHull(r = 2, as.polygon = TRUE);
+	data.frame(x = data$X, y= data$Y) |> concaveHull(as.polygon = TRUE);
 }
 let a = read.csv("./region_11.csv", row.names = NULL) |> outline;
 
