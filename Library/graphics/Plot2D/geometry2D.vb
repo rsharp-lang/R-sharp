@@ -94,7 +94,25 @@ Module geometry2D
         Call RInternal.generic.add("plot", GetType(Polygon2D), Function(polygon, args, env) fillPolygons({DirectCast(polygon, Polygon2D)}, args, env))
         Call RInternal.generic.add("plot", GetType(Polygon2D()), AddressOf fillPolygons)
         Call RInternal.generic.add("plot", GetType(PolygonGroup()), AddressOf fillPolygonGroups)
+        Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(Polygon2D), AddressOf rasterTable)
     End Sub
+
+    ''' <summary>
+    ''' convert the polygon as dataframe with filed x and y
+    ''' </summary>
+    ''' <param name="polygon"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <RGenericOverloads("as.data.frame")>
+    Private Function rasterTable(polygon As Polygon2D, args As list, env As Environment) As Object
+        Return New dataframe With {
+            .columns = New Dictionary(Of String, Array) From {
+                {"x", polygon.xpoints},
+                {"y", polygon.ypoints}
+            }
+        }
+    End Function
 
     Private Function fillPolygonGroups(polygons As PolygonGroup(), args As list, env As Environment) As Object
         Dim colors = RColorPalette.getColorSet(args.getBySynonyms("colors", "colorset", "colorSet"), "paper")
