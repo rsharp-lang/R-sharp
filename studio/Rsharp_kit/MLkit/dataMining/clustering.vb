@@ -666,7 +666,7 @@ Module clustering
         Dim kmeans_result As New List(Of EntityClusterModel)
 
         For Each cluster As ClusterEntity In result
-            Call kmeans_result.AddRange(maps.CreateObject(cluster))
+            Call kmeans_result.Add(maps.CreateObject(cluster))
         Next
 
         Return kmeans_result.ToArray
