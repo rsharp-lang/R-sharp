@@ -635,6 +635,44 @@ Module clustering
     End Function
 
     ''' <summary>
+    ''' A DBSCAN liked knn cluster method
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="knn"></param>
+    ''' <param name="p"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("knn_cluster")>
+    <RApiReturn(GetType(EntityClusterModel))>
+    Public Function knn_cluster(<RRawVectorArgument> x As Object,
+                                Optional knn As Integer = 32,
+                                Optional p As Double = 0.8,
+                                Optional env As Environment = Nothing) As Object
+        If x Is Nothing Then
+            Call $"the given data set for run knn clustering is nothing!".warning
+            Return Nothing
+        End If
+
+        Dim model = DataMiningDataSet.getDataModel(x, False, env)
+
+        If model Like GetType(Message) Then
+            Return model.TryCast(Of Message)
+        End If
+
+        Dim maps As New DataSetConvertor(model.TryCast(Of EntityClusterModel()))
+        Dim result As ClusterEntity() = maps.GetVectors(model.TryCast(Of EntityClusterModel())) _
+            .MakeKNNCluster(knn, p) _
+            .ToArray
+        Dim kmeans_result As New List(Of EntityClusterModel)
+
+        For Each cluster As ClusterEntity In result
+            Call kmeans_result.AddRange(maps.CreateObject(cluster))
+        Next
+
+        Return kmeans_result.ToArray
+    End Function
+
+    ''' <summary>
     ''' K-Means Clustering
     ''' </summary>
     ''' <param name="x">
@@ -669,6 +707,7 @@ Module clustering
                                 Optional traceback As Boolean = False,
                                 Optional env As Environment = Nothing) As Object
         If x Is Nothing Then
+            Call $"the given data set for run kmeans is nothing!".warning
             Return Nothing
         End If
 
