@@ -6,15 +6,15 @@ print(multishapes, max.print = 16);
 
 multishapes[,"shape"] = NULL;
 
-multishapes = knn_cluster(multishapes, knn = 16, p = 0.8);
+multishapes = knn_cluster(multishapes, knn = 32, p = 0.5);
 multishapes = as.data.frame(multishapes);
 
 print(multishapes, max.print = 16);
 
 # show object detection result
 bitmap(file = relative_work( "shapes_knn.png")) {
-	plot(multishapes[, "x"], multishapes[, "y"], 
-		class     = multishapes[, "cluster"], 
+	plot(as.numeric(multishapes[, "x"]), as.numeric(multishapes[, "y"]), 
+		class     = multishapes[, "Cluster"], 
 		grid.fill = "white",
 		padding   = "padding: 125px 300px 200px 200px;",
 		colorSet  = "paper"
