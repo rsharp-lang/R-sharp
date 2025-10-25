@@ -6,7 +6,7 @@ print(multishapes, max.print = 16);
 
 multishapes[,"shape"] = NULL;
 
-multishapes = knn_cluster(multishapes, knn = 32, p = 0.8);
+multishapes = knn_cluster(multishapes, knn = 32, p = 0.5);
 multishapes = as.data.frame(multishapes);
 
 print(multishapes, max.print = 16);
