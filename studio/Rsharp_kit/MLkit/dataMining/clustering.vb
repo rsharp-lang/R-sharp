@@ -269,28 +269,24 @@ Module clustering
     <RGenericOverloads("as.data.frame")>
     <Extension>
     Public Function clusterResultDataFrame(data As EntityClusterModel(), args As list, env As Environment) As Rdataframe
-        Dim table As File = data.ToCsvDoc
+        Dim cols As String() = data.PropertyNames
         Dim matrix As New Rdataframe With {
             .columns = New Dictionary(Of String, Array)
         }
-        Dim header As String
-        Dim colVals As Array
         Dim row_names = args.getValue(Of Object)("row.names", env, Nothing)
 
-        For Each column As String() In table.Columns.Skip(1)
-            header = column(Scan0)
-            colVals = column.Skip(1).ToArray
-            matrix.columns.Add(header, colVals)
-        Next
-
         If row_names Is Nothing Then
-            matrix.rownames = table.Columns _
-                .First _
-                .Skip(1) _
-                .ToArray
+            matrix.rownames = data.Keys
         Else
             matrix.rownames = CLRVector.asCharacter(row_names)
+            matrix.add(NameOf(EntityClusterModel.ID), From a As EntityClusterModel In data Select a.ID)
         End If
+
+        Call matrix.add(NameOf(EntityClusterModel.Cluster), From a As EntityClusterModel In data Select a.Cluster)
+
+        For Each col As String In cols
+            Call matrix.add(col, From a As EntityClusterModel In data Select a(col))
+        Next
 
         Return matrix
     End Function
