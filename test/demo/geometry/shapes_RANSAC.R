@@ -21,3 +21,19 @@ let test = geo_transform(multishapes, transform = t0);
 print(multishapes);
 print(test);
 
+let t = RANSAC(test, multishapes);
+
+print("calculated geometry transform parameter by RANSAC method:");
+print(t);
+
+let aligned = as.data.frame( geo_transform(test, t));
+
+multishapes = as.data.frame(multishapes );
+multishapes[,"class"]="original";
+
+aligned[,"class"] = "aligned";
+aligned = rbind(multishapes, aligned);
+
+bitmap(file = relative_work("RANSAC_aligned.png")) {
+    plot(as.numeric(aligned$x),as.numeric(aligned$y), class = aligned$class, fill = "white",point_size= 2);
+}
