@@ -361,7 +361,7 @@ Module geometry2D
 
     <ExportAPI("geo_transform")>
     <RApiReturn(GetType(Polygon2D))>
-    Public Function geo_transform(x As Polygon2D, transform As Transform) As Object
+    Public Function geo_transform(x As Polygon2D, transform As GeometryTransform) As Object
         Return transform.ApplyTo(x)
     End Function
 End Module
