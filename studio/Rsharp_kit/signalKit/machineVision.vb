@@ -97,14 +97,14 @@ Public Module machineVision
     ''' <param name="x">The polygon to be transformed.</param>
     ''' <param name="y">The polygon to align to.</param>
     ''' <param name="iterations">The number of RANSAC iterations.</param>
-    ''' <param name="distanceThreshold">The distance threshold to consider a point an inlier.</param>
+    ''' <param name="threshold">The distance threshold to consider a point an inlier.</param>
     ''' <returns>The best-fit Transform object.</returns>
     <ExportAPI("RANSAC")>
     Public Function RANSAC(x As Polygon2D, y As Polygon2D,
                            Optional iterations As Integer = 1000,
-                           Optional distanceThreshold As Double = 0.1) As AffineTransform
+                           Optional threshold As Double = 0.1) As AffineTransform
 
-        Return RANSACPointAlignment.AlignPolygons(x, y, iterations, distanceThreshold)
+        Return RANSACPointAlignment.AlignPolygons(x, y, iterations, threshold)
     End Function
 
     Private Function bitmapCommon(image As Object, env As Environment) As [Variant](Of BitmapBuffer, Message)
