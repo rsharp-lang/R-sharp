@@ -102,7 +102,7 @@ Public Module machineVision
     <ExportAPI("RANSAC")>
     Public Function RANSAC(x As Polygon2D, y As Polygon2D,
                            Optional iterations As Integer = 1000,
-                           Optional distanceThreshold As Double = 0.1) As Transform
+                           Optional distanceThreshold As Double = 0.1) As AffineTransform
 
         Return RANSACPointAlignment.AlignPolygons(x, y, iterations, distanceThreshold)
     End Function
