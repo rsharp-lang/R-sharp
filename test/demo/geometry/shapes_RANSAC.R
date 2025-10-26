@@ -21,7 +21,7 @@ let test = geo_transform(multishapes, transform = t0);
 # print(multishapes);
 # print(test);
 
-let t = RANSAC(test, multishapes);
+let t = RANSAC(test, multishapes,iterations=100000);
 
 print("calculated geometry transform parameter by RANSAC method:");
 print(t);
