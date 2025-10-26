@@ -202,8 +202,8 @@ Module geometry2D
     End Function
 
     <ExportAPI("rasterize")>
-    Public Function Rasterize(polygon As Polygon2D, Optional resolution As Double = -1) As RasterData
-        Return Rasterizer.Rasterize(polygon, If(resolution < 0, Rasterizer.EstimateResolution(polygon, size:=500), resolution))
+    Public Function Rasterize(polygon As Polygon2D, Optional resolution As Double = -1, Optional estimate_size As Integer = 1000) As RasterData
+        Return Rasterizer.Rasterize(polygon, If(resolution < 0, Rasterizer.EstimateResolution(polygon, size:=estimate_size), resolution))
     End Function
 
     ''' <summary>
