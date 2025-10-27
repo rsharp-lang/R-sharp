@@ -132,6 +132,7 @@ Public Module machineVision
     Public Function ostuFilter(image As Object,
                                Optional flip As Boolean = False,
                                Optional factor As Double = 0.65,
+                               Optional ignore_white As Boolean = True,
                                Optional env As Environment = Nothing) As Object
 
         If image Is Nothing Then
@@ -144,7 +145,9 @@ Public Module machineVision
             Return buffer.TryCast(Of Message)
         End If
 
-        Return Thresholding.ostuFilter(buffer, flip, factor:=factor)
+        Return Thresholding.ostuFilter(buffer, flip,
+                                       factor:=factor,
+                                       ignore_white:=ignore_white)
     End Function
 
     ''' <summary>
