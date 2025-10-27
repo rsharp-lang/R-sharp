@@ -56,6 +56,7 @@
 Imports System.Drawing
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.BitmapImage
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap.hqx
@@ -170,8 +171,23 @@ Module ImageFilters
     ''' https://github.com/IntPtrZero/RTCPRGB2Gray/tree/master
     ''' </remarks>
     <ExportAPI("RTCP_gray")>
-    Public Function RTCPGray_func(img As Image) As Bitmap
-        Return RTCP.RTCPGray(New Bitmap(img))
+    Public Function RTCPGray_func(img As Image, Optional sigma As Single = 0.05!,
+                                  <RRawVectorArgument>
+                                  Optional transparent As Object = "white",
+                                  Optional env As Environment = Nothing) As Bitmap
+
+        If transparent IsNot Nothing Then
+            Dim transparentColor As Color = RColorPalette.GetRawColor(transparent, [default]:="white")
+
+            Using gfx As IGraphics = DriverLoad.CreateGraphicsDevice(img.Size, transparentColor, driver:=Drivers.GDI)
+                Call gfx.DrawImageUnscaled(img, rect:=New Rectangle(New Point, img.Size))
+                Call gfx.Flush()
+
+                img = DirectCast(gfx, GdiRasterGraphics).ImageResource
+            End Using
+        End If
+
+        Return RTCP.RTCPGray(New Bitmap(img), sigma)
     End Function
 
     <ExportAPI("RTCP_weight")>

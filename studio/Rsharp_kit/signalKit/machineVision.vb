@@ -119,6 +119,14 @@ Public Module machineVision
         End If
     End Function
 
+    ''' <summary>
+    ''' Create binary image via ostu threshold algorithm
+    ''' </summary>
+    ''' <param name="image"></param>
+    ''' <param name="flip"></param>
+    ''' <param name="factor"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("ostu")>
     <RApiReturn(GetType(BitmapBuffer))>
     Public Function ostuFilter(image As Object,
@@ -139,7 +147,14 @@ Public Module machineVision
         Return Thresholding.ostuFilter(buffer, flip, factor:=factor)
     End Function
 
+    ''' <summary>
+    ''' get ostu binary image threshold value
+    ''' </summary>
+    ''' <param name="image"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("threshold")>
+    <RApiReturn(TypeCodes.integer)>
     Public Function threshold(image As Object, Optional env As Environment = Nothing) As Object
         If image Is Nothing Then
             Return Nothing
