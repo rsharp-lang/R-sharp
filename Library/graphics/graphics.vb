@@ -119,16 +119,20 @@ Partial Module grDevices
         RInternal.ConsolePrinter.AttachConsoleFormatter(Of BitmapBuffer)(Function(o) bitmapBufferStr(o))
     End Sub
 
+    Private Function imagePrintWidth() As Integer
+        Return Console.WindowWidth \ 2
+    End Function
+
     Private Function bitmapStr(bmp As Bitmap) As String
-        Return ANSI.GenerateImagePreview(bmp, terminalWidth:=Console.WindowWidth - 1)
+        Return ANSI.GenerateImagePreview(bmp, terminalWidth:=imagePrintWidth)
     End Function
 
     Private Function ImageStr(bmp As Image) As String
-        Return ANSI.GenerateImagePreview(bmp, terminalWidth:=Console.WindowWidth - 1)
+        Return ANSI.GenerateImagePreview(bmp, terminalWidth:=imagePrintWidth)
     End Function
 
     Private Function bitmapBufferStr(bmp As BitmapBuffer) As String
-        Return ANSI.GenerateImagePreview(New Bitmap(bmp), terminalWidth:=Console.WindowWidth - 1)
+        Return ANSI.GenerateImagePreview(New Bitmap(bmp), terminalWidth:=imagePrintWidth)
     End Function
 
     Private Function colorTable(raster As Color(), args As list, env As Environment) As dataframe
