@@ -88,6 +88,7 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 <Package("geometry2D")>
 <RTypeExport("polygon_group", GetType(PolygonGroup))>
 <RTypeExport("geo_transform", GetType(Transform))>
+<RTypeExport("affine2d_transform", GetType(AffineTransform))>
 Module geometry2D
 
     Public Sub Main()
