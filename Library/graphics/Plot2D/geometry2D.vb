@@ -369,7 +369,7 @@ End Module
 
 Public Class PointAccess : Inherits KdNodeAccessor(Of Point2D)
 
-    Public Overrides Sub setByDimensin(x As Point2D, dimName As String, value As Double)
+    Public Overrides Sub setByDimension(x As Point2D, dimName As String, value As Double)
         If dimName.TextEquals("x") Then
             x.X = value
         Else

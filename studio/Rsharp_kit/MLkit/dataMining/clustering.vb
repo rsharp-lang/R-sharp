@@ -1373,7 +1373,7 @@ Module clustering
 
         ReadOnly dims As String() = {"x", "y"}
 
-        Public Overrides Sub setByDimensin(x As DataSet, dimName As String, value As Double)
+        Public Overrides Sub setByDimension(x As DataSet, dimName As String, value As Double)
             x(dimName) = value
         End Sub
 
