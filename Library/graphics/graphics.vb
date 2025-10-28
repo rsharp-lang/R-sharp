@@ -120,7 +120,7 @@ Partial Module grDevices
     End Sub
 
     Private Function imagePrintWidth() As Integer
-        Return Console.WindowWidth \ 2
+        Return Console.WindowWidth \ 4
     End Function
 
     Private Function bitmapStr(bmp As Bitmap) As String
