@@ -1329,23 +1329,8 @@ Module clustering
 
         Dim kd As New KdTree(Of DataSet)(pixels, New point2DReader())
         Dim k As Integer = 60
-        Dim averageDist = Enumerable _
-            .Range(0, sampleSize) _
-            .AsParallel _
-            .Select(Function(any)
-                        Dim knn = kd _
-                            .nearest(kd.GetPointSample(1).First, k) _
-                            .ToArray
-
-                        Return Aggregate x As KdNodeHeapItem(Of DataSet)
-                               In knn
-                               Order By x.distance
-                               Take CInt(k / 2)
-                               Let d = x.distance
-                               Into Average(d)
-                    End Function) _
-            .ToArray
-        Dim meps As Double = averageDist.Average
+        Dim averageDist As Double() = Nothing
+        Dim meps As Double = kd.AverageDistance(sampleSize, k, sampleDist:=averageDist)
 
         Call println($"get average point distance from {sampleSize} sample data:")
         Call println(averageDist)
