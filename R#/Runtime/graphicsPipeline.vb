@@ -90,8 +90,26 @@ Namespace Runtime
                     Return DirectCast(color, Color)
                 Case GetType(Integer), GetType(Long), GetType(Short)
                     Return color.ToString.TranslateColor
-                Case GetType(Integer()), GetType(Long()), GetType(Short())
-                    Return DirectCast(color, Array).GetValue(Scan0).ToString.TranslateColor
+                Case GetType(Integer()), GetType(Long()), GetType(Short()), GetType(Double())
+                    Dim vec As Double() = CLRVector.asNumeric(color)
+
+                    If vec.Length = 1 Then
+                        Return CInt(vec(0)).ToString.TranslateColor
+                    ElseIf vec.Length = 3 Then
+                        If vec.All(Function(c) c <= 1.0) Then
+                            ' [0,1] * 255
+                            vec = vec.Select(Function(c) c * 255).ToArray
+                        End If
+
+                        Return System.Drawing.Color.FromArgb(CInt(vec(0)), CInt(vec(1)), CInt(vec(2)))
+                    Else
+                        If vec.All(Function(c) c <= 1.0) Then
+                            ' [0,1] * 255
+                            vec = vec.Select(Function(c) c * 255).ToArray
+                        End If
+
+                        Return System.Drawing.Color.FromArgb(CInt(vec(0)), CInt(vec(1)), CInt(vec(2)), CInt(vec(3)))
+                    End If
                 Case GetType(SolidBrush)
                     Return DirectCast(color, SolidBrush).Color
                 Case Else
