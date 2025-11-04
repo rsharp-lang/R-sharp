@@ -570,7 +570,7 @@ Namespace Language.TokenIcer
             End If
         End Function
 
-        Friend Shared ReadOnly RNullLiteral As String() = {"NULL", "NA", "Inf", "NA_real_", "NA_integer_"}
+        Friend Shared ReadOnly RNullLiteral As String() = {"NULL", "NA", "Inf", "NA_real_", "NA_integer_", "NA_complex_", "NA_character_"}
 
         Const NumericNotation As String = "(" & NumericPattern & ")+F"
 

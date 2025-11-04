@@ -203,6 +203,10 @@ Namespace Interpreter
             _globalEnvir.Push("E", std.E, True, TypeCodes.double)
             _globalEnvir.Push(".GlobalEnv", globalEnvir, True, TypeCodes.environment)
             _globalEnvir.Push(".Machine", New DotMachine().toList, True, TypeCodes.list)
+            _globalEnvir.Push("NA_integer_", Double.NaN, True, TypeCodes.integer)
+            _globalEnvir.Push("NA_real_", Double.NaN, True, TypeCodes.integer)
+            _globalEnvir.Push("NA_complex_", Double.NaN, True, TypeCodes.integer)
+            _globalEnvir.Push("NA_character_", Double.NaN, True, TypeCodes.integer)
 
             For Each dllName As String In env.options.environments.SafeQuery
                 Dim searchContext As New List(Of String)

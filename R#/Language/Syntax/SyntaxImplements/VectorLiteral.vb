@@ -86,7 +86,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     Select Case token.text
                         ' null literal for R/python/javascript
                         Case "NULL", "None", "null" : value = Nothing
-                        Case "NA" : value = GetType(Void)
+                        Case "NA", "NA_real_", "NA_integer_", "NA_complex_", "NA_character_" : value = GetType(Void)
                         Case "Inf" : value = Double.PositiveInfinity
                         Case Else
                             Return SyntaxResult.CreateError(
