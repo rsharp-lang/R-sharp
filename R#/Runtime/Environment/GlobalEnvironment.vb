@@ -209,6 +209,18 @@ Namespace Runtime
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
 
+        ''' <summary>
+        ''' ``system.file`` export to clr function for get the package data file
+        ''' </summary>
+        ''' <param name="resource"></param>
+        ''' <param name="package"></param>
+        ''' <returns>
+        ''' the full file path of the package internal resource data file
+        ''' </returns>
+        Public Function GetResourceFile(resource As String, package As String) As String
+            Return Internal.Invokes.systemFile(resource, package, env:=Me)
+        End Function
+
         <DebuggerStepThrough>
         Public Shared Function defaultEmpty() As [Default](Of Environment)
             Return DirectCast(New RInterpreter().globalEnvir, Environment)
