@@ -1,70 +1,67 @@
 ﻿#Region "Microsoft.VisualBasic::af6e7f3fa8a5a8849976bb1f4f83fbb9, Library\base\utils\console.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 126
-    '    Code Lines: 82 (65.08%)
-    ' Comment Lines: 25 (19.84%)
-    '    - Xml Docs: 92.00%
-    ' 
-    '   Blank Lines: 19 (15.08%)
-    '     File Size: 4.39 KB
+' Summaries:
 
 
-    ' Module console
-    ' 
-    '     Function: ConsoleBackColor, ConsoleForeColor, CreateProgressBar, log, passwordInput
-    '               PinProgressBarTop
-    ' 
-    '     Sub: ClearProgressBarPinned
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 126
+'    Code Lines: 82 (65.08%)
+' Comment Lines: 25 (19.84%)
+'    - Xml Docs: 92.00%
+' 
+'   Blank Lines: 19 (15.08%)
+'     File Size: 4.39 KB
+
+
+' Module console
+' 
+'     Function: ConsoleBackColor, ConsoleForeColor, CreateProgressBar, log, passwordInput
+'               PinProgressBarTop
+' 
+'     Sub: ClearProgressBarPinned
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports Microsoft.VisualBasic.ApplicationServices.Terminal.ProgressBar
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.Utility
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports CMD = System.Console
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' R# console utilities
@@ -131,32 +128,6 @@ Module console
         Call passd.PasswordInput(password, maxLen)
         Return password
     End Function
-
-    <ExportAPI("progressbar")>
-    Public Function CreateProgressBar(title$, Optional Y% = -1, Optional CLS As Boolean = False, Optional theme As ColorTheme = Nothing) As ProgressBar
-        Return New ProgressBar(title, Y Or CMD.CursorTop.When(Y <= 0), CLS, theme)
-    End Function
-
-    ''' <summary>
-    ''' Pin the top of progress bar
-    ''' </summary>
-    ''' <param name="top"></param>
-    ''' <returns></returns>
-    <ExportAPI("progressbar.pin.top")>
-    Public Function PinProgressBarTop(Optional top As Integer = -1) As Integer
-        If top <= 0 Then
-            top = CMD.CursorTop
-        End If
-
-        Call ProgressBar.PinTop(top)
-
-        Return top
-    End Function
-
-    <ExportAPI("progressbar.pin.clear")>
-    Public Sub ClearProgressBarPinned()
-        ProgressBar.ClearPinnedTop()
-    End Sub
 
     <ExportAPI("fore.color")>
     Public Function ConsoleForeColor(Optional color As ConsoleColor? = Nothing) As String
