@@ -86,11 +86,17 @@ Namespace Runtime.Components
         ''' </summary>
         Protected m_attributes As Dictionary(Of String, Object)
 
+        ''' <summary>
+        ''' get the element type of this R# runtime object
+        ''' </summary>
+        ''' <returns></returns>
         Public Overridable Property elementType As RType
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
                 Return m_type
             End Get
+            ' 20251109 can not set by public
+            ' so this property is readonly
             Protected Friend Set(value As RType)
                 m_type = value
             End Set
