@@ -701,8 +701,12 @@ Public Module utils
     ''' <returns></returns>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function saveGeneric(x As Object, type As Type, file$, meta_blank As String, encoding As Encoding, env As Environment) As Boolean
-        Return MeasureGenericType(x, type).SaveTable(file, encoding, type,
-                                                     meta_blank:=meta_blank,
-                                                     silent:=True)
+        Dim castGeneric As Array = MeasureGenericType(x, type)
+
+        Call $"save clr object({type.Name}) array as dataframe table file.".info
+
+        Return castGeneric.SaveTable(file, encoding, type,
+            meta_blank:=meta_blank,
+            silent:=True)
     End Function
 End Module
