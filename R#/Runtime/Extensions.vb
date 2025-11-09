@@ -56,6 +56,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
@@ -120,8 +121,20 @@ Namespace Runtime
             End If
 
             Dim elType As Type = arrayType.GetElementType
+            Dim firstType As Type = array.AsObjectEnumerator _
+                .Where(Function(o) o IsNot Nothing) _
+                .Select(Function(a) a.GetType) _
+                .FirstOrDefault
 
-            If arrayType.HasElementType AndAlso Not elType Is GetType(Object) Then
+            If firstType Is Nothing Then
+                ' all element in array is nothing
+                Return New Type() {elType}
+            End If
+
+            If arrayType.HasElementType AndAlso
+                Not elType Is GetType(Object) AndAlso
+                firstType Is elType Then
+
                 If excludeInterfaceOrAbstract Then
                     If Not (elType.IsAbstract OrElse elType.IsInterface) Then
                         Return New Type() {elType}
