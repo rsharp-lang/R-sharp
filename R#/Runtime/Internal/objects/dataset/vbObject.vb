@@ -77,6 +77,10 @@ Namespace Runtime.Internal.Object
     Public Class vbObject : Inherits RsharpDataObject
         Implements RNameIndex
 
+        ''' <summary>
+        ''' that target clr object to wrap in R# runtime.
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property target As Object
 
         ''' <summary>
