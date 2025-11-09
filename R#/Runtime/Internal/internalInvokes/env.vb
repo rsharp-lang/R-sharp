@@ -482,7 +482,7 @@ Namespace Runtime.Internal.Invokes
                 ' throw exception for invoke missing member from .NET object?
                 Return Internal.debug.stop({
                     $"Missing member '{calls}' in target {what}",
-                    $"type: {what.type.fullName}",
+                    $"type: {what.elementType.fullName}",
                     $"member name: {calls}"
                 }, envir)
             Else

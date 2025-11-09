@@ -302,8 +302,8 @@ Namespace Runtime.Internal.Object.Converts
             Dim list As New Dictionary(Of String, Object)
             Dim metadata As PropertyInfo = Nothing
 
-            If vbobj.type.haveDynamicsProperty Then
-                metadata = DynamicMetadataAttribute.GetMetadata(vbobj.type.raw)
+            If vbobj.elementType.haveDynamicsProperty Then
+                metadata = DynamicMetadataAttribute.GetMetadata(vbobj.elementType.raw)
             End If
 
             For Each p As KeyValuePair(Of String, PropertyInfo) In vbobj.properties
@@ -362,7 +362,7 @@ Namespace Runtime.Internal.Object.Converts
                 End If
             Next
 
-            If vbobj.type.haveDynamicsProperty Then
+            If vbobj.elementType.haveDynamicsProperty Then
                 Dim dynamic As IDynamicsObject = vbobj.target
 
                 For Each name As String In dynamic _
