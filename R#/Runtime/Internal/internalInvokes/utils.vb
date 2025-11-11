@@ -409,6 +409,7 @@ Namespace Runtime.Internal.Invokes
         ''' <paramref name="save"/> file location. 
         ''' </returns>
         <ExportAPI("wget")>
+        <RApiReturn(GetType(Boolean), GetType(Byte))>
         Public Function wget_file(url As String,
                                   Optional save As Object = Nothing,
                                   Optional env As Environment = Nothing) As Object
