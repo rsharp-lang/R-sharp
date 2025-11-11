@@ -56,6 +56,7 @@
 
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language.C
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -423,6 +424,28 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("textlines")>
         Public Function textLines(text As String, Optional trim As Boolean = True, Optional escape As Boolean = False) As String()
             Return text.LineTokens(trim, escape)
+        End Function
+
+        ''' <summary>
+        ''' make text index based on the qgram algorithm
+        ''' </summary>
+        ''' <param name="text"></param>
+        ''' <param name="qgram"></param>
+        ''' <returns></returns>
+        <ExportAPI("make_qgram")>
+        Public Function makeQGram(<RRawVectorArgument> text As Object, Optional qgram As Integer = 6) As QGramIndex
+            Dim index As New QGramIndex(qgram)
+
+            For Each str As String In CLRVector.asCharacter(text).SafeQuery
+                Call index.AddString(str)
+            Next
+
+            Return index
+        End Function
+
+        <ExportAPI("query_qgram")>
+        Public Function qquery(qgram As QGramIndex, q As String, Optional cutoff As Double = 0.8) As FindResult()
+            Return qgram.FindSimilar(q, cutoff).ToArray
         End Function
     End Module
 End Namespace

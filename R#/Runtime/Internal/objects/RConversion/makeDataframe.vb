@@ -67,16 +67,25 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.Collection.Generic
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Object.Converts
 
+    ''' <summary>
+    ''' handler for cast any clr runtime object as R# runtime dataframe object
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     Public Delegate Function IMakeDataFrame(x As Object, args As list, env As Environment) As dataframe
 
     ''' <summary>
@@ -89,8 +98,24 @@ Namespace Runtime.Internal.Object.Converts
         Sub New()
             makesDataframe(GetType(ExceptionData)) = AddressOf TracebackDataFrmae
             makesDataframe(GetType(NamedValue())) = AddressOf tupleFrame1
+            makesDataframe(GetType(FindResult())) = AddressOf indexFrame
         End Sub
 
+        <RGenericOverloads("as.data.frame")>
+        Private Function indexFrame(index As FindResult(), args As list, env As Environment) As dataframe
+            Dim result As New dataframe With {.columns = New Dictionary(Of String, Array)}
+
+            Call result.add("text", From a As FindResult In index Select a.text)
+            Call result.add("similarity", From a As FindResult In index Select a.similarity)
+            Call result.add("levenshtein", From a As FindResult In index Select a.levenshtein)
+            Call result.add("index", From a As FindResult
+                                     In index
+                                     Let offset As Integer = a.index
+                                     Select offset)
+            Return result
+        End Function
+
+        <RGenericOverloads("as.data.frame")>
         Private Function tupleFrame1(tuples As NamedValue(), args As list, env As Environment) As dataframe
             Return New dataframe With {
                 .columns = New Dictionary(Of String, Array) From {
@@ -135,6 +160,7 @@ Namespace Runtime.Internal.Object.Converts
             Return makesDataframe(type)(x, args, env)
         End Function
 
+        <RGenericOverloads("as.data.frame")>
         Private Function TracebackDataFrmae(data As Object, args As list, env As Environment) As dataframe
             Dim stacktrace As StackFrame()
 
