@@ -1025,7 +1025,7 @@ sample estimates:
             Dim rnd As Random = randf.seeds
             Dim gauss As New List(Of Double)
 
-            For i As Integer = 0 To n - 1
+            For i As Integer = 1 To n
                 Call gauss.Add(rnd.NextGaussian(mean, sd))
             Next
 

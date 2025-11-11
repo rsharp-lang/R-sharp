@@ -548,17 +548,28 @@ Namespace Runtime.Internal.Invokes
             If t1.mode.IsNumeric AndAlso t2.mode.IsNumeric Then
                 Dim from_d As Double = CDbl(from)
                 Dim to_d As Double = CDbl([to])
+                Dim byLen As Boolean = False
 
                 If length_out > 0 AndAlso by.IsNaNImaginary Then
-                    by = ((to_d - from_d) / (length_out - 1))
+                    byLen = True
+                    by = (to_d - from_d) / length_out
                 End If
                 If by.IsNaNImaginary Then
                     by = 1
                 End If
 
-                Return Microsoft.VisualBasic.Math _
+                Dim vec As Double() = Microsoft.VisualBasic.Math _
                     .seq(from_d, to_d, by) _
                     .ToArray
+
+                ' 20251112 there is a bug about the fix count elements output
+                ' which is speicificed by the length.out parameter
+                ' use take for fixed this possible error
+                If byLen Then
+                    Return vec.Take(length_out).ToArray
+                Else
+                    Return vec
+                End If
             ElseIf t1.mode = TypeCodes.string AndAlso t2.mode = TypeCodes.string Then
                 ' length_out is not working when make
                 ' ascii char sequence
