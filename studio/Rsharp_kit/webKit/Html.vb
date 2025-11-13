@@ -218,7 +218,7 @@ Module Html
     ''' <returns></returns>
     ''' 
     <ExportAPI("tables")>
-    Public Function QueryHtmlTables(html As String, Optional del_newline As Boolean = True) As list
+    Public Function QueryHtmlTables(html As String, Optional del_newline As Boolean = True, Optional filter As Boolean = False) As list
         Dim tables As String() = html.GetTablesHTML
         Dim result As New list(RType.GetRSharpType(GetType(dataframe))) With {
             .slots = New Dictionary(Of String, Object)
@@ -244,6 +244,10 @@ Module Html
 
                 table.columns(name) = data
             Next
+
+            If filter AndAlso table.nrows = 0 Then
+                Continue For
+            End If
 
             Call result.add(App.NextTempName, table)
         Next
