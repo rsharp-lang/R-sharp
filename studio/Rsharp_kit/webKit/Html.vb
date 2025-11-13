@@ -215,6 +215,9 @@ Module Html
     ''' query a list of html tables in the given html page text document
     ''' </summary>
     ''' <param name="html">text string in html format</param>
+    ''' <param name="plain_text">
+    ''' parse the table cell content into plain text data. set this parameter false will keeps the input html content for cell data. 
+    ''' </param>
     ''' <returns>
     ''' a tuple list of the dataframe data that parsed from the html tables.
     ''' the tuple list key names is used the table id prefer.
@@ -223,7 +226,8 @@ Module Html
     <ExportAPI("tables")>
     Public Function QueryHtmlTables(html As String,
                                     Optional del_newline As Boolean = True,
-                                    Optional filter As Boolean = False) As list
+                                    Optional filter As Boolean = False,
+                                    Optional plain_text As Boolean = True) As list
 
         Dim tables As String() = html.GetTablesHTML
         Dim result As New list(RType.GetRSharpType(GetType(dataframe))) With {
@@ -247,7 +251,13 @@ Module Html
                 Dim name As String = column(Scan0).getPlainText
                 Dim data As String() = column _
                     .Skip(1) _
-                    .Select(Function(si) getPlainText(si, strip_inner:=del_newline)) _
+                    .Select(Function(si)
+                                If plain_text Then
+                                    Return getPlainText(si, strip_inner:=del_newline)
+                                Else
+                                    Return si
+                                End If
+                            End Function) _
                     .ToArray
 
                 table.columns(name) = data
