@@ -251,6 +251,8 @@ Module Html
                 .GroupBy(Function(a) a) _
                 .OrderByDescending(Function(a) a.Count) _
                 .First.Key
+            ' 20251113 filterout the colspan rows
+            ' this may missing some data rows
             Dim matrix As String()() = rowsData _
                 .Where(Function(r) r.Length = cols) _
                 .MatrixTranspose(safecheck_dimension:=True) _
