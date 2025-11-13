@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
@@ -98,7 +99,7 @@ Module builder
         Dim cor As CorrelationMatrix = TryCast(x, CorrelationMatrix)
 
         If x Is Nothing Then
-            Call "The given correlation matrix data is nothing!".Warning
+            Call "The given correlation matrix data is nothing!".warning
             Return Nothing
         End If
 
@@ -138,7 +139,7 @@ Module builder
         End If
 
         If Not group Is Nothing Then
-            Dim class_labels As Dictionary(Of String, String) = group.AsGeneric(env, "no_class")
+            Dim class_labels As Dictionary(Of String, String) = handleGroupClass(group, env)
 
             For Each v As Node In g.vertex
                 v.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = class_labels _
@@ -149,6 +150,24 @@ Module builder
         Call VBDebugger.EchoLine(g.ToString)
 
         Return g
+    End Function
+
+    Private Function handleGroupClass(group As list, env As Environment) As Dictionary(Of String, String)
+        Dim clusters = group.AsGeneric(Of String())(env)
+
+        If clusters.Any(Function(a) a.Value.TryCount > 1) Then
+            Dim labels As New Dictionary(Of String, String)
+
+            For Each cluster As KeyValuePair(Of String, String()) In clusters
+                For Each id As String In cluster.Value.SafeQuery
+                    labels(id) = cluster.Key
+                Next
+            Next
+
+            Return labels
+        Else
+            Return group.AsGeneric(env, "no_class")
+        End If
     End Function
 
     ''' <summary>
