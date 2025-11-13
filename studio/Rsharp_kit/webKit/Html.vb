@@ -215,17 +215,25 @@ Module Html
     ''' query a list of html tables in the given html page text document
     ''' </summary>
     ''' <param name="html">text string in html format</param>
-    ''' <returns></returns>
+    ''' <returns>
+    ''' a tuple list of the dataframe data that parsed from the html tables.
+    ''' the tuple list key names is used the table id prefer.
+    ''' </returns>
     ''' 
     <ExportAPI("tables")>
-    Public Function QueryHtmlTables(html As String, Optional del_newline As Boolean = True, Optional filter As Boolean = False) As list
+    Public Function QueryHtmlTables(html As String,
+                                    Optional del_newline As Boolean = True,
+                                    Optional filter As Boolean = False) As list
+
         Dim tables As String() = html.GetTablesHTML
         Dim result As New list(RType.GetRSharpType(GetType(dataframe))) With {
             .slots = New Dictionary(Of String, Object)
         }
 
         For Each text As String In tables
-            Dim rows = text.GetRowsHTML
+            Dim tableHtml = HtmlDocument.LoadDocument(text, strip:=True)
+            Dim id As String = tableHtml.id
+            Dim rows As String() = text.GetRowsHTML
             Dim matrix = rows _
                 .Select(Function(r) r.GetColumnsHTML) _
                 .MatrixTranspose(safecheck_dimension:=True) _
@@ -247,9 +255,11 @@ Module Html
 
             If filter AndAlso table.nrows = 0 Then
                 Continue For
+            Else
+                id = If(id.StringEmpty(, True), App.NextTempName, id)
             End If
 
-            Call result.add(App.NextTempName, table)
+            Call result.unique_add(id, table)
         Next
 
         Return result

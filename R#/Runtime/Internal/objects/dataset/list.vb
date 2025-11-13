@@ -262,7 +262,7 @@ Namespace Runtime.Internal.Object
         End Sub
 
         ''' <summary>
-        ''' add key-value directly 
+        ''' add key-value directly, for add content data with possible duplicated names safely, use the <see cref="unique_add(String, Object)"/> method. 
         ''' </summary>
         ''' <param name="name"></param>
         ''' <param name="value"></param>
