@@ -238,8 +238,21 @@ Module Html
             Dim tableHtml As HtmlElement = HtmlDocument.LoadDocument(text, strip:=True)(0)
             Dim id As String = tableHtml.id
             Dim rows As String() = text.GetRowsHTML
-            Dim matrix As String()() = rows _
+            Dim rowsData As String()() = rows _
                 .Select(Function(r) r.GetColumnsHTML) _
+                .ToArray
+
+            If rowsData.Length = 0 Then
+                Continue For
+            End If
+
+            Dim cols As Integer = rowsData _
+                .Select(Function(a) a.Length) _
+                .GroupBy(Function(a) a) _
+                .OrderByDescending(Function(a) a.Count) _
+                .First.Key
+            Dim matrix As String()() = rowsData _
+                .Where(Function(r) r.Length = cols) _
                 .MatrixTranspose(safecheck_dimension:=True) _
                 .ToArray
             Dim table As New dataframe With {
