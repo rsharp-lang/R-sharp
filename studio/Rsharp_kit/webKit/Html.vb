@@ -254,8 +254,10 @@ Module Html
                     .Select(Function(si)
                                 If plain_text Then
                                     Return getPlainText(si, strip_inner:=del_newline)
+                                ElseIf del_newline Then
+                                    Return si.TrimNewLine.TrimWhitespace
                                 Else
-                                    Return si
+                                    Return si.TrimWhitespace
                                 End If
                             End Function) _
                     .ToArray
