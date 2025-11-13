@@ -192,6 +192,7 @@ Module stats
         Return sb.ToString
     End Function
 
+    <RGenericOverloads("as.data.frame")>
     Private Function matrixDataFrame2(x As CorrelationMatrix, args As list, env As Environment) As Rdataframe
         Dim cutoff As Double = args.getValue("cutoff", env, [default]:=0.3)
         Dim pvalue_cut As Double = args.getValue("pvalue_cut", env, [default]:=0.05)
@@ -200,7 +201,7 @@ Module stats
         Dim cor As New List(Of Double)
         Dim pvalue As New List(Of Double)
 
-        For Each link In x.GetUniqueTuples
+        For Each link As (a$, b$) In x.GetUniqueTuples
             Dim cori As Double = x.dist(link.a, link.b)
             Dim pvali As Double = x.pvalue(link.a, link.b)
 
