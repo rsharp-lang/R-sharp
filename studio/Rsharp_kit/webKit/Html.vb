@@ -238,7 +238,7 @@ Module Html
             Dim tableHtml As HtmlElement = HtmlDocument.LoadDocument(text, strip:=True)(0)
             Dim id As String = tableHtml.id
             Dim rows As String() = text.GetRowsHTML
-            Dim matrix = rows _
+            Dim matrix As String()() = rows _
                 .Select(Function(r) r.GetColumnsHTML) _
                 .MatrixTranspose(safecheck_dimension:=True) _
                 .ToArray
@@ -306,13 +306,17 @@ Module Html
         Dim text As String = html _
             .StripHTMLTags _
             .UnescapeHTML _
-            .TrimNull _
-            .Trim(" "c, ASCII.CR, ASCII.LF, ASCII.TAB, " "c, ASCII.NUL)
+            .TrimWhitespace
 
         If strip_inner Then
-            text = text.TrimNewLine.StringReplace("\s+", " ")
+            text = text.TrimNewLine.TrimWhitespace
         End If
 
         Return text
+    End Function
+
+    <Extension>
+    Private Function TrimWhitespace(s As String) As String
+        Return s.TrimNull.Trim(" "c, ASCII.CR, ASCII.LF, ASCII.TAB, " "c, ASCII.NUL)
     End Function
 End Module
