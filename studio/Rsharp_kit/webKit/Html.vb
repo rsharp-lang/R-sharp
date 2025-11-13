@@ -235,7 +235,7 @@ Module Html
         }
 
         For Each text As String In tables
-            Dim tableHtml = HtmlDocument.LoadDocument(text, strip:=True)
+            Dim tableHtml As HtmlElement = HtmlDocument.LoadDocument(text, strip:=True)(0)
             Dim id As String = tableHtml.id
             Dim rows As String() = text.GetRowsHTML
             Dim matrix = rows _
