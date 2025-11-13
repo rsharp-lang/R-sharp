@@ -134,6 +134,8 @@ Namespace Runtime.Internal.Invokes
 
             If x Is Nothing Then
                 Return Nothing
+            ElseIf TypeOf x Is WebResponseResult Then
+                Return DirectCast(x, WebResponseResult).html
             Else
                 Return htmlPrinter.GetHtml(x, args, env)
             End If
