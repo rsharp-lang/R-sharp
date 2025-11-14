@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.Framework.IO
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Data.IO.MessagePack
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.Matrix
 Imports Microsoft.VisualBasic.MIME.application.rdf_xml.Turtle
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -211,5 +212,19 @@ Public Module base
         End If
 
         Return table
+    End Function
+
+    <ExportAPI("class_labeled")>
+    Public Function class_labeled(classSet As list, Optional env As Environment = Nothing) As list
+        Dim classList As Dictionary(Of String, String()) = classSet.AsGeneric(Of String())(env)
+        Dim labels As New Dictionary(Of String, Object)
+
+        For Each [class] In classList
+            For Each id As String In [class].Value.SafeQuery
+                labels(id) = [class].Key
+            Next
+        Next
+
+        Return New list() With {.slots = labels}
     End Function
 End Module
