@@ -3828,6 +3828,11 @@ RE0:
             Return New RDispose(x, final)
         End Function
 
+        <ExportAPI("Sys.time")>
+        Public Function Sys_time() As Date
+            Return Date.Now
+        End Function
+
         ''' <summary>
         ''' # Loading/Attaching and Listing of Packages
         ''' 
