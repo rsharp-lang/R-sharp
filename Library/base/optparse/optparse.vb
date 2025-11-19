@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Development.CommandLine
@@ -118,19 +119,43 @@ Module optparse
     <ExportAPI("parse_args")>
     <RApiReturn(TypeCodes.list)>
     Public Function parse_args([object] As OptionParser,
-                               <RLazyExpression>
+                               <RDefaultExpression>
                                Optional args As Object = "~commandArgs(parse_args = 'clr')",
                                Optional print_help_and_exit As Boolean = True,
                                Optional positional_arguments As Boolean = False,
                                Optional convert_hyphens_to_underscores As Boolean = False) As Object
 
-        If print_help_and_exit Then
-            Dim doc As CommandLineDocument = [object].GetDocument
-            Dim stdout As TextWriter = App.StdOut
+        Dim cmdl As CommandLine = CType(args, CommandLine)
+        Dim opts As list = [object].getOptions(args:=cmdl)
 
-            Call doc.PrintUsage(stdout)
-            Call stdout.Flush()
+        If opts.is_empty AndAlso print_help_and_exit Then
+            Call print_help([object])
+            Call App.Exit(0)
+
+            Return Nothing
+        Else
+            Return opts
         End If
+    End Function
+
+    ''' <summary>
+    ''' ### Printing an usage message from an OptionParser object
+    ''' 
+    ''' print_help print an usage message from an OptionParser object, usually called by parse_args when it encounters a help option.
+    ''' </summary>
+    ''' <param name="object">A OptionParser instance.</param>
+    ''' <returns>
+    ''' print_help uses the cat function to print out a usage message. It returns invisible(NULL).
+    ''' </returns>
+    <ExportAPI("print_help")>
+    Public Function print_help([object] As OptionParser) As Object
+        Dim doc As CommandLineDocument = [object].GetDocument
+        Dim stdout As TextWriter = App.StdOut
+
+        Call doc.PrintUsage(stdout)
+        Call stdout.Flush()
+
+        Return Nothing
     End Function
 End Module
 

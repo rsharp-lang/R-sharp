@@ -1,7 +1,9 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.CommandLine
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 
 Public Class OptionParser
 
@@ -27,6 +29,14 @@ Public Class OptionParser
                 .Select(Function(name) New Dependency(name)) _
                 .ToArray
         }
+    End Function
+
+    Public Function getOptions(args As CommandLine) As list
+        Dim opts As list = list.empty
+
+
+
+        Return opts
     End Function
 
 End Class
