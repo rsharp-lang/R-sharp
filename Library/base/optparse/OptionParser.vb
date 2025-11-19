@@ -38,6 +38,7 @@ Public Class OptionParser
                                Optional convert_hyphens_to_underscores As Boolean = False) As list
 
         Dim opts As list = list.empty
+        Dim opt_val As Object
 
         For Each opt As OptionParserOption In option_list.SafeQuery
             Dim value = (From name As String
@@ -47,16 +48,24 @@ Public Class OptionParser
                          Select val).FirstOrDefault
 
             If value Is Nothing Then
-                For Each name As String In opt.opt_names(convert_hyphens_to_underscores)
-                    Call opts.add(name, opt.default)
-                Next
+                If opt.opt_str.Any(Function(o) args.HavebFlag(o)) Then
+                    If opt.action = "store_true" Then
+                        opt_val = True
+                    ElseIf opt.action = "store_false" Then
+                        opt_val = False
+                    Else
+                        opt_val = Nothing
+                    End If
+                Else
+                    opt_val = opt.default
+                End If
             Else
-                Dim val As Object = s4Methods.conversionValue(value, opt.type, env)
-
-                For Each name As String In opt.opt_names(convert_hyphens_to_underscores)
-                    Call opts.add(name, val)
-                Next
+                opt_val = s4Methods.conversionValue(value, opt.type, env)
             End If
+
+            For Each name As String In opt.opt_names(convert_hyphens_to_underscores)
+                Call opts.add(name, opt_val)
+            Next
         Next
 
         Return opts
