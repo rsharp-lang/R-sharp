@@ -9,6 +9,7 @@
     <Import_RootNamespace>Rstudio.common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Rsession.vb" />
     <Compile Include="$(MSBuildThisFileDirectory)RPackage.vb" />
     <Compile Include="$(MSBuildThisFileDirectory)TaskCancel\TaskCancellationExtension.vb" />
     <Compile Include="$(MSBuildThisFileDirectory)TaskCancel\TaskCancellationInternals.vb" />

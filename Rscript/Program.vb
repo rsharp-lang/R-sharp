@@ -125,6 +125,8 @@ Module Program
             configs:=If(engineConfig.StringEmpty, ConfigFile.localConfigs, engineConfig)
         )
 
+        Call RInternal.invoke.pushEnvir(GetType(Rsession))
+
         If Not attach.StringEmpty Then
             ' loading package list
             ' --attach GCModeller,mzkit,REnv

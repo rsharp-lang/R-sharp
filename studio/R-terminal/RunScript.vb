@@ -82,7 +82,7 @@ Friend Class RunScript
             result = REnv.Internal.debug.stop([error], R.globalEnvir)
         Else
             result = REnv.TryCatch(
-                runScript:=Function() R.SetTaskCancelHook(Terminal.cts).Run(program),
+                runScript:=Function() R.SetTaskCancelHook(Rsession.cts).Run(program),
                 debug:=R.debug
             )
         End If

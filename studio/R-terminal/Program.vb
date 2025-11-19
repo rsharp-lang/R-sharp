@@ -279,6 +279,8 @@ Module Program
             Call Console.WriteLine()
         End If
 
+        Call RInternal.invoke.pushEnvir(GetType(Rsession))
+
         ' Call R.LoadLibrary("base")
         ' Call R.LoadLibrary("utils")
         ' Call R.LoadLibrary("grDevices")
