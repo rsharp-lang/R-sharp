@@ -1,5 +1,10 @@
-﻿Imports System.Runtime.CompilerServices
+﻿Imports System.Reflection
+Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
+Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Runtime.Internal.Object.baseOp
@@ -29,15 +34,42 @@ Namespace Runtime.Internal.Object.baseOp
         End Function
 
         <Extension>
+        Public Function createObject(type As RType, values As list, env As Environment) As Object
+            Dim obj As Object = Activator.CreateInstance(type.raw)
+            Dim val As Object
+            Dim reflection = DataFramework.Schema(type.raw, PropertyAccess.Writeable, PublicProperty, nonIndex:=True)
+            Dim writer As PropertyInfo
+
+            For Each slot As KeyValuePair(Of String, Object) In values.slots
+                writer = reflection(slot.Key)
+                val = slot.Value
+                val = RCType.CTypeDynamic(val, writer.PropertyType, env)
+
+                If TypeOf val Is Message Then
+                    Return val
+                End If
+
+                Call writer.SetValue(obj, val)
+            Next
+
+            Return obj
+        End Function
+
+        <Extension>
         Public Function createObject(type As S4Object, values As list, env As Environment) As Object
             Dim obj As Object = Activator.CreateInstance(type.raw)
             Dim val As Object
 
             For Each slot As KeyValuePair(Of String, String) In type.slots
-                If type.prototype.ContainsKey(slot.Key) Then
-                    val = type.prototype(slot.Key)
-                Else
+                If values.hasName(slot.Key) Then
                     val = values.getByName(slot.Key)
+                Else
+                    ' use the default value
+                    If type.prototype.ContainsKey(slot.Key) Then
+                        val = type.prototype(slot.Key)
+                    Else
+                        Continue For
+                    End If
                 End If
 
                 Select Case Microsoft.VisualBasic.Strings.Trim(slot.Value).ToLower

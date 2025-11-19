@@ -1,5 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object].baseOp
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes
@@ -230,7 +232,17 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("new")>
         Public Function new_s4(Class$, <RListObjectArgument> args As list, Optional env As Environment = Nothing) As Object
+            Dim def As IRType = env.globalEnvironment.types.TryGetValue([Class])
 
+            If def Is Nothing Then
+                Return Message.NullOrStrict(env.strictOption, $"new {[Class]}();", env)
+            End If
+
+            If TypeOf def Is S4Object Then
+                Return DirectCast(def, S4Object).createObject(args, env)
+            Else
+                Return DirectCast(def, RType).createObject(args, env)
+            End If
         End Function
     End Module
 End Namespace
