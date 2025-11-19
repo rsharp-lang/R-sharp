@@ -1,5 +1,7 @@
-﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+﻿Imports System.IO
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Development.CommandLine
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
@@ -118,25 +120,15 @@ Module optparse
                                Optional positional_arguments As Boolean = False,
                                Optional convert_hyphens_to_underscores As Boolean = False) As Object
 
+        If print_help_and_exit Then
+            Dim doc As CommandLineDocument = [object].GetDocument
+            Dim stdout As TextWriter = App.StdOut
+
+            Call doc.PrintUsage(stdout)
+            Call stdout.Flush()
+        End If
     End Function
 End Module
 
-Public Class OptionParser
 
-    Public Property usage As String
-    Public Property option_list As OptionParserOption()
-    Public Property add_help_option As Boolean = True
-    Public Property description As String
-    Public Property epilogue As String
 
-End Class
-
-Public Class OptionParserOption
-
-    Public Property opt_str As String()
-    Public Property [default] As Object
-    Public Property type As String
-    Public Property help As String
-    Public Property action As String
-
-End Class
