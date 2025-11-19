@@ -1,4 +1,7 @@
-﻿Imports Microsoft.VisualBasic.Scripting.MetaData
+﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Package("optparse")>
@@ -21,6 +24,7 @@ Module optparse
     ''' <param name="callback">A function that executes after the each option value is fully parsed. It's value is assigned to the option and its arguments are the option S4 object, the long flag string, the value of the option, the parser S4 object, and ....</param>
     ''' <param name="callback_args">A list of additional arguments passed to callback function (via do.call).</param>
     ''' <returns>Both make_option and add_option return instances of class <see cref="OptionParserOption"/>.</returns>
+    <ExportAPI("make_option")>
     Public Function make_option(opt_str$(),
                                 Optional action As String = null,
                                 Optional type As String = null,
@@ -40,7 +44,83 @@ Module optparse
             .action = action
         }
     End Function
+
+    ''' <summary>
+    ''' A function to create an instance of a parser object
+    ''' 
+    ''' This function is used to create an instance of a parser object which when combined with the parse_args, 
+    ''' make_option, and add_option methods is very useful for parsing options from the command line.
+    ''' </summary>
+    ''' <param name="usage">The program usage message that will printed out if parse_args finds a help option, %prog is substituted with the value of the prog argument.</param>
+    ''' <param name="option_list">A list of of OptionParserOption instances that will define how parse_args reacts to command line options. OptionParserOption instances are usually created by make_option and can also be added to an existing OptionParser instance via the add_option function.</param>
+    ''' <param name="add_help_option">Whether a standard help option should be automatically added to the OptionParser instance.</param>
+    ''' <param name="prog">Program name to be substituted for %prog in the usage message (including description and epilogue if present), the default is to use the actual Rscript file name if called by an Rscript file and otherwise keep %prog.</param>
+    ''' <param name="description">Additional text for print_help to print out between usage statement and options statement</param>
+    ''' <param name="epilogue">Additional text for print_help to print out after the options statement</param>
+    ''' <param name="formatter">A function that formats usage text. The function should take only one argument (an OptionParser() object). Default is IndentedHelpFormatter(). The other builtin formatter provided by this package is TitledHelpFormatter().</param>
+    ''' <returns>An instance of the OptionParser class.</returns>
+    <ExportAPI("OptionParser")>
+    <RApiReturn(GetType(OptionParser))>
+    Public Function OptionParser(Optional usage$ = "usage: %prog [options]",
+                                 Optional option_list As list = Nothing,
+                                 Optional add_help_option As Boolean = True,
+                                 Optional prog As Object = null,
+                                 Optional description$ = "",
+                                 Optional epilogue$ = "",
+                                 Optional formatter As Object = "IndentedHelpFormatter",
+                                 Optional env As Environment = Nothing) As Object
+
+        Return New OptionParser With {
+            .add_help_option = add_help_option,
+            .description = description,
+            .epilogue = epilogue,
+            .option_list = option_list.AsGeneric(Of OptionParserOption)(env),
+            .usage = usage
+        }
+    End Function
+
+    ''' <summary>
+    ''' ### Parse command line options.
+    ''' 
+    ''' parse_args parses command line options using an OptionParser instance for guidance. parse_args2 is a wrapper to 
+    ''' parse_args setting the options positional_arguments and convert_hyphens_to_underscores to TRUE.
+    ''' </summary>
+    ''' <param name="object">An OptionParser instance.</param>
+    ''' <param name="args">A character vector containing command line options to be parsed. Default is everything after the Rscript program in the command line. If positional_arguments is not FALSE then parse_args will look for positional arguments at the end of this vector.</param>
+    ''' <param name="print_help_and_exit">Whether parse_args should call print_help to print out a usage message and exit the program. Default is TRUE.</param>
+    ''' <param name="positional_arguments">Number of positional arguments. A numeric denoting the exact number of supported arguments, or a numeric vector of length two denoting the minimum and maximum number of arguments (Inf for no limit). The value TRUE is equivalent to c(0, Inf). The default FALSE is supported for backward compatibility only, as it alters the format of the return value.</param>
+    ''' <param name="convert_hyphens_to_underscores">If the names in the returned list of options contains hyphens then convert them to underscores. The default FALSE is supported for backward compatibility reasons as it alters the format of the return value</param>
+    ''' <returns>Returns a list with field options containing our option values as well as another field args which 
+    ''' contains a vector of positional arguments. For backward compatibility, if and only if positional_arguments 
+    ''' is FALSE, returns a list containing option values.</returns>
+    ''' <remarks>
+    ''' #### Acknowledgement
+    ''' 
+    ''' A big thanks To Steve Lianoglou For a bug report And patch; Juan Carlos BorrÃ¡s For a bug report; Jim Nikelski For a bug 
+    ''' report And patch; Ino de Brujin And Benjamin Tyner For a bug report; Jonas Zimmermann For bug report; Miroslav Posta For
+    ''' bug reports; Stefan Seemayer For bug report And patch; Kirill MÃ¼ller For patches; Steve Humburg For patch.
+    ''' </remarks>
+    <ExportAPI("parse_args")>
+    <RApiReturn(TypeCodes.list)>
+    Public Function parse_args([object] As OptionParser,
+                               <RLazyExpression>
+                               Optional args As Object = "~commandArgs(trailingOnly = True)",
+                               Optional print_help_and_exit As Boolean = True,
+                               Optional positional_arguments As Boolean = False,
+                               Optional convert_hyphens_to_underscores As Boolean = False) As Object
+
+    End Function
 End Module
+
+Public Class OptionParser
+
+    Public Property usage As String
+    Public Property option_list As Dictionary(Of String, OptionParserOption)
+    Public Property add_help_option As Boolean = True
+    Public Property description As String
+    Public Property epilogue As String
+
+End Class
 
 Public Class OptionParserOption
 

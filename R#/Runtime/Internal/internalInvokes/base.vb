@@ -123,6 +123,8 @@ Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 Imports std = System.Math
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
+Imports Microsoft.VisualBasic.CommandLine
+
 
 #If NET48 Then
 Imports Image = System.Drawing.Image
@@ -366,14 +368,22 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("commandArgs")>
         Public Function commandArgs(Optional trailingOnly As Boolean = False, Optional parse_args As Boolean = False) As Object
-            Dim args = App.CommandLine
+            Dim args As CommandLine = App.CommandLine
 
             If parse_args Then
                 Return New list With {
                     .slots = New Dictionary(Of String, Object) From {
                         {"command", args.Name},
                         {"commandLine", App.Command},
-                        {"opts", New list With {.slots = args.ToArgumentVector.ToDictionary(Function(a) a.Name, Function(a) CObj(a.Value))}}
+                        {"opts", New list With {
+                            .slots = args _
+                                .ToArgumentVector _
+                                .ToDictionary(Function(a) a.Name,
+                                              Function(a)
+                                                  Return CObj(a.Value)
+                                              End Function)
+                            }
+                        }
                     }
                 }
             Else
