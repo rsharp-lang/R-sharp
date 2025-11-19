@@ -1,11 +1,14 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 <Package("optparse")>
 Module optparse
+
+    Const NULL As Object = Nothing
 
     ''' <summary>
     ''' Functions to enable our OptionParser to recognize specific command line options.
@@ -26,15 +29,15 @@ Module optparse
     ''' <returns>Both make_option and add_option return instances of class <see cref="OptionParserOption"/>.</returns>
     <ExportAPI("make_option")>
     Public Function make_option(opt_str$(),
-                                Optional action As String = null,
-                                Optional type As String = null,
-                                Optional dest As String = null,
+                                Optional action As String = NULL,
+                                Optional type As String = NULL,
+                                Optional dest As String = NULL,
                                 <RRawVectorArgument>
-                                Optional [default] As Object = null,
+                                Optional [default] As Object = NULL,
                                 Optional help As String = "",
-                                Optional metavar As String = null,
-                                Optional callback As Object = null,
-                                Optional callback_args As Object = null) As OptionParserOption
+                                Optional metavar As String = NULL,
+                                Optional callback As Object = NULL,
+                                Optional callback_args As Object = NULL) As OptionParserOption
 
         Return New OptionParserOption With {
             .[default] = [default],
@@ -64,7 +67,7 @@ Module optparse
     Public Function OptionParser(Optional usage$ = "usage: %prog [options]",
                                  Optional option_list As list = Nothing,
                                  Optional add_help_option As Boolean = True,
-                                 Optional prog As Object = null,
+                                 Optional prog As Object = NULL,
                                  Optional description$ = "",
                                  Optional epilogue$ = "",
                                  Optional formatter As Object = "IndentedHelpFormatter",
@@ -104,7 +107,7 @@ Module optparse
     <RApiReturn(TypeCodes.list)>
     Public Function parse_args([object] As OptionParser,
                                <RLazyExpression>
-                               Optional args As Object = "~commandArgs(trailingOnly = True)",
+                               Optional args As Object = "~commandArgs(parse_args = 'clr')",
                                Optional print_help_and_exit As Boolean = True,
                                Optional positional_arguments As Boolean = False,
                                Optional convert_hyphens_to_underscores As Boolean = False) As Object
