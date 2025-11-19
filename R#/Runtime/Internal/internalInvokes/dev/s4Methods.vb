@@ -239,6 +239,12 @@ Namespace Runtime.Internal.Invokes
 
             If def Is Nothing Then
                 Return Message.NullOrStrict(env.strictOption, $"new {[Class]}();", env)
+            ElseIf args.length = 1 AndAlso TypeOf args.data.First Is list Then
+                ' is a symbol reference
+                '
+                ' x <- xxxxx;
+                ' new("xxx", x);
+                args = args.data.First
             End If
 
             If TypeOf def Is S4Object Then
