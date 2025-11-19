@@ -18,11 +18,13 @@ Namespace Runtime.Internal.Object.baseOp
 
             For Each slot As KeyValuePair(Of String, String) In type.slots
                 Select Case Microsoft.VisualBasic.Strings.Trim(slot.Value).ToLower
-                    Case "numeric" : valueType = GetType(Double())
+                    Case "numeric", "double" : valueType = GetType(Double())
                     Case "integer" : valueType = GetType(Integer())
                     Case "character" : valueType = GetType(String())
                     Case "raw" : valueType = GetType(Byte())
                     Case "list" : valueType = GetType(list)
+                    Case "float" : valueType = GetType(Single())
+                    Case "long" : valueType = GetType(Long())
                     Case Else
                         valueType = env.types(slot.Value).raw
                 End Select
@@ -73,11 +75,13 @@ Namespace Runtime.Internal.Object.baseOp
                 End If
 
                 Select Case Microsoft.VisualBasic.Strings.Trim(slot.Value).ToLower
-                    Case "numeric" : val = CLRVector.asNumeric(val)
+                    Case "numeric", "double" : val = CLRVector.asNumeric(val)
                     Case "integer" : val = CLRVector.asInteger(val)
                     Case "character" : val = CLRVector.asCharacter(val)
                     Case "raw" : val = CLRVector.asRawByte(val)
-                    Case "list" : base.Rlist(val, env)
+                    Case "list" : val = base.Rlist(val, env)
+                    Case "float" : val = CLRVector.asFloat(val)
+                    Case "long" : val = CLRVector.asLong(val)
                     Case Else
                         ' no conversion?
                 End Select
