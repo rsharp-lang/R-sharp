@@ -1,64 +1,63 @@
 ﻿#Region "Microsoft.VisualBasic::7f14b894bf850171d3c2a072093c84d7, R#\System\Document\ShellScript\ShellScript.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 481
-    '    Code Lines: 373 (77.55%)
-    ' Comment Lines: 22 (4.57%)
-    '    - Xml Docs: 40.91%
-    ' 
-    '   Blank Lines: 86 (17.88%)
-    '     File Size: 20.98 KB
+' Summaries:
 
 
-    '     Class ShellScript
-    ' 
-    '         Properties: argumentList, message
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: AnalysisAllCommands, GetCommandArgument, loadMetaLines, parseDefault, parseMetaData
-    ' 
-    '         Sub: AddArgumentValue, (+26 Overloads) analysisTree, AnalysisTree, PrintUsage
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 481
+'    Code Lines: 373 (77.55%)
+' Comment Lines: 22 (4.57%)
+'    - Xml Docs: 40.91%
+' 
+'   Blank Lines: 86 (17.88%)
+'     File Size: 20.98 KB
+
+
+'     Class ShellScript
+' 
+'         Properties: argumentList, message
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: AnalysisAllCommands, GetCommandArgument, loadMetaLines, parseDefault, parseMetaData
+' 
+'         Sub: AddArgumentValue, (+26 Overloads) analysisTree, AnalysisTree, PrintUsage
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -76,7 +75,6 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 Imports RunCommandLine = SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.ExternalCommandLine
 
 Namespace Development.CommandLine
@@ -118,6 +116,10 @@ Namespace Development.CommandLine
             End If
         End Sub
 
+        Public Function GetDocument() As CommandLineDocument
+
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function GetCommandArgument(name As String) As CommandLineArgument
             Return arguments _
@@ -155,98 +157,6 @@ Namespace Development.CommandLine
 
             Return data
         End Function
-
-        Public Sub PrintUsage(dev As TextWriter)
-            Dim cli As New List(Of String)
-            Dim maxName As String = arguments.Select(Function(a) a.name).MaxLengthString
-            Dim valueStr As String
-
-            Call dev.WriteLine()
-            Call dev.WriteLine($"  '{sourceScript}' - {title}")
-            Call dev.WriteLine()
-
-            For Each line As String In info.LineTokens
-                Call dev.WriteLine("  " & line)
-            Next
-
-            Call dev.WriteLine()
-
-            For Each arg As CommandLineArgument In arguments
-                If arg.defaultValue.StartsWith("<required") Then
-                    cli.Add($"{arg.name} <{arg.type}>")
-                ElseIf arg.isNumeric Then
-                    cli.Add($"[{arg.name} <{arg.type}, default={Strings.Trim(arg.defaultValue).Trim(""""c)}>]")
-                Else
-                    cli.Add($"[{arg.name} <{arg.type}, default={arg.defaultValue}>]")
-                End If
-            Next
-
-            Call dev.WriteLine($"SYNOPSIS")
-            Call dev.WriteLine($"Rscript ""{sourceScript}"" {cli.JoinBy(" ")}")
-            Call dev.WriteLine()
-            Call dev.WriteLine("CommandLine Argument Values:")
-
-            Call dev.WriteLine()
-
-            Static none As [Default](Of String) = "-"
-
-            For Each arg As CommandLineArgument In arguments
-                Dim prefix As String = $" {arg.name}: {New String(" "c, maxName.Length - arg.name.Length)}"
-                Dim descriptionBlock As String = Paragraph _
-                    .SplitParagraph(arg.description Or none, 65) _
-                    .JoinBy(vbCrLf & New String(" "c, prefix.Length))
-
-                If arg.defaultValue.StartsWith("<required") Then
-                    valueStr = ($"<required>")
-                ElseIf arg.isNumeric Then
-                    valueStr = ($"[{arg.type}, default={Strings.Trim(arg.defaultValue).Trim(""""c)}]")
-                Else
-                    valueStr = ($"[{arg.type}, default={arg.defaultValue}]")
-                End If
-
-                Call dev.WriteLine(prefix & descriptionBlock) ' & valueStr)
-
-                If descriptionBlock.Contains(vbCr) OrElse descriptionBlock.Contains(vbLf) Then
-                    Call dev.WriteLine()
-                End If
-            Next
-
-            If Not authors.IsNullOrEmpty Then
-                Call dev.WriteLine()
-                Call dev.WriteLine("Authors:")
-                Call authors.printContentArray(Nothing, Nothing, 80, dev)
-            End If
-
-            If dependency > 0 Then
-                Dim requires = dependency.Where(Function(deps) deps.library.StringEmpty).ToArray
-                Dim import = dependency.Where(Function(deps) Not deps.library.StringEmpty).ToArray
-
-                Call dev.WriteLine()
-                Call dev.WriteLine("Dependency List:")
-
-                If Not requires.IsNullOrEmpty Then
-                    Dim allList As String() = requires _
-                        .Select(Function(pkg) pkg.packages) _
-                        .IteratesALL _
-                        .Distinct _
-                        .ToArray
-
-                    Call dev.WriteLine()
-                    Call dev.WriteLine(" Loading: ")
-                    Call allList.printContentArray(Nothing, Nothing, 80, dev)
-                End If
-
-                If Not import.IsNullOrEmpty Then
-                    Dim allList = import.Select(Function(ref) $"{ref.library}::[{ref.packages.JoinBy(", ")}]").ToArray
-
-                    Call dev.WriteLine()
-                    Call dev.WriteLine(" Imports: ")
-                    Call allList.printContentArray(Nothing, Nothing, 80, dev)
-                End If
-            End If
-
-            Call dev.Flush()
-        End Sub
 
         Private Sub AnalysisTree(expr As Expression, attrs As ArgumentInfo)
             If expr Is Nothing OrElse

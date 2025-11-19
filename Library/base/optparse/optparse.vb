@@ -83,7 +83,7 @@ Module optparse
             .epilogue = epilogue,
             .option_list = If(option_list Is Nothing OrElse option_list.is_empty,
                 New OptionParserOption() {},
-                renv.TryCastGenericArray(option_list.data, env)),
+                renv.TryCastGenericArray(option_list.data.ToArray, env)),
             .usage = usage
         }
     End Function
