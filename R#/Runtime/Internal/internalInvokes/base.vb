@@ -351,6 +351,12 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="trailingOnly">
         ''' logical. Should only arguments after --args be returned?
         ''' </param>
+        ''' <param name="parse_args">
+        ''' parse the arguments value? a character vector of the parse mode:
+        ''' 
+        ''' 1. clr - a clr <see cref="CommandLine"/> object will return
+        ''' 2. TRUE - value logical true will returns a tuole list that contains the commandline components
+        ''' </param>
         ''' <returns>
         ''' A character vector containing the name of the executable and the user-supplied command 
         ''' line arguments. The first element is the name of the executable by which R was invoked. 
@@ -367,10 +373,16 @@ Namespace Runtime.Internal.Invokes
         ''' command-line flag to R, as all of the command line after that flag is skipped.
         ''' </remarks>
         <ExportAPI("commandArgs")>
-        Public Function commandArgs(Optional trailingOnly As Boolean = False, Optional parse_args As Boolean = False) As Object
+        Public Function commandArgs(Optional trailingOnly As Boolean = False,
+                                    Optional parse_args As String = Nothing) As Object
+
             Dim args As CommandLine = App.CommandLine
 
-            If parse_args Then
+            If parse_args IsNot Nothing Then
+                If Microsoft.VisualBasic.Strings.LCase(parse_args) = "clr" Then
+                    Return args
+                End If
+
                 Return New list With {
                     .slots = New Dictionary(Of String, Object) From {
                         {"command", args.Name},
