@@ -177,7 +177,7 @@ Namespace Runtime.Internal.Invokes
                 .prototype = If(prototype, Internal.Object.list.empty).slots,
                 .contains = contains
             }
-            env.globalEnvironment.types([Class]) = def.eval
+            env.globalEnvironment.types([Class]) = def.eval(env.globalEnvironment)
             Return def
         End Function
 
