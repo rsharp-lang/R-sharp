@@ -19,6 +19,8 @@ Public Class OptionParser
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function GetDocument() As CommandLineDocument
+        Dim deps As New Dependency With {.packages = dependency}
+
         Return New CommandLineDocument With {
             .arguments = option_list _
                 .Select(Function(a) a.CreateArgumentInternal) _
@@ -26,10 +28,7 @@ Public Class OptionParser
             .info = description,
             .title = title,
             .sourceScript = App.CommandLine.Name,
-            .dependency = dependency _
-                .SafeQuery _
-                .Select(Function(name) New Dependency(name)) _
-                .ToArray
+            .dependency = {deps}
         }
     End Function
 
