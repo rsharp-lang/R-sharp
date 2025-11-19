@@ -32,7 +32,7 @@ Namespace Runtime.Internal.Object.baseOp
                 def.Add(slot.Key, valueType)
             Next
 
-            Return def.Create(type.class_name, asm_module:="r_sharp.s4object").GeneratedType
+            Return def.Create(type.class_name, asm_module:="r_sharp_s4object").GeneratedType
         End Function
 
         <Extension>
