@@ -427,9 +427,17 @@ printSingleElement:
                        End Function
             Else
                 If allowClassPrinter Then
-                    If Not (elementType.Namespace.StartsWith("System.") OrElse elementType.Namespace = "System") Then
+                    Dim check_dynamics = elementType.Namespace Is Nothing
+                    Dim check_primitive = (Not check_dynamics) AndAlso (elementType.Namespace.StartsWith("System.") OrElse elementType.Namespace = "System")
+
+                    If check_dynamics OrElse Not check_primitive Then
                         Return AddressOf classPrinter.printClass
                     Else
+                        ' 20251119 print value as string when deal with the .NET framework internal primitive type
+                        ' system.integer
+                        ' system.double
+                        ' system.string
+                        ' system.xxx
                         Return Function(obj) any.ToString(obj, "NULL", True)
                     End If
                 Else
