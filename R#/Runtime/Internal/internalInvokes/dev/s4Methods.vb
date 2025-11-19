@@ -171,12 +171,14 @@ Namespace Runtime.Internal.Invokes
                                  Optional slots As list = Nothing,
                                  Optional env As Environment = Nothing) As Object
 
-            Return New S4Object With {
+            Dim def As New S4Object With {
                 .class_name = [Class],
                 .slots = If(slots, Internal.Object.list.empty).AsGeneric(env, [default]:="any"),
                 .prototype = If(prototype, Internal.Object.list.empty).slots,
                 .contains = contains
             }
+            env.globalEnvironment.types([Class]) = def.eval
+            Return def
         End Function
 
         ''' <summary>

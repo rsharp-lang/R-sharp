@@ -144,7 +144,11 @@ Namespace Runtime
         ''' <returns></returns>
         Public Property lastException As Message
 
-        Public ReadOnly Property types As New Dictionary(Of String, RType)
+        ''' <summary>
+        ''' wrap runtime data type of <see cref="RType"/> or <see cref="S4Object"/>
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property types As New Dictionary(Of String, IRType)
         Public ReadOnly Property factors As New Dictionary(Of String, factor)
         Public ReadOnly Property symbolLanguages As SymbolLanguageProcessor
 

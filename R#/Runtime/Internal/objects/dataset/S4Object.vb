@@ -53,10 +53,13 @@
 #End Region
 
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Object
 
     Public Class S4Object : Inherits RsharpDataObject
+        Implements IRType
 
         ''' <summary>
         ''' The names and classes for the slots in the new class. This argument must be supplied by name, slots=, 
@@ -76,7 +79,7 @@ Namespace Runtime.Internal.Object
         ''' character string name for the class.
         ''' </summary>
         ''' <returns></returns>
-        Public Property class_name As String
+        Public Property class_name As String Implements IRType.className
         ''' <summary>
         ''' supplies an object with the default data for the slots in this class. A more flexible approach is to write a method for initialize().
         ''' </summary>
@@ -93,6 +96,18 @@ Namespace Runtime.Internal.Object
         ''' <returns></returns>
         Public Property contains As String
 
+        Public ReadOnly Property mode As TypeCodes Implements IRType.mode
+            Get
+                Return TypeCodes.generic
+            End Get
+        End Property
+
+        Public ReadOnly Property raw As Type Implements IRType.raw
+
+        Public Function eval() As S4Object
+
+        End Function
+
         Public Overrides Function ToString() As String
             If contains.StringEmpty Then
                 Return class_name
@@ -101,5 +116,8 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        Public Function getNames() As String() Implements IReflector.getNames
+            Return slots.Keys.ToArray
+        End Function
     End Class
 End Namespace

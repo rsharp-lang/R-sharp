@@ -344,7 +344,7 @@ Namespace Runtime.Internal.Invokes
                 Dim names As Array = globalEnv.types.Keys.ToArray
                 Dim fullName As Array = DirectCast(names, String()) _
                     .Select(Function(key)
-                                Return globalEnv.types(key).fullName
+                                Return globalEnv.types(key).raw.FullName
                             End Function) _
                     .ToArray
 
