@@ -29,15 +29,16 @@ Namespace Runtime.Internal.Object.baseOp
         End Function
 
         <Extension>
-        Public Function createObject(type As S4Object, env As Environment) As Object
+        Public Function createObject(type As S4Object, values As list, env As Environment) As Object
             Dim obj As Object = Activator.CreateInstance(type.raw)
+            Dim val As Object
 
             For Each slot As KeyValuePair(Of String, String) In type.slots
-                If Not type.prototype.ContainsKey(slot.Key) Then
-                    Continue For
+                If type.prototype.ContainsKey(slot.Key) Then
+                    val = type.prototype(slot.Key)
+                Else
+                    val = values.getByName(slot.Key)
                 End If
-
-                Dim val As Object = slot.Value
 
                 Select Case Microsoft.VisualBasic.Strings.Trim(slot.Value).ToLower
                     Case "numeric" : val = CLRVector.asNumeric(val)
@@ -49,7 +50,7 @@ Namespace Runtime.Internal.Object.baseOp
                         ' no conversion?
                 End Select
 
-
+                Call type.reflection(slot.Key).SetValue(obj, val)
             Next
 
             Return obj
