@@ -77,7 +77,7 @@ RE0:
         If save = "c" Then
             ' cancel
             Return
-        ElseIf cts.IsCancellationRequested Then
+        ElseIf cts IsNot Nothing AndAlso cts.IsCancellationRequested Then
             Call Console.WriteLine()
             Return
         End If
