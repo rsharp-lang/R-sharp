@@ -1,5 +1,7 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.CommandLine
+Imports SMRUCC.Rsharp.Development.Package.File
 
 Public Class OptionParser
 
@@ -9,6 +11,7 @@ Public Class OptionParser
     Public Property description As String
     Public Property epilogue As String
     Public Property title As String
+    Public Property dependency As String()
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function GetDocument() As CommandLineDocument
@@ -17,7 +20,12 @@ Public Class OptionParser
                 .Select(Function(a) a.CreateArgumentInternal) _
                 .ToArray,
             .info = description,
-            .title = title
+            .title = title,
+            .sourceScript = App.CommandLine.Name,
+            .dependency = dependency _
+                .SafeQuery _
+                .Select(Function(name) New Dependency(name)) _
+                .ToArray
         }
     End Function
 

@@ -85,10 +85,18 @@ Module Program
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Private Function QueryCommandLineArgvs(args As CommandLine) As Integer
-        Return QueryCommandLineArgvs(script:=args.SingleValue, dev:=App.StdOut)
+        Return QueryCommandLineArgvs(script:=args.SingleValue,
+                                     dev:=App.StdOut,
+                                     args:=args)
     End Function
 
-    Friend Function QueryCommandLineArgvs(script As String, dev As TextWriter) As Integer
+    ''' <summary>
+    ''' --help, -h
+    ''' </summary>
+    ''' <param name="script"></param>
+    ''' <param name="dev"></param>
+    ''' <returns></returns>
+    Friend Function QueryCommandLineArgvs(script As String, dev As TextWriter, Optional args As CommandLine = Nothing) As Integer
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(ConfigFile.localConfigs)
 
         If script.IsURLPattern Then
@@ -113,12 +121,15 @@ Module Program
             )
 
             Return 500
+        ElseIf Rscript.argumentList.IsNullOrEmpty AndAlso Rscript.hasPackageDependency("optparse") Then
+            ' use optparse system
+            Return Program.RunRScriptFile(script, If(args, App.CommandLine))
+        Else
+            ' use R# native system
+            Call Rscript.AnalysisAllCommands() _
+                .GetDocument _
+                .PrintUsage(dev)
         End If
-
-        Call Rscript _
-            .AnalysisAllCommands() _
-            .GetDocument _
-            .PrintUsage(dev)
 
         Return 0
     End Function

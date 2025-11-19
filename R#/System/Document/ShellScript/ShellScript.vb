@@ -116,6 +116,19 @@ Namespace Development.CommandLine
             End If
         End Sub
 
+        Public Function hasPackageDependency(libname As String) As Boolean
+            Return dependency _
+                .SafeQuery _
+                .Any(Function(deps)
+                         Return deps.library = libname OrElse
+                            deps.packages _
+                                .SafeQuery _
+                                .Any(Function(a)
+                                         Return a = libname
+                                     End Function)
+                     End Function)
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function GetDocument() As CommandLineDocument
             Return New CommandLineDocument With {

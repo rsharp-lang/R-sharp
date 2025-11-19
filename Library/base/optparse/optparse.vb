@@ -77,6 +77,8 @@ Module optparse
                                  Optional description$ = "",
                                  Optional epilogue$ = "",
                                  Optional formatter As Object = "IndentedHelpFormatter",
+                                 Optional title As String = Nothing,
+                                 Optional dependency As String() = Nothing,
                                  Optional env As Environment = Nothing) As Object
 
         Return New OptionParser With {
@@ -86,7 +88,9 @@ Module optparse
             .option_list = If(option_list Is Nothing OrElse option_list.is_empty,
                 New OptionParserOption() {},
                 renv.TryCastGenericArray(option_list.data.ToArray, env)),
-            .usage = usage
+            .usage = usage,
+            .title = title,
+            .dependency = dependency
         }
     End Function
 

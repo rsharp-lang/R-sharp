@@ -91,6 +91,10 @@ Namespace Development.Package.File
             End If
         End Sub
 
+        Sub New(libname As String)
+            library = libname
+        End Sub
+
         Sub New(require As Require)
             packages = require.packages _
                 .Select(AddressOf ValueAssignExpression.GetSymbol) _
