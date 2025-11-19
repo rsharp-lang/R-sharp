@@ -58,6 +58,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser.SyntaxImplements
@@ -278,6 +279,24 @@ Namespace Language.Syntax.SyntaxParser
                     ' }
 
                     Return SyntaxImplements.DeclareAnonymousFunction(code, opts)
+                Else
+                    Dim func As Token = tokens(Scan0)
+
+                    ' is lambda function
+                    ' function(x) xxx
+                    opts.SetCurrentRange(tokens)
+                    code = code.Skip(1).IteratesALL.SplitByTopLevelDelimiter(TokenType.close, includeKeyword:=True)
+
+                    Dim args = DeclareNewSymbolSyntax.DeclareNewSymbol({code(0)(1)}, opts)
+                    Dim body = opts.ParseExpression(code.Skip(2).IteratesALL)
+
+                    If args.isException Then Return args
+                    If body.isException Then Return body
+
+                    Dim stacktrace = opts.GetStackTrace(func, "lambda")
+                    Dim lambda = New DeclareLambdaFunction($"lambda -> {body.expression}", args.expression, body.expression, stacktrace)
+
+                    Return New SyntaxResult(lambda)
                 End If
             End If
 
