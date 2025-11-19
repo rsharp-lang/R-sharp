@@ -144,6 +144,7 @@ Namespace Runtime.Internal
             Call GetType(RCurl).DoCall(AddressOf pushEnvir)
             Call GetType(reshape2).DoCall(AddressOf pushEnvir)
             Call GetType(dplyr).DoCall(AddressOf pushEnvir)
+            Call GetType(s4Methods).DoCall(AddressOf pushEnvir)
         End Sub
 
         Private Sub New()

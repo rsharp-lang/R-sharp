@@ -6,6 +6,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Invokes
 
+    ''' <summary>
+    ''' s4object api function exports
+    ''' </summary>
     Public Module s4Methods
 
         ''' <summary>
