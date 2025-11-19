@@ -4,6 +4,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports renv = SMRUCC.Rsharp.Runtime
 
 <Package("optparse")>
 Module optparse
@@ -77,7 +78,9 @@ Module optparse
             .add_help_option = add_help_option,
             .description = description,
             .epilogue = epilogue,
-            .option_list = option_list.AsGeneric(Of OptionParserOption)(env),
+            .option_list = If(option_list Is Nothing OrElse option_list.is_empty,
+                New OptionParserOption() {},
+                renv.TryCastGenericArray(option_list.data, env)),
             .usage = usage
         }
     End Function
@@ -118,7 +121,7 @@ End Module
 Public Class OptionParser
 
     Public Property usage As String
-    Public Property option_list As Dictionary(Of String, OptionParserOption)
+    Public Property option_list As OptionParserOption()
     Public Property add_help_option As Boolean = True
     Public Property description As String
     Public Property epilogue As String
