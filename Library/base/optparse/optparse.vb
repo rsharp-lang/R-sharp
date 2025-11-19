@@ -6,6 +6,9 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports renv = SMRUCC.Rsharp.Runtime
 
+''' <summary>
+''' Command Line Option Parser
+''' </summary>
 <Package("optparse")>
 Module optparse
 
