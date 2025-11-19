@@ -3,7 +3,9 @@ Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Development.CommandLine
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
+Imports SMRUCC.Rsharp.Runtime.Internal.Object.baseOp
 
 Public Class OptionParser
 
@@ -31,10 +33,31 @@ Public Class OptionParser
         }
     End Function
 
-    Public Function getOptions(args As CommandLine) As list
+    Public Function getOptions(args As CommandLine,
+                               env As Environment,
+                               Optional convert_hyphens_to_underscores As Boolean = False) As list
+
         Dim opts As list = list.empty
 
+        For Each opt As OptionParserOption In option_list.SafeQuery
+            Dim value = (From name As String
+                         In opt.opt_str
+                         Let val = args.GetString(name)
+                         Where Not val.StringEmpty
+                         Select val).FirstOrDefault
 
+            If value Is Nothing Then
+                For Each name As String In opt.opt_names(convert_hyphens_to_underscores)
+                    Call opts.add(name, opt.default)
+                Next
+            Else
+                Dim val As Object = s4Methods.conversionValue(value, opt.type, env)
+
+                For Each name As String In opt.opt_names(convert_hyphens_to_underscores)
+                    Call opts.add(name, val)
+                Next
+            End If
+        Next
 
         Return opts
     End Function

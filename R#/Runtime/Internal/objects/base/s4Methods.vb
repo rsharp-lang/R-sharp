@@ -9,7 +9,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 Namespace Runtime.Internal.Object.baseOp
 
-    Module s4Methods
+    Public Module s4Methods
 
         <Extension>
         Public Function defineObject(type As S4Object, env As GlobalEnvironment) As Type
@@ -74,22 +74,27 @@ Namespace Runtime.Internal.Object.baseOp
                     End If
                 End If
 
-                Select Case Microsoft.VisualBasic.Strings.Trim(slot.Value).ToLower
-                    Case "numeric", "double" : val = CLRVector.asNumeric(val)
-                    Case "integer" : val = CLRVector.asInteger(val)
-                    Case "character" : val = CLRVector.asCharacter(val)
-                    Case "raw" : val = CLRVector.asRawByte(val)
-                    Case "list" : val = base.Rlist(val, env)
-                    Case "float" : val = CLRVector.asFloat(val)
-                    Case "long" : val = CLRVector.asLong(val)
-                    Case Else
-                        ' no conversion?
-                End Select
-
-                Call type.reflection(slot.Key).SetValue(obj, val)
+                val = s4Methods.conversionValue(val, slot.Value, env)
+                type.reflection(slot.Key).SetValue(obj, val)
             Next
 
             Return obj
+        End Function
+
+        Public Function conversionValue(val As Object, type As String, env As Environment) As Object
+            Select Case Microsoft.VisualBasic.Strings.Trim(type).ToLower
+                Case "numeric", "double" : val = CLRVector.asNumeric(val)
+                Case "integer" : val = CLRVector.asInteger(val)
+                Case "character" : val = CLRVector.asCharacter(val)
+                Case "raw" : val = CLRVector.asRawByte(val)
+                Case "list" : val = base.Rlist(val, env)
+                Case "float" : val = CLRVector.asFloat(val)
+                Case "long" : val = CLRVector.asLong(val)
+                Case Else
+                    ' no conversion?
+            End Select
+
+            Return val
         End Function
     End Module
 End Namespace

@@ -123,10 +123,11 @@ Module optparse
                                Optional args As Object = "~commandArgs(parse_args = 'clr')",
                                Optional print_help_and_exit As Boolean = True,
                                Optional positional_arguments As Boolean = False,
-                               Optional convert_hyphens_to_underscores As Boolean = False) As Object
+                               Optional convert_hyphens_to_underscores As Boolean = False,
+                               Optional env As Environment = Nothing) As Object
 
         Dim cmdl As CommandLine = CType(args, CommandLine)
-        Dim opts As list = [object].getOptions(args:=cmdl)
+        Dim opts As list = [object].getOptions(args:=cmdl, env, convert_hyphens_to_underscores)
 
         If opts.is_empty AndAlso print_help_and_exit Then
             Call print_help([object])

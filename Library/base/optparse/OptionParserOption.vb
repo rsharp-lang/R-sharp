@@ -1,4 +1,5 @@
 ﻿Imports SMRUCC.Rsharp.Development.CommandLine
+Imports Microsoft.VisualBasic.CommandLine
 
 Public Class OptionParserOption
 
@@ -19,6 +20,18 @@ Public Class OptionParserOption
     ''' </summary>
     ''' <returns></returns>
     Public Property action As String
+
+    Public Iterator Function opt_names(Optional convert_hyphens_to_underscores As Boolean = False) As IEnumerable(Of String)
+        For Each name As String In opt_str
+            name = CommandLine.TrimNamePrefix(name)
+
+            If convert_hyphens_to_underscores Then
+                name = name.Replace("-", "_")
+            End If
+
+            Yield name
+        Next
+    End Function
 
     Friend Function CreateArgumentInternal() As CommandLineArgument
         Dim defaultVal As String = [default]
