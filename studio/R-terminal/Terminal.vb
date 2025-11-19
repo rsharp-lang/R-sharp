@@ -146,13 +146,20 @@ Module Terminal
                  Optional status% = 0,
                  Optional runLast As Boolean = True,
                  Optional envir As Environment = Nothing)
-RE0:
-        Call Console.Write("Save workspace image? [y/n/c]: ")
 
         ' null string will be return if ctrl+C was pressed
-        Dim input As String = Microsoft.VisualBasic.Strings.Trim(Console.ReadLine).Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB)
+        save = Microsoft.VisualBasic.Strings.LCase(save)
 
-        If input = "c" Then
+        If save = "default" OrElse save = "ask" Then
+RE0:
+            Call Console.Write("Save workspace image? [y/n/c]: ")
+
+            save = Microsoft.VisualBasic.Strings _
+                .Trim(Console.ReadLine) _
+                .Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB)
+        End If
+
+        If save = "c" Then
             ' cancel
             Return
         ElseIf cts.IsCancellationRequested Then
@@ -160,14 +167,14 @@ RE0:
             Return
         End If
 
-        If input = "y" Then
+        If save = "y" OrElse save = "yes" Then
             ' save image for yes
             Dim saveImage As Symbol = envir.FindSymbol("save.image")
 
             If Not saveImage Is Nothing AndAlso TypeOf saveImage.value Is RMethodInfo Then
                 Call DirectCast(saveImage.value, RMethodInfo).Invoke(envir, {})
             End If
-        ElseIf input = "n" Then
+        ElseIf save = "n" OrElse save = "no" Then
             ' do nothing for no
         Else
             GoTo RE0
