@@ -58,6 +58,48 @@ Namespace Runtime.Internal.Object
 
     Public Class S4Object : Inherits RsharpDataObject
 
+        ''' <summary>
+        ''' The names and classes for the slots in the new class. This argument must be supplied by name, slots=, 
+        ''' in the call, for back compatibility with other arguments no longer recommended.
+        ''' 
+        ''' The argument must be vector With a names attribute, the names being those Of the slots In the New Class. 
+        ''' Each element Of the vector specifies an existing Class; the corresponding slot must be from this Class 
+        ''' Or a subclass Of it. Usually, this Is a character vector naming the classes. It's also legal for the 
+        ''' elements of the vector to be class representation objects, as returned by getClass.
+        ''' 
+        ''' As a limiting case, the argument may be an unnamed character vector; the elements are taken as slot 
+        ''' names And all slots have the unrestricted class "ANY".
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property slots As Dictionary(Of String, String)
+        ''' <summary>
+        ''' character string name for the class.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property class_name As String
+        ''' <summary>
+        ''' supplies an object with the default data for the slots in this class. A more flexible approach is to write a method for initialize().
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property prototype As Dictionary(Of String, Object)
+        ''' <summary>
+        ''' A vector specifying existing classes from which this class should inherit. The new class will 
+        ''' have all the slots of the superclasses, with the same requirements on the classes of these slots. 
+        ''' This argument must be supplied by name, contains=, in the call, for back compatibility with 
+        ''' other arguments no longer recommended.
+        ''' 
+        ''' See the section 'Virtual Classes’ for the special superclass "VIRTUAL".
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property contains As String
+
+        Public Overrides Function ToString() As String
+            If contains.StringEmpty Then
+                Return class_name
+            Else
+                Return $"{class_name} inherits {contains}"
+            End If
+        End Function
 
     End Class
 End Namespace
