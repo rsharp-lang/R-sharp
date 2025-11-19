@@ -116,8 +116,16 @@ Namespace Development.CommandLine
             End If
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function GetDocument() As CommandLineDocument
-
+            Return New CommandLineDocument With {
+                .arguments = arguments.ToArray,
+                .authors = authors,
+                .dependency = dependency.ToArray,
+                .info = info,
+                .sourceScript = sourceScript,
+                .title = title
+            }
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

@@ -1,12 +1,20 @@
 ﻿Imports System.IO
 Imports Microsoft.VisualBasic.Language.[Default]
-Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime.Internal.ConsolePrinter
 
 Namespace Development.CommandLine
 
     Public Class CommandLineDocument
+
+        Public Property arguments As CommandLineArgument()
+        Public Property sourceScript As String
+        Public Property title As String
+        Public Property info As String
+        Public Property authors As String()
+        Public Property dependency As Dependency()
 
         Public Sub PrintUsage(dev As TextWriter)
             Dim cli As New List(Of String)
@@ -17,7 +25,7 @@ Namespace Development.CommandLine
             Call dev.WriteLine($"  '{sourceScript}' - {title}")
             Call dev.WriteLine()
 
-            For Each line As String In Info.LineTokens
+            For Each line As String In info.LineTokens
                 Call dev.WriteLine("  " & line)
             Next
 
@@ -69,7 +77,7 @@ Namespace Development.CommandLine
                 Call authors.printContentArray(Nothing, Nothing, 80, dev)
             End If
 
-            If dependency > 0 Then
+            If dependency.Length > 0 Then
                 Dim requires = dependency.Where(Function(deps) deps.library.StringEmpty).ToArray
                 Dim import = dependency.Where(Function(deps) Not deps.library.StringEmpty).ToArray
 

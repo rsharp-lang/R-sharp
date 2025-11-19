@@ -115,8 +115,10 @@ Module Program
             Return 500
         End If
 
-        Call Rscript.AnalysisAllCommands()
-        Call Rscript.PrintUsage(dev)
+        Call Rscript _
+            .AnalysisAllCommands() _
+            .GetDocument _
+            .PrintUsage(dev)
 
         Return 0
     End Function
