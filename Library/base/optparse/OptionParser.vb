@@ -56,6 +56,12 @@ Public Class OptionParser
                     Else
                         opt_val = Nothing
                     End If
+                ElseIf opt.isLogical Then
+                    If opt.action = "store_true" Then
+                        opt_val = False
+                    Else
+                        opt_val = True
+                    End If
                 Else
                     opt_val = opt.default
                 End If

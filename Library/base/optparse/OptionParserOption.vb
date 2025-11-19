@@ -1,5 +1,6 @@
-﻿Imports SMRUCC.Rsharp.Development.CommandLine
+﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine
+Imports SMRUCC.Rsharp.Development.CommandLine
 
 Public Class OptionParserOption
 
@@ -31,6 +32,11 @@ Public Class OptionParserOption
 
             Yield name
         Next
+    End Function
+
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function isLogical() As Boolean
+        Return action = "store_true" OrElse action = "store_false"
     End Function
 
     Friend Function CreateArgumentInternal() As CommandLineArgument
