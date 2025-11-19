@@ -121,14 +121,19 @@ Module Program
             )
 
             Return 500
-        ElseIf Rscript.argumentList.IsNullOrEmpty AndAlso Rscript.hasPackageDependency("optparse") Then
+        Else
+            Call Rscript.AnalysisAllCommands()
+        End If
+
+        Dim check_empty As Boolean = Rscript.argumentList.IsNullOrEmpty
+        Dim check_optparse As Boolean = Rscript.hasPackageDependency("optparse")
+
+        If check_empty AndAlso check_optparse Then
             ' use optparse system
             Return Program.RunRScriptFile(script, If(args, App.CommandLine))
         Else
             ' use R# native system
-            Call Rscript.AnalysisAllCommands() _
-                .GetDocument _
-                .PrintUsage(dev)
+            Call Rscript.GetDocument.PrintUsage(dev)
         End If
 
         Return 0
