@@ -56,14 +56,28 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
-Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Language.TokenIcer
 
 Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
     Module CreateObjectSyntax
 
+        ' 20251119  
+        '
+        ' 1. create object:  new xxx()
+        ' 2. call s4object function: new("xxx", ...);
+
         Public Function CreateNewObject(keyword As Token, tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
+            If tokens.Length > 2 AndAlso tokens(0) = (TokenType.open, "(") AndAlso tokens.Last = (TokenType.close, ")") Then
+                ' is s4object function call: new("xxx", ...);
+                Return FunctionInvokeSyntax.FunctionInvoke(keyword, tokens, opts)
+            Else
+                Return keyword.CreateNewObjectInternal(tokens, opts)
+            End If
+        End Function
+
+        <Extension>
+        Private Function CreateNewObjectInternal(keyword As Token, tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim type As String = tokens(Scan0).text
             Dim stackFrame As StackFrame = opts.GetStackTrace(keyword, $"[{type}].cor")
             Dim blocks = tokens.Skip(1).SplitByTopLevelDelimiter(TokenType.close, True, ")")
