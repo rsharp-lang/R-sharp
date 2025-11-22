@@ -72,6 +72,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports Directory = Microsoft.VisualBasic.FileIO.Directory
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Development.Package.File
 
@@ -227,7 +228,7 @@ Namespace Development.Package.File
             meta = DESCRIPTION.ParseDocument(projDir.ReadAllText("DESCRIPTION"))
 
             If meta.Package.StringEmpty Then
-                Return Internal.debug.stop(
+                Return RInternal.debug.stop(
                     message:=$"invalid project source folder: {projDir}, please check of the DESCRIPTION Is file exists Or Not, Or Is invalid file format?",
                     envir:=env
                 )

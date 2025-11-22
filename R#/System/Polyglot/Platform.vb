@@ -61,6 +61,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCoreApp
 Imports Microsoft.VisualBasic.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Development.Polyglot
 
@@ -118,7 +119,7 @@ Namespace Development.Polyglot
         End Sub
 
         Private Sub __init_load_base_internals()
-            For Each rfunc As RMethodInfo In Internal.invoke.getAllInternals
+            For Each rfunc As RMethodInfo In RInternal.invoke.getAllInternals
                 Call interop.AddInteropSymbol(rfunc.name, rfunc)
             Next
         End Sub

@@ -68,6 +68,7 @@ Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports AssemblyInfo = Microsoft.VisualBasic.ApplicationServices.Development.AssemblyInfo
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Development.Package.File
 
@@ -174,11 +175,11 @@ Namespace Development.Package.File
         ''' <returns></returns>
         Public Shared Function Check(ByRef dir As IFileSystemEnvironment, packageName As String, env As Environment) As Message
             If dir Is Nothing Then
-                Return Internal.debug.stop({$"package '{packageName}' is not installed!", $"package: {packageName}"}, env)
+                Return RInternal.debug.stop({$"package '{packageName}' is not installed!", $"package: {packageName}"}, env)
             End If
 
-            If Not dir.FileExists($"/package/index.json") Then Return Internal.debug.stop({"missing package index file(/package/index.json)!", "package_source: " & dir.ToString}, env)
-            If Not dir.FileExists($"/CHECKSUM") Then Return Internal.debug.stop({"no package checksum data(/CHECKSUM)!", "package_source: " & dir.ToString}, env)
+            If Not dir.FileExists($"/package/index.json") Then Return RInternal.debug.stop({"missing package index file(/package/index.json)!", "package_source: " & dir.ToString}, env)
+            If Not dir.FileExists($"/CHECKSUM") Then Return RInternal.debug.stop({"no package checksum data(/CHECKSUM)!", "package_source: " & dir.ToString}, env)
 
             Return Nothing
         End Function

@@ -72,6 +72,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 <HideModuleName>
 Public Module Extensions
@@ -325,7 +326,7 @@ Public Module Extensions
                 .CastSequence(eval, parallel, tqdm) _
                 .Value
         Else
-            Return Internal.debug.stop(Message.InCompatibleType(GetType(T), x.GetType, env), env)
+            Return RInternal.debug.stop(Message.InCompatibleType(GetType(T), x.GetType, env), env)
         End If
     End Function
 

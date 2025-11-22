@@ -65,6 +65,7 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Language.Syntax
 
@@ -119,7 +120,7 @@ Namespace Language.Syntax
 
         Public Function eval(env As Environment) As Object
             If Check() Then
-                Return Internal.debug.stop("in-complete expression to evaluate.", env)
+                Return RInternal.debug.stop("in-complete expression to evaluate.", env)
             End If
 
             Return Program.CreateProgram(GetRScript,,).Execute(env)

@@ -58,6 +58,7 @@
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -118,7 +119,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Dim a As Object = value.Evaluate(envir)
 
             ' let arg as string = ?"--opt" || default;
-            If Internal.Invokes.base.isEmpty(a) Then
+            If RInternal.Invokes.base.isEmpty(a) Then
                 Return [default].Evaluate(envir)
             Else
                 Return a

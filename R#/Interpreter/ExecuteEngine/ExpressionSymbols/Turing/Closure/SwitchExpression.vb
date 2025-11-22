@@ -64,6 +64,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -109,7 +110,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             If hash.ContainsKey(hasKey) Then
                 Return hash(hasKey).Evaluate(envir)
             ElseIf [default] Is Nothing Then
-                Return Internal.debug.stop($"no switch for '{hasKey}'!", envir)
+                Return RInternal.debug.stop($"no switch for '{hasKey}'!", envir)
             Else
                 Return [default].Evaluate(envir)
             End If

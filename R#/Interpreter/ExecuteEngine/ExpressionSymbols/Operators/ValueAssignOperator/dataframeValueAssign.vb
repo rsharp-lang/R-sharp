@@ -58,6 +58,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -92,7 +93,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
                 Return Nothing
             Else
-                Return Internal.debug.stop(New NotImplementedException, env)
+                Return RInternal.debug.stop(New NotImplementedException, env)
             End If
         End Function
 
@@ -109,7 +110,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 valueArray = DirectCast(value, vector).data
             ElseIf TypeOf value Is list Then
                 If targetObj.rownames.IsNullOrEmpty Then
-                    Return Internal.debug.stop(New InvalidProgramException("unable assign list to a dataframe column without row names as key!"), env)
+                    Return RInternal.debug.stop(New InvalidProgramException("unable assign list to a dataframe column without row names as key!"), env)
                 Else
                     Dim tmp = DirectCast(value, list).getArrayFromList(targetObj, env)
 
@@ -135,7 +136,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             ElseIf valueArray.Length = 0 Then
                 targetObj.columns.Remove(indexStr)
             ElseIf valueArray.Length <> nrows AndAlso (valueArray.Length <> 1 AndAlso nrows <> 1) Then
-                Return Internal.debug.stop({
+                Return RInternal.debug.stop({
                     $"the given value is not equal size to the dataframe row numbers!",
                     $"nrows: {nrows}",
                     $"value size: {valueArray.Length}"
@@ -163,7 +164,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             Next
 
             If Not setValue Then
-                Return Internal.debug.stop("no row names contains in the given list!", env)
+                Return RInternal.debug.stop("no row names contains in the given list!", env)
             Else
                 Return a
             End If

@@ -74,6 +74,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
@@ -178,7 +179,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                 .ToArray
 
             If tokens.IsNullOrEmpty Then
-                Return Internal.debug.stop("Empty commandline to shell, no target to run!", env)
+                Return RInternal.debug.stop("Empty commandline to shell, no target to run!", env)
             End If
 
             ' 20230214 the first token of the commandline may
@@ -227,7 +228,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                     .DoCall(AddressOf envir.globalEnvironment.messages.Add)
             End If
 
-            Return Internal.Invokes.utils.system(
+            Return RInternal.Invokes.utils.system(
                 command:=commandlineStr,
                 show_output_on_console:=Not silent,
                 env:=envir,
@@ -249,7 +250,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                     $"commandline: " & commandline
                 },
                 .level = MSG_TYPES.WRN,
-                .environmentStack = Internal.debug.getEnvironmentStack(envir),
+                .environmentStack = RInternal.debug.getEnvironmentStack(envir),
                 .trace = devtools.ExceptionData.GetCurrentStackTrace
             }
         End Function

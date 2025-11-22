@@ -61,6 +61,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -145,9 +146,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                         flags.Add(False)
                     End If
                 ElseIf cmin Like GetType(Exception) Then
-                    Return Internal.debug.stop(cmin.TryCast(Of Exception)(), envir)
+                    Return RInternal.debug.stop(cmin.TryCast(Of Exception)(), envir)
                 Else
-                    Return Internal.debug.stop(cmax.TryCast(Of Exception)(), envir)
+                    Return RInternal.debug.stop(cmax.TryCast(Of Exception)(), envir)
                 End If
             Next
 

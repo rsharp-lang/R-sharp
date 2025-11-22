@@ -74,6 +74,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop.CType
 Imports any = Microsoft.VisualBasic.Scripting
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -236,7 +237,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Next
             Else
                 ' 数量不对
-                Return Internal.debug.stop(New InvalidCastException, envir)
+                Return RInternal.debug.stop(New InvalidCastException, envir)
             End If
 
             Return Nothing
@@ -249,7 +250,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             If data.ncols < targetSymbols.Length Then
                 ' 设置tuple的值的时候
                 ' dataframe必须要有相同的列数量
-                Return Internal.debug.stop("Number of dataframe column element is not identical to the tuple elements...", env)
+                Return RInternal.debug.stop("Number of dataframe column element is not identical to the tuple elements...", env)
             Else
                 Dim name As String
 
@@ -260,7 +261,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     If data.hasName(name) Then
                         value = data.getColumnVector(name)
                     Else
-                        Return Internal.debug.stop({
+                        Return RInternal.debug.stop({
                             $"missing symbol name '{name}' in your dataframe!",
                             $"symbol: {name}",
                             $"columns: {data.colnames.JoinBy(", ")}"
@@ -291,7 +292,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             If list.length = 1 Then
                 ' 设置tuple的值的时候
                 ' list必须要有相同的元素数量
-                Return Internal.debug.stop("Number of list element is not identical to the tuple elements...", envir)
+                Return RInternal.debug.stop("Number of list element is not identical to the tuple elements...", envir)
             Else
                 ' one by one
                 For Each symbol As Expression In targetSymbols
@@ -344,7 +345,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
                 Throw New NotImplementedException
             Else
-                Return Internal.debug.stop(New NotImplementedException, envir)
+                Return RInternal.debug.stop(New NotImplementedException, envir)
             End If
 
             Return Nothing
@@ -390,14 +391,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
                     Select Case symbol
                         Case "NA", "NULL", "TRUE", "FALSE", "NaN"
-                            Return Internal.debug.stop({
+                            Return RInternal.debug.stop({
                                 "invalid (do_set) left-hand side to assignment",
                                 "constant symbol is not allowed!",
                                 "symbol: " & symbol
                             }, envir)
                         Case Else
                             If Not symbol.IsPattern(Scanner.RSymbol) Then
-                                Return Internal.debug.stop({
+                                Return RInternal.debug.stop({
                                     "invalid (do_set) left-hand side to assignment",
                                     "constant literal is not allowed!",
                                     "literal: " & symbol
@@ -411,7 +412,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Case GetType(SymbolIndexer)
                     Return MemberValueAssign.setByNameIndex(symbolName, envir, value)
                 Case Else
-                    Return Internal.debug.stop(New InvalidExpressionException, envir)
+                    Return RInternal.debug.stop(New InvalidExpressionException, envir)
             End Select
 
             If target Is Nothing Then

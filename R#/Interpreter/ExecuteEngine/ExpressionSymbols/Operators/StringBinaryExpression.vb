@@ -58,6 +58,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -132,7 +133,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 right = b.GetType.FullName
             End If
 
-            Return Internal.debug.stop(New NotImplementedException($"[{left}] {[operator]} [{right}]"), env)
+            Return RInternal.debug.stop(New NotImplementedException($"[{left}] {[operator]} [{right}]"), env)
         End Function
 
         ''' <summary>

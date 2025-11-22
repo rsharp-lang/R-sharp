@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -122,7 +123,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 tryVal = [try].Evaluate(envir)
             Catch ex As Exception
                 ' handle .NET internal error
-                tryVal = Internal.debug.stop(ex, envir, suppress:=True)
+                tryVal = RInternal.debug.stop(ex, envir, suppress:=True)
             End Try
 
             If Program.isException(tryVal) Then

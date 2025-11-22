@@ -73,6 +73,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop.Operator
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -182,7 +183,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     flags = testVectorIndexOf(DirectCast(index_raw, Array).AsObjectEnumerator.Indexing, testLeft, err)
 
                     If Not err Is Nothing Then
-                        Return Internal.debug.stop(err, envir)
+                        Return RInternal.debug.stop(err, envir)
                     End If
                 End If
             End If

@@ -76,6 +76,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -353,7 +354,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     value = err
                 End If
             Catch ex As Exception
-                value = Internal.debug.stop({
+                value = RInternal.debug.stop({
                     ex.Message,
                     "symbols: " & names.JoinBy(","),
                     "value: " & If(value Is Nothing, GetType(Void), value.GetType).FullName,
@@ -439,7 +440,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         End If
                     Next
                 Else
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                         $"the value length is not equals to the tuple names!",
                         $"tuple names: [{names.Length}] {names.GetJson}",
                         $"value size: {vector.Length}"

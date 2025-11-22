@@ -79,11 +79,11 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
@@ -273,7 +273,7 @@ load:       Return LoadLibrary(filepath, env, names)
         ''' <returns></returns>
         Public Shared Function GetExternalScriptFile(libFile As String, source$, env As Environment) As Object
             If libFile.StringEmpty Then
-                Return Internal.debug.stop("No script module provided!", env)
+                Return RInternal.debug.stop("No script module provided!", env)
             ElseIf Not libFile.FileExists Then
                 If source.StringEmpty Then
                     For Each location As String In {
@@ -296,7 +296,7 @@ load:       Return LoadLibrary(filepath, env, names)
                     Next
                 End If
 
-                Return Internal.debug.stop($"Missing script file: '{libFile}'!", env)
+                Return RInternal.debug.stop($"Missing script file: '{libFile}'!", env)
             End If
 
             Return libFile
@@ -310,7 +310,7 @@ load:       Return LoadLibrary(filepath, env, names)
         ''' <returns></returns>
         Public Shared Function GetDllFile(libDll As String, env As Environment) As Object
             If libDll.StringEmpty Then
-                Return Internal.debug.stop("No package module provided!", env)
+                Return RInternal.debug.stop("No package module provided!", env)
             ElseIf libDll.IndexOf("::") > -1 Then
                 ' package::dllfile
                 Dim tupleRef As NamedValue(Of String) = libDll.GetTagValue("::", trim:=True)
@@ -330,7 +330,7 @@ load:       Return LoadLibrary(filepath, env, names)
                 If Not location.StringEmpty Then
                     Return location
                 Else
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                         $"Missing library file: '{libDll}'!",
                         $"Search_Context: {searchContext.Distinct.JoinBy("; ")}"
                     }, env, suppress:=True)
@@ -389,7 +389,7 @@ load:       Return LoadLibrary(filepath, env, names)
                         Call ImportsPackage.ImportsStatic(globalEnv, packages(required).package)
                         Call hook_jsEnv(globalEnv, required, packages(required).package)
                     Else
-                        Return Internal.debug.stop({
+                        Return RInternal.debug.stop({
                             $"There is no package named '{required}' in given module!",
                             $"namespace: {required}",
                             $"library module: {libDll}"}, envir

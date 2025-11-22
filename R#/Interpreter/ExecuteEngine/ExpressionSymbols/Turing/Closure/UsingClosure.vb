@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.Language
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -119,7 +120,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 Dim result As Object
 
                 If resource Is Nothing Then
-                    Return Internal.debug.stop("Target is nothing!", env)
+                    Return RInternal.debug.stop("Target is nothing!", env)
                 ElseIf Program.isException(resource) Then
                     Return resource
                 ElseIf Not resource.GetType.ImplementInterface(GetType(IDisposable)) Then
@@ -130,7 +131,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     ' run using closure and get result
                     result = closure.Evaluate(env)
                 Catch ex As Exception
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                         $"error while evaluate the closure expression: {ex.Message}",
                         $"runtime exception: {ex.GetType.Name}"
                     }, env)
@@ -141,7 +142,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     ' release handle and clean up the resource
                     Call DirectCast(resource, IDisposable).Dispose()
                 Catch ex As Exception
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                         $"error while dispose target resource automatically: {ex.Message}",
                         $"runtime exception: {ex.GetType.Name}"
                     }, env)

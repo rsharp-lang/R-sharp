@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Development.Polyglot
 
@@ -114,7 +115,7 @@ Namespace Development.Polyglot
             If program Is Nothing Then
                 ' there are syntax error in the external script
                 ' for current imports action
-                Return Internal.debug.stop([error].Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB), env)
+                Return RInternal.debug.stop([error].Trim(ASCII.CR, ASCII.LF, " "c, ASCII.TAB), env)
             Else
                 Return program
             End If

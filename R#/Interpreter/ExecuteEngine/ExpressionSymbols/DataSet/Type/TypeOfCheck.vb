@@ -59,6 +59,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -122,7 +123,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Dim type2 As RType = envir.globalEnvironment.GetType(typeRight)
 
                     If type2 Is Nothing Then
-                        Return Internal.debug.stop({
+                        Return RInternal.debug.stop({
                             $"we are not able to find any information about the data type: '{typeRight}', please imports underlying package namespace at first!",
                             $"type name: {typeRight}"
                         }, envir)

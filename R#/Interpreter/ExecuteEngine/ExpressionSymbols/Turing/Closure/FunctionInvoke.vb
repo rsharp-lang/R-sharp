@@ -76,6 +76,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -264,7 +265,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     Return RDefaultFunctionAttribute.GetDefaultFunction(funcName.ToString, obj:=target)
                 ElseIf Not TypeOf target Is Regex Then
                     ' message
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                         $"the given symbol is not callable!",
                         $"target: {funcName.ToString}",
                         $"schema: {target.GetType.FullName}"
@@ -367,7 +368,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                     ' .Internal::function
                     ' means should found the function from the internal
                     ' base environment directly
-                    Dim method As RMethodInfo = Internal.invoke.getFunction(funcStr)
+                    Dim method As RMethodInfo = RInternal.invoke.getFunction(funcStr)
 
                     If method Is Nothing Then
                         Return Message.SymbolNotFound(envir, funcStr, TypeCodes.closure)
@@ -431,7 +432,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             If target Is Nothing AndAlso TypeOf funcName Is Literal Then
                 Dim funcStr = DirectCast(funcName, Literal).ValueStr
                 ' 可能是一个系统的内置函数
-                Dim method As RMethodInfo = Internal.invoke.getFunction(funcStr)
+                Dim method As RMethodInfo = RInternal.invoke.getFunction(funcStr)
 
                 If method Is Nothing Then
                     Return Message.SymbolNotFound(env, funcStr, TypeCodes.closure)
@@ -498,7 +499,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 ' create argument models
                 Dim argVals As InvokeParameter() = InvokeParameter.Create(expressions:=parameters)
                 ' and then invoke the specific internal R# api
-                Dim result As Object = Internal.invoke.invokeInternals(envir, funcName, argVals)
+                Dim result As Object = RInternal.invoke.invokeInternals(envir, funcName, argVals)
 
                 Return result
             End If

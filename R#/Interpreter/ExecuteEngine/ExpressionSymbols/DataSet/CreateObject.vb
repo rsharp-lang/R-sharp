@@ -57,13 +57,14 @@
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.Language
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
-Imports SMRUCC.Rsharp.Development.Package.File
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -99,7 +100,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             If env.globalEnvironment.types.ContainsKey(activator) Then
                 Return env.globalEnvironment.types(activator)
             Else
-                Return Internal.debug.stop({"missing required type information...", "type: " & activator}, env)
+                Return RInternal.debug.stop({"missing required type information...", "type: " & activator}, env)
             End If
         End Function
 
@@ -118,7 +119,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             ' initialize the property
             For Each prop As Expression In constructor
                 If Not TypeOf prop Is ValueAssignExpression Then
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                          $"invalid expression: {prop} !",
                          $"require: " & GetType(ValueAssignExpression).Name,
                          $"but given: " & prop.expressionName

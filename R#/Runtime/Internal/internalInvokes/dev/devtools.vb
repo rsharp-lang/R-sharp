@@ -110,7 +110,15 @@ Namespace Runtime.Internal.Invokes
         End Sub
 
         Private Function getCounterTable(pr As PerformanceCounter, args As list, env As Environment) As dataframe
+            Dim counter As New dataframe With {.columns = New Dictionary(Of String, Array)}
+            Dim spans = pr.GetCounters.ToArray
 
+            Call counter.add("task", From t As TimeCounter In spans Select t.task)
+            Call counter.add("start", From t As TimeCounter In spans Select t.start)
+            Call counter.add("span0", From t As TimeCounter In spans Select t.span0)
+            Call counter.add("span1", From t As TimeCounter In spans Select t.span1)
+
+            Return counter
         End Function
 
         Private Function scriptTable1(closure As ClosureExpression, args As list, env As Environment) As dataframe

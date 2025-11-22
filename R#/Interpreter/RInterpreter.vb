@@ -95,6 +95,7 @@ Imports REnv = SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports std = System.Math
 Imports Strings = Microsoft.VisualBasic.Strings
 Imports LibDir = Microsoft.VisualBasic.FileIO.Directory
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter
 
@@ -291,7 +292,7 @@ Namespace Interpreter
             End If
 
             If setOption AndAlso Not names.IsNullOrEmpty Then
-                Return Internal.debug.stop({"can not set options with get options!"}, globalEnvir)
+                Return RInternal.debug.stop({"can not set options with get options!"}, globalEnvir)
             ElseIf setOption Then
                 Return globalEnvir
             Else
@@ -392,7 +393,7 @@ Namespace Interpreter
                 Dim result As Message = globalEnvir.LoadLibrary(packageName, silent, ignoreMissingStartupPackages:=ignoreMissingStartupPackages)
 
                 If Not result Is Nothing Then
-                    Call Internal.debug.PrintMessageInternal(result, globalEnvir)
+                    Call RInternal.debug.PrintMessageInternal(result, globalEnvir)
                 End If
             End If
 
@@ -656,7 +657,7 @@ Namespace Interpreter
             globalEnvir = InitializeEnvironment(Rscript.fileName, arguments)
 
             If Not [error].StringEmpty Then
-                result = Internal.debug.stop([error], globalEnvir)
+                result = RInternal.debug.stop([error], globalEnvir)
             Else
                 If debug Then
 #Disable Warning
@@ -711,7 +712,7 @@ Namespace Interpreter
                     .ToArray
                 result = RunInternal(Rscript, arguments, globalEnv)
             Else
-                result = Internal.debug.stop({
+                result = RInternal.debug.stop({
                     $"cannot open the connection.",
                     $"cannot open file '{filepath.FileName}': No such file or directory",
                     $"file: {filepath.GetFullPath}",

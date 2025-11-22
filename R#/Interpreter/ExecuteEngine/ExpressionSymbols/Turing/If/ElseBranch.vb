@@ -56,12 +56,13 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Development.Package.File
-Imports SMRUCC.Rsharp.Language
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
@@ -103,7 +104,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             If envir.ifPromise = 0 Then
-                Return Internal.debug.stop("syntax error: missing if branch condition test!", envir)
+                Return RInternal.debug.stop("syntax error: missing if branch condition test!", envir)
             Else
                 Dim last As IfPromise
 

@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -118,7 +119,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 End If
             Else
                 ' let arg as string = ?"--opt" || default;
-                If Internal.Invokes.base.isEmpty(a) Then
+                If RInternal.Invokes.base.isEmpty(a) Then
                     Return right.Evaluate(envir)
                 Else
                     Return a

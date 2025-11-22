@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::d150ed543e5cc109bf04ca94a554dbb7, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 851
-    '    Code Lines: 628 (73.80%)
-    ' Comment Lines: 120 (14.10%)
-    '    - Xml Docs: 45.83%
-    ' 
-    '   Blank Lines: 103 (12.10%)
-    '     File Size: 37.02 KB
+' Summaries:
 
 
-    '     Class SymbolIndexer
-    ' 
-    '         Properties: expressionName, type
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: CheckRemoves, doListSubset, emptyIndexError, Evaluate, getByIndex
-    '                   getByName, getBySymbolIndex, getColumn, getDataframeRowRange, getIndex
-    '                   getOptions, groupSubset, listSubset, streamView, takeColumnVector
-    '                   ToString, translateInteger2keys, translateLogical2keys, vectorSubset
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 851
+'    Code Lines: 628 (73.80%)
+' Comment Lines: 120 (14.10%)
+'    - Xml Docs: 45.83%
+' 
+'   Blank Lines: 103 (12.10%)
+'     File Size: 37.02 KB
+
+
+'     Class SymbolIndexer
+' 
+'         Properties: expressionName, type
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: CheckRemoves, doListSubset, emptyIndexError, Evaluate, getByIndex
+'                   getByName, getBySymbolIndex, getColumn, getDataframeRowRange, getIndex
+'                   getOptions, groupSubset, listSubset, streamView, takeColumnVector
+'                   ToString, translateInteger2keys, translateLogical2keys, vectorSubset
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -81,6 +81,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports std = System.Math
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -173,7 +174,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
             If indexType = SymbolIndexers.dataframeRanges Then
                 If Not TypeOf obj Is dataframe Then
-                    Return Internal.debug.stop(Message.InCompatibleType(GetType(dataframe), obj.GetType, envir), envir)
+                    Return RInternal.debug.stop(Message.InCompatibleType(GetType(dataframe), obj.GetType, envir), envir)
                 Else
                     Return getDataframeRowRange(data:=DirectCast(obj, dataframe), envir)
                 End If
@@ -295,7 +296,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         .Value
                 End If
             Else
-                Return Internal.debug.stop(New NotImplementedException(indexType.ToString), envir)
+                Return RInternal.debug.stop(New NotImplementedException(indexType.ToString), envir)
             End If
         End Function
 
@@ -326,7 +327,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                             Call env.AddMessage($"the required row index '{indexVec.values(Scan0).ToString}' is invalid(is nothing or else index select no row data)!")
 
                             If drop Then
-                                Return Internal.Object.list.empty
+                                Return RInternal.Object.list.empty
                             Else
                                 Return Nothing
                             End If
@@ -340,7 +341,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
                         Return result
                     Else
-                        Return Internal.debug.stop("invalid options for slice dataframe", env)
+                        Return RInternal.debug.stop("invalid options for slice dataframe", env)
                     End If
                 Else
                     Dim x = CLRVector.asObject(indexVec.values(Scan0).Evaluate(env))
@@ -355,9 +356,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 End If
             ElseIf indexVec.length = 3 Then
                 ' [row, column, drop = TRUE]
-                Return Internal.debug.stop(New NotImplementedException, env)
+                Return RInternal.debug.stop(New NotImplementedException, env)
             Else
-                Return Internal.debug.stop("invalid expression for subset a dataframe!", env)
+                Return RInternal.debug.stop("invalid expression for subset a dataframe!", env)
             End If
         End Function
 
@@ -388,7 +389,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim key As Object = indexer.GetValue(Scan0)
 
             If key Is Nothing Then
-                Return Internal.debug.stop("dataframe index could not be nothing!", env)
+                Return RInternal.debug.stop("dataframe index could not be nothing!", env)
             ElseIf key.GetType Like RType.integers Then
                 Dim strKey As String = obj.getKeyByIndex(CInt(key))
 
@@ -399,7 +400,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         Return New dataframe(obj)
                     End If
 
-                    Return Internal.debug.stop({"index outside the bounds!", "index: " & key}, env)
+                    Return RInternal.debug.stop({"index outside the bounds!", "index: " & key}, env)
                 ElseIf is_Removes Then
                     obj = New dataframe(obj)
                     obj.delete(strKey)
@@ -422,7 +423,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     If obj.columns.ContainsKey(strKey) Then
                         Return obj.getColumnVector(strKey)
                     Else
-                        Return Internal.debug.stop({
+                        Return RInternal.debug.stop({
                             "undefined columns selected",
                             "column key: " & strKey,
                             "columns of your dataframe: " & obj.colnames.GetJson
@@ -440,7 +441,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Friend Shared Function emptyIndexError(symbol As SymbolIndexer, env As Environment) As Message
-            Return Internal.debug.stop({
+            Return RInternal.debug.stop({
                 $"attempt to select less than one element in OneIndex!",
                 $"SymbolName: {symbol.symbol}",
                 $"Index: {symbol.index}"
@@ -458,7 +459,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 If indexer.Length = 1 Then
                     Return DirectCast(obj, dataframe).getColumnVector(indexer.GetValue(Scan0).ToString)
                 Else
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                        $"dataframe get by column name only supprts one key element!",
                        $"symbol: {Me.symbol.ToString}",
                        $"indexer: {Me.index.ToString}"
@@ -468,7 +469,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 If indexer.Length = 1 Then
                     Return DirectCast(obj, vector).getByName(any.ToString(indexer.GetValue(Scan0)))
                 Else
-                    Return Internal.debug.stop("attempt to select more than one element in vectorIndex", envir)
+                    Return RInternal.debug.stop("attempt to select more than one element in vectorIndex", envir)
                 End If
             ElseIf Not objType.ImplementInterface(GetType(RNameIndex)) Then
                 If objType.ImplementInterface(Of IDictionary) AndAlso objType.GenericTypeArguments(Scan0) Is GetType(String) Then
@@ -518,7 +519,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         End If
                     End If
 
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                          "Target object can not be indexed by name!",
                          "required: " & GetType(RNameIndex).FullName,
                          "given: " & objType.FullName,
@@ -538,7 +539,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Dim offset As Integer = CInt(i) - 1
 
                     If offset > names.Length - 1 Then
-                        Return Internal.debug.stop({
+                        Return RInternal.debug.stop({
                             $"Error in list[[{i}]] : subscript out of bounds",
                             $"list size: {names.Length}",
                             $"offset: {i}",
@@ -606,7 +607,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     Try
                         subsetKeys = translateInteger2keys(indexer, allKeys)
                     Catch ex As Exception
-                        Return Internal.debug.stop(ex, env)
+                        Return RInternal.debug.stop(ex, env)
                     End Try
                 End If
             End If
@@ -759,7 +760,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             ElseIf TypeOf obj Is vector Then
                 sequence = DirectCast(obj, vector).data
             ElseIf TypeOf obj Is RMethodInfo OrElse TypeOf obj Is DeclareLambdaFunction OrElse TypeOf obj Is DeclareNewFunction Then
-                Return Internal.debug.stop({$"object of type 'closure' is not subsettable", $"closure: {obj}"}, env)
+                Return RInternal.debug.stop({$"object of type 'closure' is not subsettable", $"closure: {obj}"}, env)
             Else
                 Dim type As Type = obj.GetType
                 Dim item As PropertyInfo = type.GetProperties _
@@ -832,10 +833,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
                             Return newDf
                         Else
-                            Return Internal.debug.stop(New NotImplementedException, env)
+                            Return RInternal.debug.stop(New NotImplementedException, env)
                         End If
                     Else
-                        Return Internal.debug.stop(New NotImplementedException(idx.GetType.FullName), env)
+                        Return RInternal.debug.stop(New NotImplementedException(idx.GetType.FullName), env)
                     End If
                 End If
 

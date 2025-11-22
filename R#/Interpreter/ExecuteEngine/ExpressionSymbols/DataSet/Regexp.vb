@@ -66,6 +66,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports r = System.Text.RegularExpressions.Regex
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -139,7 +140,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             ElseIf strData Is Nothing Then
                 Return Nothing
             ElseIf strData.GetType.ImplementInterface(Of RFunction) Then
-                Return Internal.debug.stop({
+                Return RInternal.debug.stop({
                     $"the given symbols is a function symbol, can not be apply for regular expression pattern matches!",
                     $"symbol expression: {text.ToString}",
                     $"symbol value: {any.ToString(strData)}"
@@ -151,7 +152,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Try
                 inputs = CLRVector.asCharacter(strData)
             Catch ex As Exception
-                Return Internal.debug.stop(ex, env)
+                Return RInternal.debug.stop(ex, env)
             End Try
 
             If inputs.Length = 1 Then

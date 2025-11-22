@@ -66,6 +66,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Public Module ApiArgumentHelpers
 
@@ -278,7 +279,7 @@ Public Module ApiArgumentHelpers
         End If
 
         If file Is Nothing Then
-            Return Internal.debug.stop({"file output can not be nothing!"}, env, suppress)
+            Return RInternal.debug.stop({"file output can not be nothing!"}, env, suppress)
         Else
             is_filepath = False
         End If
@@ -304,7 +305,7 @@ Public Module ApiArgumentHelpers
             If mode = FileAccess.Read Then
                 Return New MemoryStream(DirectCast(file, Byte()))
             Else
-                Return Internal.debug.stop(ReadOnlyRawByteStream, env, suppress)
+                Return RInternal.debug.stop(ReadOnlyRawByteStream, env, suppress)
             End If
         ElseIf TypeOf file Is StreamWriter AndAlso mode = FileAccess.Write Then
             Return DirectCast(file, StreamWriter).BaseStream
@@ -312,7 +313,7 @@ Public Module ApiArgumentHelpers
             If mode = FileAccess.Read Then
                 Return New MemoryStream(CLRVector.asRawByte(file))
             Else
-                Return Internal.debug.stop(ReadOnlyRawByteStream, env, suppress)
+                Return RInternal.debug.stop(ReadOnlyRawByteStream, env, suppress)
             End If
         Else
             Return Message.InCompatibleType(GetType(Stream), file.GetType, env,, NameOf(file), suppress)

@@ -72,6 +72,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.[Object].Converts
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -130,7 +131,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             End If
 
             If targetObj Is Nothing Then
-                Return Internal.debug.stop({"Target symbol is nothing!", $"SymbolName: {symbolIndex.symbol}"}, envir)
+                Return RInternal.debug.stop({"Target symbol is nothing!", $"SymbolName: {symbolIndex.symbol}"}, envir)
             ElseIf TypeOf targetObj Is Message Then
                 Return targetObj
             End If
@@ -156,7 +157,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 Return setVectorElements(targetObj, indexVals, value, envir)
             ElseIf symbolIndex.indexType = SymbolIndexers.dataframeColumns Then
                 If targetType IsNot GetType(dataframe) Then
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                         $"Error in {symbolIndex.symbol}[, ""{symbolIndex.index}""] = *value: incorrect number of subscripts on matrix",
                         $"typeof_symbol: {targetType.FullName}",
                         $"symbol: {symbolIndex.symbol.ToString}"
@@ -214,9 +215,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                                 Dim scalar As Boolean = push.Length = 1
 
                                 If push.Length = 0 Then
-                                    Return Internal.debug.stop("the value should not be empty when deal with a clr dictionary object value assign!", envir)
+                                    Return RInternal.debug.stop("the value should not be empty when deal with a clr dictionary object value assign!", envir)
                                 ElseIf indexStr.Length <> push.Length AndAlso push.Length > 1 Then
-                                    Return Internal.debug.stop($"the value length({push.Length}) should be equals to the key size({indexStr.Length})!", envir)
+                                    Return RInternal.debug.stop($"the value length({push.Length}) should be equals to the key size({indexStr.Length})!", envir)
                                 End If
 
                                 For i As Integer = 0 To indexStr.Length - 1
@@ -235,7 +236,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     End If
                 Else
 invalid_index:
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                         $"Target symbol can not be indexed by name!",
                         $"SymbolName: {symbolIndex.symbol}",
                         $"type: {targetObj.GetType.FullName}"
@@ -268,7 +269,7 @@ invalid_index:
                         envir:=envir
                     )
                 Else
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                         $"invalid data value source! it should be a vector type!",
                         $"given: {value.GetType.FullName}",
                         $"symbol indexer: {symbolIndex.indexType.Description}"

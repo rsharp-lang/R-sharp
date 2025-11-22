@@ -63,10 +63,9 @@ Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
-Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports devtools = Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
@@ -118,7 +117,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                         $"missing value where TRUE/FALSE needed"
                     },
                     .level = MSG_TYPES.ERR,
-                    .environmentStack = Internal.debug.getEnvironmentStack(envir),
+                    .environmentStack = RInternal.debug.getEnvironmentStack(envir),
                     .trace = devtools.ExceptionData.GetCurrentStackTrace
                 }
             ElseIf Program.isException(test) Then
@@ -128,7 +127,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
             Dim flags As Boolean() = CLRVector.asLogical(test)
 
             If flags.Length = 0 Then
-                Return Internal.debug.stop({
+                Return RInternal.debug.stop({
                     "argument is of length zero",
                     "test: " & ifTest.ToString
                 }, envir)

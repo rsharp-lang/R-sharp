@@ -57,6 +57,7 @@
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -83,13 +84,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
             If Program.isException(dataframe) Then
                 Return dataframe
             ElseIf dataframe Is Nothing Then
-                Return Internal.debug.stop(New NullReferenceException, envir)
+                Return RInternal.debug.stop(New NullReferenceException, envir)
             End If
 
             If Program.isException(projectorVal) Then
                 Return projectorVal
             ElseIf projectorVal Is Nothing Then
-                Return Internal.debug.stop(New NullReferenceException, envir)
+                Return RInternal.debug.stop(New NullReferenceException, envir)
             End If
 
             Dim projector As Array = asVector(Of Object)(projectorVal)

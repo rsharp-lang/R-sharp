@@ -1,61 +1,61 @@
 ﻿#Region "Microsoft.VisualBasic::4810b5c673138a55d4fa42635b77699f, R#\Interpreter\ExecuteEngine\Linq\DataSet\DataSet.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 49
-    '    Code Lines: 37 (75.51%)
-    ' Comment Lines: 5 (10.20%)
-    '    - Xml Docs: 100.00%
-    ' 
-    '   Blank Lines: 7 (14.29%)
-    '     File Size: 2.07 KB
+' Summaries:
 
 
-    '     Class DataSet
-    ' 
-    '         Function: CreateDataSet, CreateRawDataSet
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 49
+'    Code Lines: 37 (75.51%)
+' Comment Lines: 5 (10.20%)
+'    - Xml Docs: 100.00%
+' 
+'   Blank Lines: 7 (14.29%)
+'     File Size: 2.07 KB
+
+
+'     Class DataSet
+' 
+'         Function: CreateDataSet, CreateRawDataSet
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports Microsoft.VisualBasic.Language
+Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.LINQ
 
@@ -90,7 +90,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
 
         Friend Shared Function CreateRawDataSet(result As Object, context As ExecutableContext) As DataSet
             If result Is Nothing Then
-                Return New ErrorDataSet With {.message = Internal.debug.stop("null query sequence data!", context)}
+                Return New ErrorDataSet With {.message = RInternal.debug.stop("null query sequence data!", context)}
             ElseIf TypeOf result Is Message Then
                 Return New ErrorDataSet With {.message = result}
             ElseIf TypeOf result Is dataframe Then

@@ -77,6 +77,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Development.Package.File
 
@@ -416,7 +417,7 @@ Namespace Development.Package.File
                         Continue For
                     Else
                         ' throw exception
-                        Return Internal.debug.stop($"invalid library image file: {dll}", REngine.globalEnvir)
+                        Return RInternal.debug.stop($"invalid library image file: {dll}", REngine.globalEnvir)
                     End If
                 Else
                     attr = assembly.GetCustomAttributes(Of RPackageModuleAttribute)

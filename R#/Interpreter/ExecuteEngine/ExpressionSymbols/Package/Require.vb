@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols
 
@@ -245,7 +246,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols
                     flag = False
 
                     If Not quietly Then
-                        Call Internal.debug.PrintMessageInternal(message, envir.globalEnvironment)
+                        Call RInternal.debug.PrintMessageInternal(message, envir.globalEnvironment)
                     Else
                         Call warnings.AddRange(message.message)
                         Call envir.AddMessage(message.message, MSG_TYPES.WRN)

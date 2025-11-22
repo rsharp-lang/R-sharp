@@ -67,6 +67,7 @@ Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -195,7 +196,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                         ends:=getChar(REnv.getFirst(stops))
                     )
                 Case Else
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                         $"data type of the sequence literal is not supported!",
                         $"init: {RType.TypeOf(init)}",
                         $"stops: {RType.TypeOf(stops)}",

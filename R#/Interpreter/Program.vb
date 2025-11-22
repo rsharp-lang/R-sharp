@@ -67,6 +67,7 @@ Imports SMRUCC.Rsharp.Language.Syntax.SyntaxParser
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter
 
@@ -190,7 +191,7 @@ Namespace Interpreter
                 Return DirectCast(result, Message).level = MSG_TYPES.ERR
             ElseIf Not envir Is Nothing AndAlso result.GetType.IsInheritsFrom(GetType(Exception)) Then
                 isDotNETException = True
-                result = Internal.debug.stop(result, envir)
+                result = RInternal.debug.stop(result, envir)
 
                 Return True
             Else

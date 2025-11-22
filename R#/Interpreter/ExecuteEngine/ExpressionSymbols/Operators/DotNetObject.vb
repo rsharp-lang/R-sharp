@@ -64,6 +64,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -147,14 +148,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 ' all elements inside vector is nothing? -> returns a vector with all elements is nothing?
                 If array.AllNothing Then
                     If getStrictOpt(envir) Then
-                        Return Internal.debug.stop("all of the elements inside the given vector is nothing, can not extract symbol value when in strict mode!", envir)
+                        Return RInternal.debug.stop("all of the elements inside the given vector is nothing, can not extract symbol value when in strict mode!", envir)
                     Else
                         Return array
                     End If
                 End If
 
                 If getStrictOpt(envir) Then
-                    Return Internal.debug.stop($"can not found member symbol '{memberName}' in vector element [{type.GetElementType.FullName}].", envir)
+                    Return RInternal.debug.stop($"can not found member symbol '{memberName}' in vector element [{type.GetElementType.FullName}].", envir)
                 Else
                     Return Nothing
                 End If
@@ -192,7 +193,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
             If reader Is Nothing Then
                 If getStrictOpt(envir) Then
-                    Return Internal.debug.stop($"can not found member symbol '{memberName}' in scalar object [{objVal.GetType.FullName}].", envir)
+                    Return RInternal.debug.stop($"can not found member symbol '{memberName}' in scalar object [{objVal.GetType.FullName}].", envir)
                 Else
                     Return Nothing
                 End If

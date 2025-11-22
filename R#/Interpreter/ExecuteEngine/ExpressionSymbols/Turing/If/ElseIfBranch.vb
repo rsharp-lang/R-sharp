@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
@@ -79,7 +80,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
         Public Overrides Function Evaluate(envir As Environment) As Object
             If envir.ifPromise = 0 Then
-                Return Internal.debug.stop(New SyntaxErrorException, envir)
+                Return RInternal.debug.stop(New SyntaxErrorException, envir)
             Else
                 Dim last As IfPromise
 

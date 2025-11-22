@@ -57,7 +57,7 @@
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
-Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -84,7 +84,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim ddd As Symbol = envir.FindSymbol(dddSymbolName, [inherits]:=True)
 
             If ddd Is Nothing Then
-                Return Internal.Object.list.empty
+                Return RInternal.Object.list.empty
             Else
                 Return ddd.value
             End If

@@ -64,6 +64,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -155,7 +156,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Dim pkg As RPkg = globalEnv.packages.FindPackage([namespace], env.globalEnvironment, [error])
 
             If Not [error] Is Nothing Then
-                Return Internal.debug.stop([error], env)
+                Return RInternal.debug.stop([error], env)
             End If
 
             If pkg Is Nothing Then
@@ -163,7 +164,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Dim fsymbol As Symbol = env.FindFunction(funcName)
 
                 If fsymbol Is Nothing Then
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                         $"we can not found any namespace called: '{[namespace]}'!",
                         $"namespace: {[namespace]}",
                         $"function symbol: {funcNameSymbol}<{fsymbol}>"
@@ -173,7 +174,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 nsText = DirectCast(fsymbol.value, INamespaceReferenceSymbol).namespace
 
                 If nsText <> [namespace] Then
-                    Return Internal.debug.stop({
+                    Return RInternal.debug.stop({
                         $"we can not found any namespace called: '{[namespace]}'!",
                         $"namespace: {[namespace]}",
                         $"function symbol: {funcNameSymbol}<{funcName}>"

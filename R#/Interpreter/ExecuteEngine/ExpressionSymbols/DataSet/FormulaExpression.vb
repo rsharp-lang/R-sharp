@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
@@ -119,7 +120,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             If result Like GetType(String()) Then
                 Return result.TryCast(Of String())
             Else
-                Return Internal.debug.stop(result.TryCast(Of Exception), env)
+                Return RInternal.debug.stop(result.TryCast(Of Exception), env)
             End If
         End Function
 

@@ -60,6 +60,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Development.Package.File
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
@@ -117,9 +118,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 If type2 Is GetType(list) Then
                 ElseIf type2.IsArray Then
                 Else
-                    Return Internal.debug.stop(New InvalidProgramException(type2.FullName), envir)
+                    Return RInternal.debug.stop(New InvalidProgramException(type2.FullName), envir)
                 End If
-                Return Internal.debug.stop(New NotImplementedException, envir)
+                Return RInternal.debug.stop(New NotImplementedException, envir)
             End If
 
             Return Runtime.asVector(Of Object)(x) _

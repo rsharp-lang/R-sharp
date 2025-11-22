@@ -58,6 +58,7 @@
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports any = Microsoft.VisualBasic.Scripting
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 
@@ -95,7 +96,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                 Case GetType(ValueAssignExpression)
                     Return DirectCast(assignTo, ValueAssignExpression).DoValueAssign(envir, Value)
                 Case Else
-                    Return Internal.debug.stop(New NotImplementedException, envir)
+                    Return RInternal.debug.stop(New NotImplementedException, envir)
             End Select
         End Function
     End Class

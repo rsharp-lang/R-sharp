@@ -56,11 +56,8 @@
 #End Region
 
 Imports Microsoft.VisualBasic.My.JavaScript
-Imports SMRUCC.Rsharp.Development.Package.File
-Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
-Imports SMRUCC.Rsharp.Runtime
-Imports SMRUCC.Rsharp.Runtime.Components
 Imports any = Microsoft.VisualBasic.Scripting
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.LINQ
 
@@ -91,7 +88,7 @@ Namespace Interpreter.ExecuteEngine.LINQ
             Dim symbol As Object = Me.symbol.Exec(context)
 
             If symbol Is Nothing Then
-                Return Internal.debug.stop({"target symbol is nothing!", "symbol: " & Me.symbol.ToString}, context)
+                Return RInternal.debug.stop({"target symbol is nothing!", "symbol: " & Me.symbol.ToString}, context)
             End If
 
             If TypeOf symbol Is JavaScriptObject Then

@@ -76,6 +76,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports any = Microsoft.VisualBasic.Scripting
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
@@ -210,7 +211,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                 $"type: {var.type.Description}"
             }
 
-            Return Internal.debug.stop(message, envir)
+            Return RInternal.debug.stop(message, envir)
         End Function
 
         ''' <summary>
@@ -300,7 +301,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
                         ' produce key not found error
                         ' try to fix such bug
                         ' value = arguments(argumentKeys(i))
-                        Return Internal.debug.stop({$"argument '{var.names.First}' is required, but missing!", $"name: {var.names.First}"}, caller_context)
+                        Return RInternal.debug.stop({$"argument '{var.names.First}' is required, but missing!", $"name: {var.names.First}"}, caller_context)
                     Else
                         key = argumentKeys(i)
                         value = arguments(key).Evaluate(caller_context)
@@ -352,7 +353,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
                     Call DeclareNewSymbol.PushNames(var.names, value, typecast, False, envir, err:=err)
                 Catch ex As Exception
-                    Return Internal.debug.stop(New Exception($"unknown create parameter symbol error: {var.m_names.FirstOrDefault}(value = {any.ToString(value)})!", ex), envir)
+                    Return RInternal.debug.stop(New Exception($"unknown create parameter symbol error: {var.m_names.FirstOrDefault}(value = {any.ToString(value)})!", ex), envir)
                 End Try
 
                 If Not err Is Nothing Then
