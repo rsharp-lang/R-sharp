@@ -58,7 +58,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' WinForm controls api for ``R#`` programming.
@@ -113,7 +113,7 @@ Module gtk
             If folder.ShowDialog = DialogResult.OK Then
                 Return folder.SelectedPath
             ElseIf throwCancel Then
-                Return Internal.debug.stop("user cancel!", env)
+                Return RInternal.debug.stop("user cancel!", env)
             Else
                 Return Nothing
             End If
@@ -149,7 +149,7 @@ Module gtk
                 If file.ShowDialog = DialogResult.OK Then
                     Return file.FileName
                 ElseIf throwCancel Then
-                    Return Internal.debug.stop("user cancel!", env)
+                    Return RInternal.debug.stop("user cancel!", env)
                 Else
                     Return Nothing
                 End If
@@ -163,7 +163,7 @@ Module gtk
                 If file.ShowDialog = DialogResult.OK Then
                     Return file.FileNames
                 ElseIf throwCancel Then
-                    Return Internal.debug.stop("user cancel!", env)
+                    Return RInternal.debug.stop("user cancel!", env)
                 Else
                     Return Nothing
                 End If
