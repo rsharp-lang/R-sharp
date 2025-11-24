@@ -894,6 +894,26 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### Find Full Paths to Executables
+        ''' 
+        ''' This is an interface to the system command which, or to an emulation on Windows.
+        ''' </summary>
+        ''' <param name="names">Character vector of names or paths of possible executables.</param>
+        ''' <returns>A character vector of the same length as names, named by names. The elements are either the full path to the executable or some indication that no executable of that name was found. Typically the indication is "", but this does depend on the OS (and the known exceptions are changed to ""). Missing values in names have missing return values.
+        ''' On Windows the paths will be short paths (8+3 components, no spaces) with \ as the path delimiter.</returns>
+        ''' <remarks>
+        ''' The system command which reports on the full path names of an executable (including an executable script) as would be executed by a shell, accepting either absolute paths or looking on the path.
+        ''' On Windows an ‘executable’ is a file with extension ‘.exe’, ‘.com’, ‘.cmd’ or ‘.bat’. Such files need not actually be executable, but they are what system tries.
+        ''' On a Unix-alike the full path to which (usually ‘/usr/bin/which’) is found when R is installed.
+        ''' 
+        ''' Except on Windows this calls the system command which: since that is not part of e.g. the POSIX standards, exactly what it does is OS-dependent. It will usually do tilde-expansion and it may make use of csh aliases.
+        ''' </remarks>
+        <ExportAPI("Sys.which")>
+        Public Function Sys_which(names As String()) As Object
+
+        End Function
+
+        ''' <summary>
         ''' ### Invoke a System Command
         ''' 
         ''' ``system`` invokes the OS command specified by ``command``.
