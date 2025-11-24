@@ -909,8 +909,14 @@ Namespace Runtime.Internal.Invokes
         ''' Except on Windows this calls the system command which: since that is not part of e.g. the POSIX standards, exactly what it does is OS-dependent. It will usually do tilde-expansion and it may make use of csh aliases.
         ''' </remarks>
         <ExportAPI("Sys.which")>
-        Public Function Sys_which(names As String()) As Object
+        Public Function Sys_which(<RRawVectorArgument> names As Object) As Object
+            Dim result As New list With {.slots = New Dictionary(Of String, Object)}
 
+            For Each name As String In CLRVector.asCharacter(names)
+                result.slots(name) = ProgramPathSearchTool.Which(name)
+            Next
+
+            Return result
         End Function
 
         ''' <summary>
