@@ -1508,6 +1508,91 @@ Namespace Runtime.Internal.Invokes
                       End Function)
         End Function
 
+        ''' <summary>
+        ''' ### Pattern Matching and Replacement
+        ''' 
+        ''' grep, grepv, grepl, regexpr, gregexpr, regexec and gregexec search for matches to argument pattern
+        ''' within each element of a character vector: they differ in the format of and amount of detail in 
+        ''' the results.
+        ''' 
+        ''' sub and gsub perform replacement of the first and all matches respectively within each element of 
+        ''' a character vector.
+        ''' </summary>
+        ''' <param name="pattern">character string containing a regular expression (or character string for fixed = TRUE) 
+        ''' to be matched in the given character vector. Coerced by as.character to a character string if possible. 
+        ''' If a character vector of length 2 or more is supplied, the first element is used with a warning. Missing values 
+        ''' are allowed except for regexpr, gregexpr and regexec.</param>
+        ''' <param name="x">a character vector where matches are sought, or an object which can be coerced by 
+        ''' as.character to a character vector. Long vectors are supported.</param>
+        ''' <param name="ignore_case">logical. if FALSE, the pattern matching Is case sensitive And if TRUE, 
+        ''' case Is ignored during matching.</param>
+        ''' <param name="perl">logical. Should Perl-compatible regexps be used?</param>
+        ''' <param name="fixed">logical. If TRUE, pattern is a string to be matched as is. Overrides all conflicting arguments.</param>
+        ''' <param name="useBytes">logical. If TRUE the matching Is done byte-by-byte rather than character-by-character. See 'Details’.</param>
+        ''' <returns>grepl returns a logical vector (match or not for each element of x).</returns>
+        ''' <remarks>
+        ''' Arguments which should be character strings or character vectors are coerced to character if possible.
+        ''' Each of these functions operates in one of three modes:
+        ''' 
+        ''' + fixed = TRUE: use exact matching.
+        ''' + perl = TRUE: use Perl-style regular expressions.
+        ''' + fixed = FALSE, perl = FALSE: use POSIX 1003.2 extended regular expressions (the default).
+        ''' 
+        ''' See the help pages on regular expression for details of the different types of regular expressions.
+        ''' The two *sub functions differ only in that sub replaces only the first occurrence of a pattern whereas gsub 
+        ''' replaces all occurrences. If replacement contains backreferences which are not defined in pattern the 
+        ''' result is undefined (but most often the backreference is taken to be "").
+        ''' 
+        ''' For regexpr, gregexpr, regexec and gregexec it is an error for pattern to be NA, otherwise NA is permitted 
+        ''' and gives an NA match. grep and grepv only differ in the default of the value argument.Both grep and grepl 
+        ''' take missing values in x as not matching a non-missing pattern.
+        ''' 
+        ''' The main effect of useBytes = TRUE is to avoid errors/warnings about invalid inputs and spurious matches in 
+        ''' multibyte locales, but for regexpr it changes the interpretation of the output. It inhibits the conversion 
+        ''' of inputs with marked encodings, and is forced if any input is found which is marked as "bytes" 
+        ''' (see Encoding).
+        ''' 
+        ''' Caseless matching does not make much sense for bytes in a multibyte locale, and you should expect it only to 
+        ''' work for ASCII characters if useBytes = TRUE. regexpr and gregexpr with perl = TRUE allow Python-style named 
+        ''' captures, but not for long vector inputs.
+        ''' 
+        ''' Invalid inputs in the current locale are warned about up to 5 times.
+        ''' 
+        ''' Caseless matching with perl = TRUE for non-ASCII characters depends on the PCRE library being compiled with 
+        ''' ‘Unicode property support’, which PCRE2 is by default.
+        ''' </remarks>
+        <ExportAPI("grepl")>
+        <RApiReturn(TypeCodes.boolean)>
+        Public Function grepl(pattern$, <RRawVectorArgument> x As Object,
+                              Optional ignore_case As Boolean = False,
+                              Optional perl As Boolean = False,
+                              Optional fixed As Boolean = False,
+                              Optional useBytes As Boolean = False) As Object
+
+            Dim strs As String() = If(CLRVector.asCharacter(x), New String() {})
+
+            If fixed Then
+                If ignore_case Then
+                    Return strs _
+                        .Select(Function(s)
+                                    Return Microsoft.VisualBasic.Strings.InStr(s, pattern, CompareMethod.Text) > 0
+                                End Function) _
+                        .ToArray
+                Else
+                    Return strs _
+                        .Select(Function(s)
+                                    Return Microsoft.VisualBasic.Strings.InStr(s, pattern, CompareMethod.Binary) > 0
+                                End Function) _
+                        .ToArray
+                End If
+            Else
+                Dim r As New Regex(pattern, If(ignore_case, RegexOptions.Compiled, RegexOptions.IgnoreCase))
+                Dim matches = strs.Select(Function(s) r.Match(s).Success).ToArray
+
+                Return matches
+            End If
+        End Function
+
     End Module
 
     Public Class TextGrepLambda
