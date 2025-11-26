@@ -155,7 +155,7 @@ Module RJSON
     ''' <param name="env"></param>
     ''' <returns></returns>
     <Extension>
-    Friend Function createRObj(json As JsonElement,
+    Public Function createRObj(json As JsonElement,
                                env As Environment,
                                Optional strictSchemaCheck As Boolean = False,
                                Optional decodeMetachar As Boolean = True) As Object
