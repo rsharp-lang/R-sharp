@@ -3490,6 +3490,7 @@ RE0:
         Public Function cat(<RRawVectorArgument> values As Object,
                             Optional file As Object = Nothing,
                             Optional sep$ = " ",
+                            Optional append As Boolean = False,
                             Optional env As Environment = Nothing) As Object
 
             Dim vec As Object() = Runtime.asVector(Of Object)(values) _
@@ -3520,7 +3521,7 @@ RE0:
 
             If Not file Is Nothing Then
                 If TypeOf file Is String Then
-                    Call strs.SaveTo(CStr(file))
+                    Call strs.SaveTo(CStr(file), append:=append)
                 ElseIf file.GetType.IsInheritsFrom(GetType(Stream), strict:=False) Then
                     Dim s As New StreamWriter(DirectCast(file, Stream))
 
