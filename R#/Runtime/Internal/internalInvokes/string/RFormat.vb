@@ -12,10 +12,10 @@ Namespace Runtime.Internal.Invokes
         ''' 指定字符串的对齐方式，模仿 R 的 justify 参数。
         ''' </summary>
         Public Enum Justification
-            Left
-            Right
-            Centre
-            None
+            none
+            left
+            right
+            centre
         End Enum
 
         ''' <summary>
