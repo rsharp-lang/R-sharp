@@ -237,8 +237,16 @@ Namespace Runtime.Components
             End If
         End Function
 
+        ''' <summary>
+        ''' previews of the argument
+        ''' </summary>
+        ''' <returns></returns>
         Public Overrides Function ToString() As String
-            Return name
+            If name Is Nothing Then
+                Return $"${index} = {value}"
+            Else
+                Return $"{name} = {value}"
+            End If
         End Function
 
         ''' <summary>

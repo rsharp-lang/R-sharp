@@ -1,6 +1,10 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 Namespace Runtime.Internal.Invokes
 
@@ -97,12 +101,41 @@ Namespace Runtime.Internal.Invokes
         ''' called directly.
         ''' </remarks>
         <ExportAPI("tryCatch")>
-        Public Function tryCatch(<RLazyExpression> expr As Object,
-                                 <RLazyExpression>
-                                 Optional [finally] As Object = Nothing,
+        Public Function tryCatch(<RLazyExpression> Optional expr As Object = Nothing,
+                                 <RLazyExpression> Optional [finally] As Object = Nothing,
                                  <RListObjectArgument>
                                  Optional args As list = Nothing,
                                  Optional env As Environment = Nothing) As Object
+
+            Dim exprs As pipeline = pipeline.TryCreatePipeline(Of Expression)(expr, env)
+
+            If exprs.isError Then
+                ' this error will never happends
+                Return exprs.getError
+            End If
+
+            Dim program As New Program(exprs.populates(Of Expression)(env))
+            Dim eval As Object = program.Execute(env)
+
+            If [finally] IsNot Nothing Then
+                Dim eval2 As Object
+
+                exprs = pipeline.TryCreatePipeline(Of Expression)([finally], env)
+
+                If exprs.isError Then
+                    ' this error will never happends
+                    Return exprs.getError
+                Else
+                    program = New Program(exprs.populates(Of Expression)(env))
+                    eval2 = program.Execute(env)
+
+                    If TypeOf eval2 Is Message Then
+                        Return eval2
+                    End If
+                End If
+            End If
+
+            Return eval
         End Function
     End Module
 End Namespace
