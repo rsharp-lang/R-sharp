@@ -209,17 +209,16 @@ Namespace Runtime.Internal.Invokes
         <ExportAPI("format")>
         <RApiReturn(TypeCodes.string)>
         Public Function format_str(<RRawVectorArgument> x As Object, Optional format As String = Nothing,
-                                   Optional trim As Boolean = False, Optional digits As Object = null, Optional nsmall As Object = 0L,
+                                   Optional trim As Boolean = False, Optional digits As Integer? = null, Optional nsmall As Integer = 0L,
                                    Optional justify As RFormat.Justification = RFormat.Justification.left,
-                                   Optional width As Object = null, Optional na_encode As Boolean = True, Optional scientific As Object = Nothing,
+                                   Optional width As Integer? = null, Optional na_encode As Boolean = True, Optional scientific As Boolean? = Nothing,
                                    Optional big_mark As String = "", Optional big_interval As Long = 3L,
                                    Optional small_mark As String = "", Optional small_interval As Long = 5L,
                                    <RDefaultExpression>
                                    Optional decimal_mark As Object = "~getOption('OutDec')",
-                                   Optional zero_print As Object = null, Optional drop0trailing As Boolean = False,
+                                   Optional zero_print As String = null, Optional drop0trailing As Boolean = False,
                                    Optional args As list = Nothing,
                                    Optional env As Environment = Nothing) As Object
-
             If x Is Nothing Then
                 Return Nothing
             End If
@@ -230,7 +229,7 @@ Namespace Runtime.Internal.Invokes
                 If seqData.IsNullOrEmpty Then
                     Return Nothing
                 Else
-                    Return seqData.AsObjectEnumerator
+                    Throw New NotImplementedException
                 End If
             Else
                 Throw New NotImplementedException
