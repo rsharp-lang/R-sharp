@@ -756,7 +756,7 @@ Namespace Runtime.Internal.Invokes
         Public Function system2(command$,
                                 <RRawVectorArgument>
                                 Optional args As Object = Nothing,
-                                Optional stdout$ = "",
+                                Optional stdout As Object = "",
                                 Optional stderr$ = "",
                                 Optional stdin$ = "",
                                 Optional input As Object = null,
@@ -780,7 +780,10 @@ Namespace Runtime.Internal.Invokes
             Dim arguments As String = CStr(args)
             Dim inputStr As String() = CLRVector.asCharacter(input)
             Dim std_out As String = Nothing
-            Dim show_output_on_console As Boolean = stdout = "console" OrElse stdout = "std"
+            Dim show_output_on_console As Boolean = stdout Is Nothing OrElse
+                stdout = "console" OrElse
+                stdout = "std" OrElse
+                stdout = ""
 
             If env.globalEnvironment.debugMode Then
                 Call base.print("get app executative:", , env)
@@ -792,6 +795,8 @@ Namespace Runtime.Internal.Invokes
                 Call VBDebugger.EchoLine($"# {executative.CLIPath} {arguments}")
             End If
 
+            Dim exitCode As Integer = -1
+
             If Global.System.Environment.OSVersion.Platform = Global.System.PlatformID.Win32NT Then
                 If env.globalEnvironment.debugMode Then
                     Call base.print($"run on windows {If(clr, ".NET/CLR", "naive")} environment!", , env)
@@ -800,18 +805,12 @@ Namespace Runtime.Internal.Invokes
                 If clr Then
                     Dim ps = App.Shell(executative, arguments, CLR:=clr, debug:=True, stdin:=inputStr.JoinBy(vbLf))
 
-                    ps.Run()
+                    exitCode = ps.Run()
                     std_out = ps.StandardOutput
-
-                    If show_output_on_console Then
-                        Call Console.WriteLine(ps.StandardOutput)
-                    End If
                 Else
-                    std_out = PipelineProcess.Call(executative, arguments, inputStr.JoinBy(vbLf))
-
-                    If show_output_on_console Then
-                        Call Console.WriteLine(std_out)
-                    End If
+                    std_out = PipelineProcess.Call(executative, arguments,
+                                                   [in]:=inputStr.JoinBy(vbLf),
+                                                   exitCode:=exitCode)
                 End If
             ElseIf clr Then
                 If env.globalEnvironment.debugMode Then
@@ -831,7 +830,7 @@ Namespace Runtime.Internal.Invokes
                 End If
 
                 If shell Then
-                    Call PipelineProcess.ExecSub(
+                    exitCode = PipelineProcess.ExecSub(
                         app:=executative,
                         args:=arguments,
                         onReadLine:=AddressOf App.DoNothing,
@@ -839,11 +838,29 @@ Namespace Runtime.Internal.Invokes
                         shell:=True
                     )
                 Else
-                    std_out = PipelineProcess.Call(executative, arguments, [in]:=inputStr.JoinBy(vbLf))
+                    std_out = PipelineProcess.Call(executative, arguments,
+                                                   [in]:=inputStr.JoinBy(vbLf),
+                                                   exitCode:=exitCode)
                 End If
             End If
 
-            Return std_out
+            If show_output_on_console Then
+                Console.WriteLine(std_out)
+                Return exitCode
+            ElseIf TypeOf stdout Is String Then
+                Call std_out.SaveTo(CStr(stdout))
+                Return exitCode
+            ElseIf TypeOf stdout Is Boolean AndAlso CBool(stdout) Then
+                Return std_out
+            ElseIf TypeOf stdout Is Stream Then
+                Dim s As New StreamWriter(DirectCast(stdout, Stream))
+                Call s.WriteLine(std_out)
+                Call s.Flush()
+                Return exitCode
+            Else
+                Call $"invalid stdout description({stdout})!".warning
+                Return exitCode
+            End If
         End Function
 
         ''' <summary>
