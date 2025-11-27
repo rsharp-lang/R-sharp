@@ -1,5 +1,6 @@
 ﻿Imports System.Globalization
 Imports System.Text
+Imports std = System.Math
 
 Namespace Runtime.Internal.Invokes
 
@@ -158,8 +159,8 @@ Namespace Runtime.Internal.Invokes
             If num = 0 Then Return "0"
 
             Dim scale As Integer = Math.Ceiling(Math.Log10(Math.Abs(num)))
-            Dim factor As Double = Math.Pow(10, digits - scale)
-            Dim scaledNum As Double = Math.Round(num * factor, MidpointRounding.AwayFromZero)
+            Dim factor As Double = 10 ^ (digits - scale)
+            Dim scaledNum As Double = std.Round(num * factor, MidpointRounding.AwayFromZero)
 
             ' 使用足够大的精度来格式化，然后截断
             ' 使用 "G" 通用格式，它会自动处理科学计数法
