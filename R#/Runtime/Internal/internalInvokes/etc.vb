@@ -340,7 +340,7 @@ Namespace Runtime.Internal.Invokes
         ''' Or Windows-only culture name. name Is Not case-sensitive.</param>
         ''' <returns></returns>
         <ExportAPI("cultureInfo")>
-        Public Function CultureInfo(Optional cultureName As String = "en-US") As CultureInfo
+        Public Function CultureInfo_ctor(Optional cultureName As String = "en-US") As CultureInfo
             Return New CultureInfo(name:=cultureName)
         End Function
     End Module

@@ -1,67 +1,67 @@
 ﻿#Region "Microsoft.VisualBasic::73a585f036a8807b24bc975d3b4d285f, R#\Runtime\Internal\internalInvokes\string\stringr.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1523
-    '    Code Lines: 945 (62.05%)
-    ' Comment Lines: 419 (27.51%)
-    '    - Xml Docs: 89.02%
-    ' 
-    '   Blank Lines: 159 (10.44%)
-    '     File Size: 64.37 KB
+' Summaries:
 
 
-    '     Module stringr
-    ' 
-    '         Function: [objToString], base64Decode, base64Str, bencode, charAt
-    '                   chr, concatenate, Csprintf, decodeObject, findToStringWithFormat
-    '                   fromBstring, getElementFormat, grep, html, json
-    '                   loadJson, loadXml, match, nchar, paste
-    '                   paste0, randomAsciiStr, rawBufferBase64, regexp, splitSingleStrAuto
-    '                   sprintfSingle, str_empty, str_pad, (+2 Overloads) str_replace, str_squish
-    '                   str_trim, strPad_internal, strsplit, substr, tagvalue
-    '                   text_equals, text_grep, tolower, toupper, urldecode
-    '                   utf8_decode, xml
-    ' 
-    '     Class TextGrepLambda
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: GetTokens, TextGrep
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1523
+'    Code Lines: 945 (62.05%)
+' Comment Lines: 419 (27.51%)
+'    - Xml Docs: 89.02%
+' 
+'   Blank Lines: 159 (10.44%)
+'     File Size: 64.37 KB
+
+
+'     Module stringr
+' 
+'         Function: [objToString], base64Decode, base64Str, bencode, charAt
+'                   chr, concatenate, Csprintf, decodeObject, findToStringWithFormat
+'                   fromBstring, getElementFormat, grep, html, json
+'                   loadJson, loadXml, match, nchar, paste
+'                   paste0, randomAsciiStr, rawBufferBase64, regexp, splitSingleStrAuto
+'                   sprintfSingle, str_empty, str_pad, (+2 Overloads) str_replace, str_squish
+'                   str_trim, strPad_internal, strsplit, substr, tagvalue
+'                   text_equals, text_grep, tolower, toupper, urldecode
+'                   utf8_decode, xml
+' 
+'     Class TextGrepLambda
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Function: GetTokens, TextGrep
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -139,6 +139,229 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return htmlPrinter.GetHtml(x, args, env)
             End If
+        End Function
+
+        ''' <summary>
+        ''' ### Encode in a Common Format
+        ''' 
+        ''' Format an R object for pretty printing, notably encoding vector or column elements into a common format.
+        ''' </summary>
+        ''' <param name="x">any R object (conceptually); typically numeric.</param>
+        ''' <param name="trim">logical; if FALSE, logical, numeric And complex values are right-justified to a common width 
+        ''' If True the leading blanks For justification are suppressed.</param>
+        ''' <param name="digits">a positive Integer indicating how many significant digits are To be used For numeric And complex x.
+        ''' The Default, NULL, uses getOption("digits"). This Is a suggestion: enough decimal places will be used so that the 
+        ''' smallest (in magnitude) number has this many significant digits, And also to satisfy nsmall. (For more, notably the 
+        ''' interpretation for complex numbers see signif.)</param>
+        ''' <param name="nsmall">the minimum number of digits to the right of the decimal point in formatting real/complex numbers 
+        ''' in non-scientific formats. Allowed values are 0 &lt;= nsmall &lt;= 20.</param>
+        ''' <param name="justify">should a character vector be left-justified (the Default), right-justified, centred Or left alone. Can be abbreviated.</param>
+        ''' <param name="width">Default method: the minimum field width Or NULL Or 0 For no restriction.
+        ''' AsIs method: the maximum field width For non-character objects. NULL corresponds To the Default 12.</param>
+        ''' <param name="na_encode">logical: should NA strings be encoded? Note this only applies To elements Of character vectors, 
+        ''' Not To numerical, complex nor logical NAs, which are always encoded As "NA".</param>
+        ''' <param name="scientific">either a logical specifying whether elements of a real or complex vector should be encoded in scientific format, 
+        ''' or an integer penalty (see options("scipen")). Missing values correspond to the current default penalty.</param>
+        ''' <param name="big_mark">used for prettying (longish) numerical and complex sequences. Passed to prettyNum: that help page explains the details.</param>
+        ''' <param name="big_interval">used for prettying (longish) numerical and complex sequences. Passed to prettyNum: that help page explains the details.</param>
+        ''' <param name="small_mark">used for prettying (longish) numerical and complex sequences. Passed to prettyNum: that help page explains the details.</param>
+        ''' <param name="small_interval">used for prettying (longish) numerical and complex sequences. Passed to prettyNum: that help page explains the details.</param>
+        ''' <param name="decimal_mark">used for prettying (longish) numerical and complex sequences. Passed to prettyNum: that help page explains the details.</param>
+        ''' <param name="zero_print">used for prettying (longish) numerical and complex sequences. Passed to prettyNum: that help page explains the details.</param>
+        ''' <param name="drop0trailing">used for prettying (longish) numerical and complex sequences. Passed to prettyNum: that help page explains the details.</param>
+        ''' <param name="args">further arguments passed To Or from other methods.</param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' An object of similar structure to x containing character representations of the elements of the first argument x in a common format,
+        ''' and in the current locale's encoding.
+        ''' 
+        ''' For character, numeric, complex or factor x, dims and dimnames are preserved on matrices/arrays and names on vectors: no other attributes are copied.
+        ''' 
+        ''' If x is a list, the result is a character vector obtained by applying format.default(x, ...) to each element of the list (after 
+        ''' unlisting elements which are themselves lists), and then collapsing the result for each element with paste(collapse = ", "). 
+        ''' The defaults in this case are trim = TRUE, justify = "none" since one does not usually want alignment in the collapsed strings.
+        ''' </returns>
+        ''' <remarks>
+        ''' format is a generic function. Apart from the methods described here there are methods for dates (see format.Date), date-times 
+        ''' (see format.POSIXct) and for other classes such as format.octmode and format.dist.
+        ''' 
+        ''' format.data.frame formats the data frame column by column, applying the appropriate method of format for each column. 
+        ''' Methods for columns are often similar to as.character but offer more control. Matrix and data-frame columns will be 
+        ''' converted to separate columns in the result, and character columns (normally all) will be given class "AsIs".
+        ''' format.factor converts the factor to a character vector and then calls the default method (and so justify applies).
+        ''' format.AsIs deals with columns of complicated objects that have been extracted from a data frame. Character objects and 
+        ''' (atomic) matrices are passed to the default method (and so width does not apply). Otherwise it calls toString to 
+        ''' convert the object to character (if a vector or list, element by element) and then right-justifies the result.
+        ''' Justification for character vectors (and objects converted to character vectors by their methods) is done on display width (see nchar), 
+        ''' taking double-width characters and the rendering of special characters (as escape sequences, including escaping backslash 
+        ''' but not double quote: see print.default) into account. Thus the width is as displayed by print(quote = FALSE) and not as displayed by cat. 
+        ''' Character strings are padded with blanks to the display width of the widest. (If na.encode = FALSE missing character strings are 
+        ''' not included in the width computations and are not encoded.)
+        ''' Numeric vectors are encoded with the minimum number of decimal places needed to display all the elements to at least 
+        ''' the digits significant digits. However, if all the elements then have trailing zeroes, the number of decimal places 
+        ''' is reduced until at least one element has a non-zero final digit; see also the argument documentation for big.*, small.* etc, above. 
+        ''' See the note in print.default about digits >= 16.
+        ''' Raw vectors are converted to their 2-digit hexadecimal representation by as.character.
+        ''' format.default(x) now provides a “minimal” string when isS4(x) is true.
+        ''' While the internal code respects the option getOption("OutDec") for the ‘decimal mark’ in general, decimal.mark takes 
+        ''' precedence over that option. Similarly, scientific takes precedence over getOption("scipen").
+        ''' </remarks>
+        <ExportAPI("format")>
+        <RApiReturn(TypeCodes.string)>
+        Public Function format_str(<RRawVectorArgument> x As Object, Optional format As String = Nothing,
+                                   Optional trim As Boolean = False, Optional digits As Object = null, Optional nsmall As Object = 0L,
+                                   Optional justify As justify = justify.left,
+                                   Optional width As Object = null, Optional na_encode As Boolean = True, Optional scientific As Object = Nothing,
+                                   Optional big_mark As String = "", Optional big_interval As Long = 3L,
+                                   Optional small_mark As String = "", Optional small_interval As Long = 5L,
+                                   <RDefaultExpression>
+                                   Optional decimal_mark As Object = "~getOption('OutDec')",
+                                   Optional zero_print As Object = null, Optional drop0trailing As Boolean = False,
+                                   Optional args As list = Nothing,
+                                   Optional env As Environment = Nothing) As Object
+
+            If x Is Nothing Then
+                Return Nothing
+            End If
+
+            If Not format.StringEmpty Then
+                Dim seqData As Array = REnv.TryCastGenericArray(REnv.asVector(Of Object)(x), env)
+
+
+            Else
+                Throw New NotImplementedException
+            End If
+        End Function
+
+        Public Enum justify
+            none
+            left
+            right
+            centre
+        End Enum
+
+        ''' <summary>
+        ''' 格式化单个值的内部辅助函数。
+        ''' </summary>
+        Private Function FormatSingleValue(
+        val As Object,
+        trim As Boolean,
+        digits As Integer?,
+        nsmall As Integer?,
+        justify As justify,
+        width As Integer?,
+        na_encode As Boolean,
+        scientific As Boolean?,
+        big_mark As String,
+        big_interval As Integer,
+        decimal_mark As String,
+        zero_print As String,
+        drop0trailing As Boolean
+    ) As String
+            ' 1. 处理 NA/Nothing/DBNull.Value
+            If val Is Nothing OrElse IsDBNull(val) Then
+                Return If(na_encode, "NA", String.Empty)
+            End If
+
+            Dim result As String = String.Empty
+
+            ' 2. 处理数值类型
+            If TypeOf val Is Double OrElse TypeOf val Is Single OrElse TypeOf val Is Decimal OrElse TypeOf val Is Integer OrElse TypeOf val Is Long Then
+                Dim numericValue As Double = Convert.ToDouble(val)
+
+                ' 检查 zero.print
+                If numericValue = 0 AndAlso Not String.IsNullOrEmpty(zero_print) Then
+                    result = zero_print
+                Else
+                    ' 创建自定义的 NumberFormatInfo
+                    Dim nfi As NumberFormatInfo = CType(CultureInfo.InvariantCulture.NumberFormat.Clone(), NumberFormatInfo)
+                    nfi.NumberGroupSeparator = big_mark
+                    nfi.NumberGroupSizes = New Integer() {big_interval}
+                    nfi.NumberDecimalSeparator = decimal_mark
+
+                    Dim formatString As String = ""
+                    Dim precision As Integer = 0
+
+                    ' 决定精度和格式字符串
+                    If digits.HasValue Then
+                        ' digits 优先级最高，类似于 "G" (General) 格式
+                        precision = digits.Value
+                        formatString = "G" & precision
+                    ElseIf nsmall.HasValue AndAlso nsmall.Value > 0 Then
+                        ' 其次是 nsmall，类似于 "F" (Fixed-point) 格式
+                        precision = nsmall.Value
+                        formatString = "F" & precision
+                    Else
+                        ' 默认情况
+                        formatString = "G" ' 通用格式，精度由.NET决定
+                    End If
+
+                    ' 决定是否使用科学记数法
+                    If scientific.HasValue Then
+                        If scientific.Value Then
+                            ' 强制使用科学记数法
+                            formatString = "E" & If(digits.HasValue, digits.Value, 6) ' E 默认6位小数，我们遵循digits
+                        Else
+                            ' 强制不使用科学记数法
+                            If formatString.StartsWith("G") Then
+                                ' 对于通用格式，如果原来没定精度，用F避免科学计数法
+                                If Not digits.HasValue Then formatString = "F"
+                            End If
+                        End If
+                    Else
+                        ' scientific is Nothing (NA), 自动决定
+                        If Not scientific.HasValue AndAlso std.Abs(numericValue) > 1000000 OrElse (std.Abs(numericValue) < 0.0001 AndAlso numericValue <> 0) Then
+                            If digits.HasValue Then
+                                formatString = "E" & digits.Value
+                            Else
+                                ' 默认科学计数法精度
+                                formatString = "E6"
+                            End If
+                        End If
+                    End If
+
+                    result = numericValue.ToString(formatString, nfi)
+
+                    ' 处理 drop0trailing
+                    If drop0trailing AndAlso result.Contains(decimal_mark) Then
+                        result = result.TrimEnd("0"c)
+                        If result.EndsWith(decimal_mark) Then
+                            result = result.Substring(0, result.Length - 1)
+                        End If
+                    End If
+                End If
+
+                ' 3. 处理非数值类型（如字符串）
+            Else
+                result = val.ToString()
+            End If
+
+            ' 4. 应用 justify 和 width
+            If width.HasValue Then
+                Dim targetWidth As Integer = width.Value
+                Select Case justify
+                    Case justify.left
+                        result = result.PadRight(targetWidth)
+                    Case justify.right
+                        result = result.PadLeft(targetWidth)
+                    Case justify.centre
+                        Dim totalPad As Integer = targetWidth - result.Length
+                        If totalPad > 0 Then
+                            Dim leftPad As Integer = totalPad \ 2
+                            result = result.PadLeft(result.Length + leftPad).PadRight(targetWidth)
+                        End If
+                    Case justify.none
+                        ' R 的默认行为是右对齐，但仅在 width 被设置时
+                        result = result.PadLeft(targetWidth)
+                End Select
+            End If
+
+            ' 5. 应用 trim
+            If trim Then
+                result = result.Trim()
+            End If
+
+            Return result
         End Function
 
         ''' <summary>
