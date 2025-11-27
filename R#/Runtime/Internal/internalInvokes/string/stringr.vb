@@ -224,6 +224,7 @@ Namespace Runtime.Internal.Invokes
             End If
 
             Dim seqData As Array = REnv.TryCastGenericArray(REnv.asVector(Of Object)(x), env)
+            Dim decimal_mark_opt As String = CLRVector.asScalarCharacter(decimal_mark)
             Dim formatVal As String() = seqData _
                 .AsObjectEnumerator _
                 .Select(Function(o)
@@ -239,7 +240,7 @@ Namespace Runtime.Internal.Invokes
                                                        big_interval:=big_interval,
                                                        small_mark:=small_mark,
                                                        small_interval:=small_interval,
-                                                       decimal_mark:=CLRVector.asScalarCharacter(decimal_mark),
+                                                       decimal_mark:=decimal_mark_opt,
                                                        zero_print:=zero_print,
                                                        drop0trailing:=drop0trailing)
                         End Function) _
