@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+﻿Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
+Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -131,6 +132,24 @@ Namespace Runtime.Internal.Invokes
 
                     If TypeOf eval2 Is Message Then
                         Return eval2
+                    End If
+                End If
+            End If
+
+            If TypeOf eval Is Message Then
+                ' error handler
+                Dim err As Object = args!error
+
+                If err IsNot Nothing Then
+                    exprs = pipeline.TryCreatePipeline(Of Expression)(err, env)
+
+                    If exprs.isError Then
+                        ' this error will never happends
+                        Return exprs.getError
+                    Else
+                        env.AddMessage(DirectCast(eval, Message).message, MSG_TYPES.WRN)
+                        program = New Program(exprs.populates(Of Expression)(env))
+                        eval = program.Execute(env)
                     End If
                 End If
             End If
