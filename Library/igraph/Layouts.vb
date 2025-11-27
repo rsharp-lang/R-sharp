@@ -215,7 +215,7 @@ Module Layouts
             Call physics.Collide()
 
             If (100 * i / iterations) Mod 5 = 0 Then
-                Call base.cat($"- Completed {i + 1} of {iterations} [{CInt(100 * i / iterations)}%]\n",,, env)
+                Call base.cat($"- Completed {i + 1} of {iterations} [{CInt(100 * i / iterations)}%]\n",,, env:=env)
             End If
         Next
 
