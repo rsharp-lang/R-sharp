@@ -851,7 +851,7 @@ Namespace Runtime.Internal.Invokes
                 Call std_out.SaveTo(CStr(stdout))
                 Return exitCode
             ElseIf TypeOf stdout Is Boolean AndAlso CBool(stdout) Then
-                Return std_out
+                Return std_out.LineTokens
             ElseIf TypeOf stdout Is Stream Then
                 Dim s As New StreamWriter(DirectCast(stdout, Stream))
                 Call s.WriteLine(std_out)
