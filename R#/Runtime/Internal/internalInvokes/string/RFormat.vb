@@ -209,6 +209,83 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' 将 R 语言的日期时间格式字符串转换为等价的 .NET 自定义日期时间格式字符串。
+        ''' </summary>
+        ''' <param name="rFormat">一个有效的 R 日期时间格式字符串，例如 "%Y-%m-%d %H:%M:%S"。</param>
+        ''' <returns>一个等价的 .NET 自定义日期时间格式字符串，例如 "yyyy-MM-dd HH:mm:ss"。</returns>
+        ''' <remarks>
+        ''' 此函数支持大多数常用的 R 格式化占位符。
+        ''' 对于一些在 .NET 中没有直接等价物的复杂占位符（如一年中的第几天 %j，或周数 %U/%W），
+        ''' 函数会保留原始占位符，并可能需要在转换后进行手动处理。
+        ''' </remarks>
+        Public Shared Function ConvertRDateFormatToDotNet(rFormat As String) As String
+            If String.IsNullOrWhiteSpace(rFormat) Then
+                Return String.Empty
+            End If
+
+            ' 创建 R 到 .NET 格式占位符的映射字典
+            ' Key: R 格式化字符 (去掉 %)
+            ' Value: .NET 对应的格式化字符串
+            Dim formatMap As New Dictionary(Of Char, String) From {
+        {"Y"c, "yyyy"}, ' 4位年份
+        {"y"c, "yy"},   ' 2位年份
+        {"m"c, "MM"},   ' 月份 (01-12)
+        {"B"c, "MMMM"}, ' 月份全名
+        {"b"c, "MMM"},  ' 月份缩写
+        {"d"c, "dd"},   ' 月中的天数 (01-31)
+        {"H"c, "HH"},   ' 24小时制小时 (00-23)
+        {"I"c, "hh"},   ' 12小时制小时 (01-12)
+        {"M"c, "mm"},   ' 分钟 (00-59)
+        {"S"c, "ss"},   ' 秒 (00-59)
+        {"p"c, "tt"},   ' AM/PM 标记
+        {"A"c, "dddd"}, ' 星期全名
+        {"a"c, "ddd"},  ' 星期缩写
+        {"j"c, "DDD"},  ' 一年中的天数 (001-366) - 注意：.NET 的 "D" 是自定义格式，需要数字，这里用 DDD 提示
+        {"U"c, "ww"},   ' 一年中的周数 (周日为第一天) - 注意：.NET 的 "ww" 与 R 的计算方式可能不同
+        {"W"c, "ww"},   ' 一年中的周数 (周一为第一天) - 注意：.NET 的 "ww" 与 R 的计算方式可能不同
+        {"w"c, "dddd"}, ' 星期中的天数 (0-6, 0=周日) - .NET 没有直接对应的数字格式，这里转为星期名
+        {"x"c, "d"},    ' 地区性的日期表示
+        {"X"c, "t"},    ' 地区性的时间表示
+        {"c"c, "F"},    ' 地区性的日期和时间表示
+        {"Z"c, "zzz"},  ' 时区名称
+        {"%"c, "\%"}    ' 字面量百分号
+    }
+
+            Dim dotNetFormat As New StringBuilder()
+            Dim i As Integer = 0
+
+            While i < rFormat.Length
+                Dim currentChar As Char = rFormat(i)
+
+                If currentChar = "%"c Then
+                    ' 检查是否为字符串末尾，防止越界
+                    If i + 1 >= rFormat.Length Then
+                        dotNetFormat.Append("%"c)
+                        Exit While
+                    End If
+
+                    Dim nextChar As Char = rFormat(i + 1)
+
+                    ' 在映射表中查找
+                    If formatMap.ContainsKey(nextChar) Then
+                        dotNetFormat.Append(formatMap(nextChar))
+                        i += 2 ' 跳过 % 和下一个字符
+                    Else
+                        ' 如果是未知的占位符，保留原始字符，避免信息丢失
+                        dotNetFormat.Append("%"c).Append(nextChar)
+                        i += 2
+                    End If
+                Else
+                    ' 普通字符，直接追加
+                    dotNetFormat.Append(currentChar)
+                    i += 1
+                End If
+            End While
+
+            Return dotNetFormat.ToString()
+        End Function
+
+        ''' <summary>
         ''' 格式化字符串。
         ''' </summary>
         Private Shared Function FormatString(str As String, trim As Boolean, justify As Justification, width As Integer?) As String
