@@ -124,7 +124,7 @@ Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 Imports std = System.Math
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 Imports Microsoft.VisualBasic.CommandLine
-
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 #If NET48 Then
 Imports Image = System.Drawing.Image
@@ -3488,7 +3488,7 @@ RE0:
         ''' <returns></returns>
         <ExportAPI("cat")>
         Public Function cat(<RRawVectorArgument> values As Object,
-                            Optional file$ = Nothing,
+                            Optional file As Object = Nothing,
                             Optional sep$ = " ",
                             Optional env As Environment = Nothing) As Object
 
@@ -3518,8 +3518,17 @@ RE0:
                     .DoCall(AddressOf sprintf)
             End If
 
-            If Not file.StringEmpty Then
-                Call strs.SaveTo(file)
+            If Not file Is Nothing Then
+                If TypeOf file Is String Then
+                    Call strs.SaveTo(CStr(file))
+                ElseIf file.GetType.IsInheritsFrom(GetType(Stream), strict:=False) Then
+                    Dim s As New StreamWriter(DirectCast(file, Stream))
+
+                    Call s.Write(strs)
+                    Call s.Flush()
+                Else
+                    Return RInternal.debug.stop("the given file connection is not a valid connection object(required of file path character string or clr stream connection file)", env)
+                End If
             ElseIf env.globalEnvironment.stdout Is Nothing Then
                 Call Console.Write(strs)
             Else
