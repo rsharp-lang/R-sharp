@@ -118,24 +118,6 @@ Namespace Runtime.Internal.Invokes
             Dim program As New Program(exprs.populates(Of Expression)(env))
             Dim eval As Object = program.Execute(env)
 
-            If [finally] IsNot Nothing Then
-                Dim eval2 As Object
-
-                exprs = pipeline.TryCreatePipeline(Of Expression)([finally], env)
-
-                If exprs.isError Then
-                    ' this error will never happends
-                    Return exprs.getError
-                Else
-                    program = New Program(exprs.populates(Of Expression)(env))
-                    eval2 = program.Execute(env)
-
-                    If TypeOf eval2 Is Message Then
-                        Return eval2
-                    End If
-                End If
-            End If
-
             If TypeOf eval Is Message Then
                 ' error handler
                 Dim err As Object = args!error
@@ -150,6 +132,24 @@ Namespace Runtime.Internal.Invokes
                         env.AddMessage(DirectCast(eval, Message).message, MSG_TYPES.WRN)
                         program = New Program(exprs.populates(Of Expression)(env))
                         eval = program.Execute(env)
+                    End If
+                End If
+            End If
+
+            If [finally] IsNot Nothing Then
+                Dim eval2 As Object
+
+                exprs = pipeline.TryCreatePipeline(Of Expression)([finally], env)
+
+                If exprs.isError Then
+                    ' this error will never happends
+                    Return exprs.getError
+                Else
+                    program = New Program(exprs.populates(Of Expression)(env))
+                    eval2 = program.Execute(env)
+
+                    If TypeOf eval2 Is Message Then
+                        Return eval2
                     End If
                 End If
             End If
