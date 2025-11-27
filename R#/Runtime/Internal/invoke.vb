@@ -146,6 +146,7 @@ Namespace Runtime.Internal
             Call GetType(dplyr).DoCall(AddressOf pushEnvir)
             Call GetType(s4Methods).DoCall(AddressOf pushEnvir)
             Call GetType(stddev).DoCall(AddressOf pushEnvir)
+            Call GetType(conditions).DoCall(AddressOf pushEnvir)
         End Sub
 
         Private Sub New()
