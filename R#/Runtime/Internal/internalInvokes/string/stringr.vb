@@ -223,17 +223,29 @@ Namespace Runtime.Internal.Invokes
                 Return Nothing
             End If
 
-            If Not format.StringEmpty Then
-                Dim seqData As Array = REnv.TryCastGenericArray(REnv.asVector(Of Object)(x), env)
+            Dim seqData As Array = REnv.TryCastGenericArray(REnv.asVector(Of Object)(x), env)
+            Dim formatVal As String() = seqData _
+                .AsObjectEnumerator _
+                .Select(Function(o)
+                            Return RFormat.FormatValue(o, format,
+                                                       trim:=trim,
+                                                       digits:=digits,
+                                                       nsmall:=nsmall,
+                                                       justify:=justify,
+                                                       width:=width,
+                                                       na_encode:=na_encode,
+                                                       scientific:=scientific,
+                                                       big_mark:=big_mark,
+                                                       big_interval:=big_interval,
+                                                       small_mark:=small_mark,
+                                                       small_interval:=small_interval,
+                                                       decimal_mark:=CLRVector.asScalarCharacter(decimal_mark),
+                                                       zero_print:=zero_print,
+                                                       drop0trailing:=drop0trailing)
+                        End Function) _
+                .ToArray
 
-                If seqData.IsNullOrEmpty Then
-                    Return Nothing
-                Else
-                    Throw New NotImplementedException
-                End If
-            Else
-                Throw New NotImplementedException
-            End If
+            Return formatVal
         End Function
 
         ''' <summary>

@@ -40,10 +40,11 @@ Namespace Runtime.Internal.Invokes
         ''' <returns>格式化后的字符串。</returns>
         Public Shared Function FormatValue(
         x As Object,
+        Optional format As String = Nothing,
         Optional trim As Boolean = False,
         Optional digits As Integer? = Nothing,
         Optional nsmall As Integer = 0,
-        Optional justify As Justification = Justification.Left,
+        Optional justify As Justification = Justification.left,
         Optional width As Integer? = Nothing,
         Optional na_encode As Boolean = True,
         Optional scientific As Boolean? = Nothing,
@@ -66,7 +67,7 @@ Namespace Runtime.Internal.Invokes
                 Case TypeOf x Is Double OrElse TypeOf x Is Single OrElse TypeOf x Is Decimal OrElse TypeOf x Is Integer OrElse TypeOf x Is Long
                     Return FormatNumber(CDbl(x), trim, digits, nsmall, justify, width, scientific, big_mark, big_interval, small_mark, small_interval, decimal_mark, zero_print, drop0trailing)
                 Case TypeOf x Is Date
-                    Return FormatDate(CDate(x), trim, justify, width)
+                    Return FormatDate(CDate(x), If(format, "G"), trim, justify, width)
                 Case TypeOf x Is String
                     Return FormatString(CStr(x), trim, justify, width)
                 Case Else
@@ -201,10 +202,11 @@ Namespace Runtime.Internal.Invokes
         ''' <summary>
         ''' 格式化日期。
         ''' </summary>
-        Private Shared Function FormatDate(dt As Date, trim As Boolean, justify As Justification, width As Integer?) As String
+        Private Shared Function FormatDate(dt As Date, format As String, trim As Boolean, justify As Justification, width As Integer?) As String
             ' R 默认的日期格式通常是 YYYY-MM-DD 或类似的，这里我们使用 VB.NET 的通用格式 "G"
             ' 如果需要更复杂的 R 风格格式，可以添加一个 dateFormat 参数
-            Dim result As String = dt.ToString("G", CultureInfo.InvariantCulture)
+            Dim clr_format As String = ConvertRDateFormatToDotNet(format)
+            Dim result As String = dt.ToString(clr_format, CultureInfo.InvariantCulture)
             Return ApplyJustificationAndWidth(result, justify, width)
         End Function
 
