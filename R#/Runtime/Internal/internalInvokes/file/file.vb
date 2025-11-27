@@ -1425,48 +1425,6 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
-        ''' 
-        ''' </summary>
-        ''' <returns>
-        ''' stdin(), stdout() and stderr() return connection objects.
-        ''' </returns>
-        ''' <remarks>
-        ''' stdin(), stdout() and stderr() are standard connections corresponding to input, output and error on the console 
-        ''' respectively (and not necessarily to file streams). They are text-mode connections of class "terminal" which 
-        ''' cannot be opened or closed, and are read-only, write-only and write-only respectively. The stdout() and stderr() 
-        ''' connections can be re-directed by sink (and in some circumstances the output from stdout() can be split: see the 
-        ''' help page).
-        ''' 
-        ''' The encoding For stdin() When redirected can be Set by the command-line flag --encoding.
-        ''' 
-        ''' nullfile() returns filename of the null device ("/dev/null" on Unix, "nul:" on Windows).
-        ''' 
-        ''' showConnections returns a matrix Of information. If a connection Object has been lost Or forgotten, getConnection 
-        ''' will take a row number from the table And Return a connection Object For that connection, which can be used To 
-        ''' close the connection, For example. However, If there Is no R level Object referring To the connection it will be 
-        ''' closed automatically at the Next garbage collection (except For gzcon connections).
-        ''' 
-        ''' closeAllConnections closes(And destroys) all user connections, restoring all sink diversions As it does so.
-        ''' 
-        ''' isatty returns True If the connection Is one Of the Class "terminal" connections And it Is apparently connected To 
-        ''' a terminal, otherwise False. This may Not be reliable In embedded applications, including GUI consoles.
-        ''' 
-        ''' getAllConnections returns a sequence Of Integer connection descriptors For use With getConnection, corresponding 
-        ''' To the row names Of the table returned by showConnections(all = True).
-        ''' 
-        ''' stdin() refers to the ‘console’ and not to the C-level ‘stdin’ of the process. The distinction matters in GUI 
-        ''' consoles (which may not have an active ‘stdin’, and if they do it may not be connected to console input), and also 
-        ''' in embedded applications. If you want access to the C-level file stream ‘stdin’, use file("stdin").
-        ''' 
-        ''' When R Is reading a script from a file, the file Is the 'console’: this is traditional usage to allow in-line 
-        ''' data (see ‘An Introduction to R’ for an example).
-        ''' </remarks>
-        <ExportAPI("stdin")>
-        Public Function stdin_dev() As Stream
-            Return Console.OpenStandardInput
-        End Function
-
-        ''' <summary>
         ''' Functions to create, open and close connections, i.e., 
         ''' "generalized files", such as possibly compressed files, 
         ''' URLs, pipes, etc.
