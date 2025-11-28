@@ -876,6 +876,90 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### File Manipulation
+        ''' 
+        ''' These functions provide a low-level interface to the computer's file system.
+        ''' </summary>
+        ''' <param name="x">character vectors, containing file names or paths.</param>
+        ''' <param name="showWarnings">logical; should the warnings on failure be shown?</param>
+        ''' <returns>These functions return a logical vector indicating which operation succeeded for each of the files attempted. 
+        ''' Using a missing value for a file or path name will always be regarded as a failure.
+        ''' If showWarnings = True, file.create will give a warning For an unexpected failure.</returns>
+        ''' <remarks>
+        ''' The ... arguments are concatenated to form one character string: you can specify the files separately or 
+        ''' as one vector. All of these functions expand path names: see path.expand. (file.exists silently reports
+        ''' false for paths that would be too long after expansion: the rest will give a warning.)
+        ''' 
+        ''' file.create creates files with the given names if they do Not already exist And truncates them if they do.
+        ''' They are created with the maximal read/write permissions allowed by the 'umask’ setting (where relevant).
+        ''' By default a warning is given (with the reason) if the operation fails.
+        ''' 
+        ''' #### Case-insensitive file systems
+        ''' 
+        ''' Case-insensitive file systems are the norm on Windows and macOS, but can be found on all OSes 
+        ''' (for example a FAT-formatted USB drive is probably case-insensitive).
+        ''' 
+        ''' These functions will most likely match existing files regardless of case on such file systems: 
+        ''' however this is an OS function and it is possible that file names might be mapped to upper or 
+        ''' lower case.
+        ''' 
+        ''' #### Symbolic links on Windows
+        ''' 
+        ''' Symbolic links in the sense of POSIX file systems do not exist on Windows: however, 
+        ''' NTFS file systems support two similar concepts.
+        ''' 
+        ''' There are ‘junctions’ (or ‘junction points’), unfortunately without a public API: 
+        ''' a Windows version of the Unix concept of mounting one directory on another. A junction 
+        ''' can link directories located on the same or different local volumes of the same computer,
+        ''' but cannot link to a network drive. Function Sys.junction creates one or more junctions: 
+        ''' to should either specify a single existing directory or a set of non-existent file paths 
+        ''' of the same length as from. (Command mklink /J can also be used to create junctions.)
+        ''' 
+        ''' A version of symbolic linking to files/directories was implemented more recently, and 
+        ''' file.symlink makes use of that interface. However, it has restrictions which are crippling. 
+        ''' First, the user needs permission to make symbolic links, and that permission is not 
+        ''' normally granted except to Administrator accounts (note: not users with Administrator rights): 
+        ''' further many users report that whereas the Policy Editor appears to be able to grant such rights, 
+        ''' the API still reports insufficient permissions. Second, the interface needs to know if from 
+        ''' is a file or a directory (and it need not yet exist): we have implemented this to allow linking 
+        ''' from a directory only if it currently exists.
+        ''' 
+        ''' Care is needed with removing a junction (and most likely also a symbolic link): many tools 
+        ''' will remove the target and its contents.
+        ''' 
+        ''' #### Warning
+        ''' 
+        ''' Always check the return value of these functions when used in package code. This is especially 
+        ''' important for file.rename, which has OS-specific restrictions (and note that the session temporary
+        ''' directory is commonly on a different file system from the working directory): it is only portable
+        ''' to use file.rename to change file name(s) within a single directory.
+        ''' 
+        ''' #### Note
+        ''' 
+        ''' There is no guarantee that these functions will handle Windows relative paths of the form 
+        ''' ‘d:path’: try ‘d:./path’ instead. In particular, ‘d:’ is not recognized as a directory. 
+        ''' Nor are ‘⁠\\?\⁠’ prefixes (and similar) supported.
+        ''' 
+        ''' Most of these functions accept UTF-8 filepaths not valid in the current locale.
+        ''' 
+        ''' User error in supplying invalid file names (and note that ‘foo/’ and ‘foo\’ are invalid on Windows) 
+        ''' has undefined consequences.
+        ''' </remarks>
+        <ExportAPI("file.create")>
+        Public Function file_create(<RRawVectorArgument> x As Object,
+                                    Optional showWarnings As Boolean = True,
+                                    Optional env As Environment = Nothing) As Object
+
+            For Each file As String In CLRVector.safeCharacters(x)
+                If file <> "" Then
+                    Call New Byte() {}.FlushStream(file)
+                End If
+            Next
+
+            Return True
+        End Function
+
+        ''' <summary>
         ''' dir.create creates the last element of the path, unless recursive = TRUE. 
         ''' Trailing path separators are discarded. On Windows drives are allowed in 
         ''' the path specification and unless the path is rooted, it will be interpreted 
