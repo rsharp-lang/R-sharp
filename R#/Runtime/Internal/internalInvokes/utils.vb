@@ -72,6 +72,7 @@
 Imports System.IO
 Imports System.IO.Compression
 Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports System.Threading
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal.ProgressBar
@@ -949,6 +950,94 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         ''' <summary>
+        ''' ### Manipulation of Directories and File Permissions
+        ''' 
+        ''' These functions provide a low-level interface to the computer's file system.
+        ''' </summary>
+        ''' <param name="paths">character vectors containing file or directory paths. Tilde expansion (see path.expand) is done.</param>
+        ''' <param name="mode">the mode to be used on Unix-alikes: it will be coerced by as.octmode. For Sys.chmod it is recycled along paths.</param>
+        ''' <param name="use_umask">logical: should the mode be restricted by the umask setting?</param>
+        ''' <returns></returns>
+        ''' <remarks>Sys.chmod sets the file permissions of one or more files.
+        ''' The interpretation of mode in the Windows system functions is non-POSIX and only supports setting the 
+        ''' read-only attribute of the file. So R interprets mode to mean set read-only if and only if 
+        ''' (mode &amp; 0200) == 0 (interpreted in octal). Windows has a much more extensive system of file 
+        ''' permissions on some file systems (e.g., versions of NTFS) which are unrelated to this system call.
+        ''' </remarks>
+        <ExportAPI("Sys.chmod")>
+        Public Function Sys_chmod(<RRawVectorArgument> paths As Object,
+                                  Optional mode$ = "0777",
+                                  Optional use_umask As Boolean = True,
+                                  Optional recursive As Boolean = False) As Object
+
+            If Global.System.Environment.OSVersion.Platform = Global.System.PlatformID.Win32NT Then
+                Return True
+            End If
+
+            ' --- 2. 设置进程启动信息 ---
+            Dim startInfo As New ProcessStartInfo() With {.FileName = "/bin/chmod"}
+
+            ' 关键设置：
+            ' UseShellExecute = False: 允许我们重定向输入/输出/错误，并且不使用系统 shell 启动，更安全。
+            ' CreateNoWindow = True: 在后台运行，不弹出控制台窗口。
+            ' RedirectStandardError = True: 捕获命令的错误输出，以便了解失败原因。
+            startInfo.UseShellExecute = False
+            startInfo.CreateNoWindow = True
+            startInfo.RedirectStandardError = True
+            startInfo.RedirectStandardOutput = True ' 也捕获标准输出，尽管 chmod 成功时通常没有输出
+
+            ' --- 3. 构建命令行参数 ---
+            Dim arguments As New StringBuilder()
+
+            If recursive Then
+                arguments.Append("-R ")
+            End If
+
+            ' 添加模式
+            arguments.Append(mode & " ")
+
+            ' 添加所有路径，并对包含空格的路径进行引号处理
+            For Each path As String In CLRVector.safeCharacters(paths)
+                If String.IsNullOrWhiteSpace(path) Then
+                    Continue For
+                End If
+
+                If path.Contains(" ") Then
+                    arguments.Append($"""{path}"" ")
+                Else
+                    arguments.Append(path & " ")
+                End If
+            Next
+
+            startInfo.Arguments = arguments.ToString().Trim()
+
+            ' --- 4. 执行进程并等待完成 ---
+            Using process As New Process()
+                process.StartInfo = startInfo
+                process.Start()
+
+                ' 读取输出和错误流以防止缓冲区填满导致死锁
+                ' 对于 chmod，我们主要关心错误流
+                Dim stdOutput As String = process.StandardOutput.ReadToEnd()
+                Dim stdError As String = process.StandardError.ReadToEnd()
+
+                process.WaitForExit()
+
+                ' --- 5. 检查退出代码 ---
+                ' 在 Linux/Unix 中，退出代码 0 通常表示成功
+                If process.ExitCode = 0 Then
+                    ' 成功，清空错误信息（可能包含警告）
+                    Return True
+                Else
+                    ' 失败，errorMessage 中已包含 chmod 的错误信息
+                    Dim F As vector = vector.fromScalar(False)
+                    F.setAttribute("std_error", stdError)
+                    Return F
+                End If
+            End Using
+        End Function
+
+        ''' <summary>
         ''' ### Invoke a System Command
         ''' 
         ''' ``system`` invokes the OS command specified by ``command``.
@@ -1043,7 +1132,7 @@ Namespace Runtime.Internal.Invokes
                                Optional env As Environment = Nothing) As String
 
             Dim tokens As String() = command _
-                .Trim(" "c, ASCII.TAB, ASCII.CR, ASCII.LF) _
+                .Trim(" "c, Ascii.TAB, Ascii.CR, Ascii.LF) _
                 .LineTokens _
                 .JoinBy(" ") _
                 .DoCall(AddressOf DelimiterParser.GetTokens)
