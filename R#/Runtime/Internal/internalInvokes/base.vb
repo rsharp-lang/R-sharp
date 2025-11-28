@@ -3487,7 +3487,8 @@ RE0:
         ''' <param name="sep">a character vector of strings to append after each element.</param>
         ''' <returns></returns>
         <ExportAPI("cat")>
-        Public Function cat(<RRawVectorArgument> values As Object,
+        Public Function cat(<RRawVectorArgument, RListObjectArgument>
+                            values As Object,
                             Optional file As Object = Nothing,
                             Optional sep$ = " ",
                             Optional append As Boolean = False,
