@@ -89,7 +89,6 @@ Imports Microsoft.VisualBasic.Net.WebClient
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.SecurityString
 Imports Microsoft.VisualBasic.Serialization.JSON
-Imports Microsoft.VisualBasic.Text
 Imports Microsoft.VisualBasic.Text.Parser
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports SMRUCC.Rsharp.Development
@@ -106,6 +105,7 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Linq
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
+Imports ASCII = Microsoft.VisualBasic.Text.ASCII
 Imports LibDir = Microsoft.VisualBasic.FileIO.Directory
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RPkg = SMRUCC.Rsharp.Development.Package.Package
