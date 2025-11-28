@@ -757,7 +757,7 @@ Namespace Runtime.Internal.Invokes
                                 <RRawVectorArgument>
                                 Optional args As Object = Nothing,
                                 Optional stdout As Object = "",
-                                Optional stderr$ = "",
+                                Optional stderr As Object = "",
                                 Optional stdin$ = "",
                                 Optional input As Object = null,
                                 Optional wait As Boolean = True,
@@ -780,6 +780,7 @@ Namespace Runtime.Internal.Invokes
             Dim arguments As String = CStr(args)
             Dim inputStr As String() = CLRVector.asCharacter(input)
             Dim std_out As String = Nothing
+            Dim std_err As String = Nothing
             Dim show_output_on_console As Boolean = stdout Is Nothing OrElse (TypeOf stdout Is Boolean AndAlso Not CBool(stdout)) OrElse
                 stdout.ToString = "console" OrElse
                 stdout.ToString = "std" OrElse
@@ -840,8 +841,19 @@ Namespace Runtime.Internal.Invokes
                 Else
                     std_out = PipelineProcess.Call(executative, arguments,
                                                    [in]:=inputStr.JoinBy(vbLf),
+                                                   stdErr:=std_err,
                                                    exitCode:=exitCode)
                 End If
+            End If
+
+            If TypeOf stderr Is Boolean AndAlso CBool(stderr) Then
+                Return std_err.LineTokens
+            ElseIf TypeOf stderr Is String Then
+                Call std_err.SaveTo(CStr(stderr))
+            ElseIf TypeOf stderr Is Stream Then
+                Dim s As New StreamWriter(DirectCast(stderr, Stream))
+                Call s.WriteLine(std_err)
+                Call s.Flush()
             End If
 
             If show_output_on_console Then
