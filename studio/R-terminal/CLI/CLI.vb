@@ -83,7 +83,9 @@ Module CLI
     End Function
 
     <ExportAPI("/bash")>
+    <Description("Generates the bash script for the target rscript file.")>
     <Usage("/bash --script <run.R>")>
+    <Argument("--script", False, CLITypes.File, Description:="the file path of the target rscript file.")>
     Public Function BashRun(args As CommandLine) As Integer
         Dim script$ = args <= "--script"
         Dim bash$ = script.ParentPath & "/" & script.BaseName
@@ -94,7 +96,11 @@ Module CLI
 app=""$DIR/{script}""
 cli=""$@""
 
-R# ""$app"" $cli".Replace("{script}", script.FileName)
+# the R# may in other location that without PATH environment
+dotnet ""{rscript}"" ""$app"" $cli" _
+            .Replace("{script}", script.FileName) _
+            .Replace("{rscript}", $"{App.HOME}/R#.dll")
+
         script = script.LineTokens.JoinBy(vbLf)
 
         Return script.SaveTo(bash, utf8).CLICode
