@@ -3480,7 +3480,7 @@ RE0:
         ''' Outputs the objects, concatenating the representations. 
         ''' ``cat`` performs much less conversion than ``print``.
         ''' </summary>
-        ''' <param name="values">R objects (see ‘Details’ for the types of objects allowed).</param>
+        ''' <param name="x">R objects (see ‘Details’ for the types of objects allowed).</param>
         ''' <param name="file">A connection, or a character string naming the file to print to. 
         ''' If "" (the default), cat prints to the standard output connection, the console 
         ''' unless redirected by ``sink``.</param>
@@ -3488,22 +3488,21 @@ RE0:
         ''' <returns></returns>
         <ExportAPI("cat")>
         Public Function cat(<RRawVectorArgument, RListObjectArgument>
-                            values As Object,
+                            x As Object,
                             Optional file As Object = Nothing,
                             Optional sep$ = " ",
                             Optional append As Boolean = False,
                             Optional env As Environment = Nothing) As Object
 
-            Dim vec As Object() = Runtime.asVector(Of Object)(values) _
-                .AsObjectEnumerator _
-                .ToArray
+            Dim data As list = base.Rlist(x, env)
             Dim strs As String
+            Dim vec As Object() = data.data.ToArray
 
             If vec.Length = 1 AndAlso TypeOf vec(Scan0) Is dataframe Then
-                values = DirectCast(vec(Scan0), dataframe).CheckDimension(env)
+                x = DirectCast(vec(Scan0), dataframe).CheckDimension(env)
 
-                If TypeOf values Is Message Then
-                    Return values
+                If TypeOf x Is Message Then
+                    Return x
                 End If
 
                 sep = sprintf(sep)
@@ -3515,7 +3514,8 @@ RE0:
                     .JoinBy(vbCrLf)
             Else
                 strs = vec _
-                    .Select(Function(o) any.ToString(o, "")) _
+                    .Select(Function(o) CLRVector.safeCharacters(o)) _
+                    .IteratesALL _
                     .JoinBy(sprintf(sep)) _
                     .DoCall(AddressOf sprintf)
             End If
