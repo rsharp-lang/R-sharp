@@ -233,12 +233,12 @@ Module lpSolve
 
         Dim sbjMatrix As Double()()
         Dim types As String()
-        Dim rightHands As Double()
+        Dim rhs As Double()
 
         If lp_subj Is Nothing AndAlso lp_obj Is Nothing Then
             sbjMatrix = subjects.subjectiveMatrix(allSymbols, env).ToArray
             types = subjects.op.ToArray
-            rightHands = subjects.constraintBoundaries(env).ToArray
+            rhs = subjects.constraintBoundaries(env).ToArray
         ElseIf lp_subj IsNot Nothing AndAlso lp_obj IsNot Nothing Then
             allSymbols = lp_obj.symbols
             obj = lp_obj.factors
@@ -249,7 +249,7 @@ Module lpSolve
 
             sbjMatrix = lp_subj.alignMatrix(allSymbols.Objects).ToArray
             types = lp_subj.types
-            rightHands = lp_subj.constraints
+            rhs = lp_subj.constraints
         ElseIf lp_subj Is Nothing AndAlso lp_obj IsNot Nothing Then
             ' 情况3: 约束条件数据为空，但目标函数数据不为空
             ' 使用lp_obj的目标函数数据，从subjects表达式数组构建约束条件
@@ -264,7 +264,7 @@ Module lpSolve
             If subjects IsNot Nothing Then
                 sbjMatrix = subjects.subjectiveMatrix(allSymbols, env).ToArray
                 types = subjects.op.ToArray
-                rightHands = subjects.constraintBoundaries(env).ToArray
+                rhs = subjects.constraintBoundaries(env).ToArray
             Else
                 Return RInternal.debug.stop("Constraint data is missing! Please provide a valid constraint expression.", env)
             End If
@@ -278,7 +278,7 @@ Module lpSolve
             ' 使用已设置的obj和allSymbols，结合lp_subj的约束数据
             sbjMatrix = lp_subj.alignMatrix(allSymbols.Objects).ToArray
             types = lp_subj.types
-            rightHands = lp_subj.constraints
+            rhs = lp_subj.constraints
         Else
             ' 错误处理：缺少构建约束的必要数据
             Return RInternal.debug.stop("Constraint data is missing! Please provide a valid constraint expression or an lp_subject object.", env)
@@ -290,7 +290,7 @@ Module lpSolve
             objectiveFunctionCoefficients:=obj,
             constraintCoefficients:=sbjMatrix,
             constraintTypes:=types,
-            constraintRightHandSides:=rightHands,
+            constraintRightHandSides:=rhs,
             objectiveFunctionValue:=0
         )
         Dim solution As LPPSolution = lpp.solve(showProgress:=False)
