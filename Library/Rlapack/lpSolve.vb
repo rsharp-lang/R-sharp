@@ -296,8 +296,9 @@ Module lpSolve
         Dim solution As LPPSolution = lpp.solve(showProgress:=False)
         Dim lppResult As New list
         Dim slack As list = list.empty
+        Dim slack_size = solution.slack.TryCount
 
-        For i As Integer = 0 To solution.slack.Length - 1
+        For i As Integer = 0 To slack_size - 1
             Dim info As New Dictionary(Of String, Object)
             Dim j As Integer = i
 
