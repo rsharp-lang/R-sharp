@@ -53,15 +53,18 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCoreApp
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.LinearProgramming
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
@@ -74,16 +77,16 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Module lpSolve
 
     <ExportAPI("lp.min")>
-    Public Function lpMin(symbol As String, <RLazyExpression> objective As Expression, Optional env As Environment = Nothing) As Object
-        Return lp_objective_func(symbol, OptimizationType.MIN, objective, env)
+    Public Function lpMin(<RLazyExpression> objective As Expression, Optional env As Environment = Nothing) As Object
+        Return lp_objective_func(OptimizationType.MIN, objective, env)
     End Function
 
     <ExportAPI("lp.max")>
-    Public Function lpMax(symbol As String, <RLazyExpression> objective As Expression, Optional env As Environment = Nothing) As Object
-        Return lp_objective_func(symbol, OptimizationType.MAX, objective, env)
+    Public Function lpMax(<RLazyExpression> objective As Expression, Optional env As Environment = Nothing) As Object
+        Return lp_objective_func(OptimizationType.MAX, objective, env)
     End Function
 
-    Private Function lp_objective_func(symbol As String, type As OptimizationType, objective As Expression, env As Environment) As Object
+    Private Function lp_objective_func(type As OptimizationType, objective As Expression, env As Environment) As Object
         Dim allSymbols As Index(Of String) = Nothing
         Dim obj As Double() = Nothing
 
@@ -104,7 +107,6 @@ Module lpSolve
         End If
 
         Return New lp_objective With {
-            .symbol = symbol,
             .factors = obj,
             .symbols = If(allSymbols Is Nothing, Nothing, allSymbols.Objects),
             .type = type
@@ -113,79 +115,132 @@ Module lpSolve
 
     <ExportAPI("subject_to")>
     Public Function subject_to(<RRawVectorArgument, RLazyExpression, RListObjectArgument> subject As list, Optional env As Environment = Nothing) As Object
+        Dim subjects As BinaryExpression() = subject.data.Select(Function(e) DirectCast(e, BinaryExpression)).ToArray
+        Dim allSymbols As Index(Of String) = subjects.Select(Function(b) b.left.GetSymbols).IteratesALL.Indexing
+        Dim matrix As Double()() = subjects _
+            .Select(Function(b) b.left _
+            .GetVector(allSymbols, env) _
+            .alignVector(allSymbols)) _
+            .ToArray
+        Dim c As Double() = subjects.Select(Function(b) CLRVector.asNumeric(b.right.Evaluate(env))(0)).ToArray
+        Dim op As String() = subjects.Select(Function(b) b.operator).ToArray
 
+        Return New lp_subject With {
+            .constraints = c,
+            .types = op,
+            .matrix = matrix,
+            .symbols = allSymbols.Objects
+        }
     End Function
 
     Private Class lp_objective
 
-        Public symbol As String
         Public type As OptimizationType
         Public symbols As String()
         Public factors As Double()
 
     End Class
 
+    Private Class lp_subject
+
+        Public symbols As String()
+        Public matrix As Double()()
+        Public constraints As Double()
+        Public types As String()
+
+        Public Iterator Function alignMatrix(obj As String()) As IEnumerable(Of Double())
+            Dim cols As Index(Of String) = symbols
+
+            For Each row As Double() In matrix
+                Yield obj.Select(Function(name) row(cols(name))).ToArray
+            Next
+        End Function
+
+    End Class
+
     ''' <summary>
     ''' Linear and Integer Programming
     ''' </summary>
-    ''' <param name="direction">Character string giving direction of optimization: "min" (default) or "max."</param>
+    ''' <param name="type">Character string giving direction of optimization: "min" (default) or "max."</param>
     ''' <param name="objective"></param>
     ''' <param name="subjective"></param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("lp")>
-    Public Function lp(objective As Expression,
+    Public Function lp(<RLazyExpression> objective As Expression,
+                       <RLazyExpression, RRawVectorArgument>
                        subjective As Expression(),
-                       Optional direction As OptimizationType = OptimizationType.MIN,
+                       Optional type As OptimizationType? = Nothing,
                        Optional env As Environment = Nothing) As Object
 
-        If subjective.Length = 1 AndAlso TypeOf subjective(Scan0) Is VectorLiteral Then
-            subjective = DirectCast(subjective(Scan0), VectorLiteral).ToArray
+        Dim lp_subj As lp_subject = Nothing
+        Dim lp_obj As lp_objective = Nothing
+
+        If subjective.Length = 1 Then
+            If TypeOf subjective(Scan0) Is VectorLiteral Then
+                ' is a vector of raw expression
+                subjective = DirectCast(subjective(Scan0), VectorLiteral).ToArray
+            Else
+                lp_subj = subjective(Scan0).Evaluate(env)
+            End If
         End If
 
-        Dim allSymbols As Index(Of String) = objective.GetSymbols.Indexing
-        Dim obj As Double() = objective _
-            .GetVector(allSymbols, env) _
-            .alignVector(allSymbols)
-        Dim sbjMatrix As Double()() = subjective _
-            .Select(Function(exp)
-                        Dim target As Expression
+        Dim allSymbols As Index(Of String) = Nothing
+        Dim obj As Double() = Nothing
 
-                        If TypeOf exp Is ValueAssignExpression Then
-                            target = DirectCast(exp, ValueAssignExpression).targetSymbols(Scan0)
-                        Else
-                            target = DirectCast(exp, BinaryExpression).left
-                        End If
+        If TypeOf objective Is BinaryExpression Then
+            allSymbols = objective.GetSymbols.Indexing
+            obj = objective _
+                .GetVector(allSymbols, env) _
+                .alignVector(allSymbols)
+        Else
+            Dim [object] As Object = objective.Evaluate(env)
 
-                        Return target _
-                            .GetVector(allSymbols, env) _
-                            .alignVector(allSymbols)
-                    End Function) _
-            .ToArray
-        Dim types As String() = subjective _
-            .Select(Function(exp)
-                        If TypeOf exp Is ValueAssignExpression Then
-                            Return "="
-                        Else
-                            Return DirectCast(exp, BinaryExpression).operator
-                        End If
-                    End Function) _
-            .ToArray
-        Dim rightHands As Double() = subjective _
-            .Select(Function(exp)
-                        Dim value As Expression
+            If TypeOf [object] Is lp_objective Then
+                lp_obj = [object]
+            ElseIf DataFramework.IsNumericCollection([object].GetType) Then
+                lp_obj = New lp_objective With {
+                    .factors = CLRVector.asNumeric([object])
+                }
+            Else
+                Return Message.InCompatibleType(GetType(lp_objective), [object].GetType, env)
+            End If
+        End If
 
-                        If TypeOf exp Is ValueAssignExpression Then
-                            value = DirectCast(exp, ValueAssignExpression).value
-                        Else
-                            value = DirectCast(exp, BinaryExpression).right
-                        End If
+        If Not lp_obj Is Nothing Then
+            obj = lp_obj.factors
+            allSymbols = lp_obj.symbols
 
-                        Return CDbl(value.Evaluate(env))
-                    End Function) _
-            .ToArray
+            If type Is Nothing Then
+                type = lp_obj.type
+            End If
+        End If
+
+        Dim sbjMatrix As Double()()
+        Dim types As String()
+        Dim rightHands As Double()
+
+        If lp_subj Is Nothing AndAlso lp_obj Is Nothing Then
+            sbjMatrix = subjective.subjectiveMatrix(allSymbols, env).ToArray
+            types = subjective.op.ToArray
+            rightHands = subjective.constraintBoundaries(env).ToArray
+        ElseIf lp_subj IsNot Nothing AndAlso lp_obj IsNot Nothing Then
+            allSymbols = lp_obj.symbols
+            obj = lp_obj.factors
+
+            If type Is Nothing Then
+                type = lp_obj.type
+            End If
+
+            sbjMatrix = lp_subj.alignMatrix(allSymbols.Objects).ToArray
+            types = lp_subj.types
+            rightHands = lp_subj.constraints
+        Else
+            Throw New NotImplementedException
+        End If
+
         Dim lpp As New LPP(
-            objectiveFunctionType:=direction.Description,
+            objectiveFunctionType:=CType(type, OptimizationType).Description,
             variableNames:=allSymbols.Objects,
             objectiveFunctionCoefficients:=obj,
             constraintCoefficients:=sbjMatrix,
@@ -195,35 +250,78 @@ Module lpSolve
         )
         Dim solution As LPPSolution = lpp.solve(showProgress:=False)
         Dim lppResult As New list
+        Dim slack As list = list.empty
 
-        lppResult.add("feasible", solution.failureMessage.StringEmpty)
-        lppResult.add("solution", allSymbols.Objects.ToDictionary(Function(name) name, Function(name) solution.GetSolution(name)))
-        lppResult.add("objective", solution.ObjectiveFunctionValue)
-        lppResult.add("slack", solution.slack _
-                      .Select(Function(x, i) (x, i)) _
-                      .ToDictionary(Function(j) j.i,
-                                    Function(i)
-                                        Dim info As New Dictionary(Of String, Object)
-                                        Dim j As Integer = i.i
+        For i As Integer = 0 To solution.slack.Length - 1
+            Dim info As New Dictionary(Of String, Object)
+            Dim j As Integer = i
 
-                                        info.Add("slack", solution.slack(j))
+            Call info.Add("slack", solution.slack(j))
 
-                                        If solution.slack(j) = 0.0 Then
-                                            info.Add("binding", True)
-                                            info.Add("shadowPrice", solution.shadowPrice(j))
-                                        ElseIf solution.slack(j) > 0 Then
-                                            info.Add("shadowPrice", Double.NaN)
-                                            info.Add("binding", False)
-                                        Else
-                                            info.Add("shadowPrice", Double.NaN)
-                                            info.Add("binding", False)
-                                        End If
+            If solution.slack(j) = 0.0 Then
+                info.Add("binding", True)
+                info.Add("shadowPrice", solution.shadowPrice(j))
+            ElseIf solution.slack(j) > 0 Then
+                info.Add("shadowPrice", Double.NaN)
+                info.Add("binding", False)
+            Else
+                info.Add("shadowPrice", Double.NaN)
+                info.Add("binding", False)
+            End If
 
-                                        Return info
-                                    End Function))
-        lppResult.add("reduced_cost", solution.GetReducedCost)
+            Call slack.add($"#{i + 1}", info)
+        Next
+
+        Call lppResult.add("feasible", solution.failureMessage.StringEmpty)
+        Call lppResult.add("solution", allSymbols.Objects.ToDictionary(Function(name) name, Function(name) solution.GetSolution(name)))
+        Call lppResult.add("objective", solution.ObjectiveFunctionValue)
+        Call lppResult.add("slack", slack)
+        Call lppResult.add("reduced_cost", solution.GetReducedCost)
 
         Return lppResult
+    End Function
+
+    <Extension>
+    Private Iterator Function constraintBoundaries(subjective As Expression(), env As Environment) As IEnumerable(Of Double)
+        For Each exp As Expression In subjective
+            Dim value As Expression
+
+            If TypeOf exp Is ValueAssignExpression Then
+                value = DirectCast(exp, ValueAssignExpression).value
+            Else
+                value = DirectCast(exp, BinaryExpression).right
+            End If
+
+            Yield CDbl(value.Evaluate(env))
+        Next
+    End Function
+
+    <Extension>
+    Private Iterator Function op(subjective As Expression()) As IEnumerable(Of String)
+        For Each exp As Expression In subjective
+            If TypeOf exp Is ValueAssignExpression Then
+                Yield "="
+            Else
+                Yield DirectCast(exp, BinaryExpression).operator
+            End If
+        Next
+    End Function
+
+    <Extension>
+    Private Iterator Function subjectiveMatrix(subjective As Expression(), allSymbols As Index(Of String), env As Environment) As IEnumerable(Of Double())
+        For Each exp As Expression In subjective
+            Dim target As Expression
+
+            If TypeOf exp Is ValueAssignExpression Then
+                target = DirectCast(exp, ValueAssignExpression).targetSymbols(Scan0)
+            Else
+                target = DirectCast(exp, BinaryExpression).left
+            End If
+
+            Yield target _
+                .GetVector(allSymbols, env) _
+                .alignVector(allSymbols)
+        Next
     End Function
 
     <Extension>
