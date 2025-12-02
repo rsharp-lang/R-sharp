@@ -22,7 +22,7 @@ set.seed(123)
 
 # 定义问题的规模
 num_vars <- 1000          # 决策变量的数量
-num_constraints <- 3      # 约束条件的数量
+num_constraints <- 100      # 约束条件的数量
 
 # 第3步: 随机生成线性规划问题的数据
 
@@ -59,6 +59,9 @@ obj_terms <- paste0(sprintf("%.2f", objective_coeffs[1:3]), "*x", 1:3, collapse 
 obj_last_term <- paste0(sprintf("%.2f", objective_coeffs[num_vars]), "*x", num_vars)
 objective_string <- paste0("最大化 Z = ", obj_terms, " + ... + ", obj_last_term)
 
+std_out = paste0(sprintf("%.2f", objective_coeffs), "*x", 1:length(objective_coeffs), collapse = " + ");
+std_out = c(std_out,"\n");
+
 cat("目标函数:\n")
 cat(objective_string, "\n\n")
 
@@ -70,6 +73,8 @@ for (i in 1:num_constraints) {
   # 同样，只打印前3项和最后一项
   terms_i <- paste0(sprintf("%.2f", coeffs_i[1:3]), "*x", 1:3, collapse = " + ")
   last_term_i <- paste0(sprintf("%.2f", coeffs_i[num_vars]), "*x", num_vars)
+  
+  std_out = c(std_out, sprintf("%s <= %s,",  paste0(sprintf("%.2f", coeffs_i), "*x", 1:length(coeffs_i), collapse = " + "),constraint_rhs[i]  ) );
   
   constraint_string_i <- paste0("约束", i, ": ", terms_i, " + ... + ", last_term_i, " ", constraint_dir[i], " ", sprintf("%.2f", constraint_rhs[i]))
   constraint_strings <- c(constraint_strings, constraint_string_i)
@@ -113,7 +118,7 @@ if (lp_result$status == 0) {
   if (non_zero_vars > 0) {
     non_zero_indices <- which(solution_vector > 1e-9)
     cat("\n前10个非零变量的值:\n")
-    top_indices <- head(non_zero_indices, 10)
+    top_indices <- non_zero_indices; # head(non_zero_indices, 10)
     for (idx in top_indices) {
       cat(sprintf("  x%-4d = %.4f\n", idx, solution_vector[idx]))
     }
@@ -123,5 +128,7 @@ if (lp_result$status == 0) {
   cat("求解状态: 未找到最优解 (状态码: ", lp_result$status, ")\n")
   cat("这可能意味着问题是不可行的或无界的。\n")
 }
+
+writeLines(std_out, con = "large_lpp.txt");
 
 cat("\n--- 脚本结束 ---\n")
