@@ -1,6 +1,6 @@
 imports "lpSolve" from "Rlapack";
 
-let obj = lpSolve::lp.max("z", 15*x1 + 19*x2 + 14*x3 + 3*x4 + 10*x5 + 18*x6 + 11*x7 + 5*x8 + 20*x9 + 14*x10);
+let obj = lpSolve::lp.max(15*x1 + 19*x2 + 14*x3 + 3*x4 + 10*x5 + 18*x6 + 11*x7 + 5*x8 + 20*x9 + 14*x10);
 let subj_to = lpSolve::subject_to(
     6*x1 + 3*x2 + 3*x3 + 10*x4 + 1*x5 + 7*x6 + 7*x7 + 6*x8 + 8*x9 + 9*x10 <= 100,
     9*x1 + 9*x2 + 8*x3 + 9*x4 + 7*x5 + 9*x6 + 5*x7 + 9*x8 + 2*x9 + 6*x10 <= 150,

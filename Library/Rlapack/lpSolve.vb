@@ -169,20 +169,24 @@ Module lpSolve
     <ExportAPI("lp")>
     Public Function lp(<RLazyExpression> objective As Expression,
                        <RLazyExpression, RRawVectorArgument>
-                       subjective As Expression(),
+                       subjective As Expression,
                        Optional type As OptimizationType? = Nothing,
                        Optional env As Environment = Nothing) As Object
 
         Dim lp_subj As lp_subject = Nothing
         Dim lp_obj As lp_objective = Nothing
+        Dim subjects As Expression()
 
-        If subjective.Length = 1 Then
-            If TypeOf subjective(Scan0) Is VectorLiteral Then
-                ' is a vector of raw expression
-                subjective = DirectCast(subjective(Scan0), VectorLiteral).ToArray
-            Else
-                lp_subj = subjective(Scan0).Evaluate(env)
-            End If
+        If TypeOf subjective Is SymbolReference Then
+            subjects = subjective.Evaluate(env)
+        ElseIf TypeOf subjective Is VectorLiteral Then
+            subjects = subjective.Evaluate(env)
+        Else
+            Throw New NotImplementedException
+        End If
+
+        If subjects.Length = 1 Then
+            lp_subj = subjects(Scan0).Evaluate(env)
         End If
 
         Dim allSymbols As Index(Of String) = Nothing
@@ -221,9 +225,9 @@ Module lpSolve
         Dim rightHands As Double()
 
         If lp_subj Is Nothing AndAlso lp_obj Is Nothing Then
-            sbjMatrix = subjective.subjectiveMatrix(allSymbols, env).ToArray
-            types = subjective.op.ToArray
-            rightHands = subjective.constraintBoundaries(env).ToArray
+            sbjMatrix = subjects.subjectiveMatrix(allSymbols, env).ToArray
+            types = subjects.op.ToArray
+            rightHands = subjects.constraintBoundaries(env).ToArray
         ElseIf lp_subj IsNot Nothing AndAlso lp_obj IsNot Nothing Then
             allSymbols = lp_obj.symbols
             obj = lp_obj.factors
