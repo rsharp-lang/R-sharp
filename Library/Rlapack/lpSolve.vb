@@ -1,58 +1,59 @@
 ﻿#Region "Microsoft.VisualBasic::33d5039224eb1452a7fae060225e21b0, Library\Rlapack\lpSolve.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 218
-    '    Code Lines: 175 (80.28%)
-    ' Comment Lines: 16 (7.34%)
-    '    - Xml Docs: 93.75%
-    ' 
-    '   Blank Lines: 27 (12.39%)
-    '     File Size: 9.24 KB
+' Summaries:
 
 
-    ' Module lpSolve
-    ' 
-    '     Function: alignVector, GetSymbols, GetVector, isSimple, linprog
-    '               lp, lpMax, lpMin, solve_LSAP
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 218
+'    Code Lines: 175 (80.28%)
+' Comment Lines: 16 (7.34%)
+'    - Xml Docs: 93.75%
+' 
+'   Blank Lines: 27 (12.39%)
+'     File Size: 9.24 KB
+
+
+' Module lpSolve
+' 
+'     Function: alignVector, GetSymbols, GetVector, isSimple, linprog
+'               lp, lpMax, lpMin, solve_LSAP
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Development.NetCoreApp
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -162,10 +163,14 @@ Module lpSolve
     ''' Linear and Integer Programming
     ''' </summary>
     ''' <param name="type">Character string giving direction of optimization: "min" (default) or "max."</param>
-    ''' <param name="objective"></param>
-    ''' <param name="subjective"></param>
+    ''' <param name="objective">the objective function, for apply of the optimization analysis of this function min value or max value</param>
+    ''' <param name="subjective">the subjective matrix</param>
     ''' <param name="env"></param>
-    ''' <returns></returns>
+    ''' <returns>the lpp solution, is a tuple list that contains the data fields:
+    ''' 
+    ''' objective - the objective function value
+    ''' solution - a list of the variable value for make the solution
+    ''' </returns>
     <ExportAPI("lp")>
     Public Function lp(<RLazyExpression> objective As Expression,
                        <RLazyExpression, RRawVectorArgument>
@@ -188,7 +193,7 @@ Module lpSolve
         ElseIf TypeOf subjective Is VectorLiteral Then
             subjects = subjective.Evaluate(env)
         Else
-            Throw New NotImplementedException
+            Return RInternal.debug.stop("invalid subjective matrix!", env)
         End If
 
         If subjects.TryCount = 1 Then
@@ -245,7 +250,9 @@ Module lpSolve
             sbjMatrix = lp_subj.alignMatrix(allSymbols.Objects).ToArray
             types = lp_subj.types
             rightHands = lp_subj.constraints
-        Else
+        ElseIf lp_subj Is Nothing AndAlso lp_obj IsNot Nothing Then
+            Throw New NotImplementedException
+        ElseIf lp_subj IsNot Nothing AndAlso lp_obj Is Nothing Then
             Throw New NotImplementedException
         End If
 
@@ -281,6 +288,10 @@ Module lpSolve
 
             Call slack.add($"#{i + 1}", info)
         Next
+
+        If Not solution.failureMessage.StringEmpty(, True) Then
+            Call env.AddMessage(solution.failureMessage, MSG_TYPES.WRN)
+        End If
 
         Call lppResult.add("feasible", solution.failureMessage.StringEmpty)
         Call lppResult.add("solution", New list(allSymbols.Objects _
