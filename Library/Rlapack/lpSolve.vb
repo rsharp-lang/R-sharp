@@ -251,9 +251,37 @@ Module lpSolve
             types = lp_subj.types
             rightHands = lp_subj.constraints
         ElseIf lp_subj Is Nothing AndAlso lp_obj IsNot Nothing Then
-            Throw New NotImplementedException
+            ' 情况3: 约束条件数据为空，但目标函数数据不为空
+            ' 使用lp_obj的目标函数数据，从subjects表达式数组构建约束条件
+            obj = lp_obj.factors
+            allSymbols = lp_obj.symbols
+
+            If type Is Nothing Then
+                type = lp_obj.type
+            End If
+
+            ' 从subjects构建约束矩阵，类似第一个分支的逻辑
+            If subjects IsNot Nothing Then
+                sbjMatrix = subjects.subjectiveMatrix(allSymbols, env).ToArray
+                types = subjects.op.ToArray
+                rightHands = subjects.constraintBoundaries(env).ToArray
+            Else
+                Return RInternal.debug.stop("Constraint data is missing! Please provide a valid constraint expression.", env)
+            End If
         ElseIf lp_subj IsNot Nothing AndAlso lp_obj Is Nothing Then
-            Throw New NotImplementedException
+            ' 情况4: 目标函数数据为空，但约束条件数据不为空
+            ' 检查是否已通过二元表达式解析设置了obj和allSymbols
+            If obj Is Nothing OrElse allSymbols Is Nothing Then
+                Return RInternal.debug.stop("Objective function data is missing! Please provide a valid objective function expression.", env)
+            End If
+
+            ' 使用已设置的obj和allSymbols，结合lp_subj的约束数据
+            sbjMatrix = lp_subj.alignMatrix(allSymbols.Objects).ToArray
+            types = lp_subj.types
+            rightHands = lp_subj.constraints
+        Else
+            ' 错误处理：缺少构建约束的必要数据
+            Return RInternal.debug.stop("Constraint data is missing! Please provide a valid constraint expression or an lp_subject object.", env)
         End If
 
         Dim lpp As New LPP(
