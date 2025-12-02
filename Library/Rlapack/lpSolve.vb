@@ -175,17 +175,23 @@ Module lpSolve
 
         Dim lp_subj As lp_subject = Nothing
         Dim lp_obj As lp_objective = Nothing
-        Dim subjects As Expression()
+        Dim subjects As Expression() = Nothing
 
         If TypeOf subjective Is SymbolReference Then
-            subjects = subjective.Evaluate(env)
+            Dim val = subjective.Evaluate(env)
+
+            If TypeOf val Is lp_subject Then
+                lp_subj = val
+            Else
+                subjects = val
+            End If
         ElseIf TypeOf subjective Is VectorLiteral Then
             subjects = subjective.Evaluate(env)
         Else
             Throw New NotImplementedException
         End If
 
-        If subjects.Length = 1 Then
+        If subjects.TryCount = 1 Then
             lp_subj = subjects(Scan0).Evaluate(env)
         End If
 
@@ -277,7 +283,11 @@ Module lpSolve
         Next
 
         Call lppResult.add("feasible", solution.failureMessage.StringEmpty)
-        Call lppResult.add("solution", allSymbols.Objects.ToDictionary(Function(name) name, Function(name) solution.GetSolution(name)))
+        Call lppResult.add("solution", New list(allSymbols.Objects _
+             .ToDictionary(Function(name) name,
+                           Function(name)
+                               Return solution.GetSolution(name)
+                           End Function)))
         Call lppResult.add("objective", solution.ObjectiveFunctionValue)
         Call lppResult.add("slack", slack)
         Call lppResult.add("reduced_cost", solution.GetReducedCost)
