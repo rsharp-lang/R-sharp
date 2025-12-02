@@ -89,6 +89,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 
     End Interface
 
+    ''' <summary>
+    ''' a basic binary expression, example as math expression
+    ''' </summary>
     Public Class BinaryExpression : Inherits Expression
         Implements IBinaryExpression
 

@@ -54,6 +54,9 @@
 
 Namespace Runtime.Interop
 
+    ''' <summary>
+    ''' Tells the script host: dot not evaluate this parameter its source expression, it should pass the raw expression object to this parameter
+    ''' </summary>
     <AttributeUsage(AttributeTargets.Parameter, AllowMultiple:=False, Inherited:=True)>
     Public Class RLazyExpressionAttribute : Inherits RInteropAttribute
 

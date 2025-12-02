@@ -63,6 +63,9 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' Solve Linear/Integer Programs 
@@ -71,14 +74,56 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Module lpSolve
 
     <ExportAPI("lp.min")>
-    Public Function lpMin(objective As Expression, subjective As Expression(), Optional env As Environment = Nothing) As Object
-        Return lp(objective, subjective, OptimizationType.MIN, env)
+    Public Function lpMin(symbol As String, <RLazyExpression> objective As Expression, Optional env As Environment = Nothing) As Object
+        Return lp_objective_func(symbol, OptimizationType.MIN, objective, env)
     End Function
 
     <ExportAPI("lp.max")>
-    Public Function lpMax(objective As Expression, subjective As Expression(), Optional env As Environment = Nothing) As Object
-        Return lp(objective, subjective, OptimizationType.MAX, env)
+    Public Function lpMax(symbol As String, <RLazyExpression> objective As Expression, Optional env As Environment = Nothing) As Object
+        Return lp_objective_func(symbol, OptimizationType.MAX, objective, env)
     End Function
+
+    Private Function lp_objective_func(symbol As String, type As OptimizationType, objective As Expression, env As Environment) As Object
+        Dim allSymbols As Index(Of String) = Nothing
+        Dim obj As Double() = Nothing
+
+        If TypeOf objective Is BinaryExpression Then
+            ' x1+x2+x3+...
+            allSymbols = objective.GetSymbols.Indexing
+            obj = objective _
+                .GetVector(allSymbols, env) _
+                .alignVector(allSymbols)
+        ElseIf TypeOf objective Is VectorLiteral Then
+            ' [....]
+            allSymbols = Nothing
+            obj = CLRVector.asNumeric(objective.Evaluate(env))
+        End If
+
+        If obj Is Nothing Then
+            Return RInternal.debug.stop("the given objective function should be an binary math expression or a numeric vector!", env)
+        End If
+
+        Return New lp_objective With {
+            .symbol = symbol,
+            .factors = obj,
+            .symbols = If(allSymbols Is Nothing, Nothing, allSymbols.Objects),
+            .type = type
+        }
+    End Function
+
+    <ExportAPI("subject_to")>
+    Public Function subject_to(<RRawVectorArgument, RLazyExpression, RListObjectArgument> subject As list, Optional env As Environment = Nothing) As Object
+
+    End Function
+
+    Private Class lp_objective
+
+        Public symbol As String
+        Public type As OptimizationType
+        Public symbols As String()
+        Public factors As Double()
+
+    End Class
 
     ''' <summary>
     ''' Linear and Integer Programming
