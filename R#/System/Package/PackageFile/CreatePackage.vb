@@ -145,10 +145,16 @@ Namespace Development.Package.File
                 ' may contains some native library
                 ' so we list all possible dll files 
                 ' in all sub-directory
+                '
+                ' library  runtime platform
+                ' -------  ----------------
+                '   *.dll  native runtime files for windows
+                '    *.so  native runtime files for linux
+                ' *.dylib  native runtime files for macosx
+                '
                 Return New AssemblyPack With {
-                    .assembly = framework _
-                        .Value _
-                        .ListFiles("*.dll") _
+                    .assembly = framework.Value _
+                        .ListFiles("*.dll", "*.so", "*.dylib") _
                         .filter(assemblyFilters) _
                         .ToArray,
                     .directory = CStr(framework).GetDirectoryFullPath,
