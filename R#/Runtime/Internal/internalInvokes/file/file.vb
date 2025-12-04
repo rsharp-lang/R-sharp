@@ -1453,14 +1453,7 @@ Namespace Runtime.Internal.Invokes
             If open = FileMode.Open Then
                 If description.FileExists(True) Then
                     Using file As Stream = description.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
-                        Dim gz As New GZipStream(file, mode:=CompressionMode.Decompress)
-                        Dim data As New MemoryStream
-
-                        Call gz.CopyTo(data)
-                        Call data.Flush()
-                        Call data.Seek(Scan0, SeekOrigin.Begin)
-
-                        Return data
+                        Return file.UnGzipStream
                     End Using
                 Else
                     Return Internal.debug.stop($"the given gzip file('{description}') is not existsed or zero byte size on your filesystem!", env)
