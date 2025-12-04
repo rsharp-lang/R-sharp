@@ -70,6 +70,17 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Object
 
+    Public Class CLRIterator : Inherits pipeline
+
+        Public Sub New(input As IEnumerable, type As Type)
+            MyBase.New(input, type)
+        End Sub
+
+        Public Overrides Function populates(Of T)(env As Environment) As IEnumerable(Of T)
+            Return DirectCast(pipeline, IEnumerable(Of T))
+        End Function
+    End Class
+
     ''' <summary>
     ''' The R# data pipeline
     ''' 
@@ -174,7 +185,7 @@ Namespace Runtime.Internal.Object
         ''' <typeparam name="T">the .net clr generic type constraint</typeparam>
         ''' <param name="env"></param>
         ''' <returns>direct cast</returns>
-        Public Iterator Function populates(Of T)(env As Environment) As IEnumerable(Of T)
+        Public Overridable Iterator Function populates(Of T)(env As Environment) As IEnumerable(Of T)
             Dim cast As T
             Dim objWrapper As Boolean = GetType(T) Is GetType(vbObject)
 
@@ -226,7 +237,7 @@ Namespace Runtime.Internal.Object
         End Function
 
         ''' <summary>
-        ''' Create pipeline object from the given upstream data
+        ''' Create CLR object iterator from the given upstream data
         ''' </summary>
         ''' <typeparam name="T"></typeparam>
         ''' <param name="upstream">the upstream data</param>
@@ -238,11 +249,18 @@ Namespace Runtime.Internal.Object
         ''' </remarks>
         <DebuggerStepThrough>
         Public Shared Function CreateFromPopulator(Of T)(upstream As IEnumerable(Of T), Optional finalize As Action = Nothing) As pipeline
-            Return New pipeline(upstream, GetType(T)) With {
+            Return New CLRIterator(upstream, GetType(T)) With {
                 .pipeFinalize = finalize
             }
         End Function
 
+        ''' <summary>
+        ''' Create CLR object iterator from the given upstream data
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="pull"></param>
+        ''' <param name="finalize"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Shared Function CreateFromPopulator(Of T)(pull As Func(Of IEnumerable(Of T)), Optional finalize As Action = Nothing) As pipeline
             Return CreateFromPopulator(pull(), finalize)
