@@ -22,7 +22,8 @@ Module RPackage
     <Extension>
     Public Function Compile(meta As DESCRIPTION, src As String, save As String,
                             Optional skipSourceBuild As Boolean = True,
-                            Optional r_syntax As String = "../../_assets/R_syntax.js") As Integer
+                            Optional r_syntax As String = "../../_assets/R_syntax.js",
+                            Optional enableDebugSymbols As Boolean = False) As Integer
 
         If meta.isEmpty Then
             Call Console.WriteLine($"Missing 'DESCRIPTION' meta data file at: {src.GetDirectoryFullPath}, check of your commandline input please!")
@@ -42,18 +43,32 @@ Module RPackage
 #End If
 
         Using outputfile As FileStream = save.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
-            Return meta.Compile(src, outputfile)
+            Return meta.Compile(src, outputfile, enableDebugSymbols:=enableDebugSymbols)
         End Using
     End Function
 
+    ''' <summary>
+    ''' compile the source dir as a package file
+    ''' </summary>
+    ''' <param name="meta"></param>
+    ''' <param name="src"></param>
+    ''' <param name="outputFile"></param>
+    ''' <param name="auto_fileclose"></param>
+    ''' <param name="enableDebugSymbols"></param>
+    ''' <returns></returns>
     <Extension>
-    Public Function Compile(meta As DESCRIPTION, src As String, outputFile As Stream, Optional auto_fileclose As Boolean = True) As Integer
+    Public Function Compile(meta As DESCRIPTION, src As String, outputFile As Stream,
+                            Optional auto_fileclose As Boolean = True,
+                            Optional enableDebugSymbols As Boolean = False) As Integer
+
         ' framework dll module ignores
         Dim assemblyFilters As Index(Of String) = {
             "Rscript.exe", "R#.exe", "Rscript.dll", "R#.dll", "REnv.dll", "RData.dll",
             "Microsoft.VisualBasic.Runtime.dll"
         }
-        Dim err As Message = meta.Build(src, outputFile, assemblyFilters, file_close:=auto_fileclose)
+        Dim err As Message = meta.Build(src, outputFile, assemblyFilters,
+                                        file_close:=auto_fileclose,
+                                        enableDebugSymbols:=enableDebugSymbols)
         Dim save_file As String
 
         If TypeOf outputFile Is FileStream Then

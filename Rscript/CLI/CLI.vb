@@ -65,8 +65,8 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 <CLI> Module CLI
 
     <ExportAPI("--build")>
-    <Description("build R# package")>
-    <Usage("--build [/src <folder, default=./> --skip-src-build /save <Rpackage.zip> --github-page <syntax highlight, default=""../../_assets/R_syntax.js"">]")>
+    <Description("build a R# package source dir as package assembly file.")>
+    <Usage("--build [/src <folder, default=./> --skip-src-build /save <Rpackage.zip> --github-page <syntax highlight, default=""../../_assets/R_syntax.js""> --debug-symbols]")>
     <Argument("/src", False, CLITypes.File, PipelineTypes.std_in,
               AcceptTypes:={GetType(String)},
               Description:="A folder path that contains the R source files and meta data files of the target R package, 
@@ -77,8 +77,9 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         Dim save$ = args("/save") Or $"{src}/../{meta.Package}_{meta.Version}.zip"
         Dim skipSourceBuild As Boolean = args("--skip-src-build")
         Dim r_syntax As String = args("--github-page") Or "../../_assets/R_syntax.js"
+        Dim enableDebugSymbols As Boolean = args("--debug-symbols")
 
-        Return meta.Compile(src, save, skipSourceBuild, r_syntax)
+        Return meta.Compile(src, save, skipSourceBuild, r_syntax, enableDebugSymbols:=enableDebugSymbols)
     End Function
 
     <ExportAPI("--check")>

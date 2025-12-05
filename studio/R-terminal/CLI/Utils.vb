@@ -78,7 +78,8 @@ Partial Module CLI
     ''' <param name="args"></param>
     ''' <returns></returns>
     <ExportAPI("--install.source")>
-    <Usage("--install.source <package_source_dir, default='./'>")>
+    <Description("install package from a given R package source folder")>
+    <Usage("--install.source <package_source_dir, default='./'> [--debug-symbols]")>
     Public Function Install_source(args As CommandLine) As Integer
         Dim source_dir As String = args.Parameters _
             .ElementAtOrDefault(0, "./") _
@@ -86,8 +87,11 @@ Partial Module CLI
         Dim src$ = RPackage.sourceHelper(source_dir)
         Dim meta As DESCRIPTION = DESCRIPTION.Parse($"{src}/DESCRIPTION")
         Dim pkg_stream As New MemoryStream
+        Dim enableDebugSymbols As Boolean = args("--debug-symbols")
 
-        If meta.Compile(src, pkg_stream, auto_fileclose:=False) <> 0 Then
+        If meta.Compile(src, pkg_stream,
+                        auto_fileclose:=False,
+                        enableDebugSymbols:=enableDebugSymbols) <> 0 Then
             Return 500
         End If
 

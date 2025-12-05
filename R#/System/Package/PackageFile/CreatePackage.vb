@@ -185,12 +185,16 @@ Namespace Development.Package.File
         ''' the target directory that contains the necessary 
         ''' files for create a R# package file.</param>
         ''' <param name="outfile">the output zip file stream</param>
+        ''' <param name="enableDebugSymbols">
+        ''' enable add debug symbol pdb files into assembly package?
+        ''' </param>
         ''' <returns></returns>
         ''' 
         <Extension>
         Public Function Build(desc As DESCRIPTION, target As String, outfile As Stream,
                               Optional assemblyFilters As Index(Of String) = Nothing,
-                              Optional file_close As Boolean = True) As Message
+                              Optional file_close As Boolean = True,
+                              Optional enableDebugSymbols As Boolean = False) As Message
             ' R build output
             '
             ' * checking for file '../mzkit/DESCRIPTION' ... OK
@@ -204,7 +208,9 @@ Namespace Development.Package.File
             Dim file As New PackageModel With {
                 .info = desc,
                 .symbols = New Dictionary(Of String, Expression),
-                .assembly = getAssemblyList($"{target}/assembly", assemblyFilters),
+                .assembly = getAssemblyList($"{target}/assembly",
+                                            assemblyFilters:=assemblyFilters,
+                                            enableDebugSymbols:=enableDebugSymbols),
                 .pkg_dir = target
             }
             Dim loading As New List(Of Expression)
