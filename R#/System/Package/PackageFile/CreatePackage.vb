@@ -111,7 +111,7 @@ Namespace Development.Package.File
         ''' excludes from the package build 
         ''' </param>
         ''' <returns></returns>
-        Private Function getAssemblyList(dir As String, assemblyFilters As Index(Of String)) As AssemblyPack
+        Private Function getAssemblyList(dir As String, assemblyFilters As Index(Of String), enableDebugSymbols As Boolean) As AssemblyPack
             Dim framework As Value(Of String) = ""
 
             If Not dir.DirectoryExists Then
@@ -152,9 +152,15 @@ Namespace Development.Package.File
                 '    *.so  native runtime files for linux
                 ' *.dylib  native runtime files for macosx
                 '
+                Dim asm_files As String() = {"*.dll", "*.so", "*.dylib"}
+
+                If enableDebugSymbols Then
+                    asm_files = {"*.dll", "*.so", "*.dylib", "*.pdb"}
+                End If
+
                 Return New AssemblyPack With {
                     .assembly = framework.Value _
-                        .ListFiles("*.dll", "*.so", "*.dylib") _
+                        .ListFiles(asm_files) _
                         .filter(assemblyFilters) _
                         .ToArray,
                     .directory = CStr(framework).GetDirectoryFullPath,
