@@ -150,7 +150,7 @@ Namespace Runtime.Vectorization
             Select Case type
                 Case GetType(vector) : Return extractVector(DirectCast(x, vector), elementType)
                 Case GetType(list) : Return extractList(DirectCast(x, list), elementType)
-                Case GetType(pipeline) : Return extractPipeline(DirectCast(x, pipeline), env, elementType)
+                Case GetType(pipeline), GetType(CLRIterator) : Return extractPipeline(DirectCast(x, pipeline), env, elementType)
                 Case GetType(dataframe)
                     elementType = RType.list
                     Return extractDataframe(DirectCast(x, dataframe))
