@@ -1910,6 +1910,14 @@ RE0:
             Dim slot As InvokeParameter
             Dim key As String
             Dim value As Object
+
+            If slots Is Nothing Then
+                Return [Object].list.empty
+            End If
+            If TypeOf slots Is String Then
+                Return [Object].list.scalar(slots)
+            End If
+
             Dim parameters As InvokeParameter() = slots
             Dim uniqKeys As New Dictionary(Of String, Integer)
             ' list.symbol_names = TRUE

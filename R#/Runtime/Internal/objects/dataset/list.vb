@@ -809,8 +809,21 @@ Namespace Runtime.Internal.Object
             Return names.All(AddressOf hasName)
         End Function
 
+        ''' <summary>
+        ''' Create a tuple list object that contains no data.
+        ''' </summary>
+        ''' <returns></returns>
         Public Shared Function empty() As list
             Return New list With {.slots = New Dictionary(Of String, Object)}
+        End Function
+
+        ''' <summary>
+        ''' Create a tuple list object that just contains one scalar value
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <returns></returns>
+        Public Shared Function scalar(x As Object) As list
+            Return New list With {.slots = New Dictionary(Of String, Object) From {{"1", x}}}
         End Function
 
         ''' <summary>
