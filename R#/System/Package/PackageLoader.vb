@@ -88,11 +88,14 @@ Namespace Development.Package
         End Function
 
         ''' <summary>
-        ''' 这个函数会将包信息缓存下来
+        ''' parse the data which is tagged with <see cref="PackageAttribute"/>
         ''' </summary>
         ''' <param name="type"></param>
-        ''' <param name="strict"></param>
+        ''' <param name="strict">this function will wrap a new <see cref="PackageAttribute"/> object with type name as package name if not strict</param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' 这个函数会将包信息缓存下来
+        ''' </remarks>
         <Extension>
         Public Function ParsePackage(type As Type, Optional strict As Boolean = True) As Package
             Static packages As New Dictionary(Of Type, Package)

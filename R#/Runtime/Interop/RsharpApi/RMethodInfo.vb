@@ -111,6 +111,8 @@ Namespace Runtime.Interop
         ''' <returns></returns>
         Public ReadOnly Property invisible As Boolean
 
+        Friend pkgNsCache As String = Nothing
+
         ''' <summary>
         ''' module namespace string that parsed from <see cref="PackageAttribute"/>
         ''' </summary>
@@ -118,7 +120,11 @@ Namespace Runtime.Interop
         Public ReadOnly Property [namespace] As String Implements INamespaceReferenceSymbol.namespace
             <MethodImpl(MethodImplOptions.AggressiveInlining)>
             Get
-                Return GetPackageInfo.namespace
+                If pkgNsCache Is Nothing Then
+                    pkgNsCache = GetPackageInfo.namespace
+                End If
+
+                Return pkgNsCache
             End Get
         End Property
 

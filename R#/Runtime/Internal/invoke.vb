@@ -153,12 +153,16 @@ Namespace Runtime.Internal
         End Sub
 
         Private Shared Sub MakeIndex(baseModule As Type)
+            Dim pkg As Package = baseModule.ParsePackage(strict:=False)
+
             For Each m As RMethodInfo In ImportsPackage _
                .GetAllApi(baseModule, includesInternal:=True) _
                .Select(Function(mi) New RMethodInfo(mi))
 
                 If index.ContainsKey(m.name) Then
                     Throw New DuplicateNameException($"duplicated function with name: '{m.name}'!")
+                Else
+                    m.pkgNsCache = pkg.namespace
                 End If
 
                 Call index.Add(m.name, m)
