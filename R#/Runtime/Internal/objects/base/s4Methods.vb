@@ -13,7 +13,7 @@ Namespace Runtime.Internal.Object.baseOp
 
         <Extension>
         Public Function defineObject(type As S4Object, env As GlobalEnvironment) As Type
-            Dim def As New DynamicType
+            Dim def As New DynamicType(GetType(s4Reflector))
             Dim valueType As Type
 
             For Each slot As KeyValuePair(Of String, String) In type.slots
@@ -29,7 +29,7 @@ Namespace Runtime.Internal.Object.baseOp
                         valueType = env.types(slot.Value).raw
                 End Select
 
-                def.Add(slot.Key, valueType)
+                Call def.Add(slot.Key, valueType)
             Next
 
             Return def.Create(type.class_name, asm_module:="r_sharp_s4object").GeneratedType
