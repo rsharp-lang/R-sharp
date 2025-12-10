@@ -24,6 +24,8 @@ Namespace Runtime.Internal.Object.baseOp
         Friend ReadOnly properties As Dictionary(Of String, PropertyInfo)
         Friend ReadOnly methods As Dictionary(Of String, RMethodInfo)
 
+        Public Property s4class As S4Object
+
         ''' <summary>
         ''' R# type wrapper of the type data for <see cref="target"/>
         ''' </summary>
@@ -168,13 +170,17 @@ Namespace Runtime.Internal.Object.baseOp
         ''' check member exists or not by method <see cref="existsName"/> 
         ''' if the result value is nothing of this function.
         ''' </returns>
+        ''' <remarks>
+        ''' this method is strict in s4object, this function will throw error if not found by name
+        ''' </remarks>
         Public Overridable Function getByName(name As String) As Object Implements RNameIndex.getByName
             If properties.ContainsKey(name) Then
                 Return properties(name).GetValue(Me)
             ElseIf methods.ContainsKey(name) Then
                 Return methods(name)
             Else
-                Return Nothing
+                ' not found by name
+                Throw New MissingMemberException($"A required property/function({name}) could not be found in this s4 class: {s4class}")
             End If
         End Function
 
@@ -212,7 +218,7 @@ Namespace Runtime.Internal.Object.baseOp
                     Return Internal.debug.stop($"Target property '{name}' is not writeable!", envir)
                 End If
             Else
-                Return Internal.debug.stop($"Missing property '{name}'", envir)
+                Return Internal.debug.stop($"Missing property '{name}' inside the s4 class: {s4class}", envir)
             End If
 
             Return value
