@@ -38,6 +38,7 @@ Namespace Runtime.Internal.Object.baseOp
         ''' processing of myself
         ''' </summary>
         Public Sub New()
+            elementType = MakeReflection(Me, properties, methods)
         End Sub
 
         Private Shared Function getObjMethods(raw As Type) As NamedValue(Of MethodInfo)()
