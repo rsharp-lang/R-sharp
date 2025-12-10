@@ -58,25 +58,27 @@ Namespace Runtime.Internal.Object.baseOp
         End Function
 
         <Extension>
-        Public Function createObject(type As S4Object, values As list, env As Environment) As Object
-            Dim obj As Object = Activator.CreateInstance(type.raw)
+        Public Function createObject(s4class As S4Object, values As list, env As Environment) As Object
+            Dim obj As Object = Activator.CreateInstance(s4class.raw)
             Dim val As Object
 
-            For Each slot As KeyValuePair(Of String, String) In type.slots
+            For Each slot As KeyValuePair(Of String, String) In s4class.slots
                 If values.hasName(slot.Key) Then
                     val = values.getByName(slot.Key)
                 Else
                     ' use the default value
-                    If type.prototype.ContainsKey(slot.Key) Then
-                        val = type.prototype(slot.Key)
+                    If s4class.prototype.ContainsKey(slot.Key) Then
+                        val = s4class.prototype(slot.Key)
                     Else
                         Continue For
                     End If
                 End If
 
                 val = s4Methods.conversionValue(val, slot.Value, env)
-                type.reflection(slot.Key).SetValue(obj, val)
+                s4class.reflection(slot.Key).SetValue(obj, val)
             Next
+
+            DirectCast(obj, s4Reflector).s4class = s4class
 
             Return obj
         End Function
