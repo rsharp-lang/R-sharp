@@ -1,56 +1,53 @@
-﻿#Region "Microsoft.VisualBasic::af6e7f3fa8a5a8849976bb1f4f83fbb9, Library\base\utils\console.vb"
+﻿#Region "Microsoft.VisualBasic::ab667fd9708b28ba8c93ac4b92895530, Library\base\utils\console.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 126
-'    Code Lines: 82 (65.08%)
-' Comment Lines: 25 (19.84%)
-'    - Xml Docs: 92.00%
-' 
-'   Blank Lines: 19 (15.08%)
-'     File Size: 4.39 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module console
-' 
-'     Function: ConsoleBackColor, ConsoleForeColor, CreateProgressBar, log, passwordInput
-'               PinProgressBarTop
-' 
-'     Sub: ClearProgressBarPinned
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 97
+    '    Code Lines: 63 (64.95%)
+    ' Comment Lines: 20 (20.62%)
+    '    - Xml Docs: 90.00%
+    ' 
+    '   Blank Lines: 14 (14.43%)
+    '     File Size: 3.40 KB
+
+
+    ' Module console
+    ' 
+    '     Function: ConsoleBackColor, ConsoleForeColor, log, passwordInput
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

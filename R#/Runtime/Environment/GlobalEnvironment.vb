@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6f5092552f110cd25cca21d936b475c5, R#\Runtime\Environment\GlobalEnvironment.vb"
+﻿#Region "Microsoft.VisualBasic::00f43f87e62d3dc69f3567a4cc5c02bd, R#\Runtime\Environment\GlobalEnvironment.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 322
-    '    Code Lines: 202 (62.73%)
-    ' Comment Lines: 75 (23.29%)
-    '    - Xml Docs: 97.33%
+    '   Total Lines: 338
+    '    Code Lines: 205 (60.65%)
+    ' Comment Lines: 87 (25.74%)
+    '    - Xml Docs: 97.70%
     ' 
-    '   Blank Lines: 45 (13.98%)
-    '     File Size: 13.39 KB
+    '   Blank Lines: 46 (13.61%)
+    '     File Size: 14.09 KB
 
 
     '     Class GlobalEnvironment
@@ -51,8 +51,8 @@
     ' 
     '         Constructor: (+2 Overloads) Sub New
     ' 
-    '         Function: [GetType], defaultEmpty, doCall, (+2 Overloads) LoadLibrary, MissingPackage
-    '                   SetDebug
+    '         Function: [GetType], defaultEmpty, doCall, GetResourceFile, (+2 Overloads) LoadLibrary
+    '                   MissingPackage, SetDebug
     ' 
     '         Sub: Dispose, RedirectOutput
     ' 

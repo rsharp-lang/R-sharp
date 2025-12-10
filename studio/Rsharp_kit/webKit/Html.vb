@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6ee699003c3b1c0b05a1ac8d774fb82d, studio\Rsharp_kit\webKit\Html.vb"
+﻿#Region "Microsoft.VisualBasic::3fa24e75f9cd7d012ff7cc5aea59a6dd, studio\Rsharp_kit\webKit\Html.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 236
-    '    Code Lines: 149 (63.14%)
-    ' Comment Lines: 52 (22.03%)
-    '    - Xml Docs: 90.38%
+    '   Total Lines: 282
+    '    Code Lines: 182 (64.54%)
+    ' Comment Lines: 60 (21.28%)
+    '    - Xml Docs: 88.33%
     ' 
-    '   Blank Lines: 35 (14.83%)
-    '     File Size: 8.91 KB
+    '   Blank Lines: 40 (14.18%)
+    '     File Size: 10.89 KB
 
 
     ' Module Html
     ' 
     '     Function: anchor_table, castModel, documentDebugView, getElementById, getElementsByClass
     '               getElementsByTagName, getPlainText, links, parse, QueryHtmlTables
-    '               title, to_html
+    '               title, to_html, TrimWhitespace
     ' 
     '     Sub: Main
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6a351a07c9a0f8f740edbea0f7dadb59, Library\graphics\Plot2D\geometry2D.vb"
+﻿#Region "Microsoft.VisualBasic::49aefaa73186b76f03108d17ca58d3a3, Library\graphics\Plot2D\geometry2D.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 256
-    '    Code Lines: 193 (75.39%)
-    ' Comment Lines: 34 (13.28%)
-    '    - Xml Docs: 97.06%
+    '   Total Lines: 341
+    '    Code Lines: 255 (74.78%)
+    ' Comment Lines: 48 (14.08%)
+    '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 29 (11.33%)
-    '     File Size: 10.92 KB
+    '   Blank Lines: 38 (11.14%)
+    '     File Size: 14.51 KB
 
 
     ' Module geometry2D
     ' 
-    '     Function: ConcaveHull, density2D, fillPolygonGroups, fillPolygons, Kdtest
-    '               transform
+    '     Function: ConcaveHull, createPolygon2D, density2D, fillPolygonGroups, fillPolygons
+    '               geo_transform, Kdtest, Rasterize, rasterTable, transform
     ' 
     '     Sub: Main
     ' 
@@ -54,7 +54,7 @@
     ' 
     '     Function: activate, getByDimension, GetDimensions, metric, nodeIs
     ' 
-    '     Sub: setByDimensin
+    '     Sub: setByDimension
     ' 
     ' /********************************************************************************/
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7fcc9fd24e5bcc2f0e3cb4147ab4a682, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DataFrameSlice.vb"
+﻿#Region "Microsoft.VisualBasic::5a0ae04f583b41301509e737e6d4eff0, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DataFrameSlice.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 51
-    '    Code Lines: 35 (68.63%)
-    ' Comment Lines: 5 (9.80%)
+    '   Total Lines: 52
+    '    Code Lines: 36 (69.23%)
+    ' Comment Lines: 5 (9.62%)
     '    - Xml Docs: 60.00%
     ' 
-    '   Blank Lines: 11 (21.57%)
-    '     File Size: 1.76 KB
+    '   Blank Lines: 11 (21.15%)
+    '     File Size: 1.81 KB
 
 
     '     Class DataFrameSlice

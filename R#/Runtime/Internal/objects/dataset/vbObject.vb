@@ -1,58 +1,58 @@
-﻿#Region "Microsoft.VisualBasic::17dc8e16f6b25a2e3ceebbda7148d495, R#\Runtime\Internal\objects\dataset\vbObject.vb"
+﻿#Region "Microsoft.VisualBasic::3c456c8f5e4cda8be79a19210f43013e, R#\Runtime\Internal\objects\dataset\vbObject.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 269
-'    Code Lines: 196 (72.86%)
-' Comment Lines: 40 (14.87%)
-'    - Xml Docs: 90.00%
-' 
-'   Blank Lines: 33 (12.27%)
-'     File Size: 11.27 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class vbObject
-' 
-'         Properties: target, type
-' 
-'         Constructor: (+2 Overloads) Sub New
-'         Function: [TryCast], CreateInstance, existsName, (+2 Overloads) getByName, getNames
-'                   getObjMethods, getObjProperties, propertyParserInternal, (+2 Overloads) setByName, ToString
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 121
+    '    Code Lines: 83 (68.60%)
+    ' Comment Lines: 24 (19.83%)
+    '    - Xml Docs: 100.00%
+    ' 
+    '   Blank Lines: 14 (11.57%)
+    '     File Size: 4.84 KB
+
+
+    '     Class vbObject
+    ' 
+    '         Properties: target
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: [TryCast], CreateInstance, existsName, getByName, getNames
+    '                   setByName, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

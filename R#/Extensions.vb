@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b9648e84b684ea055eb45527fd749b78, R#\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::8a907971a752892c52d3aac26cbad36c, R#\Extensions.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 356
-    '    Code Lines: 236 (66.29%)
-    ' Comment Lines: 78 (21.91%)
+    '   Total Lines: 357
+    '    Code Lines: 237 (66.39%)
+    ' Comment Lines: 78 (21.85%)
     '    - Xml Docs: 87.18%
     ' 
-    '   Blank Lines: 42 (11.80%)
-    '     File Size: 13.22 KB
+    '   Blank Lines: 42 (11.76%)
+    '     File Size: 13.28 KB
 
 
     ' Module Extensions

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c0064fc9c3f908ccd80a077ff588e83, R#\Language\Syntax\SyntaxImplements\TryCatchSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::98967fc0fde33ce11b12b6ad63d0c116, R#\Language\Syntax\SyntaxImplements\TryCatchSyntax.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 40
-    '    Code Lines: 29 (72.50%)
-    ' Comment Lines: 2 (5.00%)
+    '   Total Lines: 39
+    '    Code Lines: 28 (71.79%)
+    ' Comment Lines: 2 (5.13%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 9 (22.50%)
-    '     File Size: 1.49 KB
+    '   Blank Lines: 9 (23.08%)
+    '     File Size: 1.46 KB
 
 
     '     Module TryCatchSyntax

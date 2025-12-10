@@ -1,56 +1,56 @@
-﻿#Region "Microsoft.VisualBasic::2bff541a1e19f02a99dade06504d5ebd, R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\SymbolDeclare.vb"
+﻿#Region "Microsoft.VisualBasic::18bde80258cf7910fe906e79bb2288bc, R#\Interpreter\ExecuteEngine\Linq\Expression\Expressions\SymbolDeclare.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 94
-'    Code Lines: 69 (73.40%)
-' Comment Lines: 12 (12.77%)
-'    - Xml Docs: 100.00%
-' 
-'   Blank Lines: 13 (13.83%)
-'     File Size: 3.72 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class SymbolDeclare
-' 
-'         Properties: isTuple, keyword, symbol, typeName
-' 
-'         Function: Exec, SetValue, ToString
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 91
+    '    Code Lines: 66 (72.53%)
+    ' Comment Lines: 12 (13.19%)
+    '    - Xml Docs: 100.00%
+    ' 
+    '   Blank Lines: 13 (14.29%)
+    '     File Size: 3.57 KB
+
+
+    '     Class SymbolDeclare
+    ' 
+    '         Properties: isTuple, keyword, symbol, typeName
+    ' 
+    '         Function: Exec, SetValue, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

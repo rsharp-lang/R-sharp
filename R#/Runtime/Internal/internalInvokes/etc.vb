@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::58bd64586caaf0cee3d71a8400251c4e, R#\Runtime\Internal\internalInvokes\etc.vb"
+﻿#Region "Microsoft.VisualBasic::e961ce94cef28ac0c213c3d14afb18f7, R#\Runtime\Internal\internalInvokes\etc.vb"
 
     ' Author:
     ' 
@@ -40,12 +40,12 @@
     '    - Xml Docs: 91.43%
     ' 
     '   Blank Lines: 23 (7.96%)
-    '     File Size: 12.49 KB
+    '     File Size: 12.50 KB
 
 
     '     Module etc
     ' 
-    '         Function: contributors, CultureInfo, getActivators, license, man
+    '         Function: contributors, CultureInfo_ctor, getActivators, license, man
     '                   platformID, RVer, sessionInfo, Sys_getenv, Sys_getlocale
     '                   Sys_info, unixtimestamp
     ' 

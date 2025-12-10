@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5d48cdff75468c9abd2cdc84507e76ee, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\SequenceLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::26e2a0d8e2f42264a8c5993e5e561fe4, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\SequenceLiteral.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 217
-    '    Code Lines: 160 (73.73%)
-    ' Comment Lines: 26 (11.98%)
+    '   Total Lines: 218
+    '    Code Lines: 161 (73.85%)
+    ' Comment Lines: 26 (11.93%)
     '    - Xml Docs: 73.08%
     ' 
-    '   Blank Lines: 31 (14.29%)
-    '     File Size: 7.90 KB
+    '   Blank Lines: 31 (14.22%)
+    '     File Size: 7.95 KB
 
 
     '     Class SequenceLiteral

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::56841419cf2592e3c42f40d0ebd067ac, studio\Rsharp_kit\signalKit\machineVision.vb"
+﻿#Region "Microsoft.VisualBasic::e98ac3ad9e949fec8cef06fa467b1918, studio\Rsharp_kit\signalKit\machineVision.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 86
-    '    Code Lines: 70 (81.40%)
-    ' Comment Lines: 0 (0.00%)
-    '    - Xml Docs: 0.00%
+    '   Total Lines: 121
+    '    Code Lines: 81 (66.94%)
+    ' Comment Lines: 22 (18.18%)
+    '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 16 (18.60%)
-    '     File Size: 3.01 KB
+    '   Blank Lines: 18 (14.88%)
+    '     File Size: 4.54 KB
 
 
     ' Module machineVision
     ' 
-    '     Function: bitmapCommon, ccl, ostuFilter, threshold
+    '     Function: bitmapCommon, ccl, ostuFilter, RANSAC, threshold
     ' 
     ' /********************************************************************************/
 

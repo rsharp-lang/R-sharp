@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::537a591389cf1bbd2ccbd15d568afd57, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\Binary\NullishCoalescing.vb"
+﻿#Region "Microsoft.VisualBasic::ed3a6dea90f903bc4826488adb27341e, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\Binary\NullishCoalescing.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 75
-    '    Code Lines: 40 (53.33%)
-    ' Comment Lines: 26 (34.67%)
+    '   Total Lines: 76
+    '    Code Lines: 41 (53.95%)
+    ' Comment Lines: 26 (34.21%)
     '    - Xml Docs: 73.08%
     ' 
-    '   Blank Lines: 9 (12.00%)
-    '     File Size: 2.91 KB
+    '   Blank Lines: 9 (11.84%)
+    '     File Size: 2.96 KB
 
 
     '     Class NullishCoalescing

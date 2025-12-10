@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2fc4d1fc3160fa68d45d97edf43a3bed, R#\Runtime\System\RsharpDataObject.vb"
+﻿#Region "Microsoft.VisualBasic::44460ad6294b906be2f463c5b0992251, R#\Runtime\System\RsharpDataObject.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 100
-    '    Code Lines: 49 (49.00%)
-    ' Comment Lines: 36 (36.00%)
-    '    - Xml Docs: 100.00%
+    '   Total Lines: 106
+    '    Code Lines: 49 (46.23%)
+    ' Comment Lines: 42 (39.62%)
+    '    - Xml Docs: 95.24%
     ' 
-    '   Blank Lines: 15 (15.00%)
-    '     File Size: 3.52 KB
+    '   Blank Lines: 15 (14.15%)
+    '     File Size: 3.75 KB
 
 
     '     Interface IAttributeReflector

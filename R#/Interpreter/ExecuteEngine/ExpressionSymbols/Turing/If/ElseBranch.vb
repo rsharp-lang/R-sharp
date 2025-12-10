@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f49183f157f115548e1af570c19e8ea3, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\ElseBranch.vb"
+﻿#Region "Microsoft.VisualBasic::1ac82783c8343ef5795a352f00959f1a, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\ElseBranch.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 80
-    '    Code Lines: 65 (81.25%)
+    '   Total Lines: 81
+    '    Code Lines: 66 (81.48%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 15 (18.75%)
-    '     File Size: 2.67 KB
+    '   Blank Lines: 15 (18.52%)
+    '     File Size: 2.72 KB
 
 
     '     Class ElseBranch

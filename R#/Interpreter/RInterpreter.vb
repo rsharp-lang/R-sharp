@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::32d46d80ef8966a36fad11c59ab460e1, R#\Interpreter\RInterpreter.vb"
+﻿#Region "Microsoft.VisualBasic::50d8cde43c40baf1bd174b6234070ae6, R#\Interpreter\RInterpreter.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 728
-    '    Code Lines: 434 (59.62%)
-    ' Comment Lines: 190 (26.10%)
+    '   Total Lines: 733
+    '    Code Lines: 439 (59.89%)
+    ' Comment Lines: 190 (25.92%)
     '    - Xml Docs: 73.68%
     ' 
-    '   Blank Lines: 104 (14.29%)
-    '     File Size: 29.68 KB
+    '   Blank Lines: 104 (14.19%)
+    '     File Size: 30.06 KB
 
 
     '     Class RInterpreter

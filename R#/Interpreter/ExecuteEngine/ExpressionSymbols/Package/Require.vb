@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9aec50ed376aa7b518f883d479f5c733, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb"
+﻿#Region "Microsoft.VisualBasic::15170036a6a2f91bee22588293417d4c, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Require.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 217
-    '    Code Lines: 83 (38.25%)
-    ' Comment Lines: 116 (53.46%)
+    '   Total Lines: 218
+    '    Code Lines: 84 (38.53%)
+    ' Comment Lines: 116 (53.21%)
     '    - Xml Docs: 95.69%
     ' 
-    '   Blank Lines: 18 (8.29%)
-    '     File Size: 10.45 KB
+    '   Blank Lines: 18 (8.26%)
+    '     File Size: 10.50 KB
 
 
     '     Class Require

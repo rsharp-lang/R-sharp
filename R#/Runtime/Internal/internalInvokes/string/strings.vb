@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3b26d75dc48b396fcb33cb8573dd5f11, R#\Runtime\Internal\internalInvokes\string\strings.vb"
+﻿#Region "Microsoft.VisualBasic::0e96eb6b41e336c5a42b0de861a99f03, R#\Runtime\Internal\internalInvokes\string\strings.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 372
-    '    Code Lines: 176 (47.31%)
-    ' Comment Lines: 170 (45.70%)
-    '    - Xml Docs: 94.71%
+    '   Total Lines: 395
+    '    Code Lines: 189 (47.85%)
+    ' Comment Lines: 176 (44.56%)
+    '    - Xml Docs: 94.89%
     ' 
-    '   Blank Lines: 26 (6.99%)
-    '     File Size: 16.87 KB
+    '   Blank Lines: 30 (7.59%)
+    '     File Size: 17.79 KB
 
 
     '     Module strings
     ' 
     '         Function: AscW, endsWith, getBetweenString, GetStackValue, InStr
-    '                   LCaseStrings, ltrim, MidString, rtrim, startsWith
-    '                   textLines, Trim, UCase
+    '                   LCaseStrings, ltrim, makeQGram, MidString, qquery
+    '                   rtrim, startsWith, textLines, Trim, UCase
     ' 
     ' 
     ' /********************************************************************************/

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3997b47a56facf96cf6c168232ac6cbd, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
+﻿#Region "Microsoft.VisualBasic::5a82650f353f196a8a444099977ea07d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Package\Imports.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 82.61%
     ' 
     '   Blank Lines: 48 (12.63%)
-    '     File Size: 16.26 KB
+    '     File Size: 16.27 KB
 
 
     '     Delegate Function

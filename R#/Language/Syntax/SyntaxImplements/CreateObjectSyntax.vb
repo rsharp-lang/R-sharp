@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dcad499a710b75f09f37dae2186fc5aa, R#\Language\Syntax\SyntaxImplements\CreateObjectSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::0ad20a2ae4379b3ad699b45d93d499e4, R#\Language\Syntax\SyntaxImplements\CreateObjectSyntax.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 47
-    '    Code Lines: 39 (82.98%)
-    ' Comment Lines: 0 (0.00%)
+    '   Total Lines: 61
+    '    Code Lines: 46 (75.41%)
+    ' Comment Lines: 5 (8.20%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 8 (17.02%)
-    '     File Size: 1.87 KB
+    '   Blank Lines: 10 (16.39%)
+    '     File Size: 2.52 KB
 
 
     '     Module CreateObjectSyntax
     ' 
-    '         Function: (+2 Overloads) CreateNewObject
+    '         Function: (+2 Overloads) CreateNewObject, CreateNewObjectInternal
     ' 
     ' 
     ' /********************************************************************************/

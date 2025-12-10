@@ -1,60 +1,61 @@
-﻿#Region "Microsoft.VisualBasic::7f14b894bf850171d3c2a072093c84d7, R#\System\Document\ShellScript\ShellScript.vb"
+﻿#Region "Microsoft.VisualBasic::3ee838ae1b730c38ec22a4ad355083a7, R#\System\Document\ShellScript\ShellScript.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 481
-'    Code Lines: 373 (77.55%)
-' Comment Lines: 22 (4.57%)
-'    - Xml Docs: 40.91%
-' 
-'   Blank Lines: 86 (17.88%)
-'     File Size: 20.98 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class ShellScript
-' 
-'         Properties: argumentList, message
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: AnalysisAllCommands, GetCommandArgument, loadMetaLines, parseDefault, parseMetaData
-' 
-'         Sub: AddArgumentValue, (+26 Overloads) analysisTree, AnalysisTree, PrintUsage
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 412
+    '    Code Lines: 322 (78.16%)
+    ' Comment Lines: 22 (5.34%)
+    '    - Xml Docs: 40.91%
+    ' 
+    '   Blank Lines: 68 (16.50%)
+    '     File Size: 18.07 KB
+
+
+    '     Class ShellScript
+    ' 
+    '         Properties: argumentList, message
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: AnalysisAllCommands, GetCommandArgument, GetDocument, hasPackageDependency, loadMetaLines
+    '                   parseDefault, parseMetaData
+    ' 
+    '         Sub: AddArgumentValue, (+26 Overloads) analysisTree, AnalysisTree
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

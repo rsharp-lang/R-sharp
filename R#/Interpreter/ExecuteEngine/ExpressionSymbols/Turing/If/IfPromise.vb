@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::847e6cc00732413dc7eee9513641ff0d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IfPromise.vb"
+﻿#Region "Microsoft.VisualBasic::8de2e28bb53feb2b1d8000e05d34d6db, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\If\IfPromise.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 45
-    '    Code Lines: 29 (64.44%)
-    ' Comment Lines: 9 (20.00%)
+    '   Total Lines: 46
+    '    Code Lines: 30 (65.22%)
+    ' Comment Lines: 9 (19.57%)
     '    - Xml Docs: 77.78%
     ' 
-    '   Blank Lines: 7 (15.56%)
-    '     File Size: 1.67 KB
+    '   Blank Lines: 7 (15.22%)
+    '     File Size: 1.73 KB
 
 
     '     Class IfPromise

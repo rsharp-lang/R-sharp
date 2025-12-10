@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d4eb18a45c42cca2d4a93d2c710e0686, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Type\TypeOfCheck.vb"
+﻿#Region "Microsoft.VisualBasic::238fc6228066ef9564239405020aca81, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Type\TypeOfCheck.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 88
-    '    Code Lines: 55 (62.50%)
-    ' Comment Lines: 18 (20.45%)
+    '   Total Lines: 89
+    '    Code Lines: 56 (62.92%)
+    ' Comment Lines: 18 (20.22%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 15 (17.05%)
-    '     File Size: 3.15 KB
+    '   Blank Lines: 15 (16.85%)
+    '     File Size: 3.21 KB
 
 
     '     Class TypeOfCheck

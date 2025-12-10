@@ -1,60 +1,60 @@
-﻿#Region "Microsoft.VisualBasic::d150ed543e5cc109bf04ca94a554dbb7, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::c409bfa576ca04cb987a6aad6fe104e1, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 851
-'    Code Lines: 628 (73.80%)
-' Comment Lines: 120 (14.10%)
-'    - Xml Docs: 45.83%
-' 
-'   Blank Lines: 103 (12.10%)
-'     File Size: 37.02 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class SymbolIndexer
-' 
-'         Properties: expressionName, type
-' 
-'         Constructor: (+2 Overloads) Sub New
-'         Function: CheckRemoves, doListSubset, emptyIndexError, Evaluate, getByIndex
-'                   getByName, getBySymbolIndex, getColumn, getDataframeRowRange, getIndex
-'                   getOptions, groupSubset, listSubset, streamView, takeColumnVector
-'                   ToString, translateInteger2keys, translateLogical2keys, vectorSubset
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 852
+    '    Code Lines: 629 (73.83%)
+    ' Comment Lines: 120 (14.08%)
+    '    - Xml Docs: 45.83%
+    ' 
+    '   Blank Lines: 103 (12.09%)
+    '     File Size: 37.09 KB
+
+
+    '     Class SymbolIndexer
+    ' 
+    '         Properties: expressionName, type
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: CheckRemoves, doListSubset, emptyIndexError, Evaluate, getByIndex
+    '                   getByName, getBySymbolIndex, getColumn, getDataframeRowRange, getIndex
+    '                   getOptions, groupSubset, listSubset, streamView, takeColumnVector
+    '                   ToString, translateInteger2keys, translateLogical2keys, vectorSubset
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

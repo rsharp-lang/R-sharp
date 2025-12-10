@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::99b4991f75e3b1c11f9f3c661c71a69b, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\SwitchExpression.vb"
+﻿#Region "Microsoft.VisualBasic::d13b64cee1f283342504ecfcdcad515a, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\SwitchExpression.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 58
-    '    Code Lines: 48 (82.76%)
+    '   Total Lines: 59
+    '    Code Lines: 49 (83.05%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 10 (17.24%)
-    '     File Size: 1.97 KB
+    '   Blank Lines: 10 (16.95%)
+    '     File Size: 2.03 KB
 
 
     '     Class SwitchExpression

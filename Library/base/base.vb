@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::52f883eed7091262938ababfe7900e28, Library\base\base.vb"
+﻿#Region "Microsoft.VisualBasic::e58d2219a3f2bbb7a710d923334cd734, Library\base\base.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 162
-    '    Code Lines: 95 (58.64%)
-    ' Comment Lines: 43 (26.54%)
+    '   Total Lines: 177
+    '    Code Lines: 107 (60.45%)
+    ' Comment Lines: 43 (24.29%)
     '    - Xml Docs: 93.02%
     ' 
-    '   Blank Lines: 24 (14.81%)
-    '     File Size: 5.94 KB
+    '   Blank Lines: 27 (15.25%)
+    '     File Size: 6.51 KB
 
 
     ' Module base
     ' 
-    '     Function: impute, loadMsgPack, ParseTtl, readSasXptDataframe, string_motif
+    '     Function: class_labeled, impute, loadMsgPack, ParseTtl, readSasXptDataframe
+    '               string_motif
     ' 
     ' /********************************************************************************/
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ddc8dbc0629ff9ea727bfdbafe55c959, R#\Language\TokenIcer\Scanner.vb"
+﻿#Region "Microsoft.VisualBasic::905c3da8468ae459a90b7b3a18fce3cc, R#\Language\TokenIcer\Scanner.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 56.60%
     ' 
     '   Blank Lines: 75 (12.71%)
-    '     File Size: 25.10 KB
+    '     File Size: 25.14 KB
 
 
     '     Interface IScanner

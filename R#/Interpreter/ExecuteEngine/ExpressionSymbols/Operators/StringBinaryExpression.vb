@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c784ff54f931d4d4f93f0664e69cc3bc, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\StringBinaryExpression.vb"
+﻿#Region "Microsoft.VisualBasic::658fbffa2233cba612bd6251b98650db, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\StringBinaryExpression.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 110
-    '    Code Lines: 72 (65.45%)
-    ' Comment Lines: 21 (19.09%)
+    '   Total Lines: 111
+    '    Code Lines: 73 (65.77%)
+    ' Comment Lines: 21 (18.92%)
     '    - Xml Docs: 90.48%
     ' 
-    '   Blank Lines: 17 (15.45%)
-    '     File Size: 4.53 KB
+    '   Blank Lines: 17 (15.32%)
+    '     File Size: 4.58 KB
 
 
     '     Module StringBinaryExpression

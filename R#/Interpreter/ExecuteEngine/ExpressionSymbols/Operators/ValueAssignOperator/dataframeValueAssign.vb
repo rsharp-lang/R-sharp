@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::78b46258b90ee4ca1e41de816427df50, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\dataframeValueAssign.vb"
+﻿#Region "Microsoft.VisualBasic::40f4e57e9ef4b0f3cb9226f3bd6e98d5, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\ValueAssignOperator\dataframeValueAssign.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 118
-    '    Code Lines: 97 (82.20%)
-    ' Comment Lines: 5 (4.24%)
+    '   Total Lines: 119
+    '    Code Lines: 98 (82.35%)
+    ' Comment Lines: 5 (4.20%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 16 (13.56%)
-    '     File Size: 4.89 KB
+    '   Blank Lines: 16 (13.45%)
+    '     File Size: 4.94 KB
 
 
     '     Module dataframeValueAssign

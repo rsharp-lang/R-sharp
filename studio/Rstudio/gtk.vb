@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::04dd12e76fd9d378dd63e5ce6610d580, studio\Rstudio\gtk.vb"
+﻿#Region "Microsoft.VisualBasic::5e4e71c5c572da207834157eb56d0ec3, studio\Rstudio\gtk.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 93.55%
     ' 
     '   Blank Lines: 8 (6.67%)
-    '     File Size: 4.63 KB
+    '     File Size: 4.65 KB
 
 
     ' Module gtk

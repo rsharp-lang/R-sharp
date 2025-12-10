@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4ad1dc2c5e5bf95b5d417715ad1a73c8, R#\System\Polyglot\RScript.vb"
+﻿#Region "Microsoft.VisualBasic::4ff39e2fe01b39618faab4049ec39e84, R#\System\Polyglot\RScript.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 69
-    '    Code Lines: 54 (78.26%)
-    ' Comment Lines: 5 (7.25%)
+    '   Total Lines: 70
+    '    Code Lines: 55 (78.57%)
+    ' Comment Lines: 5 (7.14%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 10 (14.49%)
-    '     File Size: 2.84 KB
+    '   Blank Lines: 10 (14.29%)
+    '     File Size: 2.90 KB
 
 
     '     Class RScriptLoader

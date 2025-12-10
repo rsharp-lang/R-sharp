@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8d2880dbcdfaba2b64557f73ec49b1c2, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb"
+﻿#Region "Microsoft.VisualBasic::35eb817ae7c24d0c4f4479da3bbab0e4, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\AppendOperator.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 78
-    '    Code Lines: 57 (73.08%)
-    ' Comment Lines: 9 (11.54%)
+    '   Total Lines: 79
+    '    Code Lines: 58 (73.42%)
+    ' Comment Lines: 9 (11.39%)
     '    - Xml Docs: 66.67%
     ' 
-    '   Blank Lines: 12 (15.38%)
-    '     File Size: 2.67 KB
+    '   Blank Lines: 12 (15.19%)
+    '     File Size: 2.73 KB
 
 
     '     Class AppendOperator

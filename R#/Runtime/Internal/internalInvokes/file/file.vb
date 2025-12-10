@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aaf5dc6746eb92965ad03473aff1fe3f, R#\Runtime\Internal\internalInvokes\file.vb"
+﻿#Region "Microsoft.VisualBasic::b2661e588bfdc387ccc4b0203e17997c, R#\Runtime\Internal\internalInvokes\file\file.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 2068
-    '    Code Lines: 1185 (57.30%)
-    ' Comment Lines: 672 (32.50%)
-    '    - Xml Docs: 86.31%
+    '   Total Lines: 2103
+    '    Code Lines: 1187 (56.44%)
+    ' Comment Lines: 705 (33.52%)
+    '    - Xml Docs: 85.96%
     ' 
-    '   Blank Lines: 211 (10.20%)
-    '     File Size: 95.04 KB
+    '   Blank Lines: 211 (10.03%)
+    '     File Size: 97.33 KB
 
 
     '     Enum endianness
@@ -57,15 +57,15 @@
     ' 
     '         Function: [erase], basename, buffer, bytes, close
     '                   dataUri, dir_exists, dirCopy, dirCreate, dirname
-    '                   exists, file, file_allocate, file_ext, filecopy
-    '                   fileExt, fileinfo, fileInfoByFile, filepath, fileRemove
-    '                   filesize, getRelativePath, GetSha1Hash, getwd, gzcheck
-    '                   gzfile, handleWriteLargeTextStream, isSystemDir, listDirs, listFiles
-    '                   loadListInternal, NextTempToken, normalizeFileName, normalizePath, openDir
-    '                   openGzip, openTargzip, openZip, readBin, readBinDataframe
-    '                   readBinOverloads, readFromFile, readFromStream, readLines, readList
-    '                   readText, Rhome, saveList, scanZipFiles, setwd
-    '                   stdin_dev, tempdir, tempfile, unlinks, writeBin
+    '                   exists, file, file_allocate, file_create, file_ext
+    '                   filecopy, fileExt, fileinfo, fileInfoByFile, filepath
+    '                   fileRemove, filesize, getRelativePath, GetSha1Hash, getwd
+    '                   gzcheck, gzfile, handleWriteLargeTextStream, isSystemDir, listDirs
+    '                   listFiles, loadListInternal, NextTempToken, normalizeFileName, normalizePath
+    '                   openDir, openGzip, openTargzip, openZip, readBin
+    '                   readBinDataframe, readBinOverloads, readFromFile, readFromStream, readLines
+    '                   readList, readText, Rhome, saveList, scanZipFiles
+    '                   setwd, tempdir, tempfile, unlinks, writeBin
     '                   writeBinDataframe, writeLines
     ' 
     '         Sub: fileRename

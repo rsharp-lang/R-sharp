@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3ccbea89dd0bd80193440ae74d1a9140, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\TryCatchExpression.vb"
+﻿#Region "Microsoft.VisualBasic::61c2d0fb1b52a24ba2a00f762728de55, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\TryCatchExpression.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 98
-    '    Code Lines: 74 (75.51%)
-    ' Comment Lines: 10 (10.20%)
+    '   Total Lines: 99
+    '    Code Lines: 75 (75.76%)
+    ' Comment Lines: 10 (10.10%)
     '    - Xml Docs: 60.00%
     ' 
-    '   Blank Lines: 14 (14.29%)
-    '     File Size: 3.78 KB
+    '   Blank Lines: 14 (14.14%)
+    '     File Size: 3.83 KB
 
 
     '     Class TryCatchExpression

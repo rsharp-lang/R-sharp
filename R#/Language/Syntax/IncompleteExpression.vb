@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::37eb9bbbf911875347bc5fb1bffabe1f, R#\Language\Syntax\IncompleteExpression.vb"
+﻿#Region "Microsoft.VisualBasic::42d48d1811ae797f16a0b57f5dc9fc46, R#\Language\Syntax\IncompleteExpression.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 135
-    '    Code Lines: 78 (57.78%)
-    ' Comment Lines: 34 (25.19%)
+    '   Total Lines: 136
+    '    Code Lines: 79 (58.09%)
+    ' Comment Lines: 34 (25.00%)
     '    - Xml Docs: 70.59%
     ' 
-    '   Blank Lines: 23 (17.04%)
-    '     File Size: 4.29 KB
+    '   Blank Lines: 23 (16.91%)
+    '     File Size: 4.35 KB
 
 
     '     Class IncompleteExpression

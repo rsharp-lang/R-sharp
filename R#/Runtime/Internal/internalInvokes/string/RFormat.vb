@@ -1,4 +1,68 @@
-﻿Imports System.Globalization
+﻿#Region "Microsoft.VisualBasic::e98640ed4054a0628709c03947f44a4c, R#\Runtime\Internal\internalInvokes\string\RFormat.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 331
+    '    Code Lines: 207 (62.54%)
+    ' Comment Lines: 81 (24.47%)
+    '    - Xml Docs: 65.43%
+    ' 
+    '   Blank Lines: 43 (12.99%)
+    '     File Size: 15.43 KB
+
+
+    '     Class RFormat
+    ' 
+    ' 
+    '         Enum Justification
+    ' 
+    '             centre, left, none, right
+    ' 
+    ' 
+    ' 
+    '  
+    ' 
+    '     Function: ApplyJustificationAndWidth, ApplySmallMark, ConvertRDateFormatToDotNet, FormatDate, FormatNumber
+    '               FormatString, FormatToSignificantDigits, FormatValue
+    ' 
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports System.Globalization
 Imports System.Text
 Imports std = System.Math
 

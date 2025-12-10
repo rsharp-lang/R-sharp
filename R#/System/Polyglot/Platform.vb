@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::965a1d9b282d82f62bdb29317de2021f, R#\System\Polyglot\Platform.vb"
+﻿#Region "Microsoft.VisualBasic::bda6782b1eaa928205c70ca4b769450e, R#\System\Polyglot\Platform.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 116
-    '    Code Lines: 53 (45.69%)
-    ' Comment Lines: 45 (38.79%)
+    '   Total Lines: 117
+    '    Code Lines: 54 (46.15%)
+    ' Comment Lines: 45 (38.46%)
     '    - Xml Docs: 86.67%
     ' 
-    '   Blank Lines: 18 (15.52%)
-    '     File Size: 4.99 KB
+    '   Blank Lines: 18 (15.38%)
+    '     File Size: 5.05 KB
 
 
     '     Class Platform

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4855ee06deb41e6ee0062777c435bb3d, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
+﻿#Region "Microsoft.VisualBasic::ee319ad4cb3717127f4f1a572abad77f, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1712
-    '    Code Lines: 1115 (65.13%)
-    ' Comment Lines: 377 (22.02%)
-    '    - Xml Docs: 89.66%
+    '   Total Lines: 1732
+    '    Code Lines: 1121 (64.72%)
+    ' Comment Lines: 385 (22.23%)
+    '    - Xml Docs: 89.87%
     ' 
-    '   Blank Lines: 220 (12.85%)
-    '     File Size: 71.47 KB
+    '   Blank Lines: 226 (13.05%)
+    '     File Size: 72.42 KB
 
 
     ' Module clustering
@@ -50,16 +50,16 @@
     '               dataSetCommon, dbscan, dbscan_objects, densityA, ensureNotIsDistance
     '               fuzzyCMeans, getSOMNeurons, getTraceback, gmm_components, gmm_predict
     '               gmm_predict_proba, gmmf, hclust, hdbscan_exec, hleaf
-    '               hnode, Kmeans_func, knn_class, knnsearch, Lloyds
-    '               plotSOMEmbedding, showHclust, silhouette_score, som, somgrid
-    '               ToHClust, treeDf
+    '               hnode, Kmeans_func, knn_class, knn_cluster, knnsearch
+    '               Lloyds, plotSOMEmbedding, showHclust, silhouette_score, som
+    '               somgrid, ToHClust, treeDf
     ' 
     '     Sub: Main
     '     Class point2DReader
     ' 
     '         Function: activate, getByDimension, GetDimensions, metric, nodeIs
     ' 
-    '         Sub: setByDimensin
+    '         Sub: setByDimension
     ' 
     ' 
     ' 

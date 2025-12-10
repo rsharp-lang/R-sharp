@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3d7121b4f5962a61fb84e16dda63492d, R#\System\Package\PackageFile\Dependency.vb"
+﻿#Region "Microsoft.VisualBasic::f48d30cea5f8eb85fc3e0ba609a8fd10, R#\System\Package\PackageFile\Dependency.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 63
-    '    Code Lines: 48 (76.19%)
-    ' Comment Lines: 4 (6.35%)
+    '   Total Lines: 67
+    '    Code Lines: 51 (76.12%)
+    ' Comment Lines: 4 (5.97%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 11 (17.46%)
-    '     File Size: 2.41 KB
+    '   Blank Lines: 12 (17.91%)
+    '     File Size: 2.50 KB
 
 
     '     Class Dependency
     ' 
     '         Properties: library, packages
     ' 
-    '         Constructor: (+3 Overloads) Sub New
+    '         Constructor: (+4 Overloads) Sub New
     '         Function: GetDependency, ToString
     ' 
     ' 

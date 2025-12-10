@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4091480ae5717ed9dd10017f16258602, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DataFrameProjection.vb"
+﻿#Region "Microsoft.VisualBasic::4228841edb3c5fdb87901a845934baf2, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DataFrameProjection.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 51
-    '    Code Lines: 35 (68.63%)
-    ' Comment Lines: 5 (9.80%)
+    '   Total Lines: 52
+    '    Code Lines: 36 (69.23%)
+    ' Comment Lines: 5 (9.62%)
     '    - Xml Docs: 60.00%
     ' 
-    '   Blank Lines: 11 (21.57%)
-    '     File Size: 1.78 KB
+    '   Blank Lines: 11 (21.15%)
+    '     File Size: 1.83 KB
 
 
     '     Class DataFrameProjection

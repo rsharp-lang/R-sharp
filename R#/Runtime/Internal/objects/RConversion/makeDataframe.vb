@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::914bdaa2b5d779401b7b9ea00d0a171e, R#\Runtime\Internal\objects\RConversion\makeDataframe.vb"
+﻿#Region "Microsoft.VisualBasic::415c25ee5684419cc345873b3a771312, R#\Runtime\Internal\objects\RConversion\makeDataframe.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 382
-    '    Code Lines: 275 (71.99%)
-    ' Comment Lines: 51 (13.35%)
-    '    - Xml Docs: 78.43%
+    '   Total Lines: 408
+    '    Code Lines: 292 (71.57%)
+    ' Comment Lines: 58 (14.22%)
+    '    - Xml Docs: 81.03%
     ' 
-    '   Blank Lines: 56 (14.66%)
-    '     File Size: 15.85 KB
+    '   Blank Lines: 58 (14.22%)
+    '     File Size: 17.18 KB
 
 
     '     Delegate Function
@@ -51,8 +51,9 @@
     '         Constructor: (+1 Overloads) Sub New
     ' 
     '         Function: castMultipleColumnsToDataframe, castSingleToDataframe, CheckDimension, CheckRowDimension, createColumnVector
-    '                   createDataframe, fromList, is_ableConverts, PopulateDataSet, pullColumns
-    '                   (+2 Overloads) RDataframe, RMatrix, TracebackDataFrmae, tryTypeLineage, tupleFrame1
+    '                   createDataframe, fromList, indexFrame, is_ableConverts, PopulateDataSet
+    '                   pullColumns, (+2 Overloads) RDataframe, RMatrix, TracebackDataFrmae, tryTypeLineage
+    '                   tupleFrame1
     ' 
     '         Sub: [addHandler]
     ' 

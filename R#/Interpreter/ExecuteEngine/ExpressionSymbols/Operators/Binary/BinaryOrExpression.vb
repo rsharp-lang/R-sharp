@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::986a0f914fa670d9e329adc73455d653, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\Binary\BinaryOrExpression.vb"
+﻿#Region "Microsoft.VisualBasic::c4a2318965780a344ced600e3db56e20, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\Binary\BinaryOrExpression.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 76
-    '    Code Lines: 58 (76.32%)
-    ' Comment Lines: 5 (6.58%)
+    '   Total Lines: 77
+    '    Code Lines: 59 (76.62%)
+    ' Comment Lines: 5 (6.49%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 13 (17.11%)
-    '     File Size: 2.64 KB
+    '   Blank Lines: 13 (16.88%)
+    '     File Size: 2.69 KB
 
 
     '     Class BinaryOrExpression

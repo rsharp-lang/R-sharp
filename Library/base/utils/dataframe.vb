@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cb2cc0ce34d1aa166c9f2f314461db75, Library\base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::6cd94103941b04a617df3828815d157b, Library\base\utils\dataframe.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1040
-    '    Code Lines: 705 (67.79%)
-    ' Comment Lines: 203 (19.52%)
+    '   Total Lines: 1045
+    '    Code Lines: 709 (67.85%)
+    ' Comment Lines: 203 (19.43%)
     '    - Xml Docs: 90.64%
     ' 
-    '   Blank Lines: 132 (12.69%)
-    '     File Size: 41.05 KB
+    '   Blank Lines: 133 (12.73%)
+    '     File Size: 41.27 KB
 
 
     ' Module dataframeTools
@@ -50,9 +50,9 @@
     '               createEntityRow, CreateRowObject, dataframeTable, deserialize, field_vector
     '               loadDataframe, measureColumnVector, numericLoader, openCsv, parseArffText
     '               parseDataframe, parseRow, printRowVector, printTable, project
-    '               rawToDataFrame, readCsvRaw, readDataSet, rows, rowToString
-    '               RowToString, stripCommentRows, to_dataframe, transpose, vector
-    '               write_arff, writeDataframe
+    '               rawToDataFrame, read_arff_f, readCsvRaw, readDataSet, rows
+    '               rowToString, RowToString, stripCommentRows, to_dataframe, transpose
+    '               vector, write_arff, writeDataframe
     ' 
     '     Sub: Main
     ' 

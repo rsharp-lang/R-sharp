@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::43afd28db7e04be14dbae2d04aca8565, R#\Runtime\Internal\printer\printer.vb"
+﻿#Region "Microsoft.VisualBasic::5ab89fe8ad9765591e80ba4d04d7d4b7, R#\Runtime\Internal\printer\printer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 479
-    '    Code Lines: 340 (70.98%)
-    ' Comment Lines: 73 (15.24%)
-    '    - Xml Docs: 83.56%
+    '   Total Lines: 487
+    '    Code Lines: 342 (70.23%)
+    ' Comment Lines: 78 (16.02%)
+    '    - Xml Docs: 78.21%
     ' 
-    '   Blank Lines: 66 (13.78%)
-    '     File Size: 19.95 KB
+    '   Blank Lines: 67 (13.76%)
+    '     File Size: 20.41 KB
 
 
     '     Delegate Function

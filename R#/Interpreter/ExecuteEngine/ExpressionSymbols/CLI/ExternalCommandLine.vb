@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f9bc3a5ff57c0b5424af1ec233aaf361, R#\Interpreter\ExecuteEngine\ExpressionSymbols\CLI\ExternalCommandLine.vb"
+﻿#Region "Microsoft.VisualBasic::b81a9072226177c39864e7c21cb9e157, R#\Interpreter\ExecuteEngine\ExpressionSymbols\CLI\ExternalCommandLine.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 197
-    '    Code Lines: 132 (67.01%)
-    ' Comment Lines: 38 (19.29%)
+    '   Total Lines: 198
+    '    Code Lines: 133 (67.17%)
+    ' Comment Lines: 38 (19.19%)
     '    - Xml Docs: 78.95%
     ' 
-    '   Blank Lines: 27 (13.71%)
-    '     File Size: 7.16 KB
+    '   Blank Lines: 27 (13.64%)
+    '     File Size: 7.22 KB
 
 
     '     Class ExternalCommandLine

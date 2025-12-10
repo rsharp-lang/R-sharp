@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ab3c54a7d1caf4c0ee09006512574a56, R#\Runtime\Interop\RInteropAttributes\RLazyExpressionAttribute.vb"
+﻿#Region "Microsoft.VisualBasic::af42cacaece6d8b7830fea9d0a14906f, R#\Runtime\Interop\RInteropAttributes\RLazyExpressionAttribute.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 7
-    '    Code Lines: 5 (71.43%)
-    ' Comment Lines: 0 (0.00%)
-    '    - Xml Docs: 0.00%
+    '   Total Lines: 10
+    '    Code Lines: 5 (50.00%)
+    ' Comment Lines: 3 (30.00%)
+    '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 2 (28.57%)
-    '     File Size: 220 B
+    '   Blank Lines: 2 (20.00%)
+    '     File Size: 405 B
 
 
     '     Class RLazyExpressionAttribute

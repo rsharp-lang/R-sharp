@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e623cb6562114879c0dde16cf5dfb5aa, R#\Runtime\Vectorization\ObjectSet.vb"
+﻿#Region "Microsoft.VisualBasic::6c75a40bc76e304631572ba482bb5baf, R#\Runtime\Vectorization\ObjectSet.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 94.12%
     ' 
     '   Blank Lines: 17 (14.41%)
-    '     File Size: 5.36 KB
+    '     File Size: 5.38 KB
 
 
     '     Class ObjectSet
