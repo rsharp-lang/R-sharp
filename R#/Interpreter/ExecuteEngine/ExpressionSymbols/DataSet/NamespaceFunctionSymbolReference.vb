@@ -174,11 +174,18 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 nsText = DirectCast(fsymbol.value, INamespaceReferenceSymbol).namespace
 
                 If nsText <> [namespace] Then
-                    Return RInternal.debug.stop({
-                        $"we can not found any namespace called: '{[namespace]}'!",
-                        $"namespace: {[namespace]}",
-                        $"function symbol: {funcNameSymbol}<{funcName}>"
-                    }, env)
+                    ' find internal primitive function
+                    Dim primitive = RInternal.invoke.getFunction(funcName)
+
+                    If primitive Is Nothing OrElse primitive.namespace <> [namespace] Then
+                        Return RInternal.debug.stop({
+                            $"we can not found any namespace called: '{[namespace]}'!",
+                            $"namespace: {[namespace]}",
+                            $"function symbol: {funcNameSymbol}<{funcName}>"
+                        }, env)
+                    End If
+
+                    Return primitive
                 End If
 
                 Return fsymbol.value
