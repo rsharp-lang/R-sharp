@@ -84,11 +84,13 @@ Module CLI
 
     <ExportAPI("/bash")>
     <Description("Generates the bash script for the target rscript file.")>
-    <Usage("/bash --script <run.R>")>
+    <Usage("/bash --script <run.R> --install_root")>
     <Argument("--script", False, CLITypes.File, Description:="the file path of the target rscript file.")>
+    <Argument("--install_root", True, CLITypes.Boolean, PipelineTypes.undefined, Description:="Generate the bash script and install to the linux root location(/usr/local/bin/)?")>
     Public Function BashRun(args As CommandLine) As Integer
         Dim script$ = args <= "--script"
-        Dim bash$ = script.ParentPath & "/" & script.BaseName
+        Dim install_root As Boolean = args("--install_root")
+        Dim bash$ = If(install_root, "/usr/local/bin/", script.ParentPath) & "/" & script.BaseName
         Dim utf8 As Encoding = Encodings.UTF8WithoutBOM.CodePage
         Dim dirHelper As String = UNIX.GetLocationHelper
 
