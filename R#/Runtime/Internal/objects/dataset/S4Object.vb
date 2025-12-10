@@ -61,6 +61,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Object
 
+    ''' <summary>
+    ''' class definition of the dynamics runtime clr object
+    ''' </summary>
     Public Class S4Object : Inherits RsharpDataObject
         Implements IRType
 
