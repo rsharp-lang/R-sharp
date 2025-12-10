@@ -136,7 +136,7 @@ Namespace Runtime.Internal.Object.Converts
         End Function
 
         ''' <summary>
-        ''' Cast .NET object to R# object
+        ''' Cast any .NET clr object to R# s4 class system object
         ''' </summary>
         ''' <param name="obj"></param>
         ''' <returns></returns>
@@ -159,7 +159,7 @@ Namespace Runtime.Internal.Object.Converts
                                 .Select(Function(o) New vbObject(o)) _
                                 .ToArray
                         Else
-                            Return New vbObject(obj, type)
+                            Return New vbObject(obj)
                         End If
                 End Select
             End If
