@@ -13,7 +13,7 @@ Namespace Runtime.Internal.Object.baseOp
 
         <Extension>
         Public Function defineObject(type As S4Object, env As GlobalEnvironment) As Type
-            Dim def As New DynamicType(GetType(s4Reflector))
+            Dim def As New DynamicType(base:=GetType(s4Reflector))
             Dim valueType As Type
 
             For Each slot As KeyValuePair(Of String, String) In type.slots

@@ -15,6 +15,9 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Object.baseOp
 
+    ''' <summary>
+    ''' S4 type system
+    ''' </summary>
     Public MustInherit Class s4Reflector : Inherits RsharpDataObject
         Implements RNameIndex
 
