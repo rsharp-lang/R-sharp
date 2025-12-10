@@ -72,7 +72,9 @@ Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object].baseOp
 Imports SMRUCC.Rsharp.Runtime.Interop.CType
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
@@ -411,6 +413,29 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                     target = envir.FindSymbol(DirectCast(symbolName, SymbolReference).symbol)
                 Case GetType(SymbolIndexer)
                     Return MemberValueAssign.setByNameIndex(symbolName, envir, value)
+                Case GetType(VectorLoop)
+                    ' x@slot = "xxx"
+                    Dim obj As Object = DirectCast(symbolName, VectorLoop).symbol.Evaluate(envir)
+                    Dim slot As Object = DirectCast(symbolName, VectorLoop).index.Evaluate(envir)
+
+                    If TypeOf obj Is Message Then Return obj
+                    If TypeOf slot Is Message Then Return slot
+
+                    If obj Is Nothing Then
+                        Return RInternal.debug.stop("the required target to set slot value could not be nothing!", envir)
+                    ElseIf slot Is Nothing Then
+                        Return RInternal.debug.stop("the slot member name to set value should not be nothing!", envir)
+                    ElseIf obj.GetType.IsInheritsFrom(GetType(s4Reflector)) Then
+                        Dim slotName As String() = CLRVector.asCharacter(slot)
+
+                        If slotName.IsNullOrEmpty Then
+                            Return RInternal.debug.stop("the slot member name to set value should not be nothing!", envir)
+                        ElseIf slotName.Length = 1 Then
+                            Return DirectCast(obj, s4Reflector).setByName(slotName(0), value, envir)
+                        Else
+                            Return DirectCast(obj, s4Reflector).setByName(slotName, value, envir)
+                        End If
+                    End If
                 Case Else
                     Return RInternal.debug.stop(New InvalidExpressionException, envir)
             End Select
