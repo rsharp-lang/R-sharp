@@ -126,21 +126,21 @@ Namespace Runtime.Internal
                                       Optional suppress As Boolean = False,
                                       Optional suppress_log As Boolean? = Nothing) As Message
 
-            Dim debugMode As Boolean = envir.globalEnvironment.debugMode AndAlso Not suppress
+            Dim debugMode As Boolean = (envir IsNot Nothing AndAlso envir.globalEnvironment.debugMode) AndAlso Not suppress
             ' dump sessioninfo to the error log
             ' file automatically
-            Dim session As RSessionInfo = etc.sessionInfo(envir).target
+            Dim session As RSessionInfo = If(envir Is Nothing, Nothing, etc.sessionInfo(envir).target)
 
             If suppress_log Is Nothing Then
                 suppress_log = suppress
             End If
 
-            If Not suppress_log Then
+            If session IsNot Nothing AndAlso Not suppress_log Then
                 Call App.LogFile.log(MSG_TYPES.DEBUG, session.ToString, "dump_rsharp_sessioninfo")
             End If
 
             If Not message Is Nothing AndAlso message.GetType.IsInheritsFrom(GetType(Exception), strict:=False) Then
-                If Not suppress_log Then
+                If envir IsNot Nothing AndAlso Not suppress_log Then
                     Call App.LogException(DirectCast(message, Exception), trace:=getEnvironmentStack(envir).JoinBy(vbCrLf))
                 End If
 
@@ -205,7 +205,7 @@ Namespace Runtime.Internal
             Return New Message With {
                 .message = CLRVector.asCharacter(messages),
                 .level = level,
-                .environmentStack = envir.DoCall(AddressOf getEnvironmentStack),
+                .environmentStack = If(envir Is Nothing, {}, envir.DoCall(AddressOf getEnvironmentStack)),
                 .trace = devtools.ExceptionData.GetCurrentStackTrace
             }
         End Function
@@ -234,7 +234,7 @@ Namespace Runtime.Internal
 
             Return New Message With {
                 .message = messages,
-                .environmentStack = envir.DoCall(AddressOf getEnvironmentStack),
+                .environmentStack = If(envir Is Nothing, {}, envir.DoCall(AddressOf getEnvironmentStack)),
                 .level = MSG_TYPES.ERR,
                 .trace = devtools.ExceptionData.GetCurrentStackTrace
             }

@@ -62,6 +62,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object].baseOp
 Imports any = Microsoft.VisualBasic.Scripting
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -134,10 +135,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 data = DirectCast(data, IDictionary).Values.ToArray(Of Object)
             End If
 
-            If data Is Nothing Then
-                Return Nothing
-            ElseIf data.GetType.IsArray Then
+            If data.GetType.IsArray Then
                 Return getVectorList(data, memberName, index.type, envir)
+            ElseIf data.GetType.IsInheritsFrom(GetType(s4Reflector)) Then
+                Return DirectCast(data, s4Reflector).getByName(memberName, envir)
             End If
 
             Return Message.InCompatibleType(GetType(list), data.GetType, envir)

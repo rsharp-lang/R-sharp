@@ -95,7 +95,7 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
-        Public Function existsName(name As String) As Boolean
+        Public Overrides Function existsName(name As String) As Boolean
             If properties.ContainsKey(name) Then
                 Return True
             ElseIf methods.ContainsKey(name) Then

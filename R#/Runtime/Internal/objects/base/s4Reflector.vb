@@ -231,14 +231,28 @@ Namespace Runtime.Internal.Object.baseOp
         ''' <remarks>
         ''' this method is strict in s4object, this function will throw error if not found by name
         ''' </remarks>
-        Public Overridable Function getByName(name As String) As Object Implements RNameIndex.getByName
+        Public Overridable Overloads Function getByName(name As String) As Object Implements RNameIndex.getByName
+            Return getByName(name, Nothing)
+        End Function
+
+        Public Overloads Function getByName(name As String, env As Environment) As Object
             If properties.ContainsKey(name) Then
                 Return properties(name).GetValue(Me)
             ElseIf methods.ContainsKey(name) Then
                 Return methods(name)
             Else
                 ' not found by name
-                Throw New MissingMemberException($"A required property/function({name}) could not be found in this s4 class: {s4class}")
+                Return Internal.debug.stop($"A required property/function({name}) could not be found in this s4 class: {s4class}", env)
+            End If
+        End Function
+
+        Public Overridable Function existsName(name As String) As Boolean
+            If properties.ContainsKey(name) Then
+                Return True
+            ElseIf methods.ContainsKey(name) Then
+                Return True
+            Else
+                Return False
             End If
         End Function
 
@@ -249,8 +263,8 @@ Namespace Runtime.Internal.Object.baseOp
         ''' <returns></returns>
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function getByName(names() As String) As Object Implements RNameIndex.getByName
-            Return names.Select(AddressOf getByName).ToArray
+        Public Overloads Function getByName(names() As String) As Object Implements RNameIndex.getByName
+            Return names.Select(Function(name) getByName(name)).ToArray
         End Function
 
         ''' <summary>
