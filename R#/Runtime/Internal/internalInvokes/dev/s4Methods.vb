@@ -57,6 +57,7 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object].baseOp
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Runtime.Internal.Invokes
 
@@ -306,6 +307,33 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return DirectCast(def, RType).createObject(args, env)
             End If
+        End Function
+
+        <ExportAPI("slotNames")>
+        <RApiReturn(TypeCodes.string)>
+        Public Function slotNames(x As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
+                Return Nothing
+            End If
+
+            If TypeOf x Is String Then
+                Return env.globalEnvironment.GetType(CStr(x)).getNames
+            ElseIf x.GetType.IsInheritsFrom(GetType(s4Reflector)) Then
+                Return DirectCast(x, s4Reflector).getNames
+            Else
+                Return RInternal.debug.stop("the given object should be an s4 class object for get its slot names!", env)
+            End If
+        End Function
+
+        <ExportAPI("removeClass")>
+        Public Function removeClass(Class$, Optional where As Environment = Nothing) As Object
+            Dim globalEnv As GlobalEnvironment = where.globalEnvironment
+
+            If globalEnv.GetType([Class]) IsNot Nothing Then
+                Call globalEnv.types.Remove([Class])
+            End If
+
+            Return Nothing
         End Function
     End Module
 End Namespace

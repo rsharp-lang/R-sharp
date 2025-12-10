@@ -246,6 +246,10 @@ Namespace Runtime
             Return Me
         End Function
 
+        Public Overloads Function [GetType](s4class As String) As IRType
+            Return types.TryGetValue(s4class)
+        End Function
+
         ''' <summary>
         ''' get type definition from a given type object or type name
         ''' </summary>
