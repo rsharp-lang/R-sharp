@@ -1,0 +1,1 @@
+﻿{"test_ifelse":{"author":null,"declares":{"name":"test_ifelse","parameters":[{"name":"x","text":null}],"sourceMap":{"File":"ifelse.R","Line":"1","Method":{"Method":"test_ifelse","Module":"declare_function","Namespace":"SMRUCC\/R#"}}},"description":null,"details":null,"examples":null,"keywords":null,"parameters":null,"returns":null,"see_also":null,"title":"test_ifelse"}}
