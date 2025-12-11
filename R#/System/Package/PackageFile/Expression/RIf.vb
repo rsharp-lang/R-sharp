@@ -64,6 +64,9 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 
 Namespace Development.Package.File.Expressions
 
+    ''' <summary>
+    ''' if and else if
+    ''' </summary>
     Public Class RIf : Inherits RExpression
 
         Public Sub New(context As Writer)
@@ -71,10 +74,14 @@ Namespace Development.Package.File.Expressions
         End Sub
 
         Public Overrides Sub WriteBuffer(ms As MemoryStream, x As Expression)
-            If TypeOf x Is IfBranch Then
-                Call WriteBuffer(ms, DirectCast(x, IfBranch))
-            Else
+            ' 20251212 due to the reason of elseif branch model is a sub-class
+            ' of the if branch model
+            ' expression 'TypeOf x Is IfBranch' will always be TRUE
+            ' so ElseIfBranch needs to be test before the if branch.
+            If TypeOf x Is ElseIfBranch Then
                 Call WriteBuffer(ms, DirectCast(x, ElseIfBranch))
+            Else
+                Call WriteBuffer(ms, DirectCast(x, IfBranch))
             End If
         End Sub
 
