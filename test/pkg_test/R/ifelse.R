@@ -1,9 +1,9 @@
 let test_ifelse = function(x) {
     if (x == 1) {
-        print("A")
+        print(paste(x, "->", "A"))
     } else if (x == 2) {
-        print("B")
+        print(paste(x, "->", "B"))
     } else {
-        print("C")
+        print(paste(x,"->","C"))
     }
 }
