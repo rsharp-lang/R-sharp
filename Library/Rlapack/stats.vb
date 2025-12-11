@@ -826,6 +826,7 @@ Module stats
     Public Function quantile(x As Double(),
                              <RRawVectorArgument(GetType(Double))>
                              Optional probs As Object = "0,0.25,0.5,0.75,1",
+                             Optional names As Boolean = True,
                              Optional env As Environment = Nothing) As Object
 
         Dim probList As Double() = CLRVector.asNumeric(probs)
@@ -837,13 +838,18 @@ Module stats
             Dim qvals As Double() = probList _
                 .Select(Function(p) q.Query(p)) _
                 .ToArray
-            Dim list As New Dictionary(Of String, Object)
 
-            For i As Integer = 0 To probList.Length - 1
-                list((probList(i) * 100) & "%") = qvals(i)
-            Next
+            If names Then
+                Dim list As New Dictionary(Of String, Object)
 
-            Return New list With {.slots = list}
+                For i As Integer = 0 To probList.Length - 1
+                    list((probList(i) * 100) & "%") = qvals(i)
+                Next
+
+                Return New list With {.slots = list}
+            Else
+                Return qvals
+            End If
         End If
     End Function
 
