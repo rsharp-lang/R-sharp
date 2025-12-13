@@ -491,6 +491,16 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        Public Function checkColumnNames(ParamArray synonym As String()) As String
+            For Each name As String In synonym
+                If _columns.ContainsKey(name) Then
+                    Return name
+                End If
+            Next
+
+            Return Nothing
+        End Function
+
         Public Function checkColumnNames(names As IEnumerable(Of String), env As Environment) As Message
             Dim allNames = names.ToArray
             Dim missing As New List(Of String)
