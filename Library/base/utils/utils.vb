@@ -58,6 +58,7 @@
 Imports System.IO
 Imports System.Runtime.CompilerServices
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ApplicationServices.Terminal
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -350,7 +351,7 @@ Public Module utils
             If env.strictOption Then
                 Return RInternal.debug.stop("the required dataframe file source should not be nothing!", env)
             Else
-                Call "the required dataframe file source is nothing, null value will be returns as the dataframe result value.".Warning
+                Call "the required dataframe file source is nothing, null value will be returns as the dataframe result value.".warning
             End If
 
             Return Nothing
@@ -403,6 +404,78 @@ Public Module utils
                 header:=header
             )
         End If
+    End Function
+
+    Const NA As Object = Nothing
+
+    ''' <summary>
+    ''' ## Data Input
+    ''' 
+    ''' Reads a file in table format and creates a data frame from it, with cases corresponding to lines and variables to fields in the file.
+    ''' </summary>
+    ''' <param name="file">the name Of the file which the data are To be read from. Each row Of the table appears As one line Of the file. If it does Not contain an absolute path, the file name Is relative To the current working directory, getwd(). Tilde-expansion Is performed where supported. This can be a compressed file (see file).
+    ''' Alternatively, file can be a readable text-mode connection (which will be opened for reading if necessary, And if so closed (And hence destroyed) at the end of the function call). (If stdin() Is used, the prompts for lines may be somewhat confusing. Terminate input with a blank line Or an EOF signal, Ctrl-D on Unix And Ctrl-Z on Windows. Any pushback on stdin() will be cleared before return.)
+    ''' file can also be a complete URL. (For the supported URL schemes, see the 'URLs’ section of the help for url.)</param>
+    ''' <param name="header">a logical value indicating whether the file contains the names Of the variables As its first line. If missing, the value Is determined from the file format: header Is set to TRUE if And only if the first row contains one fewer field than the number of columns.</param>
+    ''' <param name="sep">the field separator character. Values On Each line Of the file are separated by this character. If sep = "" (the Default For read.table) the separator Is 'white space’, that is one or more spaces, tabs, newlines or carriage returns.</param>
+    ''' <param name="quote">the set of quoting characters. To disable quoting altogether, use quote = "". See scan for the behaviour on quotes embedded in quotes. Quoting Is only considered for columns read as character, which Is all of them unless colClasses Is specified.</param>
+    ''' <param name="dec">the character used In the file For Decimal points.</param>
+    ''' <param name="numerals">string indicating how To convert numbers whose conversion To Double precision would lose accuracy, see type.convert. Can be abbreviated. (Applies also To complex-number inputs.)</param>
+    ''' <param name="row_names">a vector of row names. This can be a vector giving the actual row names, or a single number giving the column of the table which contains the row names, or character string giving the name of the table column containing the row names.
+    ''' If there Is a header And the first row contains one fewer field than the number Of columns, the first column In the input Is used For the row names. Otherwise If row.names Is missing, the rows are numbered.
+    ''' using row.names = NULL forces row numbering. Missing Or NULL row.names generate row names that are considered To be 'automatic’ (and not preserved by as.matrix).</param>
+    ''' <param name="col_names">a vector Of Optional names For the variables. The Default Is To use "V" followed by the column number.</param>
+    ''' <param name="as_is">controls conversion Of character variables (insofar As they are Not converted To logical, numeric Or complex) To factors, If Not otherwise specified by colClasses. Its value Is either a vector Of logicals (values are recycled If necessary), Or a vector Of numeric Or character indices which specify which columns should Not be converted To factors.
+    ''' Note: to suppress all conversions including those of numeric columns, set colClasses = "character".
+    ''' Note that As.Is Is specified per column (Not per variable) And so includes the column of row names (if any) And any columns to be skipped.</param>
+    ''' <param name="tryLogical">a logical determining If columns consisting entirely Of "F", "T", "FALSE", And "TRUE" should be converted To logical; passed To type.convert, True by Default.</param>
+    ''' <param name="na_strings">a character vector of strings which are to be interpreted as NA values. Blank fields are also considered to be missing values in logical, integer, numeric and complex fields. Note that the test happens after white space is stripped from the input (if enabled), so na.strings values may need their own white space stripped in advance.</param>
+    ''' <param name="colClasses">character. A vector of classes to be assumed for the columns. If unnamed, recycled as necessary. If named, names are matched with unspecified values being taken to be NA.
+    ''' Possible values are NA (the Default, When type.convert Is used), "NULL" (When the column Is skipped), one Of the atomic vector classes (logical, Integer, numeric, complex, character, raw), Or "factor", "Date" Or "POSIXct". Otherwise there needs To be an As method (from package methods) For conversion from "character" To the specified formal Class.
+    ''' Note that colClasses Is specified per column (Not per variable) And so includes the column Of row names (If any).</param>
+    ''' <param name="nrows">Integer: the maximum number Of rows To read In. Negative And other invalid values are ignored.</param>
+    ''' <param name="skip">integer: the number of lines of the data file to skip before beginning to read data.</param>
+    ''' <param name="check_names">logical. If TRUE then the names of the variables in the data frame are checked to ensure that they are syntactically valid variable names. If necessary they are adjusted (by make.names) so that they are, And also to ensure that there are no duplicates.</param>
+    ''' <param name="fill">logical. If TRUE then in case the rows have unequal length, blank fields are implicitly added. See ‘Details’.</param>
+    ''' <param name="strip_white">logical. Used only when sep has been specified, And allows the stripping of leading And trailing white space from unquoted character fields (numeric fields are always stripped). See scan for further details (including the exact meaning of 'white space’), remembering that the columns may include the row names.</param>
+    ''' <param name="blank_lines_skip">logical: if TRUE blank lines in the input are ignored.</param>
+    ''' <param name="comment_char">character: a character vector of length one containing a single character or an empty string. Use "" to turn off the interpretation of comments altogether.</param>
+    ''' <param name="allowEscapes">logical. Should C-style escapes such as '⁠\n⁠’ be processed or read verbatim (the default)? Note that if not within quotes these could be interpreted as a delimiter (but not as a comment character). For more details see scan.</param>
+    ''' <param name="flush">logical: If True, scan will flush To the End Of the line after reading the last Of the fields requested. This allows putting comments after the last field.</param>
+    ''' <param name="stringsAsFactors">logical: should character vectors be converted to factors? Note that this is overridden by as.is and colClasses, both of which allow finer control.</param>
+    ''' <param name="fileEncoding">character string: if non-empty declares the encoding used on a file when given as a character string (not on an existing connection) so the character data can be re-encoded. See the ‘Encoding’ section of the help for file, the ‘R Data Import/Export’ manual and ‘Note’.</param>
+    ''' <param name="encoding">encoding to be assumed for input strings. It Is used to mark character strings as known to be in Latin-1 Or UTF-8 (see Encoding) it Is Not used to re-encode the input, but allows R to handle encoded strings in their native encoding (if one of those two). See 'Value’ and ‘Note’.</param>
+    ''' <param name="text">character string: if file is not supplied and this is, then data are read from the value of text via a text connection. Notice that a literal string can be used to include (small) data sets within R code.</param>
+    ''' <param name="skipNul">logical: should NULs be skipped?</param>
+    ''' <param name="env"></param>
+    ''' <returns>A data frame (data.frame) containing a representation of the data in the file.
+    ''' Empty input Is an Error unless col.names Is specified, When a 0-row data frame Is returned: similarly giving just a header line If header = True results In a 0-row data frame. Note that In either Case the columns will be logical unless colClasses was supplied.
+    ''' Character strings In the result (including factor levels) will have a declared encoding If encoding Is "latin1" Or "UTF-8".</returns>
+    ''' <remarks>
+    ''' This function is the principal means of reading tabular data into R.
+    ''' Unless colClasses Is specified, all columns are read As character columns And Then converted Using type.convert To logical, Integer, numeric, complex Or (depending On As.Is) factor As appropriate. Quotes are (by Default) interpreted In all fields, so a column Of values Like "42" will result In an Integer column.
+    ''' A field Or line Is 'blank’ if it contains nothing (except whitespace if no separator is specified) before a comment character or the end of the field or line.
+    ''' If row.names Is Not specified And the header line has one less entry than the number Of columns, the first column Is taken To be the row names. This allows data frames To be read In from the format In which they are printed. If row.names Is specified And does Not refer To the first column, that column Is discarded from such files.
+    ''' The number Of data columns Is determined by looking at the first five lines Of input (Or the whole input If it has less than five lines), Or from the length Of col.names If it Is specified And Is longer. This could conceivably be wrong If fill Or blank.lines.skip are True, so specify col.names If necessary (As In the 'Examples’).
+    ''' read.csv And read.csv2 are identical to read.table except for the defaults. They are intended for reading 'comma separated value’ files (‘.csv’) or (read.csv2) the variant used in countries that use a comma as decimal point and a semicolon as field separator. Similarly, read.delim and read.delim2 are for reading delimited files, defaulting to the TAB character for the delimiter. Notice that header = TRUE and fill = TRUE in these variants, and that the comment character is disabled.
+    ''' The rest Of the line after a comment character Is skipped; quotes are Not processed In comments. Complete comment lines are allowed provided blank.lines.skip = True; however, comment lines prior To the header must have the comment character In the first non-blank column.
+    ''' Quoted fields With embedded newlines are supported except after a comment character. Embedded NULs are unsupported: skipping them(with skipNul = TRUE) may work.
+    ''' 
+    ''' The columns referred to in as.is and colClasses include the column of row names (if any).
+    ''' There are two approaches For reading input that Is Not In the local encoding. If the input Is known To be UTF-8 Or Latin1, use the encoding argument To Declare that. If the input Is In some other encoding, Then it may be translated On input. The fileEncoding argument achieves this by setting up a connection To Do the re-encoding into the current locale. Note that On Windows Or other systems Not running In a UTF-8 locale, this may Not be possible.
+    ''' </remarks>
+    <ExportAPI("read.table")>
+    Public Function read_table(file As Object, Optional header As Boolean = False, Optional sep As String = "", Optional quote As String = """'",
+       Optional dec As String = ".", <RRawVectorArgument(TypeCodes.string)> Optional numerals As Object = "allow.loss|warn.loss|no.loss",
+        <RRawVectorArgument> Optional row_names As Object = Nothing, <RRawVectorArgument> Optional col_names As Object = Nothing, <RLazyExpression> Optional as_is As Object = "!stringsAsFactors", Optional tryLogical As Boolean = True,
+          Optional na_strings As String = "NA", Optional colClasses As Object = NA, Optional nrows As Integer = -1,
+           Optional skip As Integer = 0, Optional check_names As Boolean = True, <RLazyExpression> Optional fill As Object = "!blank.lines.skip",
+          Optional strip_white As Boolean = False, Optional blank_lines_skip As Boolean = True,
+          Optional comment_char As Char = "#"c,
+        Optional allowEscapes As Boolean = False, Optional flush As Boolean = False,
+          Optional stringsAsFactors As Boolean = False,
+          Optional fileEncoding As String = "", Optional encoding As String = "unknown", Optional text As Object = Nothing, Optional skipNul As Boolean = False, Optional env As Environment = Nothing) As Object
+
     End Function
 
     Public Function ensureRowNames(row_names As Object, env As Environment) As Object
