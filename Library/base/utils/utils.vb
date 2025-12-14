@@ -340,70 +340,19 @@ Public Module utils
                              Optional check_modes As Boolean = True,
                              Optional encoding As Object = "unknown",
                              Optional comment_char As String = "#",
-                             Optional tsv As Boolean = False,
                              Optional skip_rows As Integer = -1,
                              Optional env As Environment = Nothing) As Object
 
-        Dim datafile As Object
-        Dim textEncoding As Encoding = Rsharp.GetEncoding(encoding)
-
-        If file Is Nothing Then
-            If env.strictOption Then
-                Return RInternal.debug.stop("the required dataframe file source should not be nothing!", env)
-            Else
-                Call "the required dataframe file source is nothing, null value will be returns as the dataframe result value.".warning
-            End If
-
-            Return Nothing
-        End If
-
-        If TypeOf file Is String Then
-            datafile = REnv _
-                .TryCatch(runScript:=Function()
-                                         If tsv Then
-                                             Return IO.File.LoadTsv(file, encoding:=textEncoding)
-                                         Else
-                                             Return IO.File.Load(file, encoding:=textEncoding, mute:=Not env.verboseOption)
-                                         End If
-                                     End Function,
-                          debug:=env.globalEnvironment.debugMode
-                )
-        ElseIf TypeOf file Is fileStream Then
-            Using reader As New textStream(DirectCast(file, fileStream), textEncoding)
-                datafile = reader.ReadToEnd _
-                    .LineTokens _
-                    .DoCall(Function(lines) FileLoader.Load(lines, False, Nothing, isTsv:=tsv)) _
-                    .DoCall(Function(ls)
-                                Return New file(ls)
-                            End Function)
-            End Using
-        ElseIf TypeOf file Is textBuffer Then
-            datafile = DirectCast(file, textBuffer).text _
-                .LineTokens _
-                .DoCall(Function(lines) FileLoader.Load(lines, False, Nothing, isTsv:=tsv)) _
-                .DoCall(Function(ls)
-                            Return New file(ls)
-                        End Function)
-        Else
-            Return RInternal.debug.stop({
-                "invalid file clr object content type!",
-                "clr_type: " & file.GetType.FullName
-            }, env)
-        End If
-
-        If Not TypeOf datafile Is file Then
-            Return RInternal.debug.stop(datafile, env)
-        Else
-            Return DirectCast(datafile, csv).rawToDataFrame(
-                row_names:=row_names,
-                check_names:=check_names,
-                check_modes:=check_modes,
-                comment_char:=comment_char,
-                skip_rows:=skip_rows,
-                env:=env,
-                header:=header
-            )
-        End If
+        Return read_table(file,
+                          header:=header,
+                          row_names:=row_names,
+                          check_names:=check_names,
+                          check_modes:=check_modes,
+                          encoding:=encoding,
+                          comment_char:=comment_char,
+                          sep:=",",
+                          skip:=skip_rows,
+                          env:=env)
     End Function
 
     Const NA As Object = Nothing
@@ -517,18 +466,83 @@ Public Module utils
     ''' Note that On Windows Or other systems Not running In a UTF-8 locale, this may Not be possible.
     ''' </remarks>
     <ExportAPI("read.table")>
-    Public Function read_table(file As Object, Optional header As Boolean = False, Optional sep As String = "", Optional quote As String = """'",
-                               Optional dec As String = ".", <RRawVectorArgument(TypeCodes.string)> Optional numerals As Object = "allow.loss|warn.loss|no.loss",
-                               <RRawVectorArgument> Optional row_names As Object = Nothing, <RRawVectorArgument> Optional col_names As Object = Nothing, <RLazyExpression> Optional as_is As Object = "!stringsAsFactors", Optional tryLogical As Boolean = True,
+    Public Function read_table(file As Object, Optional header As Boolean = False, Optional sep As String = vbTab, Optional quote As String = """'",
+                               Optional dec As String = ".",
+                               <RRawVectorArgument(TypeCodes.string)>
+                               Optional numerals As Object = "allow.loss|warn.loss|no.loss",
+                               <RRawVectorArgument>
+                               Optional row_names As Object = Nothing, <RRawVectorArgument> Optional col_names As Object = Nothing, <RLazyExpression> Optional as_is As Object = "!stringsAsFactors", Optional tryLogical As Boolean = True,
                                Optional na_strings As String = "NA", Optional colClasses As Object = NA, Optional nrows As Integer = -1,
-                               Optional skip As Integer = 0, Optional check_names As Boolean = True, <RLazyExpression> Optional fill As Object = "!blank.lines.skip",
+                               Optional skip As Integer = 0, Optional check_names As Boolean = True, Optional check_modes As Boolean = True,
+                               <RLazyExpression>
+                               Optional fill As Object = "!blank.lines.skip",
                                Optional strip_white As Boolean = False, Optional blank_lines_skip As Boolean = True,
                                Optional comment_char As Char = "#"c,
                                Optional allowEscapes As Boolean = False, Optional flush As Boolean = False,
                                Optional stringsAsFactors As Boolean = False,
                                Optional fileEncoding As String = "", Optional encoding As String = "unknown", Optional text As Object = Nothing, Optional skipNul As Boolean = False,
                                Optional env As Environment = Nothing) As Object
+        Dim datafile As Object
+        Dim textEncoding As Encoding = Rsharp.GetEncoding(encoding)
+        Dim tsv As Boolean = (sep = vbTab)
 
+        If file Is Nothing Then
+            If env.strictOption Then
+                Return RInternal.debug.stop("the required dataframe file source should not be nothing!", env)
+            Else
+                Call "the required dataframe file source is nothing, null value will be returns as the dataframe result value.".warning
+            End If
+
+            Return Nothing
+        End If
+
+        If TypeOf file Is String Then
+            datafile = REnv _
+                .TryCatch(runScript:=Function()
+                                         If tsv Then
+                                             Return IO.File.LoadTsv(file, encoding:=textEncoding)
+                                         Else
+                                             Return IO.File.Load(file, encoding:=textEncoding, mute:=Not env.verboseOption)
+                                         End If
+                                     End Function,
+                          debug:=env.globalEnvironment.debugMode
+                )
+        ElseIf TypeOf file Is fileStream Then
+            Using reader As New textStream(DirectCast(file, fileStream), textEncoding)
+                datafile = reader.ReadToEnd _
+                    .LineTokens _
+                    .DoCall(Function(lines) FileLoader.Load(lines, False, Nothing, isTsv:=tsv)) _
+                    .DoCall(Function(ls)
+                                Return New file(ls)
+                            End Function)
+            End Using
+        ElseIf TypeOf file Is textBuffer Then
+            datafile = DirectCast(file, textBuffer).text _
+                .LineTokens _
+                .DoCall(Function(lines) FileLoader.Load(lines, False, Nothing, isTsv:=tsv)) _
+                .DoCall(Function(ls)
+                            Return New file(ls)
+                        End Function)
+        Else
+            Return RInternal.debug.stop({
+                "invalid file clr object content type!",
+                "clr_type: " & file.GetType.FullName
+            }, env)
+        End If
+
+        If Not TypeOf datafile Is file Then
+            Return RInternal.debug.stop(datafile, env)
+        Else
+            Return DirectCast(datafile, csv).rawToDataFrame(
+                row_names:=row_names,
+                check_names:=check_names,
+                check_modes:=check_modes,
+                comment_char:=comment_char,
+                skip_rows:=skip,
+                env:=env,
+                header:=header
+            )
+        End If
     End Function
 
     Public Function ensureRowNames(row_names As Object, env As Environment) As Object
