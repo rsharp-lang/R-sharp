@@ -518,15 +518,16 @@ Public Module utils
     ''' </remarks>
     <ExportAPI("read.table")>
     Public Function read_table(file As Object, Optional header As Boolean = False, Optional sep As String = "", Optional quote As String = """'",
-       Optional dec As String = ".", <RRawVectorArgument(TypeCodes.string)> Optional numerals As Object = "allow.loss|warn.loss|no.loss",
-        <RRawVectorArgument> Optional row_names As Object = Nothing, <RRawVectorArgument> Optional col_names As Object = Nothing, <RLazyExpression> Optional as_is As Object = "!stringsAsFactors", Optional tryLogical As Boolean = True,
-          Optional na_strings As String = "NA", Optional colClasses As Object = NA, Optional nrows As Integer = -1,
-           Optional skip As Integer = 0, Optional check_names As Boolean = True, <RLazyExpression> Optional fill As Object = "!blank.lines.skip",
-          Optional strip_white As Boolean = False, Optional blank_lines_skip As Boolean = True,
-          Optional comment_char As Char = "#"c,
-        Optional allowEscapes As Boolean = False, Optional flush As Boolean = False,
-          Optional stringsAsFactors As Boolean = False,
-          Optional fileEncoding As String = "", Optional encoding As String = "unknown", Optional text As Object = Nothing, Optional skipNul As Boolean = False, Optional env As Environment = Nothing) As Object
+                               Optional dec As String = ".", <RRawVectorArgument(TypeCodes.string)> Optional numerals As Object = "allow.loss|warn.loss|no.loss",
+                               <RRawVectorArgument> Optional row_names As Object = Nothing, <RRawVectorArgument> Optional col_names As Object = Nothing, <RLazyExpression> Optional as_is As Object = "!stringsAsFactors", Optional tryLogical As Boolean = True,
+                               Optional na_strings As String = "NA", Optional colClasses As Object = NA, Optional nrows As Integer = -1,
+                               Optional skip As Integer = 0, Optional check_names As Boolean = True, <RLazyExpression> Optional fill As Object = "!blank.lines.skip",
+                               Optional strip_white As Boolean = False, Optional blank_lines_skip As Boolean = True,
+                               Optional comment_char As Char = "#"c,
+                               Optional allowEscapes As Boolean = False, Optional flush As Boolean = False,
+                               Optional stringsAsFactors As Boolean = False,
+                               Optional fileEncoding As String = "", Optional encoding As String = "unknown", Optional text As Object = Nothing, Optional skipNul As Boolean = False,
+                               Optional env As Environment = Nothing) As Object
 
     End Function
 
