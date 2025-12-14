@@ -482,6 +482,7 @@ Public Module utils
                                Optional stringsAsFactors As Boolean = False,
                                Optional fileEncoding As String = "", Optional encoding As String = "unknown", Optional text As Object = Nothing, Optional skipNul As Boolean = False,
                                Optional env As Environment = Nothing) As Object
+
         Dim datafile As Object
         Dim textEncoding As Encoding = Rsharp.GetEncoding(encoding)
         Dim tsv As Boolean = (sep = vbTab)
