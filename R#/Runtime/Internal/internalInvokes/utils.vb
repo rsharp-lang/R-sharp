@@ -1554,6 +1554,10 @@ Namespace Runtime.Internal.Invokes
                 ElseIf pkgDir.FileExists(alternativeName) Then
                     Call env.AddMessage($"Target file '{fileName}' is missing in R file system. Use alternative file name: '{pkgDir.GetFullPath(alternativeName)}'...")
                     Return pkgDir.GetFullPath(alternativeName)
+                ElseIf pkgDir.GetFullPath(fileName).DirectoryExists Then
+                    Return pkgDir.GetFullPath(fileName)
+                ElseIf pkgDir.GetFullPath(alternativeName).DirectoryExists Then
+                    Return pkgDir.GetFullPath(alternativeName)
                 ElseIf mustWork Then
                     Return Internal.debug.stop("file is not found!", env)
                 Else
