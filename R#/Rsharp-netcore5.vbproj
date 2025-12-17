@@ -30,6 +30,7 @@
 		<Title>R# language runtime</Title>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<AssemblyTitle>R# language runtime</AssemblyTitle>
+		<PackageOutputPath>..\.nuget</PackageOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -569,7 +570,7 @@
 	  <EmbeddedResource Remove="Test\**" />
 	  <None Remove="App\**" />
 	  <None Remove="Test\**" />
-	  <None Include="..\docs\images\R-sharp.png">
+	  <None Include="..\.nuget\R-sharp.png">
 	    <Pack>True</Pack>
 	    <PackagePath></PackagePath>
 	  </None>

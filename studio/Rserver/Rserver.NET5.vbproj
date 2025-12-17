@@ -11,6 +11,8 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <DefineConstants>write_csv=1</DefineConstants>
+    <PackageIcon>R-sharp.png</PackageIcon>
+    <PackageOutputPath>..\..\.nuget\</PackageOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -341,6 +343,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\.nuget\R-sharp.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

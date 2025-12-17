@@ -16,6 +16,8 @@ local.properties
 .settings/
 .loadpath
 
+.nuget/
+
 node_modules/
 packages/
 .vs/

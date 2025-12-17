@@ -19,6 +19,7 @@
 	  <Description>Reader of R datasets in .rda format</Description>
 	  <PackageReleaseNotes>Reader of R datasets in .rda format</PackageReleaseNotes>
 	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+	  <PackageOutputPath>..\..\.nuget</PackageOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -115,7 +116,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\docs\images\R-sharp.png">
+    <None Include="..\..\.nuget\R-sharp.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
