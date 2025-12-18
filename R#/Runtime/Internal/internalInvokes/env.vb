@@ -58,6 +58,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports System.Text.RegularExpressions
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports Microsoft.VisualBasic.CommandLine.Reflection
@@ -740,6 +741,19 @@ Namespace Runtime.Internal.Invokes
         Public Function relative_work(Optional file As String = Nothing,
                                       Optional strict As Boolean? = Nothing,
                                       Optional env As Environment = Nothing) As Object
+
+            If file IsNot Nothing Then
+                If file.StartsWith("/") Then
+                    ' is absolute path
+                    Call $"the given file path({file}) is an absolute path, relative_work will not working".warning
+                    Return file
+                End If
+                If file.StartsWith("[A-Z]+[:][/\\]", RegexOptions.IgnoreCase) Then
+                    ' is window absoluet path
+                    Call $"the given file path({file}) is a windows absolute path, relative_work will not working".warning
+                    Return file
+                End If
+            End If
 
             Dim dir As New ScriptFolder()
             Dim workdir As String = CStr(dir.Evaluate(env))
