@@ -171,7 +171,11 @@ Namespace Runtime.Internal.ConsolePrinter
         <Extension>
         Public Iterator Function ToContent(table As dataframe, maxPrint%, maxWidth%, globalEnv As GlobalEnvironment) As IEnumerable(Of ConsoleTableBaseData)
             Dim nrows As Integer = std.Min(table.nrows, maxPrint)
-            Dim rowsNames As String() = {"<mode>"}.JoinIterates(table.getRowNames.Take(nrows)).ToArray
+            Dim rowsNames As String() = New String() {"<mode>"} _
+                .JoinIterates(From si As String
+                              In table.getRowNames.Take(nrows)
+                              Select truncateDisplayString(si, maxWidth)) _
+                .ToArray
             Dim maxRowNames As Integer = rowsNames.MaxLengthString.Length
             Dim maxColumns As Integer = globalEnv.getMaxColumns
             Dim columns As NamedCollection(Of String)() = table.colnames _

@@ -3634,7 +3634,7 @@ RE0:
             Dim quot As Boolean = args.getValue("quot", env, True)
             Dim maxPrint As Integer = args.getValue("max.print", env, globalEnv.options.maxPrint)
             Dim fields As String() = args.getValue(Of String())("select", env, Nothing)
-            Dim maxWidth As Integer = args.getValue("max.width", env, 200)
+            Dim maxWidth As Integer = args.getValue("max.width", env, 120)
             ' display the syntax highlights of the R# runtime expression object?
             Dim highlights As Boolean = args.getValue("syntax.highlight", env, [default]:=True)
             Dim color As String = CLRVector.asScalarCharacter(args.getByName("color"))
