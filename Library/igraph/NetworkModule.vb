@@ -827,6 +827,7 @@ Public Module NetworkModule
                             Optional v As Object = Nothing,
                             Optional setWeight As Double? = Nothing,
                             Optional directed As Boolean = False,
+                            Optional multiple_map As Boolean = False,
                             Optional env As Environment = Nothing) As Object
 
         If TypeOf g Is NetworkGraph Then
@@ -838,14 +839,21 @@ Public Module NetworkModule
             For Each ij As (u$, v$) In uv
                 Dim vu As node = DirectCast(g, NetworkGraph).GetElementByID(ij.u)
                 Dim vv As node = DirectCast(g, NetworkGraph).GetElementByID(ij.v)
+                Dim q As IEnumerable(Of Edge)
 
                 If directed Then
-                    Call edges.AddRange(DirectCast(g, NetworkGraph).GetEdges(vu, vv).SafeQuery)
+                    q = DirectCast(g, NetworkGraph).GetEdges(vu, vv).SafeQuery
                 Else
-                    Call edges.AddRange(DirectCast(g, NetworkGraph) _
+                    q = DirectCast(g, NetworkGraph) _
                         .GetEdges(vu, vv) _
                         .SafeQuery _
-                        .AsList + DirectCast(g, NetworkGraph).GetEdges(vv, vu))
+                        .AsList + DirectCast(g, NetworkGraph).GetEdges(vv, vu)
+                End If
+
+                If multiple_map Then
+                    Call edges.AddRange(q)
+                Else
+                    Call edges.Add(q.FirstOrDefault)
                 End If
             Next
 
@@ -853,11 +861,13 @@ Public Module NetworkModule
                 Dim w As Double = CDbl(setWeight)
 
                 For Each edge As Edge In edges
-                    edge.weight = w
+                    If Not edge Is Nothing Then
+                        edge.weight = w
+                    End If
                 Next
             End If
 
-            Return (From e As Edge In edges Select e.weight).ToArray
+            Return (From e As Edge In edges Select If(e Is Nothing, 0, e.weight)).ToArray
         ElseIf TypeOf g Is E Then
             Return New list(RType.GetRSharpType(GetType(Double))) With {
                 .slots = DirectCast(g, E).edges _
