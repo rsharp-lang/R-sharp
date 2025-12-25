@@ -1,64 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::8ddbfe93ff1854452f82275c33322f94, Library\igraph\NetworkModule.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1311
-    '    Code Lines: 862 (65.75%)
-    ' Comment Lines: 285 (21.74%)
-    '    - Xml Docs: 94.39%
-    ' 
-    '   Blank Lines: 164 (12.51%)
-    '     File Size: 51.20 KB
+' Summaries:
 
 
-    ' Module NetworkModule
-    ' 
-    '     Function: addEdge, addEdges, addNode, addNodeData, addNodes
-    '               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
-    '               degree, deleteNode, E, edgeAttributes, emptyNetwork
-    '               eval, extractAdjacenciesSubNetwork, extractSubGraph, gephi_gml, getByGroup
-    '               getClass, getEdges, getEdgeTable, getEdgeTable2, getElementByID
-    '               getNodes, getNodeTable, graph, hasEdge, LoadNetwork
-    '               LouvainCluster, metaData, MST, nodeAttributes, nodeClass
-    '               nodeMass, nodeNames, printGraph, printNode, SaveNetwork
-    '               setAttributes, summaryNodes, tabular_graph, trimEdges, typeGroupOfNodes
-    '               V, weights, xref
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1311
+'    Code Lines: 862 (65.75%)
+' Comment Lines: 285 (21.74%)
+'    - Xml Docs: 94.39%
+' 
+'   Blank Lines: 164 (12.51%)
+'     File Size: 51.20 KB
+
+
+' Module NetworkModule
+' 
+'     Function: addEdge, addEdges, addNode, addNodeData, addNodes
+'               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
+'               degree, deleteNode, E, edgeAttributes, emptyNetwork
+'               eval, extractAdjacenciesSubNetwork, extractSubGraph, gephi_gml, getByGroup
+'               getClass, getEdges, getEdgeTable, getEdgeTable2, getElementByID
+'               getNodes, getNodeTable, graph, hasEdge, LoadNetwork
+'               LouvainCluster, metaData, MST, nodeAttributes, nodeClass
+'               nodeMass, nodeNames, printGraph, printNode, SaveNetwork
+'               setAttributes, summaryNodes, tabular_graph, trimEdges, typeGroupOfNodes
+'               V, weights, xref
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -821,29 +821,39 @@ Public Module NetworkModule
     <ExportAPI("weight")>
     <RApiReturn(GetType(Double))>
     Public Function weights(g As Object,
-                            Optional u As String = Nothing,
-                            Optional v As String = Nothing,
-                            Optional setWeight As Double = 0,
+                            <RRawVectorArgument>
+                            Optional u As Object = Nothing,
+                            <RRawVectorArgument>
+                            Optional v As Object = Nothing,
+                            Optional setWeight As Double? = Nothing,
                             Optional directed As Boolean = False,
                             Optional env As Environment = Nothing) As Object
 
         If TypeOf g Is NetworkGraph Then
-            Dim edges As Edge()
-            Dim vu As node = DirectCast(g, NetworkGraph).GetElementByID(u)
-            Dim vv As node = DirectCast(g, NetworkGraph).GetElementByID(v)
+            Dim edges As New List(Of Edge)
+            Dim u_vec As String() = CLRVector.asCharacter(u)
+            Dim v_vec As String() = CLRVector.asCharacter(v)
+            Dim uv As (u$, v$)() = GetVectorElement.Zip(u_vec, v_vec).ToArray
 
-            If directed Then
-                edges = DirectCast(g, NetworkGraph).GetEdges(vu, vv).SafeQuery.ToArray
-            Else
-                edges = DirectCast(g, NetworkGraph) _
-                    .GetEdges(vu, vv) _
-                    .SafeQuery _
-                    .AsList + DirectCast(g, NetworkGraph).GetEdges(vv, vu)
-            End If
+            For Each ij As (u$, v$) In uv
+                Dim vu As node = DirectCast(g, NetworkGraph).GetElementByID(ij.u)
+                Dim vv As node = DirectCast(g, NetworkGraph).GetElementByID(ij.v)
 
-            If setWeight <> 0 Then
-                For Each edge In edges
-                    edge.weight = setWeight
+                If directed Then
+                    Call edges.AddRange(DirectCast(g, NetworkGraph).GetEdges(vu, vv).SafeQuery)
+                Else
+                    Call edges.AddRange(DirectCast(g, NetworkGraph) _
+                        .GetEdges(vu, vv) _
+                        .SafeQuery _
+                        .AsList + DirectCast(g, NetworkGraph).GetEdges(vv, vu))
+                End If
+            Next
+
+            If setWeight IsNot Nothing Then
+                Dim w As Double = CDbl(setWeight)
+
+                For Each edge As Edge In edges
+                    edge.weight = w
                 Next
             End If
 
