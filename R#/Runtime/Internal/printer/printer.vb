@@ -191,7 +191,9 @@ Namespace Runtime.Internal.ConsolePrinter
 
                        Dim str As String = val.ToString(format)
 
-                       If str.IndexOf("."c) > -1 Then
+                       ' 20251226
+                       ' trim suffix zero and disable trim suffix zero for scientific notation
+                       If str.IndexOf("."c) > -1 AndAlso (str.IndexOf("e") = -1 AndAlso str.IndexOf("E") = -1) Then
                            str = str.TrimEnd("0"c)
 
                            If str.Last = "."c Then
