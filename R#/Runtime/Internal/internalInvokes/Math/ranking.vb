@@ -169,6 +169,8 @@ Namespace Runtime.Internal.Invokes
         <RApiReturn(GetType(Integer))>
         Public Function order(x As Array,
                               Optional decreasing As Boolean = False,
+                              <RRawVectorArgument>
+                              Optional sort As Object = Nothing,
                               Optional env As Environment = Nothing) As Object
 
             Dim generic As Object = REnv.TryCastGenericArray(x, env)
@@ -181,17 +183,23 @@ Namespace Runtime.Internal.Invokes
             End If
 
             If TypeOf generic Is String() Then
-                Return DirectCast(generic, String()).orderNumbers(decreasing)
+                Dim stringOrder As Index(Of String) = Nothing
+
+                If sort IsNot Nothing Then
+                    stringOrder = CLRVector.asCharacter(sort).Indexing
+                End If
+
+                Return DirectCast(generic, String()).orderNumbers(decreasing, stringOrder)
             Else
-                Return CLRVector.asNumeric(generic).orderNumbers(decreasing)
+                Return CLRVector.asNumeric(generic).orderNumbers(decreasing, Nothing)
             End If
         End Function
 
         <Extension>
-        Private Function orderNumbers(Of T As IComparable(Of T))(x As T(), decreasing As Boolean) As Integer()
+        Private Function orderNumbers(Of T As IComparable(Of T))(x As T(), decreasing As Boolean, order As Index(Of T)) As Integer()
             Return RankOrder(Of T).Input(x) _
                 .DoCall(Function(v)
-                            Return RankOrder(Of T).Ranking(v, desc:=decreasing)
+                            Return RankOrder(Of T).Ranking(v, desc:=decreasing, sort_order:=order)
                         End Function) _
                 .Select(Function(d) d.i + 1) _
                 .ToArray
