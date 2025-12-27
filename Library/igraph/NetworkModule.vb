@@ -468,9 +468,13 @@ Public Module NetworkModule
                                 Optional defaultNodeSize As Object = "20,20",
                                 Optional defaultBrush$ = "black",
                                 Optional ignoresBrokenLinks As Boolean = False,
+                                Optional verbose As Boolean? = Nothing,
                                 Optional env As Environment = Nothing) As NetworkGraph
 
-        Return NetworkFileIO.Load(directory.GetDirectoryFullPath) _
+        Return NetworkFileIO.Load(
+            dir:=directory.GetDirectoryFullPath,
+            verbose:=env.verboseOption(verbose)
+        ) _
             .CreateGraph(
                 defaultNodeSize:=InteropArgumentHelper.getSize(defaultNodeSize, env),
                 defaultBrush:=defaultBrush,
