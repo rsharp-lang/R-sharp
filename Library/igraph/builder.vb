@@ -77,6 +77,40 @@ Imports std = System.Math
 <Package("builder")>
 Module builder
 
+    <ExportAPI("cor_net")>
+    Public Function cor_net(<RRawVectorArgument> fromNode As Object,
+                            <RRawVectorArgument> toNode As Object,
+                            <RRawVectorArgument> cor As Object,
+                            <RRawVectorArgument>
+                            Optional pval As Object = Nothing) As Object
+
+        Dim fromIds As String() = CLRVector.asCharacter(fromNode)
+        Dim toIds As String() = CLRVector.asCharacter(toNode)
+        Dim corVec As Double() = CLRVector.asNumeric(cor)
+        Dim pvalVec As Double() = CLRVector.asNumeric(pval)
+        Dim g As New NetworkGraph
+        Dim i As Integer = 0
+
+        For Each id As String In fromIds.JoinIterates(toIds).Distinct
+            Call g.CreateNode(id, New NodeData With {.label = id, .origID = id})
+        Next
+
+        For Each uv In GetVectorElement.Zip(fromIds, toIds)
+            Dim u = g.GetElementByID(uv.Item1)
+            Dim v = g.GetElementByID(uv.Item2)
+
+            Call g.CreateEdge(u, v, corVec(i), data:=New EdgeData With {
+                .Properties = New Dictionary(Of String, String) From {
+                    {"p-value", pvalVec.ElementAtOrDefault(i)}
+                }
+            })
+
+            i += 1
+        Next
+
+        Return g
+    End Function
+
     ''' <summary>
     ''' Create a network graph based on the item correlations
     ''' </summary>
