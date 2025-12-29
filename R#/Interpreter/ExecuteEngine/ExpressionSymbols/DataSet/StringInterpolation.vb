@@ -94,6 +94,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         End Sub
 
         Public Overrides Function Evaluate(envir As Environment) As Object
+            If stringParts Is Nothing OrElse stringParts.Length = 0 Then
+                ' 20251229 `` will produce empty string parts collection
+                ' is empty string
+                Return ""
+            End If
+
             Dim current As Array = CLRVector.asCharacter(stringParts(Scan0).Evaluate(envir))
             Dim [next] As Object
             Dim str_concatenate As New op_evaluator(AddressOf r_string_concatenate)
