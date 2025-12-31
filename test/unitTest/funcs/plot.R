@@ -4,7 +4,6 @@ setwd(@dir);
 
 let pca_score = read.csv("./wine_PCA_score.csv", row.names = 1, check.names = FALSE);
 
-
 print(pca_score);
 
 pca_score[, "class"] = unlist($"class\d+"(rownames(pca_score)));
