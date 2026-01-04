@@ -2966,26 +2966,29 @@ RE0:
         '''
         ''' The ‘factory-fresh’ default settings of some of these options are
         '''
-        ''' add.smooth	TRUE
-        ''' check.bounds	FALSE
-        ''' continue	"+ "
-        ''' digits	7
-        ''' echo	TRUE
-        ''' encoding	"native.enc"
-        ''' error	NULL
-        ''' expressions	5000
-        ''' keep.source	interactive()
-        ''' keep.source.pkgs	FALSE
-        ''' max.print	99999
-        ''' OutDec	"."
-        ''' prompt	"> "
-        ''' scipen	0
-        ''' show.error.messages	TRUE
-        ''' timeout	60
-        ''' verbose	FALSE
-        ''' warn	0
-        ''' warning.length	1000
-        ''' width	80
+        ''' |options            |default value|
+        ''' |-------------------|-------------|
+        ''' |add.smooth         |TRUE         |
+        ''' |check.bounds       |FALSE        |
+        ''' |continue           |"+ "         |
+        ''' |digits             |7            |
+        ''' |echo               |TRUE         |
+        ''' |encoding           |"native.enc" |
+        ''' |error              |NULL         |
+        ''' |expressions        |5000         |
+        ''' |keep.source        |interactive()|
+        ''' |keep.source.pkgs   |FALSE        |
+        ''' |max.print          |99999        |
+        ''' |OutDec             |"."          |
+        ''' |prompt             |"> "         |
+        ''' |scipen             |0            |
+        ''' |show.error.messages|TRUE         |
+        ''' |timeout            |60           |
+        ''' |verbose            |FALSE        |
+        ''' |warn               |0            |
+        ''' |warning.length     |1000         |
+        ''' |width              |80           |
+        ''' 
         ''' Others are set from environment variables or are platform-dependent.
         ''' </remarks>
         <ExportAPI("options")>
