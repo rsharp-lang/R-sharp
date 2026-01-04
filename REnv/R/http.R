@@ -39,7 +39,10 @@ const http_get = function(url, streamTo, interval = 3, filetype = "html") {
         `${http.cache_dir}/${prefix}/${cacheKey}.${filetype}`;
      } else {
         # create a file reference closure object
-        file.allocate(`/${prefix}/${cacheKey}.${filetype}`, fs = get(http.cache_dir, globalenv()));
+        let fs_path = `/${prefix}/${cacheKey}.${filetype}`;
+        let fs_obj = get(http.cache_dir, globalenv());
+
+        file.allocate(fs_path, fs = fs_obj);
      }
   };
   const hit_cache = list(hit = "yes");

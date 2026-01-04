@@ -2579,8 +2579,7 @@ RE0:
             If x.StringEmpty Then
                 Return invoke.missingParameter(NameOf(getOption), "name", envir)
             Else
-                Return envir.globalEnvironment _
-                    .options _
+                Return envir.globalEnvironment.options _
                     .getOption(x, [default])
             End If
         End Function
