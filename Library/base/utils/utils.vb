@@ -509,8 +509,14 @@ Public Module utils
                                      End Function,
                           debug:=env.globalEnvironment.debugMode
                 )
-        ElseIf TypeOf file Is fileStream Then
-            Using reader As New textStream(DirectCast(file, fileStream), textEncoding)
+        ElseIf TypeOf file Is fileStream OrElse TypeOf file Is FileReference Then
+            Dim s As Stream = TryCast(file, fileStream)
+
+            If s Is Nothing Then
+                s = DirectCast(file, FileReference).open(FileMode.Open, FileAccess.Read)
+            End If
+
+            Using reader As New textStream(s, textEncoding)
                 datafile = reader.ReadToEnd _
                     .LineTokens _
                     .DoCall(Function(lines) FileLoader.Load(lines, False, Nothing, isTsv:=tsv)) _
