@@ -1,6 +1,8 @@
 let x as integer = [1024, 2, 3, 4, 5];
 let s as integer = 30;
 
+# 20260104 not working
+
 # create unit by R# activator
 unit(x) = new unit(name = "kg");
 unit(s) = new unit(name = "m");

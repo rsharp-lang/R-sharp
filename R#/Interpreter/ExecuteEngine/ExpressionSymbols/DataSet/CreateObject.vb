@@ -98,7 +98,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
         Public Shared Function TryGetType(activator As String, env As Environment) As [Variant](Of IRType, Message)
             If env.globalEnvironment.types.ContainsKey(activator) Then
-                Return env.globalEnvironment.types(activator)
+                ' 20260104 Rtype cast to variant type error whill throw
+                ' if returns the result value directly
+                ' example as: Return env.globalEnvironment.types(activator)
+                '
+                ' use a temp symbol with IRtype for avoid this runtime error
+                Dim type As IRType = env.globalEnvironment.types(activator)
+                Return New [Variant](Of IRType, Message)(type)
             Else
                 Return RInternal.debug.stop({"missing required type information...", "type: " & activator}, env)
             End If
