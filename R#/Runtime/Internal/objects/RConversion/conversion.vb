@@ -1491,7 +1491,7 @@ RE0:
         ''' <returns></returns>
         <ExportAPI("ctype")>
         Public Function castType(<RRawVectorArgument> any As Object, type As String, Optional env As Environment = Nothing) As Object
-            Dim [class] As [Variant](Of RType, Message) = DataSets.CreateObject.TryGetType(type, env)
+            Dim [class] As [Variant](Of IRType, Message) = DataSets.CreateObject.TryGetType(type, env)
 
             If [class] Like GetType(Message) Then
                 Return [class].TryCast(Of Message)

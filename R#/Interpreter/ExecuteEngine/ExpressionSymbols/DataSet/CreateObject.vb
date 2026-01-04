@@ -96,7 +96,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Me.constructor = constructor
         End Sub
 
-        Public Shared Function TryGetType(activator As String, env As Environment) As [Variant](Of RType, Message)
+        Public Shared Function TryGetType(activator As String, env As Environment) As [Variant](Of IRType, Message)
             If env.globalEnvironment.types.ContainsKey(activator) Then
                 Return env.globalEnvironment.types(activator)
             Else
@@ -111,7 +111,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             If type Like GetType(Message) Then
                 Return type.TryCast(Of Message)
             Else
-                obj = vbObject.CreateInstance(type.TryCast(Of RType).raw)
+                obj = vbObject.CreateInstance(type.TryCast(Of IRType).raw)
             End If
 
             Dim err As New Value(Of Object)
