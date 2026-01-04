@@ -88,8 +88,26 @@ Namespace Language.Syntax.SyntaxParser
                 ElseIf blocks = 1 AndAlso blocks(Scan0)(Scan0) = (TokenType.operator, "~") Then
                     Return FormulaExpressionSyntax.GetExpressionLiteral(blocks, opts)
                 Else
+                    tokens = blocks(Scan0)
+
+                    ' 20260104 test for unit literal syntax
+                    ' example as 32[MB] means 32 * 1024[KB] = 32 * 1024 * 1024
+                    ' 1       2     3          4
+                    ' literal open[ identifier close]
+                    If tokens.Length = 4 Then
+                        Select Case tokens(0).name
+                            Case TokenType.integerLiteral, TokenType.numberLiteral
+                                If tokens(1) = (TokenType.open, "[") AndAlso tokens(3) = (TokenType.close, "]") Then
+                                    If tokens(2).name = TokenType.identifier Then
+                                        ' confirmed is a unit literal syntax
+                                        Return VectorLiteralSyntax.UnitLiteralSyntax(tokens(0), tokens(2), opts)
+                                    End If
+                                End If
+                        End Select
+                    End If
+
                     ' 是一个复杂的表达式
-                    Return blocks(Scan0).ParseExpressionTree(opts)
+                    Return tokens.ParseExpressionTree(opts)
                 End If
             ElseIf opts.isBuildVector Then
                 Dim expressions As New List(Of Expression)
