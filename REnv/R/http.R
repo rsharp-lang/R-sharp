@@ -40,7 +40,7 @@ const http_get = function(url, streamTo, interval = 3, filetype = "html") {
      } else {
         # create a file reference closure object
         let fs_path = `/${prefix}/${cacheKey}.${filetype}`;
-        let fs_obj = get(http.cache_dir, globalenv());
+        let fs_obj = env::get(http.cache_dir, globalenv());
 
         file.allocate(fs_path, fs = fs_obj);
      }

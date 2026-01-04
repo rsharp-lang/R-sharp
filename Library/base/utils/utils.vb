@@ -75,6 +75,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLSX.Model
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Text
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.RDataSet
 Imports SMRUCC.Rsharp.RDataSet.Convertor
 Imports SMRUCC.Rsharp.Runtime
@@ -665,27 +666,38 @@ Public Module utils
             DirectCast(file, dataframeBuffer).dataframe = x
             DirectCast(file, dataframeBuffer).tsv = tsv
             Return file
-        ElseIf TypeOf file Is textBuffer Then
+        ElseIf TypeOf file Is textBuffer OrElse TypeOf file Is FileReference Then
             ' transfer as plant text file
             Dim document = DirectCast(x, Rdataframe).DataFrameRows(row_names, formatNumber:=Nothing, env)
-            Dim ms As New MemoryStream
-            Dim text As String
 
             If document Like GetType(Message) Then
                 Return document.TryCast(Of Message)
             End If
 
-            StreamIO.SaveDataFrame(document.TryCast(Of csv).Rows, ms, Encoding.UTF8, tsv:=tsv, silent:=True)
-            ms.Flush()
-            text = Encoding.UTF8.GetString(ms.ToArray)
-            ms.Dispose()
+            Dim table_rows As RowObject() = document.TryCast(Of csv).Rows
 
-            With DirectCast(file, textBuffer)
-                .text = text
-                .mime = "text/csv"
-            End With
+            If TypeOf file Is textBuffer Then
+                Dim ms As New MemoryStream
+                Dim text As String
 
-            Return file
+                StreamIO.SaveDataFrame(table_rows, ms, Encoding.UTF8, tsv:=tsv, silent:=True)
+                ms.Flush()
+                text = Encoding.UTF8.GetString(ms.ToArray)
+                ms.Dispose()
+
+                With DirectCast(file, textBuffer)
+                    .text = text
+                    .mime = "text/csv"
+                End With
+
+                Return file
+            Else
+                Using s As Stream = DirectCast(file, FileReference).open(access:=FileAccess.Write)
+                    StreamIO.SaveDataFrame(table_rows, s, Encoding.UTF8, tsv:=tsv, silent:=True)
+                    s.Flush()
+                    s.Dispose()
+                End Using
+            End If
         ElseIf TypeOf file Is Stream Then
             ' save table with given stream
             Dim document = DirectCast(x, Rdataframe).DataFrameRows(row_names, formatNumber:=Nothing, env)
