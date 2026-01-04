@@ -196,10 +196,12 @@ Namespace Runtime.Internal.Invokes
                 Return New tqdmList With {
                     .list = New list(DirectCast(x, IDictionary(Of String, Object)))
                 }
-                'ElseIf x.GetType.ImplementInterface(Of IDictionary) Then
-                '    Return New tqdmList With {
-                '        .list = New list(DirectCast(x, IDictionary))
-                '    }
+            ElseIf x.GetType.ImplementInterface(Of IDictionary(Of String, String)) OrElse
+                x.GetType.ImplementInterface(Of IDictionary(Of String, String())) Then
+
+                Return New tqdmList With {
+                    .list = New list(DirectCast(x, IDictionary))
+                }
             Else
                 Dim pull As Object() = CLRVector.asObject(x)
 
