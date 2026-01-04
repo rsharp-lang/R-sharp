@@ -701,7 +701,6 @@ Public Module utils
                 Using s As Stream = DirectCast(file, FileReference).open(access:=FileAccess.Write)
                     StreamIO.SaveDataFrame(table_rows, s, Encoding.UTF8, tsv:=tsv, silent:=True)
                     s.Flush()
-                    s.Dispose()
                 End Using
             End If
         ElseIf TypeOf file Is Stream Then
