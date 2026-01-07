@@ -114,6 +114,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Public Overrides Function Evaluate(envir As Environment) As Object
             Dim data As Object = symbol.Evaluate(envir)
             Dim member As Object = index.Evaluate(envir)
+            Dim idxType As TypeCodes = index.type
 
             If Program.isException(data) Then
                 Return data
@@ -123,10 +124,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Return Nothing
             End If
 
+            If idxType = TypeCodes.generic Then
+                If TypeOf member Is vector Then
+                    idxType = DirectCast(member, vector).elementType.mode
+                End If
+            End If
+
             Dim memberName As String = any.ToString(REnv.single(member))
 
             If TypeOf data Is list Then
-                Return getListVector(DirectCast(data, list), memberName, index.type, envir)
+                Return getListVector(DirectCast(data, list), memberName, idxType, envir)
             ElseIf TypeOf data Is vector Then
                 data = DirectCast(data, vector).data
             ElseIf TypeOf data Is LinqPipeline.Group Then
@@ -136,7 +143,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
 
             If data.GetType.IsArray Then
-                Return getVectorList(data, memberName, index.type, envir)
+                Return getVectorList(data, memberName, idxType, envir)
             ElseIf data.GetType.IsInheritsFrom(GetType(s4Reflector)) Then
                 Return DirectCast(data, s4Reflector).getByName(memberName, envir)
             End If
