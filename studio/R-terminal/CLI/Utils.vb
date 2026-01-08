@@ -174,6 +174,22 @@ Partial Module CLI
         Return 0
     End Function
 
+    <ExportAPI("--install.rscript")>
+    <Description("An alias command of the ``/bash`` command with argument option ``--install_root`` has enable.")>
+    Public Function InstallRscriptShortcut(args As CommandLine) As Integer
+        Dim rscript As String = args.Tokens.SafeQuery.ElementAtOrDefault(1)
+
+        If rscript.StringEmpty(, True) Then
+            Call "Missing the required rscript file path parameter!".warning
+            Return -1
+        ElseIf Not rscript.FileExists Then
+            Call $"The given rscript file({rscript}) could not be found on your file system!".warning
+            Return -1
+        End If
+
+        Return InstallRscript.Install(rscript, installLinuxRoot:=True).CLICode
+    End Function
+
     <ExportAPI("--startups")>
     <Description("Config of the startup packages.")>
     <Usage("--startups [--add <namespaceList> --remove <namespaceList>]")>

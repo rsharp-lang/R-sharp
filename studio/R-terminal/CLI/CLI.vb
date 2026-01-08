@@ -94,22 +94,8 @@ Module CLI
     Public Function BashRun(args As CommandLine) As Integer
         Dim script$ = args <= "--script"
         Dim install_root As Boolean = args("--install_root")
-        Dim bash$ = If(install_root, "/usr/local/bin/", script.ParentPath) & "/" & script.BaseName
-        Dim utf8 As Encoding = Encodings.UTF8WithoutBOM.CodePage
-        Dim dirHelper As String = UNIX.GetLocationHelper
 
-        script = dirHelper & vbLf & "
-app=""$DIR/{script}""
-cli=""$@""
-
-# the R# may in other location that without PATH environment
-dotnet ""{rscript}"" ""$app"" $cli" _
-            .Replace("{script}", script.FileName) _
-            .Replace("{rscript}", $"{App.HOME}/R#.dll")
-
-        script = script.LineTokens.JoinBy(vbLf)
-
-        Return script.SaveTo(bash, utf8).CLICode
+        Return InstallRscript.Install(script, install_root).CLICode
     End Function
 
     <ExportAPI("--man")>
