@@ -78,7 +78,11 @@ Module CLI
     <ExportAPI("--version")>
     <Description("Print R# interpreter version")>
     Public Function Version(args As CommandLine) As Integer
-        Console.Write(GetType(RInterpreter).Assembly.FromAssembly.AssemblyVersion)
+        Dim asm_time As Date = New FileInfo($"{App.HOME}/R#.dll").LastWriteTime
+        Dim asm_ver As String = GetType(RInterpreter).Assembly.FromAssembly.AssemblyVersion
+
+        Call Console.Write($"{asm_ver} [{asm_time}]")
+
         Return 0
     End Function
 
