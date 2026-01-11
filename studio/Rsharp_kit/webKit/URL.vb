@@ -290,7 +290,7 @@ Public Module URL
     ''' <summary>
     ''' create a new http cache context
     ''' </summary>
-    ''' <param name="fs"></param>
+    ''' <param name="fs">should be an abstract <see cref="IFileSystemEnvironment"/> object</param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("http.cache")>
