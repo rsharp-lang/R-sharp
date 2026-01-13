@@ -1788,6 +1788,12 @@ Namespace Runtime.Internal.Invokes
                     Call env.AddMessage(ex.Message)
                     Return False
                 End Try
+            ElseIf TypeOf con Is Microsoft.VisualBasic.FileIO.Directory Then
+                ' fs = dir.open("xxx");
+                ' close(fs);
+                ' 20260113 just ignores of the filesystem close
+                ' directory does not implements of the idispose interface
+                Return True
             Else
                 Return Internal.debug.stop(Message.InCompatibleType(GetType(Stream), con.GetType, env), env)
             End If
