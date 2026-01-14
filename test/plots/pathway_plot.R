@@ -3,8 +3,10 @@ imports "builder" from "igraph";
 
 require(igraph);
 
-let expr = read.csv("G:\GCModeller\src\workbench\pkg\test\zero_test\expression_matrix.csv", row.names = 1, check.names = FALSE);
-let g = corr(expr) |> correlation.graph(threshold = 0.85);
+let g = igraph::graph(
+    from = c("A","B","E","E","C","A","G","G","A","I","K","J"), 
+    to   = c("C","C","C","B","D","F","F","I","I","K","B","K")
+);
 
 print(g);
 
