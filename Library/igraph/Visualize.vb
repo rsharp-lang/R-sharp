@@ -143,13 +143,14 @@ Module Visualize
     Public Function plot_network(g As NetworkGraph, args As list, env As Environment) As Object
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, "1024,768")
         Dim padding As String = InteropArgumentHelper.getPadding(args!padding, Drawing2D.g.DefaultPadding)
+        Dim driver As Drivers = env.getDriver
 
         Return g.renderPlot(
             canvasSize:=size,
             padding:=padding,
             nodeSize:=args!nodeSize,
             minNodeSize:=args.getValue(Of Single)("minNodeSize", env, 10),
-            driver:=args.getValue(Of Drivers)("driver", env, Drivers.GDI),
+            driver:=driver,
             labelerIterations:=args.getValue("labelerIterations", env, 0),
             env:=env
         )
