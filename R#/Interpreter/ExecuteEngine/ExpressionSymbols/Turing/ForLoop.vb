@@ -136,7 +136,6 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
         ''' <param name="envir"></param>
         ''' <returns></returns>
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Dim result As New List(Of Object)
             Dim runLoop As Func(Of Environment, Object)
 
             If parallel Then
@@ -154,12 +153,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
                     Return item
                 ElseIf TypeOf item Is ReturnValue Then
                     Return item
-                ElseIf Not TypeOf item Is ContinuteFor Then
-                    result += REnv.single(item)
                 End If
             Next
 
-            Return REnv.TryCastGenericArray(result.ToArray, envir)
+            Return Nothing
         End Function
 
         Public Overrides Function ToString() As String
