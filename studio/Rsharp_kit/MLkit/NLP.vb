@@ -394,7 +394,7 @@ Module NLPtools
                            Optional stopwords As Object = Nothing,
                            Optional env As Environment = Nothing) As Object
 
-        Dim method As New TF_IDF(CLRVector.asCharacter(docs), CLRVector.asCharacter(stopwords))
+        Dim method As New DocumentTFIDF(CLRVector.asCharacter(docs), CLRVector.asCharacter(stopwords))
 
         Throw New NotImplementedException
     End Function
