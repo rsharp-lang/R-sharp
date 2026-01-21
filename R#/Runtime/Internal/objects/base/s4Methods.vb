@@ -74,11 +74,12 @@ Namespace Runtime.Internal.Object.baseOp
                 Select Case Microsoft.VisualBasic.Strings.Trim(slot.Value).ToLower
                     Case "numeric", "double" : valueType = GetType(Double())
                     Case "integer" : valueType = GetType(Integer())
-                    Case "character" : valueType = GetType(String())
-                    Case "raw" : valueType = GetType(Byte())
+                    Case "character", "string" : valueType = GetType(String())
+                    Case "raw", "byte" : valueType = GetType(Byte())
                     Case "list" : valueType = GetType(list)
                     Case "float" : valueType = GetType(Single())
                     Case "long" : valueType = GetType(Long())
+                    Case "boolean", "logical", "bool" : valueType = GetType(Boolean())
                     Case Else
                         valueType = env.types(slot.Value).raw
                 End Select
