@@ -114,6 +114,10 @@ Namespace Runtime.Serialize
             Erase data
         End Sub
 
+        Public Function lines() As String()
+            Return text.LineTokens
+        End Function
+
         Public Overrides Function getValue() As Object
             Return text
         End Function

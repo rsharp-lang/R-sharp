@@ -342,6 +342,8 @@ Public Module utils
                              Optional encoding As Object = "unknown",
                              Optional comment_char As String = "#",
                              Optional skip_rows As Integer = -1,
+                             <RRawVectorArgument>
+                             Optional text As Object = Nothing,
                              Optional env As Environment = Nothing) As Object
 
         Return read_table(file,
@@ -353,6 +355,7 @@ Public Module utils
                           comment_char:=comment_char,
                           sep:=",",
                           skip:=skip_rows,
+                          text:=text,
                           env:=env)
     End Function
 
@@ -481,7 +484,10 @@ Public Module utils
                                Optional comment_char As Char = "#"c,
                                Optional allowEscapes As Boolean = False, Optional flush As Boolean = False,
                                Optional stringsAsFactors As Boolean = False,
-                               Optional fileEncoding As String = "", Optional encoding As String = "unknown", Optional text As Object = Nothing, Optional skipNul As Boolean = False,
+                               Optional fileEncoding As String = "", Optional encoding As String = "unknown",
+                               <RRawVectorArgument>
+                               Optional text As Object = Nothing,
+                               Optional skipNul As Boolean = False,
                                Optional env As Environment = Nothing) As Object
 
         Dim datafile As Object
@@ -490,55 +496,19 @@ Public Module utils
 
         sep = C.sprintf(sep)
         tsv = sep = vbTab
+        datafile = getTextSource(file, text, textEncoding, env)
 
-        If file Is Nothing Then
-            If env.strictOption Then
-                Return RInternal.debug.stop("the required dataframe file source should not be nothing!", env)
-            Else
-                Call "the required dataframe file source is nothing, null value will be returns as the dataframe result value.".warning
-            End If
-
+        If datafile Is Nothing Then
             Return Nothing
-        End If
+        ElseIf TypeOf datafile Is Message Then
+            Return datafile
+        Else
+            Dim lines As String() = CLRVector.asCharacter(datafile)
 
-        If TypeOf file Is String Then
-            datafile = REnv _
-                .TryCatch(runScript:=Function()
-                                         If tsv Then
-                                             Return IO.File.LoadTsv(file, encoding:=textEncoding)
-                                         Else
-                                             Return IO.File.Load(file, encoding:=textEncoding, mute:=Not env.verboseOption)
-                                         End If
-                                     End Function,
-                          debug:=env.globalEnvironment.debugMode
-                )
-        ElseIf TypeOf file Is fileStream OrElse TypeOf file Is FileReference Then
-            Dim s As Stream = TryCast(file, fileStream)
-
-            If s Is Nothing Then
-                s = DirectCast(file, FileReference).open(FileMode.Open, FileAccess.Read)
-            End If
-
-            Using reader As New textStream(s, textEncoding)
-                datafile = reader.ReadToEnd _
-                    .LineTokens _
-                    .DoCall(Function(lines) FileLoader.Load(lines, False, Nothing, isTsv:=tsv)) _
-                    .DoCall(Function(ls)
-                                Return New file(ls)
-                            End Function)
-            End Using
-        ElseIf TypeOf file Is textBuffer Then
-            datafile = DirectCast(file, textBuffer).text _
-                .LineTokens _
-                .DoCall(Function(lines) FileLoader.Load(lines, False, Nothing, isTsv:=tsv)) _
+            datafile = FileLoader.Load(lines, False, Nothing, isTsv:=tsv) _
                 .DoCall(Function(ls)
                             Return New file(ls)
                         End Function)
-        Else
-            Return RInternal.debug.stop({
-                "invalid file clr object content type!",
-                "clr_type: " & file.GetType.FullName
-            }, env)
         End If
 
         If Not TypeOf datafile Is file Then
@@ -553,6 +523,59 @@ Public Module utils
                 env:=env,
                 header:=header
             )
+        End If
+    End Function
+
+    ''' <summary>
+    ''' get text lines or error message from the given file or text content
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="text"></param>
+    ''' <param name="textEncoding"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    Private Function getTextSource(file As Object, text As Object, textEncoding As Encoding, env As Environment) As Object
+        If file Is Nothing Then
+            If text IsNot Nothing Then
+                Dim str As String() = CLRVector.asCharacter(text)
+
+                If str.IsNullOrEmpty Then
+                    Return Nothing
+                ElseIf str.Length = 1 Then
+                    Return str(Scan0).LineTokens
+                Else
+                    Return str
+                End If
+            End If
+
+            If env.strictOption Then
+                Return RInternal.debug.stop("the required dataframe file source should not be nothing!", env)
+            Else
+                Call "the required dataframe file source is nothing, null value will be returns as the dataframe result value.".warning
+            End If
+
+            Return Nothing
+        End If
+
+        If TypeOf file Is String Then
+            Return DirectCast(file, String).ReadAllLines(textEncoding)
+        ElseIf TypeOf file Is fileStream OrElse TypeOf file Is FileReference Then
+            Dim s As Stream = TryCast(file, fileStream)
+
+            If s Is Nothing Then
+                s = DirectCast(file, FileReference).open(FileMode.Open, FileAccess.Read)
+            End If
+
+            Using reader As New textStream(s, textEncoding)
+                Return reader.ReadToEnd.LineTokens
+            End Using
+        ElseIf TypeOf file Is textBuffer Then
+            Return DirectCast(file, textBuffer).lines
+        Else
+            Return RInternal.debug.stop({
+                "invalid file clr object content type!",
+                "clr_type: " & file.GetType.FullName
+            }, env)
         End If
     End Function
 
