@@ -1,57 +1,57 @@
 ﻿#Region "Microsoft.VisualBasic::faeaa818b2f03f2beb75bc57a3a270b5, Library\base\utils\utils.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 655
-    '    Code Lines: 444 (67.79%)
-    ' Comment Lines: 141 (21.53%)
-    '    - Xml Docs: 87.23%
-    ' 
-    '   Blank Lines: 70 (10.69%)
-    '     File Size: 27.76 KB
+' Summaries:
 
 
-    ' Module utils
-    ' 
-    '     Function: ensureRowNames, loadCsv, MeasureGenericType, parseRData, printRawTable
-    '               read_csv, read_feather, saveGeneric, saveTextFile, setRowNames
-    '               write_csv, write_feather
-    ' 
-    '     Sub: Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 655
+'    Code Lines: 444 (67.79%)
+' Comment Lines: 141 (21.53%)
+'    - Xml Docs: 87.23%
+' 
+'   Blank Lines: 70 (10.69%)
+'     File Size: 27.76 KB
+
+
+' Module utils
+' 
+'     Function: ensureRowNames, loadCsv, MeasureGenericType, parseRData, printRawTable
+'               read_csv, read_feather, saveGeneric, saveTextFile, setRowNames
+'               write_csv, write_feather
+' 
+'     Sub: Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -467,7 +467,7 @@ Public Module utils
     ''' Note that On Windows Or other systems Not running In a UTF-8 locale, this may Not be possible.
     ''' </remarks>
     <ExportAPI("read.table")>
-    Public Function read_table(file As Object, Optional header As Boolean = False, Optional sep As String = vbTab, Optional quote As String = """'",
+    Public Function read_table(file As Object, Optional header As Boolean = False, Optional sep As String = "\t", Optional quote As String = """'",
                                Optional dec As String = ".",
                                <RRawVectorArgument(TypeCodes.string)>
                                Optional numerals As Object = "allow.loss|warn.loss|no.loss",
@@ -486,7 +486,10 @@ Public Module utils
 
         Dim datafile As Object
         Dim textEncoding As Encoding = Rsharp.GetEncoding(encoding)
-        Dim tsv As Boolean = (sep = vbTab)
+        Dim tsv As Boolean
+
+        sep = C.sprintf(sep)
+        tsv = sep = vbTab
 
         If file Is Nothing Then
             If env.strictOption Then
