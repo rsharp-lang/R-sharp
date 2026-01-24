@@ -214,7 +214,17 @@ Namespace Runtime.Internal.Invokes
                 Dim args_r As String() = args _
                     .SafeQuery _
                     .Select(Function(a)
-                                Return New RlangTranslator(New ClosureExpression(a)).GetScript(env)
+                                Dim aname As String = a.getName(0)
+                                Dim aval As String
+
+                                If a.value Is Nothing Then
+                                    Return aname
+                                Else
+                                    aval = New RlangTranslator(New ClosureExpression(a.value)).GetScript(env)
+                                    aval = aval.TrimEnd(";"c)
+
+                                    Return $"{aname} = {aval}"
+                                End If
                             End Function) _
                     .ToArray
 
