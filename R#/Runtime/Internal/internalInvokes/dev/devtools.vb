@@ -68,6 +68,7 @@ Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.Repository
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.ValueTypes
 Imports SMRUCC.Rsharp.Development.CodeAnalysis
@@ -187,20 +188,44 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("translate_to_rlang")>
         Public Function translate_to_rlang(code As Expression, Optional env As Environment = Nothing) As Object
+            Dim isFunc As Boolean = False
+            Dim name As String = Nothing
+            Dim args As DeclareNewSymbol() = Nothing
+
             If code Is Nothing Then
-                Call "the given closure expression is nothing!".Warning
+                Call "the given closure expression is nothing!".warning
                 Return Nothing
             End If
 
             If Not TypeOf code Is ClosureExpression Then
                 If TypeOf code Is DeclareNewFunction Then
+                    isFunc = True
+                    name = DirectCast(code, DeclareNewFunction).funcName
+                    args = DirectCast(code, DeclareNewFunction).parameters
                     code = DirectCast(code, DeclareNewFunction).body
                 Else
                     code = New ClosureExpression(code)
                 End If
             End If
 
-            Return New RlangTranslator(code).GetScript(env)
+            Dim native_r As String = New RlangTranslator(code).GetScript(env)
+
+            If isFunc Then
+                Dim args_r As String() = args _
+                    .SafeQuery _
+                    .Select(Function(a)
+                                Return New RlangTranslator(New ClosureExpression(a)).GetScript(env)
+                            End Function) _
+                    .ToArray
+
+                native_r = $"{name} <- function({args_r.JoinBy(", ")}) {{
+
+    {native_r}
+
+}}"
+            End If
+
+            Return native_r
         End Function
 
         <ExportAPI("incomplete_expression")>
