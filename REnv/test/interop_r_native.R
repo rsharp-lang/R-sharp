@@ -50,4 +50,4 @@ let pca = function(df, dirsave = "./") {
 
 data(bezdekIris);
 
-native_r(pca, list(df = bezdekIris, dirsave = relative_work()));
+native_r(function(){pca_result$x[, 1:2]}, list(df = bezdekIris, dirsave = relative_work()));

@@ -69,6 +69,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 
@@ -310,10 +311,16 @@ Namespace Development.CodeAnalysis
 
         Private Function GetSymbolIndexSubset(line As SymbolIndexer, env As Environment) As String
             Dim indexer = GetScript(line.index, env)
+            ' 仅支持简单的表达式
             Dim symbol = ValueAssignExpression.GetSymbol(line.symbol)
             Dim script As String
             Dim is_symbol As Boolean = Scanner.CheckIdentifierSymbol(indexer.Trim("'"c, """"c))
             Dim symbolName As String = indexer.Trim("'"c, """"c)
+
+            If symbol Is Nothing Then
+                ' line symbol是一个复杂的表达式，直接使用GetScript递归获取
+                symbol = GetScript(line.symbol, env)
+            End If
 
             If Not is_symbol Then
                 If line.indexType = SymbolIndexers.nameIndex AndAlso symbolName.IndexOf("$") > 0 Then
@@ -505,13 +512,13 @@ Namespace Development.CodeAnalysis
             If castError Then
                 descriptor = castLiteral(val, val.TryGetValueType, castError)
             End If
-            If castError AndAlso val.typeCode = TypeCodes.closure Then
+            If castError AndAlso (val.typeCode = TypeCodes.closure OrElse TypeOf val.value Is SymbolPrefixTree) Then
                 ' use the function name as symbol reference
                 ' example as pass the function name as parameter value
                 ' sapply(m,1,sd);
                 ' descriptor = val.name
 
-                Call $"closure symbol '{descriptor}' has been used as the parameter value.".Warning
+                Call $"closure symbol '{descriptor}' has been used as the parameter value.".warning
                 Call VBDebugger.WaitOutput()
 
                 Return name
