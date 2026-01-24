@@ -47,3 +47,7 @@ let pca = function(df, dirsave = "./") {
     writeLines(as.character( variance), con = file.path(dirsave,"PCA_importance.txt"));
     write.csv(pc_scores, file = file.path(dirsave,"PCA_scores.csv"));
 }
+
+data(bezdekIris);
+
+native_r(pca, list(df = bezdekIris, dirsave = relative_work()));
