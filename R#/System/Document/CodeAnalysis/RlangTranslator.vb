@@ -152,7 +152,10 @@ Namespace Development.CodeAnalysis
             For Each symbol In symbols
                 If symbol.Value <> CreateSymbol Then
                     If Not symbol.Key Like filters Then
-                        Yield $"{symbol.Key} <- {symbol.Value};"
+                        If symbol.Key <> symbol.Value Then
+                            ' it is no meaning for expression a <- a;
+                            Yield $"{symbol.Key} <- {symbol.Value};"
+                        End If
                     End If
                 End If
             Next
