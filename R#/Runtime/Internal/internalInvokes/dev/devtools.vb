@@ -238,6 +238,13 @@ Namespace Runtime.Internal.Invokes
             Return native_r
         End Function
 
+        <ExportAPI("translate_r_native_call")>
+        Public Function translate_r_native_call(f As DeclareNewFunction, args As list, Optional env As Environment = Nothing) As Object
+            Dim caller As New RlangFunctionCall(f)
+            Dim invoke As String = caller.GetScript(args.slots, env)
+            Return invoke
+        End Function
+
         <ExportAPI("incomplete_expression")>
         Public Function incomplete_expression() As IncompleteExpression
             Return New IncompleteExpression
