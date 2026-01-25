@@ -1,22 +1,27 @@
-﻿.TH NATIVE_R 1 2026-Jan "" "native_r"
+﻿.TH NATIVE_R 1 2026-Jan "" "make native r function call"
 .SH NAME
 native_r \- native_r(f,
     <i>args</i> = 'list'(),
+    <i>workdir</i> = <span style='color: blue !important;'>NULL</span>,
     <i>source</i> = <span style='color: blue !important;'>NULL</span>,
     <i>debug</i> = <span style='color: blue !important;'>FALSE</span>,
     <i>native.R</i> = 'getOption'('native_rexec'))
 .SH SYNOPSIS
 \fInative_r(f,
     <i>args</i> = 'list'(),
+    <i>workdir</i> = <span style='color: blue !important;'>NULL</span>,
     <i>source</i> = <span style='color: blue !important;'>NULL</span>,
     <i>debug</i> = <span style='color: blue !important;'>FALSE</span>,
     <i>native.R</i> = 'getOption'('native_rexec'))\fR
 .SH OPTIONS
 .PP
-\fBf\fB \fR\- . 
+\fBf\fB \fR\- . target r function code to be run in native r environment
 .PP
 .PP
-\fBargs\fB \fR\- 'list'(). 
+\fBargs\fB \fR\- 'list'(). the function invoke parameters
+.PP
+.PP
+\fBworkdir\fB \fR\- NULL. the workdir of the sub-process of the native R
 .PP
 .PP
 \fBsource\fB \fR\- NULL. 
@@ -29,7 +34,7 @@ native_r \- native_r(f,
 .PP
 .SH FILES
 .PP
-SMRUCC/R#.declare_function.native_r at native_r.R:line 1
+SMRUCC/R#.declare_function.native_r at native_r.R:line 7
 .PP
 .SH COPYRIGHT
 Copyright © xieguigang <xie.guigang@gcmodeller.org>, MIT Licensed 2026

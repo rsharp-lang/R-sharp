@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>native_r</title>
+    <title>make native r function call</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <link rel="stylesheet" type="text/css" href="../../_assets/page.css">
@@ -18,7 +18,7 @@
             </tr>
         </table>
 
-        <h2>native_r</h2>
+        <h2>make native r function call</h2>
 
         <h3>Description</h3>
 
@@ -29,6 +29,7 @@
         <div style="width: 100%; padding-left: 3%; color: black;">
             <pre><code class='language-R' style="color: black; font-weight:normal;"><strong>native_r</strong>(<i>f</i>,
     <i>args</i> = 'list'(),
+    <i>workdir</i> = <span style='color: blue !important;'>NULL</span>,
     <i>source</i> = <span style='color: blue !important;'>NULL</span>,
     <i>debug</i> = <span style='color: blue !important;'>FALSE</span>,
     <i>native.R</i> = 'getOption'('native_rexec'));</code></pre>
@@ -38,6 +39,17 @@
 
         <table>
             
+<dt>f</dt>
+<dd><p><p>target r function code to be run in native r environment</p></p></dd>
+
+
+<dt>args</dt>
+<dd><p><p>the function invoke parameters</p></p></dd>
+
+
+<dt>workdir</dt>
+<dd><p><p>the workdir of the sub-process of the native R</p></p></dd>
+
         </table>
 
 

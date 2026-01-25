@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Unit
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Development.Components
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -68,7 +69,7 @@ Namespace Development.CodeAnalysis
         End Function
 
         Private Function TableScript(df As dataframe, env As Environment) As String
-            Dim size As Long = HeapSizeOf.MeasureSize(df)
+            Dim size As Long = ProfileRecord.HeapSizeOf(df)
 
             If size > 4 * ByteSize.KB Then
                 ' write to temp file and pass the file path

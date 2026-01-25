@@ -62,11 +62,12 @@ declare namespace REnv {
    function include_jsonconfig(file: any): object;
    /**
      * @param args default value Is ``Call "list"()``.
+     * @param workdir default value Is ``null``.
      * @param source default value Is ``null``.
      * @param debug default value Is ``false``.
      * @param native_R default value Is ``Call "getOption"("native_rexec")``.
    */
-   function native_r(f: any, args?: any, source?: any, debug?: any, native_R?: any): object;
+   function native_r(f: any, args?: any, workdir?: any, source?: any, debug?: any, native_R?: any): object;
    /**
      * @param direction default value Is ``1``.
    */
