@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 
@@ -55,7 +56,9 @@ Namespace Development.CodeAnalysis
             ElseIf TypeOf val Is dataframe Then
                 Return TableScript(DirectCast(val, dataframe), env)
             Else
-
+                Dim literal As Literal = Literal.FromAnyValue(val)
+                Dim script As String = literal.GetNativeRScript
+                Return script
             End If
         End Function
 

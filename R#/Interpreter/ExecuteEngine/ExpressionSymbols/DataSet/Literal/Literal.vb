@@ -227,6 +227,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Me.value = CLng(value)
         End Sub
 
+        Public Shared Function FromAnyValue(val As Object) As Literal
+            Return New Literal() With {.value = val, .m_type = TypeCodes.generic}
+        End Function
+
         <DebuggerStepThrough>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function Evaluate(envir As Environment) As Object
@@ -244,6 +248,20 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
         End Function
 
+        Public Function GetNativeRScript() As String
+            If value Is Nothing Then
+                Return "NULL"
+            ElseIf TypeOf value Is String OrElse TypeOf value Is Char Then
+                Return $"""{value}"""
+            ElseIf TypeOf value Is Boolean Then
+                Return CBool(value).ToString.ToUpper
+            ElseIf TypeOf value Is Date Then
+                Return $"""{CDate(value).ToLongTimeString}"""
+            Else
+                Return value.ToString
+            End If
+        End Function
+
         ''' <summary>
         ''' Get string representation of the literal object value
         ''' </summary>
@@ -253,7 +271,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Public Overrides Function ToString() As String
             If value Is Nothing Then
                 Return "NULL"
-            ElseIf TypeOf value Is String Then
+            ElseIf TypeOf value Is String OrElse TypeOf value Is Char Then
                 Return $"""{value}"""
             ElseIf TypeOf value Is Date Then
                 Return $"#{value}#"
