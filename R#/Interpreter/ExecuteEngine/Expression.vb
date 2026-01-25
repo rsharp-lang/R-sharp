@@ -124,5 +124,9 @@ Namespace Interpreter.ExecuteEngine
         Public Shared Function ParseLines(rscript As Rscript, Optional keepsCommentLines As Boolean = False) As IEnumerable(Of Expression)
             Return rscript.GetExpressions(Program.GetRLanguageDefaultOption(rscript, keepsCommentLines:=keepsCommentLines))
         End Function
+
+        Public Shared Function Parse(script As String) As Expression
+            Return ParseLines(Rscript.FromText(script), keepsCommentLines:=False).FirstOrDefault
+        End Function
     End Class
 End Namespace

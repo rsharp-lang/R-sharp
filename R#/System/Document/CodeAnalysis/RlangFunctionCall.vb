@@ -1,9 +1,14 @@
 ﻿Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Unit
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Closure
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 
 Namespace Development.CodeAnalysis
@@ -63,7 +68,29 @@ Namespace Development.CodeAnalysis
         End Function
 
         Private Function TableScript(df As dataframe, env As Environment) As String
+            Dim size As Long = HeapSizeOf.MeasureSize(df)
 
+            If size > 4 * ByteSize.KB Then
+                ' write to temp file and pass the file path
+                Dim temp As String = App.GetNextUniqueName("df_")
+                Dim tempfile As String = TempFileSystem.GetAppSysTempFile(".csv", sessionID:=App.PID, prefix:="df_")
+                Dim expr As Expression = Expression.Parse($"write.csv({temp}, file = ""{tempfile}"", row.names = TRUE);")
+
+                Call env.Push(temp, df, [readonly]:=True, TypeCodes.dataframe)
+                Call env.Evaluate({expr})
+
+                Return $"read.csv(""{tempfile}"", row.names = 1, check.names = FALSE)"
+            Else
+                Dim rownames As String = VectorScript(df.rownames, env)
+                Dim fields As New List(Of String)
+
+                For Each field As KeyValuePair(Of String, Array) In df.columns
+                    Call fields.Add($"{field.Key} = {VectorScript(field.Value, env)}")
+                Next
+
+                ' construct of the script
+                Return $"data.frame(row.names = {rownames}, {fields.JoinBy(", " & vbLf)}, check.names = FALSE)"
+            End If
         End Function
 
         Private Function ListScript(list As Dictionary(Of String, Object), env As Environment) As String
