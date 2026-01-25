@@ -1,6 +1,7 @@
 ﻿Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Unit
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -70,6 +71,8 @@ Namespace Development.CodeAnalysis
 
         Private Function TableScript(df As dataframe, env As Environment) As String
             Dim size As Long = ProfileRecord.HeapSize(df)
+
+            df.rownames = df.rownames.UniqueNames
 
             If size > 4 * ByteSize.KB Then
                 ' write to temp file and pass the file path
