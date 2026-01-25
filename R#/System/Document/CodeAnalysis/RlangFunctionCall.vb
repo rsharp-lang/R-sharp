@@ -69,7 +69,7 @@ Namespace Development.CodeAnalysis
         End Function
 
         Private Function TableScript(df As dataframe, env As Environment) As String
-            Dim size As Long = ProfileRecord.HeapSizeOf(df)
+            Dim size As Long = ProfileRecord.HeapSize(df)
 
             If size > 4 * ByteSize.KB Then
                 ' write to temp file and pass the file path
