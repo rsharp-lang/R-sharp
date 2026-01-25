@@ -1,6 +1,17 @@
 require(REnv);
 
 let pca = function(df, dirsave = "./") {
+    library(ggplot2);
+    library(dplyr);
+    library(tidyverse);
+    library(ggthemes);
+    library(ggsignif);  # 用于添加显著性标记
+    library(rstatix);   # 用于添加统计检验结果
+    library(showtext);
+
+    # fix for the zh-cn chars display problem in pdf drawing
+    showtext_auto(enable = TRUE);
+
     # ====== PCA计算核心步骤 ======
     # 1. 数据预处理：分离分类标签和数值数据
     let class_labels <- df$class;  # 保存分类标签
@@ -24,8 +35,8 @@ let pca = function(df, dirsave = "./") {
         geom_point(size = 3, alpha = 0.8) +  # 绘制样本点
         stat_ellipse(level = 0.95, linewidth = 1) +  # 添加95%置信椭圆
         labs(title = "PCA Score Plot",
-             x = paste0("PC1 (", round(variance[1], 1), "%)"),
-             y = paste0("PC2 (", round(variance[2], 1), "%)")) +
+            x = paste0("PC1 (", round(variance[1], 1), "%)"),
+            y = paste0("PC2 (", round(variance[2], 1), "%)")) +
         scale_color_manual(values = c("#E41A1C", "#377EB8", "#4DAF4A")) +  # 自定义颜色
         theme_minimal(base_size = 12) +
         theme(
@@ -42,7 +53,8 @@ let pca = function(df, dirsave = "./") {
     dir.create(dirsave);
 
     # 6. 保存结果（可选）
-    ggsave(file.path(dirsave, "PCA_plot.png"), width = 8, height = 6, dpi = 300);
+    ggsave(file.path(dirsave, "PCA_plot.png"), width = 4, height = 3, dpi = 300);
+    ggsave(file.path(dirsave, "PCA_plot.pdf"), width = 8, height = 6);
 
     writeLines(as.character( variance), con = file.path(dirsave,"PCA_importance.txt"));
     write.csv(pc_scores, file = file.path(dirsave,"PCA_scores.csv"));
