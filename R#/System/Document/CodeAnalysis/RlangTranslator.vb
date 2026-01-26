@@ -426,6 +426,16 @@ Namespace Development.CodeAnalysis
                 Return "NULL"
             ElseIf value Is GetType(Void) Then
                 Return "NA"
+            ElseIf TypeOf value Is Double Then
+                If Double.IsPositiveInfinity(CDbl(value)) Then
+                    Return "Inf"
+                ElseIf Double.IsNegativeInfinity(CDbl(value)) Then
+                    Return "-Inf"
+                ElseIf Double.IsNaN(CDbl(value)) Then
+                    Return "NA"
+                Else
+                    Return value.ToString
+                End If
             Else
                 If TypeOf value Is String Then
                     Return $"'{value}'"
