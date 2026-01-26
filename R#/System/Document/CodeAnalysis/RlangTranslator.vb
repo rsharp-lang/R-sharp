@@ -537,7 +537,7 @@ Namespace Development.CodeAnalysis
                 ElseIf val.typeCode = TypeCodes.closure Then
                     ' make ignores of the R internal function
                     ' do nothing
-                ElseIf val.typeCode = TypeCodes.NA AndAlso TypeOf val.value Is DeclareNewSymbol Then
+                ElseIf (val.typeCode = TypeCodes.NA OrElse val.typeCode = TypeCodes.generic) AndAlso TypeOf val.value Is DeclareNewSymbol Then
                     ' is function parameter name
                     ' do nothing
                 Else
