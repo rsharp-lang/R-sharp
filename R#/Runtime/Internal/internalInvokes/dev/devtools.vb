@@ -203,6 +203,10 @@ Namespace Runtime.Internal.Invokes
                     name = DirectCast(code, DeclareNewFunction).funcName
                     args = DirectCast(code, DeclareNewFunction).parameters
                     code = DirectCast(code, DeclareNewFunction).body
+
+                    For Each arg As DeclareNewSymbol In args
+                        Call env.Push(arg(0), Nothing, [readonly]:=True, TypeCodes.NA, [overrides]:=True)
+                    Next
                 Else
                     code = New ClosureExpression(code)
                 End If

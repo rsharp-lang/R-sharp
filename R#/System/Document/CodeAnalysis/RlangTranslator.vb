@@ -324,8 +324,28 @@ Namespace Development.CodeAnalysis
             Return script
         End Function
 
+        Private Shared Function is_drop(exp As Expression) As Boolean
+            Return TypeOf exp Is ValueAssignExpression AndAlso
+                ValueAssignExpression.GetSymbol(DirectCast(exp, ValueAssignExpression).targetSymbols(0)) = "drop"
+        End Function
+
         Private Function GetSymbolIndexSubset(line As SymbolIndexer, env As Environment) As String
-            Dim indexer = GetScript(line.index, env)
+            Dim indexer As String
+
+            If TypeOf line.index Is VectorLiteral AndAlso DirectCast(line.index, VectorLiteral) _
+                .Any(Function(exp)
+                         Return is_drop(exp)
+                     End Function) Then
+                ' xxx, drop = TRUE
+                Dim vec As VectorLiteral = DirectCast(line.index, VectorLiteral)
+                Dim drop = GetScript(vec.Where(Function(exp) is_drop(exp)).First, env)
+                Dim indexList = vec.Where(Function(exp) Not is_drop(exp)).Select(Function(exp) GetScript(exp, env)).ToArray
+
+                indexer = indexList.JoinBy(", ") & ", " & drop
+            Else
+                indexer = GetScript(line.index, env)
+            End If
+
             ' 仅支持简单的表达式
             Dim symbol = ValueAssignExpression.GetSymbol(line.symbol)
             Dim script As String
