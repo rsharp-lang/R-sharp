@@ -205,7 +205,7 @@ Namespace Runtime.Internal.Invokes
                     code = DirectCast(code, DeclareNewFunction).body
 
                     For Each arg As DeclareNewSymbol In args
-                        Call env.Push(arg(0), Nothing, [readonly]:=True, TypeCodes.NA, [overrides]:=True)
+                        Call env.Push(arg(0), arg, [readonly]:=True, TypeCodes.NA, [overrides]:=True)
                     Next
                 Else
                     code = New ClosureExpression(code)

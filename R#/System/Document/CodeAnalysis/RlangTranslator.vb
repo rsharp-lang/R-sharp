@@ -537,6 +537,9 @@ Namespace Development.CodeAnalysis
                 ElseIf val.typeCode = TypeCodes.closure Then
                     ' make ignores of the R internal function
                     ' do nothing
+                ElseIf val.typeCode = TypeCodes.NA AndAlso TypeOf val.value Is DeclareNewSymbol Then
+                    ' is function parameter name
+                    ' do nothing
                 Else
                     Dim castError As Boolean = False
                     Dim descriptor As String = castClrValue(val, name, castError, env)
