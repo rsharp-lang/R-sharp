@@ -138,6 +138,7 @@ Module dataframeTools
         Return dataframeTable(Of String, EntityObject)(chars.AsEnumerable.ToArray, args, env)
     End Function
 
+    <RGenericOverloads("as.data.frame")>
     Private Function dataframeTable(Of T, DataSet As {INamedValue, DynamicPropertyBase(Of T)})(data As DataSet(), args As list, env As Environment) As Rdataframe
         Dim names As String() = data.Keys.ToArray
         Dim table As New Rdataframe With {
