@@ -89,6 +89,8 @@ Namespace Development.CodeAnalysis
 
         Const CreateSymbol As String = "<create_new_symbol>;"
 
+        ReadOnly missing As New List(Of String)
+
         Sub New(closure As ClosureExpression)
             lines = closure.program.ToArray
         End Sub
@@ -141,6 +143,11 @@ Namespace Development.CodeAnalysis
                     End If
                 End If
             Next
+
+            If missing.Any Then
+                Call $"missing {missing.Distinct.Count} symbol while translate clr code to native R: {missing.Distinct.JoinBy(", ")}".warning
+                Call missing.Clear()
+            End If
 
             Return CreateSymbols _
                 .JoinIterates(script) _
@@ -482,8 +489,9 @@ Namespace Development.CodeAnalysis
                     ' example as: aes(x = xxx);
                     '
                     ' Throw New MissingPrimaryKeyException($"missing of the symbol: {name}")
-                    Call $"missing of the symbol while translate clr code to native R: {name}".Warning
-                    Call VBDebugger.WaitOutput()
+                    ' Call $"missing of the symbol while translate clr code to native R: {name}".Warning
+                    ' Call VBDebugger.WaitOutput()
+                    Call missing.Add(name)
 
                     Return name
                 End If
