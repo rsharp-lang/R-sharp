@@ -60,6 +60,7 @@
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.My.JavaScript
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
@@ -90,6 +91,7 @@ Namespace Development.CodeAnalysis
         Const CreateSymbol As String = "<create_new_symbol>;"
 
         ReadOnly missing As New List(Of String)
+        ReadOnly closureWarning As New List(Of String)
 
         Sub New(closure As ClosureExpression)
             lines = closure.program.ToArray
@@ -147,6 +149,10 @@ Namespace Development.CodeAnalysis
             If missing.Any Then
                 Call $"missing {missing.Distinct.Count} symbol while translate clr code to native R: {missing.Distinct.JoinBy(", ")}".warning
                 Call missing.Clear()
+            End If
+            If closureWarning.Any Then
+                Call $"there are {closureWarning.Distinct.Count} closure symbols '{closureWarning.Distinct.JoinBy(", ")}' has been used as the parameter value.".warning
+                Call closureWarning.Clear()
             End If
 
             Return CreateSymbols _
@@ -528,15 +534,16 @@ Namespace Development.CodeAnalysis
                 ' sapply(m,1,sd);
                 ' descriptor = val.name
 
-                Call $"closure symbol '{descriptor}' has been used as the parameter value.".warning
-                Call VBDebugger.WaitOutput()
+                ' Call $"closure symbol '{descriptor}' has been used as the parameter value.".warning
+                ' Call VBDebugger.WaitOutput()
+                Call closureWarning.Add(descriptor)
 
                 Return name
             End If
-            If castError AndAlso val.typeCode = TypeCodes.list Then
+            If castError AndAlso (val.typeCode = TypeCodes.list OrElse TypeOf val.value Is list) Then
                 descriptor = castList(val, castError, env)
             End If
-            If castError AndAlso val.typeCode = TypeCodes.dataframe Then
+            If castError AndAlso (val.typeCode = TypeCodes.dataframe OrElse TypeOf val.value Is dataframe) Then
                 descriptor = castDataframe(val, castError, env)
             End If
             If castError Then
