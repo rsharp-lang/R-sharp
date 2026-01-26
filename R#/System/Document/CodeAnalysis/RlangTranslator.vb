@@ -60,7 +60,6 @@
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.My.JavaScript
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
@@ -197,6 +196,8 @@ Namespace Development.CodeAnalysis
                 Case GetType(UnaryNumeric) : Return getNeg(line, env)
                 Case GetType(ExpressionLiteral) : Return getExpressionLiteral(line, env)
 
+                Case GetType(ReturnValue) : Return getReturn(line, env)
+
                 Case Else
                     Dim expr_clr As String = line.GetType.Name
                     Dim rsharp_str As String = line.ToString
@@ -204,6 +205,12 @@ Namespace Development.CodeAnalysis
 
                     Throw New NotImplementedException(msg_err)
             End Select
+        End Function
+
+        Private Function getReturn(ret As ReturnValue, env As Environment) As String
+            Dim value As String = GetScript(ret.value, env)
+            Dim script As String = $"return({value});"
+            Return script
         End Function
 
         Private Function getExpressionLiteral(exp As ExpressionLiteral, env As Environment) As String
