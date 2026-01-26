@@ -267,7 +267,7 @@ Namespace Runtime.Internal.Object
         ''' just a simple wrapper to the <see cref="pipeline"/> object constructor function.
         ''' </remarks>
         <DebuggerStepThrough>
-        Public Shared Function CreateFromPopulator(Of T)(upstream As IEnumerable(Of T), Optional finalize As Action = Nothing) As pipeline
+        Public Shared Function CreateFromPopulator(Of T)(upstream As IEnumerable(Of T), Optional finalize As Action = Nothing) As CLRIterator
             Return New CLRIterator(upstream, GetType(T)) With {
                 .pipeFinalize = finalize
             }
@@ -281,7 +281,7 @@ Namespace Runtime.Internal.Object
         ''' <param name="finalize"></param>
         ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function CreateFromPopulator(Of T)(pull As Func(Of IEnumerable(Of T)), Optional finalize As Action = Nothing) As pipeline
+        Public Shared Function CreateFromPopulator(Of T)(pull As Func(Of IEnumerable(Of T)), Optional finalize As Action = Nothing) As CLRIterator
             Return CreateFromPopulator(pull(), finalize)
         End Function
 
