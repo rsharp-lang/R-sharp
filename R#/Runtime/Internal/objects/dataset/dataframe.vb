@@ -632,7 +632,7 @@ Namespace Runtime.Internal.Object
         ''' 
         ''' </param>
         ''' <returns></returns>
-        Public Function sliceByRow(selector As Array, env As Environment) As [Variant](Of dataframe, Message)
+        Public Function sliceByRow(selector As Array, env As Environment, Optional strict As Boolean = True) As [Variant](Of dataframe, Message)
             Dim indexType As Type = MeasureRealElementType(selector)
 
             If indexType Like RType.logicals Then
@@ -664,16 +664,25 @@ Namespace Runtime.Internal.Object
                 Dim rowNames As Index(Of String) = Me.getRowNames
                 Dim index As New List(Of Integer)
                 Dim i As i32 = 0
+                Dim missing As New List(Of String)
 
                 ' 20221207
                 ' index is zero-based
                 For Each name As String In indexNames
                     If (i = rowNames.IndexOf(name)) = -1 Then
-                        Return Internal.debug.stop({$"missing row with name '{name}' in the given dataframe...", $"rowname: {name}"}, env)
+                        If strict Then
+                            Return Internal.debug.stop({$"missing row with name '{name}' in the given dataframe...", $"rowname: {name}"}, env)
+                        Else
+                            Call missing.Add(name)
+                        End If
                     Else
                         Call index.Add(i)
                     End If
                 Next
+
+                If missing.Any Then
+                    Call $"missing {missing.Count} row with name '{missing.JoinBy(", ")}' in the given dataframe {ToString()}...".warning
+                End If
 
                 Return GetByRowIndex(index, env) ' checked
             Else

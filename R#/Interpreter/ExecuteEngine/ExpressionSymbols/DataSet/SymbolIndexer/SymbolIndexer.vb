@@ -382,7 +382,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
                 Return result
             Else
+                Dim slice = obj.sliceByRow(indexer, envir, strict:=CLRVector.asScalarLogical(strictVal))
 
+                If slice Like GetType(Message) Then
+                    Return slice.VB
+                Else
+                    Return slice.VA
+                End If
             End If
         End Function
 
