@@ -15,11 +15,12 @@ const native_r = function(f, args = list(),
     let script_code = f |> transform_rlang_source(source, 
         debug = debug);    
     let invoke = f |> translate_r_native_call(args);
+    let label = attr(invoke, "name");
     let native_rlang = c(script_code, invoke);
 
     native_rlang |> rlang_call(
         workdir = workdir, 
         native_R = native_R,
-        title = attr(invoke, "name")
+        title = label
     );
 }
