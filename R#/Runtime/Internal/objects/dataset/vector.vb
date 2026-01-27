@@ -173,7 +173,12 @@ Namespace Runtime.Internal.Object
 
         Sub New(v As IEnumerable(Of Double))
             Me.elementType = RType.GetRSharpType(GetType(Double))
-            Me.data = v.ToArray
+            Me.data = v.SafeQuery.ToArray
+        End Sub
+
+        Sub New(s As IEnumerable(Of String))
+            Me.elementType = RType.character
+            Me.data = s.SafeQuery.ToArray
         End Sub
 
         Private Shared Function loadGenericCollection(input As IEnumerable, model As Type, env As Environment) As Array

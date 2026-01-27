@@ -14,7 +14,7 @@
 #'          It temporarily changes the working directory if specified, then restores
 #'          the original directory after execution. 
 #'  
-const rlang_call = function(script_code, workdir = NULL, native_R = getOption("native_rexec")) {
+const rlang_call = function(script_code, workdir = NULL, native_R = getOption("native_rexec"), title = NULL) {
     let code_save = tempfile(fileext = ".R");
     let current_wd = getwd();
     let change_wd = nchar(workdir) > 0;
@@ -39,7 +39,12 @@ const rlang_call = function(script_code, workdir = NULL, native_R = getOption("n
     }
 
     cat("\n");
-    message("# run native R script:");
+    if (nchar(title) == 0) {
+        message("# run native R script:");
+    } else {
+        message(sprintf("# run native R script(%s):", title));
+    }
+    
     message(`${getwd()}$ "${native_R}" "${code_save}"`);
     cat("\n");
     # call

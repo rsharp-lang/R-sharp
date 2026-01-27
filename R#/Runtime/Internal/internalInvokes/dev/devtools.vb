@@ -246,6 +246,9 @@ Namespace Runtime.Internal.Invokes
         Public Function translate_r_native_call(f As DeclareNewFunction, args As list, Optional env As Environment = Nothing) As Object
             Dim caller As New RlangFunctionCall(f)
             Dim invoke As String = caller.GetScript(args.slots, env)
+            Dim str As New vector(New String() {invoke})
+            str.setAttribute("name", f.funcName)
+            str.setAttribute("namespace", f.Namespace)
             Return invoke
         End Function
 

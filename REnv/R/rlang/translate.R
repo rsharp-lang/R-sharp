@@ -12,7 +12,7 @@
 #' @details This function is particularly useful for generating R scripts that can be executed
 #'          in environments like Docker containers or other isolated systems where R# might
 #'          not be available. The translation process preserves the functionality of the
-#'          original R# code while making it compatible with standard R interpreters. [9](@ref)
+#'          original R# code while making it compatible with standard R interpreters. 
 #' 
 const transform_rlang_source = function(code, source = NULL, debug = FALSE) {
     let load_deps = __sourcescript(source);
