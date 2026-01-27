@@ -38,8 +38,10 @@ const rlang_call = function(script_code, workdir = NULL, native_R = getOption("n
         }     
     }
 
-    print("# run native R script:");
+    cat("\n");
+    message("# run native R script:");
     message(`${getwd()}$ "${native_R}" "${code_save}"`);
+    cat("\n");
     # call
     system2(native_R, code_save);
 
