@@ -24,24 +24,24 @@ const rlang_call = function(script_code, workdir = NULL, native_R = getOption("n
     if (change_wd) {
         dir.create(workdir);
         setwd(workdir);
-    }
-
-    print("run script at workspace:");
-    print(getwd());
-    print(code_save);
-    print(`Rscript "${code_save}"`);        
+    }       
 
     if (nchar(native_R) == 0) {
         if ((Sys.info()[['sysname']]) != "Win32NT") {
             # ubuntu linux
-            system2("/usr/lib/R/bin/Rscript", code_save);
+            # system2("/usr/lib/R/bin/Rscript", code_save);
+            native_R <- "/usr/lib/R/bin/Rscript";
         } else {
             # window environment
-            system2("C:\\Program Files\\R\\R-4.5.0\\bin\\x64\\Rscript.exe", code_save);
-        } 
-    } else {
-        system2(native_R, code_save);
+            # system2("C:\\Program Files\\R\\R-4.5.0\\bin\\x64\\Rscript.exe", code_save);
+            native_R <- "C:\\Program Files\\R\\R-4.5.0\\bin\\x64\\Rscript.exe";
+        }     
     }
+
+    print("# run native R script:");
+    message(`${getwd()}$ "${native_R}" "${code_save}"`);
+    # call
+    system2(native_R, code_save);
 
     if (change_wd) {
         setwd(current_wd);
