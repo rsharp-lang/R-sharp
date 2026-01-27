@@ -291,9 +291,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
                     Return Message.InCompatibleType(GetType(dataframe), obj.GetType, envir)
                 Else
-                    Return DirectCast(obj, dataframe) _
-                        .sliceByRow(indexer, envir) _
-                        .Value
+                    Return getRows(DirectCast(obj, dataframe), indexer, envir)
                 End If
             Else
                 Return RInternal.debug.stop(New NotImplementedException(indexType.ToString), envir)
@@ -359,6 +357,24 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Return RInternal.debug.stop(New NotImplementedException, env)
             Else
                 Return RInternal.debug.stop("invalid expression for subset a dataframe!", env)
+            End If
+        End Function
+
+        Private Function getRows(obj As dataframe, indexer As Array, envir As Environment) As Object
+            Dim opts As Dictionary(Of String, Expression) = getOptions()
+            Dim strict As Expression = opts.TryGetValue("strict", [default]:=Literal.TRUE)
+            Dim strictVal As Object = strict.Evaluate(envir)
+
+            If TypeOf strictVal Is Message Then
+                Return strictVal
+            End If
+
+            Dim slice = obj.sliceByRow(indexer, envir)
+
+            If slice Like GetType(Message) Then
+                Return slice.VB
+            Else
+                Return slice.VA
             End If
         End Function
 
