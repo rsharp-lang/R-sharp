@@ -65,6 +65,8 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Algorithm.base
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.DataFramework
 Imports Microsoft.VisualBasic.Emit.Delegates
+Imports Microsoft.VisualBasic.Imaging.GraphicsPath
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development.Package.File
@@ -73,6 +75,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Internal.Object.Converts
@@ -311,36 +314,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 ' [row, column]
                 ' [row, , drop = TRUE]
                 If TypeOf indexVec.values(1) Is ValueAssignExpression Then
-                    Dim opt As ValueAssignExpression = indexVec(1)
+                    Dim index As Expression = indexVec(0)
+                    Dim indexRaw As Object = index.Evaluate(env)
 
-                    If TypeOf opt.targetSymbols(Scan0) Is Literal AndAlso DirectCast(opt.targetSymbols(Scan0), Literal) = "drop" Then
-                        Dim drop As Boolean = CLRVector.asLogical(opt.value.Evaluate(env))(Scan0)
-                        Dim rawIndex As Object = indexVec.values(Scan0).Evaluate(env)
-                        Dim rowIndex = data.getRowIndex(rawIndex)
-
-                        If rowIndex Is Nothing OrElse CInt(rowIndex) < 0 Then
-                            ' which means the indexVec is empty, no element
-                            ' the original R language returns an empty dataframe
-                            ' returns nothing at here. and also echo warning message
-                            Call env.AddMessage($"the required row index '{indexVec.values(Scan0).ToString}' is invalid(is nothing or else index select no row data)!")
-
-                            If drop Then
-                                Return RInternal.Object.list.empty
-                            Else
-                                Return Nothing
-                            End If
-                        End If
-
-                        Dim result = data.getRowList(rowIndex, drop:=drop)
-
-                        If TypeOf result Is Dictionary(Of String, Object) Then
-                            result = New list With {.slots = result}
-                        End If
-
-                        Return result
-                    Else
-                        Return RInternal.debug.stop("invalid options for slice dataframe", env)
+                    If TypeOf indexRaw Is Message Then
+                        Return indexRaw
                     End If
+
+                    Return getRows(data, UnsafeTryCastGenericArray(CLRVector.asObject(indexRaw)), env)
                 Else
                     Dim x = CLRVector.asObject(indexVec.values(Scan0).Evaluate(env))
                     Dim y = CLRVector.asObject(indexVec.values(1).Evaluate(env))
@@ -363,19 +344,39 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         Private Function getRows(obj As dataframe, indexer As Array, envir As Environment) As Object
             Dim opts As Dictionary(Of String, Expression) = getOptions()
             Dim strict As Expression = opts.TryGetValue("strict", [default]:=Literal.TRUE)
+            Dim dropExp As Expression = opts.TryGetValue("drop", [default]:=Literal.FALSE)
             Dim strictVal As Object = strict.Evaluate(envir)
+            Dim dropVal As Object = dropExp.Evaluate(envir)
 
             If TypeOf strictVal Is Message Then
                 Return strictVal
+            ElseIf TypeOf dropVal Is Message Then
+                Return dropVal
             End If
 
-            Dim slice = obj.sliceByRow(indexer, envir)
+            Dim drop As Boolean = CLRVector.asLogical(dropVal)(Scan0)
+            Dim rowIndex = obj.getRowIndex(indexer)
 
-            If slice Like GetType(Message) Then
-                Return slice.VB
-            Else
-                Return slice.VA
+            If rowIndex Is Nothing OrElse CInt(rowIndex) < 0 Then
+                ' which means the indexVec is empty, no element
+                ' the original R language returns an empty dataframe
+                ' returns nothing at here. and also echo warning message
+                Call envir.AddMessage($"the required row index '{index.ToString}' is invalid(is nothing or else index select no row data)!")
+
+                If drop Then
+                    Return RInternal.Object.list.empty
+                Else
+                    Return Nothing
+                End If
             End If
+
+            Dim result = obj.getRowList(rowIndex, drop:=drop)
+
+            If TypeOf result Is Dictionary(Of String, Object) Then
+                result = New list With {.slots = result}
+            End If
+
+            Return result
         End Function
 
         Private Function getColumn(obj As dataframe, indexer As Array, envir As Environment) As Object
