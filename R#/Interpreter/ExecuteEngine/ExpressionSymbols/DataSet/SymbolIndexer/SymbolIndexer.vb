@@ -355,28 +355,35 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
 
             Dim drop As Boolean = CLRVector.asLogical(dropVal)(Scan0)
-            Dim rowIndex = obj.getRowIndex(indexer)
 
-            If rowIndex Is Nothing OrElse CInt(rowIndex) < 0 Then
-                ' which means the indexVec is empty, no element
-                ' the original R language returns an empty dataframe
-                ' returns nothing at here. and also echo warning message
-                Call envir.AddMessage($"the required row index '{index.ToString}' is invalid(is nothing or else index select no row data)!")
+            If indexer.IsNullOrEmpty Then
+                Return Nothing
+            ElseIf indexer.Length = 1 Then
+                Dim rowIndex = obj.getRowIndex(indexer)
 
-                If drop Then
-                    Return RInternal.Object.list.empty
-                Else
-                    Return Nothing
+                If rowIndex Is Nothing OrElse CInt(rowIndex) < 0 Then
+                    ' which means the indexVec is empty, no element
+                    ' the original R language returns an empty dataframe
+                    ' returns nothing at here. and also echo warning message
+                    Call envir.AddMessage($"the required row index '{index.ToString}' is invalid(is nothing or else index select no row data)!")
+
+                    If drop Then
+                        Return RInternal.Object.list.empty
+                    Else
+                        Return Nothing
+                    End If
                 End If
+
+                Dim result = obj.getRowList(rowIndex, drop:=drop)
+
+                If TypeOf result Is Dictionary(Of String, Object) Then
+                    result = New list With {.slots = result}
+                End If
+
+                Return result
+            Else
+
             End If
-
-            Dim result = obj.getRowList(rowIndex, drop:=drop)
-
-            If TypeOf result Is Dictionary(Of String, Object) Then
-                result = New list With {.slots = result}
-            End If
-
-            Return result
         End Function
 
         Private Function getColumn(obj As dataframe, indexer As Array, envir As Environment) As Object
