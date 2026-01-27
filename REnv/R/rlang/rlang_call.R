@@ -48,7 +48,7 @@ const rlang_call = function(script_code, workdir = NULL, native_R = getOption("n
     message(`${getwd()}$ "${native_R}" "${code_save}"`);
     cat("\n");
     # call
-    system2(native_R, code_save);
+    system2(native_R, code_save, shell=TRUE);
 
     if (change_wd) {
         setwd(current_wd);

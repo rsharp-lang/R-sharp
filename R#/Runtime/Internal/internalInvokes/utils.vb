@@ -815,7 +815,8 @@ Namespace Runtime.Internal.Invokes
                 Else
                     std_out = PipelineProcess.Call(executative, arguments,
                                                    [in]:=inputStr.JoinBy(vbLf),
-                                                   exitCode:=exitCode)
+                                                   exitCode:=exitCode,
+                                                   shell:=shell)
                 End If
             ElseIf clr Then
                 If env.globalEnvironment.debugMode Then
