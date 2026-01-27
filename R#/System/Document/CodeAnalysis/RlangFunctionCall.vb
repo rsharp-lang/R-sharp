@@ -89,7 +89,7 @@ Namespace Development.CodeAnalysis
                 Dim fields As New List(Of String)
 
                 For Each field As KeyValuePair(Of String, Array) In df.columns
-                    Call fields.Add($"{field.Key} = {VectorScript(field.Value, env)}")
+                    Call fields.Add($"""{field.Key}"" = {VectorScript(field.Value, env)}")
                 Next
 
                 ' construct of the script
@@ -104,7 +104,7 @@ Namespace Development.CodeAnalysis
                 Dim val As Object = list(name)
                 Dim script As String = ValueScript(val, env)
 
-                Call slots.Add($"{name} = {script}")
+                Call slots.Add($"""{name}"" = {script}")
             Next
 
             Return $"list({slots.JoinBy(", " & vbLf)})"
