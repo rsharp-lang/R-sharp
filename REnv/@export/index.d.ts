@@ -108,8 +108,9 @@ declare namespace REnv {
    /**
      * @param workdir default value Is ``null``.
      * @param native_R default value Is ``Call "getOption"("native_rexec")``.
+     * @param title default value Is ``null``.
    */
-   function rlang_call(script_code: any, workdir?: any, native_R?: any): object;
+   function rlang_call(script_code: any, workdir?: any, native_R?: any, title?: any): object;
    /**
      * @param source default value Is ``null``.
      * @param debug default value Is ``false``.

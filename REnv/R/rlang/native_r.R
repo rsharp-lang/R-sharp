@@ -19,6 +19,7 @@ const native_r = function(f, args = list(),
 
     native_rlang |> rlang_call(
         workdir = workdir, 
-        native_R = native_R
+        native_R = native_R,
+        title = attr(invoke, "name")
     );
 }

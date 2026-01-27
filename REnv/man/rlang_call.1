@@ -2,11 +2,13 @@
 .SH NAME
 rlang_call \- rlang_call(script.code,
     <i>workdir</i> = <span style='color: blue !important;'>NULL</span>,
-    <i>native.R</i> = 'getOption'('native_rexec'))
+    <i>native.R</i> = 'getOption'('native_rexec'),
+    <i>title</i> = <span style='color: blue !important;'>NULL</span>)
 .SH SYNOPSIS
 \fIrlang_call(script.code,
     <i>workdir</i> = <span style='color: blue !important;'>NULL</span>,
-    <i>native.R</i> = 'getOption'('native_rexec'))\fR
+    <i>native.R</i> = 'getOption'('native_rexec'),
+    <i>title</i> = <span style='color: blue !important;'>NULL</span>)\fR
 .SH DESCRIPTION
 .PP
 
@@ -22,6 +24,9 @@ This function executes a native R script file using the system's Rscript executa
 .PP
 .PP
 \fBnative.R\fB \fR\- 'getOption'('native_rexec'). 
+.PP
+.PP
+\fBtitle\fB \fR\- NULL. 
 .PP
 .SH VALUE
 .PP
