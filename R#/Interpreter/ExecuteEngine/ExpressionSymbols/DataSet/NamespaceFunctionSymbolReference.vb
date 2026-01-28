@@ -164,6 +164,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 Dim fsymbol As Symbol = env.FindFunction(funcName)
 
                 If fsymbol Is Nothing Then
+                    Dim primitive = RInternal.invoke.getFunction(funcName)
+
+                    If primitive.namespace = [namespace] Then
+                        Return primitive
+                    End If
+
                     Return RInternal.debug.stop({
                         $"we can not found any namespace called: '{[namespace]}'!",
                         $"namespace: {[namespace]}",

@@ -53,6 +53,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object].baseOp
@@ -64,6 +65,8 @@ Namespace Runtime.Internal.Invokes
     ''' <summary>
     ''' s4object api function exports
     ''' </summary>
+    ''' 
+    <Package("s4Methods")>
     Public Module s4Methods
 
         ''' <summary>
