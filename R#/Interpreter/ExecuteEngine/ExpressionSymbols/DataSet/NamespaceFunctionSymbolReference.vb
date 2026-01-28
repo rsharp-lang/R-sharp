@@ -166,7 +166,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                 If fsymbol Is Nothing Then
                     Dim primitive = RInternal.invoke.getFunction(funcName)
 
-                    If primitive.namespace = [namespace] Then
+                    If primitive IsNot Nothing AndAlso primitive.namespace = [namespace] Then
                         Return primitive
                     End If
 
