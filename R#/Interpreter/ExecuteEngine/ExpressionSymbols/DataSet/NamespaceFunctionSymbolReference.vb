@@ -171,9 +171,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
                     End If
 
                     Return RInternal.debug.stop({
-                        $"we can not found any namespace called: '{[namespace]}'!",
+                        $"we can not found any function symbol {funcName} from package namespace '{[namespace]}'!",
                         $"namespace: {[namespace]}",
-                        $"function symbol: {funcNameSymbol}<{fsymbol}>"
+                        $"function symbol: {funcNameSymbol}<{funcName}>"
                     }, env)
                 End If
 
