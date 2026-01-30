@@ -578,7 +578,11 @@ ReturnTable:
     ''' <param name="envir"></param>
     ''' <returns></returns>
     <ExportAPI("dataset.colnames")>
-    Public Function colnames(dataset As Array, <RByRefValueAssign> Optional values As Array = Nothing, Optional envir As Environment = Nothing) As Object
+    Public Function colnames(dataset As Array,
+                             <RByRefValueAssign>
+                             Optional values As Array = Nothing,
+                             Optional envir As Environment = Nothing) As Object
+
         Dim baseElement As Type = REnv.MeasureArrayElementType(dataset)
 
         If values Is Nothing OrElse values.Length = 0 Then
