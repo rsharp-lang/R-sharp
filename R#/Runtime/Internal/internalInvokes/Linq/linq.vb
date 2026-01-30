@@ -1221,6 +1221,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' For sort an R object with a class Or a numeric, complex, 
         ''' character Or logical vector. For sort.int, a numeric, complex, 
         ''' character Or logical vector, Or a factor.
+        ''' 
+        ''' for sort a dataframe object, then it will sort by the value order which is defined via the given columns.
         ''' </param>
         ''' <param name="decreasing">
         ''' logical. Should the sort be increasing or decreasing? For the 
@@ -1319,15 +1321,17 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         Public Function sort(<RRawVectorArgument>
                              x As Object,
                              Optional decreasing As Boolean = False,
+                             <RRawVectorArgument(TypeCodes.string)>
+                             Optional cols As Object = Nothing,
                              Optional na_last As Boolean = False) As Object
 
-            Return orderBy(x, desc:=decreasing)
+            Return orderBy(x, desc:=decreasing, getKey:=cols)
         End Function
 
         ''' <summary>
         ''' Sorts the elements of a sequence in ascending order according to a key.
         ''' </summary>
-        ''' <param name="sequence">A sequence of values to order.</param>
+        ''' <param name="x">A sequence of values to order.</param>
         ''' <param name="getKey">
         ''' A function to extract a key from an element. and this parameter value 
         ''' can also be the field name or column name to sort.
@@ -1344,64 +1348,67 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' </returns>
         <ExportAPI("orderBy")>
         Public Function orderBy(<RRawVectorArgument>
-                                sequence As Object,
+                                x As Object,
+                                <RRawVectorArgument(TypeCodes.string)>
                                 Optional getKey As Object = Nothing,
                                 Optional desc As Boolean = False,
                                 Optional envir As Environment = Nothing) As Object
 
+            If TypeOf x Is dataframe Then
+                Dim cols As String() = CLRVector.asCharacter(getKey)
+                Dim df As dataframe = DirectCast(x, dataframe).sortDataframe(cols, desc, envir)
+                Return df
+            End If
+
             If TypeOf getKey Is String Then
-                Return sortByKeyValue(sequence, getKey, desc, envir)
+                Return sortByKeyValue(x, getKey, desc, envir)
             ElseIf getKey Is Nothing OrElse getKey.GetType.ImplementInterface(Of RFunction) Then
-                Return sortByKeyFunction(sequence, getKey, desc, envir)
+                Return sortByKeyFunction(x, getKey, desc, envir)
             Else
                 Return Message.InCompatibleType(GetType(RFunction), getKey.GetType, envir)
             End If
         End Function
 
-        Private Function sortByKeyValue(sequence As Object, key As String, desc As Boolean, envir As Environment) As Object
-            If TypeOf sequence Is dataframe Then
-                Dim rows = DirectCast(sequence, dataframe) _
-                    .listByRows.slots _
-                    .ToArray
+        <Extension>
+        Private Function sortDataframe(x As dataframe, cols As String(), desc As Boolean, env As Environment) As Object
+            Dim sortVals = cols.Select(Function(name) (name, UnsafeTryCastGenericArray(x(name)))).ToArray
+            Dim colnames As String() = x.colnames
+            Dim rows = x.forEachRow(colnames).ToArray
+            Dim sort As IOrderedEnumerable(Of NamedCollection(Of Object))
+            Dim firstStage As Func(Of Integer, IComparable) = sortOrder(sortVals(0).Item2)
 
-                If desc Then
-                    rows = rows _
-                        .OrderByDescending(
-                            Function(i)
-                                Return DirectCast(i.Value, list).slots()(key)
-                            End Function) _
-                        .ToArray
-                Else
-                    rows = rows _
-                        .OrderBy(Function(i) DirectCast(i.Value, list).slots()(key)) _
-                        .ToArray
-                End If
+            If desc Then
+                sort = rows.OrderByDescending(Function(i) firstStage(Integer.Parse(i.description)))
 
-                ' re-assemble back the row list
-                ' to dataframe
-                Dim columns As New Dictionary(Of String, Array)
-                Dim colNames = DirectCast(sequence, dataframe).colnames
-                Dim v As Array
-
-                For Each name As String In colNames
-                    v = rows _
-                        .Select(Function(i)
-                                    Return DirectCast(i.Value, list).slots()(name)
-                                End Function) _
-                        .ToArray
-                    v = REnv.TryCastGenericArray(v, envir)
-                    columns(name) = v
+                For offset As Integer = 1 To sortVals.Length - 1
+                    Dim key = sortOrder(sortVals(offset).Item2)
+                    sort = sort.ThenByDescending(Function(i) key(Integer.Parse(i.description)))
                 Next
-
-                Return New dataframe With {
-                    .columns = columns,
-                    .rownames = rows _
-                        .Select(Function(r) r.Key) _
-                        .ToArray
-                }
             Else
-                Return Internal.debug.stop(New NotImplementedException(), envir)
+                sort = rows.OrderBy(Function(i) firstStage(Integer.Parse(i.description)))
+
+                For offset As Integer = 1 To sortVals.Length - 1
+                    Dim key = sortOrder(sortVals(offset).Item2)
+                    sort = sort.ThenBy(Function(i) key(Integer.Parse(i.description)))
+                Next
             End If
+
+            Dim result As NamedCollection(Of Object)() = sort.ToArray
+            Dim df As dataframe = dataframe.CreateDataFrame(result, colNames:=colnames)
+
+            Return df
+        End Function
+
+        Private Function sortOrder(keys As Array) As Func(Of Integer, IComparable)
+            If keys.GetType.GetElementType.ImplementInterface(Of IComparable) Then
+                Return Function(i) DirectCast(keys(i), IComparable)
+            Else
+                Throw New NotImplementedException(keys.GetType.ToString)
+            End If
+        End Function
+
+        Private Function sortByKeyValue(sequence As Object, key As String, desc As Boolean, envir As Environment) As Object
+            Return Internal.debug.stop(New NotImplementedException(), envir)
         End Function
 
         Private Function sortByKeyFunction(sequence As Object, getKey As RFunction, desc As Boolean, envir As Environment) As Object

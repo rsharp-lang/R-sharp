@@ -766,7 +766,8 @@ Namespace Runtime.Internal.Object
 
                 Yield New NamedCollection(Of Object) With {
                     .name = rowIds(index),
-                    .value = objVec
+                    .value = objVec,
+                    .description = index
                 }
             Next
         End Function
