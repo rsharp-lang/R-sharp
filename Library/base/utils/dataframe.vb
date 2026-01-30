@@ -1032,7 +1032,7 @@ ReturnTable:
                         dataframe = utils.read_csv(file)
                     End If
                 Else
-                    dataframe = FrameReader.ReadFeatures(file).toDataframe(list.empty, env)
+                    dataframe = FrameReader.ReadFrame(file).toDataframe(list.empty, env)
                 End If
         End Select
 
