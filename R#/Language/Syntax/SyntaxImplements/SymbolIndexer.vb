@@ -106,7 +106,11 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     indexType = SymbolIndexers.nameIndex
                 End If
             Else
-                Call tokens.parseIndex(index, indexType, opts)
+                Dim err = tokens.parseIndex(index, indexType, opts)
+
+                If Not err Is Nothing Then
+                    Return err
+                End If
             End If
 
             If index.isException Then
@@ -177,8 +181,11 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                 .Take(indexer.Length - 2) _
                 .ToArray
 
-            Call indexer.parseIndex(index, indexType, opts)
+            Dim err = indexer.parseIndex(index, indexType, opts)
 
+            If Not err Is Nothing Then
+                Return err
+            End If
             If index.isException Then
                 Return index
             End If
@@ -187,9 +194,14 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
         End Function
 
         <Extension>
-        Private Sub parseIndex(tokens As Token(), ByRef index As SyntaxResult, ByRef indexType As SymbolIndexers, opts As SyntaxBuilderOptions)
+        Private Function parseIndex(tokens As Token(), ByRef index As SyntaxResult, ByRef indexType As SymbolIndexers, opts As SyntaxBuilderOptions) As SyntaxResult
             Dim err As Exception = Nothing
             Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.comma, False, err:=err)
+
+            If blocks Is Nothing Then
+                Call opts.SetCurrentRange(tokens)
+                Return SyntaxResult.CreateError($"invalid syntax when parse expression: {tokens.Select(Function(t) t.text).JoinBy("")}", opts)
+            End If
 
             If blocks > 1 Then
                 ' dataframe indexer
@@ -215,7 +227,9 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
                 index = opts.ParseExpression(tokens)
             End If
-        End Sub
+
+            Return Nothing
+        End Function
 
         ''' <summary>
         ''' dataframe indexer
