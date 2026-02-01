@@ -1817,5 +1817,49 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             Return newDf
         End Function
+
+        ''' <summary>
+        ''' text labeler
+        ''' </summary>
+        ''' <param name="x"></param>
+        ''' <param name="labels"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
+        ''' <example>
+        ''' let labels = switch(c(...),  gene = c(...), prot = c(...), metabolite = c(...), NA = "kegg_pathway" );
+        ''' 
+        ''' print(labels);
+        ''' # [6] "gene" "gene" "prot" "prot" "prot" "metabolite" "kegg_pathway"
+        ''' </example>
+        <ExportAPI("switch")>
+        Public Function switch(<RRawVectorArgument> x As Object, <RListObjectArgument> labels As list, Optional env As Environment = Nothing) As Object
+            Dim strs As String() = CLRVector.asCharacter(x)
+            Dim index As New List(Of NamedValue(Of Index(Of String)))
+            Dim NA As String = CLRVector.asCharacter(labels.getBySynonyms("NA")).FirstOrDefault
+
+            NA = If(NA, "NA")
+
+            For Each name As String In labels.getNames
+                Dim subset As String() = CLRVector.asCharacter(labels.getByName(name))
+                Dim hash As Index(Of String) = subset.Indexing
+
+                Call index.Add(New NamedValue(Of Index(Of String))(name, hash))
+            Next
+
+            Dim label_str As String() = NA.Repeats(strs.Length)
+
+            For i As Integer = 0 To strs.Length - 1
+                Dim str As String = strs(i)
+
+                For Each type In index
+                    If str Like type.Value Then
+                        label_str(i) = type.Name
+                        Exit For
+                    End If
+                Next
+            Next
+
+            Return label_str
+        End Function
     End Module
 End Namespace
