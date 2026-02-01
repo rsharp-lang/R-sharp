@@ -185,7 +185,9 @@ Module jsonlitePackage
                                Optional args As list = Nothing,
                                Optional env As Environment = Nothing) As Object
 
-        Throw New NotImplementedException
+        Dim json_str As String = txt.SolveStream
+        Dim json As Object = Rbase.JSON.json_decode(json_str, env:=env)
+        Return json
     End Function
 
     ''' <summary>
@@ -268,7 +270,8 @@ Module jsonlitePackage
                              <RRawVectorArgument(GetType(String))> Optional force As Boolean = False,
                              <RRawVectorArgument(GetType(String))> Optional args As list = Nothing,
                              <RRawVectorArgument(GetType(String))> Optional env As Environment = Nothing) As Object
-        Throw New NotImplementedException
+
+        Return Rbase.JSON.json_encode(x, args:=args, env:=env)
     End Function
 
 End Module
