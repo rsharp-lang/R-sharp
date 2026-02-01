@@ -253,12 +253,16 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
+        Public Shared Sub MakeSizeNotMatchedError(v1 As GetVectorElement, v2 As GetVectorElement)
+            Throw New InvalidDataException($"size between two vector(x={v1.size},y={v2.size}) is not matched!")
+        End Sub
+
         Public Shared Iterator Function Zip(Of X, Y)(c1 As X(), c2 As Y()) As IEnumerable(Of (X, Y))
             Dim vx As GetVectorElement = GetVectorElement.Create(Of X)(c1)
             Dim vy As GetVectorElement = GetVectorElement.Create(Of Y)(c2)
 
             If Not DoesSizeMatch(vx, vy) Then
-                Throw New InvalidDataException($"size between two vector(x={vx.size},y={vy.size}) is not matched!")
+                MakeSizeNotMatchedError(vx, vy)
             End If
 
             Dim size As Integer = std.Max(vx.size, vy.size)
@@ -267,6 +271,20 @@ Namespace Runtime.Vectorization
 
             For i As Integer = 0 To size - 1
                 Yield (DirectCast(fx(i), X), DirectCast(fy(i), Y))
+            Next
+        End Function
+
+        Public Shared Iterator Function Zip(vx As GetVectorElement, vy As GetVectorElement) As IEnumerable(Of (Object, Object))
+            If Not DoesSizeMatch(vx, vy) Then
+                MakeSizeNotMatchedError(vx, vy)
+            End If
+
+            Dim size As Integer = std.Max(vx.size, vy.size)
+            Dim fx = vx.Getter
+            Dim fy = vy.Getter
+
+            For i As Integer = 0 To size - 1
+                Yield (fx(i), fy(i))
             Next
         End Function
 

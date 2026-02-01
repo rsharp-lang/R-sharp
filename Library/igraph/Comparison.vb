@@ -52,14 +52,17 @@
 #End Region
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Data.visualize.Network
+Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 
 ''' <summary>
 ''' Network graph comparison tools
 ''' </summary>
-<Package("igraph.comparison")>
+<Package("comparison")>
 Module Comparison
 
     ''' <summary>
@@ -92,5 +95,35 @@ Module Comparison
                                Optional topologyCos As Boolean = False) As Double
 
         Return Analysis.GraphSimilarity(a, b, cutoff, classEquivalent, topologyCos)
+    End Function
+
+    <ExportAPI("interaction_type")>
+    Public Function interaction_type(<RRawVectorArgument> fromType As Object,
+                                     <RRawVectorArgument> toType As Object,
+                                     Optional sort As Boolean = True,
+                                     Optional delimiter As String = " - ",
+                                     Optional env As Environment = Nothing) As Object
+
+        Dim vec1 = GetVectorElement.Create(Of String)(CLRVector.asCharacter(fromType))
+        Dim vec2 = GetVectorElement.Create(Of String)(CLRVector.asCharacter(toType))
+
+        If Not GetVectorElement.DoesSizeMatch(vec1, vec2) Then
+
+        End If
+
+        Dim interactions = GetVectorElement.Zip(vec1, vec2) _
+            .Select(Function(t)
+                        Dim a As String = CStr(t.Item1)
+                        Dim b As String = CStr(t.Item2)
+
+                        If sort Then
+                            Return {a, b}.OrderBy(Function(si) si).JoinBy(delimiter)
+                        Else
+                            Return {a, b}.JoinBy(delimiter)
+                        End If
+                    End Function) _
+            .ToArray
+
+        Return interactions
     End Function
 End Module
