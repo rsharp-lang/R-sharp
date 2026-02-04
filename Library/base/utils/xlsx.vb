@@ -56,6 +56,7 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.Framework
 Imports Microsoft.VisualBasic.Data.Framework.IO
 Imports Microsoft.VisualBasic.Data.Framework.StorageProvider.Reflection
+Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.Office.Excel.XLS.MsHtml
@@ -200,9 +201,16 @@ Module xlsx
         Dim encoding As Encodings = TextEncodings.GetEncodings(Rsharp.GetEncoding(fileEncoding))
         Dim formatNumber As String = CLRVector.asCharacter(number_format).ElementAtOrDefault(Scan0, [default]:="G6")
         Dim table As csv
+        Dim is_list As Boolean = TypeOf x Is list OrElse
+            x.GetType.ImplementInterface(Of IDictionary(Of String, Object)) OrElse
+            x.GetType.ImplementInterface(Of IDictionary(Of String, Rdataframe))
 
-        If x.GetType Is GetType(list) AndAlso file.ExtensionSuffix("xlsx") Then
-            Dim tables As list = DirectCast(x, list)
+        If Not file.ExtensionSuffix("xlsx", "xls") Then
+            Call $"the target file({file.GetFullPath}) to write xlsx file is not with suffix name *.xlsx!".warning
+        End If
+
+        If is_list Then
+            Dim tables As list = If(TryCast(x, list), New list(DirectCast(x, IDictionary)))
             Dim sanitizeSheetName As Boolean = True
             ' Create New workbook
             Dim workbook As New Workbook(file, Nothing)
