@@ -23,6 +23,8 @@ Module RPackage
     Public Function Compile(meta As DESCRIPTION, src As String, save As String,
                             Optional skipSourceBuild As Boolean = True,
                             Optional r_syntax As String = "../../_assets/R_syntax.js",
+                            Optional doc_template As String = Nothing,
+                            Optional clr_template As String = Nothing,
                             Optional enableDebugSymbols As Boolean = False) As Integer
 
         If meta.isEmpty Then
@@ -31,6 +33,8 @@ Module RPackage
         Else
             ' config for publish document files on github page
             Call App.JoinVariable("r_syntax.js", r_syntax)
+            Call App.JoinVariable("doc_template", doc_template)
+            Call App.JoinVariable("clr_template", clr_template)
         End If
 
         ' build .net5 assembly via dotnet msbuild command?

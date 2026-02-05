@@ -334,6 +334,9 @@ Namespace Development.Package.File
             Else
                 ' config for github page publish
                 Call REngine.globalEnvir.options.setOption("r_syntax.js", App.GetVariable("r_syntax.js"), REngine.globalEnvir)
+                Call REngine.globalEnvir.options.setOption("doc_template", App.GetVariable("doc_template"), REngine.globalEnvir)
+                Call REngine.globalEnvir.options.setOption("clr_template", App.GetVariable("clr_template"), REngine.globalEnvir)
+
                 Call REngine.LoadLibrary("JSON", silent:=True)
                 'Call PackageLoader.ParsePackages(plugin) _
                 '    .Where(Function(pkg) pkg.namespace = "roxygen") _
