@@ -2,6 +2,8 @@
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
+Imports SMRUCC.Rsharp.Development.Configuration
+Imports SMRUCC.Rsharp.Interpreter
 
 Partial Module CLI
 
@@ -26,7 +28,9 @@ Partial Module CLI
             Loop
         End Using
 
-
+        Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(
+            configs:=ConfigFile.localConfigs
+        )
     End Function
 
 End Module
