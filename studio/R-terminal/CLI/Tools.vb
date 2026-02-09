@@ -28,9 +28,31 @@ Partial Module CLI
             Loop
         End Using
 
+        Dim tsv As Boolean = Not file.ExtensionSuffix("csv")
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(
             configs:=ConfigFile.localConfigs
         )
+
+        Call R.Set("x", rows.JoinBy(vbCrLf))
+        Call R.LoadLibrary(
+            packageName:="utils",
+            silent:=True,
+            ignoreMissingStartupPackages:=True
+        )
+
+        Dim expr As String
+        Dim result As Object
+
+        If tsv Then
+            expr = $"read.table(header = TRUE, row.names = 1, check.names = FALSE, text = x);"
+        Else
+            expr = $"read.csv(row.names = 1, check.names = FALSE, text = x)"
+        End If
+
+        expr = $"print({expr});"
+        result = R.Evaluate(expr)
+
+        Return Rscript.handleResult(result, R.globalEnvir, Nothing)
     End Function
 
 End Module

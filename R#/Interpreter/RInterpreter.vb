@@ -434,6 +434,12 @@ Namespace Interpreter
             globalEnvir.Push(name, New RMethodInfo(name, closure, target), [readonly]:=False, mode:=TypeCodes.closure)
         End Sub
 
+        ''' <summary>
+        ''' declare new variable or set variable value
+        ''' </summary>
+        ''' <param name="name"></param>
+        ''' <param name="value"></param>
+        ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function [Set](name As String, value As Object) As Object
             Return globalEnvir.Push(name, value, [readonly]:=False)

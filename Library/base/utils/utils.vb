@@ -333,7 +333,7 @@ Public Module utils
     ''' <returns></returns>
     <ExportAPI("read.csv")>
     <RApiReturn(GetType(Rdataframe))>
-    Public Function read_csv(file As Object,
+    Public Function read_csv(Optional file As Object = Nothing,
                              Optional header As Boolean = True,
                              <RRawVectorArgument>
                              Optional row_names As Object = Nothing,
@@ -470,7 +470,10 @@ Public Module utils
     ''' Note that On Windows Or other systems Not running In a UTF-8 locale, this may Not be possible.
     ''' </remarks>
     <ExportAPI("read.table")>
-    Public Function read_table(file As Object, Optional header As Boolean = False, Optional sep As String = "\t", Optional quote As String = """'",
+    Public Function read_table(Optional file As Object = Nothing,
+                               Optional header As Boolean = False,
+                               Optional sep As String = "\t",
+                               Optional quote As String = """'",
                                Optional dec As String = ".",
                                <RRawVectorArgument(TypeCodes.string)>
                                Optional numerals As Object = "allow.loss|warn.loss|no.loss",
