@@ -587,16 +587,18 @@ Namespace Runtime.Internal.Invokes
         ''' <param name="na_rm">a logical indicating whether missing values should be removed.</param>
         ''' <returns></returns>
         <ExportAPI("max")>
-        Public Function max(<RRawVectorArgument>
+        Public Function max(<RRawVectorArgument, RListObjectArgument>
                             x As Object,
                             Optional na_rm As Boolean = False,
                             Optional env As Environment = Nothing) As Object
 
-            If TypeOf x Is list Then
-                Return Internal.debug.stop("Error in max(x) : invalid 'type' (list) of argument", env)
+            Dim vec As Object = as_numeric(x, env)
+
+            If TypeOf vec Is Message Then
+                Return vec
             End If
 
-            Dim dbl = CLRVector.asNumeric(x)
+            Dim dbl = CLRVector.asNumeric(vec)
 
             If dbl.Length = 0 Then
                 Call env.AddMessage({"no non-missing arguments to max; returning -Inf"}, MSG_TYPES.WRN)
@@ -604,6 +606,49 @@ Namespace Runtime.Internal.Invokes
             Else
                 Return dbl.Max
             End If
+        End Function
+
+        Private Function as_numeric(x As Object, env As Environment) As Object
+            Dim vals As New List(Of Double)
+
+            If TypeOf x Is InvokeParameter() Then
+                For Each arg As InvokeParameter In DirectCast(x, InvokeParameter())
+                    Dim val As Object = arg.value.Evaluate(env)
+
+                    If TypeOf val Is list Then
+                        Return Internal.debug.stop("Error in min(x) : invalid 'type' (list) of argument", env)
+                    End If
+                    If TypeOf val Is Message Then
+                        Return val
+                    Else
+                        Call vals.AddRange(CLRVector.asNumeric(val).SafeQuery)
+                    End If
+                Next
+            ElseIf TypeOf x Is list Then
+                For Each val As Object In DirectCast(x, list).data
+                    If TypeOf val Is list Then
+                        Return Internal.debug.stop("Error in min(x) : invalid 'type' (list) of argument", env)
+                    End If
+                    If TypeOf val Is Message Then
+                        Return val
+                    Else
+                        Call vals.AddRange(CLRVector.asNumeric(val).SafeQuery)
+                    End If
+                Next
+            Else
+                For Each val As Object In ObjectSet.GetObjectSet(x, env)
+                    If TypeOf val Is list Then
+                        Return Internal.debug.stop("Error in min(x) : invalid 'type' (list) of argument", env)
+                    End If
+                    If TypeOf val Is Message Then
+                        Return val
+                    Else
+                        Call vals.AddRange(CLRVector.asNumeric(val).SafeQuery)
+                    End If
+                Next
+            End If
+
+            Return vals.ToArray
         End Function
 
         ''' <summary>
@@ -615,15 +660,17 @@ Namespace Runtime.Internal.Invokes
         ''' </param>
         ''' <returns></returns>
         <ExportAPI("min")>
-        Public Function min(<RRawVectorArgument> x As Object,
+        Public Function min(<RRawVectorArgument, RListObjectArgument> x As Object,
                             Optional na_rm As Boolean = False,
                             Optional env As Environment = Nothing) As Object
 
-            If TypeOf x Is list Then
-                Return Internal.debug.stop("Error in min(x) : invalid 'type' (list) of argument", env)
+            Dim vec As Object = as_numeric(x, env)
+
+            If TypeOf vec Is Message Then
+                Return vec
             End If
 
-            Dim dbl = CLRVector.asNumeric(x)
+            Dim dbl = CLRVector.asNumeric(vec)
 
             If dbl.Length = 0 Then
                 Call env.AddMessage({"no non-missing arguments to min; returning Inf"}, MSG_TYPES.WRN)

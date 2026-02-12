@@ -933,7 +933,7 @@ Namespace Runtime.Internal.Object
                             $"index({i.value}) was outside the bounds of the target column vector size({c.Length}).",
                             $"index offset: {i.value}",
                             $"column size: {c.Length}",
-                            $"index: {If(index.Length < 80, index.GetJson, index.Take(80).ToArray.GetJson.Trim("]"c) & "...") }"
+                            $"index: [{index.Length}] {If(index.Length < 80, index.GetJson, index.Take(80).ToArray.GetJson.Trim("]"c) & "...") }"
                         }, env)
                     Else
                         Call V.SetValue(c.GetValue(i.value), i)
