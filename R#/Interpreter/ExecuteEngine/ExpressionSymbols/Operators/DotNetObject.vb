@@ -148,14 +148,14 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 ' all elements inside vector is nothing? -> returns a vector with all elements is nothing?
                 If array.AllNothing Then
                     If getStrictOpt(envir) Then
-                        Return RInternal.debug.stop("all of the elements inside the given vector is nothing, can not extract symbol value when in strict mode!", envir)
+                        Return RInternal.debug.stop($"all of the elements inside the given vector is nothing, can not extract symbol {[object]}->'{memberName}' value when in strict mode!", envir)
                     Else
                         Return array
                     End If
                 End If
 
                 If getStrictOpt(envir) Then
-                    Return RInternal.debug.stop($"can not found member symbol '{memberName}' in vector element [{type.GetElementType.FullName}].", envir)
+                    Return RInternal.debug.stop($"can not found member symbol {[object]}->'{memberName}' in vector element [{type.GetElementType.FullName}].", envir)
                 Else
                     Return Nothing
                 End If
