@@ -358,7 +358,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
             If indexer.IsNullOrEmpty Then
                 Return Nothing
-            ElseIf indexer.Length = 1 Then
+            ElseIf indexer.Length = 1 AndAlso drop Then
                 Dim rowIndex = obj.getRowIndex(indexer)
 
                 If rowIndex Is Nothing OrElse CInt(rowIndex) < 0 Then
