@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Linq
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 
@@ -13,6 +14,19 @@ Public Module ListVector
                 .ToDictionary(Function(a) a.Key,
                               Function(a)
                                   Return CLRVector.asScalarCharacter(a.Value)
+                              End Function)
+        End If
+    End Function
+
+    <Extension>
+    Public Function as_numeric(list As list) As Dictionary(Of String, Double)
+        If list Is Nothing OrElse list.slots.IsNullOrEmpty Then
+            Return New Dictionary(Of String, Double)
+        Else
+            Return list.slots _
+                .ToDictionary(Function(a) a.Key,
+                              Function(a)
+                                  Return CLRVector.asNumeric(a.Value).DefaultFirst
                               End Function)
         End If
     End Function
