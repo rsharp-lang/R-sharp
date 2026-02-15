@@ -676,6 +676,7 @@ Module plots
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, 300)
         Dim classes As ColorClass() = Nothing
         Dim classinfo As Dictionary(Of String, String) = Nothing
+        Dim showLabels As Boolean = False
 
         If args.hasName("class") Then
             Call TryGetClassData(args!class, classes, classinfo)
@@ -698,7 +699,8 @@ Module plots
             theme:=theme,
             classes:=classes,
             classinfo:=classinfo,
-            pointColor:=pointColor
+            pointColor:=pointColor,
+            showLeafLabels:=showLabels
         ).Plot(size, dpi, driver:=driver)
     End Function
 
