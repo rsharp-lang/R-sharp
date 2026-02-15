@@ -253,6 +253,10 @@ Namespace Runtime.Interop
         Public Shared ReadOnly Property closure As RType = GetRSharpType(GetType(RFunction))
         Public Shared ReadOnly Property character As RType = GetRSharpType(GetType(String))
 
+        ''' <summary>
+        ''' check of current type information is clr <see cref="Object"/> type?
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property is_any As Boolean
             Get
                 Return Me Is any

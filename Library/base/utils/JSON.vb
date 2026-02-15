@@ -280,42 +280,41 @@ Module JSON
 
         Dim read As New StreamReader(s.TryCast(Of Stream))
 
-        If lazy Then
-            Dim line As Value(Of String) = ""
-            Dim list As IEnumerable(Of Object) =
-                Iterator Function() As IEnumerable(Of Object)
+        If what Is Nothing Then
+            Dim stream As IEnumerable(Of Object) = decodeRObjectStream(read, is_file, env)
 
-                End Function()
-
-            Return pipeline.CreateFromPopulator(
-                list, finalize:=Sub()
-
-                                End Sub)
-        Else
-            Dim line As Value(Of String) = ""
-            Dim list As New List(Of Object)
-
-            Do While (line = read.ReadLine) IsNot Nothing
-                Call list.Add(CStr(line).ParseJSONinternal(
-                     raw:=False,
-                     strict_vector_syntax:=False,
-                     env:=env))
-            Loop
-
-            If is_file Then
-                Try
-                    Call read.Dispose()
-                    Call s.TryCast(Of Stream).Close()
-                Catch ex As Exception
-
-                End Try
+            If lazy Then
+                Return pipeline.CreateFromPopulator(stream)
+            Else
+                Return stream.ToArray
             End If
+        Else
+            Dim type As RType = env.globalEnvironment.GetType(what)
 
-            Return list.ToArray
+            If type.is_any Then
+                Dim stream As IEnumerable(Of Object) = decodeRObjectStream(read, is_file, env)
+
+                If lazy Then
+                    Return pipeline.CreateFromPopulator(stream)
+                Else
+                    Return stream.ToArray
+                End If
+            Else
+                Dim json_strlines As IEnumerable(Of String) = read.IteratesStream
+                Dim clr_obj As Type = type.GetRawElementType
+                Dim stream As IEnumerable(Of Object) = From json As String
+                                                       In json_strlines
+                                                       Select JsonContract.LoadObject(json, clr_obj)
+                If lazy Then
+                    Return New CLRIterator(stream, type:=clr_obj)
+                Else
+                    Return stream.ToArray
+                End If
+            End If
         End If
     End Function
 
-    Private Iterator Function decodeRobject(read As StreamReader, is_file As Boolean, env As Environment) As IEnumerable(Of Object)
+    Private Iterator Function decodeRObjectStream(read As StreamReader, is_file As Boolean, env As Environment) As IEnumerable(Of Object)
         Dim line As Value(Of String) = ""
 
         Do While (line = read.ReadLine) IsNot Nothing
@@ -328,7 +327,7 @@ Module JSON
         If is_file Then
             Try
                 Call read.Dispose()
-                Call s.TryCast(Of Stream).Close()
+                Call read.BaseStream.Close()
             Catch ex As Exception
 
             End Try
