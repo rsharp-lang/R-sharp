@@ -454,6 +454,10 @@ Namespace Runtime
             Return asVector(vec, MeasureRealElementType(vec), env)
         End Function
 
+        Public Function DirectCastGenericArray(vec As Array, type As Type, env As Environment) As Object
+            Return asVector(MeltArray(vec), type, env)
+        End Function
+
         ''' <summary>
         ''' 这个函数会确保返回的输出值都是一个数组
         ''' </summary>

@@ -308,7 +308,7 @@ Module JSON
                 If lazy Then
                     Return New CLRIterator(stream, type:=clr_obj)
                 Else
-                    Return stream.ToArray
+                    Return DirectCastGenericArray(stream.ToArray, type:=clr_obj, env)
                 End If
             End If
         End If
