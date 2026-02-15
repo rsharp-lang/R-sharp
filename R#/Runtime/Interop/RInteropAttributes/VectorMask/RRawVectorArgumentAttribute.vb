@@ -114,6 +114,11 @@ Namespace Runtime.Interop
             Me.parser = GetType(DefaultVectorParser)
         End Sub
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="vector">the vector element type</param>
+        ''' <param name="parser"></param>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(vector As TypeCodes, Optional parser As Type = Nothing)
             Call Me.New(RType.GetType(vector).GetRawElementType, parser)

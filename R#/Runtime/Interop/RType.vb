@@ -198,7 +198,10 @@ Namespace Runtime.Interop
         Public ReadOnly Property is_numeric As Boolean
             Get
                 Dim clr As Type = GetRawElementType()
-                Return clr Like integers OrElse clr Like floats
+                Dim check_int = clr Like integers
+                Dim check_float = clr Like floats
+
+                Return check_int OrElse check_float
             End Get
         End Property
 
@@ -314,7 +317,9 @@ Namespace Runtime.Interop
         ''' </summary>
         ''' <returns></returns>
         Public Function GetRawElementType() As Type
-            If raw Is GetType(Array) OrElse raw.GetElementType Is Nothing Then
+            If Not raw.IsArray Then
+                Return raw
+            ElseIf raw.GetElementType Is Nothing Then
                 Return GetType(Object)
             Else
                 Return raw.GetElementType
