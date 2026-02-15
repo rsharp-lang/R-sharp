@@ -268,6 +268,7 @@ Module JSON
     <ExportAPI("read.jsonl")>
     Public Function read_jsonl(<RRawVectorArgument> file As Object,
                                Optional lazy As Boolean = False,
+                               Optional what As Object = Nothing,
                                Optional env As Environment = Nothing) As Object
 
         Dim is_file As Boolean = False
@@ -283,24 +284,12 @@ Module JSON
             Dim line As Value(Of String) = ""
             Dim list As IEnumerable(Of Object) =
                 Iterator Function() As IEnumerable(Of Object)
-                    Do While (line = read.ReadLine) IsNot Nothing
-                        Yield CStr(line).ParseJSONinternal(
-                            raw:=False,
-                            strict_vector_syntax:=False,
-                            env:=env)
-                    Loop
+
                 End Function()
 
             Return pipeline.CreateFromPopulator(
                 list, finalize:=Sub()
-                                    If is_file Then
-                                        Try
-                                            Call read.Dispose()
-                                            Call s.TryCast(Of Stream).Close()
-                                        Catch ex As Exception
 
-                                        End Try
-                                    End If
                                 End Sub)
         Else
             Dim line As Value(Of String) = ""
@@ -323,6 +312,26 @@ Module JSON
             End If
 
             Return list.ToArray
+        End If
+    End Function
+
+    Private Iterator Function decodeRobject(read As StreamReader, is_file As Boolean, env As Environment) As IEnumerable(Of Object)
+        Dim line As Value(Of String) = ""
+
+        Do While (line = read.ReadLine) IsNot Nothing
+            Yield CStr(line).ParseJSONinternal(
+                raw:=False,
+                strict_vector_syntax:=False,
+                env:=env)
+        Loop
+
+        If is_file Then
+            Try
+                Call read.Dispose()
+                Call s.TryCast(Of Stream).Close()
+            Catch ex As Exception
+
+            End Try
         End If
     End Function
 
