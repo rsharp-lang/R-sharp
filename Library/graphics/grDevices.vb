@@ -66,6 +66,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors.Scaler
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -826,7 +827,7 @@ break:
                     Dim result = eval.Invoke({term}, env)
 
                     If TypeOf result Is Message Then
-                        Call DirectCast(result, Message).message.JoinBy("; ").Warning
+                        Call DirectCast(result, Message).message.JoinBy("; ").warning
                         Return Nothing
                     Else
                         Dim chars As String() = CLRVector.asCharacter(result)
@@ -847,6 +848,23 @@ break:
         End If
 
         Return Nothing
+    End Function
+
+    <ExportAPI("palette")>
+    Public Function palette(<RRawVectorArgument> x As Object, name As String, Optional env As Environment = Nothing) As Object
+        Dim factors As String() = CLRVector.asCharacter(x)
+
+        If factors.IsNullOrEmpty Then
+            Return Nothing
+        End If
+
+        Dim colors As New CategoryColorProfile(factors, colorSet:=name)
+        Dim colorList As String() = (From xi As String
+                                     In factors
+                                     Select colors _
+                                         .GetColor(xi) _
+                                         .ToHtmlColor).ToArray
+        Return colorList
     End Function
 
     ''' <summary>
