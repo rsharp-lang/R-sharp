@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>Rsharp.NetCore5</RootNamespace>
-    <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net10.0-windows;net10.0</TargetFrameworks>
     <AssemblyName>Rscript</AssemblyName>
     <ApplicationIcon>R#.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64</Platforms>

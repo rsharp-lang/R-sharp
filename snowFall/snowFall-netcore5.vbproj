@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>snowFall</RootNamespace>
-    <TargetFrameworks>net8.0;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net10.0-windows;net10.0</TargetFrameworks>
     <AssemblyName>snowFall</AssemblyName>
     <Description>High Performance Parallel Compute Library on Unix .NET 6 runtime for R# scripting</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
