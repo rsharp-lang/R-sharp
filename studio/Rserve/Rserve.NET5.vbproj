@@ -12,66 +12,18 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>	  
 	  <Deterministic>false</Deterministic>
 	  <DefineConstants>netcore5=1</DefineConstants>
-	  <Title>R http services</Title>
+	  <Title>R# web session backend progress</Title>
 	  <Authors>xieguigang</Authors>
 	  <Company>SMRUCC genomics Institute [GuiLin, China]</Company>
 	  <UseApplicationFramework>True</UseApplicationFramework>
 	  <Product>R#</Product>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>Rserve.xml</DocumentationFile>
-    <DefineConstants>netcore5=1</DefineConstants>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DocumentationFile>Rserve.xml</DocumentationFile>
-    <DefineConstants>netcore5=1</DefineConstants>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>Rserve.xml</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MEMI-Desktop|AnyCPU'">
-    <DocumentationFile>Rserve.xml</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|AnyCPU'">
-    <DocumentationFile>Rserve.xml</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Rsharp_app_release|AnyCPU'">
-    <DocumentationFile>Rserve.xml</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='gcmodeller_desktop|AnyCPU'">
-    <DocumentationFile>Rserve.xml</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DocumentationFile>Rserve.xml</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	  <DefineConstants>netcore5=1</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MEMI-Desktop|x64'">
-    <DocumentationFile>Rserve.xml</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DefineConstants>netcore5=1</DefineConstants>
+	  <AssemblyTitle>R http/rest api web server</AssemblyTitle>
+	  <Description>R# web session backend progress</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
     <DocumentationFile>Rserve.xml</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  
 	  <DefineConstants>netcore5=1</DefineConstants>
     <OutputPath>../../../../../mzkit\dist\bin\Rstudio\bin</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -92,7 +44,7 @@
     <DefineTrace>true</DefineTrace>
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
     <OutputPath>..\..\App\</OutputPath>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+   
   </PropertyGroup>
   
    <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'gcmodeller_desktop|net6.0-windows' ">
@@ -109,7 +61,7 @@
     <DefineTrace>true</DefineTrace>
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
     <OutputPath>../../../../../../BlueprintCAD\App\net8.0-windows\rstudio\bin</OutputPath>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+   
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
@@ -132,6 +84,118 @@
     <DefineTrace>true</DefineTrace>
     <DefineConstants>netcore5=1</DefineConstants>
     <OutputPath>../../../../../Moira\assembly\bin\Rstudio\bin</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='MEMI-Desktop|net10.0-windows|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='MEMI-Desktop|net10.0|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='MEMI-Desktop|net10.0-windows|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='MEMI-Desktop|net10.0|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-windows|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0-windows|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-windows|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-windows|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net10.0-windows|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net10.0|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net10.0-windows|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net10.0|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net10.0-windows|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net10.0|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net10.0-windows|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net10.0|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net10.0-windows|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net10.0|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net10.0-windows|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net10.0|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net10.0-windows|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net10.0|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net10.0-windows|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net10.0|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
