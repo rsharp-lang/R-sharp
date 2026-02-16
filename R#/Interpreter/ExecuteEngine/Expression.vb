@@ -106,6 +106,16 @@ Namespace Interpreter.ExecuteEngine
         ''' </returns>
         Public MustOverride Function Evaluate(envir As Environment) As Object
 
+        Friend Function GetBreakPointHashCode() As Integer
+            Dim trace = TryCast(Me, IRuntimeTrace)?.stackFrame
+
+            If trace IsNot Nothing Then
+                Return trace.GetBreakpointHashCode
+            Else
+                Return 0
+            End If
+        End Function
+
         ''' <summary>
         ''' Create a new expression model from the given R# code token collection.
         ''' </summary>

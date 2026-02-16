@@ -163,6 +163,7 @@ Namespace Runtime
         Friend ReadOnly ifPromise As New List(Of IfPromise)
         Friend ReadOnly acceptorArguments As New Dictionary(Of String, Object)
         Friend ReadOnly profiler As List(Of ProfileRecord)
+        Friend ReadOnly debugger As DebuggerContext
 
         ''' <summary>
         ''' In the constructor function of <see cref="Runtime.GlobalEnvironment"/>, 
@@ -252,6 +253,7 @@ Namespace Runtime
             [global] = Nothing
             stackFrame = globalStackFrame
             profiler = Nothing
+            debugger = New DebuggerContext With {.CurrentEnvironment = Me}
 
             Log4VB.redirectError = AddressOf redirectError
             Log4VB.redirectWarning = AddressOf redirectWarning
@@ -303,6 +305,8 @@ Namespace Runtime
             Me.stackFrame = stackFrame
             Me.global = parent.globalEnvironment
             Me.profiler = parent.profiler
+            Me.debugger = parent.debugger
+            Me.debugger.CurrentEnvironment = Me
 
             If openProfiler Then
                 Me.profiler = New List(Of ProfileRecord)
@@ -326,6 +330,8 @@ Namespace Runtime
             Me.global = globalEnv
             Me.stackFrame = New StackFrame(globalEnv.stackFrame)
             Me.profiler = globalEnv.profiler
+            Me.debugger = parent.debugger
+            Me.debugger.CurrentEnvironment = Me
 
             If globalEnv.log4vb_redirect Then
                 Log4VB.redirectError = AddressOf redirectError
@@ -925,6 +931,8 @@ Namespace Runtime
                     If Not parent Is Nothing Then
                         Log4VB.redirectError = AddressOf parent.redirectError
                         Log4VB.redirectWarning = AddressOf parent.redirectWarning
+
+                        debugger.CurrentEnvironment = parent
                     End If
 
                     Call Clear()

@@ -109,13 +109,38 @@ Namespace Interpreter
             Dim showExpression As Boolean = debug AndAlso (env.globalEnvironment.debugLevel = DebugLevels.All OrElse env.globalEnvironment.debugLevel = DebugLevels.Stack)
             Dim benchmark As Long
             Dim timestamp As Long
+            ' 获取调试器引用
+            Dim dbg As DebuggerContext = env.debugger
 
             ' The program code loop
             For Each expression As Expression In execQueue
+                If showExpression Then
+                    Call VBDebugger.WriteLine(expression.ToString, ConsoleColor.White)
+                End If
+
+                ' ================= 调试逻辑开始 =================
+                If dbg IsNot Nothing AndAlso dbg.IsDebugging Then
+                    ' 检查是否需要暂停（断点命中或单步执行）
+                    If dbg.ShouldPause(expression) Then
+                        ' 1. 显示当前行信息
+                        VBDebugger.WriteLine($"[DEBUG] Hit: {expression.ToString}", ConsoleColor.Yellow)
+
+                        ' 2. 暂停执行，等待用户输入指令
+                        ' 这里是一个阻塞调用，直到用户输入 Continue 或 Step
+                        dbg.Pause(expression, env)
+
+                        ' 3. 检查用户是否选择了停止
+                        If dbg.CurrentAction = DebugAction.Stop Then
+                            Exit For ' 退出脚本执行
+                        End If
+                    End If
+                End If
+                ' ================= 调试逻辑结束 =================
+
                 benchmark = App.NanoTime
                 timestamp = App.UnixTimeStamp
                 refreshMemory = False
-                last = ExecuteCodeLine(expression, env, breakLoop, showExpression)
+                last = ExecuteCodeLine(expression, env, breakLoop)
                 benchmark = App.NanoTime - benchmark
 
                 If Not env.profiler Is Nothing Then
@@ -188,16 +213,8 @@ Namespace Interpreter
         ''' <param name="envir"></param>
         ''' <param name="breakLoop"></param>
         ''' <returns></returns>
-        Public Function ExecuteCodeLine(expression As Expression, envir As Environment,
-                                        Optional ByRef breakLoop As Boolean = False,
-                                        Optional showExpression As Boolean = False) As Object
-            Dim last As Object
-
-            If showExpression Then
-                Call VBDebugger.WriteLine(expression.ToString, ConsoleColor.White)
-            End If
-
-            last = expression.Evaluate(envir)
+        Public Function ExecuteCodeLine(expression As Expression, envir As Environment, Optional ByRef breakLoop As Boolean = False) As Object
+            Dim last As Object = expression.Evaluate(envir)
 
             ' next keyword will break current closure 
             ' and then goto execute next iteration loop
