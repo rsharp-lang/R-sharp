@@ -442,7 +442,7 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="11.0.0-preview.1.26104.118" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="11.0.0-preview.1.26104.118" />
     <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.IO.Packaging" Version="11.0.0-preview.1.26104.118" />
+    <PackageReference Include="System.IO.Packaging" Version="10.0.3" />
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
 
     <PackageReference Include="System.Runtime" Version="4.3.1" />
