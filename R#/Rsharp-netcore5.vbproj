@@ -593,7 +593,7 @@
     <PackageReference Include="System.Runtime" Version="4.3.1" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
-    <PackageReference Include="System.Security.Permissions" Version="11.0.0-preview.1.26104.118" />
+    <PackageReference Include="System.Security.Permissions" Version="10.0.3" />
   </ItemGroup>
 
   <ItemGroup>
