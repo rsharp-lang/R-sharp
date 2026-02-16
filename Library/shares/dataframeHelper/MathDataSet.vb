@@ -1,4 +1,4 @@
-﻿#If MATH_DATASET Then
+﻿
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
@@ -60,6 +60,5 @@ Module MathDataSet
         }
     End Function
 End Module
-#End If
 
 
