@@ -366,9 +366,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="11.0.0-preview.1.26104.118" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.3" />
     <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Security.Permissions" Version="11.0.0-preview.1.26104.118" />
+    <PackageReference Include="System.Security.Permissions" Version="10.0.3" />
   </ItemGroup>
 
   <Import Project="..\..\Library\shares\dataframeHelper\dataframeHelper.projitems" Label="Shared" />
