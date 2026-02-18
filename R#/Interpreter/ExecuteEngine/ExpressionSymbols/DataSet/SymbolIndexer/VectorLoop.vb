@@ -135,16 +135,20 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             If TypeOf data Is list Then
                 Return getListVector(DirectCast(data, list), memberName, idxType, envir)
             ElseIf TypeOf data Is vector Then
+                ' cast vector to array
                 data = DirectCast(data, vector).data
             ElseIf TypeOf data Is LinqPipeline.Group Then
+                ' cast group collection to array
                 data = DirectCast(data, LinqPipeline.Group).group
             ElseIf data.GetType.ImplementInterface(Of IDictionary) Then
+                ' cast dictionary value collection to array 
                 data = DirectCast(data, IDictionary).Values.ToArray(Of Object)
             End If
 
             If data.GetType.IsArray Then
                 Return getVectorList(data, memberName, idxType, envir)
             ElseIf data.GetType.IsInheritsFrom(GetType(s4Reflector)) Then
+                ' s4object@name
                 Return DirectCast(data, s4Reflector).getByName(memberName, envir)
             End If
 
@@ -164,6 +168,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' </returns>
         Private Function getVectorList(data As Array, memberName As String, indexMode As TypeCodes, envir As Environment) As Object
             Dim source As Object() = data.AsObjectEnumerator.ToArray
+
+            If source.Length = 0 Then
+                Return Nothing
+            End If
 
             If indexMode = TypeCodes.integer Then
                 ' get by index
@@ -271,8 +279,12 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Return REnv.TryCastGenericArray(REnv.MeltArray(vec), env:=envir)
         End Function
 
-        Private Function getListVector(datalist As list, memberName As String, indexMode As TypeCodes, envir As Environment)
+        Private Function getListVector(datalist As list, memberName As String, indexMode As TypeCodes, envir As Environment) As Object
             Dim source As Object() = datalist.data.ToArray
+
+            If source.Length = 0 Then
+                Return Nothing
+            End If
 
             ' 20240507 handling of the single list data
             ' for make max compatibility with the vector feature
