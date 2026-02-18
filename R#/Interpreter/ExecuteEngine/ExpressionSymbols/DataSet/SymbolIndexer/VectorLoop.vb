@@ -162,7 +162,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' the same size and the element order with the input 
         ''' data vector.
         ''' </returns>
-        Private Shared Function getVectorList(data As Array, memberName As String, indexMode As TypeCodes, envir As Environment) As Object
+        Private Function getVectorList(data As Array, memberName As String, indexMode As TypeCodes, envir As Environment) As Object
             Dim source As Object() = data.AsObjectEnumerator.ToArray
 
             If indexMode = TypeCodes.integer Then
