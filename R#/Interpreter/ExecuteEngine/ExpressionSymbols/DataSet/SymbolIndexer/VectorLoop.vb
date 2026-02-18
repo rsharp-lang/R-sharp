@@ -182,7 +182,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' <param name="memberName"></param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
-        Private Shared Function __getVectorList(source As Object(), memberName As String, envir As Environment) As Object
+        Private Function __getVectorList(source As Object(), memberName As String, envir As Environment) As Object
             Dim vec As Object() = New Object(source.Length - 1) {}
             Dim item As Object
 
@@ -212,7 +212,15 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
 
             ' 20230206
             ' handling of the vector bugs
-            Return REnv.TryCastGenericArray(REnv.MeltArray(vec), env:=envir)
+            Dim array As Array = REnv.MeltArray(vec)
+            Dim eltype As Type = MeasureRealElementType(vec)
+
+            If eltype Is Nothing OrElse eltype Is GetType(Void) Then
+                Call $"unknown element type for make cast of the generic array of expression {symbol}@{memberName}!".warning
+                Return array
+            End If
+
+            Return REnv.asVector(array, eltype, env:=envir)
         End Function
 
         ''' <summary>
