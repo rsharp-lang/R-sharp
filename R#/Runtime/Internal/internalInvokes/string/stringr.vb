@@ -866,7 +866,7 @@ Namespace Runtime.Internal.Invokes
         ''' <returns></returns>
         <ExportAPI("sprintf")>
         <RApiReturn(GetType(String))>
-        Public Function Csprintf(format As Array,
+        Public Function Csprintf(<RRawVectorArgument(TypeCodes.string)> format As Object,
                                  <RListObjectArgument>
                                  Optional arguments As Object = Nothing,
                                  Optional env As Environment = Nothing) As Object
@@ -891,10 +891,7 @@ Namespace Runtime.Internal.Invokes
                     .ToArray
             End If
 
-            Dim inputTemplates As String() = format _
-                .AsObjectEnumerator _
-                .Select(AddressOf Scripting.ToString) _
-                .ToArray
+            Dim inputTemplates As String() = CLRVector.asCharacter(format)
 
             If inputTemplates.Length = 1 Then
                 Return sprintfSingle(inputTemplates(Scan0), args)
