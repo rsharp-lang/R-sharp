@@ -439,10 +439,10 @@ Namespace Runtime
         ''' <param name="vec"></param>
         ''' <param name="env"></param>
         ''' <returns>
-        ''' A class variant type: error message or a generic array
+        ''' A class variant type: error message or a generic array.
         ''' 
-        ''' Andalso this function will returns nothing if the input <paramref name="vec"/>
-        ''' is nothing.
+        ''' Andalso this function will returns nothing <strong>if the input <paramref name="vec"/>
+        ''' is nothing orelse is empty array.</strong>
         ''' </returns>
         ''' <remarks>
         ''' 返回错误消息或者结果向量
@@ -451,7 +451,12 @@ Namespace Runtime
         <Extension>
         Public Function TryCastGenericArray(vec As Array, env As Environment) As Object
             vec = MeltArray(vec)
-            Return asVector(vec, MeasureRealElementType(vec), env)
+
+            If vec.IsNullOrEmpty Then
+                Return Nothing
+            Else
+                Return asVector(vec, MeasureRealElementType(vec), env)
+            End If
         End Function
 
         Public Function DirectCastGenericArray(vec As Array, type As Type, env As Environment) As Object

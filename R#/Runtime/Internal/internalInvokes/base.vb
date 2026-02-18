@@ -1535,6 +1535,14 @@ Namespace Runtime.Internal.Invokes
                 End If
             End If
 
+            ' 20260219 processing of the possible empty array data
+            ' TryCastGenericArray cast of the empty array will returns nothing
+            If x Is Nothing Then
+                Return values
+            ElseIf values Is Nothing Then
+                Return x
+            End If
+
             If TypeOf x Is list Then
                 Return DirectCast(x, list).appendOfList(values, env)
             ElseIf TypeOf x Is vector OrElse x.GetType.IsArray Then
