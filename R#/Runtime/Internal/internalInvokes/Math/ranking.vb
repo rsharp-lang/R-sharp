@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.Correlations.Ranking
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -111,11 +112,11 @@ Namespace Runtime.Internal.Invokes
         ''' slowly.
         ''' </remarks>
         <ExportAPI("rank")>
-        Public Function rank(x As Double(),
+        Public Function rank(<RRawVectorArgument(TypeCodes.double)> x As Object,
                              Optional na_last As Boolean = True,
                              Optional ties_method As Strategies = Strategies.OrdinalRanking) As Double()
 
-            Return x.Ranking(ties_method)
+            Return CLRVector.asNumeric(x).Ranking(ties_method)
         End Function
 
         ''' <summary>
@@ -167,13 +168,13 @@ Namespace Runtime.Internal.Invokes
         ''' </remarks>
         <ExportAPI("order")>
         <RApiReturn(GetType(Integer))>
-        Public Function order(x As Array,
+        Public Function order(<RRawVectorArgument> x As Object,
                               Optional decreasing As Boolean = False,
                               <RRawVectorArgument>
                               Optional sort As Object = Nothing,
                               Optional env As Environment = Nothing) As Object
 
-            Dim generic As Object = REnv.TryCastGenericArray(x, env)
+            Dim generic As Object = REnv.TryCastGenericArray(CLRVector.asObject(x), env)
 
             If generic Is Nothing Then
                 Return Internal.debug.stop("Error in order(NULL) : argument 1 is not a vector.", env)
