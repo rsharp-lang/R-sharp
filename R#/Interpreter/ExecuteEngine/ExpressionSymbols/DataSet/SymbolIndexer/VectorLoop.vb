@@ -221,7 +221,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             ' 20230206
             ' handling of the vector bugs
             Dim array As Array = REnv.MeltArray(vec)
-            Dim eltype As Type = MeasureRealElementType(vec)
+            Dim eltype As Type = MeasureRealElementType(array)
 
             If eltype Is Nothing OrElse eltype Is GetType(Void) Then
                 Call $"unknown element type for make cast of the generic array of expression {symbol}@{memberName}!".warning
