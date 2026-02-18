@@ -271,7 +271,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             Return REnv.TryCastGenericArray(REnv.MeltArray(vec), env:=envir)
         End Function
 
-        Private Shared Function getListVector(datalist As list, memberName As String, indexMode As TypeCodes, envir As Environment)
+        Private Function getListVector(datalist As list, memberName As String, indexMode As TypeCodes, envir As Environment)
             Dim source As Object() = datalist.data.ToArray
 
             ' 20240507 handling of the single list data
