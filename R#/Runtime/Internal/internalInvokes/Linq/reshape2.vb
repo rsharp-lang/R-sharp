@@ -454,6 +454,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Return Nothing
             End If
 
+            ' cast the raw input data list as kv tuples 
             For Each name As String In l.getNames
                 val = l.getByName(name)
 
