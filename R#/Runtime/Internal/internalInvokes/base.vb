@@ -3225,18 +3225,20 @@ RE0:
         ''' </remarks>
         <ExportAPI("rownames")>
         Public Function rownames([object] As Object,
-                                 <RByRefValueAssign>
-                                 Optional namelist As Array = Nothing,
+                                 <RRawVectorArgument, RByRefValueAssign>
+                                 Optional namelist As Object = Nothing,
                                  Optional envir As Environment = Nothing) As Object
 
             If [object] Is Nothing Then
                 Return Nothing
             End If
 
-            If namelist Is Nothing OrElse namelist.Length = 0 Then
+            Dim name_vec As String() = CLRVector.asCharacter(namelist)
+
+            If name_vec.IsNullOrEmpty Then
                 Return RObj.names.getRowNames([object], envir)
             Else
-                Return RObj.names.setRowNames([object], CLRVector.asCharacter(namelist), envir)
+                Return RObj.names.setRowNames([object], name_vec, envir)
             End If
         End Function
 
@@ -3272,18 +3274,20 @@ RE0:
         ''' </remarks>
         <ExportAPI("colnames")>
         Public Function colnames(x As Object,
-                                 <RByRefValueAssign>
-                                 Optional namelist As Array = Nothing,
+                                 <RRawVectorArgument, RByRefValueAssign>
+                                 Optional namelist As Object = Nothing,
                                  Optional envir As Environment = Nothing) As Object
 
             If x Is Nothing Then
                 Return Nothing
             End If
 
-            If namelist Is Nothing OrElse namelist.Length = 0 Then
+            Dim name_vec As String() = CLRVector.asCharacter(namelist)
+
+            If name_vec.IsNullOrEmpty Then
                 Return RObj.names.getColNames(x, envir)
             Else
-                Return RObj.names.setColNames(x, namelist, envir)
+                Return RObj.names.setColNames(x, name_vec, envir)
             End If
         End Function
 
