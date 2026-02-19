@@ -238,7 +238,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             indexer = REnv.TryCastGenericArray(REnv.asVector(Of Object)(indexerRaw), env:=envir)
 #Enable Warning
 
-            If indexer.Length = 0 Then
+            If indexer.IsNullOrEmpty Then
                 If (indexType = SymbolIndexers.nameIndex OrElse indexType = SymbolIndexers.dataframeRanges) Then
                     Return emptyIndexError(Me, envir)
                 Else
