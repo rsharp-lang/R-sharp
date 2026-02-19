@@ -139,6 +139,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Operators
                 testLeft = REnv.TryCastGenericArray(testLeft, env:=envir)
             End If
 
+            If testLeft Is Nothing Then
+                Return Nothing
+            End If
+
             Dim flags As Boolean()
             Dim seqtype As Type = sequence.GetType
             ' 20220913 vector type implements the rnames
