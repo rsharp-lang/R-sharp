@@ -3116,8 +3116,8 @@ RE0:
         ''' </example>
         <ExportAPI("names")>
         Public Function names(<RRawVectorArgument> [object] As Object,
-                              <RByRefValueAssign>
-                              Optional namelist As Array = Nothing,
+                              <RRawVectorArgument, RByRefValueAssign>
+                              Optional namelist As Object = Nothing,
                               Optional envir As Environment = Nothing) As Object
             ' > names(NULL)
             ' NULL
