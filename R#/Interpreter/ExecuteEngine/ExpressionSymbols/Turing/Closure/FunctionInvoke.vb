@@ -241,7 +241,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' </summary>
         ''' <param name="envir"></param>
         ''' <param name="passed"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' returns the function name string or the function object value
+        ''' </returns>
         Public Function CheckInvoke(envir As Environment, ByRef passed As Boolean) As Object
             Dim target As Object = getFuncVar(funcName, [namespace], envir)
 
@@ -259,6 +261,9 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
             ElseIf target.GetType Is GetType(Message) Then
                 ' message
                 Return target
+            ElseIf TypeOf target Is SymbolPrefixTree AndAlso CType(CType(target, SymbolPrefixTree), RMethodInfo) IsNot Nothing Then
+                passed = True
+                Return CType(CType(target, SymbolPrefixTree), RMethodInfo)
             ElseIf Not target.GetType.ImplementInterface(Of RFunction) Then
                 If target.GetType.IsInheritsFrom(GetType(RDefaultFunction)) Then
                     passed = True
