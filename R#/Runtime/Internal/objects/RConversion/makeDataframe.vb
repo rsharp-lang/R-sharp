@@ -242,7 +242,11 @@ Namespace Runtime.Internal.Object.Converts
                 .Where(Function(col)
                            ' 0 all row element value in current col is empty(or NULL)
                            ' 1 all row element value in current col is the same(scalar value)
-                           Return col.Value.Length <> max AndAlso col.Value.Length > 1
+                           Dim col_size As Integer = If(
+                               col.Value Is Nothing, 0,
+                               col.Value.Length)
+
+                           Return col_size <> max AndAlso col_size > 1
                        End Function) _
                 .Select(Function(col) (col.Key, col.Value.Length)) _
                 .ToArray
