@@ -386,6 +386,10 @@ Namespace Runtime.Internal.Invokes
 
             arrayVec = REnv.TryCastGenericArray(arrayVec, envir)
 
+            If arrayVec Is Nothing Then
+                Return Nothing
+            End If
+
             If nameVec.IsNullOrEmpty Then
                 Return New RObj.vector(arrayVec, RType.GetRSharpType(arrayVec.GetType.GetElementType))
             Else
