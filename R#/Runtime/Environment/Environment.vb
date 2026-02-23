@@ -398,12 +398,18 @@ Namespace Runtime
         End Sub
 
         Protected Sub redirectWarning(obj$, msg$, level As MSG_TYPES)
-            If obj = NameOf(deps.TryHandleNetCore5AssemblyBugs) Then
-                Call Internal.debug _
-                    .CreateMessageInternal({msg, $"{stackFrame.Method.ToString}\[{obj}]"}, Me, level) _
-                    .DoCall(AddressOf globalEnvironment.dotnetCoreWarning.Add)
+            Dim enableRedirectWarning As Boolean = globalEnvironment.options.enableWarning
+
+            If enableRedirectWarning Then
+                If obj = NameOf(deps.TryHandleNetCore5AssemblyBugs) Then
+                    Call Internal.debug _
+                        .CreateMessageInternal({msg, $"{stackFrame.Method.ToString}\[{obj}]"}, Me, level) _
+                        .DoCall(AddressOf globalEnvironment.dotnetCoreWarning.Add)
+                Else
+                    Call AddMessage({msg, $"{stackFrame.Method.ToString}\[{obj}]"})
+                End If
             Else
-                Call AddMessage({msg, $"{stackFrame.Method.ToString}\[{obj}]"})
+                ' discard of the warning message when the option of warning redirect is disabled
             End If
         End Sub
 
@@ -413,6 +419,12 @@ Namespace Runtime
         ''' <param name="message"></param>
         ''' <param name="level"></param>
         Public Sub AddMessage(message As Object, Optional level As MSG_TYPES = MSG_TYPES.WRN)
+            Dim enableRedirectWarning As Boolean = globalEnvironment.options.enableWarning
+
+            If level = MSG_TYPES.WRN AndAlso Not enableRedirectWarning Then
+                Return
+            End If
+
             Internal.debug _
                 .CreateMessageInternal(message, Me, level) _
                 .DoCall(AddressOf messages.Add)

@@ -270,6 +270,12 @@ Namespace Development.Configuration
             End Get
         End Property
 
+        Public ReadOnly Property enableWarning As Boolean
+            Get
+                Return getOption("warning.enable", [default]:="TRUE").ParseBoolean
+            End Get
+        End Property
+
         ''' <summary>
         ''' file path for save the config file
         ''' </summary>
