@@ -968,7 +968,7 @@ Namespace Runtime.Internal.Object
         ''' </summary>
         ''' <returns></returns>
         Public Function GetRowNumbers() As Integer
-            If columns.TryCount = 0 Then
+            If columns.TryCount = 0 OrElse columns.Values.All(Function(c) c.IsNullOrEmpty) Then
                 Return 0
             Else
                 Return Aggregate col As Array
