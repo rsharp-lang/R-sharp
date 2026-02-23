@@ -973,7 +973,7 @@ Namespace Runtime.Internal.Object
             Else
                 Return Aggregate col As Array
                        In columns.Values
-                       Let len = col.Length
+                       Let len As Integer = If(col Is Nothing, 0, col.Length)
                        Into Max(len)
             End If
         End Function
