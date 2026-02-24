@@ -56,6 +56,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.Correlations.Ranking
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -204,6 +205,12 @@ Namespace Runtime.Internal.Invokes
                         End Function) _
                 .Select(Function(d) d.i + 1) _
                 .ToArray
+        End Function
+
+        <ExportAPI("weighted_median")>
+        <RApiReturn(TypeCodes.double)>
+        Public Function weighted_median(<RRawVectorArgument(TypeCodes.double)> x As Object, <RRawVectorArgument(TypeCodes.double)> w As Object) As Object
+            Return CLRVector.asNumeric(x).WeightedMedian(CLRVector.asNumeric(w))
         End Function
     End Module
 End Namespace
