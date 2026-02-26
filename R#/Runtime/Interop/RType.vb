@@ -273,7 +273,8 @@ Namespace Runtime.Interop
                 .ToArray
             Me.haveDynamicsProperty = raw.ImplementInterface(GetType(IDynamicsObject))
             Me.isArray = raw Is GetType(Array) _
-                  OrElse raw.IsInheritsFrom(GetType(Array))
+                  OrElse raw.IsInheritsFrom(GetType(Array)) _
+                  OrElse raw.IsArray
             Me.isCollection = raw.ImplementInterface(GetType(IEnumerable)) AndAlso Not raw Is GetType(String)
             Me.mode = raw.GetRTypeCode
             Me.isEnvironment = raw.IsInheritsFrom(GetType(Environment), strict:=False)
