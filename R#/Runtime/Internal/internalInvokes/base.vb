@@ -3124,12 +3124,15 @@ RE0:
             If [object] Is Nothing Then
                 Return Nothing
             End If
-            If namelist Is Nothing OrElse namelist.Length = 0 Then
+
+            Dim nameVec As String() = CLRVector.asCharacter(namelist)
+
+            If nameVec.IsNullOrEmpty Then
                 ' get element names
                 Return RObj.names.getNames([object], envir)
             Else
                 ' set element names
-                Return RObj.names.setNames([object], namelist, envir)
+                Return RObj.names.setNames([object], nameVec, envir)
             End If
         End Function
 

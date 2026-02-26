@@ -189,7 +189,7 @@ Namespace Runtime.Internal.Object
         ''' <summary>
         ''' 
         ''' </summary>
-        ''' <param name="[object]"></param>
+        ''' <param name="object">target R# runtime object that could be set names</param>
         ''' <param name="names">This method will ensure that the value is a string vector</param>
         ''' <param name="env"></param>
         ''' <returns></returns>
