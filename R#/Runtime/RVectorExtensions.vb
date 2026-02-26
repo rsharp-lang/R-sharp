@@ -485,7 +485,7 @@ Namespace Runtime
         ''' </remarks>
         ''' 
         <Obsolete>
-        Public Function asVector(Of T)(value As Object) As Array
+        Public Function asVector(Of T)(value As Object) As T()
             Dim valueType As Type
             Dim typeofT As Type = GetType(T)
 
@@ -540,7 +540,9 @@ Namespace Runtime
                 If typeofT Is GetType(Object) Then
                     Return {DirectCast(value, T)}
                 ElseIf typeofT Is GetType(Boolean) AndAlso valueType Is GetType(String) Then
-                    Return {DirectCast(value, String).ParseBoolean}
+                    ' 20260226 a special cast for T is boolean type
+                    ' parsed boolean from the string factor
+                    Return DirectCast(DirectCast({DirectCast(value, String).ParseBoolean}, Array), T())
                 Else
                     Return New T() {Conversion.CTypeDynamic(Of T)(value)}
                 End If
