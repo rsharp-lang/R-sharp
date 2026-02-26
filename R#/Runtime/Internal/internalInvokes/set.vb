@@ -547,7 +547,7 @@ type_err:
         ''' holds.
         ''' </returns>
         <ExportAPI("combn")>
-        Public Function combn(x As Array, m As Integer, Optional env As Environment = Nothing) As Object
+        Public Function combn(<RRawVectorArgument> x As Array, m As Integer, Optional env As Environment = Nothing) As Object
             If x Is Nothing OrElse x.Length = 0 Then
                 Return Nothing
             End If
@@ -614,7 +614,7 @@ type_err:
         ''' <param name="env"></param>
         ''' <returns></returns>
         <ExportAPI("jaccard")>
-        Public Function jaccard(x As Array, y As Array, Optional env As Environment = Nothing) As Double
+        Public Function jaccard(<RRawVectorArgument> x As Array, <RRawVectorArgument> y As Array, Optional env As Environment = Nothing) As Double
             If x Is Nothing OrElse x.Length = 0 Then
                 Call env.AddMessage("vector set x is nothing, no intersection elements for count!", MSG_TYPES.WRN)
                 Return 0

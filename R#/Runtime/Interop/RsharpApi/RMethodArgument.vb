@@ -193,7 +193,7 @@ Namespace Runtime.Interop
                 ),
                 .isOptional = p.HasDefaultValue,
                 .isObjectList = isObj,
-                .isRequireRawVector = Not .rawVectorFlag Is Nothing,
+                .isRequireRawVector = (Not .rawVectorFlag Is Nothing) OrElse p.ParameterType.IsArray,
                 .isByrefValueParameter = isByref,
                 .islazyeval = islazyeval
             }
