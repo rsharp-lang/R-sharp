@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::454f8ff7c7f5416387d6538796bd84f7, R#\Runtime\Internal\internalInvokes\set.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 653
-    '    Code Lines: 367 (56.20%)
-    ' Comment Lines: 202 (30.93%)
-    '    - Xml Docs: 90.10%
-    ' 
-    '   Blank Lines: 84 (12.86%)
-    '     File Size: 27.90 KB
+' Summaries:
 
 
-    '     Module [set]
-    ' 
-    '         Function: combn, count, createLoop, createSet, crossing
-    '                   duplicated, indexOf, intersect, jaccard, match_val_against
-    '                   rev, set_diff, set_equals, set_intersect, set_not_equals
-    '                   set_ratio, set_union, setdiff, table, union
-    '                   unset
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 653
+'    Code Lines: 367 (56.20%)
+' Comment Lines: 202 (30.93%)
+'    - Xml Docs: 90.10%
+' 
+'   Blank Lines: 84 (12.86%)
+'     File Size: 27.90 KB
+
+
+'     Module [set]
+' 
+'         Function: combn, count, createLoop, createSet, crossing
+'                   duplicated, indexOf, intersect, jaccard, match_val_against
+'                   rev, set_diff, set_equals, set_intersect, set_not_equals
+'                   set_ratio, set_union, setdiff, table, union
+'                   unset
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -547,29 +547,31 @@ type_err:
         ''' holds.
         ''' </returns>
         <ExportAPI("combn")>
-        Public Function combn(<RRawVectorArgument> x As Array, m As Integer, Optional env As Environment = Nothing) As Object
-            If x Is Nothing OrElse x.Length = 0 Then
+        Public Function combn(<RRawVectorArgument> x As Object, m As Integer, Optional env As Environment = Nothing) As Object
+            Dim xvec As Array = CLRVector.asObject(x)
+
+            If xvec.IsNullOrEmpty Then
                 Return Nothing
             End If
 
-            If x.Length = 1 Then
-                Dim size As Object = x.GetValue(Scan0)
+            If xvec.Length = 1 Then
+                Dim size As Object = xvec.GetValue(Scan0)
 
                 If RType.GetRSharpType(size.GetType).mode = TypeCodes.integer Then
-                    x = CLRVector.asInteger(size)(Scan0) _
+                    xvec = CLRVector.asInteger(size)(Scan0) _
                         .SeqIterator(offset:=1) _
                         .ToArray
                 End If
             Else
-                x = REnv.TryCastGenericArray(x, env)
+                xvec = REnv.TryCastGenericArray(xvec, env)
             End If
 
-            Dim all = x.AsObjectEnumerator(Of Object) _
+            Dim all = xvec.AsObjectEnumerator(Of Object) _
                 .ToArray _
                 .AllCombinations(m) _
                 .ToArray
 
-            Dim type As RType = RType.GetRSharpType(x(0).GetType)
+            Dim type As RType = RType.GetRSharpType(xvec(0).GetType)
 
             If type.mode = TypeCodes.boolean OrElse
                 type.mode = TypeCodes.double OrElse

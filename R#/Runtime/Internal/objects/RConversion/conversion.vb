@@ -1183,7 +1183,7 @@ RE0:
         <RApiReturn(GetType(Double))>
         Public Function asNumeric(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
             If x Is Nothing Then
-                Return 0
+                Return Nothing
             End If
 
             If TypeOf x Is list Then
@@ -1206,7 +1206,7 @@ RE0:
             ElseIf TypeOf x Is Boolean Then
                 Return If(CBool(x), 1.0, 0.0)
             ElseIf TypeOf x Is Boolean() Then
-                Return DirectCast(x, Boolean()).Select(Function(b) If(b, 1.0, 0.0)).ToArray
+                Return vector.asVector(DirectCast(x, Boolean()).Select(Function(b) If(b, 1.0, 0.0)))
             ElseIf TypeOf x Is vector Then
                 Dim vec = DirectCast(x, vector)
 
@@ -1226,20 +1226,16 @@ RE0:
             End If
 
             Dim data As Object() = pipeline _
-                    .TryCreatePipeline(Of Object)(x, env) _
-                    .populates(Of Object)(env) _
-                    .ToArray
+                .TryCreatePipeline(Of Object)(x, env) _
+                .populates(Of Object)(env) _
+                .ToArray
             Dim type As Type = REnv.MeasureRealElementType(data)
 
             If type Is GetType(String) Then
                 ' parse string to double
-                Return data _
-                    .Select(Function(obj) CStr(obj).ParseDouble) _
-                    .ToArray
+                Return vector.asVector(data.Select(Function(obj) CStr(obj).ParseDouble))
             ElseIf type.ImplementInterface(Of Value(Of Double).IValueOf) Then
-                Return data _
-                    .Select(Function(d) DirectCast(d, Value(Of Double).IValueOf).Value) _
-                    .ToArray
+                Return vector.asVector(data.Select(Function(d) DirectCast(d, Value(Of Double).IValueOf).Value))
             Else
                 Dim dbls As New List(Of Double)
                 Dim i As Integer = 0
@@ -1256,7 +1252,7 @@ RE0:
                     End If
                 Next
 
-                Return dbls.ToArray
+                Return vector.asVector(dbls)
             End If
         End Function
 
