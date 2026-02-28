@@ -65,9 +65,10 @@ declare namespace REnv {
      * @param workdir default value Is ``null``.
      * @param deps default value Is ``null``.
      * @param debug default value Is ``false``.
+     * @param requires default value Is ``null``.
      * @param native_R default value Is ``Call "getOption"("native_rexec")``.
    */
-   function native_r(f: any, args?: any, workdir?: any, deps?: any, debug?: any, native_R?: any): object;
+   function native_r(f: any, args?: any, workdir?: any, deps?: any, debug?: any, requires?: any, native_R?: any): object;
    /**
      * @param direction default value Is ``1``.
    */

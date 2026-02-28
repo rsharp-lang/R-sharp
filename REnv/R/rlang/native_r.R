@@ -8,7 +8,7 @@ const native_r = function(f, args = list(),
                         workdir = NULL, 
                         deps = NULL, 
                         debug = FALSE, 
-                        require = NULL,
+                        requires = NULL,
                         native_R = getOption("native_rexec")) {
 
     # make translate of the managed R# closure expression
@@ -21,9 +21,9 @@ const native_r = function(f, args = list(),
     let label = attr(invoke, "name");
     let native_rlang = c(script_code, invoke);
 
-    if (length(require) > 0) {
-        require = sapply(require, name -> `require(${name});`);
-        native_rlang = append(require, native_rlang);
+    if (length(requires) > 0) {
+        requires = sapply(requires, name -> `require(${name});`);
+        native_rlang = append(requires, native_rlang);
     }
 
     native_rlang |> rlang_call(
