@@ -79,8 +79,8 @@ Namespace Runtime.Internal.Object.baseOp
     Public MustInherit Class s4Reflector : Inherits RsharpDataObject
         Implements RNameIndex
 
-        Friend ReadOnly properties As Dictionary(Of String, PropertyInfo)
-        Friend ReadOnly methods As Dictionary(Of String, RMethodInfo)
+        Protected ReadOnly properties As Dictionary(Of String, PropertyInfo)
+        Protected ReadOnly methods As Dictionary(Of String, RMethodInfo)
 
         Public Property s4class As S4Object
 
@@ -97,11 +97,11 @@ Namespace Runtime.Internal.Object.baseOp
             End Set
         End Property
 
-        ''' <summary>
-        ''' processing of myself
-        ''' </summary>
-        Public Sub New()
-            elementType = MakeReflection(Me, properties, methods)
+        Sub New()
+        End Sub
+
+        Sub New(obj As Object)
+            elementType = MakeReflection(obj, properties, methods)
         End Sub
 
         Private Shared Function getObjMethods(raw As Type) As NamedValue(Of MethodInfo)()

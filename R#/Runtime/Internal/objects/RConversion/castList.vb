@@ -306,7 +306,7 @@ Namespace Runtime.Internal.Object.Converts
                 metadata = DynamicMetadataAttribute.GetMetadata(vbobj.elementType.raw)
             End If
 
-            For Each p As KeyValuePair(Of String, PropertyInfo) In vbobj.properties
+            For Each p As KeyValuePair(Of String, PropertyInfo) In vbobj.GetProperties
                 Dim value As Object
 
                 Try
