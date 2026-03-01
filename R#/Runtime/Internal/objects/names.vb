@@ -110,6 +110,12 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' Make unique names
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="data"></param>
+        ''' <returns></returns>
         <Extension>
         Public Iterator Function uniqueNames(Of T As {INamedValue, Class})(data As IEnumerable(Of T)) As IEnumerable(Of T)
             Dim pool = data.SafeQuery.ToArray

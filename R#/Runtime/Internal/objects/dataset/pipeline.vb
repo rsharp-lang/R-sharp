@@ -98,6 +98,16 @@ Namespace Runtime.Internal.Object
                 Return $"clr_iterator[{elementType.ToString}]"
             End If
         End Function
+
+        Public Shared Function Enumerates(Of T)(x As Object, env As Environment) As IEnumerable(Of T)
+            If TypeOf x Is vector Then
+                Return CLRIterator.fromVector(Of T)(x, env).populates(Of T)(env)
+            ElseIf TypeOf x Is T() Then
+                Return DirectCast(x, T())
+            Else
+                Return CLRIterator.TryCreatePipeline(Of T)(x, env).populates(Of T)(env)
+            End If
+        End Function
     End Class
 
     ''' <summary>
@@ -285,7 +295,7 @@ Namespace Runtime.Internal.Object
             Return CreateFromPopulator(pull(), finalize)
         End Function
 
-        Private Shared Function fromVector(Of T)(upstream As vector, env As Environment, suppress As Boolean) As pipeline
+        Public Shared Function fromVector(Of T)(upstream As vector, env As Environment, Optional suppress As Boolean = False) As pipeline
             If upstream.length = 0 Then
                 env.AddMessage("the input vector is in empty size!", MSG_TYPES.WRN)
                 Return CreateFromPopulator(New T() {})
