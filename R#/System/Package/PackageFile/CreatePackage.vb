@@ -624,9 +624,14 @@ Namespace Development.Package.File
             End If
         End Function
 
+        ''' <summary>
+        ''' Create package dependency and module loading list
+        ''' </summary>
+        ''' <param name="loading"></param>
+        ''' <returns></returns>
         <Extension>
         Friend Iterator Function loadingDependency(loading As IEnumerable(Of Expression)) As IEnumerable(Of Dependency)
-            Dim allDeps = loading _
+            Dim allDeps As Dependency() = loading _
                 .Where(Function(i)
                            If Not TypeOf i Is [Imports] Then
                                Return True
