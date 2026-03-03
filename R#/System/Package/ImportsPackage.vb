@@ -204,16 +204,17 @@ Namespace Development.Package
         <Extension>
         Public Function ImportsStatic(env As Environment, package As Type, Optional strict As Boolean = True) As IEnumerable(Of String)
             Try
-#If NETCOREAPP Then
                 Dim opts = env.globalEnvironment.options
+                Dim quietly As Boolean = opts.getOption("onload_quietly", [default]:=False, env).ParseBoolean
 
+#If NETCOREAPP Then
                 If opts.hasOption([Imports].attach_lib_dir) Then
                     Call deps.TryHandleNetCore5AssemblyBugs(package, New String() {opts.getOption([Imports].attach_lib_dir)})
                 Else
                     Call deps.TryHandleNetCore5AssemblyBugs(package, Nothing)
                 End If
 #End If
-                Call package.Assembly.TryRunZzzOnLoad
+                Call package.Assembly.TryRunZzzOnLoad(quietly:=quietly)
 
                 ' imports package and export api
                 Return env.ImportsStaticInternalImpl(package, strict:=strict)

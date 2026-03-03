@@ -63,6 +63,9 @@ Namespace Development.Package
     ''' </summary>
     Module zzz
 
+        ' config quietly for clr assembly module loader
+        ' options(onload_quietly = TRUE);
+
         ''' <summary>
         ''' It's a file where one usually puts actions on load of the package. 
         ''' It is tradition/convention that it's called zzz.R and could be 
@@ -85,6 +88,13 @@ Namespace Development.Package
             End If
         End Sub
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="package"></param>
+        ''' <param name="quietly">
+        ''' config quietly for clr assembly module loader
+        ''' </param>
         <Extension>
         Private Sub RunZzz(package As Assembly, quietly As Boolean)
             ' find zzz module
