@@ -76,17 +76,19 @@ Namespace Development.Package
         ''' module named ``zzz`` andalso contains a entry method named ``onLoad``
         ''' </param>
         <Extension>
-        Public Sub TryRunZzzOnLoad(package As Assembly)
+        Public Sub TryRunZzzOnLoad(package As Assembly, quietly As Boolean)
             Static assemblyLoaded As New Index(Of String)
 
             If Not package.ToString Like assemblyLoaded Then
-                Call package.RunZzz
+                Call package.RunZzz(quietly)
                 Call assemblyLoaded.Add(package.ToString)
             End If
         End Sub
 
         <Extension>
-        Private Sub RunZzz(package As Assembly)
+        Private Sub RunZzz(package As Assembly, quietly As Boolean)
+            ' find zzz module
+            ' and then find onLoad method in zzz module
             Dim zzz As Type = package _
                 .GetTypes _
                 .Where(Function(a) a.Name = "zzz") _
@@ -103,7 +105,11 @@ Namespace Development.Package
                 .FirstOrDefault
 
             If Not onLoad Is Nothing Then
-                Call onLoad.Invoke(Nothing, {})
+                If onLoad.GetParameters.IsNullOrEmpty Then
+                    Call onLoad.Invoke(Nothing, {})
+                Else
+                    Call onLoad.Invoke(Nothing, New Object() {quietly})
+                End If
             End If
         End Sub
     End Module

@@ -66,10 +66,12 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 
 Public Class zzz
 
-    Public Shared Sub onLoad()
-        Call GetType(zzz).Assembly _
-            .FromAssembly _
-            .AppSummary("Welcome to the SMRUCC Machine Learning toolkit!", "", App.StdOut)
+    Public Shared Sub onLoad(Optional quietly As Boolean = False)
+        If Not quietly Then
+            Call GetType(zzz).Assembly _
+                .FromAssembly _
+                .AppSummary("Welcome to the SMRUCC Machine Learning toolkit!", "", App.StdOut)
+        End If
 
         Call clustering.Main()
         Call CNNTools.Main()
