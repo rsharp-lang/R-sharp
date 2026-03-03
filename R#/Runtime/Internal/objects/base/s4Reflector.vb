@@ -97,7 +97,14 @@ Namespace Runtime.Internal.Object.baseOp
             End Set
         End Property
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <remarks>
+        ''' constructor for the runtime s4object
+        ''' </remarks>
         Sub New()
+            elementType = MakeReflection(Me, properties, methods)
         End Sub
 
         Sub New(obj As Object)
