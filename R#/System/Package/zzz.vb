@@ -111,7 +111,9 @@ Namespace Development.Package
             Dim onLoad As MethodInfo = zzz _
                 .GetMethods(BindingFlags.Public Or BindingFlags.Static) _
                 .Where(Function(m) m.Name = "onLoad") _
-                .Where(Function(m) m.GetParameters.IsNullOrEmpty) _
+                .Where(Function(m)
+                           Return CheckArguments(m)
+                       End Function) _
                 .FirstOrDefault
 
             If Not onLoad Is Nothing Then
@@ -122,5 +124,17 @@ Namespace Development.Package
                 End If
             End If
         End Sub
+
+        Private Function CheckArguments(m As MethodInfo) As Boolean
+            Dim args = m.GetParameters
+
+            If args.IsNullOrEmpty Then
+                Return True
+            ElseIf args.Length = 1 AndAlso args(0).ParameterType Is GetType(Boolean) Then
+                Return True
+            Else
+                Return False
+            End If
+        End Function
     End Module
 End Namespace
