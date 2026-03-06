@@ -65,6 +65,7 @@ Public Class zzz
     Public Shared Sub onLoad()
         Call ConsolePrinter.AttachConsoleFormatter(Of GeneralMatrix)(AddressOf printMatrix)
         Call symbolic.Main()
+        Call stats.Main()
     End Sub
 
     Private Shared Function printMatrix(m As GeneralMatrix) As String

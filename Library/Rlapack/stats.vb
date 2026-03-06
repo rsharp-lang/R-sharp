@@ -158,7 +158,7 @@ Imports Image = Microsoft.VisualBasic.Imaging.Image
 <Package("stats")>
 Module stats
 
-    Sub New()
+    Sub Main()
         RInternal.ConsolePrinter.AttachConsoleFormatter(Of DistanceMatrix)(AddressOf printMatrix)
         RInternal.ConsolePrinter.AttachConsoleFormatter(Of TtestResult)(AddressOf printTtest)
         RInternal.ConsolePrinter.AttachConsoleFormatter(Of TwoSampleResult)(AddressOf printTwoSampleTTest)

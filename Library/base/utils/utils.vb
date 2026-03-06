@@ -698,7 +698,7 @@ Public Module utils
 
         If TypeOf file Is dataframeBuffer Then
             ' just wrap a buffer object for web service session
-            DirectCast(file, dataframeBuffer).dataframe = x
+            DirectCast(file, dataframeBuffer).dataframe = DirectCast(x, Rdataframe)
             DirectCast(file, dataframeBuffer).tsv = tsv
             Return file
         ElseIf TypeOf file Is textBuffer OrElse TypeOf file Is FileReference Then
@@ -731,6 +731,8 @@ Public Module utils
                     StreamIO.SaveDataFrame(table_rows, s, Encoding.UTF8, tsv:=tsv, silent:=True)
                     s.Flush()
                 End Using
+
+                Return Nothing
             End If
         ElseIf TypeOf file Is Stream Then
             ' save table with given stream
