@@ -876,7 +876,7 @@ Public Module utils
             type = type.GetElementType
         End If
 
-        Return DirectCast(x, Array)
+        Return REnv.UnsafeTryCastGenericArray(x, type)
     End Function
 
     ''' <summary>
