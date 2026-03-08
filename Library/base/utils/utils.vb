@@ -892,7 +892,11 @@ Public Module utils
     Private Function saveGeneric(x As Object, type As Type, file$, meta_blank As String, encoding As Encoding, env As Environment) As Boolean
         Dim castGeneric As Array = MeasureGenericType(x, type)
 
-        Call $"save clr object({type.Name}) array as dataframe table file.".info
+        If castGeneric Is Nothing Then
+            Return "".SaveTo(file)
+        Else
+            Call $"save clr object({type.Name} x {castGeneric.Length}) array as dataframe table file.".info
+        End If
 
         Return castGeneric.SaveTable(file, encoding, type,
             meta_blank:=meta_blank,
