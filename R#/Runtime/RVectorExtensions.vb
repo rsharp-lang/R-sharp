@@ -379,8 +379,12 @@ Namespace Runtime
                 Return DirectCast(xi, vector).length <= 1
             ElseIf xi.GetType.IsArray Then
                 Return DirectCast(xi, Array).Length <= 1
+            ElseIf TypeOf xi Is list Then
+                Return DirectCast(xi, list).length <= 1
             Else
-                Return False
+                ' 20260314
+                ' treat clr object as scalar vector? 
+                Return True
             End If
         End Function
 
@@ -400,6 +404,14 @@ Namespace Runtime
 
                 If v.Length = 1 Then
                     Return v.GetValue(Scan0)
+                Else
+                    Return Nothing
+                End If
+            ElseIf TypeOf xi Is list Then
+                Dim l As list = DirectCast(xi, list)
+
+                If l.length = 1 Then
+                    Return l.data.First
                 Else
                     Return Nothing
                 End If
