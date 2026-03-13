@@ -165,7 +165,7 @@ Namespace Development.Package
         End Function
 
         Public Shared Function Load(database As String) As LocalPackageDatabase
-            If database.FileLength < 100 Then
+            If (Not database.FileExists(ZERO_Nonexists:=True)) OrElse database.FileLength < 100 Then
                 Return EmptyRepository()
             Else
                 Return database.LoadXml(Of LocalPackageDatabase)
