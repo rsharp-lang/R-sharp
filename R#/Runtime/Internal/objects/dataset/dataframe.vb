@@ -1027,17 +1027,17 @@ Namespace Runtime.Internal.Object
         ''' <param name="rows"></param>
         ''' <param name="colNames"></param>
         ''' <returns></returns>
-        Public Shared Function CreateDataFrame(Of T)(rows As NamedCollection(Of T)(), colNames As IEnumerable(Of String)) As dataframe
+        Public Shared Function CreateDataFrame(Of T)(rows As IReadOnlyCollection(Of NamedCollection(Of T)), colNames As IEnumerable(Of String)) As dataframe
             Dim rowNames = rows.Select(Function(r) r.name).ToArray
             Dim cols As New List(Of Array)
             Dim row As NamedCollection(Of T)
             Dim keys As String() = colNames.ToArray
 
             For Each key As String In keys
-                Call cols.Add(New T(rows.Length - 1) {})
+                Call cols.Add(New T(rows.Count - 1) {})
             Next
 
-            For i As Integer = 0 To rows.Length - 1
+            For i As Integer = 0 To rows.Count - 1
                 row = rows(i)
 
                 For j As Integer = 0 To cols.Count - 1

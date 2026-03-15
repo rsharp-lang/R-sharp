@@ -619,5 +619,30 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             Return strs.UniqueNames
         End Function
+
+        <ExportAPI("expands")>
+        Public Function expands(x As dataframe, split As String, Optional deli As String = " ,;", Optional env As Environment = Nothing) As Object
+            Dim rows = x.forEachRow.ToArray
+            Dim keyCol As String() = CLRVector.asCharacter(x(split))
+            Dim expandRows As New List(Of NamedCollection(Of Object))
+            Dim chars As Char() = deli.ToArray
+            Dim ordinal As Integer = x.colnames.IndexOf(split)
+
+            For i As Integer = 0 To rows.Length - 1
+                Dim keys As String() = Microsoft.VisualBasic.Strings.Trim(keyCol(i)).Split(chars)
+
+                If keys.IsNullOrEmpty OrElse keys.Length = 1 Then
+                    Call expandRows.Add(rows(i))
+                Else
+                    For Each key As String In keys
+                        Dim v As Object() = rows(i).ToArray
+                        v(ordinal) = key
+                        expandRows.Add(New NamedCollection(Of Object)(rows(i).name, v))
+                    Next
+                End If
+            Next
+
+            Return dataframe.CreateDataFrame(expandRows, colNames:=x.colnames)
+        End Function
     End Module
 End Namespace
