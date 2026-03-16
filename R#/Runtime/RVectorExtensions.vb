@@ -477,7 +477,7 @@ Namespace Runtime
             vec = MeltArray(vec)
 
             If vec.IsNullOrEmpty Then
-                Return Nothing
+                Return vec
             Else
                 Return asVector(vec, MeasureRealElementType(vec), env)
             End If

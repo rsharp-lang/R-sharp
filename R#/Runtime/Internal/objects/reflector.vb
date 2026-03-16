@@ -109,6 +109,10 @@ Namespace Runtime.Internal.Object
             ElseIf REnv.IsPrimitive(code, includeComplexList:=False) OrElse type.IsArray Then
                 Dim genericVec As Array = REnv.TryCastGenericArray(REnv.asVector(Of Object)(x), env)
 
+                If genericVec Is Nothing Then
+                    Return "[]"
+                End If
+
                 If REnv.IsPrimitive(genericVec.GetType.GetElementType, includeComplexList:=False) Then
                     Return strVector(genericVec, genericVec.GetType, env)
                 Else
