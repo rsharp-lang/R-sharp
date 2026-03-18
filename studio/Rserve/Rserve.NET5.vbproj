@@ -11,7 +11,6 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>	  
 	  <Deterministic>false</Deterministic>
-	  <DefineConstants>netcore5=1</DefineConstants>
 	  <Title>R# web session backend progress</Title>
 	  <Authors>xieguigang</Authors>
 	  <Company>SMRUCC genomics Institute [GuiLin, China]</Company>
@@ -24,13 +23,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
     <DocumentationFile>Rserve.xml</DocumentationFile>
   
-	  <DefineConstants>netcore5=1</DefineConstants>
     <OutputPath>../../../../../mzkit\dist\bin\Rstudio\bin</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='CFD_win32|net8.0-windows'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='CFD_win32|net10.0-windows'">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   
@@ -47,15 +45,15 @@
    
   </PropertyGroup>
   
-   <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'gcmodeller_desktop|net6.0-windows' ">
+   <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'gcmodeller_desktop|net10.0-windows' ">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   
-   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='CellaLAB-Desktop|net6.0-windows'">
+   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='CellaLAB-Desktop|net10.0-windows'">
      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
    </PropertyGroup>
     
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net8.0-windows|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net10.0-windows|x64'">
     <DocumentationFile>Rserve.xml</DocumentationFile>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
@@ -64,12 +62,12 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
-    <OutputPath>../../../../../../BlueprintCAD\App\net8.0-windows\rstudio\bin</OutputPath>
+    <OutputPath>../../../../../../BlueprintCAD\App\net10.0-windows\rstudio\bin</OutputPath>
    
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
     
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CellaLAB-Desktop|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CellaLAB-Desktop|net10.0-windows|x64'">
     <DocumentationFile>Rserve.xml</DocumentationFile>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
@@ -78,11 +76,11 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
-    <OutputPath>../../../../../../BlueprintCAD\App\net8.0-windows\rstudio\bin</OutputPath>
+    <OutputPath>../../../../../../BlueprintCAD\App\net10.0-windows\rstudio\bin</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net6.0|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net10.0|x64'">
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>
@@ -92,7 +90,7 @@
     <DefineConstants>netcore5=1</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net8.0-windows|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net10.0-windows|x64'">
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
     <DebugSymbols>true</DebugSymbols>
