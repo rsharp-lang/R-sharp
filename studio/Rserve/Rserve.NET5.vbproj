@@ -5,7 +5,7 @@
     <TargetFrameworks>net10.0-windows;net10.0</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
     <AssemblyName>Rserve</AssemblyName>
-    <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32;gcmodeller_desktop;CFD_win32;MEMI-Desktop</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32;gcmodeller_desktop;CFD_win32;MEMI-Desktop;CellaLAB-Desktop</Configurations>
     <OutputType>Exe</OutputType>
     <StartupObject>Rserve.Program</StartupObject>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -50,6 +50,10 @@
    <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'gcmodeller_desktop|net6.0-windows' ">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
+  
+   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='CellaLAB-Desktop|net6.0-windows'">
+     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+   </PropertyGroup>
     
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net8.0-windows|x64'">
     <DocumentationFile>Rserve.xml</DocumentationFile>
@@ -62,6 +66,19 @@
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
     <OutputPath>../../../../../../BlueprintCAD\App\net8.0-windows\rstudio\bin</OutputPath>
    
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+    
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CellaLAB-Desktop|net8.0-windows|x64'">
+    <DocumentationFile>Rserve.xml</DocumentationFile>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <OutputPath>../../../../../../BlueprintCAD\App\net8.0-windows\rstudio\bin</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
@@ -170,7 +187,15 @@
     <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CellaLAB-Desktop|net10.0-windows|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net10.0|AnyCPU'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CellaLAB-Desktop|net10.0|AnyCPU'">
     <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
   </PropertyGroup>
 
@@ -178,7 +203,15 @@
     <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CellaLAB-Desktop|net10.0-windows|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net10.0|x64'">
+    <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CellaLAB-Desktop|net10.0|x64'">
     <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
   </PropertyGroup>
 
