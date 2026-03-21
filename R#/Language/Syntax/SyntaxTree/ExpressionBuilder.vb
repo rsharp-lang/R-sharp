@@ -1,55 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::13e81d5dbafdaf1796d9ac63dbddc346, R#\Language\Syntax\SyntaxTree\ExpressionBuilder.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 558
-    '    Code Lines: 437 (78.32%)
-    ' Comment Lines: 46 (8.24%)
-    '    - Xml Docs: 26.09%
-    ' 
-    '   Blank Lines: 75 (13.44%)
-    '     File Size: 25.91 KB
+' Summaries:
 
 
-    '     Module ExpressionBuilder
-    ' 
-    '         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression, parseInvoke
-    '                   parseSymbolIndex
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 558
+'    Code Lines: 437 (78.32%)
+' Comment Lines: 46 (8.24%)
+'    - Xml Docs: 26.09%
+' 
+'   Blank Lines: 75 (13.44%)
+'     File Size: 25.91 KB
+
+
+'     Module ExpressionBuilder
+' 
+'         Function: getTupleSymbols, getValueAssign, keywordExpressionHandler, ParseExpression, parseInvoke
+'                   parseSymbolIndex
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -216,19 +216,11 @@ Namespace Language.Syntax.SyntaxParser
                 ElseIf item.isIdentifier Then
                     Return New SymbolReference(item(Scan0))
                 ElseIf item.Length = 1 AndAlso item(Scan0).name = TokenType.annotation Then
-                    Select Case Strings.LCase(item(Scan0).text)
-                        Case "@stop" : Return New SyntaxResult(New BreakPoint)
-                        Case "@script" : Return New SyntaxResult(New ScriptSymbol)
-                        Case "@home" : Return New SyntaxResult(New HomeSymbol)
-                        Case "@host" : Return New SyntaxResult(New HostSymbol)
-                        Case "@dir" : Return New SyntaxResult(New ScriptFolder)
-                        Case "@profile"
-
-                            Throw New NotImplementedException
-
-                        Case Else
-                            Return SyntaxResult.CreateError(New NotImplementedException(item(Scan0).text), opts.SetCurrentRange(item))
-                    End Select
+                    If AnnotationSymbol.CheckSymbolText(item(Scan0).text) Then
+                        Return New SyntaxResult(AnnotationSymbol.CreateSymbol(item(Scan0).text))
+                    Else
+                        Return SyntaxResult.CreateError(New NotImplementedException(item(Scan0).text), opts.SetCurrentRange(item))
+                    End If
                 ElseIf item(Scan0) = (TokenType.annotation, "@profile") Then
                     Dim expr As SyntaxResult
                     Dim tag As Token = item(Scan0)

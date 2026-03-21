@@ -32,7 +32,8 @@ const paletteer_colors = function(palette) {
 
   if (!exists(palette_internal, globalenv())) {
     # load in-memory cache data to global environment
-    let res_file = system.file("data/paletteer/palettes_d.rda", package = "REnv");
+    # system.file("data/paletteer/palettes_d.rda", package = "REnv");
+    let res_file = file.path(@datadir, "/paletteer/palettes_d.rda"); 
     let cache = readRData(res_file);
     
     set(globalenv(), palette_internal, cache$palettes_d);

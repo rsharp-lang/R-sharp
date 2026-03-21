@@ -80,6 +80,8 @@ Namespace Development.Package.File.Expressions
                 Call WriteBuffer(ms, DirectCast(x, NamespaceFunctionSymbolReference))
             ElseIf TypeOf x Is HomeSymbol Then
                 Call WriteBuffer(ms, DirectCast(x, HomeSymbol))
+            ElseIf TypeOf x Is DataDir Then
+                Call WriteBuffer(ms, DirectCast(x, DataDir))
             Else
                 Throw New NotImplementedException(x.GetType.FullName)
             End If
