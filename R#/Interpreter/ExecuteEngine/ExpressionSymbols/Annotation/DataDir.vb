@@ -18,6 +18,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
             End Get
         End Property
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' must be prefixed with symbol "@"
+        ''' </remarks>
         Public MustOverride ReadOnly Property symbol As String
 
         Public Overrides Function ToString() As String

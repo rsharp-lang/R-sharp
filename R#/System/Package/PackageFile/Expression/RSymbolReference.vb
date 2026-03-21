@@ -78,22 +78,21 @@ Namespace Development.Package.File.Expressions
                 Call WriteBuffer(ms, DirectCast(x, SymbolReference))
             ElseIf TypeOf x Is NamespaceFunctionSymbolReference Then
                 Call WriteBuffer(ms, DirectCast(x, NamespaceFunctionSymbolReference))
-            ElseIf TypeOf x Is HomeSymbol Then
-                Call WriteBuffer(ms, DirectCast(x, HomeSymbol))
-            ElseIf TypeOf x Is DataDir Then
-                Call WriteBuffer(ms, DirectCast(x, DataDir))
+            ElseIf x.GetType.IsInheritsFrom(GetType(AnnotationSymbol), strict:=False) Then
+                Call WriteBuffer(ms, DirectCast(x, AnnotationSymbol))
             Else
                 Throw New NotImplementedException(x.GetType.FullName)
             End If
         End Sub
 
-        Private Overloads Sub WriteBuffer(ms As MemoryStream, x As HomeSymbol)
+        Private Overloads Sub WriteBuffer(ms As MemoryStream, x As AnnotationSymbol)
             Using outfile As New BinaryWriter(ms)
                 Call outfile.Write(CInt(ExpressionTypes.SymbolReference))
                 Call outfile.Write(0)
                 Call outfile.Write(CByte(x.type))
 
-                Call outfile.Write(Encoding.ASCII.GetBytes("@HOME"))
+                ' 20260321 must be prefixed with symbol "@"
+                Call outfile.Write(Encoding.ASCII.GetBytes(x.symbol))
 
                 Call outfile.Flush()
                 Call saveSize(outfile)
@@ -132,8 +131,8 @@ Namespace Development.Package.File.Expressions
         Private Function parseSymbol(buffer As MemoryStream, desc As DESCRIPTION) As Expression
             Dim symbolName As String = Encoding.ASCII.GetString(buffer.ToArray)
 
-            If symbolName = "@HOME" Then
-                Return New HomeSymbol
+            If symbolName.StartsWith("@") Then
+                Return AnnotationSymbol.CreateSymbol(symbolName)
             Else
                 Return New SymbolReference(symbolName)
             End If
