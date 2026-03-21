@@ -1,6 +1,11 @@
-﻿Imports SMRUCC.Rsharp.Development.Package.File
+﻿Imports Microsoft.VisualBasic.ApplicationServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports SMRUCC.Rsharp.Development
+Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports LibDir = Microsoft.VisualBasic.FileIO.Directory
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
 
@@ -70,7 +75,33 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Annotation
         End Property
 
         Public Overrides Function Evaluate(envir As Environment) As Object
-            Throw New NotImplementedException
+            ' REnv.declare_function.R_invoke$paletteer_colors
+            For Each frame As StackFrame In envir.stackTrace
+                Dim fun_p As Method = frame.Method
+
+                If fun_p.Module = "declare_function" AndAlso fun_p.Method.StartsWith("R_invoke$") Then
+                    Dim libdir = PackageDir(envir, fun_p.Namespace)
+
+                    If TypeOf libdir Is Message Then
+                        Return libdir
+                    Else
+                        Return DirectCast(libdir, IFileSystemEnvironment).GetFullPath("/data/")
+                    End If
+                End If
+            Next
+
+            Return RInternal.debug.stop("@datadir symbol must be declared inside a R package function", envir)
+        End Function
+
+        Public Shared Function PackageDir(env As Environment, package As String) As Object
+            ' 优先从已经加载的程序包位置进行加载操作
+            If env.globalEnvironment.attachedNamespace.hasNamespace(package) Then
+                Return env.globalEnvironment.attachedNamespace(package).libpath
+            ElseIf Not RFileSystem.PackageInstalled(package, env) Then
+                Return Internal.debug.stop({$"we could not found any installed package which is named '{package}'!", $"package: {package}"}, env)
+            Else
+                Return LibDir.FromLocalFileSystem($"{RFileSystem.GetPackageDir(env)}/{package}")
+            End If
         End Function
     End Class
 End Namespace
