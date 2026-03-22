@@ -232,6 +232,8 @@ Namespace Development.Package.File
                     message:=$"invalid project source folder: {projDir}, please check of the DESCRIPTION Is file exists Or Not, Or Is invalid file format?",
                     envir:=env
                 )
+            Else
+                temp.info = meta
             End If
 
             Dim pkg As New PackageNamespace With {

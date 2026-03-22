@@ -559,6 +559,7 @@ Namespace Development.Package.File
                             .message = {$"'{line.GetType.Name}' is not allow in top level script when create a R# package!"}
                         }
                     Else
+                        func.Namespace = file.info.Package
                         file.symbols(func.funcName) = func
                     End If
                 ElseIf TypeOf line Is [Imports] OrElse TypeOf line Is Require Then
