@@ -164,12 +164,24 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     right = New dataframe(right)
                     right.delete(CInt(by))
                 Else
-                    keyX = left.getColumnVector(CStr(by))
-                    keyY = right.getColumnVector(CStr(by))
+                    If CStr(by) = "row.names" Then
+                        keyX = left.rownames
+                        keyY = right.rownames
+
+                        If keyX.IsNullOrEmpty OrElse keyY.IsNullOrEmpty Then
+                            Return Internal.debug.stop("one of the dataframe has no row.names attribute data for used as the index key for make left join operation!", env)
+                        End If
+                    Else
+                        keyX = left.getColumnVector(CStr(by))
+                        keyY = right.getColumnVector(CStr(by))
+                    End If
 
                     ' removes the duplicated col in right
                     right = New dataframe(right)
-                    right.delete(CStr(by))
+
+                    If CStr(by) <> "row.names" Then
+                        Call right.delete(CStr(by))
+                    End If
                 End If
             ElseIf by_x Is Nothing OrElse by_y Is Nothing Then
                 Return Internal.debug.stop({
