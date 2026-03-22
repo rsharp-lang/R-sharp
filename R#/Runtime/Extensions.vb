@@ -312,5 +312,10 @@ Namespace Runtime
                 Return opt
             End If
         End Function
+
+        <Extension>
+        Public Function as_iterator(Of T)(x As IEnumerable(Of T)) As CLRIterator
+            Return New CLRIterator(x, GetType(T))
+        End Function
     End Module
 End Namespace
