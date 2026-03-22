@@ -81,6 +81,10 @@ Namespace Runtime.Internal.Object
             MyBase.New(input, type)
         End Sub
 
+        Sub New(Of T)()
+
+        End Sub
+
         Public Overrides Iterator Function populates(Of T)(env As Environment) As IEnumerable(Of T)
             For Each item As T In DirectCast(pipeline, IEnumerable(Of T))
                 Yield item
