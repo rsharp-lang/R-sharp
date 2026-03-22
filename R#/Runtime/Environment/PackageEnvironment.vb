@@ -126,7 +126,7 @@ Namespace Runtime
                 Me.globalEnvironment.funcSymbols(callName) = symbol
 
                 If TypeOf callable Is DeclareNewFunction Then
-                    DirectCast(callable, DeclareNewFunction).Namespace = pkg
+                    DirectCast(callable, DeclareNewFunction).SetNamespace(pkg)
                 End If
 
                 If Not m_symbolSolver.funcOverloads.ContainsKey(callName) Then

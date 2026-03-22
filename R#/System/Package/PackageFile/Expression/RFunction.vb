@@ -275,10 +275,13 @@ Namespace Development.Package.File.Expressions
                 parameters:=args.ToArray,
                 body:=New ClosureExpression(body.ToArray),
                 stackframe:=sourceMap
-            ) With {
-                .[Namespace] = desc.Package
-            }
-            func.SetAttributes(ParseAttribute(reader))
+            )
+            ' 20260322
+            ' update expression metadata
+            Call func _
+                .SetNamespace(desc.Package) _
+                .SetAttributes(ParseAttribute(reader))
+
             Return func
         End Function
 

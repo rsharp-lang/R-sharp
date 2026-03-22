@@ -139,7 +139,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         ''' 这个是当前的这个函数的程序包来源名称，在运行时创建的函数的命令空间为``SMRUCC/R#_runtime``
         ''' </summary>
         ''' <returns></returns>
-        Public Property [Namespace] As String = SyntaxBuilderOptions.R_runtime Implements INamespaceReferenceSymbol.namespace
+        Public ReadOnly Property [Namespace] As String = SyntaxBuilderOptions.R_runtime Implements INamespaceReferenceSymbol.namespace
 
         Public ReadOnly Property funcName As String Implements RFunction.name
         Public ReadOnly Property stackFrame As StackFrame Implements IRuntimeTrace.stackFrame
@@ -184,6 +184,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.Closure
         Friend Sub SetSymbol(newName As String)
             _funcName = newName
         End Sub
+
+        Friend Function SetNamespace(pkgName As String) As DeclareNewFunction
+            _Namespace = pkgName
+
+            If stackFrame IsNot Nothing Then
+                stackFrame.Method.Namespace = pkgName
+            End If
+
+            Return Me
+        End Function
 
         ''' <summary>
         ''' get the parameter arguments of current function object
