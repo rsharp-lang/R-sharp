@@ -9,11 +9,17 @@ Partial Module CLI
 
     <ExportAPI("--head")>
     <Usage("--head <data.csv> [-n <n rows, default=15>]")>
-    Public Function head(file As String, args As CommandLine) As Integer
+    Public Function head(args As CommandLine) As Integer
+        Dim file As String = args("--file") Or args.Tokens.ElementAtOrDefault(1)
         Dim n As Integer = args("-n") Or 15
         Dim rows As New List(Of String)
 
-        Using s As Stream = file.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
+        If Not file.FileExists Then
+            Call "invalid file argument, missing file or no file path value provided!".error
+            Return 404
+        End If
+
+        Using s As Stream = File.Open(FileMode.Open, doClear:=False, [readOnly]:=True)
             Dim text As New StreamReader(s)
             Dim line As Value(Of String) = text.ReadLine
 
@@ -28,7 +34,7 @@ Partial Module CLI
             Loop
         End Using
 
-        Dim tsv As Boolean = Not file.ExtensionSuffix("csv")
+        Dim tsv As Boolean = Not File.ExtensionSuffix("csv")
         Dim R As RInterpreter = RInterpreter.FromEnvironmentConfiguration(
             configs:=ConfigFile.localConfigs
         )
