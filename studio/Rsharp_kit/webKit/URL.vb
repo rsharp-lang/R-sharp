@@ -415,6 +415,15 @@ Public Module URL
         Return data.headers.httpCode <> HTTP_RFC.RFC_OK
     End Function
 
+    <ExportAPI("plain_text")>
+    Public Function plain_text(data As WebResponseResult) As String
+        If data.headers.httpCode <> HTTP_RFC.RFC_OK Then
+            Return Nothing
+        Else
+            Return data.html
+        End If
+    End Function
+
     ''' <summary>
     ''' get content data from the http request result
     ''' </summary>
