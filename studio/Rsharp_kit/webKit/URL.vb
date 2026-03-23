@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::060757b6ba270df66041d8410d77f8a6, studio\Rsharp_kit\webKit\URL.vb"
+﻿#Region "Microsoft.VisualBasic::01b67688fa68770ac11a29793a9da0c8, studio\Rsharp_kit\webKit\URL.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 479
-    '    Code Lines: 335 (69.94%)
-    ' Comment Lines: 90 (18.79%)
+    '   Total Lines: 488
+    '    Code Lines: 343 (70.29%)
+    ' Comment Lines: 90 (18.44%)
     '    - Xml Docs: 93.33%
     ' 
-    '   Blank Lines: 54 (11.27%)
-    '     File Size: 19.37 KB
+    '   Blank Lines: 55 (11.27%)
+    '     File Size: 19.70 KB
 
 
     ' Module URL
     ' 
     '     Function: [get], content, encodeTokenPart, getPostPayload, httpCache
-    '               HttpClientPost, HttpCookies, is_http_error, post, runHttpRequest
-    '               upload, urlcomponent, urlencode
+    '               HttpClientPost, HttpCookies, is_http_error, plain_text, post
+    '               runHttpRequest, upload, urlcomponent, urlencode
     ' 
     ' /********************************************************************************/
 

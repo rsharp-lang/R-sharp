@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ddc76ca9a9bd32f58cd25b0213beced6, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\Binary\BinaryInExpression.vb"
+﻿#Region "Microsoft.VisualBasic::bb1d9c274bf58d241f8ed853da553dea, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\Binary\BinaryInExpression.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 253
-    '    Code Lines: 180 (71.15%)
-    ' Comment Lines: 36 (14.23%)
+    '   Total Lines: 257
+    '    Code Lines: 183 (71.21%)
+    ' Comment Lines: 36 (14.01%)
     '    - Xml Docs: 66.67%
     ' 
-    '   Blank Lines: 37 (14.62%)
-    '     File Size: 10.27 KB
+    '   Blank Lines: 38 (14.79%)
+    '     File Size: 10.37 KB
 
 
     '     Class BinaryInExpression

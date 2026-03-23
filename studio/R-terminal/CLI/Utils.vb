@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b3e9be7d585b5a153e1d03b2119d6ffd, studio\R-terminal\CLI\Utils.vb"
+﻿#Region "Microsoft.VisualBasic::f49bba56d4d3784cb4b2a8c1a97182f9, studio\R-terminal\CLI\Utils.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 352
-    '    Code Lines: 287 (81.53%)
-    ' Comment Lines: 13 (3.69%)
+    '   Total Lines: 368
+    '    Code Lines: 300 (81.52%)
+    ' Comment Lines: 13 (3.53%)
     '    - Xml Docs: 76.92%
     ' 
-    '   Blank Lines: 52 (14.77%)
-    '     File Size: 14.09 KB
+    '   Blank Lines: 55 (14.95%)
+    '     File Size: 14.84 KB
 
 
     ' Module CLI
     ' 
     '     Function: configJSON, configREnv, ConfigStartups, getConfig, InitializeEnvironment
-    '               Install, Install_source, reset, View
+    '               Install, Install_source, InstallRscriptShortcut, reset, View
     ' 
     ' /********************************************************************************/
 

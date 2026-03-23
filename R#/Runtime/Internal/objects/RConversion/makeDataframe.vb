@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::415c25ee5684419cc345873b3a771312, R#\Runtime\Internal\objects\RConversion\makeDataframe.vb"
+﻿#Region "Microsoft.VisualBasic::374ac36e6773bd9ef8d8f30f3b493443, R#\Runtime\Internal\objects\RConversion\makeDataframe.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 408
-    '    Code Lines: 292 (71.57%)
-    ' Comment Lines: 58 (14.22%)
+    '   Total Lines: 412
+    '    Code Lines: 295 (71.60%)
+    ' Comment Lines: 58 (14.08%)
     '    - Xml Docs: 81.03%
     ' 
-    '   Blank Lines: 58 (14.22%)
-    '     File Size: 17.18 KB
+    '   Blank Lines: 59 (14.32%)
+    '     File Size: 17.33 KB
 
 
     '     Delegate Function

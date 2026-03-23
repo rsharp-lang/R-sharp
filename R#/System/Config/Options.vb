@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3d70d7496273b308f0c8a830af869275, R#\System\Config\Options.vb"
+﻿#Region "Microsoft.VisualBasic::708b7aee6562cca23476e3b6e8639dc3, R#\System\Config\Options.vb"
 
     ' Author:
     ' 
@@ -34,21 +34,21 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 401
-    '    Code Lines: 219 (54.61%)
-    ' Comment Lines: 132 (32.92%)
+    '   Total Lines: 407
+    '    Code Lines: 224 (55.04%)
+    ' Comment Lines: 132 (32.43%)
     '    - Xml Docs: 72.73%
     ' 
-    '   Blank Lines: 50 (12.47%)
-    '     File Size: 16.35 KB
+    '   Blank Lines: 51 (12.53%)
+    '     File Size: 16.56 KB
 
 
     '     Class Options
     ' 
-    '         Properties: [lib], [strict], digits, environments, f64Format
-    '                     HTTPUserAgent, julia, lib_loc, localConfig, log4vb_redirect
-    '                     maxPrint, memoryLoad, MimeType, nwarnings, python
-    '                     stdout_multipline, typescript, verbose
+    '         Properties: [lib], [strict], digits, enableWarning, environments
+    '                     f64Format, HTTPUserAgent, julia, lib_loc, localConfig
+    '                     log4vb_redirect, maxPrint, memoryLoad, MimeType, nwarnings
+    '                     python, stdout_multipline, typescript, verbose
     ' 
     '         Constructor: (+3 Overloads) Sub New
     ' 

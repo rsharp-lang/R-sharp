@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1dd2c4893987cb68a1be81217f4c1076, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\NamespaceFunctionSymbolReference.vb"
+﻿#Region "Microsoft.VisualBasic::f8c22144352215235e217b5ad476e4dc, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\NamespaceFunctionSymbolReference.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 145
-    '    Code Lines: 101 (69.66%)
-    ' Comment Lines: 22 (15.17%)
-    '    - Xml Docs: 90.91%
+    '   Total Lines: 158
+    '    Code Lines: 109 (68.99%)
+    ' Comment Lines: 23 (14.56%)
+    '    - Xml Docs: 86.96%
     ' 
-    '   Blank Lines: 22 (15.17%)
-    '     File Size: 6.07 KB
+    '   Blank Lines: 26 (16.46%)
+    '     File Size: 6.66 KB
 
 
     '     Class NamespaceFunctionSymbolReference

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d4d020e5b1c027d3887483ab345f2eef, R#\Runtime\Internal\objects\reflector.vb"
+﻿#Region "Microsoft.VisualBasic::7a238e26385286c82634cd00e03120b5, R#\Runtime\Internal\objects\reflector.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 221
-    '    Code Lines: 159 (71.95%)
-    ' Comment Lines: 22 (9.95%)
+    '   Total Lines: 225
+    '    Code Lines: 162 (72.00%)
+    ' Comment Lines: 22 (9.78%)
     '    - Xml Docs: 90.91%
     ' 
-    '   Blank Lines: 40 (18.10%)
-    '     File Size: 8.45 KB
+    '   Blank Lines: 41 (18.22%)
+    '     File Size: 8.55 KB
 
 
     '     Module reflector

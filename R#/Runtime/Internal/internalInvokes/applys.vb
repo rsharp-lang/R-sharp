@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fd23e40d1d80f9ecc6fcb7ac20da3c2a, R#\Runtime\Internal\internalInvokes\applys.vb"
+﻿#Region "Microsoft.VisualBasic::1b84063d2672acc341e38a2f0fc5e35c, R#\Runtime\Internal\internalInvokes\applys.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 671
-    '    Code Lines: 443 (66.02%)
-    ' Comment Lines: 138 (20.57%)
+    '   Total Lines: 675
+    '    Code Lines: 446 (66.07%)
+    ' Comment Lines: 138 (20.44%)
     '    - Xml Docs: 83.33%
     ' 
-    '   Blank Lines: 90 (13.41%)
-    '     File Size: 28.86 KB
+    '   Blank Lines: 91 (13.48%)
+    '     File Size: 28.95 KB
 
 
     '     Module applys

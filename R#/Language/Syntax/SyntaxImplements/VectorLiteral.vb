@@ -1,55 +1,55 @@
-﻿#Region "Microsoft.VisualBasic::bb341ec2db29a6d5e419a9083365d246, R#\Language\Syntax\SyntaxImplements\VectorLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::5c5cefabb09a5732f41650c6e06715bc, R#\Language\Syntax\SyntaxImplements\VectorLiteral.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 244
-'    Code Lines: 196 (80.33%)
-' Comment Lines: 14 (5.74%)
-'    - Xml Docs: 35.71%
-' 
-'   Blank Lines: 34 (13.93%)
-'     File Size: 10.90 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Module VectorLiteralSyntax
-' 
-'         Function: GetVectorElements, LiteralSyntax, ParseAnnotation, ParseAnnotations, (+2 Overloads) SequenceLiteral
-'                   TypeCodeOf, VectorLiteral
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 399
+    '    Code Lines: 297 (74.44%)
+    ' Comment Lines: 44 (11.03%)
+    '    - Xml Docs: 11.36%
+    ' 
+    '   Blank Lines: 58 (14.54%)
+    '     File Size: 20.67 KB
+
+
+    '     Module VectorLiteralSyntax
+    ' 
+    '         Function: GetVectorElements, LiteralSyntax, ParseAnnotation, ParseAnnotations, (+2 Overloads) SequenceLiteral
+    '                   TypeCodeOf, UnitLiteralSyntax, VectorLiteral
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

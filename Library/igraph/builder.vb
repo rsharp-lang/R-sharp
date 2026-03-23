@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::381c688d43cccde9bdb2277fb392b57d, Library\igraph\builder.vb"
+﻿#Region "Microsoft.VisualBasic::bbe85f77c17ee3725a15ec143124f856, Library\igraph\builder.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 201
-    '    Code Lines: 131 (65.17%)
-    ' Comment Lines: 39 (19.40%)
+    '   Total Lines: 235
+    '    Code Lines: 158 (67.23%)
+    ' Comment Lines: 39 (16.60%)
     '    - Xml Docs: 84.62%
     ' 
-    '   Blank Lines: 31 (15.42%)
-    '     File Size: 7.98 KB
+    '   Blank Lines: 38 (16.17%)
+    '     File Size: 9.30 KB
 
 
     ' Module builder
     ' 
-    '     Function: clone_sparegraph, fromCorDataframe, FromCorrelations, handleGroupClass, SimilarityGraph
+    '     Function: clone_sparegraph, cor_net, fromCorDataframe, FromCorrelations, handleGroupClass
+    '               SimilarityGraph
     ' 
     ' /********************************************************************************/
 

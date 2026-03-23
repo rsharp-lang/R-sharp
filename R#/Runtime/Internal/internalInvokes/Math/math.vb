@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::037d143b7ef47ffaa4321e1fba2ad6c2, R#\Runtime\Internal\internalInvokes\Math\math.vb"
+﻿#Region "Microsoft.VisualBasic::eb934fdcc11b8183a777ffe6b9bce40a, R#\Runtime\Internal\internalInvokes\Math\math.vb"
 
     ' Author:
     ' 
@@ -34,27 +34,27 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1450
-    '    Code Lines: 580 (40.00%)
-    ' Comment Lines: 740 (51.03%)
+    '   Total Lines: 1497
+    '    Code Lines: 621 (41.48%)
+    ' Comment Lines: 740 (49.43%)
     '    - Xml Docs: 88.78%
     ' 
-    '   Blank Lines: 130 (8.97%)
-    '     File Size: 65.26 KB
+    '   Blank Lines: 136 (9.08%)
+    '     File Size: 67.17 KB
 
 
     '     Module math
     ' 
-    '         Function: abs, ceiling, cluster1D, cor, cor_test
-    '                   cos, diff, exp, fit, floor
-    '                   gcd, getRandom, isFinite, isInfinite, isNaN
-    '                   lcm_r, log, log10, log1m, log1p
-    '                   log2, max, mean, median, min
-    '                   numericClassTags, pearson, pow, prod, rexp
-    '                   rnorm, root, round, rsd, runif
-    '                   (+2 Overloads) sample, sample_int, sd, (+4 Overloads) shuffle, sign
-    '                   sin, sqrt, sum, trunc, var
-    '                   weighted_mean
+    '         Function: abs, as_numeric, ceiling, cluster1D, cor
+    '                   cor_test, cos, diff, exp, fit
+    '                   floor, gcd, getRandom, isFinite, isInfinite
+    '                   isNaN, lcm_r, log, log10, log1m
+    '                   log1p, log2, max, mean, median
+    '                   min, numericClassTags, pearson, pow, prod
+    '                   rexp, rnorm, root, round, rsd
+    '                   runif, (+2 Overloads) sample, sample_int, sd, (+4 Overloads) shuffle
+    '                   sign, sin, sqrt, sum, trunc
+    '                   var, weighted_mean
     ' 
     '         Sub: set_seed
     '         Class corTestResult

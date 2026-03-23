@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5f1fb2dd913b1f1fa6263d11231c0084, Library\Rlapack\stats.vb"
+﻿#Region "Microsoft.VisualBasic::86567a8c6c4a0ca4b160ade17028d856, Library\Rlapack\stats.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,21 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 2317
-    '    Code Lines: 1153 (49.76%)
-    ' Comment Lines: 935 (40.35%)
+    '   Total Lines: 2323
+    '    Code Lines: 1158 (49.85%)
+    ' Comment Lines: 935 (40.25%)
     '    - Xml Docs: 88.02%
     ' 
-    '   Blank Lines: 229 (9.88%)
-    '     File Size: 103.29 KB
+    '   Blank Lines: 230 (9.90%)
+    '     File Size: 103.47 KB
 
 
     ' Module stats
     ' 
-    '     Constructor: (+1 Overloads) Sub New
     '     Function: matrixDataFrame, matrixDataFrame2, printMatrix, printMvar, printTtest
     '               printTwoSampleTTest
+    ' 
+    '     Sub: Main
     '     Enum p_adjust_methods
     ' 
     '         BH, bonferroni, BY, fdr, hochberg

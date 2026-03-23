@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d234231c080d5c9f9ffb71a747e544a7, R#\Runtime\Internal\printer\tablePrinter.vb"
+﻿#Region "Microsoft.VisualBasic::be6ea177968119ab4f17254c1016b642, R#\Runtime\Internal\printer\tablePrinter.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 216
-    '    Code Lines: 162 (75.00%)
-    ' Comment Lines: 22 (10.19%)
+    '   Total Lines: 220
+    '    Code Lines: 166 (75.45%)
+    ' Comment Lines: 22 (10.00%)
     '    - Xml Docs: 40.91%
     ' 
-    '   Blank Lines: 32 (14.81%)
-    '     File Size: 9.41 KB
+    '   Blank Lines: 32 (14.55%)
+    '     File Size: 9.59 KB
 
 
     '     Module tablePrinter

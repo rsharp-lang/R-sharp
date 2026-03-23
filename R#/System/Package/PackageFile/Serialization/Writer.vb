@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::88a1ad774f0f521ad93303062aaafc7c, R#\System\Package\PackageFile\Serialization\Writer.vb"
+﻿#Region "Microsoft.VisualBasic::2e8b5894b7b0598a2f53316e309290fa, R#\System\Package\PackageFile\Serialization\Writer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 267
-    '    Code Lines: 194 (72.66%)
-    ' Comment Lines: 31 (11.61%)
+    '   Total Lines: 273
+    '    Code Lines: 199 (72.89%)
+    ' Comment Lines: 31 (11.36%)
     '    - Xml Docs: 64.52%
     ' 
-    '   Blank Lines: 42 (15.73%)
-    '     File Size: 11.72 KB
+    '   Blank Lines: 43 (15.75%)
+    '     File Size: 11.89 KB
 
 
     '     Class Writer

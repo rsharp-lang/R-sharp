@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::523de70547fe6306028670947666e58f, Library\graphics\grDevices.vb"
+﻿#Region "Microsoft.VisualBasic::8b90223291b2746d148d6d29c24816ca, Library\graphics\grDevices.vb"
 
     ' Author:
     ' 
@@ -34,21 +34,21 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 941
-    '    Code Lines: 463 (49.20%)
-    ' Comment Lines: 405 (43.04%)
+    '   Total Lines: 959
+    '    Code Lines: 478 (49.84%)
+    ' Comment Lines: 405 (42.23%)
     '    - Xml Docs: 80.49%
     ' 
-    '   Blank Lines: 73 (7.76%)
-    '     File Size: 49.24 KB
+    '   Blank Lines: 76 (7.92%)
+    '     File Size: 50.01 KB
 
 
     ' Module grDevices
     ' 
     '     Function: adjustAlpha, colorPopulator, colors, display, getFormatFromSuffix
-    '               imageAttrs, openSvgDevice, pdfDevice, postscriptDev, registerCustomPalette
-    '               requireSvgData, rgb, saveBitmap, saveImage, saveSvgFile
-    '               saveSvgStream, svg, tryMeasureFormat
+    '               imageAttrs, openSvgDevice, palette, pdfDevice, postscriptDev
+    '               registerCustomPalette, requireSvgData, rgb, saveBitmap, saveImage
+    '               saveSvgFile, saveSvgStream, svg, tryMeasureFormat
     ' 
     ' /********************************************************************************/
 

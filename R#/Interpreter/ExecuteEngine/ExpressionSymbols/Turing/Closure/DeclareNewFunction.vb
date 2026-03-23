@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1c78bd6cf0a932951d69c321cf0de68a, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
+﻿#Region "Microsoft.VisualBasic::f34b8587488c64de632009d2a52ebb7a, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Turing\Closure\DeclareNewFunction.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 449
-    '    Code Lines: 247 (55.01%)
-    ' Comment Lines: 150 (33.41%)
+    '   Total Lines: 459
+    '    Code Lines: 254 (55.34%)
+    ' Comment Lines: 150 (32.68%)
     '    - Xml Docs: 56.00%
     ' 
-    '   Blank Lines: 52 (11.58%)
-    '     File Size: 19.92 KB
+    '   Blank Lines: 55 (11.98%)
+    '     File Size: 20.21 KB
 
 
     '     Class DeclareNewFunction
@@ -51,7 +51,7 @@
     '         Constructor: (+1 Overloads) Sub New
     ' 
     '         Function: Evaluate, getArguments, getReturns, GetSymbolName, InitializeEnvironment
-    '                   (+2 Overloads) Invoke, MissingParameters, ToString
+    '                   (+2 Overloads) Invoke, MissingParameters, SetNamespace, ToString
     ' 
     '         Sub: SetSymbol
     ' 

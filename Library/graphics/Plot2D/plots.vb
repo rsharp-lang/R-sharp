@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ec9f4b9ddbeaf8e275b9a0ab7c1aa204, Library\graphics\Plot2D\plots.vb"
+﻿#Region "Microsoft.VisualBasic::3c0338b6d8ebf889f23bdea245303fc1, Library\graphics\Plot2D\plots.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1341
-    '    Code Lines: 1054 (78.60%)
-    ' Comment Lines: 149 (11.11%)
+    '   Total Lines: 1343
+    '    Code Lines: 1056 (78.63%)
+    ' Comment Lines: 149 (11.09%)
     '    - Xml Docs: 83.89%
     ' 
-    '   Blank Lines: 138 (10.29%)
-    '     File Size: 61.42 KB
+    '   Blank Lines: 138 (10.28%)
+    '     File Size: 61.50 KB
 
 
     ' Module plots

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::faffcd154a5714083f7e81e9c42973d8, R#\Language\Syntax\SyntaxImplements\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::36440bf937089d9e40d07feb1d4b4b5c, R#\Language\Syntax\SyntaxImplements\SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 238
-    '    Code Lines: 160 (67.23%)
-    ' Comment Lines: 41 (17.23%)
+    '   Total Lines: 252
+    '    Code Lines: 171 (67.86%)
+    ' Comment Lines: 41 (16.27%)
     '    - Xml Docs: 65.85%
     ' 
-    '   Blank Lines: 37 (15.55%)
-    '     File Size: 8.90 KB
+    '   Blank Lines: 40 (15.87%)
+    '     File Size: 9.41 KB
 
 
     '     Module SymbolIndexerSyntax
     ' 
-    '         Function: (+3 Overloads) SymbolIndexer
+    '         Function: parseIndex, (+3 Overloads) SymbolIndexer
     ' 
-    '         Sub: parseDataframeIndex, parseIndex
+    '         Sub: parseDataframeIndex
     ' 
     ' 
     ' /********************************************************************************/

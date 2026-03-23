@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::57ece0db55f772c2f72c3a71afaed361, R#\Runtime\Internal\internalInvokes\Linq\reshape2.vb"
+﻿#Region "Microsoft.VisualBasic::a861b93fdf0b237de071dfda33a6364f, R#\Runtime\Internal\internalInvokes\Linq\reshape2.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 569
-    '    Code Lines: 356 (62.57%)
-    ' Comment Lines: 138 (24.25%)
-    '    - Xml Docs: 90.58%
+    '   Total Lines: 570
+    '    Code Lines: 356 (62.46%)
+    ' Comment Lines: 139 (24.39%)
+    '    - Xml Docs: 89.93%
     ' 
-    '   Blank Lines: 75 (13.18%)
-    '     File Size: 25.10 KB
+    '   Blank Lines: 75 (13.16%)
+    '     File Size: 25.15 KB
 
 
     '     Module reshape2

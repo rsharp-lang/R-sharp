@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9d37cbfe2dcc9ea602ad1930bc45ab85, R#\System\Package\PackageFile\PackageLoader.vb"
+﻿#Region "Microsoft.VisualBasic::43dea7ff4ce0c59ff72cbaeac972ea78, R#\System\Package\PackageFile\PackageLoader.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 408
-    '    Code Lines: 245 (60.05%)
-    ' Comment Lines: 108 (26.47%)
+    '   Total Lines: 410
+    '    Code Lines: 247 (60.24%)
+    ' Comment Lines: 108 (26.34%)
     '    - Xml Docs: 68.52%
     ' 
-    '   Blank Lines: 55 (13.48%)
-    '     File Size: 17.06 KB
+    '   Blank Lines: 55 (13.41%)
+    '     File Size: 17.11 KB
 
 
     '     Module PackageLoader2

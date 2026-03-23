@@ -1,64 +1,64 @@
-﻿#Region "Microsoft.VisualBasic::8ddbfe93ff1854452f82275c33322f94, Library\igraph\NetworkModule.vb"
+﻿#Region "Microsoft.VisualBasic::d1a2c38f3beda44c41b0d3938be211d3, Library\igraph\NetworkModule.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 1311
-'    Code Lines: 862 (65.75%)
-' Comment Lines: 285 (21.74%)
-'    - Xml Docs: 94.39%
-' 
-'   Blank Lines: 164 (12.51%)
-'     File Size: 51.20 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-' Module NetworkModule
-' 
-'     Function: addEdge, addEdges, addNode, addNodeData, addNodes
-'               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
-'               degree, deleteNode, E, edgeAttributes, emptyNetwork
-'               eval, extractAdjacenciesSubNetwork, extractSubGraph, gephi_gml, getByGroup
-'               getClass, getEdges, getEdgeTable, getEdgeTable2, getElementByID
-'               getNodes, getNodeTable, graph, hasEdge, LoadNetwork
-'               LouvainCluster, metaData, MST, nodeAttributes, nodeClass
-'               nodeMass, nodeNames, printGraph, printNode, SaveNetwork
-'               setAttributes, summaryNodes, tabular_graph, trimEdges, typeGroupOfNodes
-'               V, weights, xref
-' 
-'     Sub: Main
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 1335
+    '    Code Lines: 883 (66.14%)
+    ' Comment Lines: 285 (21.35%)
+    '    - Xml Docs: 94.39%
+    ' 
+    '   Blank Lines: 167 (12.51%)
+    '     File Size: 52.23 KB
+
+
+    ' Module NetworkModule
+    ' 
+    '     Function: addEdge, addEdges, addNode, addNodeData, addNodes
+    '               attributes, components, computeNetwork, connectedNetwork, DecomposeGraph
+    '               degree, deleteNode, E, edgeAttributes, emptyNetwork
+    '               eval, extractAdjacenciesSubNetwork, extractSubGraph, gephi_gml, getByGroup
+    '               getClass, getEdges, getEdgeTable, getEdgeTable2, getElementByID
+    '               getNodes, getNodeTable, graph, hasEdge, LoadNetwork
+    '               LouvainCluster, metaData, MST, nodeAttributes, nodeClass
+    '               nodeMass, nodeNames, printGraph, printNode, SaveNetwork
+    '               setAttributes, summaryNodes, tabular_graph, trimEdges, typeGroupOfNodes
+    '               V, weights, xref
+    ' 
+    '     Sub: Main
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

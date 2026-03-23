@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::77f660cc37fc49126ae61cb596f5edd9, Library\base\optparse\optparse.vb"
+﻿#Region "Microsoft.VisualBasic::a9d312ebe595dca2d3c4759e3f94f305, Library\base\optparse\optparse.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 164
-    '    Code Lines: 84 (51.22%)
-    ' Comment Lines: 64 (39.02%)
+    '   Total Lines: 161
+    '    Code Lines: 84 (52.17%)
+    ' Comment Lines: 64 (39.75%)
     '    - Xml Docs: 92.19%
     ' 
-    '   Blank Lines: 16 (9.76%)
-    '     File Size: 11.59 KB
+    '   Blank Lines: 13 (8.07%)
+    '     File Size: 11.58 KB
 
 
     ' Module optparse
     ' 
     '     Function: make_option, OptionParser, parse_args, print_help
-    ' 
     ' 
     ' /********************************************************************************/
 
@@ -213,7 +212,3 @@ Module optparse
         Return Nothing
     End Function
 End Module
-
-
-
-

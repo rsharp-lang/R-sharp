@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::749f24b82ce94acea5209a03c4957e86, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
+﻿#Region "Microsoft.VisualBasic::03350ab0cc22840063b1f6e81e74cc1a, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1747
-    '    Code Lines: 995 (56.95%)
-    ' Comment Lines: 556 (31.83%)
-    '    - Xml Docs: 88.13%
+    '   Total Lines: 1809
+    '    Code Lines: 1030 (56.94%)
+    ' Comment Lines: 569 (31.45%)
+    '    - Xml Docs: 88.40%
     ' 
-    '   Blank Lines: 196 (11.22%)
-    '     File Size: 77.93 KB
+    '   Blank Lines: 210 (11.61%)
+    '     File Size: 80.98 KB
 
 
     '     Module linq
@@ -51,10 +51,11 @@
     '                   groupsSummary, groupSummary, last, left_join, match
     '                   objectPopulator, orderBy, produceKeyedSequence, progress, projectAs
     '                   reverse, rotate_left, rotate_right, runFilterPipeline, runWhichFilter
-    '                   skip, sort, sortByKeyFunction, sortByKeyValue, split
-    '                   splitByPartitionSize, splitCollection, splitList, splitVector, take
-    '                   take_chr_index, take_int_index, tryKeyBy, unique, where
-    '                   whichGenericClrSet, whichMax, whichMin
+    '                   skip, sort, sortByKeyFunction, sortByKeyValue, sortDataframe
+    '                   sortOrder, split, splitByPartitionSize, splitCollection, splitList
+    '                   splitVector, switch, take, take_chr_index, take_int_index
+    '                   tryKeyBy, unique, where, whichGenericClrSet, whichMax
+    '                   whichMin
     '         Class SplitPredicateFunction
     ' 
     '             Function: AssertEquals, AssertThat, GetPredicate

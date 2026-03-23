@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::35593f57855799089529e8b23c1f5858, studio\R-terminal\CLI\CLI.vb"
+﻿#Region "Microsoft.VisualBasic::97b3ae05c830922e054918ff97622c7b, studio\R-terminal\CLI\CLI.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 153
-    '    Code Lines: 126 (82.35%)
-    ' Comment Lines: 2 (1.31%)
+    '   Total Lines: 145
+    '    Code Lines: 119 (82.07%)
+    ' Comment Lines: 2 (1.38%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 25 (16.34%)
-    '     File Size: 6.01 KB
+    '   Blank Lines: 24 (16.55%)
+    '     File Size: 5.91 KB
 
 
     ' Module CLI

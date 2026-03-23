@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0f8a9d3987ab94d81ccb8709476f7d80, R#\System\Package\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::258c3c8c70e0c9c98f9bafc45aef6ada, R#\System\Package\zzz.vb"
 
     ' Author:
     ' 
@@ -34,16 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 56
-    '    Code Lines: 33 (58.93%)
-    ' Comment Lines: 15 (26.79%)
-    '    - Xml Docs: 93.33%
+    '   Total Lines: 86
+    '    Code Lines: 49 (56.98%)
+    ' Comment Lines: 26 (30.23%)
+    '    - Xml Docs: 76.92%
     ' 
-    '   Blank Lines: 8 (14.29%)
-    '     File Size: 1.97 KB
+    '   Blank Lines: 11 (12.79%)
+    '     File Size: 3.07 KB
 
 
     '     Module zzz
+    ' 
+    '         Function: CheckArguments
     ' 
     '         Sub: RunZzz, TryRunZzzOnLoad
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::511a771c2efc15ca55415a44799a86f3, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\CreateObject.vb"
+﻿#Region "Microsoft.VisualBasic::5f311a2bf2815827f160e303050c5b1d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\CreateObject.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 89
-    '    Code Lines: 71 (79.78%)
-    ' Comment Lines: 4 (4.49%)
-    '    - Xml Docs: 75.00%
+    '   Total Lines: 95
+    '    Code Lines: 72 (75.79%)
+    ' Comment Lines: 9 (9.47%)
+    '    - Xml Docs: 33.33%
     ' 
-    '   Blank Lines: 14 (15.73%)
-    '     File Size: 3.47 KB
+    '   Blank Lines: 14 (14.74%)
+    '     File Size: 3.85 KB
 
 
     '     Class CreateObject

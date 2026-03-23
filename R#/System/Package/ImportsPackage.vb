@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::84b63fb96d5c37818cc851f6442e2638, R#\System\Package\ImportsPackage.vb"
+﻿#Region "Microsoft.VisualBasic::ee7305c7606243a3104ed768550293e7, R#\System\Package\ImportsPackage.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 296
-    '    Code Lines: 197 (66.55%)
-    ' Comment Lines: 56 (18.92%)
+    '   Total Lines: 297
+    '    Code Lines: 198 (66.67%)
+    ' Comment Lines: 56 (18.86%)
     '    - Xml Docs: 67.86%
     ' 
-    '   Blank Lines: 43 (14.53%)
-    '     File Size: 12.59 KB
+    '   Blank Lines: 43 (14.48%)
+    '     File Size: 12.72 KB
 
 
     '     Module ImportsPackage

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b5afa54d87d3d6550114f247fc6864b4, R#\Runtime\Internal\internalInvokes\dev\devtools.vb"
+﻿#Region "Microsoft.VisualBasic::f349effbc5831467aca471b23b7c45b4, R#\Runtime\Internal\internalInvokes\dev\devtools.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 355
-    '    Code Lines: 223 (62.82%)
-    ' Comment Lines: 88 (24.79%)
+    '   Total Lines: 404
+    '    Code Lines: 262 (64.85%)
+    ' Comment Lines: 88 (21.78%)
     '    - Xml Docs: 92.05%
     ' 
-    '   Blank Lines: 44 (12.39%)
-    '     File Size: 15.69 KB
+    '   Blank Lines: 54 (13.37%)
+    '     File Size: 17.71 KB
 
 
     '     Class NoInspector
@@ -54,7 +54,7 @@
     '         Function: fetchProfileData, flash_load, FNV1aHash, getCounterTable, getDllPath
     '                   getInvokeParameters, getSymbolName, getSymbolvalue, incomplete_expression, Nilsimsa
     '                   PerformanceCounter, profilerFrames, scriptTable, scriptTable1, stringHashCode
-    '                   translate_to_rlang
+    '                   translate_r_native_call, translate_to_rlang
     ' 
     '         Sub: flag, gc, Main, raiseException, raiseThreadException
     ' 

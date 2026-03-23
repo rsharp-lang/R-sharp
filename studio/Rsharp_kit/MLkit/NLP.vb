@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::34d0d776643cb46d40eaefdcc7937dfe, studio\Rsharp_kit\MLkit\NLP.vb"
+﻿#Region "Microsoft.VisualBasic::dc0e6b0c8429f2f179b30241ac3f3de2, studio\Rsharp_kit\MLkit\NLP.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 80.00%
     ' 
     '   Blank Lines: 60 (16.71%)
-    '     File Size: 13.92 KB
+    '     File Size: 13.93 KB
 
 
     ' Module NLPtools

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b1b1d255c50c752d801b5604df22a9bd, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\Literal.vb"
+﻿#Region "Microsoft.VisualBasic::34a1a6f8a0b12a87fbb8fe3e02e0be5d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\Literal.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 222
-    '    Code Lines: 157 (70.72%)
-    ' Comment Lines: 37 (16.67%)
+    '   Total Lines: 240
+    '    Code Lines: 173 (72.08%)
+    ' Comment Lines: 37 (15.42%)
     '    - Xml Docs: 97.30%
     ' 
-    '   Blank Lines: 28 (12.61%)
-    '     File Size: 7.02 KB
+    '   Blank Lines: 30 (12.50%)
+    '     File Size: 7.77 KB
 
 
     '     Class Literal
@@ -49,7 +49,7 @@
     '                     isNumeric, NA, NULL, type, ValueStr
     ' 
     '         Constructor: (+9 Overloads) Sub New
-    '         Function: Evaluate, ToString
+    '         Function: Evaluate, FromAnyValue, GetNativeRScript, ToString
     '         Operators: <>, =
     ' 
     ' 

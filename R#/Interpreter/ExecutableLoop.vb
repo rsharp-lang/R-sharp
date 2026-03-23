@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::87b88ef10d7f9e3b7671810ddac95499, R#\Interpreter\ExecutableLoop.vb"
+﻿#Region "Microsoft.VisualBasic::205346d4cfe046c38f368a27fbe166df, R#\Interpreter\ExecutableLoop.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 240
-    '    Code Lines: 149 (62.08%)
-    ' Comment Lines: 57 (23.75%)
-    '    - Xml Docs: 35.09%
+    '   Total Lines: 257
+    '    Code Lines: 156 (60.70%)
+    ' Comment Lines: 65 (25.29%)
+    '    - Xml Docs: 30.77%
     ' 
-    '   Blank Lines: 34 (14.17%)
-    '     File Size: 9.59 KB
+    '   Blank Lines: 36 (14.01%)
+    '     File Size: 10.54 KB
 
 
     '     Class ExecutableLoop

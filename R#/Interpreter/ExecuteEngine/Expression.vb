@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b9cf10ff5aa5855b19f29b3e7b907aee, R#\Interpreter\ExecuteEngine\Expression.vb"
+﻿#Region "Microsoft.VisualBasic::93725004bf7c0d2719911600b3747df3, R#\Interpreter\ExecuteEngine\Expression.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 72
-    '    Code Lines: 34 (47.22%)
-    ' Comment Lines: 30 (41.67%)
+    '   Total Lines: 86
+    '    Code Lines: 45 (52.33%)
+    ' Comment Lines: 30 (34.88%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 8 (11.11%)
-    '     File Size: 2.89 KB
+    '   Blank Lines: 11 (12.79%)
+    '     File Size: 3.39 KB
 
 
     '     Class Expression
     ' 
     '         Properties: isCallable
     ' 
-    '         Function: CreateExpression, ParseLines
+    '         Function: CreateExpression, GetBreakPointHashCode, Parse, ParseLines
     ' 
     ' 
     ' /********************************************************************************/

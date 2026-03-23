@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ed273ebe16dd7f30c8493c1f77848eae, R#\Runtime\Internal\internalInvokes\Math\ranking.vb"
+﻿#Region "Microsoft.VisualBasic::bffa94df7e020b6e209eecbc151282ad, R#\Runtime\Internal\internalInvokes\Math\ranking.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 146
-    '    Code Lines: 49 (33.56%)
-    ' Comment Lines: 88 (60.27%)
+    '   Total Lines: 162
+    '    Code Lines: 62 (38.27%)
+    ' Comment Lines: 88 (54.32%)
     '    - Xml Docs: 89.77%
     ' 
-    '   Blank Lines: 9 (6.16%)
-    '     File Size: 7.51 KB
+    '   Blank Lines: 12 (7.41%)
+    '     File Size: 8.42 KB
 
 
     '     Module ranking
     ' 
-    '         Function: order, orderNumbers, rank
+    '         Function: order, orderNumbers, rank, weighted_median
     ' 
     ' 
     ' /********************************************************************************/

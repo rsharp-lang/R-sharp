@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dd39dc0c3b3653780c2d124e032e6506, R#\Runtime\Internal\internalInvokes\Linq\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::7637c548db3fa50e997a498a97e04e94, R#\Runtime\Internal\internalInvokes\Linq\dataframe.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 567
-    '    Code Lines: 358 (63.14%)
-    ' Comment Lines: 137 (24.16%)
+    '   Total Lines: 592
+    '    Code Lines: 379 (64.02%)
+    ' Comment Lines: 137 (23.14%)
     '    - Xml Docs: 80.29%
     ' 
-    '   Blank Lines: 72 (12.70%)
-    '     File Size: 24.72 KB
+    '   Blank Lines: 76 (12.84%)
+    '     File Size: 25.91 KB
 
 
     '     Module dataframe_methods
     ' 
     '         Function: aggregate_eval, aggregate_func, aggregate_run, colMeans, colSums
-    '                   (+2 Overloads) combineFactors, GetIndex, merge, rank_unique, rename
-    '                   rowMeans, rowSums
+    '                   (+2 Overloads) combineFactors, expands, GetIndex, merge, rank_unique
+    '                   rename, rowMeans, rowSums
     ' 
     ' 
     ' /********************************************************************************/

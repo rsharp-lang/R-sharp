@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ba83fbf43404e574bd7708274c27f510, Library\Rlapack\lpSolve.vb"
+﻿#Region "Microsoft.VisualBasic::3695f4a736547f76a41eb663c2d5b939, Library\Rlapack\lpSolve.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 415
-    '    Code Lines: 325 (78.31%)
-    ' Comment Lines: 29 (6.99%)
+    '   Total Lines: 414
+    '    Code Lines: 324 (78.26%)
+    ' Comment Lines: 29 (7.00%)
     '    - Xml Docs: 62.07%
     ' 
-    '   Blank Lines: 61 (14.70%)
-    '     File Size: 16.55 KB
+    '   Blank Lines: 61 (14.73%)
+    '     File Size: 16.48 KB
 
 
     ' Module lpSolve

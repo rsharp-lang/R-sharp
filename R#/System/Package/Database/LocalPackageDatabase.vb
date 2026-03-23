@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1e1acb6b2b7cfd451b12b52bdc1a3ca1, R#\System\Package\Database\LocalPackageDatabase.vb"
+﻿#Region "Microsoft.VisualBasic::41a1c4502153e3af2c660cfe62052439, R#\System\Package\Database\LocalPackageDatabase.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 92.31%
     ' 
     '   Blank Lines: 17 (12.32%)
-    '     File Size: 5.39 KB
+    '     File Size: 5.45 KB
 
 
     '     Class LocalPackageDatabase

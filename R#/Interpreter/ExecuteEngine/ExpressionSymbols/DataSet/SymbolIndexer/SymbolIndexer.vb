@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c409bfa576ca04cb987a6aad6fe104e1, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::d1afb85b7c1adebb4d40273720a40779, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 852
-    '    Code Lines: 629 (73.83%)
-    ' Comment Lines: 120 (14.08%)
+    '   Total Lines: 880
+    '    Code Lines: 651 (73.98%)
+    ' Comment Lines: 120 (13.64%)
     '    - Xml Docs: 45.83%
     ' 
-    '   Blank Lines: 103 (12.09%)
-    '     File Size: 37.09 KB
+    '   Blank Lines: 109 (12.39%)
+    '     File Size: 37.95 KB
 
 
     '     Class SymbolIndexer
@@ -50,8 +50,8 @@
     '         Constructor: (+2 Overloads) Sub New
     '         Function: CheckRemoves, doListSubset, emptyIndexError, Evaluate, getByIndex
     '                   getByName, getBySymbolIndex, getColumn, getDataframeRowRange, getIndex
-    '                   getOptions, groupSubset, listSubset, streamView, takeColumnVector
-    '                   ToString, translateInteger2keys, translateLogical2keys, vectorSubset
+    '                   getOptions, getRows, groupSubset, listSubset, streamView
+    '                   takeColumnVector, ToString, translateInteger2keys, translateLogical2keys, vectorSubset
     ' 
     ' 
     ' /********************************************************************************/

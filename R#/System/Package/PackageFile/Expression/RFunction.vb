@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::17e3e8fc0913f46518119aeaaee215c5, R#\System\Package\PackageFile\Expression\RFunction.vb"
+﻿#Region "Microsoft.VisualBasic::7d608471957c3e779cdba88ba256e0b2, R#\System\Package\PackageFile\Expression\RFunction.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 241
-    '    Code Lines: 192 (79.67%)
-    ' Comment Lines: 3 (1.24%)
+    '   Total Lines: 244
+    '    Code Lines: 192 (78.69%)
+    ' Comment Lines: 5 (2.05%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 46 (19.09%)
-    '     File Size: 10.47 KB
+    '   Blank Lines: 47 (19.26%)
+    '     File Size: 10.54 KB
 
 
     '     Class RFunction

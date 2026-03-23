@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b05b8708e25eda4a6d8c0fcde0575a09, R#\Runtime\Internal\objects\dataset\pipeline.vb"
+﻿#Region "Microsoft.VisualBasic::b37bbce83134c0f0ad4e43e928e18f17, R#\Runtime\Internal\objects\dataset\pipeline.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 395
-    '    Code Lines: 262 (66.33%)
-    ' Comment Lines: 80 (20.25%)
+    '   Total Lines: 408
+    '    Code Lines: 273 (66.91%)
+    ' Comment Lines: 80 (19.61%)
     '    - Xml Docs: 95.00%
     ' 
-    '   Blank Lines: 53 (13.42%)
-    '     File Size: 17.71 KB
+    '   Blank Lines: 55 (13.48%)
+    '     File Size: 18.36 KB
 
 
     '     Class CLRIterator
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: populates, ToString
+    '         Function: Enumerates, populates, ToString
     ' 
     '     Class pipeline
     ' 

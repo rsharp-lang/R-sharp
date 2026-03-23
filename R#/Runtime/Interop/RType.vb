@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::faef3138e96bc8874613bf0b625d49cd, R#\Runtime\Interop\RType.vb"
+﻿#Region "Microsoft.VisualBasic::1112c42cb855ccc8262ed09dc3fcceac, R#\Runtime\Interop\RType.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 437
-    '    Code Lines: 268 (61.33%)
-    ' Comment Lines: 122 (27.92%)
-    '    - Xml Docs: 98.36%
+    '   Total Lines: 447
+    '    Code Lines: 273 (61.07%)
+    ' Comment Lines: 126 (28.19%)
+    '    - Xml Docs: 98.41%
     ' 
-    '   Blank Lines: 47 (10.76%)
-    '     File Size: 16.65 KB
+    '   Blank Lines: 48 (10.74%)
+    '     File Size: 16.98 KB
 
 
     '     Interface IRType

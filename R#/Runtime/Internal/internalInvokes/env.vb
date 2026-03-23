@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f7f29b03a85784e93379ea0b8cc34db3, R#\Runtime\Internal\internalInvokes\env.vb"
+﻿#Region "Microsoft.VisualBasic::87e2033daed1f09887ca82706c79b15b, R#\Runtime\Internal\internalInvokes\env.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 707
-    '    Code Lines: 350 (49.50%)
-    ' Comment Lines: 292 (41.30%)
-    '    - Xml Docs: 87.67%
+    '   Total Lines: 721
+    '    Code Lines: 361 (50.07%)
+    ' Comment Lines: 294 (40.78%)
+    '    - Xml Docs: 87.07%
     ' 
-    '   Blank Lines: 65 (9.19%)
-    '     File Size: 32.22 KB
+    '   Blank Lines: 66 (9.15%)
+    '     File Size: 32.89 KB
 
 
     '     Module env

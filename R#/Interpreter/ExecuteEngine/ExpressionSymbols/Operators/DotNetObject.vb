@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e05cec116b8e19a957c83f457bb28434, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DotNetObject.vb"
+﻿#Region "Microsoft.VisualBasic::2eebe988cbbbe8952097206c4f8bf361, R#\Interpreter\ExecuteEngine\ExpressionSymbols\Operators\DotNetObject.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 53.85%
     ' 
     '   Blank Lines: 23 (15.23%)
-    '     File Size: 6.18 KB
+    '     File Size: 6.22 KB
 
 
     '     Class DotNetObject

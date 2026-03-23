@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1fd6c3faa1d7b1416f0ef364bc6707e5, R#\Language\Syntax\SyntaxTree\ExpressionTree.vb"
+﻿#Region "Microsoft.VisualBasic::db60ded0c74cdd0f74efa471a499b0d5, R#\Language\Syntax\SyntaxTree\ExpressionTree.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 281
-    '    Code Lines: 220 (78.29%)
-    ' Comment Lines: 19 (6.76%)
+    '   Total Lines: 299
+    '    Code Lines: 231 (77.26%)
+    ' Comment Lines: 24 (8.03%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 42 (14.95%)
-    '     File Size: 13.13 KB
+    '   Blank Lines: 44 (14.72%)
+    '     File Size: 14.14 KB
 
 
     '     Module ExpressionTree

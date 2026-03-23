@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5441de5c2c7e28031539edda237c8321, Library\igraph\Visualize.vb"
+﻿#Region "Microsoft.VisualBasic::7e90c60d05ac361220afb316294a8ab8, Library\igraph\Visualize.vb"
 
     ' Author:
     ' 
@@ -34,12 +34,12 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 455
-    '    Code Lines: 373 (81.98%)
-    ' Comment Lines: 30 (6.59%)
+    '   Total Lines: 456
+    '    Code Lines: 374 (82.02%)
+    ' Comment Lines: 30 (6.58%)
     '    - Xml Docs: 83.33%
     ' 
-    '   Blank Lines: 52 (11.43%)
+    '   Blank Lines: 52 (11.40%)
     '     File Size: 20.57 KB
 
 

@@ -1,58 +1,62 @@
-﻿#Region "Microsoft.VisualBasic::141f488c99176389d379eae39c0c1ca3, R#\Runtime\Vectorization\GetVectorElement.vb"
+﻿#Region "Microsoft.VisualBasic::6f4bdab50db9f6cfd669a2cf9bf5492e, R#\Runtime\Vectorization\GetVectorElement.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 319
-'    Code Lines: 204 (63.95%)
-' Comment Lines: 77 (24.14%)
-'    - Xml Docs: 83.12%
-' 
-'   Blank Lines: 38 (11.91%)
-'     File Size: 12.06 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class GetVectorElement
-' 
-'         Properties: [Error], elementType, isNullOrEmpty, Mode, size
-' 
-'         Constructor: (+3 Overloads) Sub New
-'         Function: CastTo, Create, (+2 Overloads) CreateAny, CreateVectorInternal, DoesSizeMatch
-'                   FromCollection, (+2 Overloads) Getter, IsScalar, Populate, ToString
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 356
+    '    Code Lines: 233 (65.45%)
+    ' Comment Lines: 77 (21.63%)
+    '    - Xml Docs: 83.12%
+    ' 
+    '   Blank Lines: 46 (12.92%)
+    '     File Size: 13.49 KB
+
+
+    '     Class GetVectorElement
+    ' 
+    '         Properties: [Error], elementType, isNullOrEmpty, Mode, size
+    ' 
+    '         Constructor: (+3 Overloads) Sub New
+    ' 
+    '         Function: CastTo, Create, (+2 Overloads) CreateAny, CreateVectorInternal, DoesSizeMatch
+    '                   FromCollection, (+2 Overloads) Getter, IsScalar, Populate, ToString
+    '                   (+2 Overloads) Zip
+    ' 
+    '         Sub: MakeSizeNotMatchedError
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

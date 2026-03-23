@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9c1288b0d550455d8e65b65e5f945bd2, R#\Runtime\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::70ab52c580ea36f89033bebd4833091e, R#\Runtime\Extensions.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 261
-    '    Code Lines: 168 (64.37%)
-    ' Comment Lines: 57 (21.84%)
+    '   Total Lines: 266
+    '    Code Lines: 172 (64.66%)
+    ' Comment Lines: 57 (21.43%)
     '    - Xml Docs: 77.19%
     ' 
-    '   Blank Lines: 36 (13.79%)
-    '     File Size: 9.64 KB
+    '   Blank Lines: 37 (13.91%)
+    '     File Size: 9.82 KB
 
 
     '     Module Extensions
     ' 
-    '         Function: debugOption, isCallable, MeasureArrayElementType, MeasureRealElementType, MeasureVectorType
-    '                   MeasureVectorTypes, Push, strictOption, TryCatch, verboseOption
+    '         Function: as_iterator, debugOption, isCallable, MeasureArrayElementType, MeasureRealElementType
+    '                   MeasureVectorType, MeasureVectorTypes, Push, strictOption, TryCatch
+    '                   verboseOption
     ' 
     ' 
     ' /********************************************************************************/

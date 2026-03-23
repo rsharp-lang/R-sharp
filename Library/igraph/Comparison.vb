@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2cf830dc3f1efae9e565db3f9124f25e, Library\igraph\Comparison.vb"
+﻿#Region "Microsoft.VisualBasic::8b30c2ce71fc3d6a47792f7985c250ed, Library\igraph\Comparison.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 43
-    '    Code Lines: 20 (46.51%)
-    ' Comment Lines: 18 (41.86%)
+    '   Total Lines: 76
+    '    Code Lines: 46 (60.53%)
+    ' Comment Lines: 18 (23.68%)
     '    - Xml Docs: 94.44%
     ' 
-    '   Blank Lines: 5 (11.63%)
-    '     File Size: 1.88 KB
+    '   Blank Lines: 12 (15.79%)
+    '     File Size: 3.24 KB
 
 
     ' Module Comparison
     ' 
-    '     Function: similarity, similarityOfNode
+    '     Function: interaction_type, similarity, similarityOfNode
     ' 
     ' /********************************************************************************/
 

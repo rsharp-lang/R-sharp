@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b0f6a52de1ed7ae2390f52d953430c47, R#\Runtime\Internal\objects\base\s4Reflector.vb"
+﻿#Region "Microsoft.VisualBasic::8099cb162c719dd24a38724dda189d91, R#\Runtime\Internal\objects\base\s4Reflector.vb"
 
     ' Author:
     ' 
@@ -34,22 +34,22 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 251
-    '    Code Lines: 173 (68.92%)
-    ' Comment Lines: 47 (18.73%)
-    '    - Xml Docs: 89.36%
+    '   Total Lines: 272
+    '    Code Lines: 188 (69.12%)
+    ' Comment Lines: 50 (18.38%)
+    '    - Xml Docs: 88.00%
     ' 
-    '   Blank Lines: 31 (12.35%)
-    '     File Size: 10.72 KB
+    '   Blank Lines: 34 (12.50%)
+    '     File Size: 11.43 KB
 
 
     '     Class s4Reflector
     ' 
     '         Properties: elementType, s4class
     ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: (+2 Overloads) getByName, getNames, getObjMethods, getObjProperties, MakeReflection
-    '                   propertyParserInternal, (+2 Overloads) setByName
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: existsName, (+3 Overloads) getByName, getNames, getObjMethods, getObjProperties
+    '                   MakeReflection, propertyParserInternal, (+2 Overloads) setByName
     ' 
     ' 
     ' /********************************************************************************/

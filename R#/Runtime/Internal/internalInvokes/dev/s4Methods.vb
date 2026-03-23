@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::68c68f4ab2f9ab0b3757200696d780b8, R#\Runtime\Internal\internalInvokes\dev\s4Methods.vb"
+﻿#Region "Microsoft.VisualBasic::57da325552e2929a705039f1e10f87a4, R#\Runtime\Internal\internalInvokes\dev\s4Methods.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 257
-    '    Code Lines: 46 (17.90%)
-    ' Comment Lines: 204 (79.38%)
-    '    - Xml Docs: 75.49%
+    '   Total Lines: 288
+    '    Code Lines: 71 (24.65%)
+    ' Comment Lines: 205 (71.18%)
+    '    - Xml Docs: 75.12%
     ' 
-    '   Blank Lines: 7 (2.72%)
-    '     File Size: 19.14 KB
+    '   Blank Lines: 12 (4.17%)
+    '     File Size: 20.37 KB
 
 
     '     Module s4Methods
     ' 
-    '         Function: new_s4, setClass
+    '         Function: new_s4, removeClass, setClass, slotNames
     ' 
     ' 
     ' /********************************************************************************/
