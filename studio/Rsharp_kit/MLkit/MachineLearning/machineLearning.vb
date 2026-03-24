@@ -228,7 +228,7 @@ Module machineLearning
         Call New Sample(input) With {
             .ID = App.NextTempName,
             .target = output
-        }.DoCall(AddressOf dataset.DataSamples.items.Add)
+        }.DoCall(AddressOf dataset.DataSamples.items.Append)
 
         Return model
     End Function
