@@ -400,7 +400,7 @@ Namespace Development.Configuration
                 file.config.First(Function(c) c.name = opt).text = value
             Else
                 configValues.Add(opt, value)
-                file.config.Add(New NamedValue With {.name = opt, .text = value})
+                file.config.Append(New NamedValue With {.name = opt, .text = value})
             End If
 
             If Not env Is Nothing AndAlso opt = "strict" Then
