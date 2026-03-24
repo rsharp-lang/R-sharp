@@ -130,7 +130,16 @@ Module JSON
                     End Function)) _
             .ToArray
 
-        Return json_str.LoadObject(clr, throwEx:=False, exception:=ex, knownTypes:=primitiveTypes)
+        Dim result = json_str.LoadObject(clr,
+                                         throwEx:=False,
+                                         exception:=ex,
+                                         knownTypes:=primitiveTypes)
+
+        If result Is Nothing AndAlso Not ex Is Nothing Then
+            Return RInternal.debug.stop(ex.InnerException, env)
+        Else
+            Return result
+        End If
     End Function
 
     ''' <summary>
