@@ -1,61 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::7637c548db3fa50e997a498a97e04e94, R#\Runtime\Internal\internalInvokes\Linq\dataframe.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 592
-    '    Code Lines: 379 (64.02%)
-    ' Comment Lines: 137 (23.14%)
-    '    - Xml Docs: 80.29%
-    ' 
-    '   Blank Lines: 76 (12.84%)
-    '     File Size: 25.91 KB
+' Summaries:
 
 
-    '     Module dataframe_methods
-    ' 
-    '         Function: aggregate_eval, aggregate_func, aggregate_run, colMeans, colSums
-    '                   (+2 Overloads) combineFactors, expands, GetIndex, merge, rank_unique
-    '                   rename, rowMeans, rowSums
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 592
+'    Code Lines: 379 (64.02%)
+' Comment Lines: 137 (23.14%)
+'    - Xml Docs: 80.29%
+' 
+'   Blank Lines: 76 (12.84%)
+'     File Size: 25.91 KB
+
+
+'     Module dataframe_methods
+' 
+'         Function: aggregate_eval, aggregate_func, aggregate_run, colMeans, colSums
+'                   (+2 Overloads) combineFactors, expands, GetIndex, merge, rank_unique
+'                   rename, rowMeans, rowSums
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -575,6 +576,13 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 offset = i
                 df.add(colname, join.Select(Function(v) v.my(offset)))
             Next
+
+            If rename_cols.Any Then
+                rename_cols = New List(Of String)(rename_cols.Distinct)
+
+                Call env.AddMessage($"there are {rename_cols.Count} column is duplicated between two dataframe, these column has been renamed with `x` or `y` prefixed: {rename_cols.JoinBy(", ")}", MSG_TYPES.WRN)
+                Call df.setAttribute("rename_cols", rename_cols.ToArray)
+            End If
 
             Return df
         End Function
