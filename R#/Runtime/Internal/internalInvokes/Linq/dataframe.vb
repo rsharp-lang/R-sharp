@@ -490,7 +490,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                               <RRawVectorArgument> Optional by As Object = Nothing,
                               <RRawVectorArgument> Optional by_x As Object = Nothing,
                               <RRawVectorArgument> Optional by_y As Object = Nothing,
-                              Optional all As Boolean = True,
+                              Optional all As Boolean = False,
                               Optional env As Environment = Nothing) As Object
 
             Dim byColsX As String() = Nothing
