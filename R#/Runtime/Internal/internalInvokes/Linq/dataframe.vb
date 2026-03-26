@@ -537,6 +537,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 .Where(Function(a) a.Count > 1) _
                 .Select(Function(a) a.Key) _
                 .Indexing
+            Dim rename_cols As New List(Of String)
 
             For i As Integer = 0 To sortX.Length - 1
                 colname = sortX(i)
@@ -544,10 +545,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 If colname Like index_x Then
                     If Not common_by Then
                         If Not colname Like commonNames Then
+                            rename_cols.Add(colname)
                             colname = $"x.{colname}"
                         End If
                     End If
                 ElseIf colname Like commonNames Then
+                    rename_cols.Add(colname)
                     colname = $"x.{colname}"
                 End If
 
@@ -560,10 +563,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 If colname Like index_y Then
                     If Not common_by Then
                         If Not colname Like commonNames Then
+                            rename_cols.Add(colname)
                             colname = $"y.{colname}"
                         End If
                     End If
                 ElseIf colname Like commonNames Then
+                    rename_cols.Add(colname)
                     colname = $"y.{colname}"
                 End If
 
