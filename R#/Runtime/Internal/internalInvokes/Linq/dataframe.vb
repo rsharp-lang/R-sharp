@@ -55,6 +55,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -491,44 +492,12 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                               <RRawVectorArgument> Optional by_y As Object = Nothing,
                               Optional env As Environment = Nothing) As Object
 
-            Dim byColsX As String()
-            Dim byColsY As String()
+            Dim byColsX As String() = Nothing
+            Dim byColsY As String() = Nothing
+            Dim err As Message = CheckKeyCols(x, y, by, by_x, by_y, byColsX, byColsY, env)
 
-            If by Is Nothing Then
-                ' by_x and by_y should both has been specificed!
-                byColsX = CLRVector.asCharacter(by_x)
-                byColsY = CLRVector.asCharacter(by_y)
-
-                If byColsX.IsNullOrEmpty Then
-                    Return Internal.debug.stop("by.x must be specificed for matches x!", env)
-                ElseIf byColsY.IsNullOrEmpty Then
-                    Return Internal.debug.stop("by.y must be specificed for matches y!", env)
-                End If
-
-                ' check of x 
-                For Each col As String In byColsX
-                    If Not x.hasName(col) Then
-                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for x", $"missing: {col}"}, env)
-                    End If
-                Next
-                For Each col As String In byColsY
-                    If Not y.hasName(col) Then
-                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for y", $"missing: {col}"}, env)
-                    End If
-                Next
-            Else
-                Dim byCols As String() = CLRVector.asCharacter(by)
-
-                For Each col As String In byCols
-                    If Not x.hasName(col) Then
-                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for x", $"missing: {col}"}, env)
-                    ElseIf Not y.hasName(col) Then
-                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for y", $"missing: {col}"}, env)
-                    End If
-                Next
-
-                byColsX = byCols
-                byColsY = byCols
+            If Not err Is Nothing Then
+                Return err
             End If
 
             x = New dataframe(x)
@@ -602,11 +571,80 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return df
         End Function
 
+        Private Function CheckKeyCols(x As dataframe, y As dataframe,
+                                      by As Object,
+                                      by_x As Object,
+                                      by_y As Object,
+                                      <Out> ByRef byColsX As String(),
+                                      <Out> ByRef byColsY As String(),
+                                      Optional env As Environment = Nothing) As Message
+            If by Is Nothing Then
+                ' by_x and by_y should both has been specificed!
+                byColsX = CLRVector.asCharacter(by_x)
+                byColsY = CLRVector.asCharacter(by_y)
+
+                If byColsX.IsNullOrEmpty Then
+                    Return Internal.debug.stop("by.x must be specificed for matches x!", env)
+                ElseIf byColsY.IsNullOrEmpty Then
+                    Return Internal.debug.stop("by.y must be specificed for matches y!", env)
+                End If
+
+                ' check of x 
+                For Each col As String In byColsX
+                    If col = "row.names" OrElse col = "0" Then
+                        Continue For
+                    End If
+                    If Not x.hasName(col) Then
+                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for x", $"missing: {col}"}, env)
+                    End If
+                Next
+                For Each col As String In byColsY
+                    If col = "row.names" OrElse col = "0" Then
+                        Continue For
+                    End If
+                    If Not y.hasName(col) Then
+                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for y", $"missing: {col}"}, env)
+                    End If
+                Next
+            Else
+                Dim byCols As String() = CLRVector.asCharacter(by)
+
+                For Each col As String In byCols
+                    If col = "row.names" OrElse col = "0" Then
+                        Continue For
+                    End If
+                    If Not x.hasName(col) Then
+                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for x", $"missing: {col}"}, env)
+                    ElseIf Not y.hasName(col) Then
+                        Return Internal.debug.stop({$"‘by’ must specify a unique valid column for y", $"missing: {col}"}, env)
+                    End If
+                Next
+
+                byColsX = byCols
+                byColsY = byCols
+            End If
+
+            Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="d"></param>
+        ''' <param name="by">
+        ''' supports multiple column combined as key as here
+        ''' </param>
+        ''' <returns></returns>
         Private Function GetIndex(d As dataframe, by As String()) As String()
             Dim strs As String() = Nothing
+            Dim v As String()
 
             For Each col As String In by
-                Dim v As String() = CLRVector.asCharacter(d(col))
+                If col = "0" OrElse col = "row.names" Then
+                    v = d.rownames
+                Else
+                    v = CLRVector.asCharacter(d(col))
+                End If
 
                 If strs Is Nothing Then
                     strs = v
