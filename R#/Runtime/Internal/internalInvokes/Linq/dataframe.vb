@@ -490,6 +490,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                               <RRawVectorArgument> Optional by As Object = Nothing,
                               <RRawVectorArgument> Optional by_x As Object = Nothing,
                               <RRawVectorArgument> Optional by_y As Object = Nothing,
+                              Optional union As Boolean = True,
                               Optional env As Environment = Nothing) As Object
 
             Dim byColsX As String() = Nothing
@@ -510,18 +511,20 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
             Dim dx = x.forEachRow(sortX).ToDictionary(Function(a) a.name, Function(a) a.value)
             Dim dy = y.forEachRow(sortY).ToDictionary(Function(a) a.name, Function(a) a.value)
-            Dim common As String() = x.rownames.Intersect(y.rownames).ToArray
+            Dim common As String() = If(union, x.rownames.Union(y.rownames), x.rownames.Intersect(y.rownames)).ToArray
             Dim join = common _
-                .Select(Function(ri)
-                            Dim mx = dx(ri)
-                            Dim my = dy(ri)
+                .Select(Function(row_id)
+                            Dim mx = If(dx.ContainsKey(row_id), dx(row_id), New Object(sortX.Length - 1) {})
+                            Dim my = If(dy.ContainsKey(row_id), dy(row_id), New Object(sortY.Length - 1) {})
 
-                            Return (ri, mx, my)
+                            Return (row_id, mx, my)
                         End Function) _
                 .ToArray
             Dim offset As Integer
             Dim df As New dataframe With {
-                .rownames = join.Select(Function(i) i.ri).ToArray,
+                .rownames = join _
+                    .Select(Function(i) i.row_id) _
+                    .ToArray,
                 .columns = New Dictionary(Of String, Array)
             }
             Dim common_by As Boolean = Not by Is Nothing
