@@ -325,7 +325,7 @@ Namespace Runtime.Internal.Object.Converts
                     End If
                 End If
 
-                If Not ref Is Nothing Then
+                If ref IsNot Nothing AndAlso ref.Name IsNot Nothing Then
                     name = ref.Name
                 Else
                     name = p.Key
