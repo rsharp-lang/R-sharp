@@ -120,6 +120,56 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return summary
         End Function
 
+        Private Function byKeys(ByRef left As dataframe, ByRef right As dataframe, by As Object, ByRef keyX As String(), ByRef keyY As String()) As Object
+            If RType.TypeOf(by).mode = TypeCodes.integer Then
+                ' offset -1 inside dataframe automatically
+                keyX = left.getColumnVector(CInt(by))
+                keyY = right.getColumnVector(CInt(by))
+
+                ' removes the duplicated col in right
+                right = New dataframe(right)
+                right.delete(CInt(by))
+            Else
+                If CStr(by) = "row.names" Then
+                    keyX = left.rownames
+                    keyY = right.rownames
+
+                    If keyX.IsNullOrEmpty OrElse keyY.IsNullOrEmpty Then
+                        Return Internal.debug.stop("one of the dataframe has no row.names attribute data for used as the index key for make left join operation!", env)
+                    End If
+                Else
+                    keyX = left.getColumnVector(CStr(by))
+                    keyY = right.getColumnVector(CStr(by))
+                End If
+
+                ' removes the duplicated col in right
+                right = New dataframe(right)
+
+                If CStr(by) <> "row.names" Then
+                    Call right.delete(CStr(by))
+                End If
+            End If
+
+            Return Nothing
+        End Function
+
+        Private Function byKeys(df As dataframe, by As Object) As Array
+            If RType.TypeOf(by).mode = TypeCodes.integer Then
+                Dim offset As Integer = CLRVector.asInteger(by)(0)
+                Dim vec As Array = df.getColumnVector(offset)
+
+                Return vec
+            Else
+                Dim fieldName As String = CLRVector.asScalarCharacter(by)
+
+                If fieldName = "row.names" Then
+                    Return df.rownames
+                Else
+                    Return df.getColumnVector(fieldName)
+                End If
+            End If
+        End Function
+
         ''' <summary>
         ''' A left join is a type of relational join operation that combines 
         ''' two datasets based on a common column or variable. The result of 
@@ -152,37 +202,14 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Return left
             End If
 
-            Dim keyX As String()
-            Dim keyY As String()
+            Dim keyX As String() = Nothing
+            Dim keyY As String() = Nothing
 
             If Not by Is Nothing Then
-                If RType.TypeOf(by).mode = TypeCodes.integer Then
-                    ' offset -1 inside dataframe automatically
-                    keyX = left.getColumnVector(CInt(by))
-                    keyY = right.getColumnVector(CInt(by))
+                Dim err As Message = byKeys(left, right, by, keyX, keyY)
 
-                    ' removes the duplicated col in right
-                    right = New dataframe(right)
-                    right.delete(CInt(by))
-                Else
-                    If CStr(by) = "row.names" Then
-                        keyX = left.rownames
-                        keyY = right.rownames
-
-                        If keyX.IsNullOrEmpty OrElse keyY.IsNullOrEmpty Then
-                            Return Internal.debug.stop("one of the dataframe has no row.names attribute data for used as the index key for make left join operation!", env)
-                        End If
-                    Else
-                        keyX = left.getColumnVector(CStr(by))
-                        keyY = right.getColumnVector(CStr(by))
-                    End If
-
-                    ' removes the duplicated col in right
-                    right = New dataframe(right)
-
-                    If CStr(by) <> "row.names" Then
-                        Call right.delete(CStr(by))
-                    End If
+                If Not err Is Nothing Then
+                    Return err
                 End If
             ElseIf by_x Is Nothing OrElse by_y Is Nothing Then
                 Return Internal.debug.stop({
@@ -190,16 +217,8 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                     "you should set parameter 'by' for specific field name that bot existed in two given dataset, or by.x and by.y if the index field its field name is different between two dataset."
                 }, env)
             Else
-                If RType.TypeOf(by_x).mode = TypeCodes.integer Then
-                    keyX = left.getColumnVector(CLRVector.asInteger(by_x)(0))
-                Else
-                    keyX = left.getColumnVector(CLRVector.asCharacter(by_x)(0))
-                End If
-                If RType.TypeOf(by_y).mode = TypeCodes.integer Then
-                    keyY = right.getColumnVector(CLRVector.asInteger(by_y)(0))
-                Else
-                    keyY = right.getColumnVector(CLRVector.asCharacter(by_y)(0))
-                End If
+                keyX = CLRVector.asCharacter(byKeys(left, by_x))
+                keyY = CLRVector.asCharacter(byKeys(right, by_y))
             End If
 
             If Not grep Is Nothing Then
