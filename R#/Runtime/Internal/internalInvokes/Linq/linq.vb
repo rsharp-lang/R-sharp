@@ -120,7 +120,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Return summary
         End Function
 
-        Private Function byKeys(ByRef left As dataframe, ByRef right As dataframe, by As Object, ByRef keyX As String(), ByRef keyY As String()) As Object
+        Private Function byKeys(ByRef left As dataframe, ByRef right As dataframe, by As Object, ByRef keyX As String(), ByRef keyY As String(), env As Environment) As Object
             If RType.TypeOf(by).mode = TypeCodes.integer Then
                 ' offset -1 inside dataframe automatically
                 keyX = left.getColumnVector(CInt(by))
@@ -206,7 +206,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             Dim keyY As String() = Nothing
 
             If Not by Is Nothing Then
-                Dim err As Message = byKeys(left, right, by, keyX, keyY)
+                Dim err As Message = byKeys(left, right, by, keyX, keyY, env)
 
                 If Not err Is Nothing Then
                     Return err
