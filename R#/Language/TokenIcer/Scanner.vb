@@ -242,7 +242,7 @@ Namespace Language.TokenIcer
         ''' + ||
         ''' + ==
         ''' </summary>
-        Protected ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c, "!"}
+        Protected ReadOnly longOperatorParts As Index(Of Char) = {"<"c, ">"c, "&"c, "|"c, ":"c, "="c, "-"c, "+"c, "!", "?"}
 
         Shared ReadOnly longOperators As Index(Of String) = {
             "<=", ">=", "==", "!=",
@@ -250,7 +250,7 @@ Namespace Language.TokenIcer
             "<-", "<<", "->", "=>",
             "++", "--",
             "+=", "-=", "*=", "/=",
-            "|>", ":>", "::"
+            "|>", ":>", "::", "??"
         }
         Shared ReadOnly RshortOperators As Char() = {
             "$"c, ' member getter/setter if found between two symbol, regexp symbol if found it before a string literal value
