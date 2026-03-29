@@ -1,55 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::f560ff0e56a9e906ed23c71bbcea3a64, R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\BinaryExpressionTree.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 583
-    '    Code Lines: 423 (72.56%)
-    ' Comment Lines: 78 (13.38%)
-    '    - Xml Docs: 52.56%
-    ' 
-    '   Blank Lines: 82 (14.07%)
-    '     File Size: 26.13 KB
+' Summaries:
 
 
-    '     Module BinaryExpressionTree
-    ' 
-    '         Function: CreateBinary, CreateBinaryExpression, joinNegatives, joinRemaining, MeasureCurrentLine
-    '                   (+2 Overloads) ParseBinaryExpression, ParseInvokeInternal, ProcessOperators
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 583
+'    Code Lines: 423 (72.56%)
+' Comment Lines: 78 (13.38%)
+'    - Xml Docs: 52.56%
+' 
+'   Blank Lines: 82 (14.07%)
+'     File Size: 26.13 KB
+
+
+'     Module BinaryExpressionTree
+' 
+'         Function: CreateBinary, CreateBinaryExpression, joinNegatives, joinRemaining, MeasureCurrentLine
+'                   (+2 Overloads) ParseBinaryExpression, ParseInvokeInternal, ProcessOperators
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -630,6 +630,8 @@ Namespace Language.Syntax.SyntaxParser
                 ' );
                 '
                 Return lambda
+            ElseIf opToken = "??" Then
+                Return New NullishCoalescing(a, b)
             Else
                 Return New BinaryExpression(a, b, opToken)
             End If
