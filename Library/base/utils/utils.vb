@@ -694,6 +694,7 @@ Public Module utils
                               <RDefaultExpression>
                               Optional number_format As Object = Nothing,
                               Optional meta_blank As String = "",
+                              Optional silent As Boolean = False,
                               Optional env As Environment = Nothing) As Object
 
         If TypeOf file Is dataframeBuffer Then
@@ -751,7 +752,8 @@ Public Module utils
             ' save table with specific file path
             Return env.saveTextFile(x, file, row_names, fileEncoding, tsv,
                                     meta_blank:=meta_blank,
-                                    number_format:=number_format)
+                                    number_format:=number_format,
+                                    silent:=silent)
         Else
             Return Message.InCompatibleType(GetType(String), file.GetType, env)
         End If
@@ -776,7 +778,8 @@ Public Module utils
                                   fileEncoding As Object,
                                   tsv As Boolean,
                                   meta_blank As String,
-                                  number_format As Object) As Object
+                                  number_format As Object,
+                                  silent As Boolean) As Object
         If x Is Nothing Then
             Call env.AddMessage("Empty dataframe object!", MSG_TYPES.WRN)
             Return "".SaveTo(file)
@@ -838,7 +841,10 @@ Public Module utils
             )
 #Enable Warning
         ElseIf type.IsArray OrElse type Is GetType(vector) Then
-            Return saveGeneric(x, type, file, meta_blank, encoding.CodePage, env)
+            Return saveGeneric(x, type, file, meta_blank,
+                               encoding:=encoding.CodePage,
+                               silent:=silent,
+                               env:=env)
         Else
             Dim stream As pipeline = pipeline.TryCreatePipeline(Of EntityObject)(x, env)
 
@@ -889,12 +895,12 @@ Public Module utils
     ''' <param name="env"></param>
     ''' <returns></returns>
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Private Function saveGeneric(x As Object, type As Type, file$, meta_blank As String, encoding As Encoding, env As Environment) As Boolean
+    Private Function saveGeneric(x As Object, type As Type, file$, meta_blank As String, encoding As Encoding, silent As Boolean, env As Environment) As Boolean
         Dim castGeneric As Array = MeasureGenericType(x, type)
 
         If castGeneric Is Nothing Then
             Return "".SaveTo(file)
-        Else
+        ElseIf Not silent Then
             Call $"save clr object({type.Name} x {castGeneric.Length}) array as dataframe table file.".info
         End If
 
