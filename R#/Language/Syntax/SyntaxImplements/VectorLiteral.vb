@@ -79,6 +79,11 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
             Dim num As Double = CType(constant.expression, Literal).Evaluate(Nothing)
 
+            ' 20260404
+            ' XXX[data_unit], example as:
+
+            ' 3[KB] = 3072 (3 * 1024)
+
             Select Case unit.text.ToLower
             ' --- Byte Size (Standard: Byte) ---
             ' 假设 ByteSize 类已定义并包含 PB, EB 等常量，若没有可自行定义为数字
