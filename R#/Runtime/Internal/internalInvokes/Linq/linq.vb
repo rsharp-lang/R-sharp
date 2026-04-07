@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::03350ab0cc22840063b1f6e81e74cc1a, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
+﻿#Region "Microsoft.VisualBasic::301f4cf4fcfd00e406e12b03d6b8f1f4, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
     ' Author:
     ' 
@@ -34,28 +34,28 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1809
-    '    Code Lines: 1030 (56.94%)
-    ' Comment Lines: 569 (31.45%)
+    '   Total Lines: 1828
+    '    Code Lines: 1043 (57.06%)
+    ' Comment Lines: 569 (31.13%)
     '    - Xml Docs: 88.40%
     ' 
-    '   Blank Lines: 210 (11.61%)
-    '     File Size: 80.98 KB
+    '   Blank Lines: 216 (11.82%)
+    '     File Size: 81.53 KB
 
 
     '     Module linq
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Function: [select], all, any, booleanFilter, doWhile
-    '                   fastIndexing, first, getPredicate, groupBy, groupDataframeRows
-    '                   groupsSummary, groupSummary, last, left_join, match
-    '                   objectPopulator, orderBy, produceKeyedSequence, progress, projectAs
-    '                   reverse, rotate_left, rotate_right, runFilterPipeline, runWhichFilter
-    '                   skip, sort, sortByKeyFunction, sortByKeyValue, sortDataframe
-    '                   sortOrder, split, splitByPartitionSize, splitCollection, splitList
-    '                   splitVector, switch, take, take_chr_index, take_int_index
-    '                   tryKeyBy, unique, where, whichGenericClrSet, whichMax
-    '                   whichMin
+    '         Function: [select], all, any, booleanFilter, (+2 Overloads) byKeys
+    '                   doWhile, fastIndexing, first, getPredicate, groupBy
+    '                   groupDataframeRows, groupsSummary, groupSummary, last, left_join
+    '                   match, objectPopulator, orderBy, produceKeyedSequence, progress
+    '                   projectAs, reverse, rotate_left, rotate_right, runFilterPipeline
+    '                   runWhichFilter, skip, sort, sortByKeyFunction, sortByKeyValue
+    '                   sortDataframe, sortOrder, split, splitByPartitionSize, splitCollection
+    '                   splitList, splitVector, switch, take, take_chr_index
+    '                   take_int_index, tryKeyBy, unique, where, whichGenericClrSet
+    '                   whichMax, whichMin
     '         Class SplitPredicateFunction
     ' 
     '             Function: AssertEquals, AssertThat, GetPredicate

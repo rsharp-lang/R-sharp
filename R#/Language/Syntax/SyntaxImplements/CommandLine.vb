@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1b903b94765346f830d5c5fe64921c6a, R#\Language\Syntax\SyntaxImplements\CommandLine.vb"
+﻿#Region "Microsoft.VisualBasic::34cf06bd9b9d7497c0385e1447666893, R#\Language\Syntax\SyntaxImplements\CommandLine.vb"
 
     ' Author:
     ' 

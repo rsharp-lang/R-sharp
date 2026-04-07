@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0b3001ef206fb7ca867b0396186d8f8f, Library\base\utils\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::32a00b0c12f469e85f67b432142fa67f, Library\base\utils\dataframe.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 90.64%
     ' 
     '   Blank Lines: 134 (12.76%)
-    '     File Size: 41.40 KB
+    '     File Size: 41.41 KB
 
 
     ' Module dataframeTools

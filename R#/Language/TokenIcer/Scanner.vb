@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::905c3da8468ae459a90b7b3a18fce3cc, R#\Language\TokenIcer\Scanner.vb"
+﻿#Region "Microsoft.VisualBasic::95ee8f29e2753cdf846967d030914772, R#\Language\TokenIcer\Scanner.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 590
-    '    Code Lines: 409 (69.32%)
-    ' Comment Lines: 106 (17.97%)
-    '    - Xml Docs: 56.60%
+    '   Total Lines: 596
+    '    Code Lines: 412 (69.13%)
+    ' Comment Lines: 108 (18.12%)
+    '    - Xml Docs: 55.56%
     ' 
-    '   Blank Lines: 75 (12.71%)
-    '     File Size: 25.14 KB
+    '   Blank Lines: 76 (12.75%)
+    '     File Size: 25.39 KB
 
 
     '     Interface IScanner

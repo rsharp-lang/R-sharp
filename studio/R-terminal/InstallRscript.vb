@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ec1aa70249c8abb91bed1eb92d58e728, studio\R-terminal\InstallRscript.vb"
+﻿#Region "Microsoft.VisualBasic::2e5fc9d2aa574c9aba7871ac8c59aeb5, studio\R-terminal\InstallRscript.vb"
 
     ' Author:
     ' 
@@ -93,4 +93,3 @@ dotnet ""{rscript}"" ""$app"" $cli" _
     End Function
 
 End Module
-
