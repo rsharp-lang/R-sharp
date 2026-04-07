@@ -103,6 +103,10 @@ Namespace Language
         ''' ?
         ''' </summary>
         iif
+        ''' <summary>
+        ''' ?"xxx"
+        ''' </summary>
+        query
 
         ''' <summary>
         ''' 字符串插值语法，与javascript脚本之中的字符串插值保持一致

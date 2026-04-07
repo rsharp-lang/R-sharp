@@ -356,6 +356,12 @@ Namespace Language.TokenIcer
             ElseIf c = "'"c OrElse c = """"c OrElse c = "`" Then
                 Dim token As Token = populateToken(Nothing)
 
+                If token = (TokenType.invalid, "?") Then
+                    ' 20260407 ?"--opt"
+                    ' commandline arguments
+                    token.name = TokenType.query
+                End If
+
                 escape.string = True
                 escape.stringEscape = c
                 buffer += c
