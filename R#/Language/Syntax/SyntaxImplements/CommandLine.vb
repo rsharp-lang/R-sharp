@@ -120,7 +120,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
         Public Function CommandLineArgument(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
             Dim name As SyntaxResult
 
-            If tokens.First = TokenType.iif Then
+            If tokens.First = TokenType.query Then
                 name = tokens _
                     .Skip(1) _
                     .DoCall(Function(code)
