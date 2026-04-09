@@ -67,6 +67,8 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Public Class zzz
 
     Public Shared Sub onLoad(Optional quietly As Boolean = False)
+        quietly = True
+
         If Not quietly Then
             Call GetType(zzz).Assembly _
                 .FromAssembly _
