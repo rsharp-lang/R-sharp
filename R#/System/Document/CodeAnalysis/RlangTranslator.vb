@@ -576,7 +576,9 @@ Namespace Development.CodeAnalysis
 
                 ' Call $"closure symbol '{descriptor}' has been used as the parameter value.".warning
                 ' Call VBDebugger.WaitOutput()
-                Call closureWarning.Add(descriptor)
+                If Not descriptor.StringEmpty(, True) Then
+                    Call closureWarning.Add(descriptor)
+                End If
 
                 Return name
             End If
