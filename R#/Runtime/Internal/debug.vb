@@ -290,6 +290,9 @@ Namespace Runtime.Internal
 
             Call globalEnv.stdout.Flush()
 
+            If warningList.IsNullOrEmpty Then
+                Return Nothing
+            End If
             If Not all AndAlso warningList.Length >= topn Then
                 Call dev.WriteLine($"There were {topn} or more warnings (use warnings(all = TRUE) to see all warning messages).")
             End If

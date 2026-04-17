@@ -250,6 +250,7 @@ Module Program
         Dim strict As Boolean = args.ContainsParameter("--strict") And args("--strict")
         Dim ignoreMissingStartupPackages As Boolean = args("--ignore-missing-startup-packages")
         Dim SetDllDirectory As String = args("--SetDllDirectory")
+        Dim warningFile As String = args("--warning")
 
         If Not SetDllDirectory.StringEmpty Then
             Call R.globalEnvir.options.setOption("SetDllDirectory", SetDllDirectory)

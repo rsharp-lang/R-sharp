@@ -77,7 +77,11 @@ Partial Module CLI
 
     <ExportAPI("--lambda")>
     <Description("Execute R# function with parameters")>
-    <Usage("--lambda <delegate_name> [--request </path/to/del_func_parameters.json, default=""./.r_env/run.json""> --SetDllDirectory <dll_directory> --attach <pkg_directory> --debug]")>
+    <Usage("--lambda <delegate_name> [--request </path/to/del_func_parameters.json, default=""./.r_env/run.json""> --SetDllDirectory <dll_directory> --attach <pkg_directory> --debug --warning <filepath>]")>
+    <Argument("--warning", True, CLITypes.File, AcceptTypes:={GetType(String)}, Description:="Setup the warning log file.")>
+    <Argument("--attach", True, CLITypes.File, AcceptTypes:={GetType(String)}, Description:="Attach the R source package directory for run debug in VisualStudio.")>
+    <Argument("--SetDllDirectory", True, CLITypes.File, AcceptTypes:={GetType(String)}, Description:="Setup the language runtime base library directory location.")>
+    <Argument("--request", True, CLITypes.File, AcceptTypes:={GetType(String)}, Description:="Setup the json file for input as the target lambda function parameters.")>
     Public Function execLambda(args As CommandLine) As Integer
         Dim SetDllDirectory As String = args("--SetDllDirectory")
         Dim renv As New RInterpreter
@@ -86,6 +90,7 @@ Partial Module CLI
         Dim options_argv As String = args("--options") Or "./.r_env/options.json".GetFullPath
         Dim attach As String = args("--attach")
         Dim debugMode As Boolean = args.IsTrue("--debug")
+        Dim warningFile As String = args("--warning")
 
         If Not SetDllDirectory.StringEmpty Then
             Call renv.globalEnvir.options.setOption("SetDllDirectory", SetDllDirectory)
@@ -94,7 +99,7 @@ Partial Module CLI
             Dim err As Message = PackageLoader2.Hotload(attach.GetDirectoryFullPath, renv.globalEnvir)
 
             If Not err Is Nothing Then
-                Return Rscript.handleResult(err, renv.globalEnvir, Nothing)
+                Return Rscript.handleResult(err, renv.globalEnvir, Nothing, file:=warningFile)
             End If
         End If
 
@@ -109,7 +114,7 @@ Partial Module CLI
 
         If opts Is Nothing Then
             If TypeOf opts_val Is Message Then
-                Return handleResult(opts_val, renv.globalEnvir)
+                Return handleResult(opts_val, renv.globalEnvir, file:=warningFile)
             End If
 
             opts = New list With {
@@ -167,7 +172,7 @@ Partial Module CLI
             result = renv.globalEnvir.invokeLambda(opts, callable.value, debugMode)
         End If
 
-        Return handleResult(result, renv.globalEnvir)
+        Return handleResult(result, renv.globalEnvir, file:=warningFile)
     End Function
 
     ''' <summary>

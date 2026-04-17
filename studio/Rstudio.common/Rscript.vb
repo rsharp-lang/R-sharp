@@ -50,6 +50,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
@@ -82,7 +83,8 @@ Module Rscript
                                  globalEnv As GlobalEnvironment,
                                  Optional program As RProgram = Nothing,
                                  Optional autoPrint As Boolean = False,
-                                 Optional inspect As Boolean = False) As Integer
+                                 Optional inspect As Boolean = False,
+                                 Optional file As String = Nothing) As Integer
 
         Dim requirePrintErr As Boolean = False
         Dim code As Integer = 0
@@ -117,7 +119,16 @@ Module Rscript
         End If
 FINAL:
         If globalEnv.messages > 0 Then
-            Call REnv.Internal.debug.PrintWarningMessages(globalEnv.messages, globalEnv)
+            If file.StringEmpty(, True) Then
+                Call REnv.Internal.debug.PrintWarningMessages(globalEnv.messages, globalEnv)
+            Else
+                Using log As LogFile = LogFile.Open(file)
+                    For Each msg As Message In globalEnv.messages
+                        Call log.WriteLine(msg.message.JoinBy(vbCrLf), msg.source.ToString, msg.level)
+                    Next
+                End Using
+            End If
+
             Call globalEnv.messages.Clear()
         End If
 
