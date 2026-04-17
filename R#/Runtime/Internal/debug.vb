@@ -281,7 +281,7 @@ Namespace Runtime.Internal
             Dim backup As ConsoleColor
             Dim dev As StreamWriter = New StreamWriter(globalEnv.stdout.stream)
             Dim topn As Integer = globalEnv.options.nwarnings
-            Dim warningList As Message() = warnings.ToArray
+            Dim warningList As Message() = (From msg As Message In warnings Where msg.level = MSG_TYPES.WRN).ToArray
 
             If App.IsConsoleApp Then
                 backup = Console.ForegroundColor

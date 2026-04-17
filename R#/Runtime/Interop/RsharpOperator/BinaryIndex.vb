@@ -130,7 +130,7 @@ Namespace Runtime.Interop.Operator
                             $"operator '{hashKey}' is replace by {bin}",
                             $"hash key: {hashKey}",
                             $"binary: {bin}"
-                        }, MSG_TYPES.WRN)
+                        }, MSG_TYPES.DEBUG)
                     End If
 
                     hashIndexCache.Remove(hashKey)
