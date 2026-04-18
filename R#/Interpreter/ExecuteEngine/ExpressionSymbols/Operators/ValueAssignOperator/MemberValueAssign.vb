@@ -248,7 +248,7 @@ invalid_index:
                 Return SymbolIndexer.emptyIndexError(symbolIndex, envir)
             End If
 
-            If symbolIndex.indexType = SymbolIndexers.nameIndex Then
+            If symbolIndex.indexType = SymbolIndexers.nameIndex OrElse symbolIndex.indexType = SymbolIndexers.listIndex Then
                 ' a[[x]] <- v
                 ' a$x <- v
                 If indexMode.mode = TypeCodes.string Then
