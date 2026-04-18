@@ -1,7 +1,9 @@
-l = list(5555,6666,7777);
+let l = list(5555,6666,7777, yy=8);
 
-i = 2;
-j = 3;
+let i = 2;
+let j = 3;
+
+print(l$yy);
 
 print(l[[2]]);
 print(l[[i]]);

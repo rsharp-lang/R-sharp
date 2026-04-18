@@ -68,9 +68,13 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' </summary>
         vectorIndex
         ''' <summary>
-        ''' a[[x]], a$x
+        ''' a$x
         ''' </summary>
         nameIndex
+        ''' <summary>
+        ''' a[[x]]
+        ''' </summary>
+        listIndex
         ''' <summary>
         ''' a[, x]
         ''' </summary>
