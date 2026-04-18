@@ -270,14 +270,10 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
         ''' 
         <DebuggerStepThrough>
         Public Overrides Function ToString() As String
-            If value Is Nothing Then
-                Return "NULL"
-            ElseIf TypeOf value Is String OrElse TypeOf value Is Char Then
-                Return $"""{value}"""
-            ElseIf TypeOf value Is Date Then
+            If TypeOf value Is Date Then
                 Return $"#{value}#"
             Else
-                Return value.ToString
+                Return GetNativeRScript()
             End If
         End Function
 
