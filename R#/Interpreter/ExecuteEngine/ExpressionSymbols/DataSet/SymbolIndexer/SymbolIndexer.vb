@@ -247,13 +247,16 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             End If
 
             ' now obj is always have values:
-            If indexType = SymbolIndexers.nameIndex Then
+            If indexType = SymbolIndexers.nameIndex OrElse indexType = SymbolIndexers.listIndex Then
                 ' get element value from list by name index syntax
                 ' example like:
                 '
                 '     l[[1]]
                 '
-                If RType.GetRSharpType(indexer.GetType).mode = TypeCodes.integer AndAlso TypeOf obj IsNot list Then
+                Dim indexMode = RType.GetRSharpType(indexer.GetType).mode
+                Dim is_int = (indexMode = TypeCodes.integer) OrElse (indexMode = TypeCodes.double)
+
+                If is_int AndAlso TypeOf obj IsNot list Then
                     ' a[xxx]
                     If is_Removes Then
                         Throw New NotImplementedException
@@ -558,7 +561,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             ElseIf indexer.Length = 1 Then
                 Dim i As Object = indexer.GetValue(Scan0)
 
-                If RType.TypeOf(i) Like RType.integers Then
+                If RType.TypeOf(i).is_numeric Then
                     If TypeOf obj Is list Then
                         Return DirectCast(obj, list).getByIndex(CInt(i))
                     End If

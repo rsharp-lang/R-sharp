@@ -102,8 +102,10 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     Return index
                 ElseIf TypeOf index.expression Is VectorLiteral Then
                     indexType = SymbolIndexers.vectorIndex
-                Else
+                ElseIf TypeOf index.expression Is Literal Then
                     indexType = SymbolIndexers.nameIndex
+                Else
+                    indexType = SymbolIndexers.listIndex
                 End If
             Else
                 Dim err = tokens.parseIndex(index, indexType, opts)
