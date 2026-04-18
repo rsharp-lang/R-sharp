@@ -58,6 +58,7 @@
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Microsoft.VisualBasic.Scripting
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports SMRUCC.Rsharp.Language.TokenIcer
 Imports SMRUCC.Rsharp.Runtime
@@ -252,7 +253,7 @@ Namespace Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
             If value Is Nothing Then
                 Return "NULL"
             ElseIf TypeOf value Is String OrElse TypeOf value Is Char Then
-                Return $"""{value}"""
+                Return $"""{CCodeStringLiteralEscape.EscapeForCStringLiteral(literal:=CStr(value))}"""
             ElseIf TypeOf value Is Boolean Then
                 Return CBool(value).ToString.ToUpper
             ElseIf TypeOf value Is Date Then
