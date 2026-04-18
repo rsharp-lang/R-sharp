@@ -60,6 +60,7 @@
 
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Scripting
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
@@ -470,7 +471,7 @@ Namespace Development.CodeAnalysis
                 End If
             Else
                 If TypeOf value Is String Then
-                    Return $"'{value}'"
+                    Return $"'{CCodeStringLiteralEscape.EscapeForCStringLiteral(literal:=CStr(value))}'"
                 ElseIf TypeOf value Is Boolean Then
                     Return value.ToString.ToUpper
                 Else
