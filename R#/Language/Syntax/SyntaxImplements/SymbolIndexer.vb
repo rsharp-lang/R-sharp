@@ -212,7 +212,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
                     If blocks = 1 Then
                         ' list get value by name
-                        indexType = SymbolIndexers.nameIndex
+                        indexType = SymbolIndexers.listIndex
                         tokens = blocks(Scan0)
                     Else
                         ' list subset by names
