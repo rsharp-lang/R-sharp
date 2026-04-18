@@ -308,15 +308,18 @@ Namespace Development.CodeAnalysis
             Dim index = GetScript(target.index, env)
             Dim val_str = GetScript(line.value, env)
 
-            If target.indexType = SymbolIndexers.dataframeColumns Then
-                Return $"{symbol}[,{index}]<-{val_str};"
-            ElseIf target.indexType = SymbolIndexers.nameIndex Then
-                Return $"{symbol}[[{index}]]<-{val_str};"
-            ElseIf target.indexType = SymbolIndexers.vectorIndex Then
-                Return $"{symbol}[{index}]<-{val_str};"
-            Else
-                Throw New NotImplementedException($"{target.indexType.Description}: {line.ToString}")
-            End If
+            Select Case target.indexType
+                Case SymbolIndexers.dataframeColumns
+                    Return $"{symbol}[,{index}]<-{val_str};"
+                Case SymbolIndexers.nameIndex
+                    Return $"{symbol}${index}<-{val_str};"
+                Case SymbolIndexers.listIndex
+                    Return $"{symbol}[[{index}]]<-{val_str};"
+                Case SymbolIndexers.vectorIndex
+                    Return $"{symbol}[{index}]<-{val_str};"
+                Case Else
+                    Throw New NotImplementedException($"{target.indexType.Description}: {line.ToString}")
+            End Select
         End Function
 
         Private Function getByref(line As ByRefFunctionCall, env As Environment) As String
@@ -384,6 +387,8 @@ Namespace Development.CodeAnalysis
                     Else
                         script = $"{symbol}[[{indexer}]]"
                     End If
+                Case SymbolIndexers.listIndex
+                    script = $"{symbol}[[{indexer}]]"
                 Case SymbolIndexers.vectorIndex : script = $"{symbol}[{indexer}]"
                 Case SymbolIndexers.dataframeRanges
                     ' a[1,,drop=TRUE]
