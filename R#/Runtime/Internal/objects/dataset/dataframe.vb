@@ -349,6 +349,11 @@ Namespace Runtime.Internal.Object
             Return Me
         End Function
 
+        Public Function add(Of T)(key As String, scalar As T) As dataframe
+            columns(key) = New T() {scalar}
+            Return Me
+        End Function
+
         ''' <summary>
         ''' add or replace a column vector
         ''' </summary>
