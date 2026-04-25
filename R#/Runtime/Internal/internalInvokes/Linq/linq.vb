@@ -122,13 +122,26 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
 
         Private Function byKeys(ByRef left As dataframe, ByRef right As dataframe, by As Object, ByRef keyX As String(), ByRef keyY As String(), env As Environment) As Object
             If RType.TypeOf(by).mode = TypeCodes.integer Then
-                ' offset -1 inside dataframe automatically
-                keyX = left.getColumnVector(CInt(by))
-                keyY = right.getColumnVector(CInt(by))
+                Dim i As Integer = CInt(by)
 
-                ' removes the duplicated col in right
-                right = New dataframe(right)
-                right.delete(CInt(by))
+                If i = 0 Then
+                    ' 20260426
+                    ' use row names
+                    keyX = left.rownames
+                    keyY = right.rownames
+
+                    If keyX.IsNullOrEmpty OrElse keyY.IsNullOrEmpty Then
+                        Return Internal.debug.stop("one of the dataframe has no row.names attribute data for used as the index key for make left join operation!", env)
+                    End If
+                Else
+                    ' offset -1 inside dataframe automatically
+                    keyX = left.getColumnVector(CInt(by))
+                    keyY = right.getColumnVector(CInt(by))
+
+                    ' removes the duplicated col in right
+                    right = New dataframe(right)
+                    right.delete(CInt(by))
+                End If
             Else
                 If CStr(by) = "row.names" Then
                     keyX = left.rownames
@@ -140,13 +153,10 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Else
                     keyX = left.getColumnVector(CStr(by))
                     keyY = right.getColumnVector(CStr(by))
-                End If
 
-                ' removes the duplicated col in right
-                right = New dataframe(right)
-
-                If CStr(by) <> "row.names" Then
-                    Call right.delete(CStr(by))
+                    ' removes the duplicated col in right
+                    right = New dataframe(right)
+                    right.delete(CStr(by))
                 End If
             End If
 
