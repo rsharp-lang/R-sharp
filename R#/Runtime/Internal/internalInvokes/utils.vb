@@ -463,6 +463,50 @@ Namespace Runtime.Internal.Invokes
         End Sub
 
         ''' <summary>
+        ''' Stack or Unstack Vectors from a Data Frame or List
+        ''' 
+        ''' Stacking vectors concatenates multiple vectors into a single vector along with a factor indicating where each observation originated. Unstacking reverses this operation.
+        ''' </summary>
+        ''' <param name="x">a list or data frame to be stacked or unstacked.</param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' unstack produces a list of columns according to the formula form. If all the columns have the same length, the resulting list is coerced to a data frame.
+        ''' stack produces a data frame with two columns:
+        ''' values	the result of concatenating the selected vectors in x.
+        ''' ind	a factor indicating from which vector in x the observation originated.
+        ''' </returns>
+        ''' <remarks>
+        ''' The stack function is used to transform data available as separate columns in a data frame or list into a single column that can be used in an analysis of variance model or other linear model. The unstack function reverses this operation.
+        ''' Note that stack applies to vectors (as determined by is.vector): non-vector columns (e.g., factors) will be ignored with a warning. Where vectors of different types are selected they are concatenated by unlist whose help page explains how the type of the result is chosen.
+        ''' These functions are generic: the supplied methods handle data frames and objects coercible to lists by as.list.
+        ''' </remarks>
+        <ExportAPI("stack")>
+        Public Function stack(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
+            If x Is Nothing Then
+                Return Nothing
+            End If
+            If TypeOf x Is list Then
+                Dim kv As Dictionary(Of String, String()) = DirectCast(x, list).AsGeneric(Of String())(env)
+                Dim ind As New List(Of String)
+                Dim values As New List(Of String)
+
+                For Each p As KeyValuePair(Of String, String()) In kv
+                    For Each str As String In p.Value
+                        Call values.Add(str)
+                        Call ind.Add(p.Key)
+                    Next
+                Next
+
+                Return New dataframe(
+                    slot("values") = values.ToArray,
+                    slot("ind") = ind.ToArray
+                )
+            Else
+                Return Message.InCompatibleType(GetType(list), x.GetType, env)
+            End If
+        End Function
+
+        ''' <summary>
         ''' Return the First or Last Part of an Object
         ''' 
         ''' Returns the first or last parts of a vector, matrix, table, data frame or function. 

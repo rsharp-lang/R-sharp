@@ -325,6 +325,14 @@ Namespace Runtime.Internal.Object
             columns = New Dictionary(Of String, Array)(clone.columns)
         End Sub
 
+        Sub New(ParamArray cols As ArgumentReference())
+            columns = New Dictionary(Of String, Array)
+
+            For Each slot As ArgumentReference In cols
+                columns(slot.Name) = DirectCast(slot.Value, Array)
+            Next
+        End Sub
+
         ''' <summary>
         ''' add or replace a column vector
         ''' </summary>
