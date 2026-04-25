@@ -413,7 +413,7 @@ type_err:
 
         <ExportAPI("loop")>
         Public Function createLoop(<RRawVectorArgument> x As Object) As RMethodInfo
-            Dim loops As New LoopArray(Of Object)(asVector(Of Object)(x).AsObjectEnumerator)
+            Dim loops As New LoopArray(Of Object)(CLRVector.asObject(x))
             Dim populator As Func(Of Object) = AddressOf loops.Next
 
             Return New RMethodInfo(App.NextTempName, populator)
@@ -477,6 +477,7 @@ type_err:
         ''' usable if nmax Is supplied.
         ''' </remarks>
         <ExportAPI("duplicated")>
+        <RApiReturn(TypeCodes.boolean)>
         Public Function duplicated(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
             Dim checked As New Index(Of Object)
             Dim flags As New List(Of Boolean)

@@ -3184,14 +3184,40 @@ RE0:
         End Function
 
         ''' <summary>
-        ''' make the given name string be unique
+        ''' Make Character Strings Unique
+        ''' 
+        ''' Makes the elements of a character vector unique by appending sequence numbers to duplicates.
         ''' </summary>
-        ''' <param name="names"></param>
-        ''' <returns>this function by extends the numeric suffix to the duplictaed name for make the name string be uniqued!</returns>
-        <ExportAPI("unique.names")>
-        Public Function uniqueNames(<RRawVectorArgument(GetType(String))> names As Object) As String()
+        ''' <param name="names">a character vector.</param>
+        ''' <param name="sep">
+        ''' a character string used to separate a duplicate name from its sequence number.
+        ''' </param>
+        ''' <returns>A character vector of same length as names with duplicates changed, in the current locale's encoding.</returns>
+        ''' <remarks>
+        ''' The algorithm used by make.unique has the property that make.unique(c(A, B)) == make.unique(c(make.unique(A), B)).
+        ''' In other words, you can append one string at a time to a vector, making it unique each time, And get the same result as applying make.unique to all of the strings at once.
+        ''' If character vector A Is already unique, Then make.unique(c(A, B)) preserves A.
+        ''' </remarks>
+        ''' <example>
+        ''' make.unique(c("a", "a", "a"))
+        ''' make.unique(c(make.unique(c("a", "a")), "a"))
+        ''' 
+        ''' make.unique(c("a", "a", "a.2", "a"))
+        ''' make.unique(c(make.unique(c("a", "a")), "a.2", "a"))
+        ''' 
+        ''' ## Now show a bit where this Is used :
+        ''' trace(make.unique)
+        ''' ## Applied in data.frame() constructions:
+        ''' (d1 &lt;- data.frame(x = 1, x = 2, x = 3)) # direct
+        '''  d2 &lt;- data.frame(data.frame(x = 1, x = 2), x = 3) # pairwise
+        ''' stopifnot(identical(d1, d2),
+        '''           colnames(d1) == c("x", "x.1", "x.2"))
+        ''' untrace(make.unique)
+        ''' </example>
+        <ExportAPI("make.unique")>
+        Public Function uniqueNames(<RRawVectorArgument(GetType(String))> names As Object, Optional sep As String = ".") As String()
             Dim nameList As String() = CLRVector.asCharacter(names)
-            Dim resultNames As String() = nameList.UniqueNames
+            Dim resultNames As String() = nameList.UniqueNames(sep:=sep)
 
             Return resultNames
         End Function
