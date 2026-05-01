@@ -228,4 +228,51 @@ Public Module base
 
         Return New list() With {.slots = labels}
     End Function
+
+    <ExportAPI("pickle.dumps")>
+    Public Function pickle_dumps(<RRawVectorArgument> data As Object, Optional file As Object = Nothing, Optional env As Environment = Nothing) As Object
+        If file Is Nothing Then
+            Return Pickle.MinimalPicklePickler.Pickle(data)
+        Else
+            Dim is_file As Boolean = False
+            Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env, is_filepath:=is_file)
+
+            If s Like GetType(Message) Then
+                Return s.TryCast(Of Message)
+            Else
+                Call Pickle.MinimalPicklePickler.PickleToFile(data, s.TryCast(Of Stream))
+            End If
+
+            If is_file Then
+                Try
+                    Call s.TryCast(Of Stream).Flush()
+                    Call s.TryCast(Of Stream).Dispose()
+                Catch ex As Exception
+                End Try
+            End If
+
+            Return True
+        End If
+    End Function
+
+    <ExportAPI("pickle.load")>
+    Public Function pickle_load(<RRawVectorArgument> data As Object, Optional env As Environment = Nothing) As Object
+        Dim is_file As Boolean = False
+        Dim s = SMRUCC.Rsharp.GetFileStream(data, FileAccess.Read, env, is_filepath:=is_file)
+
+        If s Like GetType(Message) Then
+            Return s.TryCast(Of Message)
+        End If
+
+        Dim obj As Object = Pickle.MinimalPickleUnpickler.UnpickleFromStream(s.TryCast(Of Stream))
+
+        If is_file Then
+            Try
+                Call s.TryCast(Of Stream).Dispose()
+            Catch ex As Exception
+            End Try
+        End If
+
+        Return obj
+    End Function
 End Module
