@@ -685,7 +685,12 @@ Namespace Development.CodeAnalysis
                     ElseIf TypeOf par Is SymbolReference Then
                         Call parList.Add(ValueAssignExpression.GetSymbol(par))
                     Else
-                        Throw New NotImplementedException($"can not extract package name from expression of type: {par.GetType.FullName}")
+                        ' library(pkg, character.only = TRUE);
+                        If f = "library" AndAlso TypeOf par Is ValueAssignExpression Then
+                            Call parList.Add(GetScript(par, env))
+                        Else
+                            Throw New NotImplementedException($"can not extract package name from expression of type: {par.GetType.FullName}")
+                        End If
                     End If
                 Next
             Else
