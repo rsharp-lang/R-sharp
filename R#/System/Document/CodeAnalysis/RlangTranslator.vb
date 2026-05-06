@@ -180,6 +180,7 @@ Namespace Development.CodeAnalysis
                 Case GetType(ValueAssignExpression) : Return GetAssignValue(line, env)
                 Case GetType(DeclareNewSymbol) : Return AssignNewSymbol(line, env)
                 Case GetType(DeclareNewFunction) : Return createFunction(line, env)
+                Case GetType(DeclareLambdaFunction) : Return createLambda(line, env)
                 Case GetType(VectorLiteral) : Return Vector(line, env)
                 Case GetType(Literal) : Return Literal(line, env)
                 Case GetType(IfBranch) : Return GetIf(line, env)
@@ -255,6 +256,14 @@ Namespace Development.CodeAnalysis
             Dim data As String = GetScript(f.formula, env)
 
             Return $"{response} ~ {data}"
+        End Function
+
+        Private Function createLambda(f As DeclareLambdaFunction, env As Environment) As String
+            Dim run As String = GetScript(f.closure, env)
+            Dim func_body = $"function({f.parameterNames.JoinBy(", ")}) {{
+{run}
+}}"
+            Return func_body
         End Function
 
         Private Function createFunction(f As DeclareNewFunction, env As Environment) As String
