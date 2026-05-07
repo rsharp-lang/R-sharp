@@ -197,6 +197,7 @@ Namespace Development.CodeAnalysis
                 Case GetType(SequenceLiteral) : Return getSequence(line, env)
                 Case GetType(UnaryNumeric) : Return getNeg(line, env)
                 Case GetType(ExpressionLiteral) : Return getExpressionLiteral(line, env)
+                Case GetType(ContinuteFor) : Return "next"
 
                 Case GetType(ReturnValue) : Return getReturn(line, env)
 
