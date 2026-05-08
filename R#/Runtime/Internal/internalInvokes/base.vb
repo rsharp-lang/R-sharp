@@ -3918,6 +3918,38 @@ RE0:
         End Function
 
         ''' <summary>
+        ''' Loading and Unloading Name Spaces
+        ''' 
+        ''' Functions to load and unload name spaces.
+        ''' </summary>
+        ''' <param name="package">String naming the package/name space To load.</param>
+        ''' <param name="quietly"></param>
+        ''' <param name="env"></param>
+        ''' <returns>requireNamespace returns TRUE if it succeeds or FALSE.</returns>
+        ''' <remarks>
+        ''' requireNamespace is a wrapper for loadNamespace analogous to require that returns a logical value.
+        ''' </remarks>
+        <ExportAPI("requireNamespace")>
+        Public Function requireNamespace(package As String,
+                                         Optional quietly As Boolean = False,
+                                         Optional env As Environment = Nothing) As Boolean
+
+            Dim eval As Object = library(package, quietly, env:=env)
+
+            ' this function will not returns any error to stop the script
+            If TypeOf eval Is Message Then
+                DirectCast(eval, Message).level = MSG_TYPES.WRN
+                env.AddMessage(eval)
+                Return False
+            ElseIf RType.TypeOf(eval).mode = TypeCodes.boolean Then
+                Return eval
+            Else
+                ' load successs
+                Return True
+            End If
+        End Function
+
+        ''' <summary>
         ''' # Loading/Attaching and Listing of Packages
         ''' 
         ''' library and require load and attach add-on packages.

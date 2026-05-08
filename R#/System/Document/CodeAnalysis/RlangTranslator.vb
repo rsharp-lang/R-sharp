@@ -180,6 +180,7 @@ Namespace Development.CodeAnalysis
                 Case GetType(ValueAssignExpression) : Return GetAssignValue(line, env)
                 Case GetType(DeclareNewSymbol) : Return AssignNewSymbol(line, env)
                 Case GetType(DeclareNewFunction) : Return createFunction(line, env)
+                Case GetType(DeclareLambdaFunction) : Return createLambda(line, env)
                 Case GetType(VectorLiteral) : Return Vector(line, env)
                 Case GetType(Literal) : Return Literal(line, env)
                 Case GetType(IfBranch) : Return GetIf(line, env)
@@ -196,6 +197,7 @@ Namespace Development.CodeAnalysis
                 Case GetType(SequenceLiteral) : Return getSequence(line, env)
                 Case GetType(UnaryNumeric) : Return getNeg(line, env)
                 Case GetType(ExpressionLiteral) : Return getExpressionLiteral(line, env)
+                Case GetType(ContinuteFor) : Return "next"
 
                 Case GetType(ReturnValue) : Return getReturn(line, env)
 
@@ -255,6 +257,14 @@ Namespace Development.CodeAnalysis
             Dim data As String = GetScript(f.formula, env)
 
             Return $"{response} ~ {data}"
+        End Function
+
+        Private Function createLambda(f As DeclareLambdaFunction, env As Environment) As String
+            Dim run As String = GetScript(f.closure, env)
+            Dim func_body = $"function({f.parameterNames.JoinBy(", ")}) {{
+{run}
+}}"
+            Return func_body
         End Function
 
         Private Function createFunction(f As DeclareNewFunction, env As Environment) As String
@@ -685,7 +695,12 @@ Namespace Development.CodeAnalysis
                     ElseIf TypeOf par Is SymbolReference Then
                         Call parList.Add(ValueAssignExpression.GetSymbol(par))
                     Else
-                        Throw New NotImplementedException($"can not extract package name from expression of type: {par.GetType.FullName}")
+                        ' library(pkg, character.only = TRUE);
+                        If f = "library" AndAlso TypeOf par Is ValueAssignExpression Then
+                            Call parList.Add(GetScript(par, env))
+                        Else
+                            Throw New NotImplementedException($"can not extract package name from expression of type: {par.GetType.FullName}")
+                        End If
                     End If
                 Next
             Else

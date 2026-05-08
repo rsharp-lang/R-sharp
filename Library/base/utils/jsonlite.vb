@@ -186,7 +186,12 @@ Module jsonlitePackage
                                Optional env As Environment = Nothing) As Object
 
         Dim json_str As String = txt.SolveStream
-        Dim json As Object = Rbase.JSON.json_decode(json_str, env:=env)
+        Dim json As Object = Rbase.JSON.json_decode(
+            json_str,
+            [typeof]:=args.getByName("what"), ' clr object json decode supports
+            env:=env
+        )
+
         Return json
     End Function
 

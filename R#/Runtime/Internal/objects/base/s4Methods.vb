@@ -90,14 +90,65 @@ Namespace Runtime.Internal.Object.baseOp
             Return def.Create(type.class_name, asm_module:="r_sharp_s4object").GeneratedType
         End Function
 
+        Private Function new_object(type As Type, values As list, env As Environment) As Object
+            Dim ctor = type.GetConstructors
+            Dim match = ctor _
+                .OrderByDescending(Function(a)
+                                       Dim n As Integer = 1
+
+                                       For Each arg As ParameterInfo In a.GetParameters
+                                           If Not values.hasName(arg.Name) Then
+                                               If Not arg.IsOptional Then
+                                                   Return 0
+                                               End If
+                                           End If
+
+                                           n += 1
+                                       Next
+
+                                       Return n
+                                   End Function) _
+                .FirstOrDefault
+
+            If match Is Nothing Then
+                Return Nothing
+            End If
+
+            Dim pars As ParameterInfo() = match.GetParameters
+            Dim args As Object() = New Object(pars.Length - 1) {}
+
+            For i As Integer = 0 To args.Length - 1
+                Dim a = pars(i)
+
+                If values.hasName(a.Name) Then
+                    args(i) = RCType.CTypeDynamic(values.getByName(a.Name), a.ParameterType, env)
+                ElseIf a.IsOptional Then
+                    args(i) = a.DefaultValue
+                Else
+                    Return Internal.debug.stop($"missing the required parameter value of '{a.Name}' for call the constructor of the CLR object type '{type.Name}'.", env)
+                End If
+            Next
+
+            Return match.Invoke(args)
+        End Function
+
         <Extension>
         Public Function createObject(type As RType, values As list, env As Environment) As Object
-            Dim obj As Object = Activator.CreateInstance(type.raw)
+            Dim obj As Object = new_object(type.raw, values, env)
+
+            If obj Is Nothing Then
+                Return Internal.debug.stop($"no valid object constructor was found for CLR object type '{type.raw.Name}'!", env)
+            End If
+
             Dim val As Object
             Dim reflection = DataFramework.Schema(type.raw, PropertyAccess.Writeable, PublicProperty, nonIndex:=True)
             Dim writer As PropertyInfo
 
             For Each slot As KeyValuePair(Of String, Object) In values.slots
+                If Not reflection.ContainsKey(slot.Key) Then
+                    Continue For
+                End If
+
                 writer = reflection(slot.Key)
                 val = slot.Value
                 val = RCType.CTypeDynamic(val, writer.PropertyType, env)
