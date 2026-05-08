@@ -1,62 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::56f0a761c86deea09df77862dac401b2, R#\Runtime\System\Symbol.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 285
-    '    Code Lines: 175 (61.40%)
-    ' Comment Lines: 73 (25.61%)
-    '    - Xml Docs: 93.15%
-    ' 
-    '   Blank Lines: 37 (12.98%)
-    '     File Size: 10.16 KB
+' Summaries:
 
 
-    '     Class Symbol
-    ' 
-    '         Properties: [readonly], [typeof], constraint, constraintValid, isCallable
-    '                     length, name, stacktrace, typeCode, typeId
-    '                     value
-    ' 
-    '         Constructor: (+5 Overloads) Sub New
-    ' 
-    '         Function: GetValueViewString, setValue, ToString, ToVector, TryGetValueType
-    ' 
-    '         Sub: setMutable
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 285
+'    Code Lines: 175 (61.40%)
+' Comment Lines: 73 (25.61%)
+'    - Xml Docs: 93.15%
+' 
+'   Blank Lines: 37 (12.98%)
+'     File Size: 10.16 KB
+
+
+'     Class Symbol
+' 
+'         Properties: [readonly], [typeof], constraint, constraintValid, isCallable
+'                     length, name, stacktrace, typeCode, typeId
+'                     value
+' 
+'         Constructor: (+5 Overloads) Sub New
+' 
+'         Function: GetValueViewString, setValue, ToString, ToVector, TryGetValueType
+' 
+'         Sub: setMutable
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -111,12 +111,6 @@ Namespace Runtime.Components
         ''' </summary>
         ''' <returns></returns>
         Public ReadOnly Property constraint As TypeCodes
-
-        ''' <summary>
-        ''' current symbol value is constant lock binding in the environment?
-        ''' </summary>
-        ''' <returns></returns>
-        Public ReadOnly Property [readonly] As Boolean
 
         ''' <summary>
         ''' <see cref="RType.fullName"/>, key for <see cref="GlobalEnvironment.types"/>
@@ -215,7 +209,7 @@ Namespace Runtime.Components
                 Optional is_readonly As Boolean = False)
 
             Me.New(constraint)
-            Me.readonly = is_readonly
+            Me._readonly = is_readonly
 
             MyBase.SetValue(value)
         End Sub
@@ -224,7 +218,7 @@ Namespace Runtime.Components
             Call Me.New(TypeCodes.closure)
 
             Me.name = rfunc.name
-            Me.readonly = is_readonly
+            Me._readonly = is_readonly
 
             MyBase.SetValue(rfunc)
         End Sub
@@ -235,7 +229,7 @@ Namespace Runtime.Components
 
             Call Me.New(constraint)
 
-            Me.readonly = [readonly]
+            Me._readonly = [readonly]
             Me.name = name
 
             MyBase.SetValue(value)
@@ -246,7 +240,7 @@ Namespace Runtime.Components
         ''' </summary>
         ''' <param name="wrap_val"></param>
         Friend Sub New(wrap_val As Object)
-            Me.readonly = True
+            Me._readonly = True
             Me.constraint = RType.TypeOf(wrap_val).mode
 
             MyBase.SetValue(wrap_val)
@@ -274,7 +268,7 @@ Namespace Runtime.Components
         ''' </param>
         ''' <returns></returns>
         Public Overloads Function setValue(x As Object, env As Environment, Optional [overrides] As Boolean = False) As Message
-            If [readonly] AndAlso Not [overrides] Then
+            If IsReadOnly AndAlso Not [overrides] Then
                 Return Internal.debug.stop($"cannot change value of locked binding for '{name}'", env)
             Else
                 MyBase.SetValue(x)
