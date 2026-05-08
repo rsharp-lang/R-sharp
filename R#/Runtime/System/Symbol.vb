@@ -78,16 +78,19 @@ Namespace Runtime.Components
     ''' <summary>
     ''' The variable model in R# language
     ''' </summary>
-    Public Class Symbol : Implements INamedValue, Value(Of Object).IValueOf
+    Public Class Symbol : Inherits ScriptSlot
+        Implements INamedValue, Value(Of Object).IValueOf
 
+        ''' <summary>
+        ''' the variable name
+        ''' </summary>
+        ''' <returns></returns>
         Public Property name As String Implements IKeyedEntity(Of String).Key
         ''' <summary>
         ''' which runtime stack that this variable symbol is created?
         ''' </summary>
         ''' <returns></returns>
         Public Property stacktrace As StackFrame()
-
-        Dim m_val As Object
 
         ''' <summary>
         ''' 变量值对于基础类型而言，都是以数组的形式存储的
@@ -96,7 +99,7 @@ Namespace Runtime.Components
         ''' <returns></returns>
         Public Property value As Object Implements Value(Of Object).IValueOf.Value
             Get
-                Return m_val
+                Return GetValue()
             End Get
             Private Set(value As Object)
                 ' do nothing
@@ -204,7 +207,7 @@ Namespace Runtime.Components
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Sub New(Optional constraint As TypeCodes = TypeCodes.generic)
             Me.constraint = constraint
-            Me.m_val = Nothing
+            Me.ClearValues()
         End Sub
 
         Sub New(value As Object,
@@ -212,17 +215,18 @@ Namespace Runtime.Components
                 Optional is_readonly As Boolean = False)
 
             Me.New(constraint)
-
-            Me.m_val = value
             Me.readonly = is_readonly
+
+            MyBase.SetValue(value)
         End Sub
 
         Sub New(rfunc As RFunction, Optional is_readonly As Boolean = False)
             Call Me.New(TypeCodes.closure)
 
             Me.name = rfunc.name
-            Me.m_val = rfunc
             Me.readonly = is_readonly
+
+            MyBase.SetValue(rfunc)
         End Sub
 
         Sub New(name As String, value As Object,
@@ -233,7 +237,8 @@ Namespace Runtime.Components
 
             Me.readonly = [readonly]
             Me.name = name
-            Me.m_val = value
+
+            MyBase.SetValue(value)
         End Sub
 
         ''' <summary>
@@ -242,8 +247,9 @@ Namespace Runtime.Components
         ''' <param name="wrap_val"></param>
         Friend Sub New(wrap_val As Object)
             Me.readonly = True
-            Me.m_val = wrap_val
             Me.constraint = RType.TypeOf(wrap_val).mode
+
+            MyBase.SetValue(wrap_val)
         End Sub
 
         Public Function TryGetValueType() As TypeCodes
@@ -267,11 +273,11 @@ Namespace Runtime.Components
         ''' script symbol imports
         ''' </param>
         ''' <returns></returns>
-        Public Function setValue(x As Object, env As Environment, Optional [overrides] As Boolean = False) As Message
+        Public Overloads Function setValue(x As Object, env As Environment, Optional [overrides] As Boolean = False) As Message
             If [readonly] AndAlso Not [overrides] Then
                 Return Internal.debug.stop($"cannot change value of locked binding for '{name}'", env)
             Else
-                m_val = x
+                MyBase.SetValue(x)
             End If
 
             Return Nothing
