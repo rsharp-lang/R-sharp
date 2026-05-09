@@ -89,6 +89,7 @@ Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
 Imports GraphicsPath = Microsoft.VisualBasic.Imaging.GraphicsPath
 Imports LineCap = Microsoft.VisualBasic.Imaging.LineCap
 Imports TextureBrush = Microsoft.VisualBasic.Imaging.TextureBrush
+Imports FontStyle = Microsoft.VisualBasic.Imaging.FontStyle
 #End If
 
 ''' <summary>
