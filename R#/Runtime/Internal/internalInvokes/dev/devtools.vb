@@ -100,6 +100,9 @@ Namespace Runtime.Internal.Invokes
 
     End Class
 
+    ''' <summary>
+    ''' An internal development tools
+    ''' </summary>
     <Package("devtools")>
     Module devtools
 
