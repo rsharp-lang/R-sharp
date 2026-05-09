@@ -15,11 +15,12 @@ const native_r = function(f, args = list(),
     # to the native R code
     let script_code = f |> transform_rlang_source(
         source = deps, 
-        debug = debug
+        debug = debug,
+        autoclose_log = FALSE
     );    
     let invoke = f |> translate_r_native_call(args);
     let label = attr(invoke, "name");
-    let native_rlang = c(script_code, invoke);
+    let native_rlang = c(script_code, invoke, "sink();");
 
     if (length(requires) > 0) {
         requires = sapply(requires, name -> `require(${name});`);

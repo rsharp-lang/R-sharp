@@ -1,12 +1,14 @@
-﻿.TH TRANSFORM_RLANG_SOURCE 1 2026-4月 "" "Translate R# code to native R script text"
+﻿.TH TRANSFORM_RLANG_SOURCE 1 2026-5月 "" "Translate R# code to native R script text"
 .SH NAME
 transform_rlang_source \- transform_rlang_source(code,
     <i>source</i> = <span style='color: blue !important;'>NULL</span>,
-    <i>debug</i> = <span style='color: blue !important;'>FALSE</span>)
+    <i>debug</i> = <span style='color: blue !important;'>FALSE</span>,
+    <i>autoclose.log</i> = <span style='color: blue !important;'>TRUE</span>)
 .SH SYNOPSIS
 \fItransform_rlang_source(code,
     <i>source</i> = <span style='color: blue !important;'>NULL</span>,
-    <i>debug</i> = <span style='color: blue !important;'>FALSE</span>)\fR
+    <i>debug</i> = <span style='color: blue !important;'>FALSE</span>,
+    <i>autoclose.log</i> = <span style='color: blue !important;'>TRUE</span>)\fR
 .SH DESCRIPTION
 .PP
 
@@ -22,6 +24,9 @@ This function converts R# managed closure expressions to executable native R cod
 .PP
 .PP
 \fBdebug\fB \fR\- FALSE. Logical indicating whether to debug the translation process (default: FALSE).
+.PP
+.PP
+\fBautoclose.log\fB \fR\- TRUE. 
 .PP
 .SH VALUE
 .PP
