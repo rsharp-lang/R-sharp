@@ -14,17 +14,18 @@
 #'          not be available. The translation process preserves the functionality of the
 #'          original R# code while making it compatible with standard R interpreters. 
 #' 
-const transform_rlang_source = function(code, source = NULL, debug = FALSE) {
+const transform_rlang_source = function(code, source = NULL, debug = FALSE, autoclose_log = TRUE) {
     let load_deps = __sourcescript(source);
     # make translate of the managed R# closure expression
     # to the native R code
     let program   = translate_to_rlang(code);
+    let close_log = ifelse(autoclose_log, "sink();", "");
     let script_code <- paste([
         "sink(file = 'rlang_interop.log', split = TRUE);",
         load_deps, 
         "# --------end of load deps----------", 
         program,
-        "sink();"
+        close_log
     ], sep = "\n\n");
 
     if (debug) {
