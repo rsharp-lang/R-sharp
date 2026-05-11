@@ -229,10 +229,20 @@ Module stats
             .columns = New Dictionary(Of String, Array),
             .rownames = x.keys
         }
+        Dim square As Boolean = CLRVector.asScalarLogical(args.getBySynonyms("square", "NxN"))
 
-        For Each row In x.PopulateRowObjects(Of DataSet)
-            Call table.columns.Add(row.ID, row(table.rownames))
-        Next
+        If square Then
+            For Each row In x.PopulateRowObjects(Of DataSet)
+                Call table.columns.Add(row.ID, row(table.rownames))
+            Next
+        Else
+            Dim data As DataSet() = x.PopulateRowObjects(Of DataSet).ToArray
+            Dim colnames As String() = data.PropertyNames
+
+            For Each col As String In colnames
+                Call table.add(col, From r As DataSet In data Select r(col))
+            Next
+        End If
 
         Return table
     End Function
