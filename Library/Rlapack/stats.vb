@@ -235,6 +235,10 @@ Module stats
             For Each row In x.PopulateRowObjects(Of DataSet)
                 Call table.columns.Add(row.ID, row(table.rownames))
             Next
+
+            If table.columns.All(Function(c) DirectCast(c.Value, Double()).All(Function(xi) xi = 0.0)) Then
+                Call "all of the data inside this matrix is ZERO, please check of this matrix is NxN matrix(square=TRUE) or MxN matrix(square=FALSE)?".warning
+            End If
         Else
             Dim data As DataSet() = x.PopulateRowObjects(Of DataSet).ToArray
             Dim colnames As String() = data.PropertyNames
