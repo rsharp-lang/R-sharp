@@ -72,6 +72,7 @@ Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -212,6 +213,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Return left
             End If
 
+            ' 20260513 keyY should be unique!
             Dim keyX As String() = Nothing
             Dim keyY As String() = Nothing
 
@@ -249,7 +251,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             ' 20221207
             ' index i is zero-based
             ' indexing of the right dataset
-            Dim idx As Dictionary(Of String, Integer) = Index(Of String).Indexing(keyY)
+            Dim idx As Dictionary(Of String, Integer) = Index(Of String).Indexing((From id As String In keyY Select If(id, "")).UniqueNames)
             Dim i As Integer() = keyX _
                 .Select(Function(key)
                             ' due to the reason of left join some data may be missing in the right dataset
