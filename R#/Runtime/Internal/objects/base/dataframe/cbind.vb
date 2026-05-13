@@ -168,6 +168,15 @@ Namespace Runtime.Internal.Object.baseOp.dataframeOp
             Return d
         End Function
 
+        ''' <summary>
+        ''' column combine of two dataframe
+        ''' </summary>
+        ''' <param name="d"></param>
+        ''' <param name="append"></param>
+        ''' <param name="strict"></param>
+        ''' <param name="[default]"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Private Function cbind(d As dataframe, append As dataframe, strict As Boolean, [default] As Object, env As Environment) As dataframe
             If Not strict Then
                 Dim colnames As String() = d.columns.Keys.ToArray
@@ -279,6 +288,16 @@ SKIP:
             Call d.columns.Add(namekey, col)
         End Sub
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="d"></param>
+        ''' <param name="nameKey">used as colname if the <paramref name="col"/> data is a vector.</param>
+        ''' <param name="col">the col data for make cbind, value could be a vector or a dataframe</param>
+        ''' <param name="strict"></param>
+        ''' <param name="[default]"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function cbind(d As dataframe, nameKey As String,
                               col As Object,
