@@ -886,7 +886,7 @@ Namespace Runtime.Internal.Invokes
             Else
                 args = listValues _
                     .Select(Function(a)
-                                Return REnv.asVector(Of Object)(a)
+                                Return CLRVector.asObject(a)
                             End Function) _
                     .ToArray
             End If
@@ -1062,6 +1062,32 @@ Namespace Runtime.Internal.Invokes
 
             Return strs _
                 .Select(Function(s) s.StringReplace("\s+", " ").Trim) _
+                .ToArray
+        End Function
+
+        ''' <summary>
+        ''' Remove matched patterns
+        ''' 
+        ''' Remove matches, i.e. replace them with "".
+        ''' </summary>
+        ''' <param name="string">Input vector. Either a character vector, Or something coercible To one.</param>
+        ''' <param name="pattern">
+        ''' Pattern to look for.
+        ''' The Default interpretation Is a regular expression, As described In vignette("regular-expressions"). Use regex() For finer control Of the matching behaviour.
+        ''' Match a fixed String (i.e. by comparing only bytes), Using fixed(). This Is fast, but approximate. Generally, For matching human text, you'll want coll() which respects character matching rules for the specified locale.
+        ''' You can Not match boundaries, including "", With this Function.
+        ''' </param>
+        ''' <returns>A character vector the same length as string/pattern.</returns>
+        ''' <example>
+        ''' fruits &lt;- c("one apple", "two pears", "three bananas")
+        ''' str_remove(fruits, "[aeiou]")
+        ''' </example>
+        <ExportAPI("str_remove")>
+        <RApiReturn(TypeCodes.string)>
+        Public Function str_remove(<RRawVectorArgument(TypeCodes.string)> [string] As Object, pattern As String) As Object
+            Return CLRVector.asCharacter([string]) _
+                .SafeQuery _
+                .Select(Function(str) str.StringReplace(pattern, "")) _
                 .ToArray
         End Function
 
