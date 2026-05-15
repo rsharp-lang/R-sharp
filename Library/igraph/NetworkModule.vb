@@ -83,6 +83,7 @@ Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.DataSets
@@ -454,7 +455,7 @@ Public Module NetworkModule
     ''' save the network graph
     ''' </summary>
     ''' <param name="g">the network graph object or [nodes, edges] table data.</param>
-    ''' <param name="file">a folder file path for save the network data.</param>
+    ''' <param name="file">a folder file path for save the network data. this file path data could be also the json file to save</param>
     ''' <param name="properties">a list of property name for save in node table and edge table.</param>
     ''' <returns></returns>
     <ExportAPI("save.network")>
@@ -471,7 +472,13 @@ Public Module NetworkModule
         If TypeOf tables Is Message Then
             Return tables
         Else
-            Return DirectCast(tables, NetworkTables).Save(file)
+            Dim graphData As NetworkTables = DirectCast(tables, NetworkTables)
+
+            If file.ExtensionSuffix("json") Then
+                Return graphData.GetJson.SaveTo(file)
+            Else
+                Return graphData.Save(file)
+            End If
         End If
     End Function
 
