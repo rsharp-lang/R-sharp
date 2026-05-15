@@ -141,6 +141,8 @@ Namespace Runtime.Internal.Object
                 Case Else
                     If type.ImplementInterface(Of IReflector) Then
                         Return DirectCast([object], IReflector).getNames
+                    ElseIf type.ImplementInterface(Of RNames) Then
+                        Return DirectCast([object], RNames).getNames
                     ElseIf type.IsArray Then
                         Dim objVec As Array = CLRVector.asObject([object])
                         Dim names As String() = getArrayNames(objVec)
