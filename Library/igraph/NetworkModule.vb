@@ -219,6 +219,9 @@ Public Module NetworkModule
     ''' if the target object is missing from the title
     ''' list.
     ''' </param>
+    ''' <param name="props">
+    ''' the network edge properties metadata
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("graph")>
@@ -228,6 +231,8 @@ Public Module NetworkModule
                           Optional title As list = Nothing,
                           Optional shape As list = Nothing,
                           Optional defaultId As Boolean = False,
+                          <RListObjectArgument>
+                          Optional props As list = Nothing,
                           Optional env As Environment = Nothing) As Object
 
         If from.TryCount <> [to].TryCount Then
@@ -256,6 +261,13 @@ Public Module NetworkModule
         Dim data As NodeData
         Dim shapeData As String
 
+        Call props.slots.Remove(NameOf(from))
+        Call props.slots.Remove(NameOf([to]))
+        Call props.slots.Remove(NameOf(weights))
+        Call props.slots.Remove(NameOf(title))
+        Call props.slots.Remove(NameOf(shape))
+        Call props.slots.Remove(NameOf(defaultId))
+
         For Each id As String In allKeys
             data = New NodeData With {
                 .label = title.getValue(id, env, [default]:=If(defaultId, id, ""))
@@ -269,8 +281,18 @@ Public Module NetworkModule
             Call g.CreateNode(id, data)
         Next
 
+        Dim edge_meta As New Dictionary(Of String, Func(Of Integer, Object))
+
+        For Each key As String In props.getNames
+            Call edge_meta.Add(key, GetVectorElement.Create(Of String)(CLRVector.asCharacter(props(key))).Getter)
+        Next
+
         For i As Integer = 0 To from.Length - 1
-            Call g.CreateEdge(from(i), [to](i), weight:=getWeight(i))
+            Dim edge As Edge = g.CreateEdge(from(i), [to](i), weight:=getWeight(i))
+
+            For Each meta In edge_meta
+                Call edge.data.Add(meta.Key, CStr(meta.Value(i)))
+            Next
         Next
 
         Return g
