@@ -76,67 +76,17 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
-Public Class GraphElementCollection : Implements RNames
-
-    ''' <summary>
-    ''' all data attribute names in each vertex node object
-    ''' </summary>
-    Protected ReadOnly dataNames As Index(Of String)
-    Protected ReadOnly list As Array
-
-    Sub New(collection As IEnumerable(Of Node))
-        list = collection.ToArray
-        dataNames = loadDataNames(DirectCast(list, Node()).Select(Function(a) DirectCast(a.data, GraphData)))
-    End Sub
-
-    Sub New(collection As IEnumerable(Of Edge))
-        list = collection.ToArray
-        dataNames = loadDataNames(DirectCast(list, Edge()).Select(Function(a) DirectCast(a.data, GraphData)))
-    End Sub
-
-    <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Private Shared Function loadDataNames(data As IEnumerable(Of GraphData)) As Index(Of String)
-        Return data _
-            .Select(Function(v)
-                        Return v.Properties.Keys
-                    End Function) _
-            .IteratesALL _
-            .Distinct _
-            .ToArray
-    End Function
-
-
-#Region "Metadata Attribute Data Accessor"
-
-    <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Public Function setNames(names() As String, envir As Environment) As Object Implements RNames.setNames
-        Throw New NotImplementedException()
-    End Function
-
-    <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Public Function hasName(name As String) As Boolean Implements RNames.hasName
-        Return name Like dataNames
-    End Function
-
-    ''' <summary>
-    ''' get all node vertex attribute names
-    ''' </summary>
-    ''' <returns></returns>
-    <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Public Function getNames() As String() Implements IReflector.getNames
-        Return dataNames.Objects
-    End Function
-#End Region
-
-End Class
-
 ''' <summary>
 ''' node attribute data visitor
 ''' </summary>
 Public Class V : Inherits GraphElementCollection
     Implements RNames, RNameIndex, RIndex, RIndexer
 
-    Friend ReadOnly vertex As Node()
+    Public ReadOnly Property vertex As Node()
+        Get
+            Return DirectCast(list, Node())
+        End Get
+    End Property
 
     ReadOnly vertexIndex As Dictionary(Of String, Node)
     ''' <summary>
@@ -175,7 +125,6 @@ Public Class V : Inherits GraphElementCollection
     Sub New(list As IEnumerable(Of Node))
         Call MyBase.New(list.ToArray)
 
-        vertex = DirectCast(MyBase.list, Node()).ToArray
         vertexIndex = vertex.ToDictionary(Function(v) v.label)
         i = vertex.Select(Function(v) v.label).Indexing
     End Sub
