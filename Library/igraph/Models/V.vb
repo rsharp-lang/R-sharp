@@ -63,6 +63,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Linq
@@ -89,8 +90,9 @@ Public Class V : Inherits GraphElementCollection
     End Property
 
     ReadOnly vertexIndex As Dictionary(Of String, Node)
+
     ''' <summary>
-    ''' ordinal order of <see cref="vertex"/>
+    ''' ordinal order of <see cref="vertex"/>, index for the nodes unique id
     ''' </summary>
     ReadOnly i As Index(Of String)
 
@@ -117,6 +119,16 @@ Public Class V : Inherits GraphElementCollection
         End Get
     End Property
 
+    ''' <summary>
+    ''' ordinal order of <see cref="vertex"/>, index for the nodes unique id
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property id As String()
+        Get
+            Return i.Objects
+        End Get
+    End Property
+
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Sub New(g As NetworkGraph, Optional allConnected As Boolean = False)
         Call Me.New(If(allConnected, g.connectedNodes, g.vertex))
@@ -126,7 +138,10 @@ Public Class V : Inherits GraphElementCollection
         Call MyBase.New(list.ToArray)
 
         vertexIndex = vertex.ToDictionary(Function(v) v.label)
-        i = vertex.Select(Function(v) v.label).Indexing
+        i = vertex _
+            .Select(Function(v) v.label) _
+            .UniqueNames _
+            .Indexing
     End Sub
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
