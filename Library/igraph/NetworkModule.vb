@@ -371,7 +371,7 @@ Public Module NetworkModule
     ''' extract sub-network from a given network via a specific network node as centroid. 
     ''' </summary>
     ''' <param name="g"></param>
-    ''' <param name="fromPoint"></param>
+    ''' <param name="fromPoint">a vector of the vertex id to make extract of the sub-graph</param>
     ''' <returns></returns>
     <ExportAPI("subgraphFromPoint")>
     Public Function extractAdjacenciesSubNetwork(g As NetworkGraph, fromPoint As String(), Optional radius As Integer = 1) As NetworkGraph
@@ -1358,10 +1358,10 @@ Public Module NetworkModule
     ''' <returns></returns>
     <ExportAPI("extract.sub_graph")>
     Public Function extractSubGraph(g As NetworkGraph, node_group As String, Optional minVertices As Integer = 3) As NetworkGraph
-        Dim nodeSet = (From v As node
-                       In g.vertex
-                       Where v.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = node_group
-                       Select v).ToArray
+        Dim nodeSet As node() = (From v As node
+                                 In g.vertex
+                                 Where v.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = node_group
+                                 Select v).ToArray
         Dim edgeSet As Edge() = g.getEdgeSet(nodeSet)
         Dim component As NetworkGraph = edgeSet.DecomposeGraph(minVertices:=minVertices)
 
