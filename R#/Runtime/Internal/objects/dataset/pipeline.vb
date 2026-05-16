@@ -321,6 +321,9 @@ Namespace Runtime.Internal.Object
         ''' <param name="upstream"></param>
         ''' <param name="env"></param>
         ''' <param name="suppress"></param>
+        ''' <param name="nullPipe">
+        ''' make this function returns nothing when the given <paramref name="upstream"/> data is nothing instead of the default behaviour throw the runtime error
+        ''' </param>
         ''' <param name="callerFrameName">debug used only</param>
         ''' <returns>
         ''' the required data sequence or an error message if the 
@@ -330,10 +333,11 @@ Namespace Runtime.Internal.Object
         ''' <remarks>
         ''' this function also will returns a null reference error
         ''' message if the given <paramref name="upstream"/> data is
-        ''' ``Nothing``.
+        ''' ``Nothing`` and also the parameter <paramref name="nullPipe"/> is set to false by default.
         ''' </remarks>
         Public Shared Function TryCreatePipeline(Of T)(upstream As Object, env As Environment,
                                                        Optional suppress As Boolean = False,
+                                                       Optional nullPipe As Boolean = False,
                                                        <CallerMemberName>
                                                        Optional callerFrameName$ = Nothing) As pipeline
 
@@ -345,7 +349,14 @@ Namespace Runtime.Internal.Object
             End If
 
             If upstream Is Nothing Then
-                Return Internal.debug.stop($"the upstream data(of {GetType(T).FullName}) can not be nothing!", env, suppress_log:=suppress)
+                Dim err As String = $"the upstream data(of {GetType(T).FullName}) can not be nothing!"
+
+                If nullPipe Then
+                    Call err.warning
+                    Return Nothing
+                Else
+                    Return Internal.debug.stop(err, env, suppress_log:=suppress)
+                End If
             End If
 
             Dim upstream_type As Type = upstream.GetType
@@ -357,7 +368,7 @@ Namespace Runtime.Internal.Object
                 ElseIf GetType(T).IsInterface AndAlso DirectCast(upstream, pipeline).elementType.raw.ImplementInterface(Of T) Then
                     Return upstream
                 ElseIf DirectCast(upstream, pipeline).elementType Is RType.any Then
-                    Call "the given upstream pipeline is a stream of generic object collection. some type cast maybe failure!".Warning
+                    Call "the given upstream pipeline is a stream of generic object collection. some type cast maybe failure!".warning
                     Return upstream
                 ElseIf DirectCast(upstream, pipeline).elementType.raw.IsInheritsFrom(GetType(T), False) Then
                     Return upstream
