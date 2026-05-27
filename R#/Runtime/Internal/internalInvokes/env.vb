@@ -737,6 +737,25 @@ Namespace Runtime.Internal.Invokes
         ''' returns the given <paramref name="file"/> its full path which is 
         ''' relative to the folder of current running script file.
         ''' </returns>
+        <ExportAPI("here")>
+        Public Function relative_work_alias(Optional file As String = Nothing,
+                                            Optional strict As Boolean? = Nothing,
+                                            Optional env As Environment = Nothing) As Object
+
+            Return relative_work(file, strict, env)
+        End Function
+
+        ''' <summary>
+        ''' get the absolute file path that relative to the current script folder
+        ''' </summary>
+        ''' <param name="file">
+        ''' this function will returns current script folder if this parameter is missing
+        ''' </param>
+        ''' <param name="env"></param>
+        ''' <returns>
+        ''' returns the given <paramref name="file"/> its full path which is 
+        ''' relative to the folder of current running script file.
+        ''' </returns>
         <ExportAPI("relative_work")>
         Public Function relative_work(Optional file As String = Nothing,
                                       Optional strict As Boolean? = Nothing,
