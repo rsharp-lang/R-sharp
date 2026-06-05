@@ -138,7 +138,7 @@ Namespace Development.Package.File.Expressions
                             Return New Literal With {.m_type = TypeCodes.NA, .value = Nothing}
                         Case ""
                             Return New Literal With {.m_type = TypeCodes.string, .value = ""}
-                        Case "∞"
+                        Case "∞", "Infinity", "Inf"
                             Return New Literal With {.m_type = TypeCodes.double, .value = Double.PositiveInfinity}
                         Case Else
                             Throw New NotImplementedException($"unsure about the literal string: '{str}'")
