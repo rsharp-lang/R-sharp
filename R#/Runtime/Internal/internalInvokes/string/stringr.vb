@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::aeab3c26faf336c4c64b536da76dd878, R#\Runtime\Internal\internalInvokes\string\stringr.vb"
+﻿#Region "Microsoft.VisualBasic::562d428b05046dd71effb94cc0e71b06, R#\Runtime\Internal\internalInvokes\string\stringr.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1715
-    '    Code Lines: 1012 (59.01%)
-    ' Comment Lines: 537 (31.31%)
-    '    - Xml Docs: 89.01%
+    '   Total Lines: 1741
+    '    Code Lines: 1020 (58.59%)
+    ' Comment Lines: 554 (31.82%)
+    '    - Xml Docs: 89.17%
     ' 
-    '   Blank Lines: 166 (9.68%)
-    '     File Size: 79.87 KB
+    '   Blank Lines: 167 (9.59%)
+    '     File Size: 81.36 KB
 
 
     '     Module stringr
@@ -51,9 +51,9 @@
     '                   html, json, loadJson, loadXml, match
     '                   nchar, paste, paste0, randomAsciiStr, rawBufferBase64
     '                   regexp, splitSingleStrAuto, sprintfSingle, str_empty, str_pad
-    '                   (+2 Overloads) str_replace, str_squish, str_trim, strPad_internal, strsplit
-    '                   substr, tagvalue, text_equals, text_grep, tolower
-    '                   toupper, urldecode, utf8_decode, xml
+    '                   str_remove, (+2 Overloads) str_replace, str_squish, str_trim, strPad_internal
+    '                   strsplit, substr, tagvalue, text_equals, text_grep
+    '                   tolower, toupper, urldecode, utf8_decode, xml
     ' 
     '     Class TextGrepLambda
     ' 

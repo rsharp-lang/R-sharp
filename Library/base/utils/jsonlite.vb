@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7b6032604ac49323c57b4dc1dea24ca2, Library\base\utils\jsonlite.vb"
+﻿#Region "Microsoft.VisualBasic::62b89ea1cfe74b82609b25b9afadf89f, Library\base\utils\jsonlite.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 224
-    '    Code Lines: 67 (29.91%)
-    ' Comment Lines: 147 (65.62%)
+    '   Total Lines: 229
+    '    Code Lines: 71 (31.00%)
+    ' Comment Lines: 147 (64.19%)
     '    - Xml Docs: 95.24%
     ' 
-    '   Blank Lines: 10 (4.46%)
-    '     File Size: 12.39 KB
+    '   Blank Lines: 11 (4.80%)
+    '     File Size: 12.51 KB
 
 
     ' Module jsonlitePackage

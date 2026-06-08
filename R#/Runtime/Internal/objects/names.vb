@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d5ea8831989009da2c5601e77f135367, R#\Runtime\Internal\objects\names.vb"
+﻿#Region "Microsoft.VisualBasic::0e6ace52bbbd31151db7b2ac4b055734, R#\Runtime\Internal\objects\names.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 268
-    '    Code Lines: 207 (77.24%)
-    ' Comment Lines: 23 (8.58%)
+    '   Total Lines: 270
+    '    Code Lines: 209 (77.41%)
+    ' Comment Lines: 23 (8.52%)
     '    - Xml Docs: 78.26%
     ' 
-    '   Blank Lines: 38 (14.18%)
-    '     File Size: 10.99 KB
+    '   Blank Lines: 38 (14.07%)
+    '     File Size: 11.12 KB
 
 
     '     Module names

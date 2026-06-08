@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::36440bf937089d9e40d07feb1d4b4b5c, R#\Language\Syntax\SyntaxImplements\SymbolIndexer.vb"
+﻿#Region "Microsoft.VisualBasic::7537e01507ee153330c3fe22234f9cc1, R#\Language\Syntax\SyntaxImplements\SymbolIndexer.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 252
-    '    Code Lines: 171 (67.86%)
-    ' Comment Lines: 41 (16.27%)
+    '   Total Lines: 254
+    '    Code Lines: 173 (68.11%)
+    ' Comment Lines: 41 (16.14%)
     '    - Xml Docs: 65.85%
     ' 
-    '   Blank Lines: 40 (15.87%)
-    '     File Size: 9.41 KB
+    '   Blank Lines: 40 (15.75%)
+    '     File Size: 9.53 KB
 
 
     '     Module SymbolIndexerSyntax

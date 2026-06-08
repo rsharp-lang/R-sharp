@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5d35d7d1bb3bef25b10ad4006497d4bf, Library\igraph\Models\V.vb"
+﻿#Region "Microsoft.VisualBasic::323b9db48cee2936bfaacc417382730e, Library\igraph\Models\V.vb"
 
     ' Author:
     ' 
@@ -34,23 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 243
-    '    Code Lines: 174 (71.60%)
-    ' Comment Lines: 27 (11.11%)
+    '   Total Lines: 207
+    '    Code Lines: 150 (72.46%)
+    ' Comment Lines: 24 (11.59%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 42 (17.28%)
-    '     File Size: 8.77 KB
+    '   Blank Lines: 33 (15.94%)
+    '     File Size: 7.39 KB
 
 
-    ' Class GraphElementCollection
-    ' 
-    '     Constructor: (+2 Overloads) Sub New
-    '     Function: getNames, hasName, loadDataNames, setNames
-    ' 
     ' Class V
     ' 
-    '     Properties: size
+    '     Properties: id, size, vertex
     ' 
     '     Constructor: (+2 Overloads) Sub New
     '     Function: ConfigSymbols, eval, EvaluateIndexer, (+2 Overloads) getByIndex, (+2 Overloads) getByName

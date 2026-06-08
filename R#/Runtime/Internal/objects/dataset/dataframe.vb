@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bfb54c316323408d4054d787022f113e, R#\Runtime\Internal\objects\dataset\dataframe.vb"
+﻿#Region "Microsoft.VisualBasic::a3b888f2ad113cd741d3154f4607757a, R#\Runtime\Internal\objects\dataset\dataframe.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1077
-    '    Code Lines: 576 (53.48%)
-    ' Comment Lines: 379 (35.19%)
+    '   Total Lines: 1090
+    '    Code Lines: 586 (53.76%)
+    ' Comment Lines: 379 (34.77%)
     '    - Xml Docs: 87.60%
     ' 
-    '   Blank Lines: 122 (11.33%)
-    '     File Size: 43.87 KB
+    '   Blank Lines: 125 (11.47%)
+    '     File Size: 44.31 KB
 
 
     '     Interface IdataframeReader
@@ -52,8 +52,8 @@
     '         Properties: colnames, columns, empty, ncols, nrows
     '                     rownames
     ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: (+3 Overloads) add, (+2 Overloads) checkColumnNames, (+2 Overloads) Create, (+3 Overloads) CreateDataFrame, (+2 Overloads) delete
+    '         Constructor: (+3 Overloads) Sub New
+    '         Function: (+4 Overloads) add, (+2 Overloads) checkColumnNames, (+2 Overloads) Create, (+3 Overloads) CreateDataFrame, (+2 Overloads) delete
     '                   detach, FilterByRowIndex, forEachRow, GetByRowIndex, getBySynonym
     '                   getKeyByIndex, getNames, getRowIndex, (+2 Overloads) getRowList, getRowNames
     '                   GetRowNumbers, (+2 Overloads) getVector, hasName, projectByColumn, setNames

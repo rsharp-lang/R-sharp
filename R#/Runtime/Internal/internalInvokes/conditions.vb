@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d7fd2f819368cd56b6642c27acad635b, R#\Runtime\Internal\internalInvokes\conditions.vb"
+﻿#Region "Microsoft.VisualBasic::65488629a0d13e1dbd25346361106c39, R#\Runtime\Internal\internalInvokes\conditions.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 160
-    '    Code Lines: 52 (32.50%)
-    ' Comment Lines: 94 (58.75%)
+    '   Total Lines: 159
+    '    Code Lines: 51 (32.08%)
+    ' Comment Lines: 94 (59.12%)
     '    - Xml Docs: 94.68%
     ' 
-    '   Blank Lines: 14 (8.75%)
-    '     File Size: 11.50 KB
+    '   Blank Lines: 14 (8.81%)
+    '     File Size: 11.46 KB
 
 
     '     Module conditions

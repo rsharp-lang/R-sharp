@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b37bbce83134c0f0ad4e43e928e18f17, R#\Runtime\Internal\objects\dataset\pipeline.vb"
+﻿#Region "Microsoft.VisualBasic::b4581608a7eeab42dc53615a1f4839ff, R#\Runtime\Internal\objects\dataset\pipeline.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 408
-    '    Code Lines: 273 (66.91%)
-    ' Comment Lines: 80 (19.61%)
-    '    - Xml Docs: 95.00%
+    '   Total Lines: 420
+    '    Code Lines: 280 (66.67%)
+    ' Comment Lines: 84 (20.00%)
+    '    - Xml Docs: 96.43%
     ' 
-    '   Blank Lines: 55 (13.48%)
-    '     File Size: 18.36 KB
+    '   Blank Lines: 56 (13.33%)
+    '     File Size: 18.99 KB
 
 
     '     Class CLRIterator

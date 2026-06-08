@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::47588633e41c3995b2913c628f8c1180, R#\Runtime\Internal\internalInvokes\utils.vb"
+﻿#Region "Microsoft.VisualBasic::528fd8a5be4e34d59fc95a0407eb1c28, R#\Runtime\Internal\internalInvokes\utils.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1951
-    '    Code Lines: 1000 (51.26%)
-    ' Comment Lines: 776 (39.77%)
-    '    - Xml Docs: 86.21%
+    '   Total Lines: 1995
+    '    Code Lines: 1023 (51.28%)
+    ' Comment Lines: 794 (39.80%)
+    '    - Xml Docs: 86.40%
     ' 
-    '   Blank Lines: 175 (8.97%)
-    '     File Size: 95.92 KB
+    '   Blank Lines: 178 (8.92%)
+    '     File Size: 98.54 KB
 
 
     '     Module utils
@@ -49,9 +49,9 @@
     '                   data, dataSearchByPackageDir, debugTool, description, FindSystemFile
     '                   GetInstalledPackages, (+2 Overloads) getPackageSystemFile, head, installPackages, keyGroups
     '                   loadByName, md5, memorySize, now, progress_bar
-    '                   readFile, setTqdmProgressBarlabel, shQuote, Sys_chmod, Sys_which
-    '                   system, system2, systemFile, tqdm_wrap, wget_file
-    '                   workdir
+    '                   readFile, setTqdmProgressBarlabel, shQuote, stack, Sys_chmod
+    '                   Sys_which, system, system2, systemFile, tqdm_wrap
+    '                   wget_file, workdir
     ' 
     '         Sub: cls, pause, sleep
     '         Enum TimeSpanUnits
