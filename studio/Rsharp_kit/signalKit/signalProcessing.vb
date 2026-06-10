@@ -499,12 +499,18 @@ Module signalProcessing
     ''' 
     <ExportAPI("gaussian")>
     <RApiReturn(TypeCodes.double)>
-    Public Function Gaussian(<RRawVectorArgument> x As Object, A#, mu#, sigma#) As Object
+    Public Function Gaussian(<RRawVectorArgument(TypeCodes.double)> x As Object, A#, mu#, sigma#) As Object
         Return Distributions.Gaussian.Gaussian(CLRVector.asNumeric(x), A, mu, sigma)
     End Function
 
     <ExportAPI("mexican_hat.wavelet")>
-    Public Function MexicanHatWavelet(x As Double, center As Double, sigma As Double) As Double
-        Return MathUtils.MexicanHatWavelet(x, center, sigma)
+    <RApiReturn(TypeCodes.double)>
+    Public Function MexicanHatWavelet(<RRawVectorArgument(TypeCodes.double)> x As Object, center As Double, sigma As Double) As Object
+        Return CLRVector.asNumeric(x) _
+            .SafeQuery _
+            .Select(Function(xi)
+                        Return MathUtils.MexicanHatWavelet(xi, center, sigma)
+                    End Function) _
+            .ToArray
     End Function
 End Module
