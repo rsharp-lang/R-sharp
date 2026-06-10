@@ -609,6 +609,16 @@ Namespace Runtime.Vectorization
             End If
         End Function
 
+        Public Function asScalarNumber(x As Object) As Double
+            Dim vec As Double() = asNumeric(x)
+
+            If vec.IsNullOrEmpty Then
+                Return 0
+            End If
+
+            Return vec(0)
+        End Function
+
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         <Extension>
         Public Function asLogical(v As vector) As Boolean()
