@@ -58,6 +58,7 @@
 Imports System.Drawing
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.TagData
 Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.Framework.IO
@@ -75,36 +76,9 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports DashStyle = Microsoft.VisualBasic.Imaging.DashStyle
 Imports RDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
-Imports Microsoft.VisualBasic.ComponentModel.TagData
-
-
-#If NET48 Then
-Imports Pen = System.Drawing.Pen
-Imports Pens = System.Drawing.Pens
-Imports Brush = System.Drawing.Brush
-Imports Font = System.Drawing.Font
-Imports Brushes = System.Drawing.Brushes
-Imports SolidBrush = System.Drawing.SolidBrush
-Imports DashStyle = System.Drawing.Drawing2D.DashStyle
-Imports Image = System.Drawing.Image
-Imports Bitmap = System.Drawing.Bitmap
-Imports GraphicsPath = System.Drawing.Drawing2D.GraphicsPath
-Imports FontStyle = System.Drawing.FontStyle
-#Else
-Imports Pen = Microsoft.VisualBasic.Imaging.Pen
-Imports Pens = Microsoft.VisualBasic.Imaging.Pens
-Imports Brush = Microsoft.VisualBasic.Imaging.Brush
-Imports Font = Microsoft.VisualBasic.Imaging.Font
-Imports Brushes = Microsoft.VisualBasic.Imaging.Brushes
-Imports SolidBrush = Microsoft.VisualBasic.Imaging.SolidBrush
-Imports DashStyle = Microsoft.VisualBasic.Imaging.DashStyle
-Imports Image = Microsoft.VisualBasic.Imaging.Image
-Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
-Imports GraphicsPath = Microsoft.VisualBasic.Imaging.GraphicsPath
-Imports FontStyle = Microsoft.VisualBasic.Imaging.FontStyle
-#End If
 
 ''' <summary>
 ''' Signal processing is an electrical engineering subfield that focuses on analyzing, 
@@ -527,5 +501,10 @@ Module signalProcessing
     <RApiReturn(TypeCodes.double)>
     Public Function Gaussian(<RRawVectorArgument> x As Object, A#, mu#, sigma#) As Object
         Return Distributions.Gaussian.Gaussian(CLRVector.asNumeric(x), A, mu, sigma)
+    End Function
+
+    <ExportAPI("mexican_hat.wavelet")>
+    Public Function MexicanHatWavelet(x As Double, center As Double, sigma As Double) As Double
+        Return MathUtils.MexicanHatWavelet(x, center, sigma)
     End Function
 End Module
