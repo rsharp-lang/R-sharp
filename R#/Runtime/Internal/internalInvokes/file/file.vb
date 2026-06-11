@@ -1699,11 +1699,21 @@ Namespace Runtime.Internal.Invokes
             End If
 
             If [object] Is Nothing Then
+                Call "target object for write binary data is nothing!".warning
                 Return False
             End If
 
             If Not generic.exists("writeBin") Then
                 Return generic.missingGenericSymbol("writeBin", Nothing, env)
+            ElseIf TypeOf [object] Is vector Then
+                [object] = DirectCast([object], vector).data
+            ElseIf TypeOf [object] Is vbObject Then
+                [object] = DirectCast([object], vbObject).target
+            End If
+
+            If [object] Is Nothing Then
+                Call "target object for write binary data is nothing!".warning
+                Return False
             End If
 
             Dim f As GenericFunction = generic.get("writeBin", [object].GetType())
