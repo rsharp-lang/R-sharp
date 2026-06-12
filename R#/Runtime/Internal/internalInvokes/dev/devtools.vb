@@ -470,6 +470,12 @@ Namespace Runtime.Internal.Invokes
             Call thread.Start()
         End Sub
 
+        ''' <summary>
+        ''' Read ini profile file data as list
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="section"></param>
+        ''' <returns></returns>
         <ExportAPI("read_ini")>
         <RApiReturn(TypeCodes.list)>
         Public Function read_ini(file As String, Optional section As String = Nothing) As Object
