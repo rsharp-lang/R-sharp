@@ -67,6 +67,7 @@ Imports System.Threading
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.Settings.Inf
 Imports Microsoft.VisualBasic.Data.Repository
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -468,5 +469,35 @@ Namespace Runtime.Internal.Invokes
 
             Call thread.Start()
         End Sub
+
+        <ExportAPI("read_ini")>
+        <RApiReturn(TypeCodes.list)>
+        Public Function read_ini(file As String, Optional section As String = Nothing) As Object
+            Dim inf As New IniFile(file)
+            Dim profiles As list = Internal.Object.list.empty
+
+            If section.StringEmpty Then
+                ' read all as list
+                For Each sectionData As Section In inf.AsEnumerable
+                    Dim profileData As list = Internal.Object.list.empty
+
+                    For Each profile In sectionData.AsEnumerable
+                        Call profileData.unique_add(profile.name, profile.value)
+                    Next
+
+                    Call profiles.unique_add(sectionData.Name, profileData)
+                Next
+            Else
+                Dim sectionData As Section = inf(section)
+
+                If Not sectionData Is Nothing Then
+                    For Each profile In sectionData.AsEnumerable
+                        Call profiles.unique_add(profile.name, profile.value)
+                    Next
+                End If
+            End If
+
+            Return profiles
+        End Function
     End Module
 End Namespace
