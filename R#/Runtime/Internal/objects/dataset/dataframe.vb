@@ -601,7 +601,7 @@ Namespace Runtime.Internal.Object
                 Next
             ElseIf indexType Like RType.logicals Then
                 Dim flags = CLRVector.asLogical(selector)
-                Dim cols = flags.Zip(join:=colnames) _
+                Dim cols = flags.Zip(colnames) _
                     .Where(Function(i) i.First) _
                     .Select(Function(i) i.Second) _
                     .ToArray
