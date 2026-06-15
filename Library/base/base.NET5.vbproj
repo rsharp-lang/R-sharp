@@ -100,12 +100,9 @@
     <DefineConstants>MATH_DATASET=1,write_csv=1,UNIX=1</DefineConstants>
     <DefineTrace>true</DefineTrace>
     <OutputPath>../../../../../\mzkit\dist\bin\Rstudio\library\</OutputPath>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'gcmodeller_desktop|net6.0-windows' ">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
-
+  
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
     <DefineConstants>write_csv=1,UNIX=1</DefineConstants>
   </PropertyGroup>

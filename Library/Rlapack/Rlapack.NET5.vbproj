@@ -117,6 +117,7 @@
 	  <DefineDebug>false</DefineDebug>
 	  <DefineTrace>true</DefineTrace>
 	  <BaseAddress>4194304</BaseAddress>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	  <OutputPath>../../../../../\mzkit\dist\bin\Rstudio\library\</OutputPath>
 	</PropertyGroup>
 
