@@ -181,6 +181,15 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        Public Shared Function Stream(Of T)(upstream As Object, env As Environment,
+                                            Optional suppress As Boolean = False,
+                                            Optional nullPipe As Boolean = False,
+                                            <CallerMemberName>
+                                            Optional callerFrameName$ = Nothing) As PipeIterator(Of T)
+
+            Return TryCreatePipeline(Of T)(upstream, env, suppress:=suppress, nullPipe:=nullPipe, callerFrameName:=callerFrameName).getData(Of T)(env)
+        End Function
+
         ''' <summary>
         ''' populate the data element from the pipeline stream
         ''' </summary>
