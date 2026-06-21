@@ -173,6 +173,14 @@ Namespace Runtime.Internal.Object
             Return New vector(elementType, populates(Of Object)(env), env)
         End Function
 
+        Public Function getData(Of T)(env As Environment) As PipeIterator(Of T)
+            If isError Then
+                Return New PipeIterator(Of T)(getError)
+            Else
+                Return New PipeIterator(Of T)(populates(Of T)(env))
+            End If
+        End Function
+
         ''' <summary>
         ''' populate the data element from the pipeline stream
         ''' </summary>
