@@ -3,6 +3,10 @@ Imports SMRUCC.Rsharp.Runtime.Components
 
 Namespace Runtime.Internal.Object
 
+    ''' <summary>
+    ''' <see cref="IEnumerable(Of T)"/> collection of <typeparamref name="T"/>
+    ''' </summary>
+    ''' <typeparam name="T"></typeparam>
     Public Class PipeIterator(Of T) : Implements IEnumerable(Of T)
 
         Dim data As T()
