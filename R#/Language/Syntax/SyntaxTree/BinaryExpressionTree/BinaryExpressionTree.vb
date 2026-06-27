@@ -175,7 +175,7 @@ Namespace Language.Syntax.SyntaxParser
                             list(Scan0).name = TokenType.identifier
                         End If
 
-                        If list.Length = 1 AndAlso list(0) = (TokenType.operator, "|>") Then
+                        If list.Length = 1 AndAlso (list(0) = (TokenType.operator, "|>") OrElse list(0) = (TokenType.operator, "::")) Then
                             Call buf.Add(list(Scan0).text)
                             Call oplist.Add(buf.Last.VB)
                         ElseIf list.First = (TokenType.open, "(") AndAlso list.Last = (TokenType.close, ")") Then
