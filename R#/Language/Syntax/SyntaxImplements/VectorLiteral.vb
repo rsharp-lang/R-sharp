@@ -222,7 +222,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
                 Case Else
                     Return SyntaxResult.CreateError(
-                    err:=New SyntaxErrorException($"Not implemented literal unit token: {unit.text}"),
+                    err_msg:=$"Not implemented literal unit token: {unit.text}",
                     opts:=opts.SetCurrentRange({value})
                 )
             End Select
@@ -250,7 +250,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                         Case "Inf" : value = Double.PositiveInfinity
                         Case Else
                             Return SyntaxResult.CreateError(
-                                err:=New SyntaxErrorException($"Unknown literal token: {token.ToString}"),
+                                err_msg:=$"Unknown literal token: {token.ToString}",
                                 opts:=opts.SetCurrentRange({token})
                             )
                     End Select
@@ -261,7 +261,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     }
                 Case Else
                     Return SyntaxResult.CreateError(
-                        err:=New InvalidExpressionException(token.ToString),
+                        err_msg:="invalid literal expression syntax of " & (token.ToString),
                         opts:=opts.SetCurrentRange({token})
                     )
             End Select

@@ -82,7 +82,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                 End If
 
                 If Not TypeOf [default].expression Is DeclareLambdaFunction Then
-                    Return SyntaxResult.CreateError(New Exception("invalid expression type for the default value of the switch expression!"), opts)
+                    Return SyntaxResult.CreateError("invalid expression type for the default value of the switch expression!", opts)
                 Else
                     With DirectCast([default].expression, DeclareLambdaFunction)
                         [default] = New SyntaxResult(.closure)
@@ -105,7 +105,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     Return optVal
                 ElseIf Not TypeOf optVal.expression Is ValueAssignExpression Then
                     Return SyntaxResult.CreateError(
-                        err:=New Exception("invalid expression for switch options!"),
+                        err_msg:="invalid expression for switch options!",
                         opts:=opts.SetCurrentRange(opt)
                     )
                 Else
@@ -119,7 +119,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                         End If
 
                         If keyStr Like GetType(Exception) Then
-                            Return SyntaxResult.CreateError(keyStr, opts.SetCurrentRange(opt))
+                            Return SyntaxResult.CreateError(keyStr.TryCast(Of Exception).Message, opts.SetCurrentRange(opt))
                         Else
                             Call switch.Add(keyStr.TryCast(Of String())()(0), .value)
                         End If

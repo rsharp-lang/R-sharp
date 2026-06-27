@@ -197,12 +197,12 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
         <Extension>
         Private Function parseIndex(tokens As Token(), ByRef index As SyntaxResult, ByRef indexType As SymbolIndexers, opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim err As Exception = Nothing
+            Dim err As String = Nothing
             Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.comma, False, err:=err)
 
             If blocks Is Nothing Then
                 Call opts.SetCurrentRange(tokens)
-                Return SyntaxResult.CreateError($"invalid syntax when parse expression: {tokens.Select(Function(t) t.text).JoinBy("")}", opts)
+                Return SyntaxResult.CreateError($"invalid syntax when parse expression: {tokens.Select(Function(t) t.text).JoinBy("")}; {err}", opts)
             End If
 
             If blocks > 1 Then

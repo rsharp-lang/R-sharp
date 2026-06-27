@@ -92,7 +92,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     .ToArray
             End If
 
-            Dim ex As Exception = Nothing
+            Dim ex As String = Nothing
             Dim lineBlocks = allTokens _
                 .SplitByTopLevelDelimiter(TokenType.terminator, err:=ex) _
                 .SafeQuery _
@@ -152,7 +152,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     End If
 
                     If Not member.isJsonMember Then
-                        Return SyntaxResult.CreateError(New InvalidExpressionException, opts.SetCurrentRange(member))
+                        Return SyntaxResult.CreateError("not a valid json literal syntax", opts.SetCurrentRange(member))
                     End If
 
                     Dim name As Token = member(Scan0)

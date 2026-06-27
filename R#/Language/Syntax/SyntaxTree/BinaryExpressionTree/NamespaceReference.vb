@@ -130,7 +130,7 @@ Namespace Language.Syntax.SyntaxParser
 
                 Return indexer
             Else
-                Return SyntaxResult.CreateError(New SyntaxErrorException, opts)
+                Return SyntaxResult.CreateError("invalid namespace reference calls", opts)
             End If
 
             Return New SyntaxResult(namespaceRef)

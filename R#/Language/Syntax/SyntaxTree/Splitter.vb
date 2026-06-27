@@ -82,7 +82,7 @@ Namespace Language.Syntax.SyntaxParser
                                                  Optional includeKeyword As Boolean = False,
                                                  Optional tokenText$ = Nothing,
                                                  <Out>
-                                                 Optional ByRef err As Exception = Nothing) As List(Of Token())
+                                                 Optional ByRef err As String = Nothing) As List(Of Token())
             Dim blocks As New List(Of Token())
             Dim buf As New List(Of Token)
             Dim stack As New Stack(Of Token)
@@ -112,7 +112,7 @@ Namespace Language.Syntax.SyntaxParser
                     stack.Push(t)
                 ElseIf t.name = TokenType.close Then
                     If stack.Count = 0 Then
-                        err = New SyntaxErrorException(tokenVector.JoinBy(" "))
+                        err = $"syntax error on parse stacks: {tokenVector.JoinBy(" ")}"
                         Return Nothing
                     Else
                         stack.Pop()

@@ -193,7 +193,7 @@ Namespace Language.Syntax.SyntaxParser
 
                 Return New SyntaxResult(bin)
             Else
-                Return SyntaxResult.CreateError(New NotImplementedException, opts)
+                Return SyntaxResult.CreateError("invalid syntax for parse member name index expression", opts)
             End If
 
             ' a$b symbol reference

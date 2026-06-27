@@ -71,7 +71,7 @@ Namespace Language.Syntax.SyntaxParser
 
         <Extension>
         Public Function CreateTree(tokens As Token(), opts As SyntaxBuilderOptions) As SyntaxResult
-            Dim err As Exception = Nothing
+            Dim err As String = Nothing
             Dim blocks As List(Of Token()) = tokens.SplitByTopLevelDelimiter(TokenType.comma, err:=err)
 
             Call opts.SetCurrentRange(tokens)
@@ -125,7 +125,7 @@ Namespace Language.Syntax.SyntaxParser
 
                 Return New VectorLiteral(expressions.ToArray, TypeCodes.generic)
             Else
-                Return SyntaxResult.CreateError(New NotImplementedException, opts)
+                Return SyntaxResult.CreateError("can not build a valid expression tree", opts)
             End If
         End Function
 
@@ -268,11 +268,11 @@ Namespace Language.Syntax.SyntaxParser
 
                                 Return splitTokens.ObjectInvoke(opts)
                             Else
-                                Return SyntaxResult.CreateError(New SyntaxErrorException, opts)
+                                Return SyntaxResult.CreateError("invalid R function syntax", opts)
                             End If
                         End If
                     Else
-                        Return SyntaxResult.CreateError(New NotImplementedException, opts)
+                        Return SyntaxResult.CreateError("invalid R function syntax, token number is mis-matched when parse function syntax pattern!", opts)
                     End If
                 ElseIf openSymbol = "{" Then
                     ' 是一个可以产生值的closure
@@ -324,9 +324,7 @@ Namespace Language.Syntax.SyntaxParser
                 opts = opts.SetCurrentRange(tokens)
             End If
 
-            Dim msg As String = $"Unsure for parse: '{tokens.Select(Function(t) t.text).JoinBy(" ")}'!"
-
-            Return SyntaxResult.CreateError(New NotImplementedException(msg), opts)
+            Return SyntaxResult.CreateError($"Unsure for parse: '{tokens.Select(Function(t) t.text).JoinBy(" ")}'!", opts)
         End Function
 
         <Extension>

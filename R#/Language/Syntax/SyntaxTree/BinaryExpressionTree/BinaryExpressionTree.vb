@@ -470,7 +470,7 @@ Namespace Language.Syntax.SyntaxParser
                 Dim calls As FunctionInvoke = buf(2).TryCast(Of Expression)
                 Dim [namespace] As Expression = buf(Scan0).TryCast(Of Expression)
 
-                Return SyntaxResult.CreateError(New NotImplementedException, opts)
+                Return SyntaxResult.CreateError("namespace function call is not implemented yet.", opts)
             ElseIf buf = 3 Then
                 If (tokens(1) Like GetType(String)) AndAlso (tokens(1).TryCast(Of String) Like ExpressionSignature.valueAssignOperatorSymbols OrElse tokens(1).TryCast(Of String) Like iterateAssign) Then
                     Dim target As Expression = tokens(Scan0).TryCast(Of Expression)
@@ -501,7 +501,7 @@ Namespace Language.Syntax.SyntaxParser
                 Return SyntaxImplements.DeclareLambdaFunction(tokens(Scan0).VA, tokens(2).VA, lineNum, opts)
             End If
 
-            Return SyntaxResult.CreateError(New SyntaxErrorException($"unsure how to build binary expression for {tokens.JoinBy(" ")}"), opts)
+            Return SyntaxResult.CreateError($"unsure how to build binary expression for {tokens.JoinBy(" ")}", opts)
         End Function
 
         <Extension>
@@ -570,12 +570,12 @@ Namespace Language.Syntax.SyntaxParser
                             ' j-1 and j+1
                             Dim a As SyntaxResult = If(
                                 j - 1 < 0,
-                                SyntaxResult.CreateError(New SyntaxErrorException, opts),
+                                SyntaxResult.CreateError("invalid token sequence offsets on expression 'a'", opts),
                                 buf(j - 1).TryCast(Of SyntaxResult)
                             )
                             Dim b As SyntaxResult = If(
                                 j + 1 >= buf.Count,
-                                SyntaxResult.CreateError(New SyntaxErrorException, opts),
+                                SyntaxResult.CreateError("invalid token sequence offsets on expression 'b'", opts),
                                 buf(j + 1).TryCast(Of SyntaxResult)
                             )
 
