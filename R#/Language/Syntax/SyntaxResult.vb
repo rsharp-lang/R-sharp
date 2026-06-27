@@ -110,16 +110,19 @@ Namespace Language.Syntax.SyntaxParser
         ''' <summary>
         ''' Create syntax error on current script file code span
         ''' </summary>
-        ''' <param name="err"></param>
+        ''' <param name="err_msg"></param>
         ''' <param name="opts"></param>
         ''' <returns></returns>
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function CreateError(err As String, opts As SyntaxBuilderOptions) As SyntaxResult
-            Return CreateError(New SyntaxErrorException(err), opts)
-        End Function
+        Public Shared Function CreateError(err_msg As String, opts As SyntaxBuilderOptions) As SyntaxResult
+            Dim err As Exception
 
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Shared Function CreateError(err As Exception, opts As SyntaxBuilderOptions) As SyntaxResult
+            Try
+                Throw New SyntaxErrorException(err_msg)
+            Catch ex As Exception
+                err = ex
+            End Try
+
             Return CreateError(opts, err, opts.fromSpan, opts.toSpan)
         End Function
 

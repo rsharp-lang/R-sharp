@@ -75,7 +75,7 @@ Namespace Language.Syntax.SyntaxParser
         Friend ReadOnly operatorPriority As String() = {"^", "*/%", "+-"}
 
         ReadOnly comparisonOperators As String() = {"<", ">", "<=", ">=", "==", "!=", "in", "like", "between"}
-        ReadOnly logicalOperators As String() = {"&&", "||", "!"}
+        ReadOnly logicalOperators As String() = {"&&", "||", "!", "|"}
 
         ''' <summary>
         ''' 
@@ -501,7 +501,7 @@ Namespace Language.Syntax.SyntaxParser
                 Return SyntaxImplements.DeclareLambdaFunction(tokens(Scan0).VA, tokens(2).VA, lineNum, opts)
             End If
 
-            Return SyntaxResult.CreateError(New SyntaxErrorException, opts)
+            Return SyntaxResult.CreateError(New SyntaxErrorException($"unsure how to build binary expression for {tokens.JoinBy(" ")}"), opts)
         End Function
 
         <Extension>
@@ -633,6 +633,10 @@ Namespace Language.Syntax.SyntaxParser
             ElseIf opToken = "??" Then
                 Return New NullishCoalescing(a, b)
             Else
+                ' 20260627
+                ' | binary operator is create at here
+                ' | just created as binary expression, but not to be evaluated
+                ' this usually be used for native_r calls
                 Return New BinaryExpression(a, b, opToken)
             End If
         End Function
