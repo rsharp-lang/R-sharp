@@ -141,9 +141,9 @@
     <PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="4.151.0-preview.1.1" />
     <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="4.151.0-preview.1.1" />
     <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
-    <PackageReference Include="System.Drawing.Common" Version="11.0.0-preview.5.26302.115" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.9" />
     <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Resources.Extensions" Version="11.0.0-preview.5.26302.115" />
+    <PackageReference Include="System.Resources.Extensions" Version="10.0.9" />
   </ItemGroup>
 
   <ItemGroup>

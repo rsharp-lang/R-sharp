@@ -258,10 +258,10 @@
     <PackageReference Include="SkiaSharp" Version="4.151.0-preview.1.1" />
     <PackageReference Include="SkiaSharp.Extended" Version="3.1.0-preview.3" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="4.151.0-preview.1.1" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="11.0.0-preview.5.26302.115" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.9" />
  
     <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Resources.Extensions" Version="11.0.0-preview.5.26302.115" />
+    <PackageReference Include="System.Resources.Extensions" Version="10.0.9" />
   </ItemGroup>
 
   <ItemGroup>
