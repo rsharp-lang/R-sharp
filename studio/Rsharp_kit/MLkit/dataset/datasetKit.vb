@@ -735,12 +735,12 @@ Module datasetKit
             If camera Is Nothing Then
                 env.AddMessage("the 3D camera Is nothing, default camera value will be apply!", MSG_TYPES.WRN)
                 camera = New Camera With {
-                    .screen = size.SizeParser,
-                    .angleX = 120,
-                    .angleY = 120,
-                    .angleZ = 30,
-                    .fov = 1500,
-                    .viewDistance = 500
+                    .Screen = size.SizeParser,
+                    .AngleX = 120,
+                    .AngleY = 120,
+                    .AngleZ = 30,
+                    .FieldOfView = 1500,
+                    .ViewDistance = 500
                 }
             Else
                 size = $"{camera.screen.Width},{camera.screen.Height}"
