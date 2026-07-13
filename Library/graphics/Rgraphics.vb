@@ -67,7 +67,6 @@ Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors.Scaler
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.HeatMap
 Imports Microsoft.VisualBasic.Imaging.Math2D
 Imports Microsoft.VisualBasic.Math
-Imports Microsoft.VisualBasic.Math.LinearAlgebra
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
@@ -78,6 +77,7 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
 Imports Image = Microsoft.VisualBasic.Imaging.Image
+Imports matrix = SMRUCC.Rsharp.Runtime.Internal.Object.matrix
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
