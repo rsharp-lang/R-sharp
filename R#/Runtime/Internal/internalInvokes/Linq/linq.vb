@@ -512,7 +512,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' ```
         ''' </remarks>
         <ExportAPI("match")>
-        Public Function match(x As Array, table As Array,
+        Public Function match(<RRawVectorArgument> x As Object, <RRawVectorArgument> table As Object,
                               Optional nomatch As Integer = -1,
                               Optional incomparables As Integer = Nothing) As Integer()
 
