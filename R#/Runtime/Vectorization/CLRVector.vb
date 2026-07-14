@@ -260,6 +260,10 @@ Namespace Runtime.Vectorization
         ''' <returns>
         ''' this function returns nothing if the input object <paramref name="x"/> is nothing
         ''' </returns>
+        ''' <remarks>
+        ''' 1. if the given <paramref name="x"/> is nothing then function returns nothing
+        ''' 2. if there are NULL value inside x vector, corresponding empty string element will generates
+        ''' </remarks>
         Public Function asCharacter(x As Object) As String()
             If x Is Nothing Then
                 Return Nothing
