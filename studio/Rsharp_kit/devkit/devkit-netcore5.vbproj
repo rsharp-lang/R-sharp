@@ -70,7 +70,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.9" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.10" />
   </ItemGroup>
 
   <ItemGroup>
