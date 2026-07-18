@@ -72,7 +72,6 @@ Imports Microsoft.VisualBasic.MachineLearning
 Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
 Imports Microsoft.VisualBasic.MachineLearning.Debugger
 Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
-Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork.StoreProcedure
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
@@ -89,7 +88,7 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 ''' R# machine learning library
 ''' </summary>
 <Package("machineLearning", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@gcmodeller.org")>
-Module machineLearning
+Module machineLearningTools
 
     Sub New()
         REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(MLDataSet), AddressOf tabular)
@@ -116,7 +115,7 @@ Module machineLearning
 
     <ExportAPI("softmax")>
     Public Function Softmax(<RRawVectorArgument> V As Object) As Object
-        Return SoftmaxLayer.Softmax(CLRVector.asNumeric(V)).DoCall(AddressOf vector.asVector)
+        Return MachineLearning.Softmax(CLRVector.asNumeric(V)).DoCall(AddressOf vector.asVector)
     End Function
 
     <ExportAPI("raw_samples")>
@@ -147,21 +146,6 @@ Module machineLearning
         End If
 
         Return MLDataSet.JoinSamples(x, sampleList.populates(Of Sample)(env), estimateQuantile)
-    End Function
-
-    <ExportAPI("read.ANN_network")>
-    Public Function readANNModel(file As String) As NeuralNetwork
-        Return NeuralNetwork.LoadModel(file)
-    End Function
-
-    <ExportAPI("load.parallel_ANN")>
-    Public Function loadParallelANN(dir As String, normalize As NormalizeMatrix, Optional method As Methods = Methods.NormalScaler) As ParallelNetwork
-        Return ParallelNetwork.LoadSnapshot(dir, normalize, method)
-    End Function
-
-    <ExportAPI("as.ANN")>
-    Public Function createANN(model As NeuralNetwork) As Network
-        Return model.LoadModel
     End Function
 
     ''' <summary>
@@ -234,19 +218,6 @@ Module machineLearning
         Return model
     End Function
 
-    <ExportAPI("ANN.predict")>
-    Public Function ANNpredict(model As Object, input As Double(), Optional env As Environment = Nothing) As Object
-        If model Is Nothing Then
-            Return RInternal.debug.stop("the required neuron network can not be nothing!", env)
-        ElseIf TypeOf model Is Network Then
-            Return DirectCast(model, Network).Compute(input)
-        ElseIf TypeOf model Is ParallelNetwork Then
-            Return DirectCast(model, ParallelNetwork).Predicts(input).ToArray
-        Else
-            Return Message.InCompatibleType(GetType(Network), model.GetType, env)
-        End If
-    End Function
-
     <ExportAPI("normalize")>
     Public Function normalizeData(trainingSet As NormalizeMatrix, input As Double(), Optional method As Normalizer.Methods = Normalizer.Methods.NormalScaler) As Double()
         Return trainingSet.NormalizeInput(input, method)
@@ -298,169 +269,6 @@ Module machineLearning
         Return Diagnostics.CheckDataSet(dataset).ToArray
     End Function
 
-    ''' <summary>
-    ''' save a trained ANN network model into a given xml files.
-    ''' </summary>
-    ''' <param name="model"></param>
-    ''' <param name="file">the xml file path or directory path.</param>
-    ''' <param name="scattered"></param>
-    ''' <param name="env"></param>
-    ''' <returns></returns>
-    <ExportAPI("write.ANN_network")>
-    <RApiReturn(GetType(Boolean))>
-    Public Function writeANNNetwork(model As Object, file$, Optional scattered As Boolean = True, Optional env As Environment = Nothing) As Object
-        If model Is Nothing Then
-            Return False
-        ElseIf TypeOf model Is Network Then
-            model = StoreProcedure.NeuralNetwork.Snapshot(DirectCast(model, Network))
-        ElseIf TypeOf model Is TrainingUtils Then
-            model = DirectCast(model, TrainingUtils).TakeSnapshot
-        ElseIf TypeOf model Is IndividualParallelTraining Then
-            Call DirectCast(model, IndividualParallelTraining).Snapshot(file)
-            Return True
-        ElseIf Not TypeOf model Is NeuralNetwork Then
-            Return RInternal.debug.stop({
-                $"invalid data type for save: {model.GetType.FullName}",
-                $"required: {GetType(NeuralNetwork).FullName}"
-            }, env)
-        End If
-
-        With DirectCast(model, NeuralNetwork)
-            If Not scattered Then
-                Return .GetXml.SaveTo(file)
-            Else
-                Return .ScatteredStore(Directory.FromLocalFileSystem(file))
-            End If
-        End With
-    End Function
-
-    ''' <summary>
-    ''' open a file connection to the model debug file.
-    ''' </summary>
-    ''' <param name="ANN"></param>
-    ''' <param name="file">the file path to the debug file.</param>
-    ''' <param name="env"></param>
-    ''' <returns></returns>
-    <ExportAPI("open.debugger")>
-    <RApiReturn(GetType(ANNDebugger))>
-    Public Function openDebugger(ANN As Object, file$, Optional env As Environment = Nothing) As Object
-        Dim model As Network
-
-        If ANN Is Nothing Then
-            Return RInternal.debug.stop("the ANN network model can Not be nothing!", env)
-        ElseIf TypeOf ANN Is TrainingUtils Then
-            ANN = DirectCast(ANN, TrainingUtils).NeuronNetwork
-        End If
-
-        If Not TypeOf ANN Is Network Then
-            Return RInternal.debug.stop({
-                $"unsupported object type: {ANN.GetType.FullName}!",
-                $"required: {GetType(Network).FullName}"
-            }, env)
-        Else
-            model = ANN
-        End If
-
-        Return New RDispose(
-            x:=New ANNDebugger(model),
-            final:=Sub(debugger)
-                       DirectCast(debugger, ANNDebugger).Save(file, model)
-                   End Sub)
-    End Function
-
-    ''' <summary>
-    ''' create a new ANN training model
-    ''' </summary>
-    ''' <param name="inputSize">the number of nodes for the input layer</param>
-    ''' <param name="outputSize">the number of nodes for the output layer</param>
-    ''' <param name="hiddenSize">the hiden size of nodes for each hidden layers</param>
-    ''' <param name="learnRate"></param>
-    ''' <param name="momentum"></param>
-    ''' <param name="active"></param>
-    ''' <param name="weight0"></param>
-    ''' <param name="learnRateDecay"></param>
-    ''' <param name="truncate"></param>
-    ''' <returns></returns>
-    <ExportAPI("ANN.training_model")>
-    Public Function CreateANNTrainer(inputSize%, outputSize%,
-                                     <RRawVectorArgument(GetType(Integer))>
-                                     Optional hiddenSize As Object = "25,100,30",
-                                     Optional learnRate As Double = 0.1,
-                                     Optional momentum As Double = 0.9,
-                                     <RDefaultValue("hidden: Sigmoid(alpha:=2.0); output: Sigmoid(alpha:=2.0)")>
-                                     Optional active As activation = Nothing,
-                                     Optional weight0 As Object = "random",
-                                     Optional learnRateDecay As Double = 0.0000000001,
-                                     Optional truncate As Double = -1,
-                                     Optional split As Boolean = False) As ANNTrainer
-        Dim w0 As Func(Of Double)
-        Dim sizeVec As Integer() = CLRVector.asInteger(hiddenSize)
-
-        If weight0 Is Nothing OrElse Scripting.ToString(REnv.getFirst(weight0)) = "random" Then
-            w0 = Helpers.RandomWeightInitializer
-        Else
-            w0 = Helpers.UnifyWeightInitializer(CLRVector.asNumeric(weight0).GetValue(Scan0))
-        End If
-
-        Dim trainingHelper As ANNTrainer
-
-        If split Then
-            trainingHelper = New IndividualParallelTraining(
-                inputSize, sizeVec,
-                outputSize,
-                learnRate,
-                momentum,
-                active.CreateActivations,
-                weightInit:=w0
-            )
-        Else
-            trainingHelper = New TrainingUtils(
-                inputSize, sizeVec,
-                outputSize,
-                learnRate,
-                momentum,
-                active.CreateActivations,
-                weightInit:=w0
-            )
-        End If
-
-        trainingHelper.NeuronNetwork.LearnRateDecay = learnRateDecay
-        trainingHelper.Truncate = truncate
-
-        Return trainingHelper
-    End Function
-
-    ''' <summary>
-    ''' Apply configuration on the ANN training model.
-    ''' </summary>
-    ''' <param name="util"></param>
-    ''' <param name="dropout">
-    ''' a percentage value range in [0,1].
-    ''' </param>
-    ''' <returns></returns>
-    <ExportAPI("configuration")>
-    Public Function configuration(util As ANNTrainer,
-                                  Optional softmax As Boolean? = Nothing,
-                                  Optional selectiveMode As Boolean? = Nothing,
-                                  Optional dropout As Double? = Nothing,
-                                  Optional snapshotLocation As String = "NA") As ANNTrainer
-
-        If Not softmax Is Nothing Then
-            util = util.SetLayerNormalize(opt:=softmax)
-        End If
-        If Not dropout Is Nothing Then
-            util = util.SetDropOut(percentage:=dropout)
-        End If
-        If Not selectiveMode Is Nothing Then
-            util = util.SetSelective(opt:=selectiveMode)
-        End If
-        If Not snapshotLocation = "NA" Then
-            util = util.SetSnapshotLocation(snapshotLocation)
-        End If
-
-        Return util
-    End Function
-
     <ExportAPI("input.size")>
     Public Function inputSize(trainSet As MLDataSet) As Integer
         Return trainSet.Size.Width
@@ -469,138 +277,5 @@ Module machineLearning
     <ExportAPI("output.size")>
     Public Function outputSize(trainSet As MLDataSet) As Integer
         Return trainSet.OutputSize
-    End Function
-
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="ann"></param>
-    ''' <param name="trainingSet"></param>
-    ''' <param name="normalMethod"></param>
-    ''' <param name="attribute">
-    ''' run training for a single output or all of the result output.
-    ''' </param>
-    ''' <returns></returns>
-    <ExportAPI("set.trainingSet")>
-    Public Function setTrainingSet(ann As ANNTrainer,
-                                   trainingSet As MLDataSet,
-                                   Optional normalMethod As Methods = Methods.RelativeScaler,
-                                   Optional attribute% = -1,
-                                   Optional setOutputNames As Boolean = True) As ANNTrainer
-
-        For Each sample As Sample In trainingSet.PopulateNormalizedSamples(method:=normalMethod)
-            If attribute < 0 Then
-                Call ann.Add(sample.vector, sample.target)
-            Else
-                Call ann.Add(sample.vector, sample.target(attribute))
-            End If
-        Next
-
-        If setOutputNames Then
-            Call ann.SetOutputNames(trainingSet.output)
-        End If
-
-        Return ann
-    End Function
-
-    <ExportAPI("training")>
-    Public Function runANNTraining(training As ANNTrainer,
-                                   Optional maxIterations As Integer = 10000,
-                                   Optional minErr As Double = 0.01,
-                                   Optional parallel As Boolean = True) As ANNTrainer
-
-        Helpers.MaxEpochs = maxIterations
-        Helpers.MinimumError = minErr
-
-        Call training _
-            .AttachReporter(Sub(i, err, ANN)
-                            End Sub) _
-            .Train(parallel)
-
-        Return training
-    End Function
-
-    ''' <summary>
-    ''' do ANN model training
-    ''' </summary>
-    ''' <param name="trainSet">A dataset object that used for ANN model training.</param>
-    ''' <param name="hiddenSize">An integer vector for indicates the network size of the hidden layers in the ANN network.</param>
-    ''' <param name="learnRate"></param>
-    ''' <param name="momentum"></param>
-    ''' <param name="weight0">weight method for initialize the ANN network model.</param>
-    ''' <param name="active"></param>
-    ''' <param name="normalMethod"></param>
-    ''' <param name="learnRateDecay"></param>
-    ''' <param name="truncate"></param>
-    ''' <param name="selectiveMode"></param>
-    ''' <param name="maxIterations"></param>
-    ''' <param name="minErr"></param>
-    ''' <param name="parallel"></param>
-    ''' <param name="outputSnapshot">
-    ''' this parameter will config the output object type. this function is returns the raw ANN model 
-    ''' by default, and you can change the output type to file model by set this parameter value to 
-    ''' ``TRUE``. 
-    ''' </param>
-    ''' <param name="attribute">
-    ''' run training for a single output or all of the result output.
-    ''' </param>
-    ''' <returns></returns>
-    <ExportAPI("training.ANN")>
-    <RApiReturn(GetType(StoreProcedure.NeuralNetwork), GetType(Network))>
-    Public Function runANNTraining(trainSet As MLDataSet,
-                                   <RRawVectorArgument(GetType(Integer))>
-                                   Optional hiddenSize As Object = "25,100,30",
-                                   Optional learnRate As Double = 0.1,
-                                   Optional momentum As Double = 0.9,
-                                   Optional weight0 As Object = "random",
-                                   <RDefaultValue("hidden: Sigmoid(alpha:=2.0); output: Sigmoid(alpha:=2.0)")>
-                                   Optional active As activation = Nothing,
-                                   Optional normalMethod As Methods = Methods.RelativeScaler,
-                                   Optional learnRateDecay As Double = 0.0000000001,
-                                   Optional truncate As Double = -1,
-                                   Optional softmax As Boolean = True,
-                                   Optional selectiveMode As Boolean = False,
-                                   Optional dropout As Double = 0,
-                                   Optional maxIterations As Integer = 10000,
-                                   Optional minErr As Double = 0.01,
-                                   Optional parallel As Boolean = True,
-                                   Optional outputSnapshot As Boolean = False,
-                                   Optional attribute% = -1) As Object
-
-        Dim trainingHelper As TrainingUtils = CreateANNTrainer(
-            inputSize:=trainSet.Size.Width,
-            outputSize:=trainSet.OutputSize,
-            hiddenSize:=hiddenSize,
-            learnRate:=learnRate,
-            momentum:=momentum,
-            weight0:=weight0,
-            learnRateDecay:=learnRateDecay,
-            truncate:=truncate,
-            active:=active
-        ).SetLayerNormalize(opt:=softmax) _
-         .SetDropOut(percentage:=dropout) _
-         .SetSelective(opt:=selectiveMode)
-
-        For Each sample As Sample In trainSet.PopulateNormalizedSamples(method:=normalMethod)
-            If attribute < 0 Then
-                Call trainingHelper.Add(sample.vector, sample.target)
-            Else
-                Call trainingHelper.Add(sample.vector, sample.target(attribute))
-            End If
-        Next
-
-        Helpers.MaxEpochs = maxIterations
-        Helpers.MinimumError = minErr
-
-        Call trainingHelper _
-            .AttachReporter(Sub(i, err, ANN)
-                            End Sub) _
-            .Train(parallel)
-
-        If outputSnapshot Then
-            Return trainingHelper.TakeSnapshot
-        Else
-            Return trainingHelper.NeuronNetwork
-        End If
     End Function
 End Module
