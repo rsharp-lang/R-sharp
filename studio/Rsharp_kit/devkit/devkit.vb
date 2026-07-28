@@ -1,56 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::4809e18541e46d4494e359fabebdb6ab, studio\Rsharp_kit\devkit\devkit.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 158
-    '    Code Lines: 105 (66.46%)
-    ' Comment Lines: 33 (20.89%)
-    '    - Xml Docs: 96.97%
-    ' 
-    '   Blank Lines: 20 (12.66%)
-    '     File Size: 6.09 KB
+' Summaries:
 
 
-    ' Module devkit
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: AssemblyInfo, decodeSourceMap, encodeSourceMap, getSourceFiles, gitLog
-    '               inspect, printProject, readBannerData, readVbProject, showIL
-    '               svnLog, writeCodeBanner
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 158
+'    Code Lines: 105 (66.46%)
+' Comment Lines: 33 (20.89%)
+'    - Xml Docs: 96.97%
+' 
+'   Blank Lines: 20 (12.66%)
+'     File Size: 6.09 KB
+
+
+' Module devkit
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: AssemblyInfo, decodeSourceMap, encodeSourceMap, getSourceFiles, gitLog
+'               inspect, printProject, readBannerData, readVbProject, showIL
+'               svnLog, writeCodeBanner
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -61,9 +61,9 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.CodeSign
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.IL
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.SourceMap
-Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.vbproj
-Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.vbproj.Xml
+Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.VBProj
 Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.VersionControl
+Imports Microsoft.VisualBasic.ApplicationServices.Development.VisualStudio.VersionControl.Git
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
@@ -80,11 +80,11 @@ Module devkit
 
     Sub New()
         RInternal.ConsolePrinter.AttachConsoleFormatter(Of ILInstruction)(Function(a) DirectCast(a, ILInstruction).GetCode)
-        RInternal.ConsolePrinter.AttachConsoleFormatter(Of Project)(AddressOf printProject)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of VBProject)(AddressOf printProject)
         RInternal.ConsolePrinter.AttachConsoleFormatter(Of LicenseInfo)(Function(a) a.ToString)
     End Sub
 
-    Private Function printProject(vbproj As Project) As String
+    Private Function printProject(vbproj As VBProject) As String
         Return vbproj.ToString
     End Function
 
@@ -99,16 +99,16 @@ Module devkit
     End Function
 
     <ExportAPI("sourceFiles")>
-    Public Function getSourceFiles(vbproj As Project) As String()
+    Public Function getSourceFiles(vbproj As VBProject) As String()
         Return vbproj _
             .EnumerateSourceFiles(skipAssmInfo:=True, fullName:=True) _
             .ToArray
     End Function
 
     <ExportAPI("read.vbproj")>
-    Public Function readVbProject(file As String, Optional legacy As Boolean = False) As Project
+    Public Function readVbProject(file As String, Optional legacy As Boolean = False) As VBProject
         Try
-            Dim vbproj As Project = Project.Load(file)
+            Dim vbproj As VBProject = VBProject.Load(file)
 
             If Not legacy Then
                 If Not vbproj.IsDotNetCoreSDK Then
