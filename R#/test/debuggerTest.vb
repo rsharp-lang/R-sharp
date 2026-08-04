@@ -54,11 +54,7 @@
 #End Region
 
 Imports System.IO
-Imports System.Linq
-Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
 Imports SMRUCC.Rsharp.Interpreter
-Imports SMRUCC.Rsharp.Interpreter.Debugger
-Imports REnv = SMRUCC.Rsharp.Runtime
 
 Module debuggerTest
 
@@ -91,7 +87,7 @@ Module debuggerTest
     ''' 从而可以触发按照 ``文件 + 行号`` 注册的断点
     ''' </summary>
     Private Function WriteScript() As String
-        Dim path As String = Path.GetTempFileName().Replace(".tmp", ".R")
+        Dim path As String = System.IO.Path.GetTempFileName().Replace(".tmp", ".R")
         Call File.WriteAllText(path, script)
         Return path
     End Function

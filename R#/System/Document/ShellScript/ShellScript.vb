@@ -185,7 +185,7 @@ Namespace Development.CommandLine
                 TypeOf expr Is Literal OrElse
                 TypeOf expr Is SymbolReference OrElse
                 TypeOf expr Is ScriptSymbol OrElse
-                TypeOf expr Is BreakPoint OrElse
+                TypeOf expr Is Annotation.BreakPoint OrElse
                 TypeOf expr Is Regexp OrElse
                 TypeOf expr Is ContinuteFor OrElse
                 TypeOf expr Is VectorLoop OrElse

@@ -45,6 +45,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.Text
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
 Imports SMRUCC.Rsharp.Runtime.Components.Interface
 
@@ -137,7 +138,7 @@ Namespace Interpreter
             If file.StringEmpty(, True) Then
                 Return ""
             Else
-                Return file.Replace("\", "/").ToLower.Trim(" "c, ControlChars.Quot)
+                Return file.Replace("\", "/").ToLower.Trim(" "c, ASCII.Quot)
             End If
         End Function
     End Structure
