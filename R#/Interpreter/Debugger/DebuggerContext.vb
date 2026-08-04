@@ -229,12 +229,16 @@ Namespace Interpreter
         Friend Function ShouldPause(expr As Expression, env As Environment, ByRef hit As Breakpoint) As Boolean
             hit = Nothing
 
-            ' 并行执行的工作线程不参与调试, 避免多个线程同时等待同一个信号量
-            ' 而造成死锁, 同时也避免了并行线程污染 CurrentEnvironment
-            If Not isOwnerThread Then
-                Return False
-            End If
-
+            ' 说明: 早期的版本在这里针对非"调试会话所有者线程"的执行线程直接
+            ' 返回了 False, 用来规避 parLapply/parSapply 等并行任务的工作线程
+            ' 争用同一个调试信号量而造成死锁. 但是 R# 在运行脚本的时候, 整个
+            ' 脚本程序的执行本身就可能会被调度到一个非主线程之上(例如线程池
+            ' 线程), 这样一来主线程所启动的调试会话反而会被这个线程判定为
+            ' "非所有者线程" 而永远无法命中任何断点. 
+            '
+            ' 因此这里不再以线程编号来门控单步/断点, 而是把并行任务的调试排除
+            ' 交给 Environment 之上的并行上下文标记(参见 Environment 的并行相关
+            ' 属性)来处理, 避免正常的脚本执行因为被调度到其它线程而丢失调试能力
             Select Case CurrentAction
                 Case DebugAction.Stop
                     Return False

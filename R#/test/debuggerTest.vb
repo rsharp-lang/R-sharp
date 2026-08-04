@@ -104,6 +104,9 @@ Module debuggerTest
         Call dbg.AddBreakpoint(file, 3)
         Call dbg.AddBreakpoint(file, 8)
 
+        ' [DIAG] 写入文件: 测试侧 debugger 实例 hashcode 与断点数量
+        System.IO.File.AppendAllText("test_diag.log", $"testSideDebuggerHash={dbg.GetHashCode()} breakpointCount={dbg.ListBreakpoints().Length}" & vbCrLf)
+
         Call dbg.Start(breakOnEntry:=False)
 
         Dim hits As New List(Of Integer)

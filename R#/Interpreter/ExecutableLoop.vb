@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::205346d4cfe046c38f368a27fbe166df, R#\Interpreter\ExecutableLoop.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 257
-    '    Code Lines: 156 (60.70%)
-    ' Comment Lines: 65 (25.29%)
-    '    - Xml Docs: 30.77%
-    ' 
-    '   Blank Lines: 36 (14.01%)
-    '     File Size: 10.54 KB
+' Summaries:
 
 
-    '     Class ExecutableLoop
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: Execute, ExecuteCodeLine, isBreakSignal
-    ' 
-    '         Sub: configException, printMemoryProfile, runRefreshMemory
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 257
+'    Code Lines: 156 (60.70%)
+' Comment Lines: 65 (25.29%)
+'    - Xml Docs: 30.77%
+' 
+'   Blank Lines: 36 (14.01%)
+'     File Size: 10.54 KB
+
+
+'     Class ExecutableLoop
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: Execute, ExecuteCodeLine, isBreakSignal
+' 
+'         Sub: configException, printMemoryProfile, runRefreshMemory
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -65,6 +65,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter
@@ -118,6 +119,9 @@ Namespace Interpreter
             Dim dbg As DebuggerContext = env.debugger
             Dim depth As Integer = 0
 
+            ' [DIAG] 临时诊断: 写入文件, 打印执行侧 debugger 实例与已注册断点数量
+            System.IO.File.AppendAllText("exe_diag.log", $"exeSideDebuggerHash={dbg.GetHashCode()} isDebugging={If(dbg Is Nothing, "N/A", dbg.IsDebugging.ToString())} bpCount={If(dbg Is Nothing, -1, dbg.ListBreakpoints().Length)}" & vbCrLf)
+
             ' 注意: 在这里只判断调试器对象是否存在, 而不判断 IsDebugging 状态.
             ' 因为调试会话有可能是在当前的这个代码块已经开始执行了之后才被启动
             ' 的(例如由脚本之中的 browser() 函数所触发), 如果在这里就根据
@@ -142,6 +146,8 @@ Namespace Interpreter
                     ' 在未开启调试的时候, 这里仅有一次布尔判断的开销
                     If Not dbg Is Nothing AndAlso dbg.IsDebugging Then
                         Dim hit As Breakpoint = Nothing
+
+                        System.IO.File.AppendAllText("exe2_diag.log", $"shouldPauseCall line={If(TryCast(expression, IRuntimeTrace)?.stackFrame.Line, "?")} file={If(TryCast(expression, IRuntimeTrace)?.stackFrame.File, "?")}" & vbCrLf)
 
                         ' 检查是否需要暂停(断点命中或者单步执行)
                         If dbg.ShouldPause(expression, env, hit) Then
