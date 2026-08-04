@@ -138,7 +138,7 @@ Namespace Interpreter
             If file.StringEmpty(, True) Then
                 Return ""
             Else
-                Return file.Replace("\", "/").ToLower.Trim(" "c, ASCII.Quot)
+                Return file.Replace("\", "/").ToLower.Trim(" "c, ChrW(34))
             End If
         End Function
     End Structure

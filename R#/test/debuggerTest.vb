@@ -65,15 +65,15 @@ Module debuggerTest
     ''' 每一行都会被调试器当作一个单独的顶层语句来执行
     ''' </summary>
     Const script As String =
-"a <- 1                                    " & vbLf &
-"b <- 2                                    " & vbLf &
-"f <- function(x) {                         " & vbLf &
-"    y <- x + 1                            " & vbLf &
-"    return(y * 2)                         " & vbLf &
-"}                                         " & vbLf &
-"c <- f(a)                                 " & vbLf &
-"d <- a + b + c                            " & vbLf &
-"print(d)                                  "
+"let a = 1;" & vbLf &
+"let b = 2;" & vbLf &
+"let f = function(x) {" & vbLf &
+"    let y = x + 1;" & vbLf &
+"    return(y * 2)" & vbLf &
+"};" & vbLf &
+"let c = f(a);" & vbLf &
+"let d = a + b + c;" & vbLf &
+"print(d);"
 
     Sub Main()
         Call RunScriptBreakpointTest()
@@ -109,6 +109,7 @@ Module debuggerTest
         Dim hits As New List(Of Integer)
 
         AddHandler dbg.OnBreakpointHit, Sub(frame As DebugFrame)
+                                            Call Console.WriteLine($"[DIAG] hit at {frame.file}:{frame.line}")
                                             Call hits.Add(frame.line)
                                             Call dbg.Resume(DebugAction.Continue)
                                         End Sub
