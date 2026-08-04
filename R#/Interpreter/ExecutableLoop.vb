@@ -119,7 +119,11 @@ Namespace Interpreter
             Dim dbg As DebuggerContext = env.debugger
             Dim depth As Integer = 0
 
-            System.IO.File.AppendAllText("exe_diag.log", $"dbgHash={If(dbg Is Nothing, 0, dbg.GetHashCode())} isDbg={If(dbg Is Nothing, False, dbg.IsDebugging)}" & vbCrLf)
+            Dim firstFile As String = "?"
+            If execQueue IsNot Nothing AndAlso execQueue.Count > 0 AndAlso TypeOf execQueue(0) Is IRuntimeTrace Then
+                firstFile = CType(execQueue(0), IRuntimeTrace).stackFrame.File
+            End If
+            ' System.IO.File.AppendAllText("exe_diag.log", $"file={firstFile} dbgHash={If(dbg Is Nothing, 0, dbg.GetHashCode())} isDbg={If(dbg Is Nothing, False, dbg.IsDebugging)}" & vbCrLf)
 
             ' 注意: 在这里只判断调试器对象是否存在, 而不判断 IsDebugging 状态.
             ' 因为调试会话有可能是在当前的这个代码块已经开始执行了之后才被启动
@@ -145,6 +149,8 @@ Namespace Interpreter
                     ' 在未开启调试的时候, 这里仅有一次布尔判断的开销
                     If Not dbg Is Nothing AndAlso dbg.IsDebugging Then
                         Dim hit As Breakpoint = Nothing
+
+                        ' System.IO.File.AppendAllText("execdiag2.log", $"entered dbgHash={dbg.GetHashCode()} isDbg={dbg.IsDebugging} file={firstFile}" & vbCrLf)
 
                         ' 检查是否需要暂停(断点命中或者单步执行)
                         If dbg.ShouldPause(expression, env, hit) Then

@@ -209,7 +209,7 @@ Namespace Interpreter
             ' 路径匹配失败之后, 再以纯文件名做一次回退匹配
             Dim nameKey As String = key(System.IO.Path.GetFileName(location.file), location.line)
 
-            System.IO.File.AppendAllText("tryhit_diag.log", $"full={fullKey}|name={nameKey}|valid={location.isValid}|keys={String.Join(",", index.Keys)}" & vbCrLf)
+            ' System.IO.File.AppendAllText("tryhit_diag.log", $"full={fullKey}|name={nameKey}|valid={location.isValid}|keys={String.Join(",", index.Keys)}" & vbCrLf)
 
             If (index.TryGetValue(fullKey, bp) OrElse index.TryGetValue(nameKey, bp)) AndAlso bp.enabled Then
                 Return bp

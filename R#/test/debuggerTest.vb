@@ -88,7 +88,11 @@ Module debuggerTest
     ''' </summary>
     Private Function WriteScript() As String
         Dim path As String = System.IO.Path.GetTempFileName().Replace(".tmp", ".R")
-        Call File.WriteAllText(path, script)
+        ' 以不带 BOM 的 UTF-8 写入, 否则文件开头的 BOM 字节会被
+        ' 词法解析器当作第一行, 从而导致后续的源代码行号整体产生
+        ' 一个 +1 的偏移, 使得按照编辑器可见行号注册的断点(例如第 1 行)
+        ' 无法与实际执行时所处的源代码位置相匹配
+        Call File.WriteAllText(path, script, New System.Text.UTF8Encoding(False))
         Return path
     End Function
 

@@ -167,6 +167,7 @@
 	  <None Remove="build_full.txt" />
 	  <None Remove="diag.log" />
 	  <None Remove="err.log" />
+	  <None Remove="exe_diag.log" />
 	  <None Remove="out.log" />
 	  <None Remove="shouldpause_diag.log" />
 	  <None Remove="step_diag.log" />
