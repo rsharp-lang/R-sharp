@@ -163,6 +163,16 @@
 	  <None Remove="Test\**" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="build_full.txt" />
+	  <None Remove="diag.log" />
+	  <None Remove="err.log" />
+	  <None Remove="out.log" />
+	  <None Remove="shouldpause_diag.log" />
+	  <None Remove="step_diag.log" />
+	  <None Remove="tryhit_diag.log" />
+	</ItemGroup>
+
   <ItemGroup>
     <Import Include="System.Data" />
   </ItemGroup>
