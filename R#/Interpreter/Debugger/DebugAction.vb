@@ -60,11 +60,34 @@ Namespace Interpreter
     ''' <summary>
     ''' 调试动作类型
     ''' </summary>
+    ''' <remarks>
+    ''' 单步语义均以 <see cref="DebuggerContext.stackDepth"/> 所记录的
+    ''' 块嵌套深度为判定基准, 具体的判定规则请参见
+    ''' <see cref="DebuggerContext.ShouldPause"/> 函数.
+    ''' </remarks>
     Public Enum DebugAction
-        [Continue] ' 继续运行直到下一个断点
-        [StepOver] ' 单步跳过（执行下一行）
-        [StepInto] ' 单步进入（进入函数内部，如果支持）
-        [Stop]     ' 停止执行
+        ''' <summary>
+        ''' 继续运行, 直到命中下一个断点为止
+        ''' </summary>
+        [Continue]
+        ''' <summary>
+        ''' 单步跳过: 在与当前语句相同或者更外层的位置暂停,
+        ''' 被调用的函数体/循环体将会被完整执行完毕而不会中途暂停
+        ''' </summary>
+        [StepOver]
+        ''' <summary>
+        ''' 单步进入: 在下一条被执行的语句处暂停, 无论其位于哪一个嵌套层级,
+        ''' 因此可以进入用户所自定义的函数体内部
+        ''' </summary>
+        [StepInto]
+        ''' <summary>
+        ''' 单步跳出: 一直执行到当前的代码块返回至其外层代码块之后再暂停
+        ''' </summary>
+        [StepOut]
+        ''' <summary>
+        ''' 停止执行整个脚本程序
+        ''' </summary>
+        [Stop]
     End Enum
 
 End Namespace
