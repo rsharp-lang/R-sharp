@@ -34,7 +34,13 @@
 
     '     Class DebugInspector
     ' 
-    '         Function: Evaluate, GetCallStack, GetVariables, PreviewValue
+    '         Function: Evaluate, FormatValue, GetCallStack, GetVariables
+    ' 
+    '         Class VariableInfo
+    ' 
+    '             Properties: name, type, value
+    ' 
+    '             Function: ToString
     ' 
     ' 
     ' /********************************************************************************/
@@ -42,20 +48,21 @@
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
-Imports Microsoft.VisualBasic.Linq
-Imports SMRUCC.Rsharp.Language
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
-Imports RRuntime = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter
 
     ''' <summary>
-    ''' 运行时的检查器
+    ''' 调试器的运行时检查器
     ''' </summary>
     ''' <remarks>
-    ''' 为调试器提供查看当前作用域之中的变量/查看调用堆栈以及
-    ''' 在暂停点之上对任意的R#表达式进行求值等运行时的检查能力
+    ''' 这个类型提供了在程序暂停之后所需要用到的各种运行时状态的检查功能, 
+    ''' 其内部的实现都是复用的解释器所已经具备的基础设施:
+    ''' 
+    ''' + 变量列表: 复用 <see cref="Environment.GetSymbolsNames"/> 以及 <see cref="Environment.FindSymbol"/>
+    ''' + 调用堆栈: 复用 <see cref="Environment.stackTrace"/>
+    ''' + 表达式求值: 复用 <see cref="Program.BuildProgram"/> 的语法解析链路
     ''' </remarks>
     Public Class DebugInspector
 
@@ -66,98 +73,145 @@ Namespace Interpreter
         End Sub
 
         ''' <summary>
-        ''' 列出目标环境之中所定义的全部的变量符号
+        ''' 一个变量的描述信息
+        ''' </summary>
+        Public Class VariableInfo
+
+            Public Property name As String
+            Public Property type As String
+            Public Property value As String
+
+            Public Overrides Function ToString() As String
+                Return $"{name} <{type}> = {value}"
+            End Function
+        End Class
+
+        ''' <summary>
+        ''' 列出目标环境之中的所有的变量符号
         ''' </summary>
         ''' <param name="env">
-        ''' 目标运行时环境, 默认是使用调试器当前所处的暂停点上的环境
+        ''' 目标运行时环境, 默认为当前所暂停的位置上的环境对象
         ''' </param>
-        ''' <returns>[变量名称 =&gt; 变量值的预览文本]</returns>
-        Public Function GetVariables(Optional env As Environment = Nothing) As NamedValue(Of String)()
+        ''' <param name="inherits">
+        ''' 是否同时列出定义于父环境之中的变量符号?
+        ''' </param>
+        Public Function GetVariables(Optional env As Environment = Nothing,
+                                     Optional inherits As Boolean = False) As VariableInfo()
+
             env = If(env, debugger.CurrentEnvironment)
 
             If env Is Nothing Then
                 Return {}
             End If
 
-            Return env.GetSymbolsNames _
-                .Select(Function(name)
-                            Return New NamedValue(Of String)(name, PreviewValue(env.GetValue(name)))
+            Dim list As New List(Of VariableInfo)
+            Dim names As New Index(Of String)
+            Dim current As Environment = env
+
+            Do While Not current Is Nothing
+                For Each name As String In current.GetSymbolsNames
+                    ' 内层环境之中的同名变量会遮蔽掉外层环境之中的变量, 
+                    ' 在这里只保留最内层的那一个
+                    If name Like names Then
+                        Continue For
+                    End If
+
+                    Dim symbol As Symbol = current.FindSymbol(name)
+
+                    If symbol Is Nothing Then
+                        Continue For
+                    End If
+
+                    Call names.Add(name)
+                    Call list.Add(New VariableInfo With {
+                        .name = name,
+                        .type = symbol.typeof?.ToString,
+                        .value = FormatValue(symbol.value)
+                    })
+                Next
+
+                If Not inherits Then
+                    Exit Do
+                Else
+                    current = current.parent
+                End If
+            Loop
+
+            Return list.OrderBy(Function(v) v.name).ToArray
+        End Function
+
+        ''' <summary>
+        ''' 获取得到从当前的位置一直到最顶层的调用堆栈信息
+        ''' </summary>
+        ''' <param name="env">
+        ''' 目标运行时环境, 默认为当前所暂停的位置上的环境对象
+        ''' </param>
+        Public Function GetCallStack(Optional env As Environment = Nothing) As String()
+            env = If(env, debugger.CurrentEnvironment)
+
+            If env Is Nothing Then
+                Return {}
+            End If
+
+            Dim stacks As StackFrame() = env.stackTrace
+
+            If stacks.IsNullOrEmpty Then
+                Return {}
+            End If
+
+            Return stacks _
+                .Select(Function(frame, i)
+                            Return $"[{i}] {frame}"
                         End Function) _
-                .OrderBy(Function(v) v.Name) _
                 .ToArray
         End Function
 
         ''' <summary>
-        ''' 获取得到从当前的栈帧一直到最顶层的调用堆栈信息
-        ''' </summary>
-        ''' <param name="env">
-        ''' 目标运行时环境, 默认是使用调试器当前所处的暂停点上的环境
-        ''' </param>
-        Public Function GetCallStack(Optional env As Environment = Nothing) As StackFrame()
-            env = If(env, debugger.CurrentEnvironment)
-
-            If env Is Nothing Then
-                Return {}
-            Else
-                ' 直接复用运行时环境所提供的堆栈追踪能力
-                Return env.stackTrace
-            End If
-        End Function
-
-        ''' <summary>
-        ''' 在指定的运行时环境之中对一段R#表达式源代码进行求值
+        ''' 在指定的运行时环境之中对一个R#表达式进行求值
         ''' </summary>
         ''' <param name="expression">所需要进行求值的R#表达式的源代码</param>
         ''' <param name="env">
-        ''' 目标运行时环境, 默认是使用调试器当前所处的暂停点上的环境
+        ''' 目标运行时环境, 默认为当前所暂停的位置上的环境对象
         ''' </param>
         ''' <returns>
         ''' 表达式的求值结果. 当语法解析或者是求值的过程之中发生了错误的时候, 
-        ''' 这个函数会返回一个 <see cref="Message"/> 错误消息对象
+        ''' 函数会返回一个 <see cref="Message"/> 类型的错误对象
         ''' </returns>
         ''' <remarks>
-        ''' 这个函数是直接复用了解释器现成的语法解析与求值链路的, 
-        ''' 所以在这里可以执行任意合法的R#表达式, 
-        ''' 其效果等价于其他的调试器之中的``立即窗口``
+        ''' 请注意, 表达式的求值是在真实的运行时环境之上进行的, 
+        ''' 所以类似于``x = 1``这样的赋值表达式是会对程序的运行状态
+        ''' 产生实际的副作用的
         ''' </remarks>
         Public Function Evaluate(expression As String, Optional env As Environment = Nothing) As Object
             env = If(env, debugger.CurrentEnvironment)
 
             If env Is Nothing Then
-                Return RRuntime.debug.stop("no active runtime environment for the expression evaluation!", env)
+                Return Internal.debug.stop("no available runtime environment for evaluate the expression!", env)
             ElseIf expression.StringEmpty(, True) Then
                 Return Nothing
             End If
 
             Dim syntaxError As String = Nothing
+            Dim program As Program = Program.BuildProgram(expression, [error]:=syntaxError)
+
+            If program Is Nothing Then
+                Return Internal.debug.stop({"syntax error while parsing the debug expression!", syntaxError}, env)
+            End If
 
             Try
-                Dim script As Rscript = Rscript.FromText(expression)
-                Dim program As Program = Program.CreateProgram(script, [error]:=syntaxError)
-
-                If program Is Nothing Then
-                    Return RRuntime.debug.stop($"syntax error in the debug expression: {syntaxError}", env)
-                End If
-
-                ' 在求值的过程之中临时的关闭掉调试器, 避免因为求值的表达式
-                ' 本身也会流经 ExecutableLoop 而导致调试器发生递归的重入
-                Dim restore As Boolean = debugger.IsDebugging
-                debugger.IsDebugging = False
-
-                Try
-                    Return program.Execute(env)
-                Finally
-                    debugger.IsDebugging = restore
-                End Try
+                ' 这里不可以直接使用 program.Execute, 因为
+                ' ExecutableLoop.Execute 会再一次的触发调试器的暂停逻辑, 
+                ' 从而造成重入的死锁问题. 在这里通过临时的挂起调试状态来规避
+                Return debugger.EvaluateWithoutDebug(program, env)
             Catch ex As Exception
-                Return RRuntime.debug.stop(ex, env)
+                Return Internal.debug.stop(ex, env)
             End Try
         End Function
 
         ''' <summary>
-        ''' 将一个运行时的对象值转换为一段简短的预览文本
+        ''' 将一个运行时的对象值格式化为便于阅读的字符串形式
         ''' </summary>
-        Public Shared Function PreviewValue(value As Object, Optional maxLength As Integer = 64) As String
+        Public Shared Function FormatValue(value As Object, Optional maxLength As Integer = 120) As String
             If value Is Nothing Then
                 Return "NULL"
             End If
@@ -168,18 +222,21 @@ Namespace Interpreter
                 If TypeOf value Is String Then
                     text = $"""{value}"""
                 ElseIf TypeOf value Is Array Then
-                    Dim vec As Array = DirectCast(value, Array)
-                    Dim preview As String = vec.AsObjectEnumerator _
-                        .Take(8) _
-                        .Select(Function(o) If(o Is Nothing, "NULL", o.ToString)) _
+                    Dim vec = DirectCast(value, Array).AsObjectEnumerator.Take(10).ToArray
+                    Dim body As String = vec _
+                        .Select(Function(o) If(o Is Nothing, "NA", o.ToString)) _
                         .JoinBy(", ")
 
-                    text = $"[{vec.Length}] {preview}{If(vec.Length > 8, ", ...", "")}"
+                    If DirectCast(value, Array).Length > 10 Then
+                        body = $"{body}, ..."
+                    End If
+
+                    text = $"[{body}]"
                 Else
                     text = value.ToString
                 End If
             Catch ex As Exception
-                text = $"<{value.GetType.Name}>"
+                text = $"<error: {ex.Message}>"
             End Try
 
             If text.Length > maxLength Then
