@@ -140,6 +140,8 @@ Module debuggerTest
         Call dbg.AddBreakpoint(file, 1)
         Call dbg.Start(breakOnEntry:=False)
 
+        Console.Error.WriteLine($"[STEP-DIAG] before Source: dbgHash={dbg.GetHashCode()} isDbg={dbg.IsDebugging} globalDbgHash={R.globalEnvir.debugger.GetHashCode()} globalIsDbg={R.globalEnvir.debugger.IsDebugging}")
+
         Dim stepCount As Integer = 0
         Dim maxSteps As Integer = 12
 
