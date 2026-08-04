@@ -1,55 +1,58 @@
 #Region "Microsoft.VisualBasic::00000000000000000000000000000000, R#\Interpreter\Debugger\DebugInspector.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
 
-    '     Class DebugInspector
-    ' 
-    '         Function: Evaluate, FormatValue, GetCallStack, GetVariables
-    ' 
-    '         Class VariableInfo
-    ' 
-    '             Properties: name, type, value
-    ' 
-    '             Function: ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class DebugInspector
+' 
+'         Function: Evaluate, FormatValue, GetCallStack, GetVariables
+' 
+'         Class VariableInfo
+' 
+'             Properties: name, type, value
+' 
+'             Function: ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Diagnostics
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
+Imports Microsoft.VisualBasic.Linq
 
 Namespace Interpreter
 
@@ -96,7 +99,7 @@ Namespace Interpreter
         ''' 是否同时列出定义于父环境之中的变量符号?
         ''' </param>
         Public Function GetVariables(Optional env As Environment = Nothing,
-                                     Optional inherits As Boolean = False) As VariableInfo()
+                                     Optional [inherits] As Boolean = False) As VariableInfo()
 
             env = If(env, debugger.CurrentEnvironment)
 
@@ -130,7 +133,7 @@ Namespace Interpreter
                     })
                 Next
 
-                If Not inherits Then
+                If Not [inherits] Then
                     Exit Do
                 Else
                     current = current.parent

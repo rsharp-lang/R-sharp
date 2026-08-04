@@ -245,13 +245,13 @@ Namespace Interpreter
                 Case DebugAction.StepOver
                     ' 单步跳过: 只在与基准深度相同或者更外层的位置上暂停, 
                     ' 更深的层级属于被调用的函数体, 直接执行完毕即可
-                    If _stackDepth <= baselineDepth Then
+                    If _depth <= baselineDepth Then
                         Return True
                     End If
 
                 Case DebugAction.StepOut
                     ' 单步跳出: 一直执行到返回至外层的代码块之后才暂停
-                    If _stackDepth < baselineDepth Then
+                    If _depth < baselineDepth Then
                         Return True
                     End If
             End Select
@@ -336,7 +336,7 @@ Namespace Interpreter
         Public Sub [Resume](action As DebugAction)
             CurrentAction = action
             ' 以当前所处的深度作为后续单步判断的基准
-            baselineDepth = _stackDepth
+            baselineDepth = _depth
 
             If action = DebugAction.Stop Then
                 IsDebugging = False
