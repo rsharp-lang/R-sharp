@@ -117,8 +117,11 @@ Module debuggerTest
         Call R.Source(file)
 
         Call Assert(hits.Count = 2, "should hit both breakpoints")
-        Call Assert(hits(0) = 3, "first breakpoint should be at line 3")
-        Call Assert(hits(1) = 8, "second breakpoint should be at line 8")
+
+        If hits.Any Then
+            Call Assert(hits(0) = 3, "first breakpoint should be at line 3")
+            Call Assert(hits(1) = 8, "second breakpoint should be at line 8")
+        End If
 
         Call DumpBreakpoints("script breakpoint test")
 
