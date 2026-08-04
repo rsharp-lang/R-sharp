@@ -110,64 +110,91 @@ Namespace Interpreter
             Dim benchmark As Long
             Dim timestamp As Long
             ' 获取调试器引用
+            '
+            ' 因为所有的函数体/循环体/分支体最终都是通过 ClosureExpression
+            ' 委托至 Program.Execute 再进入到当前的这个函数之中来执行其内部
+            ' 的语句列表的, 所以在这里进行插桩就可以让单步调试以及断点功能
+            ' 自动的覆盖到所有的嵌套层级之上
             Dim dbg As DebuggerContext = env.debugger
+            Dim depth As Integer = 0
 
-            ' The program code loop
-            For Each expression As Expression In execQueue
-                If showExpression Then
-                    Call VBDebugger.WriteLine(expression.ToString, ConsoleColor.White)
-                End If
+            ' 注意: 在这里只判断调试器对象是否存在, 而不判断 IsDebugging 状态.
+            ' 因为调试会话有可能是在当前的这个代码块已经开始执行了之后才被启动
+            ' 的(例如由脚本之中的 browser() 函数所触发), 如果在这里就根据
+            ' IsDebugging 来决定是否维护深度计数器的话, 就会造成 EnterBlock
+            ' 与 ExitBlock 不成对出现从而使得深度计数器失衡
+            If Not dbg Is Nothing Then
+                ' 进入一个新的代码块, 记录下当前的嵌套深度以供
+                ' StepOver/StepInto/StepOut 这三种单步动作做判断
+                depth = dbg.EnterBlock()
+            End If
 
-                ' ================= 调试逻辑开始 =================
-                If dbg IsNot Nothing AndAlso dbg.IsDebugging Then
-                    ' 检查是否需要暂停（断点命中或单步执行）
-                    If dbg.ShouldPause(expression) Then
-                        ' 1. 显示当前行信息
-                        VBDebugger.WriteLine($"[DEBUG] Hit: {expression.ToString}", ConsoleColor.Yellow)
+            Try
+                ' The program code loop
+                For Each expression As Expression In execQueue
+                    If showExpression Then
+                        Call VBDebugger.WriteLine(expression.ToString, ConsoleColor.White)
+                    End If
 
-                        ' 2. 暂停执行，等待用户输入指令
-                        ' 这里是一个阻塞调用，直到用户输入 Continue 或 Step
-                        dbg.Pause(expression, env)
+                    ' ================= 调试逻辑开始 =================
+                    ' 这里需要在每一次的循环之中都重新读取 IsDebugging 的状态,
+                    ' 因为调试会话可能会在执行的过程之中被启动或者是被终止.
+                    ' 在未开启调试的时候, 这里仅有一次布尔判断的开销
+                    If Not dbg Is Nothing AndAlso dbg.IsDebugging Then
+                        Dim hit As Breakpoint = Nothing
 
-                        ' 3. 检查用户是否选择了停止
-                        If dbg.CurrentAction = DebugAction.Stop Then
-                            Exit For ' 退出脚本执行
+                        ' 检查是否需要暂停(断点命中或者单步执行)
+                        If dbg.ShouldPause(expression, env, hit) Then
+                            ' 暂停执行并且等待宿主程序下达下一步的调试指令, 
+                            ' 这是一个阻塞调用, 直到有代码调用了 dbg.Resume 为止
+                            Call dbg.Pause(New DebugFrame(expression, env, depth, hit))
+
+                            ' 检查用户是否选择了停止执行整个脚本程序
+                            If dbg.CurrentAction = DebugAction.Stop Then
+                                Exit For
+                            End If
                         End If
                     End If
-                End If
-                ' ================= 调试逻辑结束 =================
+                    ' ================= 调试逻辑结束 =================
 
-                benchmark = App.NanoTime
-                timestamp = App.UnixTimeStamp
-                refreshMemory = False
-                last = ExecuteCodeLine(expression, env, breakLoop)
-                benchmark = App.NanoTime - benchmark
+                    benchmark = App.NanoTime
+                    timestamp = App.UnixTimeStamp
+                    refreshMemory = False
+                    last = ExecuteCodeLine(expression, env, breakLoop)
+                    benchmark = App.NanoTime - benchmark
 
-                If Not env.profiler Is Nothing Then
-                    Call runRefreshMemory()
-                    Call env.profiler.Add(New ProfileRecord(expression) With {
-                        .elapse_time = benchmark,
-                        .memory_delta = memoryDelta,
-                        .stackframe = New StackFrame(env.stackFrame),
-                        .tag = timestamp,
-                        .memory_size = memSize2
-                    })
-                End If
+                    If Not env.profiler Is Nothing Then
+                        Call runRefreshMemory()
+                        Call env.profiler.Add(New ProfileRecord(expression) With {
+                            .elapse_time = benchmark,
+                            .memory_delta = memoryDelta,
+                            .stackframe = New StackFrame(env.stackFrame),
+                            .tag = timestamp,
+                            .memory_size = memSize2
+                        })
+                    End If
 
-                If showExpression Then
-                    Call VBDebugger.WriteLine($"[elapse_time] {TimeSpan.FromTicks(benchmark).FormatTime}", ConsoleColor.Green)
-                End If
+                    If showExpression Then
+                        Call VBDebugger.WriteLine($"[elapse_time] {TimeSpan.FromTicks(benchmark).FormatTime}", ConsoleColor.Green)
+                    End If
 
-                If showMemory Then
-                    Call runRefreshMemory()
-                    Call printMemoryProfile()
-                End If
+                    If showMemory Then
+                        Call runRefreshMemory()
+                        Call printMemoryProfile()
+                    End If
 
-                If breakLoop Then
-                    Call configException(env, last, expression)
-                    Exit For
+                    If breakLoop Then
+                        Call configException(env, last, expression)
+                        Exit For
+                    End If
+                Next
+            Finally
+                If Not dbg Is Nothing Then
+                    ' 使用 Finally 来保证在发生了异常或者是通过 return/break
+                    ' 提前退出当前的代码块的时候, 深度计数器也不会失衡
+                    Call dbg.ExitBlock()
                 End If
-            Next
+            End Try
 
             Return last
         End Function

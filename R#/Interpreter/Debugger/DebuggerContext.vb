@@ -109,6 +109,19 @@ Namespace Interpreter
         ''' 这个计数器的数值就天然的等于当前的代码块的嵌套深度了
         ''' </remarks>
         Public ReadOnly Property stackDepth As Integer
+            Get
+                Return _depth
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' <see cref="stackDepth"/> 的后备字段
+        ''' </summary>
+        ''' <remarks>
+        ''' 因为需要通过 <see cref="Interlocked"/> 来进行原子操作, 
+        ''' 所以在这里必须要声明为一个可以按引用传递的字段
+        ''' </remarks>
+        Private _depth As Integer
 
         ''' <summary>
         ''' 在执行单步操作的时候所记录下来的基准深度
@@ -177,8 +190,10 @@ Namespace Interpreter
         ''' 这个函数只应该被 <see cref="ExecutableLoop.Execute"/> 所调用
         ''' </remarks>
         Friend Function EnterBlock() As Integer
-            _stackDepth += 1
-            Return _stackDepth
+            ' 并行任务的工作线程同样会经由 ExecutableLoop 来执行代码块, 
+            ' 而整个环境链之上共享的是同一个调试器上下文对象, 
+            ' 所以在这里必须要使用原子操作来避免深度计数器被多个线程所破坏
+            Return Interlocked.Increment(_depth)
         End Function
 
         ''' <summary>
@@ -190,7 +205,7 @@ Namespace Interpreter
         ''' return/break 提前退出的时候深度计数器不会失衡
         ''' </remarks>
         Friend Sub ExitBlock()
-            _stackDepth -= 1
+            Call Interlocked.Decrement(_depth)
         End Sub
 
         ''' <summary>
@@ -329,6 +344,29 @@ Namespace Interpreter
 
             Call resumeSignal.Set()
         End Sub
+
+        ''' <summary>
+        ''' 在临时挂起调试状态的情况下执行一段R#程序
+        ''' </summary>
+        ''' <remarks>
+        ''' 在暂停点上对监视表达式或者是条件断点的条件表达式进行求值的时候, 
+        ''' 其内部同样会经由 <see cref="ExecutableLoop.Execute"/> 来执行, 
+        ''' 如果不做特殊处理的话就会再一次的触发暂停逻辑, 
+        ''' 从而使得执行线程重入 <see cref="Pause"/> 而造成死锁.
+        ''' 
+        ''' 所以在这里通过临时的将 <see cref="IsDebugging"/> 置为False
+        ''' 的方式来保证求值过程本身不会被调试器所拦截
+        ''' </remarks>
+        Friend Function EvaluateWithoutDebug(program As Program, env As Environment) As Object
+            Dim restore As Boolean = IsDebugging
+
+            Try
+                IsDebugging = False
+                Return program.Execute(env)
+            Finally
+                IsDebugging = restore
+            End Try
+        End Function
 
         ''' <summary>
         ''' 添加一个断点
