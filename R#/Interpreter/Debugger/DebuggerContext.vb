@@ -284,6 +284,9 @@ Namespace Interpreter
 
             bp.hitCount += 1
 
+            ' [DIAG] 临时诊断: 写入文件绕过缓冲, 打印实际命中的断点行号
+            System.IO.File.AppendAllText("hit_diag.log", $"line={bp.line} file='{bp.file}' condition='{bp.condition}'" & vbCrLf)
+
             Return bp
         End Function
 

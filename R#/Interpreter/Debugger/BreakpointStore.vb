@@ -194,8 +194,18 @@ Namespace Interpreter
             End If
 
             Dim bp As Breakpoint = Nothing
+            Dim fullKey As String = key(location.file, location.line)
+            ' 在程序执行期间, 表达式的 stackFrame.File 往往只带有纯文件名
+            ' (取决于词法解析器在构建 source 对象时所使用的文件名), 而用户
+            ' 在注册断点的时候通常是使用完整的文件路径. 为了能够让这两者有
+            ' 效的匹配而不会由于目录前缀的差异而丢失命中, 这里在按照完整
+            ' 路径匹配失败之后, 再以纯文件名做一次回退匹配
+            Dim nameKey As String = key(System.IO.Path.GetFileName(location.file), location.line)
 
-            If index.TryGetValue(key(location.file, location.line), bp) AndAlso bp.enabled Then
+            ' [DIAG] 临时诊断
+            System.IO.File.AppendAllText("tryhit_diag.log", $"act_full={fullKey}; act_name={nameKey}; isValid={location.isValid}; keys=[{String.Join(", ", index.Keys)}]" & vbCrLf)
+
+            If (index.TryGetValue(fullKey, bp) OrElse index.TryGetValue(nameKey, bp)) AndAlso bp.enabled Then
                 Return bp
             Else
                 Return Nothing

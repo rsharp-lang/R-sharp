@@ -120,6 +120,18 @@ Namespace Interpreter
                 lineNum = -1
             End If
 
+            ' 语法构建器在填充 StackFrame.Line 的时候使用的是词法分
+            ' 析器之中的 0-based 行号(参见 SyntaxBuilderOptions.
+            ' GetStackTrace 之中直接取 token.span.line 的实现), 
+            ' 而解释器在向外暴露错误堆栈信息的时候会对行号做 +1 的
+            ' 处理(例如 RInterpreter 之中 tokens(i).span.line + 1), 
+            ' 所以在这里统一把 0-based 的堆栈帧行号转换为用户视角之下
+            ' 的 1-based 行号, 使得由用户按照文件编辑器之中的可见行号
+            ' 所注册进来的断点能够与实际执行时所处的源代码位置相匹配
+            If lineNum >= 0 Then
+                lineNum += 1
+            End If
+
             Return New SourceLocation(frame.File, lineNum)
         End Function
 
