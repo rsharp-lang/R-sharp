@@ -498,3 +498,4 @@ test/unitTest/dataframe/wine.dat
 test/pkg_test/test.zip
 /test/plots/cor_net.pdf
 /test/syntax/data/rda/data.pkl
+R\#/test/build_full.txt
