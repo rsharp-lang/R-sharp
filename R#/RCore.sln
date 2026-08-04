@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32210.308
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11723.231 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Core", "..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj", "{C1583836-FB5E-4E09-8CFD-B270AA522215}"
 EndProject

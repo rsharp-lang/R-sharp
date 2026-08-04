@@ -129,8 +129,9 @@ declare namespace REnv {
    /**
      * @param source default value Is ``null``.
      * @param debug default value Is ``false``.
+     * @param autoclose_log default value Is ``true``.
    */
-   function transform_rlang_source(code: any, source?: any, debug?: any): object;
+   function transform_rlang_source(code: any, source?: any, debug?: any, autoclose_log?: any): object;
    /**
    */
    function walkFiles(vbproj: any, refer: any, banner: any, proj_folder: any): object;

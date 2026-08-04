@@ -175,7 +175,7 @@ Namespace Runtime
         End Function
 
         Public Overrides Function ToString() As String
-            Dim const_s As Integer = symbols.Values.Where(Function(s) s.readonly).Count
+            Dim const_s As Integer = Aggregate s As Symbol In symbols.Values Where s.IsReadOnly Into Count
             Dim let_s As Integer = symbols.Count - const_s
 
             Return $"{symbols.Count} symbols inside environment, {const_s} binding lock and {let_s} unlock binding."

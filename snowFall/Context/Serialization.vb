@@ -112,12 +112,12 @@ Public Module Serialization
         Dim stackTrace As Byte() = MsgPackSerializer.SerializeObject(symbol.stacktrace)
 
         If env.globalEnvironment.Rscript.debug Then
-            Call Console.WriteLine($"[found symbol::{symbol.name}] {symbol.ToString}")
+            Call VBDebugger.EchoLine($"[found symbol::{symbol.name}] {symbol.ToString}")
         End If
 
         Using buffer As New MemoryStream, writer As New BinaryDataWriter(buffer)
             Call writer.Write(symbol.name, BinaryStringFormat.ZeroTerminated)
-            Call writer.Write(symbol.readonly)
+            Call writer.Write(symbol.IsReadOnly)
 
             If TypeOf symbol.value Is RMethodInfo Then
                 Dim del As New IDelegate(DirectCast(symbol.value, RMethodInfo).GetNetCoreCLRDeclaration)
