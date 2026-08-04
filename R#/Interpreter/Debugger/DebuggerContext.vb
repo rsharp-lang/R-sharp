@@ -148,7 +148,18 @@ Namespace Interpreter
         ''' 而造成死锁. 所以在这里记录下创建者线程(即主线程)的编号, 
         ''' 使得只有主线程才会真正的进入暂停状态
         ''' </remarks>
-        ReadOnly ownerThreadId As Integer = Thread.CurrentThread.ManagedThreadId
+        ''' 
+        ''' 注意: 这个字段的初始值为 0, 表示调试会话的所有者线程尚未
+        ''' 绑定. 在 <see cref="ShouldPause"/> 第一次被调用的那个执行线程
+        ''' 之上, 会通过原子操作把这个字段绑定为当前线程的编号, 
+        ''' 从而把"脚本程序的执行线程"记录为调试会话的所有者线程. 
+        ''' 这是因为 R# 在运行脚本的时候, 整个脚本程序的执行可能会被调度到
+        ''' 一个非主线程(例如线程池线程)之上, 如果在这里把所有者线程硬编码为
+        ''' 创建 DebuggerContext 的那个线程的话, 反而会把真正的脚本执行线程
+        ''' 误判为"非所有者线程"而永远无法命中任何断点. 
+        ''' 在绑定成功之后, 其余的并行工作线程(例如 parLapply 的工作线程)因为
+        ''' 线程编号不同, 则会被正确的排除在调试之外, 避免多个线程争用同一个信号量
+        Private ownerThreadId As Integer = 0
 
         ''' <summary>
         ''' 触发断点时的回调事件(可以用来弹窗或者在控制台之中做交互)
@@ -171,6 +182,11 @@ Namespace Interpreter
             IsDebugging = True
             CurrentAction = If(breakOnEntry, DebugAction.StepInto, DebugAction.Continue)
             baselineDepth = 0
+            ' 重置所有者线程标记, 使得在脚本程序的执行线程第一次进入
+            ' ShouldPause 的时候, 能够通过原子操作把该线程绑定为所有者线程.
+            ' 这样做可以保证无论脚本被调度到主线程还是线程池线程之上, 
+            ' 真正的执行线程都能够正常的进入暂停状态
+            ownerThreadId = 0
             Call resumeSignal.Reset()
         End Sub
 
@@ -229,16 +245,29 @@ Namespace Interpreter
         Friend Function ShouldPause(expr As Expression, env As Environment, ByRef hit As Breakpoint) As Boolean
             hit = Nothing
 
-            ' 说明: 早期的版本在这里针对非"调试会话所有者线程"的执行线程直接
-            ' 返回了 False, 用来规避 parLapply/parSapply 等并行任务的工作线程
-            ' 争用同一个调试信号量而造成死锁. 但是 R# 在运行脚本的时候, 整个
-            ' 脚本程序的执行本身就可能会被调度到一个非主线程之上(例如线程池
-            ' 线程), 这样一来主线程所启动的调试会话反而会被这个线程判定为
-            ' "非所有者线程" 而永远无法命中任何断点. 
-            '
-            ' 因此这里不再以线程编号来门控单步/断点, 而是把并行任务的调试排除
-            ' 交给 Environment 之上的并行上下文标记(参见 Environment 的并行相关
-            ' 属性)来处理, 避免正常的脚本执行因为被调度到其它线程而丢失调试能力
+            ' 把第一次进入这个函数的执行线程绑定为调试会话的所有者线程. 
+            ' 因为 R# 在运行脚本的时候, 整个脚本程序的执行本身就有可能会被调度到
+            ' 一个非主线程(例如线程池线程)之上, 如果在这里把所有者线程硬编码为
+            ' 创建 DebuggerContext 的那个线程的话, 真正的脚本执行线程反而会被误判
+            ' 为"非所有者线程"而永远无法命中任何断点. 通过原子操作把首个进入的执行
+            ' 线程绑定为所有者线程之后, 正常的脚本执行就可以正确的进入暂停状态, 
+            ' 而随后进入到这个函数之中的并行工作线程(例如 parLapply 的工作线程)
+            ' 由于线程编号不同, 则会被正确的排除在调试之外, 避免多个线程争用同一个
+            ' 调试信号量而造成死锁
+            If ownerThreadId = 0 Then
+                ' 仅当当前仍然为未绑定状态(0)的时候才进行绑定, 保证只有第一个
+                ' 线程能够成功的把自己登记为所有者线程
+                Interlocked.CompareExchange(ownerThreadId, Thread.CurrentThread.ManagedThreadId, 0)
+            End If
+
+            System.IO.File.AppendAllText("shouldpause_diag.log", $"afterBind ownerTid={ownerThreadId} curTid={Thread.CurrentThread.ManagedThreadId} isOwner={isOwnerThread} action={CurrentAction}" & vbCrLf)
+
+            If Not isOwnerThread Then
+                ' 当前线程不是调试会话的所有者线程(例如并行任务的工作线程), 
+                ' 不参与调试, 避免多个线程同时等待同一个信号量而造成死锁
+                Return False
+            End If
+
             Select Case CurrentAction
                 Case DebugAction.Stop
                     Return False
@@ -287,9 +316,6 @@ Namespace Interpreter
             End If
 
             bp.hitCount += 1
-
-            ' [DIAG] 临时诊断: 写入文件绕过缓冲, 打印实际命中的断点行号
-            System.IO.File.AppendAllText("hit_diag.log", $"line={bp.line} file='{bp.file}' condition='{bp.condition}'" & vbCrLf)
 
             Return bp
         End Function

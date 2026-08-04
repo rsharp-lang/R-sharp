@@ -104,22 +104,17 @@ Module debuggerTest
         Call dbg.AddBreakpoint(file, 3)
         Call dbg.AddBreakpoint(file, 8)
 
-        ' [DIAG] 写入文件: 测试侧 debugger 实例 hashcode 与断点数量
-        System.IO.File.AppendAllText("test_diag.log", $"testSideDebuggerHash={dbg.GetHashCode()} breakpointCount={dbg.ListBreakpoints().Length}" & vbCrLf)
-
         Call dbg.Start(breakOnEntry:=False)
 
         Dim hits As New List(Of Integer)
 
         AddHandler dbg.OnBreakpointHit, Sub(frame As DebugFrame)
-                                            Call Console.WriteLine($"[DIAG] hit at {frame.file}:{frame.line}")
                                             Call hits.Add(frame.line)
                                             Call dbg.Resume(DebugAction.Continue)
                                         End Sub
 
         Call R.Source(file)
 
-        Console.WriteLine($"[DIAG] hits.Count={hits.Count} lines=[{String.Join(",", hits)}]")
         Call Assert(hits.Count = 2, "should hit both breakpoints")
 
         '无条件执行行号断言:即使断点集合为空也会给出明确的失败信号

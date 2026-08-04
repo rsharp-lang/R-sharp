@@ -107,6 +107,7 @@ Namespace Interpreter
         ''' <returns>所添加的断点对象</returns>
         Public Function Add(file As String, line As Integer, Optional condition As String = Nothing) As Breakpoint
             Dim keyId As String = key(file, line)
+            Dim nameId As String = key(System.IO.Path.GetFileName(file), line)
             Dim bp As Breakpoint = Nothing
 
             If index.TryGetValue(keyId, bp) Then
@@ -120,7 +121,13 @@ Namespace Interpreter
                     .condition = condition,
                     .enabled = True
                 }
+                ' 同时以完整的文件路径与纯文件名两种键来进行索引, 
+                ' 因为在程序执行期间, 表达式的 stackFrame.File 往往只带有
+                ' 纯文件名(取决于词法解析器在构建 source 对象时所使用的文件名),
+                ' 而用户在注册断点的时候通常是使用完整的文件路径. 用两份索引
+                ' 即可保证无论以何种形式注册或者命中的断点都能够正确的匹配上
                 index(keyId) = bp
+                index(nameId) = bp
             End If
 
             Return bp
@@ -202,8 +209,7 @@ Namespace Interpreter
             ' 路径匹配失败之后, 再以纯文件名做一次回退匹配
             Dim nameKey As String = key(System.IO.Path.GetFileName(location.file), location.line)
 
-            ' [DIAG] 临时诊断
-            System.IO.File.AppendAllText("tryhit_diag.log", $"act_full={fullKey}; act_name={nameKey}; isValid={location.isValid}; keys=[{String.Join(", ", index.Keys)}]" & vbCrLf)
+            System.IO.File.AppendAllText("tryhit_diag.log", $"full={fullKey}|name={nameKey}|valid={location.isValid}|keys={String.Join(",", index.Keys)}" & vbCrLf)
 
             If (index.TryGetValue(fullKey, bp) OrElse index.TryGetValue(nameKey, bp)) AndAlso bp.enabled Then
                 Return bp

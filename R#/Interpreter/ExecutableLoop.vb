@@ -119,9 +119,6 @@ Namespace Interpreter
             Dim dbg As DebuggerContext = env.debugger
             Dim depth As Integer = 0
 
-            ' [DIAG] 临时诊断: 写入文件, 打印执行侧 debugger 实例与已注册断点数量
-            System.IO.File.AppendAllText("exe_diag.log", $"exeSideDebuggerHash={dbg.GetHashCode()} isDebugging={If(dbg Is Nothing, "N/A", dbg.IsDebugging.ToString())} bpCount={If(dbg Is Nothing, -1, dbg.ListBreakpoints().Length)}" & vbCrLf)
-
             ' 注意: 在这里只判断调试器对象是否存在, 而不判断 IsDebugging 状态.
             ' 因为调试会话有可能是在当前的这个代码块已经开始执行了之后才被启动
             ' 的(例如由脚本之中的 browser() 函数所触发), 如果在这里就根据
@@ -146,8 +143,6 @@ Namespace Interpreter
                     ' 在未开启调试的时候, 这里仅有一次布尔判断的开销
                     If Not dbg Is Nothing AndAlso dbg.IsDebugging Then
                         Dim hit As Breakpoint = Nothing
-
-                        System.IO.File.AppendAllText("exe2_diag.log", $"shouldPauseCall line={If(TryCast(expression, IRuntimeTrace)?.stackFrame.Line, "?")} file={If(TryCast(expression, IRuntimeTrace)?.stackFrame.File, "?")}" & vbCrLf)
 
                         ' 检查是否需要暂停(断点命中或者单步执行)
                         If dbg.ShouldPause(expression, env, hit) Then
