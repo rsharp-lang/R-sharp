@@ -145,6 +145,21 @@ Namespace Runtime
         Public Property lastException As Message
 
         ''' <summary>
+        ''' the debugger context object for the current R# interpreter runtime
+        ''' </summary>
+        ''' <remarks>
+        ''' 这个属性对外暴露了调试器的核心对象, 使得宿主程序可以在不访问
+        ''' <see cref="Environment.debugger"/> 这个 Friend 字段的情况之下, 
+        ''' 就可以通过订阅 <see cref="DebuggerContext.OnBreakpointHit"/> 事件
+        ''' 并且调用 <see cref="DebuggerContext.Resume"/> 函数的方式来驱动调试会话
+        ''' </remarks>
+        Public ReadOnly Property debugger As DebuggerContext
+            Get
+                Return MyBase.debugger
+            End Get
+        End Property
+
+        ''' <summary>
         ''' wrap runtime data type of <see cref="RType"/> or <see cref="S4Object"/>
         ''' </summary>
         ''' <returns></returns>
