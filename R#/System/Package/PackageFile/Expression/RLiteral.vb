@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cd3010d37a0d0c9f4cab5abf87b8bf2f, R#\System\Package\PackageFile\Expression\RLiteral.vb"
+﻿#Region "Microsoft.VisualBasic::706d9a413dc61feb66bfecf27a4590a2, R#\System\Package\PackageFile\Expression\RLiteral.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 14 (13.33%)
-    '     File Size: 4.89 KB
+    '     File Size: 4.91 KB
 
 
     '     Class RLiteral
@@ -138,7 +138,7 @@ Namespace Development.Package.File.Expressions
                             Return New Literal With {.m_type = TypeCodes.NA, .value = Nothing}
                         Case ""
                             Return New Literal With {.m_type = TypeCodes.string, .value = ""}
-                        Case "∞"
+                        Case "∞", "Infinity", "Inf"
                             Return New Literal With {.m_type = TypeCodes.double, .value = Double.PositiveInfinity}
                         Case Else
                             Throw New NotImplementedException($"unsure about the literal string: '{str}'")

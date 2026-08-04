@@ -68,12 +68,12 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
             If symbolNames Like GetType(SyntaxErrorException) Then
                 Return SyntaxResult.CreateError(
-                    err:=symbolNames.TryCast(Of SyntaxErrorException),
+                    err_msg:=symbolNames.TryCast(Of SyntaxErrorException).Message,
                     opts:=opts.SetCurrentRange(target)
                 )
             ElseIf symbolNames.TryCast(Of String()).Length > 1 Then
                 Return SyntaxResult.CreateError(
-                    err:=New NotImplementedException("iterate assign of tuple is not supported yet"),
+                    err_msg:="iterate assign of tuple is not supported yet",
                     opts:=opts.SetCurrentRange(target)
                 )
             Else
@@ -108,7 +108,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
             If symbolNames Like GetType(SyntaxErrorException) Then
                 Return SyntaxResult.CreateError(
-                    err:=symbolNames.TryCast(Of SyntaxErrorException),
+                    err_msg:=symbolNames.TryCast(Of SyntaxErrorException).Message,
                     opts:=opts.SetCurrentRange(tokens(Scan0))
                 )
             End If

@@ -84,6 +84,11 @@ Public Module Extensions
     End Sub
 
     <Extension>
+    Public Function IsNullOrEmpty(Of T)(pipe As PipeIterator(Of T)) As Boolean
+        Return pipe Is Nothing OrElse pipe.length <= 0
+    End Function
+
+    <Extension>
     Public Function toList(data As dataframe, env As Environment, Optional byrow As Boolean = False) As list
         If byrow Then
             Return data.listByRows(Nothing, env)

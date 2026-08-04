@@ -115,9 +115,9 @@ Module gr3D
                            Optional env As Environment = Nothing) As Camera
 
         Return New Camera(InteropArgumentHelper.getVector3D(viewAngle)) With {
-            .viewDistance = viewDistance,
-            .fov = fov,
-            .screen = InteropArgumentHelper.getSize(size, env).SizeParser
+            .ViewDistance = viewDistance,
+            .FieldOfView = fov,
+            .Screen = InteropArgumentHelper.getSize(size, env).SizeParser
         }
     End Function
 End Module

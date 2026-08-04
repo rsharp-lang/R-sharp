@@ -131,7 +131,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     End If
                 Else
                     Return SyntaxResult.CreateError(
-                        err:=New SyntaxErrorException,
+                        err_msg:="invalid syntax on package imports expression",
                         opts:=opts.SetCurrentRange(.ElementAt(Scan0))
                     )
                 End If

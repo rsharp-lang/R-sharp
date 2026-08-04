@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b37bbce83134c0f0ad4e43e928e18f17, R#\Runtime\Internal\objects\dataset\pipeline.vb"
+﻿#Region "Microsoft.VisualBasic::b4581608a7eeab42dc53615a1f4839ff, R#\Runtime\Internal\objects\dataset\pipeline.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 408
-    '    Code Lines: 273 (66.91%)
-    ' Comment Lines: 80 (19.61%)
-    '    - Xml Docs: 95.00%
+    '   Total Lines: 420
+    '    Code Lines: 280 (66.67%)
+    ' Comment Lines: 84 (20.00%)
+    '    - Xml Docs: 96.43%
     ' 
-    '   Blank Lines: 55 (13.48%)
-    '     File Size: 18.36 KB
+    '   Blank Lines: 56 (13.33%)
+    '     File Size: 18.99 KB
 
 
     '     Class CLRIterator
@@ -74,41 +74,6 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Invokes.LinqPipeline
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Runtime.Internal.Object
-
-    Public Class CLRIterator : Inherits pipeline
-
-        Public Sub New(input As IEnumerable, type As Type)
-            MyBase.New(input, type)
-        End Sub
-
-        Public Overrides Iterator Function populates(Of T)(env As Environment) As IEnumerable(Of T)
-            For Each item As T In DirectCast(pipeline, IEnumerable(Of T))
-                Yield item
-            Next
-
-            If Not pipeFinalize Is Nothing Then
-                Call pipeFinalize()()
-            End If
-        End Function
-
-        Public Overrides Function ToString() As String
-            If pipeline.GetType.IsArray Then
-                Return $"clr_array[{elementType.ToString} x {DirectCast(pipeline, Array).Length}]"
-            Else
-                Return $"clr_iterator[{elementType.ToString}]"
-            End If
-        End Function
-
-        Public Shared Function Enumerates(Of T)(x As Object, env As Environment) As IEnumerable(Of T)
-            If TypeOf x Is vector Then
-                Return CLRIterator.fromVector(Of T)(x, env).populates(Of T)(env)
-            ElseIf TypeOf x Is T() Then
-                Return DirectCast(x, T())
-            Else
-                Return CLRIterator.TryCreatePipeline(Of T)(x, env).populates(Of T)(env)
-            End If
-        End Function
-    End Class
 
     ''' <summary>
     ''' The R# data pipeline
@@ -206,6 +171,23 @@ Namespace Runtime.Internal.Object
         ''' </remarks>
         Public Function createVector(env As Environment) As vector
             Return New vector(elementType, populates(Of Object)(env), env)
+        End Function
+
+        Public Function getData(Of T)(env As Environment) As PipeIterator(Of T)
+            If isError Then
+                Return New PipeIterator(Of T)(getError)
+            Else
+                Return New PipeIterator(Of T)(populates(Of T)(env))
+            End If
+        End Function
+
+        Public Shared Function Stream(Of T)(upstream As Object, env As Environment,
+                                            Optional suppress As Boolean = False,
+                                            Optional nullPipe As Boolean = False,
+                                            <CallerMemberName>
+                                            Optional callerFrameName$ = Nothing) As PipeIterator(Of T)
+
+            Return TryCreatePipeline(Of T)(upstream, env, suppress:=suppress, nullPipe:=nullPipe, callerFrameName:=callerFrameName).getData(Of T)(env)
         End Function
 
         ''' <summary>
@@ -321,18 +303,23 @@ Namespace Runtime.Internal.Object
         ''' <param name="upstream"></param>
         ''' <param name="env"></param>
         ''' <param name="suppress"></param>
+        ''' <param name="nullPipe">
+        ''' make this function returns nothing when the given <paramref name="upstream"/> data is nothing instead of the default behaviour throw the runtime error
+        ''' </param>
         ''' <param name="callerFrameName">debug used only</param>
         ''' <returns>
         ''' the required data sequence or an error message if the 
         ''' upstream element type is not matched of the required 
         ''' target type.
-        ''' 
+        ''' </returns>
+        ''' <remarks>
         ''' this function also will returns a null reference error
         ''' message if the given <paramref name="upstream"/> data is
-        ''' ``Nothing``.
-        ''' </returns>
+        ''' ``Nothing`` and also the parameter <paramref name="nullPipe"/> is set to false by default.
+        ''' </remarks>
         Public Shared Function TryCreatePipeline(Of T)(upstream As Object, env As Environment,
                                                        Optional suppress As Boolean = False,
+                                                       Optional nullPipe As Boolean = False,
                                                        <CallerMemberName>
                                                        Optional callerFrameName$ = Nothing) As pipeline
 
@@ -344,7 +331,14 @@ Namespace Runtime.Internal.Object
             End If
 
             If upstream Is Nothing Then
-                Return Internal.debug.stop($"the upstream data(of {GetType(T).FullName}) can not be nothing!", env, suppress_log:=suppress)
+                Dim err As String = $"the upstream data(of {GetType(T).FullName}) can not be nothing!"
+
+                If nullPipe Then
+                    Call err.warning
+                    Return Nothing
+                Else
+                    Return Internal.debug.stop(err, env, suppress_log:=suppress)
+                End If
             End If
 
             Dim upstream_type As Type = upstream.GetType
@@ -356,7 +350,7 @@ Namespace Runtime.Internal.Object
                 ElseIf GetType(T).IsInterface AndAlso DirectCast(upstream, pipeline).elementType.raw.ImplementInterface(Of T) Then
                     Return upstream
                 ElseIf DirectCast(upstream, pipeline).elementType Is RType.any Then
-                    Call "the given upstream pipeline is a stream of generic object collection. some type cast maybe failure!".Warning
+                    Call "the given upstream pipeline is a stream of generic object collection. some type cast maybe failure!".warning
                     Return upstream
                 ElseIf DirectCast(upstream, pipeline).elementType.raw.IsInheritsFrom(GetType(T), False) Then
                     Return upstream

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>Rbase</RootNamespace>
-    <TargetFrameworks>net10.0-windows;net10.0</TargetFrameworks>
+    <TargetFrameworks>net10.0</TargetFrameworks>
     <AssemblyName>base</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32;gcmodeller_desktop;CFD_win32</Configurations>
@@ -100,12 +100,9 @@
     <DefineConstants>MATH_DATASET=1,write_csv=1,UNIX=1</DefineConstants>
     <DefineTrace>true</DefineTrace>
     <OutputPath>../../../../../\mzkit\dist\bin\Rstudio\library\</OutputPath>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'gcmodeller_desktop|net6.0-windows' ">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
-
+  
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
     <DefineConstants>write_csv=1,UNIX=1</DefineConstants>
   </PropertyGroup>
@@ -194,8 +191,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.5" />
-    <PackageReference Include="System.Drawing.Common" Version="10.0.5" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.10" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.10" />
     <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
   </ItemGroup>
 

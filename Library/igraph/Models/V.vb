@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5d35d7d1bb3bef25b10ad4006497d4bf, Library\igraph\Models\V.vb"
+﻿#Region "Microsoft.VisualBasic::323b9db48cee2936bfaacc417382730e, Library\igraph\Models\V.vb"
 
     ' Author:
     ' 
@@ -34,23 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 243
-    '    Code Lines: 174 (71.60%)
-    ' Comment Lines: 27 (11.11%)
+    '   Total Lines: 207
+    '    Code Lines: 150 (72.46%)
+    ' Comment Lines: 24 (11.59%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 42 (17.28%)
-    '     File Size: 8.77 KB
+    '   Blank Lines: 33 (15.94%)
+    '     File Size: 7.39 KB
 
 
-    ' Class GraphElementCollection
-    ' 
-    '     Constructor: (+2 Overloads) Sub New
-    '     Function: getNames, hasName, loadDataNames, setNames
-    ' 
     ' Class V
     ' 
-    '     Properties: size
+    '     Properties: id, size, vertex
     ' 
     '     Constructor: (+2 Overloads) Sub New
     '     Function: ConfigSymbols, eval, EvaluateIndexer, (+2 Overloads) getByIndex, (+2 Overloads) getByName
@@ -63,6 +58,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Data.visualize.Network.FileStream.Generic
 Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Linq
@@ -76,71 +72,22 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
 
-Public Class GraphElementCollection : Implements RNames
-
-    ''' <summary>
-    ''' all data attribute names in each vertex node object
-    ''' </summary>
-    Protected ReadOnly dataNames As Index(Of String)
-    Protected ReadOnly list As Array
-
-    Sub New(collection As IEnumerable(Of Node))
-        list = collection.ToArray
-        dataNames = loadDataNames(DirectCast(list, Node()).Select(Function(a) DirectCast(a.data, GraphData)))
-    End Sub
-
-    Sub New(collection As IEnumerable(Of Edge))
-        list = collection.ToArray
-        dataNames = loadDataNames(DirectCast(list, Edge()).Select(Function(a) DirectCast(a.data, GraphData)))
-    End Sub
-
-    <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Private Shared Function loadDataNames(data As IEnumerable(Of GraphData)) As Index(Of String)
-        Return data _
-            .Select(Function(v)
-                        Return v.Properties.Keys
-                    End Function) _
-            .IteratesALL _
-            .Distinct _
-            .ToArray
-    End Function
-
-
-#Region "Metadata Attribute Data Accessor"
-
-    <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Public Function setNames(names() As String, envir As Environment) As Object Implements RNames.setNames
-        Throw New NotImplementedException()
-    End Function
-
-    <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Public Function hasName(name As String) As Boolean Implements RNames.hasName
-        Return name Like dataNames
-    End Function
-
-    ''' <summary>
-    ''' get all node vertex attribute names
-    ''' </summary>
-    ''' <returns></returns>
-    <MethodImpl(MethodImplOptions.AggressiveInlining)>
-    Public Function getNames() As String() Implements IReflector.getNames
-        Return dataNames.Objects
-    End Function
-#End Region
-
-End Class
-
 ''' <summary>
 ''' node attribute data visitor
 ''' </summary>
 Public Class V : Inherits GraphElementCollection
     Implements RNames, RNameIndex, RIndex, RIndexer
 
-    Friend ReadOnly vertex As Node()
+    Public ReadOnly Property vertex As Node()
+        Get
+            Return DirectCast(list, Node())
+        End Get
+    End Property
 
     ReadOnly vertexIndex As Dictionary(Of String, Node)
+
     ''' <summary>
-    ''' ordinal order of <see cref="vertex"/>
+    ''' ordinal order of <see cref="vertex"/>, index for the nodes unique id
     ''' </summary>
     ReadOnly i As Index(Of String)
 
@@ -167,6 +114,16 @@ Public Class V : Inherits GraphElementCollection
         End Get
     End Property
 
+    ''' <summary>
+    ''' ordinal order of <see cref="vertex"/>, index for the nodes unique id
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property id As String()
+        Get
+            Return i.Objects
+        End Get
+    End Property
+
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Sub New(g As NetworkGraph, Optional allConnected As Boolean = False)
         Call Me.New(If(allConnected, g.connectedNodes, g.vertex))
@@ -175,9 +132,11 @@ Public Class V : Inherits GraphElementCollection
     Sub New(list As IEnumerable(Of Node))
         Call MyBase.New(list.ToArray)
 
-        vertex = DirectCast(MyBase.list, Node()).ToArray
         vertexIndex = vertex.ToDictionary(Function(v) v.label)
-        i = vertex.Select(Function(v) v.label).Indexing
+        i = vertex _
+            .Select(Function(v) v.label) _
+            .UniqueNames _
+            .Indexing
     End Sub
 
     <MethodImpl(MethodImplOptions.AggressiveInlining)>

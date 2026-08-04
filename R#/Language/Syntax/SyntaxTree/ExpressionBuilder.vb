@@ -170,7 +170,7 @@ Namespace Language.Syntax.SyntaxParser
         <Extension>
         Friend Function ParseExpression(code As List(Of Token()), opts As SyntaxBuilderOptions) As SyntaxResult
             If code = 0 Then
-                Return SyntaxResult.CreateError(New SyntaxErrorException("expressin tokens can not be empty!"), opts)
+                Return SyntaxResult.CreateError("expressin tokens can not be empty!", opts)
             ElseIf code(Scan0).isKeyword Then
                 Dim expression As SyntaxResult = code.keywordExpressionHandler(opts)
 
@@ -219,7 +219,7 @@ Namespace Language.Syntax.SyntaxParser
                     If AnnotationSymbol.CheckSymbolText(item(Scan0).text) Then
                         Return New SyntaxResult(AnnotationSymbol.CreateSymbol(item(Scan0).text))
                     Else
-                        Return SyntaxResult.CreateError(New NotImplementedException(item(Scan0).text), opts.SetCurrentRange(item))
+                        Return SyntaxResult.CreateError("unknown annotation symbol:" & item(Scan0).text, opts.SetCurrentRange(item))
                     End If
                 ElseIf item(Scan0) = (TokenType.annotation, "@profile") Then
                     Dim expr As SyntaxResult
@@ -347,7 +347,7 @@ Namespace Language.Syntax.SyntaxParser
                             ' do nothing
                             GoTo Binary
                         Else
-                            Return SyntaxResult.CreateError(New SyntaxErrorException, opts)
+                            Return SyntaxResult.CreateError("invalid sequence literal syntax", opts)
                         End If
                     End If
 
@@ -580,7 +580,7 @@ Binary:
         End Function
 
         Private Iterator Function getTupleSymbols(target As IEnumerable(Of Token), opts As SyntaxBuilderOptions) As IEnumerable(Of SyntaxResult)
-            Dim err As Exception = Nothing
+            Dim err As String = Nothing
             Dim tokenBlocks = target.SplitByTopLevelDelimiter(TokenType.comma, err:=err)
 
             If Not err Is Nothing Then

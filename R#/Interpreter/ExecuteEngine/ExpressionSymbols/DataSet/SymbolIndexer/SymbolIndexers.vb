@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4ea5a2fefae5b232911cc986b5192a83, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexers.vb"
+﻿#Region "Microsoft.VisualBasic::db9c94633486f10dc98fa925ba2170dc, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\SymbolIndexer\SymbolIndexers.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 29
-    '    Code Lines: 9 (31.03%)
-    ' Comment Lines: 19 (65.52%)
+    '   Total Lines: 33
+    '    Code Lines: 10 (30.30%)
+    ' Comment Lines: 22 (66.67%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 1 (3.45%)
-    '     File Size: 761 B
+    '   Blank Lines: 1 (3.03%)
+    '     File Size: 839 B
 
 
     '     Enum SymbolIndexers
     ' 
-    '         dataframeColumns, dataframeRanges, dataframeRows, nameIndex, vectorIndex
+    '         dataframeColumns, dataframeRanges, dataframeRows, listIndex, nameIndex
+    '         vectorIndex
     ' 
     '  
     ' 

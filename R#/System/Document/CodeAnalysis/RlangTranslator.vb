@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::eeec78f7be8610efdb8965888b84ab07, R#\System\Document\CodeAnalysis\RlangTranslator.vb"
+﻿#Region "Microsoft.VisualBasic::67084e73392db46210590e1ec18b0429, R#\System\Document\CodeAnalysis\RlangTranslator.vb"
 
     ' Author:
     ' 
@@ -34,24 +34,24 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 632
-    '    Code Lines: 487 (77.06%)
-    ' Comment Lines: 40 (6.33%)
-    '    - Xml Docs: 32.50%
+    '   Total Lines: 656
+    '    Code Lines: 510 (77.74%)
+    ' Comment Lines: 41 (6.25%)
+    '    - Xml Docs: 31.71%
     ' 
-    '   Blank Lines: 105 (16.61%)
-    '     File Size: 27.53 KB
+    '   Blank Lines: 105 (16.01%)
+    '     File Size: 28.82 KB
 
 
     '     Class RlangTranslator
     ' 
     '         Constructor: (+2 Overloads) Sub New
     '         Function: AssignNewSymbol, castClrValue, castDataframe, castList, castLiteral
-    '                   createFunction, CreateSymbols, GetAssignValue, GetBinaryOp, getByref
-    '                   GetElse, getExpressionLiteral, getForLoop, getFormulaString, GetFunctionInvoke
-    '                   GetIf, getMemberValueAssign, getNeg, getReturn, (+2 Overloads) GetScript
-    '                   getSequence, GetSymbol, GetSymbolIndexSubset, GetUnaryNot, is_drop
-    '                   (+2 Overloads) Literal, requirePkg, Vector
+    '                   createFunction, createLambda, CreateSymbols, GetAssignValue, GetBinaryOp
+    '                   getByref, GetElse, getExpressionLiteral, getForLoop, getFormulaString
+    '                   GetFunctionInvoke, GetIf, getMemberValueAssign, getNeg, getReturn
+    '                   (+2 Overloads) GetScript, getSequence, GetSymbol, GetSymbolIndexSubset, GetUnaryNot
+    '                   is_drop, (+2 Overloads) Literal, requirePkg, Vector
     ' 
     ' 
     ' /********************************************************************************/

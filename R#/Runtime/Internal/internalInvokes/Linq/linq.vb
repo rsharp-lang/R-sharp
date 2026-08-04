@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::301f4cf4fcfd00e406e12b03d6b8f1f4, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
+﻿#Region "Microsoft.VisualBasic::d0f9d31cd1230bc4973565611d4a41e9, R#\Runtime\Internal\internalInvokes\Linq\linq.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1828
-    '    Code Lines: 1043 (57.06%)
-    ' Comment Lines: 569 (31.13%)
-    '    - Xml Docs: 88.40%
+    '   Total Lines: 1840
+    '    Code Lines: 1051 (57.12%)
+    ' Comment Lines: 572 (31.09%)
+    '    - Xml Docs: 87.94%
     ' 
-    '   Blank Lines: 216 (11.82%)
-    '     File Size: 81.53 KB
+    '   Blank Lines: 217 (11.79%)
+    '     File Size: 82.21 KB
 
 
     '     Module linq
@@ -72,6 +72,7 @@ Imports Microsoft.VisualBasic.CommandLine.InteropService.Pipeline
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.Repository
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -212,6 +213,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 Return left
             End If
 
+            ' 20260513 keyY should be unique!
             Dim keyX As String() = Nothing
             Dim keyY As String() = Nothing
 
@@ -249,7 +251,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
             ' 20221207
             ' index i is zero-based
             ' indexing of the right dataset
-            Dim idx As Dictionary(Of String, Integer) = Index(Of String).Indexing(keyY)
+            Dim idx As Dictionary(Of String, Integer) = Index(Of String).Indexing((From id As String In keyY Select If(id, "")).UniqueNames)
             Dim i As Integer() = keyX _
                 .Select(Function(key)
                             ' due to the reason of left join some data may be missing in the right dataset
@@ -510,7 +512,7 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
         ''' ```
         ''' </remarks>
         <ExportAPI("match")>
-        Public Function match(x As Array, table As Array,
+        Public Function match(<RRawVectorArgument> x As Object, <RRawVectorArgument> table As Object,
                               Optional nomatch As Integer = -1,
                               Optional incomparables As Integer = Nothing) As Integer()
 

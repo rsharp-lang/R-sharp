@@ -88,20 +88,19 @@ Namespace Runtime.Internal.Object.Converts
 
             For Each key As String In columns
                 Dim val As Array = data.columns(key)
+                Dim vec As GetVectorElement = GetVectorElement.CreateAny(val)
 
-                If val.Length = 1 Then
-                    Dim first As Object = val.GetValue(Scan0)
-                    getVals.Add(key, Function() first)
-                Else
-                    getVals.Add(key, Function(i) val.GetValue(i))
-                End If
+                Call getVals.Add(key, vec.Getter())
             Next
 
             Dim index As Integer
             Dim row As Dictionary(Of String, Object)
             Dim rownames As String() = If(
                 data.rownames.IsNullOrEmpty,
-                data.nrows.Sequence(offset:=1).Select(Function(i) $"[[{i}]]").ToArray,
+                data.nrows _
+                    .Sequence(offset:=1) _
+                    .Select(Function(i) $"[[{i}]]") _
+                    .ToArray,
                 data.rownames.UniqueNames
             )
 

@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<RootNamespace>SMRUCC.Rsharp</RootNamespace>
-    <TargetFrameworks>net10.0-windows;net10.0</TargetFrameworks>
+    <TargetFrameworks>net10.0</TargetFrameworks>
 		<AssemblyName>REnv</AssemblyName>
 		<Authors>xie.guigang@gcmodeller.org</Authors>
 		<Company>SMRUCC genomics Institute</Company>
@@ -639,10 +639,7 @@
 
   <ItemGroup>
     <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
-    <PackageReference Include="System.Security.Permissions" Version="10.0.5" />
+    <PackageReference Include="System.Security.Permissions" Version="10.0.10" />
   </ItemGroup>
 
   <ItemGroup>

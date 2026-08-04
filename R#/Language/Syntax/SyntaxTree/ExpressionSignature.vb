@@ -157,6 +157,11 @@ Namespace Language.Syntax.SyntaxParser
             End If
         End Function
 
+        ''' <summary>
+        ''' ns::f
+        ''' </summary>
+        ''' <param name="tokens"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function isNamespaceReferenceCall(tokens As [Variant](Of Expression, String)()) As Boolean
             If Not tokens(1) Like GetType(String) OrElse Not tokens(1).TryCast(Of String) = "::" Then

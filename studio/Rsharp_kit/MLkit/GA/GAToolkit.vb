@@ -105,44 +105,4 @@ Module GAToolkit
 
         Return ancestor.InitialPopulation(popSize:=population_size, parallel:=True)
     End Function
-
-    ''' <summary>
-    ''' Run ANN training under the GA framework
-    ''' </summary>
-    ''' <param name="trainingSet"></param>
-    ''' <param name="mutationRate#"></param>
-    ''' <param name="populationSize%"></param>
-    ''' <param name="iterations%"></param>
-    ''' <returns></returns>
-    <ExportAPI("ANN.training")>
-    <RApiReturn(GetType(Network))>
-    Public Function runANNTraining(ANN As Object, trainingSet As DataSet,
-                                   Optional mutationRate# = 0.2,
-                                   Optional populationSize% = 1000,
-                                   Optional iterations% = 10000,
-                                   Optional env As Environment = Nothing) As Object
-
-        Dim trainingMatrix As Sample() = trainingSet _
-            .DataSamples _
-            .AsEnumerable _
-            .ToArray
-        Dim network As Network
-
-        If ANN Is Nothing Then
-            Return RInternal.debug.stop("the required ANN model object can not be nothing!", env)
-        ElseIf TypeOf ANN Is ANNTrainer Then
-            network = DirectCast(ANN, ANNTrainer).NeuronNetwork
-        ElseIf TypeOf ANN Is Network Then
-            network = DirectCast(ANN, Network)
-        Else
-            Return Message.InCompatibleType(GetType(Network), ANN.GetType, env)
-        End If
-
-        Return network.RunGATrainer(
-            trainingSet:=trainingMatrix,
-            mutationRate:=mutationRate,
-            populationSize:=populationSize,
-            iterations:=iterations
-        )
-    End Function
 End Module

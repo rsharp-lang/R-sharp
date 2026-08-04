@@ -98,7 +98,7 @@ Namespace Language.Implementation
                 End If
 
                 Return SyntaxResult.CreateError(
-                    err:=symbolNames.TryCast(Of SyntaxErrorException),
+                    err_msg:=symbolNames.TryCast(Of SyntaxErrorException).Message,
                     opts:=opts.SetCurrentRange(target)
                 )
             End If

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::34a1a6f8a0b12a87fbb8fe3e02e0be5d, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\Literal.vb"
+﻿#Region "Microsoft.VisualBasic::4f4a32ecf90f9abc07a4d4bf7a6c366a, R#\Interpreter\ExecuteEngine\ExpressionSymbols\DataSet\Literal\Literal.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 240
-    '    Code Lines: 173 (72.08%)
-    ' Comment Lines: 37 (15.42%)
+    '   Total Lines: 237
+    '    Code Lines: 170 (71.73%)
+    ' Comment Lines: 37 (15.61%)
     '    - Xml Docs: 97.30%
     ' 
-    '   Blank Lines: 30 (12.50%)
-    '     File Size: 7.77 KB
+    '   Blank Lines: 30 (12.66%)
+    '     File Size: 7.70 KB
 
 
     '     Class Literal

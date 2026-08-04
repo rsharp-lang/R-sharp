@@ -89,6 +89,7 @@ Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
 Imports GraphicsPath = Microsoft.VisualBasic.Imaging.GraphicsPath
 Imports LineCap = Microsoft.VisualBasic.Imaging.LineCap
 Imports TextureBrush = Microsoft.VisualBasic.Imaging.TextureBrush
+Imports FontStyle = Microsoft.VisualBasic.Imaging.FontStyle
 #End If
 
 ''' <summary>
@@ -252,6 +253,25 @@ Public Module InteropArgumentHelper
             Case Else
                 Return [default]
         End Select
+    End Function
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="env"></param>
+    ''' <param name="size"></param>
+    ''' <param name="style"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' default font family name is configed via options(fontFamily = "Bookman Old Style");
+    ''' </remarks>
+    <Extension>
+    Public Function FontCss(env As Environment, size As String, Optional style As FontStyle = FontStyle.Regular) As String
+        Dim fontFamily As String = env.globalEnvironment.options.getOption("fontFamily", FontFace.BookmanOldStyle)
+        Dim font As New CSSFont With {.family = fontFamily, .color = "black", .size = size, .style = style}
+        Dim css As String = font.CSSValue
+
+        Return css
     End Function
 
     ''' <summary>

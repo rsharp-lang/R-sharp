@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::86567a8c6c4a0ca4b160ade17028d856, Library\Rlapack\stats.vb"
+﻿#Region "Microsoft.VisualBasic::5b1413a73f8ae34ceeec9cab14b2199e, Library\Rlapack\stats.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 2323
-    '    Code Lines: 1158 (49.85%)
-    ' Comment Lines: 935 (40.25%)
+    '   Total Lines: 2337
+    '    Code Lines: 1170 (50.06%)
+    ' Comment Lines: 935 (40.01%)
     '    - Xml Docs: 88.02%
     ' 
-    '   Blank Lines: 230 (9.90%)
-    '     File Size: 103.47 KB
+    '   Blank Lines: 232 (9.93%)
+    '     File Size: 104.21 KB
 
 
     ' Module stats
@@ -124,6 +124,8 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
+Imports Image = Microsoft.VisualBasic.Imaging.Image
+Imports matrix = SMRUCC.Rsharp.Runtime.Internal.Object.matrix
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
@@ -131,21 +133,6 @@ Imports std = System.Math
 Imports stdVector = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 Imports vec = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
-#If NET48 Then
-Imports Pen = System.Drawing.Pen
-Imports Pens = System.Drawing.Pens
-Imports Brush = System.Drawing.Brush
-Imports Font = System.Drawing.Font
-Imports Brushes = System.Drawing.Brushes
-Imports SolidBrush = System.Drawing.SolidBrush
-Imports DashStyle = System.Drawing.Drawing2D.DashStyle
-Imports Image = System.Drawing.Image
-Imports Bitmap = System.Drawing.Bitmap
-Imports GraphicsPath = System.Drawing.Drawing2D.GraphicsPath
-Imports FontStyle = System.Drawing.FontStyle
-#Else
-Imports Image = Microsoft.VisualBasic.Imaging.Image
-#End If
 
 ''' <summary>
 ''' ### The R Stats Package 
@@ -229,10 +216,24 @@ Module stats
             .columns = New Dictionary(Of String, Array),
             .rownames = x.keys
         }
+        Dim square As Boolean = CLRVector.asScalarLogical(args.getBySynonyms("square", "NxN"))
 
-        For Each row In x.PopulateRowObjects(Of DataSet)
-            Call table.columns.Add(row.ID, row(table.rownames))
-        Next
+        If square Then
+            For Each row In x.PopulateRowObjects(Of DataSet)
+                Call table.columns.Add(row.ID, row(table.rownames))
+            Next
+
+            If table.columns.All(Function(c) DirectCast(c.Value, Double()).All(Function(xi) xi = 0.0)) Then
+                Call "all of the data inside this matrix is ZERO, please check of this matrix is NxN matrix(square=TRUE) or MxN matrix(square=FALSE)?".warning
+            End If
+        Else
+            Dim data As DataSet() = x.PopulateRowObjects(Of DataSet).ToArray
+            Dim colnames As String() = data.PropertyNames
+
+            For Each col As String In colnames
+                Call table.add(col, From r As DataSet In data Select r(col))
+            Next
+        End If
 
         Return table
     End Function

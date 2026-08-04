@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::32cdec12c1b721fdce78a87908c416ed, R#\Runtime\Internal\objects\base\s4Methods.vb"
+﻿#Region "Microsoft.VisualBasic::3d9b79581f8de97dd9b88a84f9fe302d, R#\Runtime\Internal\objects\base\s4Methods.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 104
-    '    Code Lines: 84 (80.77%)
-    ' Comment Lines: 2 (1.92%)
+    '   Total Lines: 155
+    '    Code Lines: 123 (79.35%)
+    ' Comment Lines: 2 (1.29%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 18 (17.31%)
-    '     File Size: 4.42 KB
+    '   Blank Lines: 30 (19.35%)
+    '     File Size: 6.51 KB
 
 
     '     Module s4Methods
     ' 
-    '         Function: conversionValue, (+2 Overloads) createObject, defineObject
+    '         Function: conversionValue, (+2 Overloads) createObject, defineObject, new_object
     ' 
     ' 
     ' /********************************************************************************/

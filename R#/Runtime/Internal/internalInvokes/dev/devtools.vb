@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f349effbc5831467aca471b23b7c45b4, R#\Runtime\Internal\internalInvokes\dev\devtools.vb"
+﻿#Region "Microsoft.VisualBasic::d9dfcd31ac5d29359361b2e6513356b7, R#\Runtime\Internal\internalInvokes\dev\devtools.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 404
-    '    Code Lines: 262 (64.85%)
-    ' Comment Lines: 88 (21.78%)
-    '    - Xml Docs: 92.05%
+    '   Total Lines: 407
+    '    Code Lines: 262 (64.37%)
+    ' Comment Lines: 91 (22.36%)
+    '    - Xml Docs: 92.31%
     ' 
-    '   Blank Lines: 54 (13.37%)
-    '     File Size: 17.71 KB
+    '   Blank Lines: 54 (13.27%)
+    '     File Size: 17.79 KB
 
 
     '     Class NoInspector
@@ -67,6 +67,7 @@ Imports System.Threading
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.ComponentModel.Settings.Inf
 Imports Microsoft.VisualBasic.Data.Repository
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -100,6 +101,9 @@ Namespace Runtime.Internal.Invokes
 
     End Class
 
+    ''' <summary>
+    ''' An internal development tools
+    ''' </summary>
     <Package("devtools")>
     Module devtools
 
@@ -465,5 +469,41 @@ Namespace Runtime.Internal.Invokes
 
             Call thread.Start()
         End Sub
+
+        ''' <summary>
+        ''' Read ini profile file data as list
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="section"></param>
+        ''' <returns></returns>
+        <ExportAPI("read_ini")>
+        <RApiReturn(TypeCodes.list)>
+        Public Function read_ini(file As String, Optional section As String = Nothing) As Object
+            Dim inf As New IniFile(file)
+            Dim profiles As list = Internal.Object.list.empty
+
+            If section.StringEmpty Then
+                ' read all as list
+                For Each sectionData As Section In inf.AsEnumerable
+                    Dim profileData As list = Internal.Object.list.empty
+
+                    For Each profile In sectionData.AsEnumerable
+                        Call profileData.unique_add(profile.name, profile.value)
+                    Next
+
+                    Call profiles.unique_add(sectionData.Name, profileData)
+                Next
+            Else
+                Dim sectionData As Section = inf(section)
+
+                If Not sectionData Is Nothing Then
+                    For Each profile In sectionData.AsEnumerable
+                        Call profiles.unique_add(profile.name, profile.value)
+                    Next
+                End If
+            End If
+
+            Return profiles
+        End Function
     End Module
 End Namespace

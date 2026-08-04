@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f0b5b6648f95d42d0ee16b42ccdefe2a, R#\Runtime\Internal\objects\base\dataframe\cbind.vb"
+﻿#Region "Microsoft.VisualBasic::11f2ed8858e27a612e335d2d3d915eb2, R#\Runtime\Internal\objects\base\dataframe\cbind.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 241
-    '    Code Lines: 169 (70.12%)
-    ' Comment Lines: 41 (17.01%)
-    '    - Xml Docs: 58.54%
+    '   Total Lines: 260
+    '    Code Lines: 169 (65.00%)
+    ' Comment Lines: 60 (23.08%)
+    '    - Xml Docs: 70.00%
     ' 
-    '   Blank Lines: 31 (12.86%)
-    '     File Size: 10.23 KB
+    '   Blank Lines: 31 (11.92%)
+    '     File Size: 11.04 KB
 
 
     '     Module cbindOp
@@ -168,6 +168,15 @@ Namespace Runtime.Internal.Object.baseOp.dataframeOp
             Return d
         End Function
 
+        ''' <summary>
+        ''' column combine of two dataframe
+        ''' </summary>
+        ''' <param name="d"></param>
+        ''' <param name="append"></param>
+        ''' <param name="strict"></param>
+        ''' <param name="[default]"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         Private Function cbind(d As dataframe, append As dataframe, strict As Boolean, [default] As Object, env As Environment) As dataframe
             If Not strict Then
                 Dim colnames As String() = d.columns.Keys.ToArray
@@ -279,6 +288,16 @@ SKIP:
             Call d.columns.Add(namekey, col)
         End Sub
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="d"></param>
+        ''' <param name="nameKey">used as colname if the <paramref name="col"/> data is a vector.</param>
+        ''' <param name="col">the col data for make cbind, value could be a vector or a dataframe</param>
+        ''' <param name="strict"></param>
+        ''' <param name="[default]"></param>
+        ''' <param name="env"></param>
+        ''' <returns></returns>
         <Extension>
         Public Function cbind(d As dataframe, nameKey As String,
                               col As Object,

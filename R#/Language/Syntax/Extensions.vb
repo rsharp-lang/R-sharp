@@ -197,7 +197,7 @@ Namespace Language.Syntax
         ''' <returns></returns>
         <Extension>
         Public Iterator Function GetExpressions(tokens As Token(), errHandler As Action(Of SyntaxResult), opts As SyntaxBuilderOptions) As IEnumerable(Of Expression)
-            Dim err As Exception = Nothing
+            Dim err As String = Nothing
             Dim hasError As Boolean = False
 
             If errHandler Is Nothing Then

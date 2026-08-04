@@ -92,8 +92,6 @@ Imports Microsoft.VisualBasic.DataMining.Lloyds
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder
-Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder.GMM
-Imports Microsoft.VisualBasic.MachineLearning.VariationalAutoencoder.GMM.EMGaussianMixtureModel
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Correlations
 Imports Microsoft.VisualBasic.Math.Matrix
@@ -320,20 +318,20 @@ Module clustering
                 .ToArray
 
             ' nd
-            Return GMM.Solver.Predicts(rowdatas, components, threshold, strict:=strict)
+            Return GaussianMixtureModel.Predicts(rowdatas, components, threshold, strict:=strict)
         End If
 
         If TypeOf x Is vector Then
             x = DirectCast(x, vector).data
         End If
 
-        Dim seq As pipeline = pipeline.TryCreatePipeline(Of ClusterEntity)(x, env)
+        Dim seq As PipeIterator(Of ClusterEntity) = pipeline.Stream(Of ClusterEntity)(x, env)
 
         If seq.isError Then
             If x.GetType.IsArray Then
                 ' 1d
                 x = TryCastGenericArray(x, env)
-                x = GMM.Solver.Predicts(CLRVector.asNumeric(x), components, threshold,
+                x = GaussianMixtureModel.Predicts(CLRVector.asNumeric(x), components, threshold,
                       verbose:=verbose)
 
                 Return x
@@ -343,7 +341,7 @@ Module clustering
         End If
 
         ' nd
-        Return GMM.Solver.Predicts(seq.populates(Of ClusterEntity)(env), components, threshold, strict:=strict)
+        Return GaussianMixtureModel.Predicts(seq.getData, components, threshold, strict:=strict)
     End Function
 
     ''' <summary>
@@ -359,18 +357,19 @@ Module clustering
             Return Nothing
         End If
 
-        If TypeOf x Is Mixture Then
-            Return DirectCast(x, Mixture).data _
-                .AsEnumerable _
-                .Select(Function(di) di.max) _
-                .ToArray
-        ElseIf TypeOf x Is GaussianMixtureModel Then
-            Return DirectCast(x, GaussianMixtureModel).Probs _
-                .Select(Function(di) which.Max(di) + 1) _
-                .ToArray
-        Else
-            Return Message.InCompatibleType(GetType(GaussianMixtureModel), x.GetType, env)
-        End If
+        'If TypeOf x Is Mixture Then
+        '    Return DirectCast(x, Mixture).data _
+        '        .AsEnumerable _
+        '        .Select(Function(di) di.max) _
+        '        .ToArray
+        'ElseIf TypeOf x Is GaussianMixtureModel Then
+        '    Return DirectCast(x, GaussianMixtureModel).PredictProba() _
+        '        .Select(Function(di) which.Max(di) + 1) _
+        '        .ToArray
+        'Else
+        '    Return Message.InCompatibleType(GetType(GaussianMixtureModel), x.GetType, env)
+        'End If
+        Throw New NotImplementedException
     End Function
 
     <ExportAPI("gmm.components")>
@@ -379,23 +378,24 @@ Module clustering
             Return Nothing
         End If
 
-        If TypeOf x Is Mixture Then
-            Dim comps = DirectCast(x, Mixture).components
-            Dim df As New Rdataframe With {
-                .columns = New Dictionary(Of String, Array),
-                .rownames = comps _
-                    .Select(Function(c, i) $"C{i + 1}") _
-                    .ToArray
-            }
+        'If TypeOf x Is Mixture Then
+        '    Dim comps = DirectCast(x, Mixture).components
+        '    Dim df As New Rdataframe With {
+        '        .columns = New Dictionary(Of String, Array),
+        '        .rownames = comps _
+        '            .Select(Function(c, i) $"C{i + 1}") _
+        '            .ToArray
+        '    }
 
-            Call df.add("mean", comps.Select(Function(c) If(c.Mean.IsNaNImaginary, Double.NaN, c.Mean)))
-            Call df.add("stdev", comps.Select(Function(c) If(c.Stdev.IsNaNImaginary, Double.NaN, c.Stdev)))
-            Call df.add("weight", comps.Select(Function(c) If(c.Weight.IsNaNImaginary, Double.NaN, c.Weight)))
+        '    Call df.add("mean", comps.Select(Function(c) If(c.Mean.IsNaNImaginary, Double.NaN, c.Mean)))
+        '    Call df.add("stdev", comps.Select(Function(c) If(c.Stdev.IsNaNImaginary, Double.NaN, c.Stdev)))
+        '    Call df.add("weight", comps.Select(Function(c) If(c.Weight.IsNaNImaginary, Double.NaN, c.Weight)))
 
-            Return df
-        Else
-            Throw New NotImplementedException
-        End If
+        '    Return df
+        'Else
+        '    Throw New NotImplementedException
+        'End If
+        Throw New NotImplementedException
     End Function
 
     <ExportAPI("gmm.predict_proba")>
@@ -404,41 +404,42 @@ Module clustering
             Return Nothing
         End If
 
-        If TypeOf x Is Mixture Then
-            Dim mx As Mixture = DirectCast(x, Mixture)
-            Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
-            Dim ds = mx.data.AsEnumerable.ToArray
+        'If TypeOf x Is Mixture Then
+        '    Dim mx As Mixture = DirectCast(x, Mixture)
+        '    Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+        '    Dim ds = mx.data.AsEnumerable.ToArray
 
-            df.rownames = ds.Select(Function(di) di.dataId).ToArray
-            df.add("max", ds.Select(Function(di) di.max))
+        '    df.rownames = ds.Select(Function(di) di.dataId).ToArray
+        '    df.add("max", ds.Select(Function(di) di.max))
 
-            Dim offset As Integer
+        '    Dim offset As Integer
 
-            For i As Integer = 0 To mx.components.Length - 1
-                offset = i
-                df.add($"C{i + 1}", ds.Select(Function(di) di.probs(offset)))
-            Next
+        '    For i As Integer = 0 To mx.components.Length - 1
+        '        offset = i
+        '        df.add($"C{i + 1}", ds.Select(Function(di) di.probs(offset)))
+        '    Next
 
-            Return df
-        ElseIf TypeOf x Is GaussianMixtureModel Then
-            Dim mx As GaussianMixtureModel = DirectCast(x, GaussianMixtureModel)
-            Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
-            Dim ds = mx.DataSet
-            Dim probs = mx.Probs
-            Dim index As Integer = 0
+        '    Return df
+        'ElseIf TypeOf x Is GaussianMixtureModel Then
+        '    Dim mx As GaussianMixtureModel = DirectCast(x, GaussianMixtureModel)
+        '    Dim df As New Rdataframe With {.columns = New Dictionary(Of String, Array)}
+        '    Dim ds = mx.DataSet
+        '    Dim probs = mx.Probs
+        '    Dim index As Integer = 0
 
-            df.rownames = ds.Select(Function(di) di.uid).ToArray
-            df.add("max", probs.Select(Function(di) which.Max(di) + 1))
+        '    df.rownames = ds.Select(Function(di) di.uid).ToArray
+        '    df.add("max", probs.Select(Function(di) which.Max(di) + 1))
 
-            For i As Integer = 0 To mx.Components.Length - 1
-                index = i
-                df.add($"C{i + 1}", probs.Select(Function(di) di(index)))
-            Next
+        '    For i As Integer = 0 To mx.Components.Length - 1
+        '        index = i
+        '        df.add($"C{i + 1}", probs.Select(Function(di) di(index)))
+        '    Next
 
-            Return df
-        Else
-            Return Message.InCompatibleType(GetType(GaussianMixtureModel), x.GetType, env)
-        End If
+        '    Return df
+        'Else
+        '    Return Message.InCompatibleType(GetType(GaussianMixtureModel), x.GetType, env)
+        'End If
+        Throw New NotImplementedException
     End Function
 
     ''' <summary>

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d1a2c38f3beda44c41b0d3938be211d3, Library\igraph\NetworkModule.vb"
+﻿#Region "Microsoft.VisualBasic::ab6f5d63ea352e0f6a633e3c5f6898be, Library\igraph\NetworkModule.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 1335
-    '    Code Lines: 883 (66.14%)
-    ' Comment Lines: 285 (21.35%)
-    '    - Xml Docs: 94.39%
+    '   Total Lines: 1364
+    '    Code Lines: 904 (66.28%)
+    ' Comment Lines: 288 (21.11%)
+    '    - Xml Docs: 94.44%
     ' 
-    '   Blank Lines: 167 (12.51%)
-    '     File Size: 52.23 KB
+    '   Blank Lines: 172 (12.61%)
+    '     File Size: 53.54 KB
 
 
     ' Module NetworkModule
@@ -82,6 +82,7 @@ Imports Microsoft.VisualBasic.Data.visualize.Network.Graph
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine
@@ -219,6 +220,9 @@ Public Module NetworkModule
     ''' if the target object is missing from the title
     ''' list.
     ''' </param>
+    ''' <param name="props">
+    ''' the network edge properties metadata
+    ''' </param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("graph")>
@@ -228,6 +232,8 @@ Public Module NetworkModule
                           Optional title As list = Nothing,
                           Optional shape As list = Nothing,
                           Optional defaultId As Boolean = False,
+                          <RListObjectArgument>
+                          Optional props As list = Nothing,
                           Optional env As Environment = Nothing) As Object
 
         If from.TryCount <> [to].TryCount Then
@@ -256,6 +262,13 @@ Public Module NetworkModule
         Dim data As NodeData
         Dim shapeData As String
 
+        Call props.slots.Remove(NameOf(from))
+        Call props.slots.Remove(NameOf([to]))
+        Call props.slots.Remove(NameOf(weights))
+        Call props.slots.Remove(NameOf(title))
+        Call props.slots.Remove(NameOf(shape))
+        Call props.slots.Remove(NameOf(defaultId))
+
         For Each id As String In allKeys
             data = New NodeData With {
                 .label = title.getValue(id, env, [default]:=If(defaultId, id, ""))
@@ -269,8 +282,18 @@ Public Module NetworkModule
             Call g.CreateNode(id, data)
         Next
 
+        Dim edge_meta As New Dictionary(Of String, Func(Of Integer, Object))
+
+        For Each key As String In props.getNames
+            Call edge_meta.Add(key, GetVectorElement.Create(Of String)(CLRVector.asCharacter(props(key))).Getter)
+        Next
+
         For i As Integer = 0 To from.Length - 1
-            Call g.CreateEdge(from(i), [to](i), weight:=getWeight(i))
+            Dim edge As Edge = g.CreateEdge(from(i), [to](i), weight:=getWeight(i))
+
+            For Each meta In edge_meta
+                Call edge.data.Add(meta.Key, CStr(meta.Value(i)))
+            Next
         Next
 
         Return g
@@ -349,7 +372,7 @@ Public Module NetworkModule
     ''' extract sub-network from a given network via a specific network node as centroid. 
     ''' </summary>
     ''' <param name="g"></param>
-    ''' <param name="fromPoint"></param>
+    ''' <param name="fromPoint">a vector of the vertex id to make extract of the sub-graph</param>
     ''' <returns></returns>
     <ExportAPI("subgraphFromPoint")>
     Public Function extractAdjacenciesSubNetwork(g As NetworkGraph, fromPoint As String(), Optional radius As Integer = 1) As NetworkGraph
@@ -432,7 +455,7 @@ Public Module NetworkModule
     ''' save the network graph
     ''' </summary>
     ''' <param name="g">the network graph object or [nodes, edges] table data.</param>
-    ''' <param name="file">a folder file path for save the network data.</param>
+    ''' <param name="file">a folder file path for save the network data. this file path data could be also the json file to save</param>
     ''' <param name="properties">a list of property name for save in node table and edge table.</param>
     ''' <returns></returns>
     <ExportAPI("save.network")>
@@ -449,7 +472,13 @@ Public Module NetworkModule
         If TypeOf tables Is Message Then
             Return tables
         Else
-            Return DirectCast(tables, NetworkTables).Save(file)
+            Dim graphData As NetworkTables = DirectCast(tables, NetworkTables)
+
+            If file.ExtensionSuffix("json") Then
+                Return graphData.GetJson.SaveTo(file)
+            Else
+                Return graphData.Save(file)
+            End If
         End If
     End Function
 
@@ -1336,10 +1365,10 @@ Public Module NetworkModule
     ''' <returns></returns>
     <ExportAPI("extract.sub_graph")>
     Public Function extractSubGraph(g As NetworkGraph, node_group As String, Optional minVertices As Integer = 3) As NetworkGraph
-        Dim nodeSet = (From v As node
-                       In g.vertex
-                       Where v.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = node_group
-                       Select v).ToArray
+        Dim nodeSet As node() = (From v As node
+                                 In g.vertex
+                                 Where v.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = node_group
+                                 Select v).ToArray
         Dim edgeSet As Edge() = g.getEdgeSet(nodeSet)
         Dim component As NetworkGraph = edgeSet.DecomposeGraph(minVertices:=minVertices)
 

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>roxygenNet</RootNamespace>
-    <TargetFrameworks>net10.0-windows;net10.0</TargetFrameworks>
+    <TargetFrameworks>net10.0</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
     <AssemblyName>roxygenNet</AssemblyName>
     <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32</Configurations>
@@ -70,6 +70,7 @@
     <DefineTrace>true</DefineTrace>
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
     <OutputPath>../../../../../..\mzkit\dist\bin\Rstudio\library\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">

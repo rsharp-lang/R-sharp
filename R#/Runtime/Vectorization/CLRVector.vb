@@ -260,6 +260,10 @@ Namespace Runtime.Vectorization
         ''' <returns>
         ''' this function returns nothing if the input object <paramref name="x"/> is nothing
         ''' </returns>
+        ''' <remarks>
+        ''' 1. if the given <paramref name="x"/> is nothing then function returns nothing
+        ''' 2. if there are NULL value inside x vector, corresponding empty string element will generates
+        ''' </remarks>
         Public Function asCharacter(x As Object) As String()
             If x Is Nothing Then
                 Return Nothing
@@ -607,6 +611,16 @@ Namespace Runtime.Vectorization
             Else
                 Throw New InvalidCastException(x.GetType.FullName)
             End If
+        End Function
+
+        Public Function asScalarNumber(x As Object) As Double
+            Dim vec As Double() = asNumeric(x)
+
+            If vec.IsNullOrEmpty Then
+                Return 0
+            End If
+
+            Return vec(0)
         End Function
 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>

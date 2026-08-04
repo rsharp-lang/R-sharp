@@ -238,26 +238,4 @@ Module validation
 
         Return ROC
     End Function
-
-    <ExportAPI("ANN.ROC")>
-    Public Function ANN_ROC(ANN As Network,
-                            validateSet As TrainingSample(),
-                            range As Double(),
-                            attribute%,
-                            Optional n% = 20) As Evaluation.Validation()
-
-        Return ANN.CreateValidateResult(validateSet).ROC(range, attribute, n)
-    End Function
-
-    <ExportAPI("as.validation")>
-    Public Function createSampleValidation(trainingSet As NormalizeMatrix,
-                                           input As Double(),
-                                           validate As Double(),
-                                           Optional method As Normalizer.Methods = Normalizer.Methods.NormalScaler) As TrainingSample
-        Return New TrainingSample With {
-            .classify = validate,
-            .sample = trainingSet.NormalizeInput(input, method),
-            .sampleID = App.NextTempName
-        }
-    End Function
 End Module

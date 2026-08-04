@@ -75,7 +75,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
             If target.Any(Function(a) a = isKeyword OrElse a = isSymbol) Then
                 If keyword <> "typeof" Then
                     Return SyntaxResult.CreateError(
-                        err:=New NotImplementedException("type check is only implement on typeof keyword."),
+                        err_msg:="type check is only implement on typeof keyword.",
                         opts:=opts.SetCurrentRange(target)
                     )
                 End If
@@ -155,7 +155,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
                     Return New SyntaxResult(symbolCall)
                 Else
                     Return SyntaxResult.CreateError(
-                        err:=symbolNames.TryCast(Of SyntaxErrorException),
+                        err_msg:=symbolNames.TryCast(Of SyntaxErrorException).Message,
                         opts:=opts.SetCurrentRange(code.IteratesALL.ToArray)
                     )
                 End If
@@ -213,7 +213,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
             If symbolNames Like GetType(SyntaxErrorException) Then
                 Return SyntaxResult.CreateError(
-                    err:=symbolNames.TryCast(Of SyntaxErrorException),
+                    err_msg:=symbolNames.TryCast(Of SyntaxErrorException).Message,
                     opts:=opts.SetCurrentRange(singleToken)
                 )
             End If
@@ -252,7 +252,7 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
 
             If symbolNames Like GetType(SyntaxErrorException) Then
                 Return SyntaxResult.CreateError(
-                    err:=symbolNames.TryCast(Of SyntaxErrorException),
+                    err_msg:=symbolNames.TryCast(Of SyntaxErrorException).Message,
                     opts:=opts.SetCurrentRange(symbol)
                 )
             End If
@@ -279,7 +279,9 @@ Namespace Language.Syntax.SyntaxParser.SyntaxImplements
         ''' get tuple names or a single symbol name
         ''' </summary>
         ''' <param name="code"></param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' returns the correct token text or an exception object without stacktrace information
+        ''' </returns>
         Friend Function getNames(code As Token(), opts As SyntaxBuilderOptions) As [Variant](Of String(), SyntaxErrorException)
             If opts.isPythonPipelineSymbol Then
                 ' join a.b tokens

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::471cf7c372766f7e296569f8b530d9fc, studio\R-terminal\Program.vb"
+﻿#Region "Microsoft.VisualBasic::dd0b2c221fd53a759d163c5318af9839, studio\R-terminal\Program.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 314
-    '    Code Lines: 217 (69.11%)
-    ' Comment Lines: 55 (17.52%)
+    '   Total Lines: 315
+    '    Code Lines: 218 (69.21%)
+    ' Comment Lines: 55 (17.46%)
     '    - Xml Docs: 45.45%
     ' 
-    '   Blank Lines: 42 (13.38%)
-    '     File Size: 12.94 KB
+    '   Blank Lines: 42 (13.33%)
+    '     File Size: 12.99 KB
 
 
     ' Module Program
