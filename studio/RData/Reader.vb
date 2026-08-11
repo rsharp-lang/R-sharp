@@ -352,6 +352,8 @@ Public MustInherit Class Reader
             value = parseVector(AddressOf parse_double)
         ElseIf info.type = RObjectType.CPLX Then
             value = parseVector(AddressOf parse_complex)
+        ElseIf info.type = RObjectType.RAW Then
+            value = parseVector(AddressOf parse_byte)
         ElseIf info.type Like objType3 Then
             value = parseVector(Function() parse_R_object(reference_list))
         ElseIf info.type = RObjectType.S4 Then
@@ -447,12 +449,10 @@ Public MustInherit Class Reader
                                             Optional expand_altrep As Boolean = True,
                                             Optional debug As Boolean = False) As RData
 
-        ' The serialization magic header must be skipped before parsing the
-        ' version block + objects. R 4.x produces two layouts:
-        '   rds : "X\n"            (2 bytes) followed by version int32s
-        '   rda : "RDXn\nX\n"       (8 bytes) followed by version int32s
-        ' file_type() leaves the stream positioned at 0 (it seeks back after
-        ' probing), so we re-detect the magic here and skip it deterministically.
+        ' Re-detect the magic from the start of the stream. Note that the caller
+        ' (file_type) leaves the stream positioned right after the matched magic,
+        ' so we rewind before probing again; then we skip the magic deterministically.
+        Call bin.Seek(0, SeekOrigin.Begin)
         Dim magic As FileTypes = Parser.file_type(bin)
         Dim skip As Long
 
@@ -470,9 +470,7 @@ Public MustInherit Class Reader
 
         Call bin.Seek(skip, SeekOrigin.Begin)
 
-        If debug Then Console.WriteLine($"[ParseRDataBinary] magic={magic} skip={skip} pos={bin.Position}")
         Dim format_type As RdataFormats = rdata_format(bin)
-        If debug Then Console.WriteLine($"[ParseRDataBinary] format_type={format_type}")
 
         If format_type = RdataFormats.XDR Then
             Return New ParserXDR(bin, bin.Position, expand_altrep, debug:=debug).parse_all
