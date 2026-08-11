@@ -63,17 +63,46 @@ Module Module1
 
     ReadOnly R As New RInterpreter
 
+    ReadOnly dataDir As String = "g:\GCModeller\src\R-sharp\studio\RData\test\data\"
+
     Sub Main()
-        App.CurrentDirectory = "E:\GCModeller\src\R-sharp\studio\test\data\"
+        App.CurrentDirectory = dataDir
 
-        'Call testRealExample()
+        Call loadAllSamples()
 
-        Call listIO()
+        Pause()
+    End Sub
 
-        'Call readmultiple()
-        '    Call table()
-        ' Call vector()
-        ' Call list()
+    ''' <summary>
+    ''' Load every generated rda/rds sample and print a short summary so the
+    ''' read values can be compared against what GNU R produced.
+    ''' </summary>
+    Sub loadAllSamples()
+        Dim files() As String = {
+            "samples.rda",
+            "int_vec.rds", "str_vec.rds", "cplx_vec.rds", "raw_vec.rds",
+            "named_vec.rds", "factor_vec.rds", "mat.rds", "df.rds",
+            "df_with_factor.rds", "ts_obj.rds", "nested.rds",
+            "altrep_intseq.rds", "altrep_realseq.rds", "deferred_str.rds",
+            "ref_list.rds"
+        }
+
+        For Each file As String In files
+            Call Console.WriteLine(New String("-"c, 70))
+            Call Console.WriteLine($"FILE: {file}")
+
+            Try
+                Using stream = file.Open
+                    Dim obj = Reader.ParseData(stream, debug:=False)
+                    Dim value = ConvertToR.ToRObject(obj.object)
+
+                    Call R.Inspect(value)
+                End Using
+            Catch ex As Exception
+                Call Console.WriteLine($"!!! FAILED to read {file}: {ex.GetType.Name}: {ex.Message}")
+                Call Console.WriteLine(ex.StackTrace)
+            End Try
+        Next
     End Sub
 
     Sub listIO()

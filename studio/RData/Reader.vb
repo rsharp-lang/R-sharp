@@ -71,8 +71,6 @@ Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
 Imports gzip = Microsoft.VisualBasic.Net.Http.GZipStreamHandler
 Imports RData = SMRUCC.Rsharp.RDataSet.Struct.RData
 
-Public Delegate Function AltRepConstructor(stat As RObject) As (RObjectInfo, Object)
-
 Public MustInherit Class Reader
 
     Protected ReadOnly altrep_constructor_dict As New Dictionary(Of String, AltRepConstructor) From {
@@ -80,7 +78,7 @@ Public MustInherit Class Reader
          {"compact_intseq", compact_intseq_constructor},
          {"compact_realseq", compact_realseq_constructor},
          {"wrap_real", wrap_constructor},
-         {"wrap_string", wrap_constructor},
+         {"wrap_character", wrap_constructor},
          {"wrap_logical", wrap_constructor},
          {"wrap_integer", wrap_constructor},
          {"wrap_complex", wrap_constructor},
@@ -197,13 +195,19 @@ Public MustInherit Class Reader
     ''' <param name="state"></param>
     ''' <returns></returns>
     Public Function expand_altrep_to_object(info As RObject, state As RObject) As (RObjectInfo, Object)
-        Dim class_sym As RObject = info.value.data.GetValue(0)
+        ' info is the ALTREP class symbol (SYMSXP) read before the state
+        Dim class_sym As RObject = info
 
         Do While class_sym.info.type = RObjectType.REF
             class_sym = class_sym.referenced_object
         Loop
 
         Dim altrep_name As String = class_sym.characters
+
+        If Not altrep_constructor_dict.ContainsKey(altrep_name) Then
+            Throw New NotSupportedException($"unsupported ALTREP class: '{altrep_name}'")
+        End If
+
         Dim constructor = altrep_constructor_dict(altrep_name)
 
         Return constructor(info, state)

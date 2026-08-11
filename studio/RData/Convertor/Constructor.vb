@@ -64,11 +64,6 @@ Namespace Convertor
 
     Public Module Constructor
 
-        Public ReadOnly wrap_constructor As AltRepConstructor = AddressOf AltRepConstructor.wrap_constructor
-        Public ReadOnly compact_realseq_constructor As AltRepConstructor = AddressOf AltRepConstructor.compact_realseq_constructor
-        Public ReadOnly compact_intseq_constructor As AltRepConstructor = AddressOf AltRepConstructor.compact_intseq_constructor
-        Public ReadOnly deferred_string_constructor As AltRepConstructor = AddressOf AltRepConstructor.deferred_string_constructor
-
         ReadOnly toType As New Dictionary(Of RObjectType, RType) From {
             {RObjectType.ANY, RType.GetRSharpType(GetType(Object))},
             {RObjectType.CHAR, RType.GetRSharpType(GetType(Char))},

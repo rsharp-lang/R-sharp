@@ -11,6 +11,7 @@
 #End Region
 
 Imports SMRUCC.Rsharp.RDataSet.Flags
+Imports SMRUCC.Rsharp.RDataSet.Struct
 Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
 
 Namespace Convertor
@@ -33,7 +34,7 @@ Namespace Convertor
     ''' </returns>
     Public Delegate Function AltRepConstructor(info As RObject, state As RObject) As (info As RObjectInfo, value As Object)
 
-    Public Module AltRepConstructor
+    Public Module AltRepConstructorExpander
 
         ''' <summary>
         ''' compact_intseq: state is an INTSXP of length 3 -> (start, step, n).
