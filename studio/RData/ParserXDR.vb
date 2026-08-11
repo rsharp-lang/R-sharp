@@ -77,8 +77,10 @@ Public Class ParserXDR : Inherits Reader
     End Sub
 
     Public Overrides Function parse_int() As Integer
-        If debug Then Console.WriteLine($"  [parse_int] pos={data.Position} eos={data.EndOfStream} len={data.Length}")
-        Return XDRParser.UnpackInteger()
+        If debug Then Console.WriteLine($"  [parse_int] pos_before={data.Position}")
+        Dim v = XDRParser.UnpackInteger()
+        If debug Then Console.WriteLine($"  [parse_int] pos_after={data.Position} val={v}")
+        Return v
     End Function
 
     Public Overrides Function parse_double() As Double
@@ -91,7 +93,10 @@ Public Class ParserXDR : Inherits Reader
     ''' <param name="length"></param>
     ''' <returns></returns>
     Public Overrides Function parse_string(length As Integer) As Byte()
-        Return data.ReadBytes(length)
+        If debug Then Console.WriteLine($"  [parse_string] len={length} pos_before={data.Position}")
+        Dim buf = data.ReadBytes(length)
+        If debug Then Console.WriteLine($"  [parse_string] pos_after={data.Position}")
+        Return buf
     End Function
 
     Public Overrides Function parse_byte() As Integer

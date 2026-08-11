@@ -189,11 +189,10 @@ Public MustInherit Class Reader
             ' Reading the length as a 4-byte XDR int is wrong and shifts
             ' every following object by 3 bytes, corrupting parse.
             Call parse_int()                          ' min_version int32 (skip)
-            If debug Then Console.WriteLine($"  [extra] after min_version pos={data.Position}")
             Dim encoding_len As Integer = parse_byte() ' 1-byte compact length
-            If debug Then Console.WriteLine($"  [extra] encLen={encoding_len} pos={data.Position}")
+            If debug Then Console.WriteLine($"  [extra] encLen={encoding_len}")
             encoding = parse_string(encoding_len).decode(Encodings.ASCII)
-            If debug Then Console.WriteLine($"  [extra] encoding='{encoding}' pos={data.Position}")
+            If debug Then Console.WriteLine($"  [extra] encoding='{encoding}'")
         End If
 
         Dim extract_info As New RExtraInfo With {
