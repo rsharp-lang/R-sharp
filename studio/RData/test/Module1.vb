@@ -102,30 +102,29 @@ Module Module1
 
     ' Spot-check parsed vector values against the R 4.5.0 source values.
     Sub verifyVector(value As Object, file As String)
-        If Not (TypeOf value Is Array) Then
-            Return
-        End If
+        Dim items = New List(Of Object)
 
-        Dim a As Array = value
-        Dim n As Integer = a.Length
-
-        If n = 0 Then
-            Return
-        End If
+        For Each x In DirectCast(value, IEnumerable)
+            items.Add(x)
+        Next
 
         Select Case file
             Case "altrep_intseq.rds"
-                Dim okHead = (CInt(a.GetValue(0)) = 1) AndAlso (CInt(a.GetValue(1)) = 2)
-                Dim okTail = (CInt(a.GetValue(n - 1)) = n)
-                Call Console.WriteLine($"    [verify] 1..{n}: head=({a.GetValue(0)},{a.GetValue(1)}) tail={a.GetValue(n - 1)} -> {(If(okHead AndAlso okTail, "OK", "MISMATCH"))}")
+                Dim n = items.Count
+                Dim a = items.Select(Function(x) CInt(x)).ToArray()
+                Dim okHead = (a(0) = 1) AndAlso (a(1) = 2)
+                Dim okTail = (a(n - 1) = n)
+                Call Console.WriteLine($"    [verify] 1..{n}: head=({a(0)},{a(1)}) tail={a(n - 1)} -> {(If(okHead AndAlso okTail, "OK", "MISMATCH"))}")
             Case "altrep_realseq.rds"
-                Dim okHead = Math.Abs(CDbl(a.GetValue(0)) - 0.0) < 1E-9
-                Dim okTail = Math.Abs(CDbl(a.GetValue(n - 1)) - 1.0) < 1E-9
-                Call Console.WriteLine($"    [verify] seq(0,1,by=0.01): first={a.GetValue(0)} last={a.GetValue(n - 1)} -> {(If(okHead AndAlso okTail, "OK", "MISMATCH"))}")
+                Dim n = items.Count
+                Dim a = items.Select(Function(x) CDbl(x)).ToArray()
+                Dim okHead = Math.Abs(a(0) - 0.0) < 1E-9
+                Dim okTail = Math.Abs(a(n - 1) - 1.0) < 1E-9
+                Call Console.WriteLine($"    [verify] seq(0,1,by=0.01): first={a(0)} last={a(n - 1)} -> {(If(okHead AndAlso okTail, "OK", "MISMATCH"))}")
             Case "str_vec.rds"
-                Call Console.WriteLine($"    [verify] first='{a.GetValue(0)}' last='{a.GetValue(n - 1)}'")
+                Call Console.WriteLine($"    [verify] ('{items(0)}','{items(1)}',...,'{items(items.Count - 1)}')")
             Case "deferred_str.rds"
-                Call Console.WriteLine($"    [verify] deferred string vec length={n}, first='{a.GetValue(0)}'")
+                Call Console.WriteLine($"    [verify] deferred string vec length={items.Count}, first='{items(0)}'")
         End Select
     End Sub
 End Module
