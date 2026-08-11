@@ -433,13 +433,12 @@ Public MustInherit Class Reader
             Case FileTypes.rdata_binary_v2, FileTypes.rdata_binary_v3, FileTypes.Unknown
                 Return ParseRDataBinary(reader, expand_altrep, debug)
             Case FileTypes.gzip
-                Using ms As New MemoryStream
-                    Dim nbytes As Integer = reader.Length - reader.Position
+                ' The whole stream (starting at the gzip magic 0x1f 0x8b) is a
+                ' gzip compressed R serialization blob. Rewind and decompress it
+                ' directly, then parse the decompressed stream.
+                reader.Seek(Scan0, SeekOrigin.Begin)
 
-                    Call ms.Write(reader.ReadBytes(nbytes).AddGzipMagic.ToArray, Scan0, nbytes + 2)
-                    Call ms.Flush()
-                    Call ms.Seek(Scan0, SeekOrigin.Begin)
-
+                Using ms As New MemoryStream(reader.ReadBytes(CInt(reader.Length)))
                     Using newData As MemoryStream = gzip.UnGzipStream(ms)
                         Call newData.Seek(Scan0, SeekOrigin.Begin)
 
