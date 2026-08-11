@@ -176,11 +176,21 @@ Namespace Convertor
 
             If nodeType = ListNodeType.NA Then
                 If rdata.info.type = RObjectType.S4 Then
-                    Return PullRObject(rdata.attributes, list)
+                    ' An S4 object whose slots pairlist is empty: keep a placeholder
+                    ' entry so the object is not silently dropped during the walk.
+                    Call list.Add(".class", GetS4Class(rdata.attributes))
+                    Return list
                 End If
 
                 Return Nothing
             ElseIf nodeType = ListNodeType.Vector Then
+                If rdata.info.type = RObjectType.S4 Then
+                    ' S4 vectors (e.g. an S4 that is just a primitive) carry the
+                    ' class name in their attributes.
+                    Call list.Add(".class", GetS4Class(rdata.attributes))
+                    Return list
+                End If
+
                 ' 已经没有数据了，结束递归
                 If rdata.value.isPrimitive Then
                     ' is a numeric matrix
@@ -213,6 +223,13 @@ Namespace Convertor
 
                 Return current
             Else
+                ' An S4 slot node (e.g. an Assay / DimReduction) carries its class
+                ' name in the attributes. Record it so downstream readers can
+                ' dispatch on the concrete S4 type.
+                If rdata.info.type = RObjectType.S4 Then
+                    Call list.Add(".class", GetS4Class(rdata.attributes))
+                End If
+
                 ' CAR为当前节点的数据
                 ' 获取节点数据，然后继续通过CDR进行链表的递归访问
                 Dim current As Object = PullRObject(car, list)
@@ -237,6 +254,44 @@ Namespace Convertor
                     Return PullRObject(CDR, list)
                 End If
             End If
+        End Function
+
+        ''' <summary>
+        ''' Extract the S4 class name from the object's attributes pairlist.
+        ''' The class is stored under the "class" tag as a character vector.
+        ''' </summary>
+        Private Function GetS4Class(attributes As RObject) As String
+            If attributes Is Nothing Then
+                Return Nothing
+            End If
+
+            Dim classAttr As RObject = attributes.LinkVisitor("class")
+
+            If classAttr Is Nothing Then
+                Return Nothing
+            End If
+
+            ' The class value is a STRSXP character vector; pull it and take
+            ' the first element (the most specific class name).
+            Dim classObj As RObject = classAttr.value?.CAR
+
+            If classObj Is Nothing Then
+                Return Nothing
+            End If
+
+            Dim classVal As Object = PullRObject(classObj, New Dictionary(Of String, Object))
+
+            If TypeOf classVal Is Array Then
+                Dim arr As Array = DirectCast(classVal, Array)
+
+                If arr.Length > 0 Then
+                    Return arr.GetValue(0)?.ToString()
+                End If
+            ElseIf classVal IsNot Nothing Then
+                Return classVal.ToString()
+            End If
+
+            Return Nothing
         End Function
 
         <Extension>

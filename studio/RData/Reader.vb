@@ -357,7 +357,12 @@ Public MustInherit Class Reader
         ElseIf info.type Like objType3 Then
             value = parseVector(Function() parse_R_object(reference_list))
         ElseIf info.type = RObjectType.S4 Then
-            value = Nothing
+            ' R serializes an S4 object as: the S4 type flag, followed by a
+            ' LISTSXP pairlist that holds the named slots, followed by the
+            ' object attributes (which contain the "class" name). The slots
+            ' pairlist must be consumed here, otherwise every byte that follows
+            ' shifts out of alignment and the whole object tree corrupts.
+            value = parse_R_object(reference_list)
         ElseIf info.type = RObjectType.ALTREP Then
             Dim altrep_info = parse_R_object(reference_list)
             Dim altrep_state = parse_R_object(reference_list)
