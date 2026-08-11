@@ -287,13 +287,13 @@ Namespace Convertor
         ''' </summary>
         Private Function GetS4Class(attributes As RObject) As String
             If attributes Is Nothing Then
-                Return Nothing
+                Return "@NULLATTR@"
             End If
 
             Dim classAttr As RObject = attributes.LinkVisitor("class")
 
             If classAttr Is Nothing Then
-                Return Nothing
+                Return "@NOCLASS@"
             End If
 
             ' The class value is a STRSXP character vector; pull it and take
