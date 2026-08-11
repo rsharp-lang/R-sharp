@@ -294,6 +294,7 @@ Public MustInherit Class Reader
             add_reference = True
         ElseIf info.type Like typeList1 Then
             tag = Nothing
+            add_reference = True
 
             If info.attributes Then
                 attributes = parse_R_object(reference_list)
@@ -362,6 +363,9 @@ Public MustInherit Class Reader
             ' object attributes (which contain the "class" name). The slots
             ' pairlist must be consumed here, otherwise every byte that follows
             ' shifts out of alignment and the whole object tree corrupts.
+            ' The S4 node itself participates in the reference table so that
+            ' later REF entries can resolve back to it.
+            add_reference = True
             value = parse_R_object(reference_list)
         ElseIf info.type = RObjectType.ALTREP Then
             Dim altrep_info = parse_R_object(reference_list)
