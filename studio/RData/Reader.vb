@@ -320,7 +320,7 @@ Public MustInherit Class Reader
             Dim altrep_state = parse_R_object(reference_list)
             Dim altrep_attr = parse_R_object(reference_list)
 
-            If expand_altrep AndAlso Not altrep_info.value.data.IsNullOrEmpty Then
+            If expand_altrep AndAlso altrep_info IsNot Nothing AndAlso altrep_info.info.type = RObjectType.SYM Then
                 With expand_altrep_to_object(info:=altrep_info, state:=altrep_state)
                     info = .Item1
                     value = .Item2
