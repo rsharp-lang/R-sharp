@@ -195,8 +195,11 @@ Public MustInherit Class Reader
     ''' <param name="state"></param>
     ''' <returns></returns>
     Public Function expand_altrep_to_object(info As RObject, state As RObject) As (RObjectInfo, Object)
-        ' info is the ALTREP class symbol (SYMSXP) read before the state
-        Dim class_sym As RObject = info
+        ' In R >= 4.x the ALTREP class is serialized as a LISTSXP pairlist
+        ' list3(csym, psym, stype): class symbol, package symbol, storage type.
+        ' The class name we need lives in the first element (caR) which is a SYMSXP.
+        Dim class_list As RObject = info
+        Dim class_sym As RObject = class_list.value.CAR
 
         Do While class_sym.info.type = RObjectType.REF
             class_sym = class_sym.referenced_object
@@ -205,6 +208,12 @@ Public MustInherit Class Reader
         Dim altrep_name As String = class_sym.characters
 
         Console.WriteLine($"[expand_altrep] class='{altrep_name}' stateType={state.info.type} stateRef={state.info.reference}")
+        If state.info.type = RObjectType.REAL Then
+            Dim sv = TryCast(state.value.data, Double())
+            If sv IsNot Nothing Then
+                Console.WriteLine($"   state(REAL) len={sv.Length} values=({String.Join(",", sv)})")
+            End If
+        End If
 
         If Not altrep_constructor_dict.ContainsKey(altrep_name) Then
             Throw New NotSupportedException($"unsupported ALTREP class: '{altrep_name}'")
@@ -320,7 +329,7 @@ Public MustInherit Class Reader
             Dim altrep_state = parse_R_object(reference_list)
             Dim altrep_attr = parse_R_object(reference_list)
 
-            If expand_altrep AndAlso altrep_info IsNot Nothing AndAlso altrep_info.info.type = RObjectType.SYM Then
+            If expand_altrep AndAlso altrep_info IsNot Nothing Then
                 With expand_altrep_to_object(info:=altrep_info, state:=altrep_state)
                     info = .Item1
                     value = .Item2

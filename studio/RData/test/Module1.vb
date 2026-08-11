@@ -39,7 +39,7 @@ Module Module1
 
             Try
                 Using stream = file.Open
-                    Dim obj = Reader.ParseData(stream, debug:=False)
+                    Dim obj = Reader.ParseData(stream, debug:=(file = "int_vec.rds"))
                     Dim value = ConvertToR.ToRObject(obj.object)
 
                     Call summarize(value, file)
