@@ -100,6 +100,9 @@ Public Class ParserXDR : Inherits Reader
     End Function
 
     Public Overrides Function parse_byte() As Integer
-        Return data.ReadByte()
+        If debug Then Console.WriteLine($"  [parse_byte] pos={data.Position}")
+        Dim b = data.ReadByte()
+        If debug Then Console.WriteLine($"  [parse_byte] val={b} pos_after={data.Position}")
+        Return b
     End Function
 End Class
