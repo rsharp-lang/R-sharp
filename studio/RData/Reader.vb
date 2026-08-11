@@ -179,10 +179,16 @@ Public MustInherit Class Reader
     ''' <returns></returns>
     Public Function parse_extra_info(versions As RVersions) As RExtraInfo
         Dim encoding As String = Nothing
-        Dim encoding_len As Integer
 
         If versions.format >= 3 Then
-            encoding_len = parse_int()
+            ' R 4.x format 3 header layout (after the 3 version int32s):
+            '   int32  min_version (4 bytes)   - always present
+            '   byte   encoding_length (1 byte) - compact 1-byte length
+            '   char[] encoding (encoding_length bytes) e.g. "UTF-8"
+            ' Reading the length as a 4-byte XDR int is wrong and shifts
+            ' every following object by 3 bytes, corrupting parse.
+            Call parse_int()                          ' min_version int32 (skip)
+            Dim encoding_len As Integer = parse_byte() ' 1-byte compact length
             encoding = parse_string(encoding_len).decode(Encodings.ASCII)
         End If
 
@@ -211,14 +217,6 @@ Public MustInherit Class Reader
         Loop
 
         Dim altrep_name As String = class_sym.characters
-
-        Console.WriteLine($"[expand_altrep] class='{altrep_name}' stateType={state.info.type} stateRef={state.info.reference}")
-        If state.info.type = RObjectType.REAL Then
-            Dim sv = TryCast(state.value.data, Double())
-            If sv IsNot Nothing Then
-                Console.WriteLine($"   state(REAL) len={sv.Length} values=({String.Join(",", sv)})")
-            End If
-        End If
 
         If Not altrep_constructor_dict.ContainsKey(altrep_name) Then
             Throw New NotSupportedException($"unsupported ALTREP class: '{altrep_name}'")

@@ -25,12 +25,12 @@ Module Module1
     ''' </summary>
     Sub loadAllSamples()
         Dim files() As String = {
-            "samples.rda",
-            "int_vec.rds", "str_vec.rds", "cplx_vec.rds", "raw_vec.rds",
-            "named_vec.rds", "factor_vec.rds", "mat.rds", "df.rds",
-            "df_with_factor.rds", "ts_obj.rds", "nested.rds",
-            "altrep_intseq.rds", "altrep_realseq.rds", "deferred_str.rds",
-            "ref_list.rds"
+            "samples_nc.rda",
+            "int_vec_nc.rds", "str_vec_nc.rds", "cplx_vec_nc.rds", "raw_vec_nc.rds",
+            "named_vec_nc.rds", "factor_vec_nc.rds", "mat_nc.rds", "df_nc.rds",
+            "df_with_factor_nc.rds", "ts_obj_nc.rds", "nested_nc.rds",
+            "altrep_intseq_nc.rds", "altrep_realseq_nc.rds", "deferred_str_nc.rds",
+            "ref_list_nc.rds"
         }
 
         For Each file As String In files
@@ -39,7 +39,7 @@ Module Module1
 
             Try
                 Using stream = file.Open
-                    Dim obj = Reader.ParseData(stream, debug:=(file = "altrep_realseq.rds"))
+                    Dim obj = Reader.ParseData(stream, debug:=(file = "str_vec_nc.rds"))
                     Dim value = ConvertToR.ToRObject(obj.object)
 
                     Call summarize(value, file)

@@ -92,4 +92,8 @@ Public Class ParserXDR : Inherits Reader
     Public Overrides Function parse_string(length As Integer) As Byte()
         Return data.ReadBytes(length)
     End Function
+
+    Public Overrides Function parse_byte() As Integer
+        Return data.ReadByte()
+    End Function
 End Class
