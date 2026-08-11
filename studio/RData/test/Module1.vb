@@ -102,29 +102,28 @@ Module Module1
 
     ' Spot-check parsed vector values against the R 4.5.0 source values.
     Sub verifyVector(value As Object, file As String)
-        Dim items = New List(Of Object)
+        If Not (TypeOf value Is vector) Then
+            Return
+        End If
 
-        For Each x In DirectCast(value, IEnumerable)
-            items.Add(x)
-        Next
+        Dim data As Array = DirectCast(value, vector).data
+        Dim n As Integer = data.Length
 
         Select Case file
             Case "altrep_intseq.rds"
-                Dim n = items.Count
-                Dim a = items.Select(Function(x) CInt(x)).ToArray()
+                Dim a = data.OfType(Of Object)().Select(Function(x) CInt(x)).ToArray()
                 Dim okHead = (a(0) = 1) AndAlso (a(1) = 2)
                 Dim okTail = (a(n - 1) = n)
                 Call Console.WriteLine($"    [verify] 1..{n}: head=({a(0)},{a(1)}) tail={a(n - 1)} -> {(If(okHead AndAlso okTail, "OK", "MISMATCH"))}")
             Case "altrep_realseq.rds"
-                Dim n = items.Count
-                Dim a = items.Select(Function(x) CDbl(x)).ToArray()
+                Dim a = data.OfType(Of Object)().Select(Function(x) CDbl(x)).ToArray()
                 Dim okHead = Math.Abs(a(0) - 0.0) < 1E-9
                 Dim okTail = Math.Abs(a(n - 1) - 1.0) < 1E-9
                 Call Console.WriteLine($"    [verify] seq(0,1,by=0.01): first={a(0)} last={a(n - 1)} -> {(If(okHead AndAlso okTail, "OK", "MISMATCH"))}")
             Case "str_vec.rds"
-                Call Console.WriteLine($"    [verify] ('{items(0)}','{items(1)}',...,'{items(items.Count - 1)}')")
+                Call Console.WriteLine($"    [verify] ('{data.GetValue(0)}','{data.GetValue(1)}',...,'{data.GetValue(n - 1)}')")
             Case "deferred_str.rds"
-                Call Console.WriteLine($"    [verify] deferred string vec length={items.Count}, first='{items(0)}'")
+                Call Console.WriteLine($"    [verify] deferred string vec length={n}, first='{data.GetValue(0)}'")
         End Select
     End Sub
 End Module
