@@ -203,10 +203,10 @@ Public MustInherit Class Reader
             class_sym = class_sym.referenced_object
         Loop
 
-        Dim altrep_name As String = DirectCast(class_sym.value.data, Char()).CharString
+        Dim altrep_name As String = class_sym.characters
         Dim constructor = altrep_constructor_dict(altrep_name)
 
-        Return constructor(state)
+        Return constructor(info, state)
     End Function
 
     ''' <summary>
@@ -330,6 +330,11 @@ Public MustInherit Class Reader
                     .attributes = altrep_attr
                 }
             End If
+
+            ' The ALTREP node itself occupies a slot in the reference table, just
+            ' like a regular object, so later REF entries can resolve back to it.
+            ' (R serializes ALTREP with a ref_index increment.)
+            add_reference = True
 
         ElseIf info.type = RObjectType.EMPTYENV Then
             value = Nothing

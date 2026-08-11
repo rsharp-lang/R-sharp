@@ -63,10 +63,10 @@ Namespace Convertor
 
     Public Module Constructor
 
-        Public ReadOnly wrap_constructor As AltRepConstructor
-        Public ReadOnly compact_realseq_constructor As AltRepConstructor
-        Public ReadOnly compact_intseq_constructor As AltRepConstructor
-        Public ReadOnly deferred_string_constructor As AltRepConstructor
+        Public ReadOnly wrap_constructor As AltRepConstructor = AddressOf AltRepConstructor.wrap_constructor
+        Public ReadOnly compact_realseq_constructor As AltRepConstructor = AddressOf AltRepConstructor.compact_realseq_constructor
+        Public ReadOnly compact_intseq_constructor As AltRepConstructor = AddressOf AltRepConstructor.compact_intseq_constructor
+        Public ReadOnly deferred_string_constructor As AltRepConstructor = AddressOf AltRepConstructor.deferred_string_constructor
 
         ReadOnly toType As New Dictionary(Of RObjectType, RType) From {
             {RObjectType.ANY, RType.GetRSharpType(GetType(Object))},
@@ -74,7 +74,12 @@ Namespace Convertor
             {RObjectType.REAL, RType.GetRSharpType(GetType(Double))},
             {RObjectType.LGL, RType.GetRSharpType(GetType(Boolean))},
             {RObjectType.STR, RType.GetRSharpType(GetType(String))},
-            {RObjectType.INT, RType.GetRSharpType(GetType(Integer))}
+            {RObjectType.INT, RType.GetRSharpType(GetType(Integer))},
+            {RObjectType.CPLX, RType.GetRSharpType(GetType(Double()))},
+            {RObjectType.RAW, RType.GetRSharpType(GetType(Byte()))},
+            {RObjectType.VEC, RType.GetRSharpType(GetType(Object))},
+            {RObjectType.LIST, RType.GetRSharpType(GetType(Object))},
+            {RObjectType.NIL, RType.GetRSharpType(GetType(Object))}
         }
 
         <Extension>
