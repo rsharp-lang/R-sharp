@@ -223,11 +223,36 @@ Namespace Convertor
 
                 Return current
             Else
-                ' An S4 slot node (e.g. an Assay / DimReduction) carries its class
-                ' name in the attributes. Record it so downstream readers can
-                ' dispatch on the concrete S4 type.
                 If rdata.info.type = RObjectType.S4 Then
-                    Call list.Add(".class", GetS4Class(rdata.attributes))
+                    ' An S4 object keeps its slots in a dedicated dictionary so
+                    ' that the ".class" marker and slot values do not leak into a
+                    ' parent object's slot collection (which would cause key
+                    ' collisions for nested S4 objects such as assays inside a
+                    ' Seurat object).
+                    Dim ownSlots As New Dictionary(Of String, Object)
+
+                    Call ownSlots.Add(".class", GetS4Class(rdata.attributes))
+
+                    Dim cur As RObject = rdata
+
+                    Do While cur IsNot Nothing AndAlso cur.value IsNot Nothing AndAlso cur.value.nodeType <> ListNodeType.NA
+                        Dim slotCar As RObject = cur.value.CAR
+                        Dim slotValue As Object = PullRObject(slotCar, ownSlots)
+                        Dim slotName As String = If(cur.tag?.characters, cur.characters)
+
+                        If ownSlots.ContainsKey(slotName) Then
+                            slotName = ownSlots.Keys _
+                                .JoinIterates({slotName}) _
+                                .uniqueNames _
+                                .Last
+                        End If
+
+                        Call ownSlots.Add(slotName, slotValue)
+
+                        cur = cur.value.CDR
+                    Loop
+
+                    Return New list With {.slots = ownSlots}
                 End If
 
                 ' CAR为当前节点的数据
