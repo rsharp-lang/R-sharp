@@ -224,6 +224,8 @@ Namespace Convertor
                 Return current
             Else
                 If rdata.info.type = RObjectType.S4 Then
+                    ' TEMP diagnostic
+                    Console.Error.WriteLine($"[S4] attrs is {(If(rdata.attributes Is Nothing, "Nothing", rdata.attributes.info.type.ToString))}, value.nodeType={(If(rdata.value Is Nothing, "Nothing", rdata.value.nodeType.ToString))}")
                     ' An S4 object keeps its slots in a dedicated dictionary so
                     ' that the ".class" marker and slot values do not leak into a
                     ' parent object's slot collection (which would cause key
@@ -290,6 +292,9 @@ Namespace Convertor
                 Return "@NULLATTR@"
             End If
 
+            ' TEMP: inspect raw attributes node
+            Console.Error.WriteLine($"[GetS4Class] attrs.type={attributes.info.type}, chars={attributes.characters}, symName={attributes.symbolName}")
+
             Dim classAttr As RObject = attributes.LinkVisitor("class")
 
             If classAttr Is Nothing Then
@@ -314,6 +319,8 @@ Namespace Convertor
             End If
 
             Dim classVal As Object = PullRObject(classObj, New Dictionary(Of String, Object))
+            ' TEMP diagnostic
+            Console.Error.WriteLine($"[GetS4Class] found classAttr tag={classAttr.tag?.characters}, valType={classVal?.GetType().Name}, val={classVal}")
 
             If TypeOf classVal Is Array Then
                 Dim arr As Array = DirectCast(classVal, Array)
