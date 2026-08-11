@@ -99,11 +99,9 @@ Namespace Convertor
                     ' complex vector: data is already a Complex() array
                     Return DirectCast(robj.value.data, Complex())
                 Case RObjectType.RAW
-                    ' raw bytes vector: data is a List(Of Object) of 0-255 Integers
-                    ' produced by parseVector(AddressOf parse_byte); convert to Byte().
-                    Return DirectCast(robj.value.data, IEnumerable(Of Object)) _
-                        .Select(Function(b) CByte(b)) _
-                        .ToArray()
+                    ' raw bytes vector: data is an Integer()/Int32() array of 0-255
+                    ' values produced by parseVector(AddressOf parse_byte); convert to Byte().
+                    Return CLRVector.asRawByte(robj.value.data)
                 Case Else
                     Throw New NotImplementedException(robj.info.ToString)
             End Select
