@@ -77,6 +77,7 @@ Public Class ParserXDR : Inherits Reader
     End Sub
 
     Public Overrides Function parse_int() As Integer
+        If debug Then Console.WriteLine($"  [parse_int] pos={data.Position} eos={data.EndOfStream} len={data.Length}")
         Return XDRParser.UnpackInteger()
     End Function
 

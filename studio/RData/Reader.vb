@@ -140,6 +140,7 @@ Public MustInherit Class Reader
     ''' <returns></returns>
     Public Function parse_all() As RData
         Dim versions As RVersions = parse_versions()
+        If debug Then Console.WriteLine($"[parse_all] format={versions.format} serialized={versions.serialized} minimum={versions.minimum}")
         Dim extra_info As RExtraInfo = parse_extra_info(versions)
         Dim obj As RObject = parse_R_object()
 
@@ -188,8 +189,11 @@ Public MustInherit Class Reader
             ' Reading the length as a 4-byte XDR int is wrong and shifts
             ' every following object by 3 bytes, corrupting parse.
             Call parse_int()                          ' min_version int32 (skip)
+            If debug Then Console.WriteLine($"  [extra] after min_version pos={data.Position}")
             Dim encoding_len As Integer = parse_byte() ' 1-byte compact length
+            If debug Then Console.WriteLine($"  [extra] encLen={encoding_len} pos={data.Position}")
             encoding = parse_string(encoding_len).decode(Encodings.ASCII)
+            If debug Then Console.WriteLine($"  [extra] encoding='{encoding}' pos={data.Position}")
         End If
 
         Dim extract_info As New RExtraInfo With {
@@ -429,11 +433,14 @@ Public MustInherit Class Reader
 
         Select Case magic
             Case FileTypes.rdata_binary_v2, FileTypes.rdata_binary_v3
-                ' "RDXn\n" (6 bytes) + "X\n" (2 bytes)
-                skip = 8
+                ' rda files: "RDXn\n" (6 bytes) prefix, then the "X\n" format
+                ' magic follows immediately. Skip the RDX prefix so that
+                ' rdata_format() can read the "X\n" magic at the right place.
+                skip = 6
             Case Else
-                ' Treat as a plain rds-style blob: "X\n" (2 bytes)
-                skip = 2
+                ' Plain rds-style blob: the "X\n" format magic is at offset 0,
+                ' directly followed by the version block. No prefix to skip.
+                skip = 0
         End Select
 
         Call bin.Seek(skip, SeekOrigin.Begin)
