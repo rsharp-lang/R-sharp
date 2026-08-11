@@ -360,7 +360,7 @@ Namespace Convertor
                 names = names.uniqueNames
             End If
 
-            Dim list As New list
+            Dim list As list = list.empty
             Dim obj As Object
             Dim name As String
             Dim load As Dictionary(Of String, Object)
