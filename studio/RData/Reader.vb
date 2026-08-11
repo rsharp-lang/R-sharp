@@ -149,7 +149,7 @@ Public MustInherit Class Reader
     Public Function parse_all() As RData
         Dim versions As RVersions = parse_versions()
         Dim extra_info As RExtraInfo = parse_extra_info(versions)
-        Dim obj As RObject = parse_R_object()
+        Dim obj As RObject = parse_R_object(is_root:=True)
 
         Return New RData With {
             .versions = versions,
@@ -249,13 +249,25 @@ Public MustInherit Class Reader
     ''' </summary>
     ''' <param name="reference_list"></param>
     ''' <returns></returns>
-    Friend Function parse_R_object(Optional reference_list As List(Of RObject) = Nothing) As RObject
+    Friend Function parse_R_object(Optional reference_list As List(Of RObject) = Nothing,
+                                     Optional is_root As Boolean = False) As RObject
         If reference_list Is Nothing Then
             ' Index is 1-based, so we insert a dummy object
             reference_list = New List(Of RObject)
         End If
 
-        Dim info_int As Integer = parse_int24()
+        ' R 4.x writes the per-object info as a 3-byte (24-bit) integer for the
+        ' top-level / root object, but as a full 4-byte XDR integer for every
+        ' nested object (e.g. STRSXP elements, list members). Reading them with
+        ' a single width corrupts the byte alignment of everything that follows.
+        Dim info_int As Integer
+
+        If is_root Then
+            info_int = parse_int24()
+        Else
+            info_int = parse_int()
+        End If
+
         Dim info As RObjectInfo = parse_r_object_info(info_int)
         Dim tag = Nothing
         Dim attributes As RObject = Nothing
@@ -458,7 +470,9 @@ Public MustInherit Class Reader
 
         Call bin.Seek(skip, SeekOrigin.Begin)
 
+        If debug Then Console.WriteLine($"[ParseRDataBinary] magic={magic} skip={skip} pos={bin.Position}")
         Dim format_type As RdataFormats = rdata_format(bin)
+        If debug Then Console.WriteLine($"[ParseRDataBinary] format_type={format_type}")
 
         If format_type = RdataFormats.XDR Then
             Return New ParserXDR(bin, bin.Position, expand_altrep, debug:=debug).parse_all
