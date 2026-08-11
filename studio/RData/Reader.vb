@@ -204,6 +204,8 @@ Public MustInherit Class Reader
 
         Dim altrep_name As String = class_sym.characters
 
+        Console.WriteLine($"[expand_altrep] class='{altrep_name}' stateType={state.info.type} stateRef={state.info.reference}")
+
         If Not altrep_constructor_dict.ContainsKey(altrep_name) Then
             Throw New NotSupportedException($"unsupported ALTREP class: '{altrep_name}'")
         End If

@@ -64,12 +64,12 @@ Module Module1
                 Dim v = l(name)
 
                 Call Console.WriteLine($"    ${name} -> {describe(v)}")
-            End If
+            Next
         ElseIf TypeOf value Is dataframe Then
             Dim df As dataframe = value
 
             Call Console.WriteLine($"  type=dataframe, rows={df.nrows}, cols={df.ncols}")
-            Call Console.WriteLine($"    columns: {df.getColumns(True).JoinBy(", ")}")
+            Call Console.WriteLine($"    columns: {df.colnames.JoinBy(", ")}")
         Else
             Call Console.WriteLine($"  {describe(value)}")
         End If

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.VisualBasic.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>TestRData</RootNamespace>
@@ -10,8 +10,13 @@
     <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Module1.vb" />
     <ProjectReference Include="..\RData.NET5.vbproj" />
     <ProjectReference Include="..\..\..\R#\Rsharp-netcore5.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="My Project\**" />
+    <EmbeddedResource Remove="My Project\**" />
+    <None Remove="My Project\**" />
   </ItemGroup>
 </Project>
