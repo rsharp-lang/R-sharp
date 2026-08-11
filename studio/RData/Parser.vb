@@ -156,7 +156,12 @@ Module Parser
     ''' <param name="info_int"></param>
     ''' <returns></returns>
     Public Function parse_r_object_info(info_int As Integer) As RObjectInfo
-        Dim type_exp As RObjectType = bits(info_int, 0, 8)
+        ' R's serialized object info packs the SEXP type in the HIGH byte and
+        ' the flags + gp in the low bits, i.e.  info = (type << 8) | flags.
+        ' This is the layout used by every R version (2 and 3) and matches the
+        ' official R_Serialize format. The earlier 0-based type extraction was
+        ' wrong and made every object decode as NILVALUE, producing NULL results.
+        Dim type_exp As RObjectType = bits(info_int, 8, 16)
         Dim reference = 0
         Dim object_flag As Boolean
         Dim attributes As Boolean
@@ -169,14 +174,14 @@ Module Parser
             tag = False
             gp = 0
         Else
-            object_flag = CBool(bits(info_int, 8, 9))
-            attributes = CBool(bits(info_int, 9, 10))
-            tag = CBool(bits(info_int, 10, 11))
-            gp = bits(info_int, 12, 28)
+            object_flag = CBool(bits(info_int, 0, 1))
+            attributes = CBool(bits(info_int, 1, 2))
+            tag = CBool(bits(info_int, 2, 3))
+            gp = bits(info_int, 12, 20)
         End If
 
         If type_exp = RObjectType.REF Then
-            reference = bits(info_int, 8, 32)
+            reference = bits(info_int, 0, 24)
         End If
 
         Return New RObjectInfo With {
