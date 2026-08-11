@@ -130,6 +130,11 @@ Public MustInherit Class Reader
     Public MustOverride Function parse_string(length As Integer) As Byte()
 
     ''' <summary>
+    ''' Read a single raw byte (used for R 4.x compact integer / 1-byte lengths).
+    ''' </summary>
+    Public MustOverride Function parse_byte() As Integer
+
+    ''' <summary>
     ''' Parse all the file.
     ''' </summary>
     ''' <returns></returns>
