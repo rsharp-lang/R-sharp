@@ -37,14 +37,14 @@ Namespace Convertor
     Public Module AltRepConstructorExpander
 
         ''' <summary>
-        ''' compact_intseq: state is a REALSXP of length 3 -> (start, step, n).
-        ''' Produces integer(1:n) mapped through start + i*step.
+        ''' compact_intseq: state is a REALSXP of length 3 -> (n, step, start).
+        ''' Produces integer(start .. start + (n-1)*step).
         ''' </summary>
         Public Function compact_intseq_constructor(info As RObject, state As RObject) As (RObjectInfo, Object)
             Dim values As Double() = DirectCast(state.value.data, Double())
-            Dim start As Integer = CInt(values(0))
+            Dim n As Integer = CInt(values(0))
             Dim [step] As Integer = CInt(values(1))
-            Dim n As Integer = CInt(values(2))
+            Dim start As Integer = CInt(values(2))
             Dim buffer As Integer() = New Integer(n - 1) {}
 
             For i As Integer = 0 To n - 1
@@ -55,14 +55,14 @@ Namespace Convertor
         End Function
 
         ''' <summary>
-        ''' compact_realseq: state is a REALSXP of length 3 -> (start, step, n).
-        ''' Produces double(1:n) mapped through start + i*step.
+        ''' compact_realseq: state is a REALSXP of length 3 -> (n, step, start).
+        ''' Produces double(start .. start + (n-1)*step).
         ''' </summary>
         Public Function compact_realseq_constructor(info As RObject, state As RObject) As (RObjectInfo, Object)
             Dim values As Double() = DirectCast(state.value.data, Double())
-            Dim start As Double = values(0)
+            Dim n As Double = values(0)
             Dim [step] As Double = values(1)
-            Dim n As Double = values(2)
+            Dim start As Double = values(2)
             Dim length As Integer = CInt(n)
             Dim buffer As Double() = New Double(length - 1) {}
 
