@@ -418,6 +418,26 @@ Public MustInherit Class Reader
                                             Optional expand_altrep As Boolean = True,
                                             Optional debug As Boolean = False) As RData
 
+        ' The serialization magic header must be skipped before parsing the
+        ' version block + objects. R 4.x produces two layouts:
+        '   rds : "X\n"            (2 bytes) followed by version int32s
+        '   rda : "RDXn\nX\n"       (8 bytes) followed by version int32s
+        ' file_type() leaves the stream positioned at 0 (it seeks back after
+        ' probing), so we re-detect the magic here and skip it deterministically.
+        Dim magic As FileTypes = Parser.file_type(bin)
+        Dim skip As Long
+
+        Select Case magic
+            Case FileTypes.rdata_binary_v2, FileTypes.rdata_binary_v3
+                ' "RDXn\n" (6 bytes) + "X\n" (2 bytes)
+                skip = 8
+            Case Else
+                ' Treat as a plain rds-style blob: "X\n" (2 bytes)
+                skip = 2
+        End Select
+
+        Call bin.Seek(skip, SeekOrigin.Begin)
+
         Dim format_type As RdataFormats = rdata_format(bin)
 
         If format_type = RdataFormats.XDR Then
