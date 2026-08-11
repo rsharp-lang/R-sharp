@@ -74,15 +74,15 @@ Imports RData = SMRUCC.Rsharp.RDataSet.Struct.RData
 Public MustInherit Class Reader
 
     Protected ReadOnly altrep_constructor_dict As New Dictionary(Of String, AltRepConstructor) From {
-         {"deferred_string", deferred_string_constructor},
-         {"compact_intseq", compact_intseq_constructor},
-         {"compact_realseq", compact_realseq_constructor},
-         {"wrap_real", wrap_constructor},
-         {"wrap_character", wrap_constructor},
-         {"wrap_logical", wrap_constructor},
-         {"wrap_integer", wrap_constructor},
-         {"wrap_complex", wrap_constructor},
-         {"wrap_raw", wrap_constructor}
+         {"deferred_string", AddressOf AltRepConstructorExpander.deferred_string_constructor},
+         {"compact_intseq", AddressOf AltRepConstructorExpander.compact_intseq_constructor},
+         {"compact_realseq", AddressOf AltRepConstructorExpander.compact_realseq_constructor},
+         {"wrap_real", AddressOf AltRepConstructorExpander.wrap_constructor},
+         {"wrap_character", AddressOf AltRepConstructorExpander.wrap_constructor},
+         {"wrap_logical", AddressOf AltRepConstructorExpander.wrap_constructor},
+         {"wrap_integer", AddressOf AltRepConstructorExpander.wrap_constructor},
+         {"wrap_complex", AddressOf AltRepConstructorExpander.wrap_constructor},
+         {"wrap_raw", AddressOf AltRepConstructorExpander.wrap_constructor}
     }
 
     Protected ReadOnly expand_altrep As Boolean
