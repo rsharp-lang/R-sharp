@@ -43,8 +43,8 @@ Namespace Convertor
         Public Function compact_intseq_constructor(info As RObject, state As RObject) As (RObjectInfo, Object)
             Dim values As Double() = DirectCast(state.value.data, Double())
             Dim n As Integer = CInt(values(0))
-            Dim [step] As Integer = CInt(values(1))
-            Dim start As Integer = CInt(values(2))
+            Dim start As Integer = CInt(values(1))
+            Dim [step] As Integer = CInt(values(2))
             Dim buffer As Integer() = New Integer(n - 1) {}
 
             For i As Integer = 0 To n - 1
@@ -61,8 +61,8 @@ Namespace Convertor
         Public Function compact_realseq_constructor(info As RObject, state As RObject) As (RObjectInfo, Object)
             Dim values As Double() = DirectCast(state.value.data, Double())
             Dim n As Double = values(0)
-            Dim [step] As Double = values(1)
-            Dim start As Double = values(2)
+            Dim start As Double = values(1)
+            Dim [step] As Double = values(2)
             Dim length As Integer = CInt(n)
             Dim buffer As Double() = New Double(length - 1) {}
 
