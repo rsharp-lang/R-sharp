@@ -140,7 +140,6 @@ Public MustInherit Class Reader
     ''' <returns></returns>
     Public Function parse_all() As RData
         Dim versions As RVersions = parse_versions()
-        If debug Then Console.WriteLine($"[parse_all] format={versions.format} serialized={versions.serialized} minimum={versions.minimum}")
         Dim extra_info As RExtraInfo = parse_extra_info(versions)
         Dim obj As RObject = parse_R_object()
 
@@ -183,16 +182,23 @@ Public MustInherit Class Reader
 
         If versions.format >= 3 Then
             ' R 4.x format 3 header layout (after the 3 version int32s):
-            '   int32  min_version (4 bytes)   - always present
-            '   byte   encoding_length (1 byte) - compact 1-byte length
-            '   char[] encoding (encoding_length bytes) e.g. "UTF-8"
-            ' Reading the length as a 4-byte XDR int is wrong and shifts
-            ' every following object by 3 bytes, corrupting parse.
+            '   int32  min_version       (4 bytes) - serialization format version
+            '   char[] encoding          null-terminated C string, e.g. "UTF-8"
+            ' No length prefix is written for the encoding string; it is a plain
+            ' null-terminated string immediately following min_version. Consuming
+            ' it as a 1-byte/4-byte length would shift every object by several bytes.
             Call parse_int()                          ' min_version int32 (skip)
-            Dim encoding_len As Integer = parse_byte() ' 1-byte compact length
-            If debug Then Console.WriteLine($"  [extra] encLen={encoding_len}")
-            encoding = parse_string(encoding_len).decode(Encodings.ASCII)
-            If debug Then Console.WriteLine($"  [extra] encoding='{encoding}'")
+
+            Dim buf As New List(Of Byte)
+            Dim b As Integer = parse_byte()
+
+            Do While b > 0
+                buf.Add(CByte(b))
+                b = parse_byte()
+            Loop
+            ' b = 0 (the terminating NUL) has already been consumed here.
+
+            encoding = buf.ToArray().decode(Encodings.ASCII)
         End If
 
         Dim extract_info As New RExtraInfo With {
@@ -432,10 +438,10 @@ Public MustInherit Class Reader
 
         Select Case magic
             Case FileTypes.rdata_binary_v2, FileTypes.rdata_binary_v3
-                ' rda files: "RDXn\n" (6 bytes) prefix, then the "X\n" format
-                ' magic follows immediately. Skip the RDX prefix so that
-                ' rdata_format() can read the "X\n" magic at the right place.
-                skip = 6
+                ' rda files: "RDXn\n" (5 bytes: R, D, X, n, LF) prefix, then the
+                ' "X\n" format magic follows immediately. Skip the RDX prefix so
+                ' that rdata_format() can read the "X\n" magic at the right place.
+                skip = 5
             Case Else
                 ' Plain rds-style blob: the "X\n" format magic is at offset 0,
                 ' directly followed by the version block. No prefix to skip.
