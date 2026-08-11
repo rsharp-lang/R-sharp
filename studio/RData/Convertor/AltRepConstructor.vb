@@ -120,12 +120,11 @@ Namespace Convertor
         Private Function makeVector(type As RObjectType, value As Object) As (RObjectInfo, Object)
             Dim info As New RObjectInfo With {
                 .type = type,
-                .[class] = type,
                 .reference = -1,
-                .length = -1,
                 .gp = 0,
-                .objectflag = False,
-                .hasAttribute = False
+                .[object] = False,
+                .attributes = False,
+                .tag = False
             }
 
             Return (info, value)

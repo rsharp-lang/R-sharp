@@ -52,6 +52,7 @@
 
 #End Region
 
+Imports System.Numerics
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports SMRUCC.Rsharp.RDataSet.Flags
@@ -75,7 +76,7 @@ Namespace Convertor
             {RObjectType.LGL, RType.GetRSharpType(GetType(Boolean))},
             {RObjectType.STR, RType.GetRSharpType(GetType(String))},
             {RObjectType.INT, RType.GetRSharpType(GetType(Integer))},
-            {RObjectType.CPLX, RType.GetRSharpType(GetType(Double()))},
+            {RObjectType.CPLX, RType.GetRSharpType(GetType(Complex))},
             {RObjectType.RAW, RType.GetRSharpType(GetType(Byte()))},
             {RObjectType.VEC, RType.GetRSharpType(GetType(Object))},
             {RObjectType.LIST, RType.GetRSharpType(GetType(Object))},
