@@ -96,4 +96,9 @@ Public Class ParserXDR : Inherits Reader
     Public Overrides Function parse_byte() As Integer
         Return data.ReadByte()
     End Function
+
+    Public Overrides Function parse_int24() As Integer
+        Dim b = data.ReadBytes(3)
+        Return (CInt(b(0)) << 16) Or (CInt(b(1)) << 8) Or CInt(b(2))
+    End Function
 End Class

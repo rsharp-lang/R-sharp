@@ -135,6 +135,14 @@ Public MustInherit Class Reader
     Public MustOverride Function parse_byte() As Integer
 
     ''' <summary>
+    ''' Read the 24-bit (3-byte) object info integer. R's serialization format
+    ''' stores the per-object info header as a 3-byte big-endian integer, not a
+    ''' full 4-byte XDR word. Reading it as a 4-byte int shifts every following
+    ''' object (length + payload) by one byte and corrupts the parse.
+    ''' </summary>
+    Public MustOverride Function parse_int24() As Integer
+
+    ''' <summary>
     ''' Parse all the file.
     ''' </summary>
     ''' <returns></returns>
@@ -247,7 +255,7 @@ Public MustInherit Class Reader
             reference_list = New List(Of RObject)
         End If
 
-        Dim info_int As Integer = parse_int()
+        Dim info_int As Integer = parse_int24()
         Dim info As RObjectInfo = parse_r_object_info(info_int)
         Dim tag = Nothing
         Dim attributes As RObject = Nothing
