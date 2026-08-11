@@ -131,26 +131,38 @@ Namespace Convertor
         ''' <returns></returns>
         <Extension>
         Public Function LinkVisitor(robj As RObject, key As String) As RObject
+            ' robj is the attributes node (or any pairlist container);
+            ' its .value is the head of the attribute pairlist. Each node
+            ' in that list carries the attribute name in its .tag, the value
+            ' in its .value, and the rest in .value.CDR.
+            If robj Is Nothing Then
+                Return Nothing
+            End If
+
+            ' The attribute pairlist is carried in robj.value (an RList);
+            ' its CAR is the first attribute node, and each node's .value.CDR
+            ' points to the next attribute node.
+            Dim cur As RObject = robj.value.CAR
             Dim tag As RObject
 
-            Do While Not robj Is Nothing
-                tag = robj.tag
+            Do While Not cur Is Nothing
+                tag = cur.tag
 
-                If tag Is Nothing AndAlso robj.referenced_object Is Nothing Then
+                If tag Is Nothing AndAlso cur.referenced_object Is Nothing Then
                     Return Nothing
                 End If
 
                 If tag IsNot Nothing Then
                     If tag.characters = key Then
-                        Return robj
+                        Return cur
                     End If
 
                     If tag.referenced_object IsNot Nothing AndAlso tag.referenced_object.characters = key Then
-                        Return robj
+                        Return cur
                     End If
                 End If
 
-                robj = robj.value.CDR
+                cur = cur.value.CDR
             Loop
 
             Return Nothing

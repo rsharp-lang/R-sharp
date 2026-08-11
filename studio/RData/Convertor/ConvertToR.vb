@@ -293,6 +293,15 @@ Namespace Convertor
             Dim classAttr As RObject = attributes.LinkVisitor("class")
 
             If classAttr Is Nothing Then
+                ' TEMP diagnostic: dump available attribute tag names
+                Dim cur As RObject = attributes.value?.CAR
+                Dim tags As New List(Of String)
+                Do While cur IsNot Nothing
+                    Dim t = cur.tag
+                    If t IsNot Nothing Then tags.Add(If(t.characters, "<ref:" & If(t.referenced_object?.characters, "?") & ">"))
+                    cur = cur.value?.CDR
+                Loop
+                Console.Error.WriteLine($"[GetS4Class] @NOCLASS@ attrs={String.Join(",", tags)}")
                 Return "@NOCLASS@"
             End If
 
