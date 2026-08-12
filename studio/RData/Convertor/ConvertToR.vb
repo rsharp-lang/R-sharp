@@ -292,15 +292,26 @@ Namespace Convertor
                 Return "@NULLATTR@"
             End If
 
-            ' Try LinkVisitor first (standard pairlist traversal)
-            Dim classAttr As RObject = attributes.LinkVisitor("class")
-
-            ' If LinkVisitor failed, try walking the attributes chain manually.
-            ' In some R serialization layouts the "class" tag may be nested
-            ' one level deeper (e.g. attributes.value.CAR.value.CDR chain).
-            If classAttr Is Nothing Then
-                classAttr = FindClassInAttributes(attributes)
+            ' When attributes itself has symbolName "class", it IS the class
+            ' node (this happens with LIST-type attributes nodes in some R
+            ' serialization layouts). Its value.CAR holds the STRSXP vector.
+            If attributes.symbolName = "class" Then
+                Dim classObj As RObject = attributes.value?.CAR
+                If classObj IsNot Nothing Then
+                    Dim classVal As Object = PullRObject(classObj, New Dictionary(Of String, Object))
+                    If TypeOf classVal Is Array Then
+                        Dim arr As Array = DirectCast(classVal, Array)
+                        If arr.Length > 0 Then Return arr.GetValue(0)?.ToString()
+                    ElseIf classVal IsNot Nothing Then
+                        Return classVal.ToString()
+                    End If
+                End If
+                ' If the direct extraction failed, fall through to LinkVisitor
             End If
+
+            ' Standard case: attributes is a container pairlist; walk it via
+            ' LinkVisitor to find the node whose tag == "class".
+            Dim classAttr As RObject = attributes.LinkVisitor("class")
 
             If classAttr Is Nothing Then
                 Return "@NOCLASS@"
@@ -308,78 +319,20 @@ Namespace Convertor
 
             ' The class value is a STRSXP character vector; pull it and take
             ' the first element (the most specific class name).
-            Dim classObj As RObject = classAttr.value?.CAR
+            Dim classValueObj As RObject = classAttr.value?.CAR
 
-            If classObj Is Nothing Then
-                ' Sometimes the value is directly in the data array
-                If classAttr.value?.data IsNot Nothing AndAlso classAttr.value.data.Length > 0 Then
-                    Dim rawVal As Object = classAttr.value.data.GetValue(0)
-                    If rawVal IsNot Nothing Then
-                        Return rawVal.ToString()
-                    End If
-                End If
+            If classValueObj Is Nothing Then
                 Return Nothing
             End If
 
-            Dim classVal As Object = PullRObject(classObj, New Dictionary(Of String, Object))
+            Dim classVal2 As Object = PullRObject(classValueObj, New Dictionary(Of String, Object))
 
-            If TypeOf classVal Is Array Then
-                Dim arr As Array = DirectCast(classVal, Array)
-
-                If arr.Length > 0 Then
-                    Return arr.GetValue(0)?.ToString()
-                End If
-            ElseIf classVal IsNot Nothing Then
-                Return classVal.ToString()
+            If TypeOf classVal2 Is Array Then
+                Dim arr As Array = DirectCast(classVal2, Array)
+                If arr.Length > 0 Then Return arr.GetValue(0)?.ToString()
+            ElseIf classVal2 IsNot Nothing Then
+                Return classVal2.ToString()
             End If
-
-            Return Nothing
-        End Function
-
-        ''' <summary>
-        ''' Walk the attributes pairlist chain looking for a node whose tag
-        ''' (or referenced tag) equals "class". Handles nested pairlist layouts.
-        ''' </summary>
-        Private Function FindClassInAttributes(attrs As RObject) As RObject
-            If attrs Is Nothing Then Return Nothing
-
-            ' Walk the CDR chain starting from the CAR of attrs.value
-            Dim cur As RObject = If(attrs.value?.CAR, attrs.value)
-            If cur Is Nothing Then Return Nothing
-
-            ' Also check if attrs itself has a tag "class" (direct attributes node)
-            If attrs.tag IsNot Nothing Then
-                If attrs.tag.characters = "class" Then Return attrs
-                If attrs.tag.referenced_object IsNot Nothing AndAlso
-                   attrs.tag.referenced_object.characters = "class" Then Return attrs
-            End If
-
-            Do While cur IsNot Nothing
-                ' Check if this node's tag is "class"
-                Dim t As RObject = cur.tag
-                If t IsNot Nothing Then
-                    If t.characters = "class" Then Return cur
-                    If t.referenced_object IsNot Nothing AndAlso
-                       t.referenced_object.characters = "class" Then Return cur
-                End If
-
-                ' Also check referenced_object tag
-                If cur.referenced_object IsNot Nothing Then
-                    t = cur.referenced_object.tag
-                    If t IsNot Nothing Then
-                        If t.characters = "class" Then Return cur.referenced_object
-                        If t.referenced_object IsNot Nothing AndAlso
-                           t.referenced_object.characters = "class" Then Return cur.referenced_object
-                    End If
-                End If
-
-                ' Move to next node in the chain
-                If cur.value IsNot Nothing AndAlso cur.value.CDR IsNot Nothing Then
-                    cur = cur.value.CDR
-                Else
-                    Exit Do
-                End If
-            Loop
 
             Return Nothing
         End Function

@@ -153,12 +153,15 @@ Namespace Convertor
                 End If
 
                 If tag IsNot Nothing Then
-                    If tag.characters = key Then
+                    ' Check characters (standard CHARSXP) and symbolName (alternative name storage)
+                    If tag.characters = key OrElse tag.symbolName = key Then
                         Return cur
                     End If
 
-                    If tag.referenced_object IsNot Nothing AndAlso tag.referenced_object.characters = key Then
-                        Return cur
+                    If tag.referenced_object IsNot Nothing Then
+                        If tag.referenced_object.characters = key OrElse tag.referenced_object.symbolName = key Then
+                            Return cur
+                        End If
                     End If
                 End If
 
