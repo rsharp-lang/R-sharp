@@ -240,7 +240,18 @@ Namespace Convertor
                     Do While cur IsNot Nothing AndAlso cur.value IsNot Nothing AndAlso cur.value.nodeType <> ListNodeType.NA
                         Dim slotCar As RObject = cur.value.CAR
                         Dim slotValue As Object = PullRObject(slotCar, ownSlots)
-                        Dim slotName As String = If(cur.tag?.characters, cur.characters)
+                        Dim slotName As String = Nothing
+                        If cur.tag IsNot Nothing AndAlso Not String.IsNullOrEmpty(cur.tag.characters) Then
+                            slotName = cur.tag.characters
+                        ElseIf cur.tag IsNot Nothing AndAlso Not String.IsNullOrEmpty(cur.tag.symbolName) Then
+                            slotName = cur.tag.symbolName
+                        ElseIf Not String.IsNullOrEmpty(cur.characters) Then
+                            slotName = cur.characters
+                        ElseIf Not String.IsNullOrEmpty(cur.symbolName) Then
+                            slotName = cur.symbolName
+                        Else
+                            slotName = ""
+                        End If
 
                         If ownSlots.ContainsKey(slotName) Then
                             slotName = ownSlots.Keys _
@@ -249,6 +260,7 @@ Namespace Convertor
                                 .Last
                         End If
 
+                        Console.Error.WriteLine($"[S4-slot] tag.chars='{If(cur.tag?.characters, "<null>")}' tag.symName='{If(cur.tag?.symbolName, "<null>")}' cur.chars='{If(cur.characters, "<null>")}' cur.symName='{If(cur.symbolName, "<null>")}' -> slotName='{slotName}'")
                         Call ownSlots.Add(slotName, slotValue)
 
                         cur = cur.value.CDR
@@ -260,7 +272,18 @@ Namespace Convertor
                 ' CAR为当前节点的数据
                 ' 获取节点数据，然后继续通过CDR进行链表的递归访问
                 Dim current As Object = PullRObject(car, list)
-                Dim currentName As String = If(rdata.tag?.characters, rdata.characters)
+                Dim currentName As String = Nothing
+                If rdata.tag IsNot Nothing AndAlso Not String.IsNullOrEmpty(rdata.tag.characters) Then
+                    currentName = rdata.tag.characters
+                ElseIf rdata.tag IsNot Nothing AndAlso Not String.IsNullOrEmpty(rdata.tag.symbolName) Then
+                    currentName = rdata.tag.symbolName
+                ElseIf Not String.IsNullOrEmpty(rdata.characters) Then
+                    currentName = rdata.characters
+                ElseIf Not String.IsNullOrEmpty(rdata.symbolName) Then
+                    currentName = rdata.symbolName
+                Else
+                    currentName = ""
+                End If
                 Dim CDR As RObject = value.CDR
 
                 ' 20220920 duplicated symbol names?
@@ -297,12 +320,19 @@ Namespace Convertor
             ' serialization layouts). Its value.CAR holds the STRSXP vector.
             If attributes.symbolName = "class" Then
                 Dim classObj As RObject = attributes.value?.CAR
+                Console.Error.WriteLine($"[GetS4Class] Direct class node: classObj={If(classObj Is Nothing, "Nothing", classObj.info.type.ToString())}")
                 If classObj IsNot Nothing Then
                     Dim classVal As Object = PullRObject(classObj, New Dictionary(Of String, Object))
+                    Console.Error.WriteLine($"[GetS4Class] Direct class value: type={If(classVal?.GetType().Name, "Nothing")}, val={classVal}")
                     If TypeOf classVal Is Array Then
                         Dim arr As Array = DirectCast(classVal, Array)
-                        If arr.Length > 0 Then Return arr.GetValue(0)?.ToString()
+                        If arr.Length > 0 Then
+                            Dim result As String = arr.GetValue(0)?.ToString()
+                            Console.Error.WriteLine($"[GetS4Class] Direct: returning '{result}'")
+                            Return result
+                        End If
                     ElseIf classVal IsNot Nothing Then
+                        Console.Error.WriteLine($"[GetS4Class] Direct: returning '{classVal.ToString()}'")
                         Return classVal.ToString()
                     End If
                 End If
