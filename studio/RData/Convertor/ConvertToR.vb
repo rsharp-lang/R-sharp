@@ -292,21 +292,17 @@ Namespace Convertor
                 Return "@NULLATTR@"
             End If
 
-            ' TEMP: inspect raw attributes node
-            Console.Error.WriteLine($"[GetS4Class] attrs.type={attributes.info.type}, chars={attributes.characters}, symName={attributes.symbolName}")
-
+            ' Try LinkVisitor first (standard pairlist traversal)
             Dim classAttr As RObject = attributes.LinkVisitor("class")
 
+            ' If LinkVisitor failed, try walking the attributes chain manually.
+            ' In some R serialization layouts the "class" tag may be nested
+            ' one level deeper (e.g. attributes.value.CAR.value.CDR chain).
             If classAttr Is Nothing Then
-                ' TEMP diagnostic: dump available attribute tag names
-                Dim cur As RObject = attributes.value?.CAR
-                Dim tags As New List(Of String)
-                Do While cur IsNot Nothing
-                    Dim t = cur.tag
-                    If t IsNot Nothing Then tags.Add(If(t.characters, "<ref:" & If(t.referenced_object?.characters, "?") & ">"))
-                    cur = cur.value?.CDR
-                Loop
-                Console.Error.WriteLine($"[GetS4Class] @NOCLASS@ attrs={String.Join(",", tags)}")
+                classAttr = FindClassInAttributes(attributes)
+            End If
+
+            If classAttr Is Nothing Then
                 Return "@NOCLASS@"
             End If
 
@@ -315,12 +311,17 @@ Namespace Convertor
             Dim classObj As RObject = classAttr.value?.CAR
 
             If classObj Is Nothing Then
+                ' Sometimes the value is directly in the data array
+                If classAttr.value?.data IsNot Nothing AndAlso classAttr.value.data.Length > 0 Then
+                    Dim rawVal As Object = classAttr.value.data.GetValue(0)
+                    If rawVal IsNot Nothing Then
+                        Return rawVal.ToString()
+                    End If
+                End If
                 Return Nothing
             End If
 
             Dim classVal As Object = PullRObject(classObj, New Dictionary(Of String, Object))
-            ' TEMP diagnostic
-            Console.Error.WriteLine($"[GetS4Class] found classAttr tag={classAttr.tag?.characters}, valType={classVal?.GetType().Name}, val={classVal}")
 
             If TypeOf classVal Is Array Then
                 Dim arr As Array = DirectCast(classVal, Array)
@@ -331,6 +332,54 @@ Namespace Convertor
             ElseIf classVal IsNot Nothing Then
                 Return classVal.ToString()
             End If
+
+            Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' Walk the attributes pairlist chain looking for a node whose tag
+        ''' (or referenced tag) equals "class". Handles nested pairlist layouts.
+        ''' </summary>
+        Private Function FindClassInAttributes(attrs As RObject) As RObject
+            If attrs Is Nothing Then Return Nothing
+
+            ' Walk the CDR chain starting from the CAR of attrs.value
+            Dim cur As RObject = If(attrs.value?.CAR, attrs.value)
+            If cur Is Nothing Then Return Nothing
+
+            ' Also check if attrs itself has a tag "class" (direct attributes node)
+            If attrs.tag IsNot Nothing Then
+                If attrs.tag.characters = "class" Then Return attrs
+                If attrs.tag.referenced_object IsNot Nothing AndAlso
+                   attrs.tag.referenced_object.characters = "class" Then Return attrs
+            End If
+
+            Do While cur IsNot Nothing
+                ' Check if this node's tag is "class"
+                Dim t As RObject = cur.tag
+                If t IsNot Nothing Then
+                    If t.characters = "class" Then Return cur
+                    If t.referenced_object IsNot Nothing AndAlso
+                       t.referenced_object.characters = "class" Then Return cur
+                End If
+
+                ' Also check referenced_object tag
+                If cur.referenced_object IsNot Nothing Then
+                    t = cur.referenced_object.tag
+                    If t IsNot Nothing Then
+                        If t.characters = "class" Then Return cur.referenced_object
+                        If t.referenced_object IsNot Nothing AndAlso
+                           t.referenced_object.characters = "class" Then Return cur.referenced_object
+                    End If
+                End If
+
+                ' Move to next node in the chain
+                If cur.value IsNot Nothing AndAlso cur.value.CDR IsNot Nothing Then
+                    cur = cur.value.CDR
+                Else
+                    Exit Do
+                End If
+            Loop
 
             Return Nothing
         End Function

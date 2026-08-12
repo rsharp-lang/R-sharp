@@ -400,6 +400,57 @@ Public MustInherit Class Reader
             value = Nothing
         ElseIf info.type = RObjectType.NILVALUE Then
             value = Nothing
+        ElseIf info.type = RObjectType.CLO OrElse
+               info.type = RObjectType.PROM OrElse
+               info.type = RObjectType.BCODE OrElse
+               info.type = RObjectType.EXTPTR OrElse
+               info.type = RObjectType.WEAKREF OrElse
+               info.type = RObjectType.SPECIAL OrElse
+               info.type = RObjectType.BUILTIN Then
+            ' These types (closures, promises, byte code, external pointers,
+            ' weak references, special/builtin functions) appear as function
+            ' references / internal R objects inside Seurat objects. We don't
+            ' need their actual data, but they MUST be registered in the
+            ' reference table so that later REF entries can resolve correctly.
+            ' Skip their payload by parsing each field that R serializes for
+            ' these types, then register a placeholder in the reference table.
+            '
+            ' R serialization format for these types (format version 2/3):
+            '   CLO (3):    formals, body, environment
+            '   PROM (5):   value, expr, environment
+            '   BCODE (21): code stream (INTSXP vector), constants, expr
+            '   EXTPTR (22): pointer data (raw)
+            '   WEAKREF (23): referent
+            '   SPECIAL (7): function name (CHARSXP)
+            '   BUILTIN (8): function name (CHARSXP)
+            '
+            ' Strategy: consume the expected number of child objects from the
+            ' stream so byte alignment is maintained, but return Nothing as
+            ' the value.
+            Dim skipCount As Integer
+
+            Select Case info.type
+                Case RObjectType.CLO, RObjectType.PROM, RObjectType.BCODE
+                    skipCount = 3
+                Case RObjectType.SPECIAL, RObjectType.BUILTIN, RObjectType.WEAKREF
+                    skipCount = 1
+                Case RObjectType.EXTPTR
+                    skipCount = 1
+                Case Else
+                    skipCount = 0
+            End Select
+
+            If debug Then
+                Call Console.WriteLine($"  [SKIP] {info.type}({info.type.Description}): consuming {skipCount} child objects")
+            End If
+
+            For i As Integer = 0 To skipCount - 1
+                Call parse_R_object(reference_list)
+            Next
+
+            ' Register a placeholder so REF indices stay correct
+            add_reference = True
+            value = Nothing
         ElseIf info.type = RObjectType.REF Then
             value = Nothing
             ' Index is 1-based
