@@ -165,40 +165,6 @@ Module Parser
         ' This is the official R_Serialize 3-byte info encoding, so the type
         ' lives in the low byte and the flags follow.
         Dim type_exp As RObjectType = bits(info_int, 0, 8)
-
-        ' TEMP: debug unknown type codes seen with R 4.x format 3
-        If type_exp <> RObjectType.NIL AndAlso
-           type_exp <> RObjectType.SYM AndAlso
-           type_exp <> RObjectType.LIST AndAlso
-           type_exp <> RObjectType.CLO AndAlso
-           type_exp <> RObjectType.ENV AndAlso
-           type_exp <> RObjectType.PROM AndAlso
-           type_exp <> RObjectType.LANG AndAlso
-           type_exp <> RObjectType.SPECIAL AndAlso
-           type_exp <> RObjectType.BUILTIN AndAlso
-           type_exp <> RObjectType.CHAR AndAlso
-           type_exp <> RObjectType.LGL AndAlso
-           type_exp <> RObjectType.INT AndAlso
-           type_exp <> RObjectType.REAL AndAlso
-           type_exp <> RObjectType.CPLX AndAlso
-           type_exp <> RObjectType.STR AndAlso
-           type_exp <> RObjectType.DOT AndAlso
-           type_exp <> RObjectType.ANY AndAlso
-           type_exp <> RObjectType.VEC AndAlso
-           type_exp <> RObjectType.EXPR AndAlso
-           type_exp <> RObjectType.BCODE AndAlso
-           type_exp <> RObjectType.EXTPTR AndAlso
-           type_exp <> RObjectType.WEAKREF AndAlso
-           type_exp <> RObjectType.RAW AndAlso
-           type_exp <> RObjectType.S4 AndAlso
-           type_exp <> RObjectType.FUNSXP AndAlso
-           type_exp <> RObjectType.ALTREP AndAlso
-           type_exp <> RObjectType.EMPTYENV AndAlso
-           type_exp <> RObjectType.GLOBALENV AndAlso
-           type_exp <> RObjectType.NILVALUE AndAlso
-           type_exp <> RObjectType.REF Then
-            Console.Error.WriteLine($"[DEBUG parse_r_object_info] info_int=0x{info_int:X8} ({info_int}) -> type_exp={CInt(type_exp)} (0x{CInt(type_exp):X2})")
-        End If
         Dim reference = 0
         Dim object_flag As Boolean
         Dim attributes As Boolean
