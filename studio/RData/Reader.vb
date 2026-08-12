@@ -412,21 +412,32 @@ Public MustInherit Class Reader
             ' references / internal R objects inside Seurat objects. We don't
             ' need their actual data, but they MUST be registered in the
             ' reference table so that later REF entries can resolve correctly.
-            ' Skip their payload by parsing each field that R serializes for
-            ' these types, then register a placeholder in the reference table.
+            '
+            ' IMPORTANT: The tag flag must be handled BEFORE consuming child
+            ' objects. If info.tag is set, a tag object precedes the payload.
+            ' Similarly, info.attributes means an attributes object follows.
+            ' We handle both flags inline to maintain correct byte alignment.
             '
             ' R serialization format for these types (format version 2/3):
-            '   CLO (3):    formals, body, environment
-            '   PROM (5):   value, expr, environment
-            '   BCODE (21): code stream (INTSXP vector), constants, expr
-            '   EXTPTR (22): pointer data (raw)
-            '   WEAKREF (23): referent
-            '   SPECIAL (7): function name (CHARSXP)
-            '   BUILTIN (8): function name (CHARSXP)
+            '   CLO (3):    [tag?] formals, body, environment [attributes?]
+            '   PROM (5):   [tag?] value, expr, environment [attributes?]
+            '   BCODE (21): [tag?] code stream (INTSXP), constants, expr [attributes?]
+            '   EXTPTR (22): [tag?] pointer data (raw) [attributes?]
+            '   WEAKREF (23): [tag?] referent [attributes?]
+            '   SPECIAL (7): [tag?] function name (CHARSXP) [attributes?]
+            '   BUILTIN (8): [tag?] function name (CHARSXP) [attributes?]
             '
-            ' Strategy: consume the expected number of child objects from the
-            ' stream so byte alignment is maintained, but return Nothing as
-            ' the value.
+            ' Strategy: consume the tag (if present), then the payload objects,
+            ' then attributes (if present). Register a placeholder in the
+            ' reference table.
+
+            ' Step 1: Read tag if the flag is set
+            If info.tag Then
+                tag = parse_R_object(reference_list)
+                tag_read = True
+            End If
+
+            ' Step 2: Read payload objects (depends on type)
             Dim skipCount As Integer
 
             Select Case info.type
@@ -441,12 +452,18 @@ Public MustInherit Class Reader
             End Select
 
             If debug Then
-                Call Console.WriteLine($"  [SKIP] {info.type}({info.type.Description}): consuming {skipCount} child objects")
+                Call Console.WriteLine($"  [SKIP] {info.type}({CInt(info.type)}): consuming tag={info.tag}, {skipCount} child objects")
             End If
 
             For i As Integer = 0 To skipCount - 1
                 Call parse_R_object(reference_list)
             Next
+
+            ' Step 3: Read attributes if the flag is set
+            If info.attributes Then
+                attributes = parse_R_object(reference_list)
+                attributes_read = True
+            End If
 
             ' Register a placeholder so REF indices stay correct
             add_reference = True
@@ -456,7 +473,18 @@ Public MustInherit Class Reader
             ' Index is 1-based
             referenced_object = reference_list(info.reference - 1)
         Else
-            Call $"Type {info.type.ToString}({info.type.Description}) not implemented".Warning
+            ' For unknown/not-implemented types, log a warning and skip.
+            ' Some R 4.x format-3 type codes (e.g. 249, 251) are not in
+            ' our RObjectType enum; we register a placeholder so the
+            ' reference table index stays correct.
+            Dim typeDesc As String
+            Try
+                typeDesc = info.type.Description
+            Catch
+                typeDesc = "unknown"
+            End Try
+            Call $"Type {info.type.ToString}({typeDesc}) not implemented".Warning
+            add_reference = True
             value = Nothing
         End If
 
