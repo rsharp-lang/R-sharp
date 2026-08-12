@@ -224,8 +224,6 @@ Namespace Convertor
                 Return current
             Else
                 If rdata.info.type = RObjectType.S4 Then
-                    ' TEMP diagnostic
-                    Console.Error.WriteLine($"[S4] attrs is {(If(rdata.attributes Is Nothing, "Nothing", rdata.attributes.info.type.ToString))}, value.nodeType={(If(rdata.value Is Nothing, "Nothing", rdata.value.nodeType.ToString))}")
                     ' An S4 object keeps its slots in a dedicated dictionary so
                     ' that the ".class" marker and slot values do not leak into a
                     ' parent object's slot collection (which would cause key
@@ -260,7 +258,6 @@ Namespace Convertor
                                 .Last
                         End If
 
-                        Console.Error.WriteLine($"[S4-slot] tag.chars='{If(cur.tag?.characters, "<null>")}' tag.symName='{If(cur.tag?.symbolName, "<null>")}' cur.chars='{If(cur.characters, "<null>")}' cur.symName='{If(cur.symbolName, "<null>")}' -> slotName='{slotName}'")
                         Call ownSlots.Add(slotName, slotValue)
 
                         cur = cur.value.CDR
@@ -320,19 +317,12 @@ Namespace Convertor
             ' serialization layouts). Its value.CAR holds the STRSXP vector.
             If attributes.symbolName = "class" Then
                 Dim classObj As RObject = attributes.value?.CAR
-                Console.Error.WriteLine($"[GetS4Class] Direct class node: classObj={If(classObj Is Nothing, "Nothing", classObj.info.type.ToString())}")
                 If classObj IsNot Nothing Then
                     Dim classVal As Object = PullRObject(classObj, New Dictionary(Of String, Object))
-                    Console.Error.WriteLine($"[GetS4Class] Direct class value: type={If(classVal?.GetType().Name, "Nothing")}, val={classVal}")
                     If TypeOf classVal Is Array Then
                         Dim arr As Array = DirectCast(classVal, Array)
-                        If arr.Length > 0 Then
-                            Dim result As String = arr.GetValue(0)?.ToString()
-                            Console.Error.WriteLine($"[GetS4Class] Direct: returning '{result}'")
-                            Return result
-                        End If
+                        If arr.Length > 0 Then Return arr.GetValue(0)?.ToString()
                     ElseIf classVal IsNot Nothing Then
-                        Console.Error.WriteLine($"[GetS4Class] Direct: returning '{classVal.ToString()}'")
                         Return classVal.ToString()
                     End If
                 End If
