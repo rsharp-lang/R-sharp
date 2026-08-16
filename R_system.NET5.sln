@@ -13837,8 +13837,8 @@ Global
 		{4B899B5A-37FC-5056-E231-4242F7BB8FB0}.Rsharp_app_release|Any CPU.Build.0 = CellaLAB-Desktop|Any CPU
 		{4B899B5A-37FC-5056-E231-4242F7BB8FB0}.Rsharp_app_release|ARM32.ActiveCfg = CellaLAB-Desktop|Any CPU
 		{4B899B5A-37FC-5056-E231-4242F7BB8FB0}.Rsharp_app_release|ARM32.Build.0 = CellaLAB-Desktop|Any CPU
-		{4B899B5A-37FC-5056-E231-4242F7BB8FB0}.Rsharp_app_release|x64.ActiveCfg = CellaLAB-Desktop|x64
-		{4B899B5A-37FC-5056-E231-4242F7BB8FB0}.Rsharp_app_release|x64.Build.0 = CellaLAB-Desktop|x64
+		{4B899B5A-37FC-5056-E231-4242F7BB8FB0}.Rsharp_app_release|x64.ActiveCfg = Release|x64
+		{4B899B5A-37FC-5056-E231-4242F7BB8FB0}.Rsharp_app_release|x64.Build.0 = Release|x64
 		{4B899B5A-37FC-5056-E231-4242F7BB8FB0}.Rsharp_app_release|x86.ActiveCfg = CellaLAB-Desktop|Any CPU
 		{4B899B5A-37FC-5056-E231-4242F7BB8FB0}.Rsharp_app_release|x86.Build.0 = CellaLAB-Desktop|Any CPU
 		{4B899B5A-37FC-5056-E231-4242F7BB8FB0}.RsharpDev|Any CPU.ActiveCfg = MEMI-Desktop|Any CPU
