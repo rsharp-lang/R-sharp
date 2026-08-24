@@ -1692,7 +1692,8 @@ Namespace Runtime.Internal.Invokes
                                  Optional args As list = Nothing,
                                  Optional env As Environment = Nothing) As Object
 
-            Dim buf = GetFileStream(con, FileAccess.Write, env)
+            Dim is_file As Boolean = False
+            Dim buf = GetFileStream(con, FileAccess.Write, env, is_filepath:=is_file)
 
             If buf Like GetType(Message) Then
                 Return buf.TryCast(Of Message)
@@ -1726,9 +1727,9 @@ Namespace Runtime.Internal.Invokes
                 args.slots("con") = buf.TryCast(Of Stream)
             End If
 
-            Dim out = f([object], args, env)
+            Dim out As Object = f([object], args, env)
 
-            If TypeOf con Is String Then
+            If is_file Then
                 Call buf.TryCast(Of Stream).Dispose()
             End If
 

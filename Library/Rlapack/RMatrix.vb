@@ -98,7 +98,7 @@ Imports vec = Microsoft.VisualBasic.Math.LinearAlgebra.Vector
 <RTypeExport("data_mat", GetType(DataMatrix))>
 Module RMatrix
 
-    Sub New()
+    Sub Main()
         Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(NumericMatrix), AddressOf createTable)
         Call RInternal.ConsolePrinter.AttachInternalConsoleFormatter(Of NumericMatrix)(
             Function(print, env)
@@ -117,6 +117,8 @@ Module RMatrix
 
         Call RInternal.generic.add("writeBin", GetType(NumericMatrix), AddressOf saveMatrix)
         Call RInternal.generic.add("readBin.LA_mat", GetType(Stream), AddressOf readMatrix)
+        Call RInternal.generic.add("writeBin", GetType(DataMatrix), AddressOf saveDataMatrix)
+        Call RInternal.generic.add("readBin.data_mat", GetType(Stream), AddressOf readDataMatrix)
     End Sub
 
     <RGenericOverloads("writeBin")>
