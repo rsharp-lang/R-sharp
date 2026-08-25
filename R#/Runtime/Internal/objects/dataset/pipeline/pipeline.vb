@@ -189,6 +189,8 @@ Namespace Runtime.Internal.Object
 
             If TypeOf upstream Is IEnumerable(Of T) Then
                 Return CLRIterator.CreateFromPopulator(DirectCast(upstream, IEnumerable(Of T))).getData(Of T)(env)
+            ElseIf TypeOf upstream Is CLRIterator AndAlso DirectCast(upstream, CLRIterator).m_type.GetRawElementType Is GetType(T) Then
+                Return DirectCast(upstream, CLRIterator).getData(Of T)(env)
             End If
 
             Return TryCreatePipeline(Of T)(upstream, env, suppress:=suppress, nullPipe:=nullPipe, callerFrameName:=callerFrameName).getData(Of T)(env)
