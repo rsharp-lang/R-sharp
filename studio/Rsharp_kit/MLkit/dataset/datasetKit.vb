@@ -971,7 +971,7 @@ Module datasetKit
                                                       Return CObj(CLRVector.asNumeric(v.r.vector))
                                                   End Function)
                             }
-                        Case "dataframe"
+                        Case "dataframe", "data.frame"
                             Return LabelledVector.CreateDataFrame(vector:=rawdata)
                         Case Else
                             Return RInternal.debug.stop(New NotImplementedException($"the data set format '{dataset}' is not yet implemented!"), env)
