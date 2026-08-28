@@ -52,6 +52,7 @@
 
 #End Region
 
+Imports System.Numerics
 Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports SMRUCC.Rsharp.RDataSet.Flags
@@ -63,18 +64,18 @@ Namespace Convertor
 
     Public Module Constructor
 
-        Public ReadOnly wrap_constructor As AltRepConstructor
-        Public ReadOnly compact_realseq_constructor As AltRepConstructor
-        Public ReadOnly compact_intseq_constructor As AltRepConstructor
-        Public ReadOnly deferred_string_constructor As AltRepConstructor
-
         ReadOnly toType As New Dictionary(Of RObjectType, RType) From {
             {RObjectType.ANY, RType.GetRSharpType(GetType(Object))},
             {RObjectType.CHAR, RType.GetRSharpType(GetType(Char))},
             {RObjectType.REAL, RType.GetRSharpType(GetType(Double))},
             {RObjectType.LGL, RType.GetRSharpType(GetType(Boolean))},
             {RObjectType.STR, RType.GetRSharpType(GetType(String))},
-            {RObjectType.INT, RType.GetRSharpType(GetType(Integer))}
+            {RObjectType.INT, RType.GetRSharpType(GetType(Integer))},
+            {RObjectType.CPLX, RType.GetRSharpType(GetType(Complex))},
+            {RObjectType.RAW, RType.GetRSharpType(GetType(Byte()))},
+            {RObjectType.VEC, RType.GetRSharpType(GetType(Object))},
+            {RObjectType.LIST, RType.GetRSharpType(GetType(Object))},
+            {RObjectType.NIL, RType.GetRSharpType(GetType(Object))}
         }
 
         <Extension>
@@ -130,26 +131,41 @@ Namespace Convertor
         ''' <returns></returns>
         <Extension>
         Public Function LinkVisitor(robj As RObject, key As String) As RObject
+            ' robj is the attributes node (or any pairlist container);
+            ' its .value is the head of the attribute pairlist. Each node
+            ' in that list carries the attribute name in its .tag, the value
+            ' in its .value, and the rest in .value.CDR.
+            If robj Is Nothing Then
+                Return Nothing
+            End If
+
+            ' The attribute pairlist is carried in robj.value (an RList);
+            ' its CAR is the first attribute node, and each node's .value.CDR
+            ' points to the next attribute node.
+            Dim cur As RObject = robj.value.CAR
             Dim tag As RObject
 
-            Do While Not robj Is Nothing
-                tag = robj.tag
+            Do While Not cur Is Nothing
+                tag = cur.tag
 
-                If tag Is Nothing AndAlso robj.referenced_object Is Nothing Then
+                If tag Is Nothing AndAlso cur.referenced_object Is Nothing Then
                     Return Nothing
                 End If
 
                 If tag IsNot Nothing Then
-                    If tag.characters = key Then
-                        Return robj
+                    ' Check characters (standard CHARSXP) and symbolName (alternative name storage)
+                    If tag.characters = key OrElse tag.symbolName = key Then
+                        Return cur
                     End If
 
-                    If tag.referenced_object IsNot Nothing AndAlso tag.referenced_object.characters = key Then
-                        Return robj
+                    If tag.referenced_object IsNot Nothing Then
+                        If tag.referenced_object.characters = key OrElse tag.referenced_object.symbolName = key Then
+                            Return cur
+                        End If
                     End If
                 End If
 
-                robj = robj.value.CDR
+                cur = cur.value.CDR
             Loop
 
             Return Nothing

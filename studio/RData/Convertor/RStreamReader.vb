@@ -53,6 +53,7 @@
 
 #End Region
 
+Imports System.Numerics
 Imports System.Runtime.CompilerServices
 Imports SMRUCC.Rsharp.RDataSet.Flags
 Imports SMRUCC.Rsharp.RDataSet.Struct.LinkedList
@@ -94,6 +95,13 @@ Namespace Convertor
                 Case RObjectType.INT : Return ReadIntegers(robj)
                 Case RObjectType.REAL : Return ReadNumbers(robj)
                 Case RObjectType.LGL : Return ReadLogicals(robj)
+                Case RObjectType.CPLX
+                    ' complex vector: data is already a Complex() array
+                    Return DirectCast(robj.value.data, Complex())
+                Case RObjectType.RAW
+                    ' raw bytes vector: data is an Integer()/Int32() array of 0-255
+                    ' values produced by parseVector(AddressOf parse_byte); convert to Byte().
+                    Return CLRVector.asRawByte(robj.value.data)
                 Case Else
                     Throw New NotImplementedException(robj.info.ToString)
             End Select

@@ -24,7 +24,7 @@
 		<PackageTags>R#,rsharp</PackageTags>
 		<FileVersion>1.5635.*</FileVersion>
 		<OutputType>Exe</OutputType>
-		<StartupObject>test.test_vector_constructor</StartupObject>
+		<StartupObject>test.debuggerTest</StartupObject>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -163,12 +163,19 @@
 	  <None Remove="Test\**" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <Import Include="System.Data" />
-  </ItemGroup>
+	<ItemGroup>
+	  <None Remove="build_full.txt" />
+	  <None Remove="diag.log" />
+	  <None Remove="err.log" />
+	  <None Remove="exe_diag.log" />
+	  <None Remove="out.log" />
+	  <None Remove="shouldpause_diag.log" />
+	  <None Remove="step_diag.log" />
+	  <None Remove="tryhit_diag.log" />
+	</ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Runtime" Version="4.3.1" />
+    <Import Include="System.Data" />
   </ItemGroup>
 
   <ItemGroup>

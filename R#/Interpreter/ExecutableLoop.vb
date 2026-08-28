@@ -1,58 +1,58 @@
 ﻿#Region "Microsoft.VisualBasic::205346d4cfe046c38f368a27fbe166df, R#\Interpreter\ExecutableLoop.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 257
-    '    Code Lines: 156 (60.70%)
-    ' Comment Lines: 65 (25.29%)
-    '    - Xml Docs: 30.77%
-    ' 
-    '   Blank Lines: 36 (14.01%)
-    '     File Size: 10.54 KB
+' Summaries:
 
 
-    '     Class ExecutableLoop
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: Execute, ExecuteCodeLine, isBreakSignal
-    ' 
-    '         Sub: configException, printMemoryProfile, runRefreshMemory
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 257
+'    Code Lines: 156 (60.70%)
+' Comment Lines: 65 (25.29%)
+'    - Xml Docs: 30.77%
+' 
+'   Blank Lines: 36 (14.01%)
+'     File Size: 10.54 KB
+
+
+'     Class ExecutableLoop
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: Execute, ExecuteCodeLine, isBreakSignal
+' 
+'         Sub: configException, printMemoryProfile, runRefreshMemory
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -65,6 +65,7 @@ Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Blocks
 Imports SMRUCC.Rsharp.Interpreter.ExecuteEngine.ExpressionSymbols.Operators
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Components
+Imports SMRUCC.Rsharp.Runtime.Components.Interface
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 Namespace Interpreter
@@ -110,64 +111,99 @@ Namespace Interpreter
             Dim benchmark As Long
             Dim timestamp As Long
             ' 获取调试器引用
+            '
+            ' 因为所有的函数体/循环体/分支体最终都是通过 ClosureExpression
+            ' 委托至 Program.Execute 再进入到当前的这个函数之中来执行其内部
+            ' 的语句列表的, 所以在这里进行插桩就可以让单步调试以及断点功能
+            ' 自动的覆盖到所有的嵌套层级之上
             Dim dbg As DebuggerContext = env.debugger
+            Dim depth As Integer = 0
 
-            ' The program code loop
-            For Each expression As Expression In execQueue
-                If showExpression Then
-                    Call VBDebugger.WriteLine(expression.ToString, ConsoleColor.White)
-                End If
+            Dim firstFile As String = "?"
+            If execQueue IsNot Nothing AndAlso execQueue.Count > 0 AndAlso TypeOf execQueue(0) Is IRuntimeTrace Then
+                firstFile = CType(execQueue(0), IRuntimeTrace).stackFrame.File
+            End If
+            ' System.IO.File.AppendAllText("exe_diag.log", $"file={firstFile} dbgHash={If(dbg Is Nothing, 0, dbg.GetHashCode())} isDbg={If(dbg Is Nothing, False, dbg.IsDebugging)}" & vbCrLf)
 
-                ' ================= 调试逻辑开始 =================
-                If dbg IsNot Nothing AndAlso dbg.IsDebugging Then
-                    ' 检查是否需要暂停（断点命中或单步执行）
-                    If dbg.ShouldPause(expression) Then
-                        ' 1. 显示当前行信息
-                        VBDebugger.WriteLine($"[DEBUG] Hit: {expression.ToString}", ConsoleColor.Yellow)
+            ' 注意: 在这里只判断调试器对象是否存在, 而不判断 IsDebugging 状态.
+            ' 因为调试会话有可能是在当前的这个代码块已经开始执行了之后才被启动
+            ' 的(例如由脚本之中的 browser() 函数所触发), 如果在这里就根据
+            ' IsDebugging 来决定是否维护深度计数器的话, 就会造成 EnterBlock
+            ' 与 ExitBlock 不成对出现从而使得深度计数器失衡
+            If Not dbg Is Nothing Then
+                ' 进入一个新的代码块, 记录下当前的嵌套深度以供
+                ' StepOver/StepInto/StepOut 这三种单步动作做判断
+                depth = dbg.EnterBlock()
+            End If
 
-                        ' 2. 暂停执行，等待用户输入指令
-                        ' 这里是一个阻塞调用，直到用户输入 Continue 或 Step
-                        dbg.Pause(expression, env)
+            Try
+                ' The program code loop
+                For Each expression As Expression In execQueue
+                    If showExpression Then
+                        Call VBDebugger.WriteLine(expression.ToString, ConsoleColor.White)
+                    End If
 
-                        ' 3. 检查用户是否选择了停止
-                        If dbg.CurrentAction = DebugAction.Stop Then
-                            Exit For ' 退出脚本执行
+                    ' ================= 调试逻辑开始 =================
+                    ' 这里需要在每一次的循环之中都重新读取 IsDebugging 的状态,
+                    ' 因为调试会话可能会在执行的过程之中被启动或者是被终止.
+                    ' 在未开启调试的时候, 这里仅有一次布尔判断的开销
+                    If Not dbg Is Nothing AndAlso dbg.IsDebugging Then
+                        Dim hit As Breakpoint = Nothing
+
+                        ' System.IO.File.AppendAllText("execdiag2.log", $"entered dbgHash={dbg.GetHashCode()} isDbg={dbg.IsDebugging} file={firstFile}" & vbCrLf)
+
+                        ' 检查是否需要暂停(断点命中或者单步执行)
+                        If dbg.ShouldPause(expression, env, hit) Then
+                            ' 暂停执行并且等待宿主程序下达下一步的调试指令, 
+                            ' 这是一个阻塞调用, 直到有代码调用了 dbg.Resume 为止
+                            Call dbg.Pause(New DebugFrame(expression, env, depth, hit))
+
+                            ' 检查用户是否选择了停止执行整个脚本程序
+                            If dbg.CurrentAction = DebugAction.Stop Then
+                                Exit For
+                            End If
                         End If
                     End If
-                End If
-                ' ================= 调试逻辑结束 =================
+                    ' ================= 调试逻辑结束 =================
 
-                benchmark = App.NanoTime
-                timestamp = App.UnixTimeStamp
-                refreshMemory = False
-                last = ExecuteCodeLine(expression, env, breakLoop)
-                benchmark = App.NanoTime - benchmark
+                    benchmark = App.NanoTime
+                    timestamp = App.UnixTimeStamp
+                    refreshMemory = False
+                    last = ExecuteCodeLine(expression, env, breakLoop)
+                    benchmark = App.NanoTime - benchmark
 
-                If Not env.profiler Is Nothing Then
-                    Call runRefreshMemory()
-                    Call env.profiler.Add(New ProfileRecord(expression) With {
-                        .elapse_time = benchmark,
-                        .memory_delta = memoryDelta,
-                        .stackframe = New StackFrame(env.stackFrame),
-                        .tag = timestamp,
-                        .memory_size = memSize2
-                    })
-                End If
+                    If Not env.profiler Is Nothing Then
+                        Call runRefreshMemory()
+                        Call env.profiler.Add(New ProfileRecord(expression) With {
+                            .elapse_time = benchmark,
+                            .memory_delta = memoryDelta,
+                            .stackframe = New StackFrame(env.stackFrame),
+                            .tag = timestamp,
+                            .memory_size = memSize2
+                        })
+                    End If
 
-                If showExpression Then
-                    Call VBDebugger.WriteLine($"[elapse_time] {TimeSpan.FromTicks(benchmark).FormatTime}", ConsoleColor.Green)
-                End If
+                    If showExpression Then
+                        Call VBDebugger.WriteLine($"[elapse_time] {TimeSpan.FromTicks(benchmark).FormatTime}", ConsoleColor.Green)
+                    End If
 
-                If showMemory Then
-                    Call runRefreshMemory()
-                    Call printMemoryProfile()
-                End If
+                    If showMemory Then
+                        Call runRefreshMemory()
+                        Call printMemoryProfile()
+                    End If
 
-                If breakLoop Then
-                    Call configException(env, last, expression)
-                    Exit For
+                    If breakLoop Then
+                        Call configException(env, last, expression)
+                        Exit For
+                    End If
+                Next
+            Finally
+                If Not dbg Is Nothing Then
+                    ' 使用 Finally 来保证在发生了异常或者是通过 return/break
+                    ' 提前退出当前的代码块的时候, 深度计数器也不会失衡
+                    Call dbg.ExitBlock()
                 End If
-            Next
+            End Try
 
             Return last
         End Function

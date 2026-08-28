@@ -156,6 +156,14 @@ Module Parser
     ''' <param name="info_int"></param>
     ''' <returns></returns>
     Public Function parse_r_object_info(info_int As Integer) As RObjectInfo
+        ' R's serialized object info is a 24-bit (3-byte) integer laid out as:
+        '   bits  0- 7 : SEXP type
+        '   bit     8  : OBJECT flag
+        '   bit     9  : has-attributes flag
+        '   bit    10  : has-tag flag
+        '   bits 12-19 : gp (general purpose / LEVELS)
+        ' This is the official R_Serialize 3-byte info encoding, so the type
+        ' lives in the low byte and the flags follow.
         Dim type_exp As RObjectType = bits(info_int, 0, 8)
         Dim reference = 0
         Dim object_flag As Boolean
@@ -172,7 +180,7 @@ Module Parser
             object_flag = CBool(bits(info_int, 8, 9))
             attributes = CBool(bits(info_int, 9, 10))
             tag = CBool(bits(info_int, 10, 11))
-            gp = bits(info_int, 12, 28)
+            gp = bits(info_int, 12, 20)
         End If
 
         If type_exp = RObjectType.REF Then

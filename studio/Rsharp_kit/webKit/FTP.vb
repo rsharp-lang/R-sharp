@@ -52,10 +52,10 @@
 #End Region
 
 Imports System.IO
-Imports System.Net
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Net.FTP
 Imports Microsoft.VisualBasic.Net.WebClient
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
@@ -82,23 +82,13 @@ Module FTP
                                  Optional throwEx As Boolean = False,
                                  Optional env As Environment = Nothing) As Object
 
-        Dim request As FtpWebRequest = ftp.CreateRequest(dir)
-        Dim list As New List(Of String)
-
-        request.Method = WebRequestMethods.Ftp.ListDirectory
-
         Try
-            Using response As FtpWebResponse = DirectCast(request.GetResponse(), FtpWebResponse)
-                Dim responseStream As Stream = response.GetResponseStream
+            Using client As FtpClient = ftp.CreateFtpClient()
                 Dim dirname As String = dir.Trim("/"c).Split("/"c).Last
 
-                Using reader As New StreamReader(responseStream)
-                    Do While reader.Peek <> -1
-                        list.Add(reader.ReadLine)
-                    Loop
-                End Using
+                Dim entries As String() = client.ListDirectoryAsync(dir).GetAwaiter().GetResult()
 
-                Return list _
+                Return entries _
                     .Select(Function(a) a.Replace($"{dirname}/", "")) _
                     .ToArray
             End Using
@@ -124,33 +114,16 @@ Module FTP
     ''' <returns></returns>
     <ExportAPI("ftp.get")>
     Public Function ftpget(ftp As FtpContext, file As String, Optional save As String = "./", Optional env As Environment = Nothing) As Object
-        Dim request As FtpWebRequest = ftp.CreateRequest(file)
+        Dim filepath As String
 
-        request.Method = WebRequestMethods.Ftp.DownloadFile
+        If save.StringEmpty OrElse save.Last = "/" Then
+            filepath = $"{save}/{file.FileName}"
+        Else
+            filepath = save
+        End If
 
-        Using response As FtpWebResponse = DirectCast(request.GetResponse(), FtpWebResponse)
-            Dim responseStream As Stream = response.GetResponseStream
-            Dim filepath As String
-            Dim buffer As Byte() = New Byte(1024 - 1) {}
-            Dim size As i32 = Scan0
-
-            If save.StringEmpty OrElse save.Last = "/" Then
-                filepath = $"{save}/{file.FileName}"
-            Else
-                filepath = save
-            End If
-
-            Using write As New BinaryWriter(filepath.Open(, doClear:=True)), reader As New StreamReader(responseStream)
-                Do While True
-                    If (size = reader.BaseStream.Read(buffer, Scan0, buffer.Length)) > 0 Then
-                        Call write.Write(buffer.Take(size).ToArray)
-                    Else
-                        Exit Do
-                    End If
-                Loop
-
-                Call write.Flush()
-            End Using
+        Using client As FtpClient = ftp.CreateFtpClient()
+            client.DownloadFileAsync(file, filepath, overwrite:=True).GetAwaiter().GetResult()
         End Using
 
         Return True

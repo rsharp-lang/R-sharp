@@ -62,7 +62,7 @@ Namespace Convertor
         Public Shared Function IsPairList(robj As RObject) As Boolean
             Dim attrs As RObject = robj.attributes
 
-            If attrs Is Nothing Then
+            If attrs Is Nothing OrElse attrs.info.type = RObjectType.NILVALUE Then
                 If robj.info.type Like ConvertToR.elementVectorFlags Then
                     Return False
                 Else
@@ -80,7 +80,7 @@ Namespace Convertor
         Public Shared Function IsDataFrame(robj As RObject) As Boolean
             Dim attrs As RObject = robj.attributes
 
-            If attrs Is Nothing Then
+            If attrs Is Nothing OrElse attrs.info.type = RObjectType.NILVALUE Then
                 Return False
             ElseIf robj.info.type Like ConvertToR.elementVectorFlags Then
                 Return False
@@ -96,7 +96,7 @@ Namespace Convertor
         Public Shared Function HasFactor(robj As RObject) As Boolean
             Dim attrs As RObject = robj.attributes
 
-            If attrs Is Nothing Then
+            If attrs Is Nothing OrElse attrs.info.type = RObjectType.NILVALUE Then
                 Return False
             End If
 

@@ -176,11 +176,21 @@ Namespace Convertor
 
             If nodeType = ListNodeType.NA Then
                 If rdata.info.type = RObjectType.S4 Then
-                    Return PullRObject(rdata.attributes, list)
+                    ' An S4 object whose slots pairlist is empty: keep a placeholder
+                    ' entry so the object is not silently dropped during the walk.
+                    Call list.Add(".class", GetS4Class(rdata.attributes))
+                    Return list
                 End If
 
                 Return Nothing
             ElseIf nodeType = ListNodeType.Vector Then
+                If rdata.info.type = RObjectType.S4 Then
+                    ' S4 vectors (e.g. an S4 that is just a primitive) carry the
+                    ' class name in their attributes.
+                    Call list.Add(".class", GetS4Class(rdata.attributes))
+                    Return list
+                End If
+
                 ' 已经没有数据了，结束递归
                 If rdata.value.isPrimitive Then
                     ' is a numeric matrix
@@ -213,10 +223,64 @@ Namespace Convertor
 
                 Return current
             Else
+                If rdata.info.type = RObjectType.S4 Then
+                    ' An S4 object keeps its slots in a dedicated dictionary so
+                    ' that the ".class" marker and slot values do not leak into a
+                    ' parent object's slot collection (which would cause key
+                    ' collisions for nested S4 objects such as assays inside a
+                    ' Seurat object).
+                    Dim ownSlots As New Dictionary(Of String, Object)
+
+                    Call ownSlots.Add(".class", GetS4Class(rdata.attributes))
+
+                    Dim cur As RObject = rdata
+
+                    Do While cur IsNot Nothing AndAlso cur.value IsNot Nothing AndAlso cur.value.nodeType <> ListNodeType.NA
+                        Dim slotCar As RObject = cur.value.CAR
+                        Dim slotValue As Object = PullRObject(slotCar, ownSlots)
+                        Dim slotName As String = Nothing
+                        If cur.tag IsNot Nothing AndAlso Not String.IsNullOrEmpty(cur.tag.characters) Then
+                            slotName = cur.tag.characters
+                        ElseIf cur.tag IsNot Nothing AndAlso Not String.IsNullOrEmpty(cur.tag.symbolName) Then
+                            slotName = cur.tag.symbolName
+                        ElseIf Not String.IsNullOrEmpty(cur.characters) Then
+                            slotName = cur.characters
+                        ElseIf Not String.IsNullOrEmpty(cur.symbolName) Then
+                            slotName = cur.symbolName
+                        Else
+                            slotName = ""
+                        End If
+
+                        If ownSlots.ContainsKey(slotName) Then
+                            slotName = ownSlots.Keys _
+                                .JoinIterates({slotName}) _
+                                .uniqueNames _
+                                .Last
+                        End If
+
+                        Call ownSlots.Add(slotName, slotValue)
+
+                        cur = cur.value.CDR
+                    Loop
+
+                    Return New list With {.slots = ownSlots}
+                End If
+
                 ' CAR为当前节点的数据
                 ' 获取节点数据，然后继续通过CDR进行链表的递归访问
                 Dim current As Object = PullRObject(car, list)
-                Dim currentName As String = If(rdata.tag?.characters, rdata.characters)
+                Dim currentName As String = Nothing
+                If rdata.tag IsNot Nothing AndAlso Not String.IsNullOrEmpty(rdata.tag.characters) Then
+                    currentName = rdata.tag.characters
+                ElseIf rdata.tag IsNot Nothing AndAlso Not String.IsNullOrEmpty(rdata.tag.symbolName) Then
+                    currentName = rdata.tag.symbolName
+                ElseIf Not String.IsNullOrEmpty(rdata.characters) Then
+                    currentName = rdata.characters
+                ElseIf Not String.IsNullOrEmpty(rdata.symbolName) Then
+                    currentName = rdata.symbolName
+                Else
+                    currentName = ""
+                End If
                 Dim CDR As RObject = value.CDR
 
                 ' 20220920 duplicated symbol names?
@@ -237,6 +301,60 @@ Namespace Convertor
                     Return PullRObject(CDR, list)
                 End If
             End If
+        End Function
+
+        ''' <summary>
+        ''' Extract the S4 class name from the object's attributes pairlist.
+        ''' The class is stored under the "class" tag as a character vector.
+        ''' </summary>
+        Private Function GetS4Class(attributes As RObject) As String
+            If attributes Is Nothing Then
+                Return "@NULLATTR@"
+            End If
+
+            ' When attributes itself has symbolName "class", it IS the class
+            ' node (this happens with LIST-type attributes nodes in some R
+            ' serialization layouts). Its value.CAR holds the STRSXP vector.
+            If attributes.symbolName = "class" Then
+                Dim classObj As RObject = attributes.value?.CAR
+                If classObj IsNot Nothing Then
+                    Dim classVal As Object = PullRObject(classObj, New Dictionary(Of String, Object))
+                    If TypeOf classVal Is Array Then
+                        Dim arr As Array = DirectCast(classVal, Array)
+                        If arr.Length > 0 Then Return arr.GetValue(0)?.ToString()
+                    ElseIf classVal IsNot Nothing Then
+                        Return classVal.ToString()
+                    End If
+                End If
+                ' If the direct extraction failed, fall through to LinkVisitor
+            End If
+
+            ' Standard case: attributes is a container pairlist; walk it via
+            ' LinkVisitor to find the node whose tag == "class".
+            Dim classAttr As RObject = attributes.LinkVisitor("class")
+
+            If classAttr Is Nothing Then
+                Return "@NOCLASS@"
+            End If
+
+            ' The class value is a STRSXP character vector; pull it and take
+            ' the first element (the most specific class name).
+            Dim classValueObj As RObject = classAttr.value?.CAR
+
+            If classValueObj Is Nothing Then
+                Return Nothing
+            End If
+
+            Dim classVal2 As Object = PullRObject(classValueObj, New Dictionary(Of String, Object))
+
+            If TypeOf classVal2 Is Array Then
+                Dim arr As Array = DirectCast(classVal2, Array)
+                If arr.Length > 0 Then Return arr.GetValue(0)?.ToString()
+            ElseIf classVal2 IsNot Nothing Then
+                Return classVal2.ToString()
+            End If
+
+            Return Nothing
         End Function
 
         <Extension>
@@ -264,7 +382,7 @@ Namespace Convertor
                 names = names.uniqueNames
             End If
 
-            Dim list As New list
+            Dim list As list = list.empty
             Dim obj As Object
             Dim name As String
             Dim load As Dictionary(Of String, Object)

@@ -163,7 +163,17 @@ Namespace Runtime
         Friend ReadOnly ifPromise As New List(Of IfPromise)
         Friend ReadOnly acceptorArguments As New Dictionary(Of String, Object)
         Friend ReadOnly profiler As List(Of ProfileRecord)
-        Friend ReadOnly debugger As DebuggerContext
+
+        ''' <summary>
+        ''' the debugger context object for the current R# interpreter runtime
+        ''' </summary>
+        ''' <remarks>
+        ''' 这个属性对外暴露了调试器的核心对象, 使得宿主程序可以在不访问
+        ''' <see cref="Environment.debugger"/> 这个 Friend 字段的情况之下, 
+        ''' 就可以通过订阅 <see cref="DebuggerContext.OnBreakpointHit"/> 事件
+        ''' 并且调用 <see cref="DebuggerContext.Resume"/> 函数的方式来驱动调试会话
+        ''' </remarks>
+        Public ReadOnly Property debugger As DebuggerContext
 
         ''' <summary>
         ''' In the constructor function of <see cref="Runtime.GlobalEnvironment"/>, 

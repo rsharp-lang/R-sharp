@@ -558,7 +558,13 @@ opt:                    If arg.isOptional Then
                 value = value
             ElseIf Not arg.isRequireRawVector Then
                 value = Runtime.getFirst(value)
-            ElseIf arg.isRequireRawVector AndAlso Not arg.rawVectorFlag.vector Is Nothing Then
+            ElseIf arg.isRequireRawVector Then
+                ' 20260826 arg is object type, can accept any kind of value
+                ' collection is processed inside the target function
+                If arg.type.is_any Then
+                    Return value
+                End If
+
                 Return Runtime.asVector(value, arg.rawVectorFlag.vector, envir)
             End If
 
