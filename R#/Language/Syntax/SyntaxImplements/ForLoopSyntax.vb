@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2b817484016acf42b9660efefa3226b7, R#\Language\Syntax\SyntaxImplements\ForLoopSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::b34b241a76f5cefa6881bff466835f96, R#\Language\Syntax\SyntaxImplements\ForLoopSyntax.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 18 (14.40%)
-    '     File Size: 4.90 KB
+    '     File Size: 4.87 KB
 
 
     '     Module ForLoopSyntax

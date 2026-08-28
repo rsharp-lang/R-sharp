@@ -1,58 +1,58 @@
-﻿#Region "Microsoft.VisualBasic::205346d4cfe046c38f368a27fbe166df, R#\Interpreter\ExecutableLoop.vb"
+﻿#Region "Microsoft.VisualBasic::67675641bccda78b808fd2c10610bf64, R#\Interpreter\ExecutableLoop.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-' Code Statistics:
 
-'   Total Lines: 257
-'    Code Lines: 156 (60.70%)
-' Comment Lines: 65 (25.29%)
-'    - Xml Docs: 30.77%
-' 
-'   Blank Lines: 36 (14.01%)
-'     File Size: 10.54 KB
+    ' /********************************************************************************/
+
+    ' Summaries:
 
 
-'     Class ExecutableLoop
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: Execute, ExecuteCodeLine, isBreakSignal
-' 
-'         Sub: configException, printMemoryProfile, runRefreshMemory
-' 
-' 
-' /********************************************************************************/
+    ' Code Statistics:
+
+    '   Total Lines: 293
+    '    Code Lines: 171 (58.36%)
+    ' Comment Lines: 83 (28.33%)
+    '    - Xml Docs: 24.10%
+    ' 
+    '   Blank Lines: 39 (13.31%)
+    '     File Size: 13.18 KB
+
+
+    '     Class ExecutableLoop
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: Execute, ExecuteCodeLine, isBreakSignal
+    ' 
+    '         Sub: configException, printMemoryProfile, runRefreshMemory
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

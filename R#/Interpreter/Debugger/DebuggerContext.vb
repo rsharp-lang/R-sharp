@@ -1,50 +1,61 @@
-﻿#Region "Microsoft.VisualBasic::cd702853309c115833a18263b4c03cb0, R#\Interpreter\Debugger\DebuggerContext.vb"
+﻿#Region "Microsoft.VisualBasic::42f999b893931ef28a39eafbe8d1d34b, R#\Interpreter\Debugger\DebuggerContext.vb"
 
-' Author:
-' 
-'       asuka (amethyst.asuka@gcmodeller.org)
-'       xie (genetics@smrucc.org)
-'       xieguigang (xie.guigang@live.com)
-' 
-' Copyright (c) 2018 GPL3 Licensed
-' 
-' 
-' GNU GENERAL PUBLIC LICENSE (GPL3)
-' 
-' 
-' This program is free software: you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation, either version 3 of the License, or
-' (at your option) any later version.
-' 
-' This program is distributed in the hope that it will be useful,
-' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-' GNU General Public License for more details.
-' 
-' You should have received a copy of the GNU General Public License
-' along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
-
-' /********************************************************************************/
-
-' Summaries:
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-'     Class DebuggerContext
-' 
-'         Properties: breakpoints, CurrentAction, CurrentEnvironment, inspector, IsDebugging
-'                     stackDepth
-' 
-'         Function: AddBreakpoint, EnterBlock, evaluateCondition, ListBreakpoints, RemoveBreakpoint
-'                   ShouldPause, TryHitBreakpoint
-' 
-'         Sub: ClearBreakpoints, ExitBlock, Pause, [Resume], SetEnabled
-'              Start, [Stop]
-' 
-' 
-' /********************************************************************************/
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 393
+    '    Code Lines: 135 (34.35%)
+    ' Comment Lines: 208 (52.93%)
+    '    - Xml Docs: 84.13%
+    ' 
+    '   Blank Lines: 50 (12.72%)
+    '     File Size: 17.71 KB
+
+
+    '     Class DebuggerContext
+    ' 
+    '         Properties: breakpoints, CurrentAction, CurrentEnvironment, inspector, IsDebugging
+    '                     isOwnerThread, stackDepth
+    ' 
+    '         Function: AddBreakpoint, EnterBlock, evaluateCondition, EvaluateWithoutDebug, ListBreakpoints
+    '                   RemoveBreakpoint, ShouldPause, TryHitBreakpoint
+    ' 
+    '         Sub: [Resume], [Stop], ClearBreakpoints, ExitBlock, Pause
+    '              SetEnabled, Start
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

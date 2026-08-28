@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::29a529130f57ebb59eddb5a6ae3b9e7b, Library\Rlapack\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::86ed4846f93c255617b77642ad876ffa, Library\Rlapack\zzz.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 36
-    '    Code Lines: 31 (86.11%)
+    '   Total Lines: 37
+    '    Code Lines: 32 (86.49%)
     ' Comment Lines: 0 (0.00%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 5 (13.89%)
-    '     File Size: 1.23 KB
+    '   Blank Lines: 5 (13.51%)
+    '     File Size: 1.26 KB
 
 
     ' Class zzz

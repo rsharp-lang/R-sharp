@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::02c327b565cc318d70a61e4cc61dfb37, studio\RData\Convertor\RStreamReader.vb"
+﻿#Region "Microsoft.VisualBasic::d38b0830f6800ebbee5efbc76dcb095e, studio\RData\Convertor\RStreamReader.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 74
-    '    Code Lines: 58 (78.38%)
-    ' Comment Lines: 5 (6.76%)
-    '    - Xml Docs: 100.00%
+    '   Total Lines: 82
+    '    Code Lines: 63 (76.83%)
+    ' Comment Lines: 8 (9.76%)
+    '    - Xml Docs: 62.50%
     ' 
-    '   Blank Lines: 11 (14.86%)
-    '     File Size: 2.95 KB
+    '   Blank Lines: 11 (13.41%)
+    '     File Size: 3.43 KB
 
 
     '     Class RStreamReader

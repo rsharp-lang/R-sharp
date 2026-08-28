@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5f6b51e45a42574f94341342ada4081e, R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\NameMemberReference.vb"
+﻿#Region "Microsoft.VisualBasic::6f284fdbb40611ab74ffa5374f313cc3, R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\NameMemberReference.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 22 (15.71%)
-    '     File Size: 5.97 KB
+    '     File Size: 6.00 KB
 
 
     '     Class ArrayVectorLoopProcessor

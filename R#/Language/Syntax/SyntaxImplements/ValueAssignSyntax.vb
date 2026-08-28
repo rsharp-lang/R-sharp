@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bd7dfab18d07e70e49174d5cd9594342, R#\Language\Syntax\SyntaxImplements\ValueAssignSyntax.vb"
+﻿#Region "Microsoft.VisualBasic::7695bf78d16b8e4f285a062ff3111b35, R#\Language\Syntax\SyntaxImplements\ValueAssignSyntax.vb"
 
     ' Author:
     ' 

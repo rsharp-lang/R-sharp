@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::21f582d42bc46dea9ef92717b03c92ea, studio\RData\Convertor\ConvertToR.vb"
+﻿#Region "Microsoft.VisualBasic::8061c10672ac6483f4e93bf1c839a19e, studio\RData\Convertor\ConvertToR.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 377
-    '    Code Lines: 281 (74.54%)
-    ' Comment Lines: 39 (10.34%)
-    '    - Xml Docs: 46.15%
+    '   Total Lines: 495
+    '    Code Lines: 360 (72.73%)
+    ' Comment Lines: 60 (12.12%)
+    '    - Xml Docs: 36.67%
     ' 
-    '   Blank Lines: 57 (15.12%)
-    '     File Size: 14.17 KB
+    '   Blank Lines: 75 (15.15%)
+    '     File Size: 19.97 KB
 
 
     '     Module ConvertToR
     ' 
     '         Function: CreateFactor, CreatePairList, CreateRMatrix, CreateRTable, CreateRVector
-    '                   extractMatrixDimNames, hasDimension, PullRawData, (+2 Overloads) PullRObject, readColumnNames
-    '                   readRowNames, ToRObject
+    '                   extractMatrixDimNames, GetS4Class, hasDimension, PullRawData, (+2 Overloads) PullRObject
+    '                   readColumnNames, readRowNames, ToRObject
     ' 
     ' 
     ' /********************************************************************************/

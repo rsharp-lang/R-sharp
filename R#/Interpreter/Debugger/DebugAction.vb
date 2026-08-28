@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::290f84394471fcf75dbe160a5c74910c, R#\Interpreter\Debugger\DebugAction.vb"
+﻿#Region "Microsoft.VisualBasic::6317f13c90e21a0b41dce2388c7ff2bf, R#\Interpreter\Debugger\DebugAction.vb"
 
     ' Author:
     ' 
@@ -34,17 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 13
-    '    Code Lines: 8 (61.54%)
-    ' Comment Lines: 3 (23.08%)
+    '   Total Lines: 36
+    '    Code Lines: 9 (25.00%)
+    ' Comment Lines: 25 (69.44%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 2 (15.38%)
-    '     File Size: 371 B
+    '   Blank Lines: 2 (5.56%)
+    '     File Size: 1.29 KB
 
 
     '     Enum DebugAction
     ' 
+    '         [Continue], [StepInto], [StepOut], [StepOver], [Stop]
     ' 
     '  
     ' 

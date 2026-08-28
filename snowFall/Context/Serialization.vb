@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::18925dd27e40be8cd55cb0f182db1723, snowFall\Context\Serialization.vb"
+﻿#Region "Microsoft.VisualBasic::e4cde9ddfb1bd79725b39b3a6bb57b5e, snowFall\Context\Serialization.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 96.43%
     ' 
     '   Blank Lines: 18 (13.95%)
-    '     File Size: 4.78 KB
+    '     File Size: 4.79 KB
 
 
     ' Module Serialization

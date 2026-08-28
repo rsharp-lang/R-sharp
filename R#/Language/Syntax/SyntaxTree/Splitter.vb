@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::dd2942489846b75c30e43cebea5dc908, R#\Language\Syntax\SyntaxTree\Splitter.vb"
+﻿#Region "Microsoft.VisualBasic::73e2ddbbdfb997d2e88e2e51d7c32113, R#\Language\Syntax\SyntaxTree\Splitter.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 16 (14.81%)
-    '     File Size: 4.27 KB
+    '     File Size: 4.28 KB
 
 
     '     Module Splitter

@@ -1,4 +1,4 @@
-#Region "Microsoft.VisualBasic::00000000000000000000000000000000, R#\Interpreter\Debugger\DebugFrame.vb"
+﻿#Region "Microsoft.VisualBasic::bf51d6867517d608bc1b9d0377593103, R#\Interpreter\Debugger\DebugFrame.vb"
 
     ' Author:
     ' 
@@ -32,11 +32,23 @@
     ' Summaries:
 
 
+    ' Code Statistics:
+
+    '   Total Lines: 73
+    '    Code Lines: 33 (45.21%)
+    ' Comment Lines: 32 (43.84%)
+    '    - Xml Docs: 100.00%
+    ' 
+    '   Blank Lines: 8 (10.96%)
+    '     File Size: 2.81 KB
+
+
     '     Class DebugFrame
     ' 
     '         Properties: breakpoint, depth, environment, expression, file
     '                     line
     ' 
+    '         Constructor: (+1 Overloads) Sub New
     '         Function: GetSourceLocation, ToString
     ' 
     ' 

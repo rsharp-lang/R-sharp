@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::97b3ae05c830922e054918ff97622c7b, studio\R-terminal\CLI\CLI.vb"
+﻿#Region "Microsoft.VisualBasic::0b71391602f819b973e9f20685f512b9, studio\R-terminal\CLI\CLI.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 145
-    '    Code Lines: 119 (82.07%)
-    ' Comment Lines: 2 (1.38%)
+    '   Total Lines: 110
+    '    Code Lines: 89 (80.91%)
+    ' Comment Lines: 2 (1.82%)
     '    - Xml Docs: 0.00%
     ' 
-    '   Blank Lines: 24 (16.55%)
-    '     File Size: 5.91 KB
+    '   Blank Lines: 19 (17.27%)
+    '     File Size: 4.61 KB
 
 
     ' Module CLI
     ' 
-    '     Function: BashRun, Info, man, SyntaxText, unixman
-    '               Version
+    '     Function: BashRun, Info, man, unixman, Version
     ' 
     ' /********************************************************************************/
 

@@ -1,4 +1,59 @@
-﻿Imports System.IO
+﻿#Region "Microsoft.VisualBasic::bd14f76ac6004fda94edfc2976fa964e, studio\RData\test\Module1.vb"
+
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 129
+    '    Code Lines: 97 (75.19%)
+    ' Comment Lines: 8 (6.20%)
+    '    - Xml Docs: 87.50%
+    ' 
+    '   Blank Lines: 24 (18.60%)
+    '     File Size: 4.75 KB
+
+
+    ' Module Module1
+    ' 
+    '     Function: describe
+    ' 
+    '     Sub: loadAllSamples, Main, summarize, verifyVector
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Imports System.IO
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.RDataSet
 Imports SMRUCC.Rsharp.RDataSet.Convertor

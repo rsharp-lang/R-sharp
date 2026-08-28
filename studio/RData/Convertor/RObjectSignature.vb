@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::eacc443e4adca3b7e57e0d44ab2a2e4d, studio\RData\Convertor\RObjectSignature.vb"
+﻿#Region "Microsoft.VisualBasic::ddc261ee7422d62c37b36e320348261f, studio\RData\Convertor\RObjectSignature.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 16 (25.00%)
-    '     File Size: 2.00 KB
+    '     File Size: 2.14 KB
 
 
     '     Class RObjectSignature

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::169fc19c6a9731d755ebf0302ae25586, studio\Rsharp_kit\MLkit\GA\GAToolkit.vb"
+﻿#Region "Microsoft.VisualBasic::9c6263cf8ffb918d3f5b2e9942341d2a, studio\Rsharp_kit\MLkit\GA\GAToolkit.vb"
 
     ' Author:
     ' 
@@ -34,18 +34,18 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 95
-    '    Code Lines: 64 (67.37%)
-    ' Comment Lines: 20 (21.05%)
+    '   Total Lines: 48
+    '    Code Lines: 29 (60.42%)
+    ' Comment Lines: 12 (25.00%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 11 (11.58%)
-    '     File Size: 3.86 KB
+    '   Blank Lines: 7 (14.58%)
+    '     File Size: 1.90 KB
 
 
     ' Module GAToolkit
     ' 
-    '     Function: population, runANNTraining, template
+    '     Function: population, template
     ' 
     ' /********************************************************************************/
 

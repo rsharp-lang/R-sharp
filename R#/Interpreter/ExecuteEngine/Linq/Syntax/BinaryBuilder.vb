@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d61917e597e90838f11bec5899e66471, R#\Interpreter\ExecuteEngine\Linq\Syntax\BinaryBuilder.vb"
+﻿#Region "Microsoft.VisualBasic::9ef1de84ee59fc20378185cf770a1059, R#\Interpreter\ExecuteEngine\Linq\Syntax\BinaryBuilder.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 15 (12.71%)
-    '     File Size: 4.94 KB
+    '     File Size: 4.95 KB
 
 
     '     Module BinaryBuilder

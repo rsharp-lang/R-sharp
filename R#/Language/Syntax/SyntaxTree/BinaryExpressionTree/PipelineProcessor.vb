@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d920b7f2873287d1b743b4709b6d2537, R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\PipelineProcessor.vb"
+﻿#Region "Microsoft.VisualBasic::62d88405af023ef328140451596f5c79, R#\Language\Syntax\SyntaxTree\BinaryExpressionTree\PipelineProcessor.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 0.00%
     ' 
     '   Blank Lines: 21 (15.33%)
-    '     File Size: 5.42 KB
+    '     File Size: 5.43 KB
 
 
     '     Class PipelineProcessor

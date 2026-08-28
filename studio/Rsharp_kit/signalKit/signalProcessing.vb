@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::56b17c7a473fc08e73c324b38979cd88, studio\Rsharp_kit\signalKit\signalProcessing.vb"
+﻿#Region "Microsoft.VisualBasic::03c584bac8f12b04f0ab6076af4f7aa7, studio\Rsharp_kit\signalKit\signalProcessing.vb"
 
     ' Author:
     ' 
@@ -34,20 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 474
-    '    Code Lines: 339 (71.52%)
-    ' Comment Lines: 75 (15.82%)
+    '   Total Lines: 459
+    '    Code Lines: 325 (70.81%)
+    ' Comment Lines: 75 (16.34%)
     '    - Xml Docs: 94.67%
     ' 
-    '   Blank Lines: 60 (12.66%)
-    '     File Size: 19.77 KB
+    '   Blank Lines: 59 (12.85%)
+    '     File Size: 19.19 KB
 
 
     ' Module signalProcessing
     ' 
     '     Function: asGeneral, asMatrix, FindAllSignalPeaks, Gaussian, gaussian_bin
-    '               gaussian_fit, gaussian_peak, gaussPeaks, peakTable, plotPeaksDecomposition
-    '               printSignalDf, resampler_f, writeCDF
+    '               gaussian_fit, gaussian_peak, gaussPeaks, MexicanHatWavelet, peakTable
+    '               plotPeaksDecomposition, printSignalDf, resampler_f, writeCDF
     ' 
     '     Sub: Main
     ' 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0633470094f327cde8f24e52863366f1, R#\Runtime\Internal\objects\RConversion\makeList.vb"
+﻿#Region "Microsoft.VisualBasic::ae510c7ac827e4f28b4c70ccf20d38e3, R#\Runtime\Internal\objects\RConversion\makeList.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 97
-    '    Code Lines: 76 (78.35%)
-    ' Comment Lines: 7 (7.22%)
+    '   Total Lines: 96
+    '    Code Lines: 75 (78.12%)
+    ' Comment Lines: 7 (7.29%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 14 (14.43%)
-    '     File Size: 3.58 KB
+    '   Blank Lines: 14 (14.58%)
+    '     File Size: 3.51 KB
 
 
     '     Module makeList

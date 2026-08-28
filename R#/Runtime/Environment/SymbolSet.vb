@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::04f20a2f3c9aacfa430e8f61f3b249c8, R#\Runtime\Environment\SymbolSet.vb"
+﻿#Region "Microsoft.VisualBasic::cec3e2f784e7ebf3b3fe43cb9fb0fdf6, R#\Runtime\Environment\SymbolSet.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 95.00%
     ' 
     '   Blank Lines: 18 (13.53%)
-    '     File Size: 4.78 KB
+    '     File Size: 4.80 KB
 
 
     '     Class SymbolSet

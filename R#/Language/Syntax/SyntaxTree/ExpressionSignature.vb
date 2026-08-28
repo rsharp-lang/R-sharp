@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::da9b96e21e781f2deb83733f5ace745c, R#\Language\Syntax\SyntaxTree\ExpressionSignature.vb"
+﻿#Region "Microsoft.VisualBasic::9c965f2891da54d1a1d541a085adb219, R#\Language\Syntax\SyntaxTree\ExpressionSignature.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 443
-    '    Code Lines: 316 (71.33%)
-    ' Comment Lines: 75 (16.93%)
-    '    - Xml Docs: 90.67%
+    '   Total Lines: 448
+    '    Code Lines: 316 (70.54%)
+    ' Comment Lines: 80 (17.86%)
+    '    - Xml Docs: 91.25%
     ' 
-    '   Blank Lines: 52 (11.74%)
-    '     File Size: 15.82 KB
+    '   Blank Lines: 52 (11.61%)
+    '     File Size: 15.96 KB
 
 
     '     Module ExpressionSignature

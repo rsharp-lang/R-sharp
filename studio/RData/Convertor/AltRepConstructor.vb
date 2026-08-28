@@ -1,12 +1,58 @@
-#Region "Microsoft.VisualBasic::altrep_constructor, studio\RData\Convertor\AltRepConstructor.vb"
+﻿#Region "Microsoft.VisualBasic::33b7db9f1b251dec1fd766f12e8d2f2b, studio\RData\Convertor\AltRepConstructor.vb"
 
-    ' AltRep (ALTernative REPresentation) vector expansion for GNU R >= 3.5.
-    '
-    ' R uses ALTREP to store some vectors in a compact form instead of the
-    ' full materialized data buffer. When such an object is read from a rda/rds
-    ' file we expand it into the equivalent plain vector so that the rest of the
-    ' conversion pipeline (CreateRVector / CreateRTable) can treat it like any
-    ' other atomic vector.
+    ' Author:
+    ' 
+    '       asuka (amethyst.asuka@gcmodeller.org)
+    '       xie (genetics@smrucc.org)
+    '       xieguigang (xie.guigang@live.com)
+    ' 
+    ' Copyright (c) 2018 GPL3 Licensed
+    ' 
+    ' 
+    ' GNU GENERAL PUBLIC LICENSE (GPL3)
+    ' 
+    ' 
+    ' This program is free software: you can redistribute it and/or modify
+    ' it under the terms of the GNU General Public License as published by
+    ' the Free Software Foundation, either version 3 of the License, or
+    ' (at your option) any later version.
+    ' 
+    ' This program is distributed in the hope that it will be useful,
+    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
+    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    ' GNU General Public License for more details.
+    ' 
+    ' You should have received a copy of the GNU General Public License
+    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+
+    ' Code Statistics:
+
+    '   Total Lines: 122
+    '    Code Lines: 66 (54.10%)
+    ' Comment Lines: 38 (31.15%)
+    '    - Xml Docs: 84.21%
+    ' 
+    '   Blank Lines: 18 (14.75%)
+    '     File Size: 5.35 KB
+
+
+    '     Delegate Function
+    ' 
+    ' 
+    '     Module AltRepConstructorExpander
+    ' 
+    '         Function: compact_intseq_constructor, compact_realseq_constructor, deferred_string_constructor, makeVector, wrap_constructor
+    ' 
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

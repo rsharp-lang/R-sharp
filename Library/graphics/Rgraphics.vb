@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::5bb9b46dcbf2fb879b2b0a30ff5488cc, Library\graphics\Rgraphics.vb"
+﻿#Region "Microsoft.VisualBasic::27042fed68145326c03f310dfee46401, Library\graphics\Rgraphics.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 86.32%
     ' 
     '   Blank Lines: 47 (11.99%)
-    '     File Size: 15.79 KB
+    '     File Size: 15.81 KB
 
 
     ' Module Rgraphics

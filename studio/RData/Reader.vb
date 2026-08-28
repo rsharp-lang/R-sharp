@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::421dcce7a0acc7a87150e3b0b6734d3e, studio\RData\Reader.vb"
+﻿#Region "Microsoft.VisualBasic::146444c4d5e86c30267504c077aaff03, studio\RData\Reader.vb"
 
     ' Author:
     ' 
@@ -34,25 +34,20 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 383
-    '    Code Lines: 262 (68.41%)
-    ' Comment Lines: 66 (17.23%)
-    '    - Xml Docs: 86.36%
+    '   Total Lines: 466
+    '    Code Lines: 290 (62.23%)
+    ' Comment Lines: 110 (23.61%)
+    '    - Xml Docs: 60.00%
     ' 
-    '   Blank Lines: 55 (14.36%)
-    '     File Size: 13.95 KB
+    '   Blank Lines: 66 (14.16%)
+    '     File Size: 18.56 KB
 
 
-    ' Delegate Function
-    ' 
-    ' 
     ' Class Reader
     ' 
     '     Constructor: (+1 Overloads) Sub New
     '     Function: expand_altrep_to_object, parse_all, parse_bool, parse_complex, parse_extra_info
     '               parse_R_object, parse_versions, ParseData, ParseRDataBinary, parseVector
-    ' 
-    ' 
     ' 
     ' /********************************************************************************/
 

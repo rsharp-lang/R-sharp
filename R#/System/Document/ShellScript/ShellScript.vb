@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3ee838ae1b730c38ec22a4ad355083a7, R#\System\Document\ShellScript\ShellScript.vb"
+﻿#Region "Microsoft.VisualBasic::3f0cb910a9092cbf5d403efe2865988f, R#\System\Document\ShellScript\ShellScript.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 40.91%
     ' 
     '   Blank Lines: 68 (16.50%)
-    '     File Size: 18.07 KB
+    '     File Size: 18.08 KB
 
 
     '     Class ShellScript

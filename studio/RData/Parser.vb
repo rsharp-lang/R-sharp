@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::19a4c2bd7f409d5a1c246371174b4b0c, studio\RData\Parser.vb"
+﻿#Region "Microsoft.VisualBasic::0bf54a80295154fe4e2889e68619046e, studio\RData\Parser.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 161
-    '    Code Lines: 110 (68.32%)
-    ' Comment Lines: 28 (17.39%)
-    '    - Xml Docs: 100.00%
+    '   Total Lines: 169
+    '    Code Lines: 110 (65.09%)
+    ' Comment Lines: 36 (21.30%)
+    '    - Xml Docs: 77.78%
     ' 
-    '   Blank Lines: 23 (14.29%)
-    '     File Size: 5.26 KB
+    '   Blank Lines: 23 (13.61%)
+    '     File Size: 5.68 KB
 
 
     ' Module Parser

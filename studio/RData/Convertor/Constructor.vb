@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::274df2f9b8e1a43c560c1e1e5f663096, studio\RData\Convertor\Constructor.vb"
+﻿#Region "Microsoft.VisualBasic::1d631a5787885e591c841a2ef2399393, studio\RData\Convertor\Constructor.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 115
-    '    Code Lines: 89 (77.39%)
-    ' Comment Lines: 6 (5.22%)
-    '    - Xml Docs: 100.00%
+    '   Total Lines: 131
+    '    Code Lines: 97 (74.05%)
+    ' Comment Lines: 14 (10.69%)
+    '    - Xml Docs: 42.86%
     ' 
-    '   Blank Lines: 20 (17.39%)
-    '     File Size: 4.06 KB
+    '   Blank Lines: 20 (15.27%)
+    '     File Size: 5.01 KB
 
 
     '     Module Constructor

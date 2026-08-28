@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cdad396281c9283c4b0e30ee0374243c, studio\RData\ParserXDR.vb"
+﻿#Region "Microsoft.VisualBasic::0f159161a58d398cc914ffe053717d8e, studio\RData\ParserXDR.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 41
-    '    Code Lines: 25 (60.98%)
-    ' Comment Lines: 8 (19.51%)
+    '   Total Lines: 50
+    '    Code Lines: 32 (64.00%)
+    ' Comment Lines: 8 (16.00%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 8 (19.51%)
-    '     File Size: 1.20 KB
+    '   Blank Lines: 10 (20.00%)
+    '     File Size: 1.49 KB
 
 
     ' Class ParserXDR
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: parse_double, parse_int, parse_string
+    '     Function: parse_byte, parse_double, parse_int, parse_int24, parse_string
     ' 
     ' /********************************************************************************/
 

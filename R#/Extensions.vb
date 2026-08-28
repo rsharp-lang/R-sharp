@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8a907971a752892c52d3aac26cbad36c, R#\Extensions.vb"
+﻿#Region "Microsoft.VisualBasic::c514436dfe93694bec7a90ddeb350eb2, R#\Extensions.vb"
 
     ' Author:
     ' 
@@ -34,21 +34,21 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 357
-    '    Code Lines: 237 (66.39%)
-    ' Comment Lines: 78 (21.85%)
+    '   Total Lines: 362
+    '    Code Lines: 241 (66.57%)
+    ' Comment Lines: 78 (21.55%)
     '    - Xml Docs: 87.18%
     ' 
-    '   Blank Lines: 42 (11.76%)
-    '     File Size: 13.28 KB
+    '   Blank Lines: 43 (11.88%)
+    '     File Size: 13.45 KB
 
 
     ' Module Extensions
     ' 
     '     Constructor: (+1 Overloads) Sub New
     '     Function: AsRReturn, Buffer, CastSequence, EvaluateFramework, evaluateList
-    '               GetEncoding, GetObject, GetString, ParseDebugLevel, SafeCreateColumns
-    '               toList
+    '               GetEncoding, GetObject, GetString, IsNullOrEmpty, ParseDebugLevel
+    '               SafeCreateColumns, toList
     ' 
     ' /********************************************************************************/
 

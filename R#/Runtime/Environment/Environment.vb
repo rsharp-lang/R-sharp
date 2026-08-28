@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1447283ff5b2a0d334cba9b5ad09da2c, R#\Runtime\Environment\Environment.vb"
+﻿#Region "Microsoft.VisualBasic::5d6c00ef88adbd15d2312e7c3575c363, R#\Runtime\Environment\Environment.vb"
 
     ' Author:
     ' 
@@ -34,19 +34,19 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 910
-    '    Code Lines: 464 (50.99%)
-    ' Comment Lines: 334 (36.70%)
-    '    - Xml Docs: 62.28%
+    '   Total Lines: 920
+    '    Code Lines: 464 (50.43%)
+    ' Comment Lines: 343 (37.28%)
+    '    - Xml Docs: 63.27%
     ' 
-    '   Blank Lines: 112 (12.31%)
-    '     File Size: 39.66 KB
+    '   Blank Lines: 113 (12.28%)
+    '     File Size: 40.22 KB
 
 
     '     Class Environment
     ' 
-    '         Properties: funcSymbols, globalEnvironment, isGlobal, isLINQContext, last
-    '                     messages, parent, stackFrame, stackTrace
+    '         Properties: debugger, funcSymbols, globalEnvironment, isGlobal, isLINQContext
+    '                     last, messages, parent, stackFrame, stackTrace
     ' 
     '         Constructor: (+5 Overloads) Sub New
     ' 

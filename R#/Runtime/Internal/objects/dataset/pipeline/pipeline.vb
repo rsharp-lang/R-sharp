@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b4581608a7eeab42dc53615a1f4839ff, R#\Runtime\Internal\objects\dataset\pipeline.vb"
+﻿#Region "Microsoft.VisualBasic::57a3f8f1dd0d4e44fc9f60c9e12e2937, R#\Runtime\Internal\objects\dataset\pipeline\pipeline.vb"
 
     ' Author:
     ' 
@@ -34,28 +34,24 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 420
-    '    Code Lines: 280 (66.67%)
-    ' Comment Lines: 84 (20.00%)
+    '   Total Lines: 408
+    '    Code Lines: 270 (66.18%)
+    ' Comment Lines: 84 (20.59%)
     '    - Xml Docs: 96.43%
     ' 
-    '   Blank Lines: 56 (13.33%)
-    '     File Size: 18.99 KB
+    '   Blank Lines: 54 (13.24%)
+    '     File Size: 18.97 KB
 
 
-    '     Class CLRIterator
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Function: Enumerates, populates, ToString
-    ' 
     '     Class pipeline
     ' 
     '         Properties: [pipeFinalize], isError, isMessage
     ' 
     '         Constructor: (+4 Overloads) Sub New
     ' 
-    '         Function: (+2 Overloads) CreateFromPopulator, createVector, fromVector, getError, populates
-    '                   ToString, TryCastGroupStream, TryCastObjectVector, TryCreatePipeline
+    '         Function: (+2 Overloads) CreateFromPopulator, createVector, fromVector, getData, getError
+    '                   populates, Stream, ToString, TryCastGroupStream, TryCastObjectVector
+    '                   TryCreatePipeline
     ' 
     ' 
     ' 

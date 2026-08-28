@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::b414776b2faa03f2a2f2daaf9a2483c9, R#\Language\Syntax\SyntaxResult.vb"
+﻿#Region "Microsoft.VisualBasic::7aa317d08fab743a49b25985ff959a86, R#\Language\Syntax\SyntaxResult.vb"
 
     ' Author:
     ' 
@@ -34,13 +34,13 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 114
-    '    Code Lines: 64 (56.14%)
-    ' Comment Lines: 31 (27.19%)
+    '   Total Lines: 117
+    '    Code Lines: 66 (56.41%)
+    ' Comment Lines: 31 (26.50%)
     '    - Xml Docs: 100.00%
     ' 
-    '   Blank Lines: 19 (16.67%)
-    '     File Size: 4.28 KB
+    '   Blank Lines: 20 (17.09%)
+    '     File Size: 4.22 KB
 
 
     '     Class SyntaxResult
@@ -48,7 +48,7 @@
     '         Properties: isException
     ' 
     '         Constructor: (+3 Overloads) Sub New
-    '         Function: (+3 Overloads) CreateError, ToString
+    '         Function: (+2 Overloads) CreateError, ToString
     '         Operators: (+2 Overloads) Like
     ' 
     ' 

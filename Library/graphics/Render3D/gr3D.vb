@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4a40cb68d919a9f50c488eaf41d74c44, Library\graphics\Render3D\gr3D.vb"
+﻿#Region "Microsoft.VisualBasic::e7917964a5aa900a1523fd4f3947ca7a, Library\graphics\Render3D\gr3D.vb"
 
     ' Author:
     ' 
@@ -40,7 +40,7 @@
     '    - Xml Docs: 100.00%
     ' 
     '   Blank Lines: 7 (10.14%)
-    '     File Size: 2.57 KB
+    '     File Size: 2.58 KB
 
 
     ' Module gr3D

@@ -1,4 +1,4 @@
-#Region "Microsoft.VisualBasic::00000000000000000000000000000000, R#\Interpreter\Debugger\SourceLocation.vb"
+﻿#Region "Microsoft.VisualBasic::b5539802cbb9d79b4b1e62b26e4660dc, R#\Interpreter\Debugger\SourceLocation.vb"
 
     ' Author:
     ' 
@@ -32,11 +32,23 @@
     ' Summaries:
 
 
+    ' Code Statistics:
+
+    '   Total Lines: 112
+    '    Code Lines: 47 (41.96%)
+    ' Comment Lines: 52 (46.43%)
+    '    - Xml Docs: 78.85%
+    ' 
+    '   Blank Lines: 13 (11.61%)
+    '     File Size: 4.72 KB
+
+
     '     Structure SourceLocation
     ' 
-    '         Properties: file, line
+    '         Properties: file, isValid, line
     ' 
-    '         Function: (+2 Overloads) FromExpression, NormalizeFilePath, ToString
+    '         Constructor: (+1 Overloads) Sub New
+    '         Function: FromExpression, FromStackFrame, NormalizeFilePath, ToString
     ' 
     ' 
     ' /********************************************************************************/

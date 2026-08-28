@@ -1,4 +1,4 @@
-#Region "Microsoft.VisualBasic::00000000000000000000000000000000, R#\Interpreter\Debugger\BreakpointStore.vb"
+﻿#Region "Microsoft.VisualBasic::4feef3850c730f7ff246d8dcc299e923, R#\Interpreter\Debugger\BreakpointStore.vb"
 
     ' Author:
     ' 
@@ -32,11 +32,23 @@
     ' Summaries:
 
 
+    ' Code Statistics:
+
+    '   Total Lines: 174
+    '    Code Lines: 77 (44.25%)
+    ' Comment Lines: 76 (43.68%)
+    '    - Xml Docs: 80.26%
+    ' 
+    '   Blank Lines: 21 (12.07%)
+    '     File Size: 7.67 KB
+
+
     '     Class BreakpointStore
     ' 
     '         Properties: count, isEmpty
     ' 
-    '         Function: Add, GetBreakpoint, ListAll, Remove, TryHit
+    '         Function: Add, GetBreakpoint, key, ListAll, Remove
+    '                   TryHit
     ' 
     '         Sub: Clear, SetEnabled
     ' 

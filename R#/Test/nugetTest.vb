@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ae191086006af1c335ae4aa31469e183, R#\Test\nugetTest.vb"
+﻿#Region "Microsoft.VisualBasic::ae191086006af1c335ae4aa31469e183, R#\test\nugetTest.vb"
 
     ' Author:
     ' 

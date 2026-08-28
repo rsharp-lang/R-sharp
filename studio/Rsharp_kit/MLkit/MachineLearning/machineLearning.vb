@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fa7a4f73206848acb9febdd44eaeb4e3, studio\Rsharp_kit\MLkit\MachineLearning\machineLearning.vb"
+﻿#Region "Microsoft.VisualBasic::12daedd1e94c0d139e3eb181f480a8af, studio\Rsharp_kit\MLkit\MachineLearning\machineLearning.vb"
 
     ' Author:
     ' 
@@ -34,24 +34,22 @@
 
     ' Code Statistics:
 
-    '   Total Lines: 545
-    '    Code Lines: 379 (69.54%)
-    ' Comment Lines: 107 (19.63%)
-    '    - Xml Docs: 98.13%
+    '   Total Lines: 220
+    '    Code Lines: 158 (71.82%)
+    ' Comment Lines: 36 (16.36%)
+    '    - Xml Docs: 97.22%
     ' 
-    '   Blank Lines: 59 (10.83%)
-    '     File Size: 22.41 KB
+    '   Blank Lines: 26 (11.82%)
+    '     File Size: 8.47 KB
 
 
-    ' Module machineLearning
+    ' Module machineLearningTools
     ' 
     '     Constructor: (+1 Overloads) Sub New
     ' 
-    '     Function: addSamples, addTrainingSample, ANNpredict, checkModelDataset, configuration
-    '               createANN, CreateANNTrainer, createEmptyMLDataset, createNormalizationMatrix, getRawSamples
-    '               inputSize, loadParallelANN, normalizeData, openDebugger, outputSize
-    '               readANNModel, (+2 Overloads) runANNTraining, setTrainingSet, Softmax, tabular
-    '               writeANNNetwork
+    '     Function: addSamples, addTrainingSample, checkModelDataset, createEmptyMLDataset, createNormalizationMatrix
+    '               getRawSamples, inputSize, normalizeData, outputSize, Softmax
+    '               tabular
     ' 
     '     Sub: doFileSave
     ' 
