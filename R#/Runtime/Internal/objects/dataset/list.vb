@@ -1,64 +1,64 @@
 ﻿#Region "Microsoft.VisualBasic::d4b65a245febf97fb867897f6e7ee19d, R#\Runtime\Internal\objects\dataset\list.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 799
-    '    Code Lines: 430 (53.82%)
-    ' Comment Lines: 264 (33.04%)
-    '    - Xml Docs: 89.77%
-    ' 
-    '   Blank Lines: 105 (13.14%)
-    '     File Size: 29.69 KB
+' Summaries:
 
 
-    '     Class list
-    ' 
-    '         Properties: data, is_empty, length, slots
-    ' 
-    '         Constructor: (+12 Overloads) Sub New
-    ' 
-    '         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) empty, (+2 Overloads) getByIndex
-    '                   (+2 Overloads) getByName, getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue
-    '                   GetVector, hasName, hasNames, listOf, namedValues
-    '                   scalar, set_empty, setByindex, setByIndex, (+2 Overloads) setByName
-    '                   setNames, slotKeys, subset, ToString
-    ' 
-    '         Sub: (+3 Overloads) add, unique_add
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 799
+'    Code Lines: 430 (53.82%)
+' Comment Lines: 264 (33.04%)
+'    - Xml Docs: 89.77%
+' 
+'   Blank Lines: 105 (13.14%)
+'     File Size: 29.69 KB
+
+
+'     Class list
+' 
+'         Properties: data, is_empty, length, slots
+' 
+'         Constructor: (+12 Overloads) Sub New
+' 
+'         Function: AsGeneric, checkTuple, ctypeInternal, (+2 Overloads) empty, (+2 Overloads) getByIndex
+'                   (+2 Overloads) getByName, getBySynonyms, getNames, GetSlots, (+2 Overloads) getValue
+'                   GetVector, hasName, hasNames, listOf, namedValues
+'                   scalar, set_empty, setByindex, setByIndex, (+2 Overloads) setByName
+'                   setNames, slotKeys, subset, ToString
+' 
+'         Sub: (+3 Overloads) add, unique_add
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -144,7 +144,7 @@ Namespace Runtime.Internal.Object
         ''' <param name="list"></param>
         Sub New(list As list)
             If list Is Nothing OrElse list.slots Is Nothing Then
-                Call EmptyListWarningMessage.Warning
+                Call EmptyListWarningMessage.warning
 
                 ' create empty list
                 slots = New Dictionary(Of String, Object)
@@ -159,7 +159,7 @@ Namespace Runtime.Internal.Object
             _slots = If(list, New Dictionary(Of String, Object))
 
             If list Is Nothing Then
-                Call EmptyListWarningMessage.Warning
+                Call EmptyListWarningMessage.warning
             End If
         End Sub
 
@@ -167,7 +167,7 @@ Namespace Runtime.Internal.Object
 
         Sub New(list As IDictionary(Of String, Object))
             If list Is Nothing Then
-                Call EmptyListWarningMessage.Warning
+                Call EmptyListWarningMessage.warning
 
                 ' create empty list
                 _slots = New Dictionary(Of String, Object)
@@ -181,7 +181,7 @@ Namespace Runtime.Internal.Object
             _slots = New Dictionary(Of String, Object)
 
             If list Is Nothing Then
-                Call EmptyListWarningMessage.Warning
+                Call EmptyListWarningMessage.warning
             Else
                 For Each name As String In list.Keys
                     _slots(name) = list(name)
@@ -201,7 +201,7 @@ Namespace Runtime.Internal.Object
                     _slots(itemKey.ToString) = table(itemKey)
                 Next
             Else
-                Call EmptyListWarningMessage.Warning
+                Call EmptyListWarningMessage.warning
             End If
         End Sub
 
@@ -575,7 +575,7 @@ Namespace Runtime.Internal.Object
         ''' <param name="default">the default element generic value if the type cast failure.</param>
         ''' <param name="err">gets the error message for the type cast failure from this parameter.</param>
         ''' <returns></returns>
-        Public Function AsGeneric(Of T)(env As Environment,
+        Public Function asGeneric(Of T)(env As Environment,
                                         Optional [default] As T = Nothing,
                                         Optional ByRef err As Message = Nothing) As Dictionary(Of String, T)
             Try
@@ -596,6 +596,16 @@ Namespace Runtime.Internal.Object
                 err = Internal.debug.stop(ex, env)
                 Return Nothing
             End Try
+        End Function
+
+        Public Function asGeneric(Of T)(cast As Func(Of Object, T)) As Dictionary(Of String, T)
+            Dim generic As New Dictionary(Of String, T)
+
+            For Each key As String In slots.Keys
+                Call generic.Add(key, cast(getByName(key)))
+            Next
+
+            Return generic
         End Function
 
         Public Overrides Function ToString() As String
