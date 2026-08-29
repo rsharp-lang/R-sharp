@@ -1548,7 +1548,7 @@ Namespace Runtime.Internal.Invokes
                                    Optional env As Environment = Nothing) As Object
 
             If Not package.StringEmpty Then
-                Return env.getPackageSystemFile(fileName, package, mustWork)
+                Return env.getPackageSystemFile(fileName, package, mustWork, muteWarn:=False)
             Else
                 Return env.getPackageSystemFile(fileName, mustWork)
             End If
@@ -1561,7 +1561,7 @@ Namespace Runtime.Internal.Invokes
 
             ' find in current attachedNamespace
             For Each pkg_ns As PackageEnvironment In globalEnvir.attachedNamespace.AsEnumerable
-                val = env.getPackageSystemFile(fileName, package:=pkg_ns.namespace.packageName, mustWork)
+                val = env.getPackageSystemFile(fileName, package:=pkg_ns.namespace.packageName, mustWork, muteWarn:=True)
 
                 If val Is Nothing Then
                     Continue For
@@ -1581,7 +1581,7 @@ Namespace Runtime.Internal.Invokes
         End Function
 
         <Extension>
-        Private Function getPackageSystemFile(env As Environment, fileName As String, package As String, mustWork As Boolean) As Object
+        Private Function getPackageSystemFile(env As Environment, fileName As String, package As String, mustWork As Boolean, muteWarn As Boolean) As Object
             Dim pkgDir As IFileSystemEnvironment
             Dim alternativeName As String = fileName.createAlternativeName
 
@@ -1599,7 +1599,10 @@ Namespace Runtime.Internal.Invokes
                 If pkgDir.FileExists(fileName) Then
                     Return pkgDir.GetFullPath(fileName)
                 ElseIf pkgDir.FileExists(alternativeName) Then
-                    Call env.AddMessage($"Target file '{fileName}' is missing in R file system. Use alternative file name: '{pkgDir.GetFullPath(alternativeName)}'...")
+                    If Not muteWarn Then
+                        Call env.AddMessage($"Target file '{fileName}' is missing in R file system. Use alternative file name: '{pkgDir.GetFullPath(alternativeName)}'...")
+                    End If
+
                     Return pkgDir.GetFullPath(alternativeName)
                 ElseIf pkgDir.GetFullPath(fileName).DirectoryExists Then
                     Return pkgDir.GetFullPath(fileName)
@@ -1608,7 +1611,10 @@ Namespace Runtime.Internal.Invokes
                 ElseIf mustWork Then
                     Return Internal.debug.stop("file is not found!", env)
                 Else
-                    Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
+                    If Not muteWarn Then
+                        Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
+                    End If
+
                     Return Nothing
                 End If
             Else
@@ -1621,7 +1627,10 @@ Namespace Runtime.Internal.Invokes
                 ElseIf mustWork Then
                     Return Internal.debug.stop("file is not found!", env)
                 Else
-                    Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
+                    If Not muteWarn Then
+                        Call env.AddMessage($"target file '{fileName}' is missing in R file system.")
+                    End If
+
                     Return Nothing
                 End If
             End If
