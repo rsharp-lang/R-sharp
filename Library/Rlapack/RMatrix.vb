@@ -64,10 +64,12 @@ Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data.GraphTheory
+Imports Microsoft.VisualBasic.Data.Trinity
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
+Imports Microsoft.VisualBasic.Math.Distributions
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Solvers
 Imports Microsoft.VisualBasic.Math.Matrix
@@ -114,11 +116,24 @@ Module RMatrix
                        End Function
             End Function)
 
+        Call RInternal.generic.add("summary", GetType(DataMatrix), AddressOf summaryMatrix1)
+
         Call RInternal.generic.add("writeBin", GetType(NumericMatrix), AddressOf saveMatrix)
         Call RInternal.generic.add("readBin.LA_mat", GetType(Stream), AddressOf readMatrix)
         Call RInternal.generic.add("writeBin", GetType(DataMatrix), AddressOf saveDataMatrix)
         Call RInternal.generic.add("readBin.data_mat", GetType(Stream), AddressOf readDataMatrix)
     End Sub
+
+    Private Function summaryMatrix1(x As DataMatrix, args As list, env As Environment) As Object
+        Dim sum As New StringBuilder
+        Dim sample As New SampleDistribution
+
+        Call sum.AppendLine($"matrix with dimension names: [{x.size}x{x.size}] {x.keys.Concatenate}")
+        Call sum.AppendLine()
+
+
+        Return sum.ToString
+    End Function
 
     <RGenericOverloads("writeBin")>
     Public Function saveDataMatrix(m As DataMatrix, args As list, env As Environment) As Object
