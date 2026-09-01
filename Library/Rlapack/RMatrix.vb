@@ -177,6 +177,16 @@ Module RMatrix
         Return df
     End Function
 
+    ''' <summary>
+    ''' get matrix dimension names
+    ''' </summary>
+    ''' <param name="x"></param>
+    ''' <returns></returns>
+    <ExportAPI("dim_names")>
+    Public Function dim_names(x As DataMatrix) As String()
+        Return x.keys
+    End Function
+
     <ExportAPI("one")>
     <RApiReturn(GetType(NumericMatrix))>
     Public Function one(m As Integer, n As Integer) As Object
