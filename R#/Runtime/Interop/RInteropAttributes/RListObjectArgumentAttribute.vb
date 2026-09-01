@@ -76,9 +76,7 @@ Namespace Runtime.Interop
         ''' <param name="objects"></param>
         ''' <param name="envir"></param>
         ''' <returns></returns>
-        Public Shared Iterator Function getObjectList(<RListObjectArgument>
-                                                      objects As Object,
-                                                      envir As Environment) As IEnumerable(Of NamedValue(Of Object))
+        Public Shared Iterator Function getObjectList(<RListObjectArgument> objects As Object, envir As Environment) As IEnumerable(Of NamedValue(Of Object))
             Dim type As Type
 
             If objects Is Nothing Then
