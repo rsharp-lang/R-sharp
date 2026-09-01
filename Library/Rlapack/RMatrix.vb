@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::33c2cb3eaa93550067ceff3505c73b0c, Library\Rlapack\RMatrix.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 897
-    '    Code Lines: 527 (58.75%)
-    ' Comment Lines: 250 (27.87%)
-    '    - Xml Docs: 88.40%
-    ' 
-    '   Blank Lines: 120 (13.38%)
-    '     File Size: 35.31 KB
+' Summaries:
 
 
-    ' Module RMatrix
-    ' 
-    '     Function: (+3 Overloads) add, asInteger, asMatrix, createTable, (+3 Overloads) division
-    '               dot, eigen, fromGraph, gauss, gauss_solve
-    '               HungarianAssignments, Matrix, matrix_extractor, (+5 Overloads) multiply, nmf_decompose
-    '               nmf_matrix, one, parse, readDataMatrix, readMatrix
-    '               rowPack, saveDataMatrix, saveMatrix, (+3 Overloads) substract, sum_all
-    '               zero
-    ' 
-    '     Sub: extractVector, Main
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 897
+'    Code Lines: 527 (58.75%)
+' Comment Lines: 250 (27.87%)
+'    - Xml Docs: 88.40%
+' 
+'   Blank Lines: 120 (13.38%)
+'     File Size: 35.31 KB
+
+
+' Module RMatrix
+' 
+'     Function: (+3 Overloads) add, asInteger, asMatrix, createTable, (+3 Overloads) division
+'               dot, eigen, fromGraph, gauss, gauss_solve
+'               HungarianAssignments, Matrix, matrix_extractor, (+5 Overloads) multiply, nmf_decompose
+'               nmf_matrix, one, parse, readDataMatrix, readMatrix
+'               rowPack, saveDataMatrix, saveMatrix, (+3 Overloads) substract, sum_all
+'               zero
+' 
+'     Sub: extractVector, Main
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -70,6 +70,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Math.Distributions
+Imports Microsoft.VisualBasic.Math.Distributions.Summary
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Matrix
 Imports Microsoft.VisualBasic.Math.LinearAlgebra.Solvers
 Imports Microsoft.VisualBasic.Math.Matrix
@@ -126,10 +127,11 @@ Module RMatrix
 
     Private Function summaryMatrix1(x As DataMatrix, args As list, env As Environment) As Object
         Dim sum As New StringBuilder
-        Dim sample As New SampleDistribution
+        Dim sample As SampleDistribution = SampleDistribution.FromBlocks(From r As IReadOnlyCollection(Of Double) In x.PopulateRows Select r.ToArray)
 
         Call sum.AppendLine($"matrix with dimension names: [{x.size}x{x.size}] {x.keys.Concatenate}")
         Call sum.AppendLine()
+
 
 
         Return sum.ToString
