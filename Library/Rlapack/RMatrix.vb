@@ -126,15 +126,10 @@ Module RMatrix
     End Sub
 
     Private Function summaryMatrix1(x As DataMatrix, args As list, env As Environment) As Object
-        Dim sum As New StringBuilder
         Dim sample As SampleDistribution = SampleDistribution.FromBlocks(From r As IReadOnlyCollection(Of Double) In x.PopulateRows Select r.ToArray)
+        Dim summary As String = sample.ToDisplayText(title:=$"matrix with dimension names: [{x.size}x{x.size}] {x.keys.Concatenate}")
 
-        Call sum.AppendLine($"matrix with dimension names: [{x.size}x{x.size}] {x.keys.Concatenate}")
-        Call sum.AppendLine()
-
-
-
-        Return sum.ToString
+        Return summary
     End Function
 
     <RGenericOverloads("writeBin")>
