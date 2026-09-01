@@ -140,6 +140,13 @@ Module RMatrix
         Return True
     End Function
 
+    ''' <summary>
+    ''' read binary data for <see cref="DataMatrix"/>
+    ''' </summary>
+    ''' <param name="s"></param>
+    ''' <param name="args"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <RGenericOverloads("readBin")>
     Public Function readDataMatrix(s As Stream, args As list, env As Environment) As Object
         Return MatrixFormat.ReadData(s)
