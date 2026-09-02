@@ -1,62 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::6f4bdab50db9f6cfd669a2cf9bf5492e, R#\Runtime\Vectorization\GetVectorElement.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 356
-    '    Code Lines: 233 (65.45%)
-    ' Comment Lines: 77 (21.63%)
-    '    - Xml Docs: 83.12%
-    ' 
-    '   Blank Lines: 46 (12.92%)
-    '     File Size: 13.49 KB
+' Summaries:
 
 
-    '     Class GetVectorElement
-    ' 
-    '         Properties: [Error], elementType, isNullOrEmpty, Mode, size
-    ' 
-    '         Constructor: (+3 Overloads) Sub New
-    ' 
-    '         Function: CastTo, Create, (+2 Overloads) CreateAny, CreateVectorInternal, DoesSizeMatch
-    '                   FromCollection, (+2 Overloads) Getter, IsScalar, Populate, ToString
-    '                   (+2 Overloads) Zip
-    ' 
-    '         Sub: MakeSizeNotMatchedError
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 356
+'    Code Lines: 233 (65.45%)
+' Comment Lines: 77 (21.63%)
+'    - Xml Docs: 83.12%
+' 
+'   Blank Lines: 46 (12.92%)
+'     File Size: 13.49 KB
+
+
+'     Class GetVectorElement
+' 
+'         Properties: [Error], elementType, isNullOrEmpty, Mode, size
+' 
+'         Constructor: (+3 Overloads) Sub New
+' 
+'         Function: CastTo, Create, (+2 Overloads) CreateAny, CreateVectorInternal, DoesSizeMatch
+'                   FromCollection, (+2 Overloads) Getter, IsScalar, Populate, ToString
+'                   (+2 Overloads) Zip
+' 
+'         Sub: MakeSizeNotMatchedError
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -260,6 +260,31 @@ Namespace Runtime.Vectorization
         Public Shared Sub MakeSizeNotMatchedError(v1 As GetVectorElement, v2 As GetVectorElement)
             Throw New InvalidDataException($"size between two vector(x={v1.size},y={v2.size}) is not matched!")
         End Sub
+
+        Public Shared Iterator Function Zip(Of A, B, C, D)(a1 As A(), b1 As B(), c1 As C(), d1 As D()) As IEnumerable(Of (A, B, C, D))
+            Dim va As GetVectorElement = GetVectorElement.Create(Of A)(a1)
+            Dim vb As GetVectorElement = GetVectorElement.Create(Of B)(b1)
+            Dim vc As GetVectorElement = GetVectorElement.Create(Of C)(c1)
+            Dim vd As GetVectorElement = GetVectorElement.Create(Of D)(d1)
+
+            If Not DoesSizeMatch(va, vb) Then
+                MakeSizeNotMatchedError(va, vb)
+            ElseIf Not DoesSizeMatch(vb, vc) Then
+                MakeSizeNotMatchedError(vb, vc)
+            ElseIf Not DoesSizeMatch(vc, vd) Then
+                MakeSizeNotMatchedError(vc, vd)
+            End If
+
+            Dim size As Integer = std.Max(std.Max(va.size, vb.size), std.Max(vc.size, vd.size))
+            Dim fa = va.Getter
+            Dim fb = vb.Getter
+            Dim fc = vc.Getter
+            Dim fd = vd.Getter
+
+            For i As Integer = 0 To size - 1
+                Yield (DirectCast(fa(i), A), DirectCast(fb(i), B), DirectCast(fc(i), C), DirectCast(fd(i), D))
+            Next
+        End Function
 
         Public Shared Iterator Function Zip(Of X, Y)(c1 As X(), c2 As Y()) As IEnumerable(Of (X, Y))
             Dim vx As GetVectorElement = GetVectorElement.Create(Of X)(c1)
