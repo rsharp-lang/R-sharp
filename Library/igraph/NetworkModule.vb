@@ -825,7 +825,7 @@ Public Module NetworkModule
                     End Function) _
             .ToArray
 
-        For Each node As node In REnv.asVector(Of node)(nodes)
+        For Each node As node In RVectorExtensions.asVector(Of node)(nodes)
             For Each a In attrValues
                 node.data(a.Name) = a.Value
             Next
@@ -1074,13 +1074,13 @@ Public Module NetworkModule
             Return g.GetElementByID(DirectCast(id, Integer))
         ElseIf idtype Is GetType(String) Then
             Return g.GetElementByID(DirectCast(id, String))
-        ElseIf REnv.isVector(Of Integer)(id) Then
+        ElseIf RVectorExtensions.isVector(Of Integer)(id) Then
             array = CLRVector.asInteger(id) _
                 .Select(Function(i)
                             Return g.GetElementByID(i)
                         End Function) _
                 .ToArray
-        ElseIf REnv.isVector(Of String)(id) Then
+        ElseIf RVectorExtensions.isVector(Of String)(id) Then
             array = CLRVector.asCharacter(id) _
                 .Select(Function(i)
                             Return g.GetElementByID(DirectCast(i, String))
@@ -1300,7 +1300,7 @@ Public Module NetworkModule
                            Return n.data(NamesOf.REFLECTION_ID_MAPPING_NODETYPE) = typeStr
                        End Function) _
                 .ToArray
-        ElseIf REnv.isVector(Of String)(typeSelector) Then
+        ElseIf RVectorExtensions.isVector(Of String)(typeSelector) Then
             Dim typeIndex As Index(Of String) = CLRVector.asCharacter(typeSelector).Indexing
 
             Return g.vertex _
