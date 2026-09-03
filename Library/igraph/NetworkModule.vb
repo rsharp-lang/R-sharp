@@ -97,7 +97,6 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports node = Microsoft.VisualBasic.Data.visualize.Network.Graph.Node
 Imports rDataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
-Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
@@ -108,14 +107,14 @@ Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Public Module NetworkModule
 
     Friend Sub Main()
-        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of NetworkGraph)(AddressOf printGraph)
-        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of node)(AddressOf printNode)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of NetworkGraph)(AddressOf printGraph)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of node)(AddressOf printNode)
 
-        REnv.Internal.generic.add("summary", GetType(node()), AddressOf summaryNodes)
+        RInternal.generic.add("summary", GetType(node()), AddressOf summaryNodes)
 
-        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(V), AddressOf getNodeTable)
-        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(E), AddressOf getEdgeTable)
-        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(VertexEdge()), AddressOf getEdgeTable2)
+        RInternal.Object.Converts.makeDataframe.addHandler(GetType(V), AddressOf getNodeTable)
+        RInternal.Object.Converts.makeDataframe.addHandler(GetType(E), AddressOf getEdgeTable)
+        RInternal.Object.Converts.makeDataframe.addHandler(GetType(VertexEdge()), AddressOf getEdgeTable2)
     End Sub
 
     <RGenericOverloads("as.data.frame")>
@@ -467,18 +466,24 @@ Public Module NetworkModule
                                 Optional meta As MetaData = Nothing,
                                 Optional env As Environment = Nothing) As Object
 
-        Dim tables = tabular_graph(g, properties, meta, _3d:=_3d, env)
+        If TypeOf g Is NetworkGraph Then
+            Dim tables = tabular_graph(g, properties, meta, _3d:=_3d, env)
 
-        If TypeOf tables Is Message Then
-            Return tables
-        Else
-            Dim graphData As NetworkTables = DirectCast(tables, NetworkTables)
-
-            If file.ExtensionSuffix("json") Then
-                Return graphData.GetJson.SaveTo(file)
+            If TypeOf tables Is Message Then
+                Return tables
             Else
-                Return graphData.Save(file)
+                Dim graphData As NetworkTables = DirectCast(tables, NetworkTables)
+
+                If file.ExtensionSuffix("json") Then
+                    Return graphData.GetJson.SaveTo(file)
+                Else
+                    Return graphData.Save(file)
+                End If
             End If
+        ElseIf TypeOf g Is NetworkGraphStream Then
+            Return DirectCast(g, NetworkGraphStream).SaveStream(file)
+        Else
+            Return Message.InCompatibleType(GetType(NetworkGraph), g.GetType, env)
         End If
     End Function
 
