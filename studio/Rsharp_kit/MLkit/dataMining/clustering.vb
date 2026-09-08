@@ -1,69 +1,69 @@
 ﻿#Region "Microsoft.VisualBasic::028b33db61f7b87f5d350c2a4d72bbc4, studio\Rsharp_kit\MLkit\dataMining\clustering.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1744
-    '    Code Lines: 1076 (61.70%)
-    ' Comment Lines: 440 (25.23%)
-    '    - Xml Docs: 78.64%
-    ' 
-    '   Blank Lines: 228 (13.07%)
-    '     File Size: 72.97 KB
+' Summaries:
 
 
-    ' Module clustering
-    ' 
-    '     Function: AffinityPropagationClustering, btreeClusterFUN, calinski_harabasz, Canopy, clusterGroups
-    '               clusterResultDataFrame, clusters, clustersDf1, clusterSummary, cmeansSummary
-    '               dataSetCommon, dbscan, dbscan_objects, densityA, ensureNotIsDistance
-    '               fuzzyCMeans, getSOMNeurons, getTraceback, gmm_components, gmm_predict
-    '               gmm_predict_proba, gmmf, hclust, hdbscan_exec, hleaf
-    '               hnode, Kmeans_func, knn_class, knn_cluster, knnsearch
-    '               Lloyds, plotSOMEmbedding, showHclust, silhouette_score, som
-    '               somgrid, ToHClust, treeDf
-    ' 
-    '     Sub: Main
-    '     Class point2DReader
-    ' 
-    '         Function: activate, getByDimension, GetDimensions, metric, nodeIs
-    ' 
-    '         Sub: setByDimension
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1744
+'    Code Lines: 1076 (61.70%)
+' Comment Lines: 440 (25.23%)
+'    - Xml Docs: 78.64%
+' 
+'   Blank Lines: 228 (13.07%)
+'     File Size: 72.97 KB
+
+
+' Module clustering
+' 
+'     Function: AffinityPropagationClustering, btreeClusterFUN, calinski_harabasz, Canopy, clusterGroups
+'               clusterResultDataFrame, clusters, clustersDf1, clusterSummary, cmeansSummary
+'               dataSetCommon, dbscan, dbscan_objects, densityA, ensureNotIsDistance
+'               fuzzyCMeans, getSOMNeurons, getTraceback, gmm_components, gmm_predict
+'               gmm_predict_proba, gmmf, hclust, hdbscan_exec, hleaf
+'               hnode, Kmeans_func, knn_class, knn_cluster, knnsearch
+'               Lloyds, plotSOMEmbedding, showHclust, silhouette_score, som
+'               somgrid, ToHClust, treeDf
+' 
+'     Sub: Main
+'     Class point2DReader
+' 
+'         Function: activate, getByDimension, GetDimensions, metric, nodeIs
+' 
+'         Sub: setByDimension
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -82,6 +82,7 @@ Imports Microsoft.VisualBasic.DataMining.BinaryTree
 Imports Microsoft.VisualBasic.DataMining.BinaryTree.AffinityPropagation
 Imports Microsoft.VisualBasic.DataMining.Clustering
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
+Imports Microsoft.VisualBasic.DataMining.ComponentModel.EntityModels
 Imports Microsoft.VisualBasic.DataMining.DBSCAN
 Imports Microsoft.VisualBasic.DataMining.FuzzyCMeans
 Imports Microsoft.VisualBasic.DataMining.HDBSCAN.Distance
@@ -511,7 +512,7 @@ Module clustering
     Public Function getTraceback(Optional x As list = Nothing, Optional env As Environment = Nothing) As Object
         If Not x Is Nothing Then
             Dim data As NamedCollection(Of String)() = x _
-                .AsGeneric(Of String())(env) _
+                .asGeneric(Of String())(env) _
                 .Select(Function(t)
                             Return New NamedCollection(Of String)(t.Key, t.Value)
                         End Function) _
@@ -1194,7 +1195,7 @@ Module clustering
         ' set cluster labels
         If TypeOf [class] Is list Then
             Dim labels As Dictionary(Of String, String) = DirectCast([class], list) _
-                .AsGeneric(Of String)(env)
+                .asGeneric(Of String)(env)
             Dim list As New List(Of String)
 
             For Each item As EntityClusterModel In entities.populates(Of EntityClusterModel)(env)
