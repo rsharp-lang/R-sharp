@@ -53,7 +53,7 @@
 
 Imports System.IO
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Data.IO.ManagedSqlite.Core
+Imports Microsoft.VisualBasic.Data.IO.ManagedSqlite
 Imports Microsoft.VisualBasic.Data.IO.ManagedSqlite.Core.SQLSchema
 Imports Microsoft.VisualBasic.Data.IO.ManagedSqlite.Core.Tables
 Imports Microsoft.VisualBasic.Scripting.MetaData
