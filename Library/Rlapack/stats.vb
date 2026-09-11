@@ -385,6 +385,13 @@ Module stats
                              Optional env As Environment = Nothing) As Object
         Select Case method
             Case p_adjust_methods.fdr : Return p.FDR(n).ToArray
+            Case p_adjust_methods.bonferroni : Return Microsoft.VisualBasic.Math.Extensions.BonferroniCorrection(p, n)
+            Case p_adjust_methods.holm : Return Microsoft.VisualBasic.Math.Extensions.HolmCorrection(p, n)
+            Case p_adjust_methods.hochberg : Return Microsoft.VisualBasic.Math.Extensions.HochbergCorrection(p, n)
+            Case p_adjust_methods.hommel : Return Microsoft.VisualBasic.Math.Extensions.HommelCorrection(p, n)
+            Case p_adjust_methods.BH : Return Microsoft.VisualBasic.Math.Extensions.BenjaminiHochbergCorrection(p, n)
+            Case p_adjust_methods.BY : Return Microsoft.VisualBasic.Math.Extensions.BenjaminiYekutieliCorrection(p, n)
+            Case p_adjust_methods.none : Return p
             Case Else
                 Return RInternal.debug.stop(New NotImplementedException(method.Description), env)
         End Select
