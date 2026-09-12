@@ -55,6 +55,9 @@
 
 Namespace Runtime.Internal.Object
 
+    ''' <summary>
+    ''' subclass of <see cref="pipeline"/> model
+    ''' </summary>
     Public Class CLRIterator : Inherits pipeline
 
         Public Sub New(input As IEnumerable, type As Type)

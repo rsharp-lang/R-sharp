@@ -444,12 +444,14 @@ Namespace Runtime.Internal.Invokes.LinqPipeline
                 }
 
                 Return subset
-            ElseIf TypeOf sequence Is pipeline Then
-                Return DirectCast(sequence, pipeline) _
-                    .populates(Of Object)(env) _
+            ElseIf TypeOf sequence Is pipeline OrElse TypeOf sequence Is CLRIterator Then
+                Dim pipe As pipeline = DirectCast(sequence, pipeline)
+                Dim itrs As IEnumerable(Of Object) = pipe.populates(Of Object)(env)
+
+                Return itrs _
                     .Take(nscalar) _
                     .DoCall(Function(seq)
-                                Return New pipeline(seq, DirectCast(sequence(), pipeline).elementType)
+                                Return New pipeline(seq, pipe.elementType)
                             End Function)
             Else
                 Return ObjectSet.GetObjectSet(sequence, env).Take(nscalar).ToArray
