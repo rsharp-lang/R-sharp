@@ -271,8 +271,6 @@ Namespace Interpreter
                 Interlocked.CompareExchange(ownerThreadId, Thread.CurrentThread.ManagedThreadId, 0)
             End If
 
-            ' System.IO.File.AppendAllText("shouldpause_diag.log", $"afterBind ownerTid={ownerThreadId} curTid={Thread.CurrentThread.ManagedThreadId} isOwner={isOwnerThread} action={CurrentAction} dbg={IsDebugging} bpEmpty={breakpoints.isEmpty}" & vbCrLf)
-
             If Not isOwnerThread Then
                 ' 当前线程不是调试会话的所有者线程(例如并行任务的工作线程), 
                 ' 不参与调试, 避免多个线程同时等待同一个信号量而造成死锁

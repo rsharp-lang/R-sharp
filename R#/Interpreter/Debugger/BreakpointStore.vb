@@ -184,7 +184,11 @@ Namespace Interpreter
         ''' 列出当前所注册的全部的断点
         ''' </summary>
         Public Function ListAll() As Breakpoint()
+            ' 因为同一个断点对象会同时以完整路径与纯文件名两种键名
+            ' 登记在索引字典之中, 所以在这里需要对枚举结果进行去重, 
+            ' 避免同一个断点在列表之中被重复的展示出来
             Return index.Values _
+                .Distinct() _
                 .OrderBy(Function(bp) bp.file) _
                 .ThenBy(Function(bp) bp.line) _
                 .ToArray
@@ -220,8 +224,6 @@ Namespace Interpreter
             ' 效的匹配而不会由于目录前缀的差异而丢失命中, 这里在按照完整
             ' 路径匹配失败之后, 再以纯文件名做一次回退匹配
             Dim nameKey As String = key(System.IO.Path.GetFileName(location.file), location.line)
-
-            ' System.IO.File.AppendAllText("tryhit_diag.log", $"full={fullKey}|name={nameKey}|valid={location.isValid}|keys={String.Join(",", index.Keys)}" & vbCrLf)
 
             If (index.TryGetValue(fullKey, bp) OrElse index.TryGetValue(nameKey, bp)) AndAlso bp.enabled Then
                 Return bp
