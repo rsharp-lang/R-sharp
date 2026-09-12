@@ -174,6 +174,11 @@ Module jsonlitePackage
     ''' sequences but it is usually preferable to encode unicode 
     ''' characters in JSON using native UTF-8 rather than escape 
     ''' sequences.
+    ''' 
+    ''' ABOUT CONVERT JSON ARRAY AS VECTOR:
+    ''' de-serialize the json to target .NET CLR type via set parameter ``what`` to exported clr type name. this function could handling of the clr array type automatically:
+    ''' if the given json data is json array and also the given clr type by parameter ``what`` is not a clr array type, then this function will try to convert the clr type 
+    ''' to .NET array type based on use the given clr type as array element type.
     ''' </remarks>
     <ExportAPI("fromJSON")>
     Public Function fromJSONEx(txt As String,

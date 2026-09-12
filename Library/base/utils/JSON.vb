@@ -115,6 +115,9 @@ Module JSON
 
         json_str = Strings.Trim(json_str).Trim(ASCII.CR, ASCII.LF, ASCII.TAB, " "c)
 
+        ' 20260913 程序会自动处理数组的反序列化，例如所提供的clr类型定义是数组的基础元素类型，并非数组类型
+        ' 则程序检测到json为数组类型的json数据的时候
+        ' 会在这个地方将clr类型转换为对应的元素类型的数组类型
         If json_str.StartsWith("[") Then
             ' is an array
             If Not clr.IsArray Then
