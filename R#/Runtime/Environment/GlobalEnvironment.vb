@@ -209,6 +209,7 @@ Namespace Runtime
             Me.symbolLanguages = New SymbolLanguageProcessor(Me)
             Me.hiddenFunctions = New SymbolSet(globalEnv.funcSymbols)
             Me.attachedNamespace = globalEnv.attachedNamespace
+            Me.polyglot = New Polyglot.Platform(Me)
 
             Call types.Add("unit", RType.GetRSharpType(GetType(unit)))
         End Sub
