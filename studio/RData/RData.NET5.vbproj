@@ -16,10 +16,12 @@
 	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
 	  <PackageIcon>R-sharp.png</PackageIcon>
 	  <PackageIconUrl />
-	  <Description>Reader of R datasets in .rda format</Description>
-	  <PackageReleaseNotes>Reader of R datasets in .rda format</PackageReleaseNotes>
+	  <Description>Reader of R datasets in *.rda/*.rds format, and make serialization from GNU r object to R#/CLR runtime object.</Description>
+	  <PackageReleaseNotes>Reader of R datasets in *.rda/*.rds format</PackageReleaseNotes>
 	  <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 	  <PackageOutputPath>..\..\.nuget</PackageOutputPath>
+	  <Title>GNU R Data Reader</Title>
+	  <IncludeSymbols>True</IncludeSymbols>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

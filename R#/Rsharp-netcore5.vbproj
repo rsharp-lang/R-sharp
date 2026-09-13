@@ -22,7 +22,7 @@
 		<Configurations>Debug;Release;Rsharp_app_release;LipidSearch;PlantMAT;mzkit;NPSearch;gcmodeller_desktop;CFD_win32;Desktop;MEMI-Desktop;CellaLAB-Desktop</Configurations>
 		<RepositoryType>git</RepositoryType>
 		<AnalysisLevel>preview</AnalysisLevel>
-		<PackageTags>R#,rsharp</PackageTags>
+		<PackageTags>R#;rsharp;ast;r-lang;linq;vector;dataframe;list;environment;runtime</PackageTags>
 		<FileVersion>1.5635.*</FileVersion>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<Product>R#</Product>
@@ -31,6 +31,7 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<AssemblyTitle>R# language runtime</AssemblyTitle>
 		<PackageOutputPath>..\.nuget</PackageOutputPath>
+		<ApplicationIcon>R#.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -619,6 +620,7 @@
 	  <EmbeddedResource Remove="Test\**" />
 	  <None Remove="App\**" />
 	  <None Remove="Test\**" />
+	  <Content Include="R#.ico" />
 	  <None Include="..\.nuget\R-sharp.png">
 	    <Pack>True</Pack>
 	    <PackagePath></PackagePath>
