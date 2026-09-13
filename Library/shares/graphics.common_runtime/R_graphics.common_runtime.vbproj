@@ -12,6 +12,8 @@
     <Configurations>Debug;Release;nuget_release;CellaLAB-Desktop;Rsharp_app_release</Configurations>
     <PackageIcon>R-sharp.png</PackageIcon>
     <PackageOutputPath>..\..\..\.nuget\</PackageOutputPath>
+    <Title>Shared Graphics Common Runtime in R# programming system</Title>
+    <PackageTags>gdi+;skia;R#;r-sharp;image;size;canvas;svg;pdf</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">

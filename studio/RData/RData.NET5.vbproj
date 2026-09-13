@@ -22,6 +22,7 @@
 	  <PackageOutputPath>..\..\.nuget</PackageOutputPath>
 	  <Title>GNU R Data Reader</Title>
 	  <IncludeSymbols>True</IncludeSymbols>
+	  <PackageTags>r-sharp;R#;rda;rds;dataset;dataframe;vector;s4-object;GNU R</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
