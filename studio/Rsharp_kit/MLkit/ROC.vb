@@ -57,6 +57,7 @@
 #End Region
 
 Imports Microsoft.VisualBasic.DataMining
+Imports Microsoft.VisualBasic.DataMining.Evaluation
 Imports Microsoft.VisualBasic.My.JavaScript
 
 Public Class ROC : Inherits JavaScriptObject
@@ -104,7 +105,7 @@ Public Class ROC : Inherits JavaScriptObject
 
     Public ReadOnly Property BestThreshold As Double
         Get
-            Return threshold(Evaluation.BestThreshold(sensibility, FPR))
+            Return threshold(RocAuc.BestThreshold(sensibility, FPR))
         End Get
     End Property
 
