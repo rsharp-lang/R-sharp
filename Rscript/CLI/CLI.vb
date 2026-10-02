@@ -87,13 +87,20 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         Dim doc_template As String = args("--doc-template")
         Dim clr_template As String = args("--clr-template")
 
-        Return meta.Compile(
-            src, save, skipSourceBuild,
-            r_syntax:=r_syntax,
-            enableDebugSymbols:=enableDebugSymbols,
-            doc_template:=doc_template,
-            clr_template:=clr_template
-        )
+        Try
+            Return meta.Compile(
+                src, save, skipSourceBuild,
+                r_syntax:=r_syntax,
+                enableDebugSymbols:=enableDebugSymbols,
+                doc_template:=doc_template,
+                clr_template:=clr_template
+            )
+        Catch ex As Exception
+            Call App.LogException(ex)
+            Call ex.PrintException
+
+            Return -1
+        End Try
     End Function
 
     <ExportAPI("--check")>
