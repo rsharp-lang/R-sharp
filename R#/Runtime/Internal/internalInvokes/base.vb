@@ -119,20 +119,15 @@ Imports SMRUCC.Rsharp.Runtime.Internal.Object.Utils
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
+Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
 Imports collectionSet = Microsoft.VisualBasic.ComponentModel.DataStructures.Set
+Imports Image = Microsoft.VisualBasic.Imaging.Image
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports RObj = SMRUCC.Rsharp.Runtime.Internal.Object
 Imports std = System.Math
 Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 
-#If NET48 Then
-Imports Image = System.Drawing.Image
-Imports Bitmap = System.Drawing.Bitmap
-#Else
-Imports Image = Microsoft.VisualBasic.Imaging.Image
-Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
-#End If
 
 Namespace Runtime.Internal.Invokes
 
