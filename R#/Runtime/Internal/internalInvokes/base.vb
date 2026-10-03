@@ -3738,13 +3738,19 @@ RE0:
 
             If TypeOf x Is SymbolPrefixTree Then
                 x = CType(DirectCast(x, SymbolPrefixTree), RMethodInfo)
-                type = x.GetType
+
+                If x Is Nothing Then
+                    GoTo print_nil
+                Else
+                    type = x.GetType
+                End If
             End If
 
             If TypeOf x Is invisible Then
                 x = DirectCast(x, invisible).value
 
                 If x Is Nothing Then
+print_nil:
                     Call globalEnv.stdout.WriteLine("NULL")
                     ' just returns nothing literal
                     Return Nothing
