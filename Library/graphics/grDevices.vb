@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8b90223291b2746d148d6d29c24816ca, Library\graphics\grDevices.vb"
+#Region "Microsoft.VisualBasic::8b90223291b2746d148d6d29c24816ca, Library\graphics\grDevices.vb"
 
     ' Author:
     ' 
@@ -456,6 +456,9 @@ Public Module grDevices
         If TypeOf image Is PlotEngine Then
             ' 新引擎的图表对象：取出其图形数据之后再做 SVG 判断
             image = DirectCast(image, PlotEngine).AsGraphicsData()
+        ElseIf TypeOf image Is Microsoft.VisualBasic.Data.Plots.Canvas.Plot Then
+            ' ggplot 之类的图层式图表对象（基于新引擎的 Canvas.Plot 基类）
+            image = DirectCast(image, Microsoft.VisualBasic.Data.Plots.Canvas.Plot).Plot(driver:=Drivers.SVG)
         End If
 
         If Not TypeOf image Is SVGData Then
@@ -486,6 +489,9 @@ Public Module grDevices
 
         If TypeOf image Is PlotEngine Then
             image = DirectCast(image, PlotEngine).AsGraphicsData()
+        ElseIf TypeOf image Is Microsoft.VisualBasic.Data.Plots.Canvas.Plot Then
+            ' ggplot 之类的图层式图表对象（基于新引擎的 Canvas.Plot 基类）
+            image = DirectCast(image, Microsoft.VisualBasic.Data.Plots.Canvas.Plot).Plot(driver:=Drivers.SVG)
         End If
 
         If Not TypeOf image Is SVGData Then
