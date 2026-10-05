@@ -60,9 +60,7 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.SchemaMaps
-Imports Microsoft.VisualBasic.Data.ChartPlots
-Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
-Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
+Imports Microsoft.VisualBasic.Data.Plots
 Imports Microsoft.VisualBasic.Data.Framework.IO
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
 Imports Microsoft.VisualBasic.DataMining.Evaluation
@@ -103,23 +101,22 @@ Module SVMkit
 
     Private Function plotROC(validates As PerformanceEvaluator, args As list, env As Environment) As Object
         Dim ROC = validates.ROCCurve
-        Dim curve As New SerialData With {
-            .color = Color.Black,
-            .lineType = DashStyle.Solid,
-            .pointSize = 5,
-            .shape = LegendStyles.Circle,
-            .title = validates.AuC,
-            .width = 5,
-            .pts = ROC _
-                .Select(Function(a)
-                            Return New PointData() With {
-                                .pt = a
-                            }
-                        End Function) _
-                .ToArray
+        Dim curve As New ROCCurve With {
+            .Name = validates.AuC.ToString,
+            .FPR = ROC.Select(Function(a) CDbl(a.X)).ToArray,
+            .TPR = ROC.Select(Function(a) CDbl(a.Y)).ToArray,
+            .AUC = validates.AuC,
+            .Color = Color.Black
         }
+        Dim size As Size = InteropArgumentHelper.getSize(args!size, env, "2700,2400").SizeParser
 
-        Return ROCPlot.Plot(roc:=curve)
+        Using plt As New ROCPlot(size.Width, size.Height, PlotTheme.Light(), env.getDriver) With {
+            .Title = "ROC Curve",
+            .Curves = New List(Of ROCCurve) From {curve}
+        }
+            Call plt.Plot()
+            Return plt.AsGraphicsData()
+        End Using
     End Function
 
     Private Function problemDataframe(problem As Problem, args As list, env As Environment) As dataframe

@@ -92,6 +92,7 @@ Imports Microsoft.VisualBasic.Math.Distributions.BinBox
 Imports Microsoft.VisualBasic.Math.Interpolation
 Imports Microsoft.VisualBasic.Math.Matrix
 Imports Microsoft.VisualBasic.MIME.Html.CSS
+Imports Microsoft.VisualBasic.MIME.Html.Render
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports R_graphics.Common.Runtime
@@ -204,11 +205,11 @@ Module plots
         Dim colors As String = CLRVector.safeCharacters(args.getBySynonyms("colors", "colorset")).ElementAtOrDefault(0, ColorBrewer.DivergingSchemes.RdYlBu11)
         Dim size = graphicsPipeline.getSize(args.slots, env, New SizeF(3000, 3000))
         Dim rowNames As String() = dataset.Select(Function(a) a.ID).ToArray
-        Dim mat(rowNames.Length - 1, colNames.Length - 1) As Double
+        Dim mat(rowNames.Length - 1, cols.Length - 1) As Double
 
         For i As Integer = 0 To rowNames.Length - 1
-            For j As Integer = 0 To colNames.Length - 1
-                mat(i, j) = dataset(i).Properties(colNames(j))
+            For j As Integer = 0 To cols.Length - 1
+                mat(i, j) = dataset(i).Properties(cols(j))
             Next
         Next
 
@@ -216,7 +217,7 @@ Module plots
             .Title = mainTitle,
             .Matrix = mat,
             .RowLabels = rowNames,
-            .ColLabels = colNames,
+            .ColLabels = cols,
             .ColorMap = parseColorMap(colors, ColorScale.ColorMapType.Viridis)
         }
             Call plt.Plot()
@@ -500,7 +501,6 @@ Module plots
             Dim fit As Object = args!fit
             Dim lines As New List(Of Series) From {line}
             Dim x_axis As Double() = line.X
-            Dim color = defaultColor
 
             If TypeOf fit Is gaussVariable() Then
                 For Each peak As gaussVariable In DirectCast(fit, gaussVariable())
@@ -1110,7 +1110,7 @@ Module plots
     Public Function plotODEResult(math As ODEOutput, args As list, env As Environment) As Object
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="1600,1200")
         Dim padding As String = InteropArgumentHelper.getPadding(args!padding, [default]:=g.DefaultPadding, env)
-        Dim pts As PointF() = math.GetPointsData.Select(Function(p) p.PointF).ToArray
+        Dim pts As PointF() = math.GetPointsData.Select(Function(p) New PointF(p.X, p.Y)).ToArray
         Dim sz As Size = size.SizeParser
         Dim driver As Drivers = env.getDriver
 
@@ -1172,6 +1172,14 @@ Module plots
         End If
 
         Dim serials As Series() = DirectCast(data, IEnumerable(Of Series)).ToArray
+        Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="2100,1600")
+        Dim margin = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 5% 10% 10% 15%;", env:=env)
+        Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
+        Dim spline As Splines = args.getValue(Of Splines)("interplot", env, Splines.None)
+        Dim xlim As Double() = CLRVector.asNumeric(args("xlim"))
+        Dim ylim As Double() = CLRVector.asNumeric(args("ylim"))
+        Dim absoluteScale As Boolean = args.getValue("absolute_scale", env, False)
+        Dim drawLine As Boolean = getFirst(CLRVector.asLogical(args!line))
 
         If drawLine Then
             ' plot(x, y, line = TRUE) 绘制连线
@@ -1180,18 +1188,10 @@ Module plots
             Next
         End If
 
-        Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="2100,1600")
-        Dim margin = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 5% 10% 10% 15%;", env:=env)
-        Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
-        Dim spline As Splines = args.getValue(Of Splines)("interplot", env, Splines.None)
-        Dim xlim As Double() = CLRVector.asNumeric(args("xlim"))
-        Dim ylim As Double() = CLRVector.asNumeric(args("ylim"))
-        Dim absoluteScale As Boolean = args.getValue("absolute_scale", env, False)
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
         Dim showLegend As Boolean = args.getValue(Of Boolean)({"showLegend", "legend", "legend.show"}, env, [default]:=True)
         Dim showAxis As Boolean = args.getValue(Of Boolean)({"show.axis", "axis.show"}, env, [default]:=True)
-        Dim drawLine As Boolean = getFirst(CLRVector.asLogical(args!line))
         Dim convexHull As Object = args.getBySynonyms("convexHull")
         Dim convexHullList = CLRVector.asCharacter(convexHull)
         Dim drawHull As Boolean = False
@@ -1352,8 +1352,8 @@ Module plots
     ''' </remarks>
     <ExportAPI("violin")>
     Public Function doViolinPlot(data As Array,
-                                 <RRawVectorArgument> Optional size As Object = Canvas.Resolution2K.Size,
-                                 <RRawVectorArgument> Optional margin As Object = Canvas.Resolution2K.PaddingWithTopTitle,
+                                 <RRawVectorArgument> Optional size As Object = "2400,1800",
+                                 <RRawVectorArgument> Optional margin As Object = "padding: 120px 80px 100px 150px;",
                                  Optional bg$ = "white",
                                  Optional colorSet$ = DesignerTerms.TSFShellColors,
                                  Optional ylab$ = "y axis",
@@ -1500,9 +1500,9 @@ Module plots
             Dim y As Double() = CLRVector.asNumeric(DirectCast(data, Rdataframe).columns("y"))
             Dim vals As Double() = CLRVector.asNumeric(DirectCast(data, Rdataframe).columns("data"))
             Dim measures As MeasureData() = x.Select(Function(xi, i) New MeasureData(xi, y(i), vals(i))).ToArray
-            Dim layers As ContourLayer() = ContourLayer.GetContours(measures).ToArray
+            Dim contours As GeneralPath() = ContourLayer.GetContours(measures).ToArray
 
-            Return renderContourLayers(layers, RColorPalette.getColorSet(colorSet), env.getDriver)
+            Return renderContourLayers(contours, RColorPalette.getColorSet(colorSet), env.getDriver)
         ElseIf TypeOf data Is DeclareLambdaFunction Then
             Dim lambda As Func(Of (Double, Double), Double) = DirectCast(data, DeclareLambdaFunction).CreateLambda(Of (Double, Double), Double)(env)
             Dim rx As DoubleRange = args.getValue(Of Double())("x", env)
@@ -1526,7 +1526,10 @@ Module plots
                 Return Message.InCompatibleType(GetType(FormulaExpression), data.GetType, env)
             End If
 
-            Return renderContourLayers(layers.populates(Of ContourLayer)(env).ToArray, RColorPalette.getColorSet(colorSet), env.getDriver)
+            Return renderContourLayers(
+                layers.populates(Of ContourLayer)(env).Select(Function(layer) New GeneralPath(layer)).ToArray,
+                RColorPalette.getColorSet(colorSet),
+                env.getDriver)
         End If
     End Function
 
@@ -1534,11 +1537,8 @@ Module plots
     ''' render the marching squares contour layers
     ''' (从旧 Plots 项目的 Contour.ContourPlot 渲染逻辑迁移而来)
     ''' </summary>
-    Private Function renderContourLayers(layers As ContourLayer(), colorSet As String, driver As Drivers) As GraphicsData
-        Dim contours As GeneralPath() = layers _
-            .OrderBy(Function(layer) layer.threshold) _
-            .Select(Function(layer) New GeneralPath(layer)) _
-            .ToArray
+    Private Function renderContourLayers(contours As GeneralPath(), colorSet As String, driver As Drivers) As GraphicsData
+        contours = contours.OrderBy(Function(layer) layer.level).ToArray
         Dim level_cutoff As Double() = contours.Select(Function(c) c.level).ToArray
         Dim colors As Brush() = Designer _
             .GetColors(colorSet, level_cutoff.Length) _

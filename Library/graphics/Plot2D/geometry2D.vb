@@ -74,6 +74,7 @@ Imports Microsoft.VisualBasic.Imaging.Drawing2D.Math2D.ConcaveHull
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Imaging.LayoutModel
 Imports Microsoft.VisualBasic.Imaging.Math2D
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
@@ -159,7 +160,10 @@ Module geometry2D
 
             For Each polygon As Polygon2D In polygons
                 groups.Add(New PolygonGroup With {
-                    .SubRegions = {polygon.ToArray}
+                    .SubRegions = {polygon.xpoints _
+                        .SeqIterator _
+                        .Select(Function(i) New PointF(i.value, polygon.ypoints(i.i))) _
+                        .ToArray}
                 })
             Next
 

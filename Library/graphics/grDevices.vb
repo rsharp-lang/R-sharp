@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.ApplicationServices.Development
 Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data.Plots
 Imports Microsoft.VisualBasic.Drawing
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.FileIO
@@ -394,8 +395,8 @@ Public Module grDevices
         Else
             Return env.FileStreamWriter(
                 file, Sub(stream)
-                          If TypeOf image Is Plot Then
-                              Call DirectCast(image, Plot).Plot(size, dpi, Drivers.PDF).Save(stream)
+                          If TypeOf image Is GraphicsData Then
+                              Call DirectCast(image, GraphicsData).Save(stream)
                           Else
                               Call DirectCast(image, PdfImage).Save(stream)
                           End If
@@ -452,22 +453,14 @@ Public Module grDevices
     ''' <param name="env"></param>
     ''' <returns></returns>
     Private Function saveSvgStream(image As Object, file As textBuffer, args As list, env As Environment) As Object
-        If Not TypeOf image Is SVGData Then
-            If image.GetType.IsInheritsFrom(GetType(Plot)) Then
-                Dim arg1 = args.slots
-                Dim arg2 = env.GetAcceptorArguments
-                Dim size = graphicsPipeline.getSize(If(arg1.CheckSizeArgument, arg1, arg2), env, New SizeF(3300, 2700))
-                Dim wh As String = $"{size.Width},{size.Height}"
-                ' set default dpi to 100 for svg
-                Dim dpi As Integer = graphicsPipeline.getDpi(
-                    If(arg1.CheckDpiArgument, arg1, arg2), env, [default]:=100)
+        If TypeOf image Is PlotEngine Then
+            ' 新引擎的图表对象：取出其图形数据之后再做 SVG 判断
+            image = DirectCast(image, PlotEngine).AsGraphicsData()
+        End If
 
-                file.mime = "image/svg+xml"
-                file.text = DirectCast(image, Plot).Plot(wh, dpi, driver:=Drivers.SVG).AsSVG.GetSVGXml
-            Else
-                ' throw error from this error message helper function
-                Return requireSvgData(image, env)
-            End If
+        If Not TypeOf image Is SVGData Then
+            ' throw error from this error message helper function
+            Return requireSvgData(image, env)
         Else
             file.mime = "image/svg+xml"
             file.text = DirectCast(image, SVGData).GetSVGXml
@@ -491,18 +484,12 @@ Public Module grDevices
             Return Message.InCompatibleType(GetType(Stream), file.GetType, env)
         End If
 
-        If Not TypeOf image Is SVGData Then
-            If image.GetType.IsInheritsFrom(GetType(Plot)) Then
-                Dim arg1 = args.slots
-                Dim arg2 = env.GetAcceptorArguments
-                Dim size = graphicsPipeline.getSize(If(arg1.CheckSizeArgument, arg1, arg2), env, New SizeF(3300, 2700))
-                Dim wh As String = $"{size.Width},{size.Height}"
-                Dim dpi As Integer = graphicsPipeline.getDpi(If(arg1.CheckDpiArgument, arg1, arg2), env, 100)
+        If TypeOf image Is PlotEngine Then
+            image = DirectCast(image, PlotEngine).AsGraphicsData()
+        End If
 
-                Call DirectCast(image, Plot).Plot(wh, dpi, driver:=Drivers.SVG).Save(stream)
-            Else
-                Return requireSvgData(image, env)
-            End If
+        If Not TypeOf image Is SVGData Then
+            Return requireSvgData(image, env)
         Else
             Call DirectCast(image, SVGData).Save(stream)
         End If
