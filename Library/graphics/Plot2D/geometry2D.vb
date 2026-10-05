@@ -1,62 +1,62 @@
 ﻿#Region "Microsoft.VisualBasic::49aefaa73186b76f03108d17ca58d3a3, Library\graphics\Plot2D\geometry2D.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 341
-    '    Code Lines: 255 (74.78%)
-    ' Comment Lines: 48 (14.08%)
-    '    - Xml Docs: 100.00%
-    ' 
-    '   Blank Lines: 38 (11.14%)
-    '     File Size: 14.51 KB
+' Summaries:
 
 
-    ' Module geometry2D
-    ' 
-    '     Function: ConcaveHull, createPolygon2D, density2D, fillPolygonGroups, fillPolygons
-    '               geo_transform, Kdtest, Rasterize, rasterTable, transform
-    ' 
-    '     Sub: Main
-    ' 
-    ' Class PointAccess
-    ' 
-    '     Function: activate, getByDimension, GetDimensions, metric, nodeIs
-    ' 
-    '     Sub: setByDimension
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 341
+'    Code Lines: 255 (74.78%)
+' Comment Lines: 48 (14.08%)
+'    - Xml Docs: 100.00%
+' 
+'   Blank Lines: 38 (11.14%)
+'     File Size: 14.51 KB
+
+
+' Module geometry2D
+' 
+'     Function: ConcaveHull, createPolygon2D, density2D, fillPolygonGroups, fillPolygons
+'               geo_transform, Kdtest, Rasterize, rasterTable, transform
+' 
+'     Sub: Main
+' 
+' Class PointAccess
+' 
+'     Function: activate, getByDimension, GetDimensions, metric, nodeIs
+' 
+'     Sub: setByDimension
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -64,9 +64,11 @@ Imports System.Drawing
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Data
 Imports Microsoft.VisualBasic.Data.ChartPlots
 Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Canvas
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
+Imports Microsoft.VisualBasic.Data.Plots
 Imports Microsoft.VisualBasic.Data.visualize.Network
 Imports Microsoft.VisualBasic.DataMining.DensityQuery
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
@@ -86,7 +88,7 @@ Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 <Package("geometry2D")>
-<RTypeExport("polygon_group", GetType(PolygonGroup))>
+<RTypeExport("polygon_group", GetType(ChartPlots.PolygonGroup))>
 <RTypeExport("geo_transform", GetType(Transform))>
 <RTypeExport("affine2d_transform", GetType(AffineTransform))>
 Module geometry2D
@@ -94,7 +96,7 @@ Module geometry2D
     Public Sub Main()
         Call RInternal.generic.add("plot", GetType(Polygon2D), Function(polygon, args, env) fillPolygons({DirectCast(polygon, Polygon2D)}, args, env))
         Call RInternal.generic.add("plot", GetType(Polygon2D()), AddressOf fillPolygons)
-        Call RInternal.generic.add("plot", GetType(PolygonGroup()), AddressOf fillPolygonGroups)
+        Call RInternal.generic.add("plot", GetType(ChartPlots.PolygonGroup()), AddressOf fillPolygonGroups)
         Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(Polygon2D), AddressOf rasterTable)
     End Sub
 
@@ -115,12 +117,12 @@ Module geometry2D
         }
     End Function
 
-    Private Function fillPolygonGroups(polygons As PolygonGroup(), args As list, env As Environment) As Object
+    Private Function fillPolygonGroups(polygons As ChartPlots.PolygonGroup(), args As list, env As Environment) As Object
         Dim colors = RColorPalette.getColorSet(args.getBySynonyms("colors", "colorset", "colorSet"), "paper")
         Dim size = InteropArgumentHelper.getSize(args.getBySynonyms("size"), env)
         Dim scatter As Boolean = CLRVector.asScalarLogical(args.getBySynonyms("scatter"))
         Dim theme As New Theme With {.colorSet = colors}
-        Dim app As New FillPolygons(polygons, scatter, theme)
+        Dim app As New ChartPlots.FillPolygons(polygons, scatter, theme)
 
         Return app.Plot(size)
     End Function
@@ -141,7 +143,7 @@ Module geometry2D
                          End Sub,
                 driver:=driver)
         Else
-            Dim app As New FillPolygons(polygons, scatter, theme)
+            Dim app As New ChartPlots.FillPolygons(polygons, scatter, theme)
             Return app.Plot(size, driver:=driver)
         End If
     End Function
@@ -316,7 +318,7 @@ Module geometry2D
             New NamedValue(Of PointF)("1", points2.Random, "#ffff00")
         }
 
-        Return DrawKDTree.Plot(tree2, query, k:=knn, size:=$"{sizeVal.Width},{sizeVal.Height}", padding:="padding: 50px 50px 50px 50px;")
+        Return DrawKDTree.Plot(tree2, query, k:=knn, size:=$"{sizeVal.Width},{sizeVal.Height}", theme:=PlotTheme.Light("padding: 50px 50px 50px 50px;"))
     End Function
 
     ''' <summary>
