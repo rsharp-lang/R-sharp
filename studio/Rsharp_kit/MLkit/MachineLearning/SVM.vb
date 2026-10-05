@@ -71,6 +71,7 @@ Imports Microsoft.VisualBasic.MachineLearning.SVM.StorageProcedure
 Imports Microsoft.VisualBasic.MIME.application
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Interpreter
 Imports SMRUCC.Rsharp.Runtime
@@ -81,6 +82,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports DashStyle = Microsoft.VisualBasic.Imaging.DashStyle
 Imports dataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports Parameter = Microsoft.VisualBasic.MachineLearning.SVM.Parameter
+Imports ROCCurve = Microsoft.VisualBasic.Data.Plots.ROCCurve
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports std = System.Math
 
