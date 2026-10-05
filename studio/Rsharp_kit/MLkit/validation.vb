@@ -55,9 +55,7 @@
 
 Imports System.Drawing.Drawing2D
 Imports Microsoft.VisualBasic.CommandLine.Reflection
-Imports Microsoft.VisualBasic.Data.ChartPlots
-Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
-Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
+Imports Microsoft.VisualBasic.Data.Plots
 Imports Microsoft.VisualBasic.DataMining
 Imports Microsoft.VisualBasic.DataMining.ComponentModel
 Imports Microsoft.VisualBasic.DataMining.Evaluation
@@ -87,19 +85,25 @@ Module validation
 
     <RGenericOverloads("plot")>
     Public Function PlotROC(roc As ROC, args As list, env As Environment) As Object
-        Dim line As SerialData = ROCPlot.CreateSerial(roc)
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, "2700,2400")
         Dim type As Drivers = env.getDriver
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
+        Dim sz As Size = size.SizeParser
+        Dim curve As New ROCCurve With {
+            .Name = roc.AUC.ToString("F3"),
+            .FPR = roc.FPR,
+            .TPR = roc.sensibility,
+            .AUC = roc.AUC,
+            .Color = args.getValue("line_color", env, "steelblue").TranslateColor
+        }
 
-        line.color = args.getValue("line_color", env, "steelblue").TranslateColor
-        line.lineType = DashStyle.Dash
-        line.pointSize = args.getValue("point_size", env, 5)
-        line.shape = LegendStyles.Circle
-        line.width = args.getValue("line_width", env, 1)
-        line.title = roc.AUC.ToString("F3")
-
-        Return ROCPlot.Plot(line, size:=size, dpi:=dpi, driver:=type)
+        Using plt As New ROCPlot(sz.Width, sz.Height, PlotTheme.Light(), type) With {
+            .Title = "ROC Curve",
+            .Curves = New List(Of ROCCurve) From {curve}
+        }
+            Call plt.Plot()
+            Return plt.AsGraphicsData()
+        End Using
     End Function
 
     <RGenericOverloads("as.data.frame")>

@@ -59,9 +59,8 @@ Imports System.Drawing
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.TagData
-Imports Microsoft.VisualBasic.Data.ChartPlots
-Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
 Imports Microsoft.VisualBasic.Data.Framework.IO
+Imports Microsoft.VisualBasic.Data.Plots
 Imports Microsoft.VisualBasic.Data.Signal
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Language
@@ -119,9 +118,9 @@ Module signalProcessing
         End If
 
         Dim x_axis As Double() = seq(x_range.Min, x_range.Max, by:=(x_range.Max - x_range.Min) / res).ToArray
-        Dim y As PointData()() = New PointData(decompose.Length - 1)() {}
+        Dim y As Double()() = New Double(decompose.Length - 1)() {}
         Dim yi As Double
-        Dim conv As New List(Of PointData)
+        Dim conv As New List(Of Double)
         Dim offset As Integer = 0
         Dim colors As Color() = Designer.GetColors(
             term:=RColorPalette.getColorSet(
@@ -132,7 +131,7 @@ Module signalProcessing
         )
 
         For i As Integer = 0 To decompose.Length - 1
-            y(i) = New PointData(x_axis.Length - 1) {}
+            y(i) = New Double(x_axis.Length - 1) {}
         Next
 
         For Each xi As Double In x_axis
@@ -146,43 +145,45 @@ Module signalProcessing
                 End If
 
                 sum += yi
-                y(i)(offset) = New PointData(xi, yi)
+                y(i)(offset) = yi
             Next
 
-            conv.Add(New PointData(xi, sum))
+            conv.Add(sum)
             offset += 1
         Next
 
-        Dim signals As New List(Of SerialData)
+        Dim signals As New List(Of Series)
 
 #Disable Warning
-        Call signals.Add(New SerialData With {
-            .color = Color.Black,
-            .lineType = DashStyle.Solid,
-            .pointSize = 5,
-            .pts = conv.ToArray,
-            .shape = LegendStyles.Square,
-            .width = 2,
-            .title = "signal"
+        Call signals.Add(New Series With {
+            .Color = Color.Black,
+            .LineStyle = DashStyle.Solid,
+            .PointSize = 5,
+            .X = x_axis,
+            .Y = conv.ToArray,
+            .MarkerShape = MarkerShape.Square,
+            .Name = "signal"
         })
 
         For i As Integer = 0 To decompose.Length - 1
-            Call signals.Add(New SerialData With {
-                .color = colors(i),
-                .lineType = DashStyle.Dash,
-                .pointSize = 5,
-                .pts = y(i),
-                .shape = LegendStyles.Triangle,
-                .title = decompose(i).ToString,
-                .width = 2
+            Call signals.Add(New Series With {
+                .Color = colors(i),
+                .LineStyle = DashStyle.Dash,
+                .PointSize = 5,
+                .X = x_axis,
+                .Y = y(i),
+                .MarkerShape = MarkerShape.Triangle,
+                .Name = decompose(i).ToString
             })
         Next
 #Enable Warning
 
-        Return Scatter.Plot(signals, padding:=padding,
-            drawLine:=True, fill:=False,
-            XtickFormat:="F2", YtickFormat:="G3",
-            gridFill:=fill)
+        Using plt As New ScatterPlot(2100, 1600, New PlotTheme(padding), env.getDriver) With {
+            .Title = "Peak Decomposition"
+        }
+            Call plt.Plot(signals)
+            Return plt.AsGraphicsData()
+        End Using
     End Function
 
     Private Function gaussPeaks(peaks As Variable(), args As list, env As Environment) As RDataframe

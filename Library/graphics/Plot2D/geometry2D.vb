@@ -65,7 +65,6 @@ Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Data
-Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Canvas
 Imports Microsoft.VisualBasic.Data.GraphTheory.KdTree
 Imports Microsoft.VisualBasic.Data.Plots
 Imports Microsoft.VisualBasic.Data.visualize.Network
@@ -87,7 +86,7 @@ Imports randf = Microsoft.VisualBasic.Math.RandomExtensions
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 <Package("geometry2D")>
-<RTypeExport("polygon_group", GetType(ChartPlots.PolygonGroup))>
+<RTypeExport("polygon_group", GetType(PolygonGroup))>
 <RTypeExport("geo_transform", GetType(Transform))>
 <RTypeExport("affine2d_transform", GetType(AffineTransform))>
 Module geometry2D
@@ -95,7 +94,7 @@ Module geometry2D
     Public Sub Main()
         Call RInternal.generic.add("plot", GetType(Polygon2D), Function(polygon, args, env) fillPolygons({DirectCast(polygon, Polygon2D)}, args, env))
         Call RInternal.generic.add("plot", GetType(Polygon2D()), AddressOf fillPolygons)
-        Call RInternal.generic.add("plot", GetType(ChartPlots.PolygonGroup()), AddressOf fillPolygonGroups)
+        Call RInternal.generic.add("plot", GetType(PolygonGroup()), AddressOf fillPolygonGroups)
         Call RInternal.Object.Converts.makeDataframe.addHandler(GetType(Polygon2D), AddressOf rasterTable)
     End Sub
 
@@ -116,14 +115,29 @@ Module geometry2D
         }
     End Function
 
-    Private Function fillPolygonGroups(polygons As ChartPlots.PolygonGroup(), args As list, env As Environment) As Object
-        Dim colors = RColorPalette.getColorSet(args.getBySynonyms("colors", "colorset", "colorSet"), "paper")
+    Private Function fillPolygonGroups(polygons As PolygonGroup(), args As list, env As Environment) As Object
         Dim size = InteropArgumentHelper.getSize(args.getBySynonyms("size"), env)
         Dim scatter As Boolean = CLRVector.asScalarLogical(args.getBySynonyms("scatter"))
-        Dim theme As New Theme With {.colorSet = colors}
-        Dim app As New ChartPlots.FillPolygons(polygons, scatter, theme)
+        Dim padding As String = InteropArgumentHelper.getPadding(args!padding, "padding: 10% 10% 15% 20%;")
+        Dim driver As Drivers = env.getDriver
+        Dim sz As Size = size.SizeParser
 
-        Return app.Plot(size)
+        If polygons.IsNullOrEmpty Then
+            Return g.GraphicsPlots(
+                sz, "padding:0px", "white",
+                plotAPI:=Sub(ByRef gfx, rect)
+
+                         End Sub,
+                driver:=driver)
+        Else
+            Using plt As New FillPolygons(sz.Width, sz.Height, New PlotTheme(padding), driver) With {
+                .Groups = New List(Of PolygonGroup)(polygons),
+                .ShowPoints = scatter
+            }
+                Call plt.Plot()
+                Return plt.AsGraphicsData()
+            End Using
+        End If
     End Function
 
     Private Function fillPolygons(polygons As Polygon2D(), args As list, env As Environment) As Object
@@ -131,7 +145,6 @@ Module geometry2D
         Dim size = InteropArgumentHelper.getSize(args.getBySynonyms("size"), env)
         Dim scatter As Boolean = CLRVector.asScalarLogical(args.getBySynonyms("scatter"))
         Dim padding As String = InteropArgumentHelper.getPadding(args!padding, "padding: 10% 10% 15% 20%;")
-        Dim theme As New Theme With {.colorSet = colors, .padding = padding}
         Dim driver As Drivers = env.getDriver
 
         If polygons.IsNullOrEmpty Then
@@ -142,8 +155,21 @@ Module geometry2D
                          End Sub,
                 driver:=driver)
         Else
-            Dim app As New ChartPlots.FillPolygons(polygons, scatter, theme)
-            Return app.Plot(size, driver:=driver)
+            Dim groups As New List(Of PolygonGroup)
+
+            For Each polygon As Polygon2D In polygons
+                groups.Add(New PolygonGroup With {
+                    .SubRegions = {polygon.ToArray}
+                })
+            Next
+
+            Using plt As New FillPolygons(size.SizeParser.Width, size.SizeParser.Height, New PlotTheme(padding), driver) With {
+                .Groups = groups,
+                .ShowPoints = scatter
+            }
+                Call plt.Plot()
+                Return plt.AsGraphicsData()
+            End Using
         End If
     End Function
 

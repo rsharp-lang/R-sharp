@@ -68,20 +68,10 @@ Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataStructures
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.Bootstrapping
-Imports Microsoft.VisualBasic.Data.ChartPlots
-Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot
-Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Data
-Imports Microsoft.VisualBasic.Data.ChartPlots.BarPlot.Histogram
-Imports Microsoft.VisualBasic.Data.ChartPlots.Contour
-Imports Microsoft.VisualBasic.Data.ChartPlots.Fractions
-Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic
-Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Canvas
-Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
-Imports Microsoft.VisualBasic.Data.ChartPlots.Plot3D
-Imports Microsoft.VisualBasic.Data.ChartPlots.Plots
-Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics
-Imports Microsoft.VisualBasic.Data.ChartPlots.Statistics.Heatmap
 Imports Microsoft.VisualBasic.Data.Framework.IO
+Imports Microsoft.VisualBasic.Data.Plots
+Imports Microsoft.VisualBasic.Data.Plots.Plot3D
+Imports Microsoft.VisualBasic.Data.Plots.Plot3D.Legend
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
 Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering
 Imports Microsoft.VisualBasic.Emit.Delegates
@@ -122,7 +112,6 @@ Imports gaussVariable = Microsoft.VisualBasic.Math.SignalProcessing.EmGaussian.V
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
-Imports Scatter2D = Microsoft.VisualBasic.Data.ChartPlots.Scatter
 
 #If NET48 Then
 Imports Pen = System.Drawing.Pen
@@ -159,14 +148,14 @@ Module plots
 
     <RInitialize>
     Sub Main()
-        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of SerialData)(Function(line) line.ToString)
+        REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of Series)(Function(line) line.ToString)
         REnv.Internal.ConsolePrinter.AttachConsoleFormatter(Of GraphicsData)(AddressOf printImage)
 
         Call REnv.Internal.generic.add("plot", GetType(DeclareLambdaFunction), AddressOf plotFormula)
         Call REnv.Internal.generic.add("plot", GetType(ODEOutput), AddressOf plotODEResult)
         Call REnv.Internal.generic.add("plot", GetType(ODEsOut), AddressOf plot_deSolveResult)
-        Call REnv.Internal.generic.add("plot", GetType(SerialData()), AddressOf plotSerials)
-        Call REnv.Internal.generic.add("plot", GetType(SerialData), AddressOf plotSerials)
+        Call REnv.Internal.generic.add("plot", GetType(Series()), AddressOf plotSerials)
+        Call REnv.Internal.generic.add("plot", GetType(Series), AddressOf plotSerials)
         Call REnv.Internal.generic.add("plot", GetType(DataBinBox(Of Double)()), AddressOf plot_binBox)
         Call REnv.Internal.generic.add("plot", GetType(Dictionary(Of String, Double)), AddressOf plot_categoryBars)
         Call REnv.Internal.generic.add("plot", GetType(DistanceMatrix), AddressOf plot_corHeatmap)
@@ -214,14 +203,50 @@ Module plots
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
         Dim colors As String = CLRVector.safeCharacters(args.getBySynonyms("colors", "colorset")).ElementAtOrDefault(0, ColorBrewer.DivergingSchemes.RdYlBu11)
         Dim size = graphicsPipeline.getSize(args.slots, env, New SizeF(3000, 3000))
+        Dim rowNames As String() = dataset.Select(Function(a) a.ID).ToArray
+        Dim mat(rowNames.Length - 1, colNames.Length - 1) As Double
 
-        Return HeatMap.Plot(dataset,
-                            mapName:=colors,
-                            size:=$"{size.Width},{size.Height}",
-                            dendrogramLayout:="600,300",
-                            mainTitle:=mainTitle,
-                            ppi:=dpi,
-                            driver:=driver)
+        For i As Integer = 0 To rowNames.Length - 1
+            For j As Integer = 0 To colNames.Length - 1
+                mat(i, j) = dataset(i).Properties(colNames(j))
+            Next
+        Next
+
+        Using plt As New HeatmapPlot(size.Width, size.Height, PlotTheme.Light(), driver) With {
+            .Title = mainTitle,
+            .Matrix = mat,
+            .RowLabels = rowNames,
+            .ColLabels = colNames,
+            .ColorMap = parseColorMap(colors, ColorScale.ColorMapType.Viridis)
+        }
+            Call plt.Plot()
+            Return plt.AsGraphicsData()
+        End Using
+    End Function
+
+    Private Function parseColorMap(name As String, [default] As ColorScale.ColorMapType) As ColorScale.ColorMapType
+        Dim cmap As ColorScale.ColorMapType = Nothing
+
+        If [Enum].TryParse(name, ignoreCase:=True, result:=cmap) Then
+            Return cmap
+        Else
+            Return [default]
+        End If
+    End Function
+
+    ''' <summary>
+    ''' 将 R# 的图例形状参数映射为新引擎的 <see cref="MarkerShape"/>
+    ''' </summary>
+    Private Function parseMarkerShape(style As LegendStyles) As MarkerShape
+        Select Case style
+            Case LegendStyles.Rectangle, LegendStyles.RoundRectangle : Return MarkerShape.Square
+            Case LegendStyles.Diamond : Return MarkerShape.Diamond
+            Case LegendStyles.Triangle : Return MarkerShape.Triangle
+            Case LegendStyles.Hexagon : Return MarkerShape.Hexagon
+            Case LegendStyles.Pentacle : Return MarkerShape.Star
+            Case LegendStyles.SolidLine, LegendStyles.DashLine : Return MarkerShape.None
+            Case Else : Return MarkerShape.Circle
+        End Select
     End Function
 
     Private Function printImage(img As GraphicsData) As String
@@ -245,39 +270,50 @@ Module plots
 
     Public Function plotLinearYFit(fit As IFitted, args As list, env As Environment) As Object
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, "1600,1100")
-        Dim gridFill As String = RColorPalette.getColor(args("grid.fill"), "rgb(245,245,245)")
         Dim showLegend As Boolean = args.getValue("show.legend", env, True)
         Dim showYFit As Boolean = args.getValue("show.yfit", env, True)
         Dim padding As String = InteropArgumentHelper.getPadding(args!padding, "padding: 150px 100px 150px 200px")
         Dim xlab As String = args.getValue("xlab", env, "X")
         Dim ylab As String = args.getValue("ylab", env, "Y")
-        Dim PredictsLabel As String = args.getValue("predicts_lab", env, "Predicts")
-        Dim ReferenceLabel As String = args.getValue("reference_lab", env, "Standard Reference")
-        Dim LinearLabel As String = args.getValue("linear_lab", env, "Linear")
-        Dim SamplesLabel As String = args.getValue("samples_lab", env, "Samples")
-        Dim tickX As String = args.getValue("xtick", env, "F0")
-        Dim tickY As String = args.getValue("ytick", env, "G2")
-        Dim absolute_positive As Boolean = args.getValue("absolute_positive", env, False)
+        Dim driver As Drivers = env.getDriver
+        Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
 
-        Return RegressionPlot.Plot(fit, size:=size,
-            gridFill:=gridFill,
-            showLegend:=showLegend,
-            showYFitPoints:=showYFit,
-            showErrorBand:=False,
-            title:=args.getValue(Of String)("main", env, Nothing),
-            margin:=padding,
-            factorFormat:="G4",
-            xAxisTickFormat:=tickX,
-            yAxisTickFormat:=tickY,
-            xLabel:=xlab,
-            yLabel:=ylab,
-            pointLabelFontCSS:=CSSFont.Win10Normal,
-            PredictsLabel:=PredictsLabel,
-            ReferenceLabel:=ReferenceLabel,
-            LinearLabel:=LinearLabel,
-            SamplesLabel:=SamplesLabel,
-            absolute_positive:=absolute_positive
-        )
+        ' 将 R# 的线性拟合结果转换为新引擎的回归拟合数据模型
+        Dim testPoints = fit.ErrorTest _
+            .Select(Function(t, i)
+                        Dim pt As TestPoint = TryCast(t, TestPoint)
+
+                        If pt Is Nothing Then
+                            pt = New TestPoint With {
+                                .X = i,
+                                .Y = t.Y,
+                                .Yfit = t.Yfit
+                            }
+                        End If
+
+                        Return pt
+                    End Function) _
+            .ToArray
+        Dim regression As New RegressionFit With {
+            .X = testPoints.Select(Function(p) p.X).ToArray,
+            .Y = testPoints.Select(Function(p) p.Y).ToArray,
+            .Yfit = testPoints.Select(Function(p) p.Yfit).ToArray,
+            .EquationText = fit.Polynomial.ToString,
+            .Name = "fit"
+        }
+
+        Using plt As New RegressionPlot(size.SizeParser.Width, size.SizeParser.Height, New PlotTheme(padding), driver) With {
+            .Fit = regression,
+            .Title = args.getValue(Of String)("main", env, "Regression Plot"),
+            .XLabel = xlab,
+            .YLabel = ylab,
+            .ShowPoints = showYFit,
+            .ShowConfidenceBand = False,
+            .ShowLegend = showLegend
+        }
+            Call plt.Plot()
+            Return plt.AsGraphicsData()
+        End Using
     End Function
 
     Private Function measureDataTable(data As MeasureData(), args As list, env As Environment) As Rdataframe
@@ -342,7 +378,7 @@ Module plots
         Dim colors As Dictionary(Of String, Color) = uniqClass.CreateColorMaps(
             args.getBySynonyms("colorSet", "colors", "color_set"), env,
             shuffles:=shuffles)
-        Dim classSerials As New Dictionary(Of String, List(Of PointData))
+        Dim classSerials As New Dictionary(Of String, List(Of PointF))
 
         If classList.Length <> x.Length Then
             If env.globalEnvironment.Rscript.strict Then
@@ -357,38 +393,34 @@ Module plots
         End If
 
         For Each label As String In uniqClass
-            classSerials(label) = New List(Of PointData)
+            classSerials(label) = New List(Of PointF)
         Next
-
-        Dim point As PointData
 
         If y Is Nothing Then
             For i As Integer = 0 To x.Length - 1
-                point = New PointData(classSerials(classList(i)).Count + 1, x(i))
-                classSerials(classList(i)).Add(point)
+                classSerials(classList(i)).Add(New PointF(classSerials(classList(i)).Count + 1, x(i)))
             Next
         Else
             Dim maxy As Double = y.Max
 
             For i As Integer = 0 To x.Length - 1
-                point = New PointData(x(i), If(reverse, maxy - y(i), y(i)))
-                classSerials(classList(i)).Add(point)
+                classSerials(classList(i)).Add(New PointF(x(i), If(reverse, maxy - y(i), y(i))))
             Next
         End If
 
-        Dim lines As SerialData() = classSerials _
+        Dim lines As Series() = classSerials _
             .Where(Function(list)
                        Return list.Value.Count > 0
                    End Function) _
             .Select(Function(tuple)
-                        Return New SerialData With {
-                            .pts = tuple.Value.ToArray,
-                            .color = colors(tuple.Key),
-                            .pointSize = ptSize,
-                            .shape = shape,
-                            .title = tuple.Key,
-                            .width = 5,
-                            .lineType = DashStyle.Custom
+                        Return New Series With {
+                            .X = tuple.Value.Select(Function(p) CDbl(p.X)).ToArray,
+                            .Y = tuple.Value.Select(Function(p) CDbl(p.Y)).ToArray,
+                            .Color = colors(tuple.Key),
+                            .PointSize = ptSize,
+                            .MarkerShape = parseMarkerShape(shape),
+                            .Name = tuple.Key,
+                            .LineStyle = DashStyle.Custom
                         }
                     End Function) _
             .ToArray
@@ -402,33 +434,23 @@ Module plots
                                        reverse As Boolean,
                                        shape As LegendStyles,
                                        env As Environment) As Object
-        Dim line As SerialData
 
-        If y Is Nothing Then
-            line = New SerialData() With {
-                .pts = x _
-                    .SeqIterator _
-                    .Select(Function(i)
-                                Return New PointData(i.i, i.value)
-                            End Function) _
-                    .ToArray,
-                .pointSize = ptSize,
-                .title = args.getValue("title", env, "data"),
-                .shape = shape,
-                .color = args.getValue("color", env, "black").TranslateColor
-            }
-        Else
-            Dim colorSet As Func(Of Integer, String)
-            Dim maxy As Double = y.Max
+        ' 逐点着色（colorSet / scaler 映射）：由于新引擎的 Series 只支持系列级颜色，
+        ' 这里按照点颜色将数据点分组为多个相同标题的 Series
+        Dim pointColors As Dictionary(Of Integer, Color) = Nothing
+        Dim maxy As Double = If(y.IsNullOrEmpty, x.Max, y.Max)
+
+        If Not y Is Nothing Then
             Dim mapScaler As Double() = CLRVector.asNumeric(args.getBySynonyms("scaler", "heatmap"))
 
             If mapScaler.IsNullOrEmpty Then
                 If args.hasName("colorSet") AndAlso Not args!colorSet Is Nothing Then
                     Dim colorsMap As String() = RColorPalette.getColors(args!colorSet, x.Length, Nothing)
 
-                    colorSet = Function(i) colorsMap(i)
-                Else
-                    colorSet = Function() Nothing
+                    pointColors = New Dictionary(Of Integer, Color)
+                    For i As Integer = 0 To x.Length - 1
+                        pointColors(i) = colorsMap(i).TranslateColor
+                    Next
                 End If
             Else
                 Dim colorsMap As String() = Nothing
@@ -445,35 +467,40 @@ Module plots
                     colorsMap = RColorPalette.getColors("viridis", levels.Max + 1, Nothing)
                 End If
 
-                colorSet = Function(i)
-                               Dim value As Double = mapScaler(i)
-                               Dim offset As Integer = scaler.ScaleMapping(value, levels)
+                pointColors = New Dictionary(Of Integer, Color)
 
-                               Return colorsMap(offset)
-                           End Function
+                For i As Integer = 0 To x.Length - 1
+                    Dim value As Double = mapScaler(i)
+                    Dim offset As Integer = scaler.ScaleMapping(value, levels)
+
+                    pointColors(i) = colorsMap(offset).TranslateColor
+                Next
             End If
+        End If
 
-            line = New SerialData() With {
-                .pts = x _
-                    .Select(Function(xi, i)
-                                Return New PointData(xi, If(reverse, maxy - y(i), y(i))) With {
-                                    .color = colorSet(i)
-                                }
-                            End Function) _
-                    .ToArray,
-                .pointSize = ptSize,
-                .title = args.getValue("title", env, "x ~ y"),
-                .shape = shape,
-                .color = args.getValue("color", env, "black").TranslateColor
-            }
+        Dim title As String = args.getValue("title", env, If(y Is Nothing, "data", "x ~ y"))
+        Dim color As Color = args.getValue("color", env, "black").TranslateColor
+        Dim defaultColor As Color = color
+        Dim line As New Series With {
+            .PointSize = ptSize,
+            .Name = title,
+            .MarkerShape = parseMarkerShape(shape),
+            .Color = defaultColor
+        }
+
+        If y Is Nothing Then
+            line.X = x.SeqIterator.Select(Function(i) CDbl(i.i)).ToArray
+            line.Y = x
+        Else
+            line.X = x
+            line.Y = y.Select(Function(yi, i) If(reverse, maxy - yi, yi)).ToArray
         End If
 
         If args.hasName("fit") Then
             Dim fit As Object = args!fit
-            Dim lines As New List(Of SerialData) From {line}
-            Dim x_axis As Double() = line.x
-            Dim color = args.getValue("color", env, "black").TranslateColor
-            Dim maxy As Double = y.Max
+            Dim lines As New List(Of Series) From {line}
+            Dim x_axis As Double() = line.X
+            Dim color = defaultColor
 
             If TypeOf fit Is gaussVariable() Then
                 For Each peak As gaussVariable In DirectCast(fit, gaussVariable())
@@ -487,18 +514,18 @@ Module plots
                         Continue For
                     End If
 
-                    line = New SerialData With {
-                        .pointSize = ptSize,
-                        .title = peak.ToString,
-                        .shape = shape,
-                        .color = color,
-                        .pts = x_axis _
+                    lines.Add(New Series With {
+                        .PointSize = ptSize,
+                        .Name = peak.ToString,
+                        .MarkerShape = parseMarkerShape(shape),
+                        .Color = color,
+                        .X = x_axis,
+                        .Y = x_axis _
                             .Select(Function(xi)
-                                        Return New PointData(xi, If(reverse, maxy - peak.gaussian(xi), peak.gaussian(xi)))
+                                        Return If(reverse, maxy - peak.gaussian(xi), peak.gaussian(xi))
                                     End Function) _
                             .ToArray
-                    }
-                    lines.Add(line)
+                    })
                 Next
             End If
 
@@ -509,11 +536,7 @@ Module plots
                            Return TypeOf args(s) Is list AndAlso DirectCast(args(s), list).hasNames("x", "y")
                        End Function) _
                 .ToArray
-            Dim lines As New List(Of SerialData) From {line}
-            Dim color = args.getValue("color", env, "black").TranslateColor
-
-            ' plot(data)  only x, no y(means y is nothing)
-            Dim maxy As Double = If(y.IsNullOrEmpty, x.Max, y.Max)
+            Dim lines As New List(Of Series) From {line}
 
             For Each name As String In fit_names
                 Dim serial_data As list = args(name)
@@ -525,21 +548,50 @@ Module plots
                     color_line = serial_data.getValue("color", env, "black").TranslateColor
                 End If
 
-                line = New SerialData With {
-                    .pointSize = ptSize,
-                    .title = name,
-                    .shape = shape,
-                    .color = color_line,
-                    .pts = x_axis _
-                        .Select(Function(xi, i)
-                                    Return New PointData(xi, If(reverse, maxy - y_axis(i), y_axis(i)))
-                                End Function) _
-                        .ToArray
-                }
-                lines.Add(line)
+                lines.Add(New Series With {
+                    .PointSize = ptSize,
+                    .Name = name,
+                    .MarkerShape = parseMarkerShape(shape),
+                    .Color = color_line,
+                    .X = x_axis,
+                    .Y = y_axis.Select(Function(yi, i) If(reverse, maxy - yi, yi)).ToArray
+                })
             Next
 
-            Return plotSerials(lines, args, env)
+            If pointColors.IsNullOrEmpty Then
+                Return plotSerials(lines, args, env)
+            Else
+                ' 逐点着色：按颜色分组后输出
+                Dim grouped As New List(Of Series)
+
+                For Each base As Series In lines
+                    If base.Color Is Nothing OrElse Not base Is line Then
+                        grouped.Add(base)
+                        Continue For
+                    End If
+
+                    Dim byColor = base.Y _
+                        .SeqIterator _
+                        .GroupBy(Function(i) pointColors(i.i).ToHtmlColor) _
+                        .ToArray
+
+                    For gi As Integer = 0 To byColor.Length - 1
+                        Dim grp = byColor(gi)
+
+                        grouped.Add(New Series With {
+                            .PointSize = ptSize,
+                            .Name = If(gi = 0, base.Name, ""),
+                            .MarkerShape = base.MarkerShape,
+                            .Color = pointColors(grp.First.i),
+                            .X = grp.Select(Function(i) base.X(i.i)).ToArray,
+                            .Y = grp.Select(Function(i) base.Y(i.i)).ToArray,
+                            .LineStyle = DashStyle.Custom
+                        })
+                    Next
+                Next
+
+                Return plotSerials(grouped, args, env)
+            End If
         End If
     End Function
 
@@ -600,7 +652,7 @@ Module plots
     Public Function plotVector(x As vector, args As list, env As Environment) As Object
         Dim array As Array = REnv.TryCastGenericArray(x.data, env)
 
-        If TypeOf array Is SerialData() Then
+        If TypeOf array Is Series() Then
             Return plotSerials(array, args, env)
         Else
             Return plotArray(CLRVector.asNumeric(array), args, env)
@@ -682,19 +734,18 @@ Module plots
             Call TryGetClassData(args!class, classes, classinfo)
         End If
 
-        Dim theme As New Theme With {
+        Dim theme As New DendrogramTheme With {
             .padding = padding,
             .tagCSS = labelStyle,
             .gridStrokeX = linkStroke,
-            .gridStrokeY = linkStroke,
             .axisTickCSS = tickStyle,
             .axisStroke = axisStroke,
-            .pointSize = ptSize,
+            .pointSize = CSng(ptSize),
             .background = bg,
             .XaxisTickFormat = axisFormat
         }
 
-        Return New DendrogramPanelV2(
+        Return New DendrogramPlot(
             hist:=cluster,
             theme:=theme,
             classes:=classes,
@@ -723,20 +774,27 @@ Module plots
         Dim labelFont$ = InteropArgumentHelper.getFontCSS(args!labelCSS, CSSFont.Win7Normal)
         Dim legendTitleFont$ = InteropArgumentHelper.getFontCSS(args!legendTitleCSS, CSSFont.Win7LargeBold)
 
-        Return CorrelationTriangle.Plot(
-            data:=dist,
-            size:=size,
-            bg:=bg,
-            padding:=padding,
-            mainTitle:=title,
-            drawGrid:=True,
-            driver:=driver,
-            mapName:=colorSet,
-            variantSize:=Not fixedSize,
-            titleFont:=titleFont,
-            rowLabelFontStyle:=labelFont,
-            legendFont:=legendTitleFont
-        )
+        Dim n As Integer = dist.size
+        Dim names As String() = dist.keys
+        Dim m(n - 1, n - 1) As Double
+
+        For i As Integer = 0 To n - 1
+            For j As Integer = 0 To n - 1
+                m(i, j) = dist(i, j)
+            Next
+        Next
+
+        Using plt As New CorrelationTrianglePlot(size.SizeParser.Width, size.SizeParser.Height, New PlotTheme(padding), driver) With {
+            .Title = title,
+            .Correlation = New Microsoft.VisualBasic.Data.Plots.CorrelationMatrix With {
+                .Names = names,
+                .Matrix = m
+            },
+            .ShowValues = fixedSize
+        }
+            Call plt.Plot()
+            Return plt.AsGraphicsData()
+        End Using
     End Function
 
     Public Function plot_categoryBars(data As Dictionary(Of String, Double), args As list, env As Environment) As Object
@@ -744,20 +802,26 @@ Module plots
         Dim xlab$ = args.GetString("x.lab", "X")
         Dim ylab$ = args.GetString("y.lab", "Y")
         Dim padding$ = InteropArgumentHelper.getPadding(args!padding)
-        Dim serials As BarDataSample() = data _
+        Dim driver As Drivers = env.getDriver
+        Dim serials As BarSerial() = data _
             .Select(Function(bar)
-                        Return New BarDataSample With {
-                            .data = {bar.Value},
-                            .tag = bar.Key
+                        Return New BarSerial With {
+                            .Label = bar.Key,
+                            .Value = bar.Value,
+                            .Color = Color.SkyBlue
                         }
                     End Function) _
             .ToArray
-        Dim plotData As New BarDataGroup With {
-            .Samples = serials,
-            .Serials = {New NamedValue(Of Color)(title, Color.SkyBlue)}
-        }
 
-        Return plotData.Plot(padding:=padding)
+        Using plt As New BarPlot(2400, 1800, New PlotTheme(padding), driver) With {
+            .Title = title,
+            .XLabel = xlab,
+            .YLabel = ylab,
+            .Serials = serials
+        }
+            Call plt.Plot()
+            Return plt.AsGraphicsData()
+        End Using
     End Function
 
     Public Function plot_binBox(data As DataBinBox(Of Double)(), args As list, env As Environment) As Object
@@ -787,16 +851,27 @@ Module plots
                 .Average
         End If
 
-        Return data.HistogramPlot(
-            serialsTitle:=title,
-            xLabel:=xlab,
-            yLabel:=ylab,
-            padding:=padding,
-            dpi:=dpi,
-            driver:=env.getDriver,
-            size:=$"{size.Width},{size.Height}",
-            highlights:=highlights
-        )
+        ' DataBinBox 分箱数据 -> 显式分箱边界的直方图
+        Dim binEdges As New List(Of Double)
+
+        If data.Length > 0 Then
+            binEdges.Add(data(0).Raw.Min)
+        End If
+
+        For Each bin As DataBinBox(Of Double) In data
+            binEdges.Add(bin.Raw.Max)
+        Next
+
+        Using plt As New HistogramPlot(size.Width, size.Height, New PlotTheme(padding), env.getDriver) With {
+            .Title = title,
+            .XLabel = xlab,
+            .YLabel = ylab,
+            .Data = data.SelectMany(Function(bin) bin.Raw).ToArray,
+            .BinEdges = binEdges.ToArray
+        }
+            Call plt.Plot()
+            Return plt.AsGraphicsData()
+        End Using
     End Function
 
     ''' <summary>
@@ -826,7 +901,8 @@ Module plots
                                  Optional size As Object = "1600,1200",
                                  Optional env As Environment = Nothing) As Object
 
-        Dim data As New List(Of FractionData)
+        Dim names As New List(Of String)
+        Dim values As New List(Of Double)
         Dim colorSet As String = RColorPalette.getColorSet(schema, "Paired:c12")
         Dim colors As LoopArray(Of Color) = Designer.GetColors(colorSet)
 
@@ -835,31 +911,31 @@ Module plots
         ElseIf TypeOf x Is list Then
             ' a collection of [name => number]
             For Each tag As NamedValue(Of Object) In DirectCast(x, list).namedValues
-                data += New FractionData With {
-                    .Name = tag.Name,
-                    .Value = CLRVector.asNumeric(tag.Value).GetValue(Scan0),
-                    .Color = ++colors
-                }
+                names.Add(tag.Name)
+                values.Add(CLRVector.asNumeric(tag.Value).GetValue(Scan0))
             Next
         ElseIf TypeOf x Is vector Then
             Dim v As vector = DirectCast(x, vector)
 
             If v.elementType.is_numeric Then
-                Dim names As String() = DirectCast(x, vector).getNames
+                Dim vecNames As String() = DirectCast(x, vector).getNames
                 Dim vec As Double() = CLRVector.asNumeric(x)
 
-                For i As Integer = 0 To names.Length - 1
-                    data += New FractionData With {
-                        .Name = names(i),
-                        .Color = ++colors,
-                        .Value = vec(i)
-                    }
+                For i As Integer = 0 To vecNames.Length - 1
+                    names.Add(vecNames(i))
+                    values.Add(vec(i))
                 Next
             Else
-                data = New List(Of FractionData)(CLRVector.asCharacter(x).charPie(colors))
+                For Each factor As IGrouping(Of String, String) In CLRVector.asCharacter(x).GroupBy(Function(s) s)
+                    names.Add(factor.Key)
+                    values.Add(factor.Count)
+                Next
             End If
         ElseIf TypeOf x Is String() Then
-            data = New List(Of FractionData)(CLRVector.asCharacter(x).charPie(colors))
+            For Each factor As IGrouping(Of String, String) In CLRVector.asCharacter(x).GroupBy(Function(s) s)
+                names.Add(factor.Key)
+                values.Add(factor.Count)
+            Next
         Else
             Return Message.InCompatibleType(GetType(vector), x.GetType, env)
         End If
@@ -873,28 +949,37 @@ Module plots
             End If
 
             ' 3D
-            Return data.Plot3D(camera)
+            Dim slices As PieSlice() = names _
+                .SeqIterator _
+                .Select(Function(a)
+                            Return New PieSlice With {
+                                .Name = a.value,
+                                .Value = values(a.i),
+                                .Color = ++colors
+                            }
+                        End Function) _
+                .ToArray
+
+            Return PieChart3D.Plot3D(slices, camera, driver:=env.getDriver)
         Else
             ' 2D
-            Return PieChart.Plot(
-                data:=data,
-                size:=InteropArgumentHelper.getSize(size, env),
-                driver:=env.getDriver
-            )
-        End If
-    End Function
+            Dim sz As Size = InteropArgumentHelper.getSize(size, env).SizeParser
+            Dim colorArr(values.Count - 1) As Color
 
-    <Extension>
-    Private Iterator Function charPie(chars As String(), colors As LoopArray(Of Color)) As IEnumerable(Of FractionData)
-        Dim factors = chars.GroupBy(Function(s) s)
+            For i As Integer = 0 To values.Count - 1
+                colorArr(i) = ++colors
+            Next
 
-        For Each factor As IGrouping(Of String, String) In factors
-            Yield New FractionData With {
-                .Name = factor.Key,
-                .Color = ++colors,
-                .Value = factor.Count
+            Using plt As New PiePlot(sz.Width, sz.Height, PlotTheme.Light(), env.getDriver) With {
+                .Title = "Pie Chart",
+                .Labels = names.ToArray,
+                .Values = values.ToArray,
+                .Colors = colorArr
             }
-        Next
+                Call plt.Plot()
+                Return plt.AsGraphicsData()
+            End Using
+        End If
     End Function
 
     ''' <summary>
@@ -952,44 +1037,31 @@ Module plots
             .AsObjectEnumerator _
             .Select(AddressOf RColorPalette.getColor) _
             .ToArray
-        Dim s As HistProfile() = items _
+        Dim bars As VariableBarData() = items _
             .SeqIterator _
             .Select(Function(i)
-                        Dim histLegend As New LegendObject With {
-                            .color = colors(i),
-                            .fontstyle = CSSFont.Win7LargerBold,
-                            .style = LegendStyles.Rectangle,
-                            .title = i.value
+                        ' 旧版本的 barplot 带有 min/max 变宽柱语义，
+                        ' 这里映射为新引擎的 VariableWidthBarPlot
+                        Return New VariableBarData With {
+                            .Name = i.value,
+                            .Value = values(i.i),
+                            .Width = maxX(i.i) - minX(i.i)
                         }
-                        Dim x As Double = values(i)
-                        Dim bar As New HistogramData With {
-                            .pointY = x,
-                            .y = x,
-                            .x1 = minX(i.i),
-                            .x2 = maxX(i.i)
-                        }
-
-                        Return New HistProfile(histLegend, {bar})
                     End Function) _
             .ToArray
-        Dim group As New HistogramGroup With {
-            .Samples = s,
-            .Serials = s _
-                .Select(Function(a) a.SerialData) _
-                .ToArray
-        }
-        Dim bgColor As String = RColorPalette.getColor(bg, "white")
 
-        Return group.Plot(
-            bg:=bgColor,
-            size:=InteropArgumentHelper.getSize(size, env),
-            padding:=InteropArgumentHelper.getPadding(padding),
-            showGrid:=show_grid,
-            xlabel:=xlab,
-            Ylabel:=ylab,
-            title:=title,
-            showLegend:=show_legend
-        )
+        Dim sz As Size = InteropArgumentHelper.getSize(size, env).SizeParser
+        Dim pad As String = InteropArgumentHelper.getPadding(padding)
+
+        Using plt As New VariableWidthBarPlot(sz.Width, sz.Height, New PlotTheme(pad), env.getDriver) With {
+            .Title = title,
+            .XLabel = xlab,
+            .YLabel = ylab,
+            .Bars = New List(Of VariableBarData)(bars)
+        }
+            Call plt.Plot()
+            Return plt.AsGraphicsData()
+        End Using
     End Function
 
     Public Function plot_deSolveResult(desolve As ODEsOut, args As list, env As Environment) As Object
@@ -1001,6 +1073,13 @@ Module plots
         Dim x As Double() = desolve.y(CStr(vector!x)).value
         Dim y As Double() = desolve.y(CStr(vector!y)).value
         Dim z As Double() = desolve.y(CStr(vector!z)).value
+        If camera Is Nothing Then
+            camera = New Camera With {
+                .screen = New Size(2400, 1800),
+                .viewDistance = 10000
+            }
+        End If
+
         Dim data As New Serial3D With {
             .Color = color,
             .PointSize = 5,
@@ -1019,11 +1098,34 @@ Module plots
                 .ToArray
         }
 
-        Return {data}.Plot(camera, bg:=bg, showLegend:=False)
+        ' 3D 散点：使用迁移到 DataPlot 的 Plot3D 引擎（支持 driver 输出）
+        Return Scatter3DPlot.Plot(
+            {data}, camera,
+            bg:=bg,
+            showLegend:=False,
+            driver:=env.getDriver
+        )
     End Function
 
     Public Function plotODEResult(math As ODEOutput, args As list, env As Environment) As Object
-        Return math.Plot(size:=InteropArgumentHelper.getSize(args!size, env))
+        Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="1600,1200")
+        Dim padding As String = InteropArgumentHelper.getPadding(args!padding, [default]:=g.DefaultPadding, env)
+        Dim pts As PointF() = math.GetPointsData.Select(Function(p) p.PointF).ToArray
+        Dim sz As Size = size.SizeParser
+        Dim driver As Drivers = env.getDriver
+
+        Using plt As New LinePlot(sz.Width, sz.Height, New PlotTheme(padding), driver) With {
+            .Title = math.ID
+        }
+            Call plt.Plot({New Series With {
+                .Name = math.ID,
+                .Color = Color.Cyan,
+                .LineStyle = DashStyle.Dash,
+                .X = pts.Select(Function(p) CDbl(p.X)).ToArray,
+                .Y = pts.Select(Function(p) CDbl(p.Y)).ToArray
+            }})
+            Return plt.AsGraphicsData()
+        End Using
     End Function
 
     ''' <summary>
@@ -1039,16 +1141,22 @@ Module plots
 
         Dim fx As Func(Of Double, Double) = math.CreateLambda(Of Double, Double)(env)
         Dim x As Double() = CLRVector.asNumeric(args!x)
-        Dim points As PointF() = x.Select(Function(xi) New PointF(xi, fx(xi))).ToArray
+        Dim sz As Size = InteropArgumentHelper.getSize(args!size, env).SizeParser
+        Dim padding As String = InteropArgumentHelper.getPadding(args!padding)
         Dim driver As Drivers = imageDriverHandler.getDriver(env)
 
-        Return points.Plot(
-            size:=InteropArgumentHelper.getSize(args!size, env).SizeParser,
-            title:=math.ToString,
-            padding:=InteropArgumentHelper.getPadding(args!padding),
-            gridFill:=RColorPalette.getColor(args("grid.fill"), "rgb(250,250,250)"),
-            driver:=driver
-        )
+        Using plt As New LinePlot(sz.Width, sz.Height, New PlotTheme(padding), driver) With {
+            .Title = math.ToString
+        }
+            Call plt.Plot({New Series With {
+                .Name = math.ToString,
+                .Color = Color.Black,
+                .LineStyle = DashStyle.Solid,
+                .X = x,
+                .Y = x.Select(Function(xi) fx(xi)).ToArray
+            }})
+            Return plt.AsGraphicsData()
+        End Using
     End Function
 
     ''' <summary>
@@ -1059,11 +1167,19 @@ Module plots
     ''' <param name="env"></param>
     ''' <returns></returns>
     Public Function plotSerials(data As Object, args As list, env As Environment) As Object
-        If TypeOf data Is SerialData Then
-            data = {DirectCast(data, SerialData)}
+        If TypeOf data Is Series Then
+            data = {DirectCast(data, Series)}
         End If
 
-        Dim serials As SerialData() = DirectCast(data, IEnumerable(Of SerialData)).ToArray
+        Dim serials As Series() = DirectCast(data, IEnumerable(Of Series)).ToArray
+
+        If drawLine Then
+            ' plot(x, y, line = TRUE) 绘制连线
+            For Each s As Series In serials
+                s.LineStyle = DashStyle.Solid
+            Next
+        End If
+
         Dim size As String = InteropArgumentHelper.getSize(args!size, env, [default]:="2100,1600")
         Dim margin = InteropArgumentHelper.getPadding(args!padding, [default]:="padding: 5% 10% 10% 15%;", env:=env)
         Dim title As String = any.ToString(getFirst(args!title), "Scatter Plot")
@@ -1075,83 +1191,90 @@ Module plots
         Dim dpi As Integer = graphicsPipeline.getDpi(args.slots, env, [default]:=100)
         Dim showLegend As Boolean = args.getValue(Of Boolean)({"showLegend", "legend", "legend.show"}, env, [default]:=True)
         Dim showAxis As Boolean = args.getValue(Of Boolean)({"show.axis", "axis.show"}, env, [default]:=True)
+        Dim drawLine As Boolean = getFirst(CLRVector.asLogical(args!line))
         Dim convexHull As Object = args.getBySynonyms("convexHull")
         Dim convexHullList = CLRVector.asCharacter(convexHull)
+        Dim drawHull As Boolean = False
 
         If Not convexHullList.IsNullOrEmpty Then
             If convexHullList.Length = 1 AndAlso (convexHullList(0).ToLower = "true" OrElse convexHullList(0).ToLower = "false") Then
                 If convexHullList(0).ParseBoolean Then
                     ' use all serials as convex hull
-                    convexHullList = serials _
-                        .Select(Function(s)
-                                    Return s.title
-                                End Function) _
-                        .ToArray
+                    drawHull = True
                 Else
                     ' no convex hull
-                    convexHullList = {}
+                    drawHull = False
                 End If
+            Else
+                drawHull = True
             End If
         End If
+
+        ' 将 Line 列表 (斜率-截距参考线) 转换为新引擎的 abline 模型: (b, a) => y = a + b * x
+        Dim ablines As New List(Of (b As Double, a As Double))
+
+        For Each line As Line In args.getValue(Of Line())("abline", env).SafeQuery
+            If line.B.X <> line.A.X Then
+                Dim b As Double = (line.B.Y - line.A.Y) / (line.B.X - line.A.X)
+
+                ablines.Add((b, line.A.Y - b * line.A.X))
+            End If
+        Next
+
+        Dim theme As New PlotTheme(margin) With {
+            .ShowGrid = showAxis
+        }
 
         If args.CheckGraphicsDeviceExists Then
             ' draw on current graphics context
             Dim dev As graphicsDevice = R_graphics.Common.Runtime.graphics.curDev
-            Dim padding As Padding = InteropArgumentHelper.getPadding(dev.getArgumentValue("padding", args))
-            Dim canvas As New GraphicsRegion(dev.g.Size, padding)
 
-            Call Scatter2D.Plot(
-                serials, dev.g, canvas,
-                Xlabel:=args.getValue("x.lab", env, "X"),
-                Ylabel:=args.getValue("y.lab", env, "Y"),
-                drawLine:=getFirst(CLRVector.asLogical(args!line)),
-                legendBgFill:=RColorPalette.getColor(args!legendBgFill, Nothing),
-                legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
-                showLegend:=showLegend,
-                title:=title,
-                legendSplit:=args.getValue(Of Integer)("legend.block", env),
-                ablines:=args.getValue(Of Line())("abline", env),
-                hullConvexList:=convexHullList,
-                XtickFormat:=args.getValue("x.format", env, "F2"),
-                YtickFormat:=args.getValue("y.format", env, "F2"),
-                interplot:=spline,
-                axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.Win7VeryLarge),
-                gridFill:=RColorPalette.getColor(If(args("grid.fill"), args("fill")), "lightgray", env),
-                xlim:=xlim,
-                ylim:=ylim,
-                XaxisAbsoluteScalling:=absoluteScale,
-                YaxisAbsoluteScalling:=absoluteScale,
-                drawAxis:=showAxis
-            )
+            Using plt As New ScatterPlot(dev.g, theme) With {
+                .Title = title,
+                .XLabel = args.getValue("x.lab", env, "X"),
+                .YLabel = args.getValue("y.lab", env, "Y"),
+                .ShowLegend = showLegend,
+                .ShowConvexHull = drawHull,
+                .AbLines = ablines,
+                .Smooth = spline <> Splines.None
+            }
+                If Not xlim.IsNullOrEmpty Then
+                    plt.XMin = xlim(0)
+                    plt.XMax = xlim(xlim.Length - 1)
+                End If
+                If Not ylim.IsNullOrEmpty Then
+                    plt.YMin = ylim(0)
+                    plt.YMax = ylim(ylim.Length - 1)
+                End If
+
+                Call plt.Plot(serials)
+            End Using
 
             Return Nothing
         Else
-            Return Scatter2D.Plot(
-                c:=serials,
-                size:=size, padding:=margin,
-                Xlabel:=args.getValue("x.lab", env, "X"),
-                Ylabel:=args.getValue("y.lab", env, "Y"),
-                drawLine:=getFirst(CLRVector.asLogical(args!line)),
-                legendBgFill:=RColorPalette.getColor(args!legendBgFill, Nothing),
-                legendFontCSS:=InteropArgumentHelper.getFontCSS(args("legend.font")),
-                showLegend:=showLegend,
-                title:=title,
-                legendSplit:=args.getValue(Of Integer)("legend.block", env),
-                ablines:=args.getValue(Of Line())("abline", env),
-                hullConvexList:=convexHullList,
-                XtickFormat:=args.getValue("x.format", env, "F2"),
-                YtickFormat:=args.getValue("y.format", env, "F2"),
-                interplot:=spline,
-                axisLabelCSS:=args.getValue("axis.cex", env, CSSFont.Win7VeryLarge),
-                gridFill:=RColorPalette.getColor(If(args("grid.fill"), args("fill")), "lightgray", env),
-                xlim:=xlim,
-                ylim:=ylim,
-                XaxisAbsoluteScalling:=absoluteScale,
-                YaxisAbsoluteScalling:=absoluteScale,
-                dpi:=dpi,
-                driver:=env.getDriver,
-                drawAxis:=showAxis
-            )
+            Dim sz As Size = size.SizeParser
+
+            Using plt As New ScatterPlot(sz.Width, sz.Height, theme, driver) With {
+                .Title = title,
+                .XLabel = args.getValue("x.lab", env, "X"),
+                .YLabel = args.getValue("y.lab", env, "Y"),
+                .ShowLegend = showLegend,
+                .ShowConvexHull = drawHull,
+                .AbLines = ablines,
+                .Smooth = spline <> Splines.None
+            }
+                If Not xlim.IsNullOrEmpty Then
+                    plt.XMin = xlim(0)
+                    plt.XMax = xlim(xlim.Length - 1)
+                End If
+                If Not ylim.IsNullOrEmpty Then
+                    plt.YMin = ylim(0)
+                    plt.YMax = ylim(ylim.Length - 1)
+                End If
+
+                Call plt.Plot(serials)
+                Return plt.AsGraphicsData()
+            End Using
         End If
     End Function
 
@@ -1173,28 +1296,20 @@ Module plots
                                  Optional name$ = "data serial",
                                  Optional color As Object = "black",
                                  Optional alpha As Integer = 255,
-                                 Optional ptSize As Integer = 5) As SerialData
+                                 Optional ptSize As Integer = 5) As Series
 
         Dim px As Double() = CLRVector.asNumeric(x)
         Dim py As Double() = CLRVector.asNumeric(y)
-        Dim points As PointData() = px _
-            .Select(Function(xi, i)
-                        Return New PointData With {
-                            .pt = New PointF(xi, y(i))
-                        }
-                    End Function) _
-            .ToArray
-        Dim serial As New SerialData With {
-            .color = RColorPalette _
+        Dim serial As New Series With {
+            .Color = RColorPalette _
                 .getColor(color) _
                 .TranslateColor _
                 .Alpha(alpha),
-            .lineType = DashStyle.Solid,
-            .pointSize = ptSize,
-            .pts = points,
-            .shape = LegendStyles.SolidLine,
-            .title = name,
-            .width = 5
+            .LineStyle = DashStyle.Solid,
+            .PointSize = ptSize,
+            .X = px,
+            .Y = py,
+            .Name = name
         }
 
         Return serial
@@ -1252,42 +1367,31 @@ Module plots
         End If
 
         Dim type As Type = REnv.MeasureArrayElementType(data)
-
-        size = InteropArgumentHelper.getSize(size, env)
-        margin = InteropArgumentHelper.getPadding(margin)
+        Dim driver As Drivers = env.getDriver
+        Dim groups As New List(Of BoxGroup)
 
         If type Is GetType(DataSet) Then
-#Disable Warning
-            Return ViolinPlot.Plot(
-                dataset:=DirectCast(REnv.asVector(Of DataSet)(data), DataSet()),
-                size:=size,
-                margin:=margin,
-                bg:=bg,
-                colorset:=colorSet,
-                Ylabel:=ylab,
-                title:=title,
-                labelAngle:=labelAngle,
-                showStats:=showStats
-            )
-#Enable Warning
+            For Each entity As DataSet In DirectCast(data, DataSet())
+                groups.Add(New BoxGroup With {
+                    .Name = entity.ID,
+                    .Data = entity.Vector
+                })
+            Next
         Else
-            Dim dataSet As New NamedCollection(Of Double) With {
-                .name = title,
-                .value = CLRVector.asNumeric(data)
-            }
-
-            Return ViolinPlot.Plot(
-                dataset:={dataSet},
-                size:=size,
-                margin:=margin,
-                bg:=bg,
-                colorset:=colorSet,
-                Ylabel:=ylab,
-                title:=title,
-                labelAngle:=labelAngle,
-                showStats:=showStats
-            )
+            groups.Add(New BoxGroup With {
+                .Name = title,
+                .Data = CLRVector.asNumeric(data)
+            })
         End If
+
+        Using plt As New ViolinPlot(size.SizeParser.Width, size.SizeParser.Height, New PlotTheme(margin), driver) With {
+            .Title = title,
+            .YLabel = ylab,
+            .Groups = groups
+        }
+            Call plt.Plot()
+            Return plt.AsGraphicsData()
+        End Using
     End Function
 
     <ExportAPI("fillPolygon")>
@@ -1299,10 +1403,8 @@ Module plots
                                 Optional reverse As Boolean = False,
                                 Optional env As Environment = Nothing) As Object
 
-        Dim theme As New Theme With {
-            .gridFill = RColorPalette.getColor(grid_fill, "white"),
-            .padding = InteropArgumentHelper.getPadding(padding, g.DefaultUltraLargePadding)
-        }
+        Dim pad As String = InteropArgumentHelper.getPadding(padding, g.DefaultUltraLargePadding)
+        Dim driver As Drivers = env.getDriver
 
         If polygon Is Nothing Then
             Return RInternal.debug.stop("polygon data can not be nothing!", env)
@@ -1312,13 +1414,13 @@ Module plots
             Dim poly As pipeline = pipeline.TryCreatePipeline(Of GeneralPath)(pathData, env, suppress:=True)
 
             If Not poly.isError Then
-                Return New PolygonPlot2D(poly.populates(Of GeneralPath)(env), theme, names, reverse).Plot
+                Return renderPolygons(poly.populates(Of GeneralPath)(env), names, pad, driver)
             End If
 
             poly = pipeline.TryCreatePipeline(Of Math2D.Polygon2D)(pathData, env)
 
             If Not poly.isError Then
-                Return New PolygonPlot2D(poly.populates(Of Math2D.Polygon2D)(env).Select(Function(p) New GeneralPath(p)), theme, names, reverse).Plot
+                Return renderPolygons(poly.populates(Of Math2D.Polygon2D)(env).Select(Function(p) New GeneralPath(p)), names, pad, driver)
             End If
 
             Return poly.getError
@@ -1326,17 +1428,45 @@ Module plots
             Dim poly As pipeline = pipeline.TryCreatePipeline(Of GeneralPath)(polygon, env, suppress:=True)
 
             If Not poly.isError Then
-                Return New PolygonPlot2D(poly.populates(Of GeneralPath)(env), theme, reverse:=reverse).Plot
+                Return renderPolygons(poly.populates(Of GeneralPath)(env), Nothing, pad, driver)
             End If
 
             poly = pipeline.TryCreatePipeline(Of Math2D.Polygon2D)(polygon, env)
 
             If Not poly.isError Then
-                Return New PolygonPlot2D(poly.populates(Of Math2D.Polygon2D)(env).Select(Function(p) New GeneralPath(p)), theme, reverse:=reverse).Plot
+                Return renderPolygons(poly.populates(Of Math2D.Polygon2D)(env).Select(Function(p) New GeneralPath(p)), Nothing, pad, driver)
             End If
 
             Return poly.getError
         End If
+    End Function
+
+    ''' <summary>
+    ''' render polygon groups via the new DataPlot FillPolygons plot engine
+    ''' </summary>
+    Private Function renderPolygons(paths As IEnumerable(Of GeneralPath),
+                                    names As String(),
+                                    padding As String,
+                                    driver As Drivers) As GraphicsData
+
+        Dim pathList As GeneralPath() = paths.ToArray
+        Dim groups As New List(Of PolygonGroup)
+
+        For i As Integer = 0 To pathList.Length - 1
+            Dim name As String = If(names.IsNullOrEmpty, pathList(i).ToString, names(i))
+
+            groups.Add(New PolygonGroup With {
+                .Label = name,
+                .SubRegions = pathList(i).GetPolygons.ToArray
+            })
+        Next
+
+        Using plt As New FillPolygons(2400, 1800, New PlotTheme(padding), driver) With {
+            .Groups = groups
+        }
+            Call plt.Plot()
+            Return plt.AsGraphicsData()
+        End Using
     End Function
 
     ''' <summary>
@@ -1370,20 +1500,25 @@ Module plots
             Dim y As Double() = CLRVector.asNumeric(DirectCast(data, Rdataframe).columns("y"))
             Dim vals As Double() = CLRVector.asNumeric(DirectCast(data, Rdataframe).columns("data"))
             Dim measures As MeasureData() = x.Select(Function(xi, i) New MeasureData(xi, y(i), vals(i))).ToArray
+            Dim layers As ContourLayer() = ContourLayer.GetContours(measures).ToArray
 
-            Return PlotContour.Plot(measures, colorSet:=RColorPalette.getColorSet(colorSet))
+            Return renderContourLayers(layers, RColorPalette.getColorSet(colorSet), env.getDriver)
         ElseIf TypeOf data Is DeclareLambdaFunction Then
             Dim lambda As Func(Of (Double, Double), Double) = DirectCast(data, DeclareLambdaFunction).CreateLambda(Of (Double, Double), Double)(env)
             Dim rx As DoubleRange = args.getValue(Of Double())("x", env)
             Dim ry As DoubleRange = args.getValue(Of Double())("y", env)
 
-            Return Contour.HeatMap.Plot(
-                fun:=Function(x, y) lambda((x, y)),
-                xrange:=rx,
-                yrange:=ry,
-                xsteps:=rx.Length / 200,
-                ysteps:=ry.Length / 200
-            )
+            Using plt As New ContourPlot(2400, 1800, PlotTheme.Light(), env.getDriver) With {
+                .Title = "Contour Plot",
+                .Surface = Function(x, y) lambda((x, y)),
+                .XMin = rx.Min, .XMax = rx.Max,
+                .YMin = ry.Min, .YMax = ry.Max,
+                .Mode = ContourPlot.ContourMode.Filled,
+                .Levels = 10
+            }
+                Call plt.Plot()
+                Return plt.AsGraphicsData()
+            End Using
         Else
             Dim layers As pipeline = pipeline.TryCreatePipeline(Of ContourLayer)(data, env)
 
@@ -1391,13 +1526,62 @@ Module plots
                 Return Message.InCompatibleType(GetType(FormulaExpression), data.GetType, env)
             End If
 
-            Return layers _
-                .populates(Of ContourLayer)(env) _
-                .Plot(
-                    colorSet:=RColorPalette.getColorSet(colorSet),
-                    xlim:=xlim,
-                    ylim:=ylim
-                )
+            Return renderContourLayers(layers.populates(Of ContourLayer)(env).ToArray, RColorPalette.getColorSet(colorSet), env.getDriver)
         End If
+    End Function
+
+    ''' <summary>
+    ''' render the marching squares contour layers
+    ''' (从旧 Plots 项目的 Contour.ContourPlot 渲染逻辑迁移而来)
+    ''' </summary>
+    Private Function renderContourLayers(layers As ContourLayer(), colorSet As String, driver As Drivers) As GraphicsData
+        Dim contours As GeneralPath() = layers _
+            .OrderBy(Function(layer) layer.threshold) _
+            .Select(Function(layer) New GeneralPath(layer)) _
+            .ToArray
+        Dim level_cutoff As Double() = contours.Select(Function(c) c.level).ToArray
+        Dim colors As Brush() = Designer _
+            .GetColors(colorSet, level_cutoff.Length) _
+            .Select(Function(c) New SolidBrush(c)) _
+            .ToArray
+        Dim i As i32 = Scan0
+        Dim plotInternal =
+            Sub(ByRef g As IGraphics, canvas As GraphicsRegion)
+                Dim css As CSSEnvirnment = g.LoadEnvironment
+                Dim polygons = contours _
+                    .Select(Function(layer) layer.GetContour.shapes) _
+                    .IteratesALL _
+                    .ToArray
+                Dim dims As Size
+
+                If polygons.Length = 0 Then
+                    dims = New Size
+                Else
+                    dims = New Size(polygons.Select(Function(p) p.x.Max).Max, polygons.Select(Function(p) p.y.Max).Max)
+                End If
+
+                Dim rect As Rectangle = canvas.PlotRegion(css)
+
+                If dims.Width * dims.Height > 0 Then
+                    Dim scaleX = d3js.scale.linear.domain(values:=New Double() {0, dims.Width}).range(values:=New Double() {rect.Left, rect.Right})
+                    Dim scaleY = d3js.scale.linear.domain(values:=New Double() {0, dims.Height}).range(values:=New Double() {rect.Top, rect.Bottom})
+
+                    For Each polygon As GeneralPath In contours
+                        Dim color As Brush = colors(++i)
+
+                        Call polygon.Fill(g, color, scaleX, scaleY)
+                        Call polygon.Draw(g, Pens.Black, scaleX, scaleY)
+                    Next
+                End If
+
+                Dim paddingLayout As PaddingLayout = PaddingLayout.EvaluateFromCSS(css, canvas.Padding)
+                Dim legendLayout As New Rectangle(rect.Right + 10, rect.Top, paddingLayout.Right / 3 * 2, rect.Height / 3 * 2)
+                Dim legendTitleFont As Font = css.GetFont(CSSFont.Win7LargeBold)
+                Dim tickFont As Font = css.GetFont(CSSFont.Win7Normal)
+
+                Call g.ColorMapLegend(legendLayout, colors, level_cutoff, legendTitleFont, title:="Levels", tickFont, Pens.Gray)
+            End Sub
+
+        Return g.GraphicsPlots(New Size(2400, 1800), "padding: 100px 150px 100px 150px;", "white", plotInternal, driver:=driver)
     End Function
 End Module

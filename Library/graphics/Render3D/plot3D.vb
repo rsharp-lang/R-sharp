@@ -54,8 +54,8 @@
 
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Data.ChartPlots.Graphic.Legend
-Imports Microsoft.VisualBasic.Data.ChartPlots.Plot3D
+Imports Microsoft.VisualBasic.Data.Plots.Plot3D
+Imports Microsoft.VisualBasic.Data.Plots.Plot3D.Legend
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing3D
 Imports Microsoft.VisualBasic.Imaging.Driver
@@ -66,7 +66,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports REnv = SMRUCC.Rsharp.Runtime
-Imports scatter3D = Microsoft.VisualBasic.Data.ChartPlots.Plot3D.Scatter
+Imports scatter3D = Microsoft.VisualBasic.Data.Plots.Plot3D.Scatter3DPlot
 
 <Package("chart3D", Category:=APICategories.SoftwareTools)>
 Module plot3D
