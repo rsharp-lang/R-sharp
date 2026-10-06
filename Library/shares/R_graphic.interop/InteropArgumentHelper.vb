@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::6c1485771d5bcc380c04668904258373, R-sharp\Library\R_graphic.interop\InteropArgumentHelper.vb"
+#Region "Microsoft.VisualBasic::6c1485771d5bcc380c04668904258373, R-sharp\Library\R_graphic.interop\InteropArgumentHelper.vb"
 
 ' Author:
 ' 
@@ -51,6 +51,17 @@
 #End Region
 
 Imports System.Drawing
+Imports Pen = Microsoft.VisualBasic.Imaging.Pen
+Imports Pens = Microsoft.VisualBasic.Imaging.Pens
+Imports Brush = Microsoft.VisualBasic.Imaging.Brush
+Imports Font = Microsoft.VisualBasic.Imaging.Font
+Imports Brushes = Microsoft.VisualBasic.Imaging.Brushes
+Imports SolidBrush = Microsoft.VisualBasic.Imaging.SolidBrush
+Imports DashStyle = Microsoft.VisualBasic.Imaging.DashStyle
+Imports Image = Microsoft.VisualBasic.Imaging.Image
+Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
+Imports GraphicsPath = Microsoft.VisualBasic.Imaging.GraphicsPath
+Imports FontStyle = Microsoft.VisualBasic.Imaging.FontStyle
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D

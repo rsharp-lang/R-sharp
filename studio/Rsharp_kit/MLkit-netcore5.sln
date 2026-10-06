@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
@@ -49,8 +49,6 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "html_netcore5", "..\..\..\r
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "imaging-netcore5", "..\..\..\runtime\sciBASIC#\gr\Microsoft.VisualBasic.Imaging\imaging-netcore5.vbproj", "{1C66059F-3211-431E-8DCF-728D11387EB4}"
 EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "plots-netcore5", "..\..\..\runtime\sciBASIC#\Data_science\Visualization\Plots\plots-netcore5.vbproj", "{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "R_graphic.interop", "..\..\Library\R_graphic.interop\R_graphic.interop.shproj", "{53AF2B13-CCD5-4F73-94D5-612191E785A9}"
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "data_visualize-netcore5", "..\..\..\runtime\sciBASIC#\Data_science\Visualization\Visualization\data_visualize-netcore5.vbproj", "{C417247D-91B2-4A75-8221-BAC90438EEBD}"
@@ -62,8 +60,6 @@ EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "datastorage-netcore5", "..\..\..\runtime\sciBASIC#\Data\BinaryData\DataStorage\datastorage-netcore5.vbproj", "{86C141DD-0496-4EDB-8F2E-F5D028AC044C}"
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "JSON-netcore5", "..\..\..\runtime\sciBASIC#\mime\application%json\JSON-netcore5.vbproj", "{0DA38150-30C6-4BE7-B18D-726E02ACF630}"
-EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "plots_extensions-netcore5", "..\..\..\runtime\sciBASIC#\Data_science\Visualization\Plots-statistics\plots_extensions-netcore5.vbproj", "{A9A8E514-5632-42F9-8378-256B7BE25BB1}"
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "stats-netcore5", "..\..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\Math.Statistics\stats-netcore5.vbproj", "{B84FA53F-BF95-4F5D-9E29-01670E67FF37}"
 EndProject
@@ -375,22 +371,6 @@ Global
 		{1C66059F-3211-431E-8DCF-728D11387EB4}.Rsharp_app_release|Any CPU.Build.0 = Rsharp_app_release|Any CPU
 		{1C66059F-3211-431E-8DCF-728D11387EB4}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
 		{1C66059F-3211-431E-8DCF-728D11387EB4}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.Debug|x64.ActiveCfg = Debug|x64
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.Debug|x64.Build.0 = Debug|x64
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.LipidSearch|Any CPU.ActiveCfg = LipidSearch|Any CPU
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.LipidSearch|Any CPU.Build.0 = LipidSearch|Any CPU
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.LipidSearch|x64.ActiveCfg = LipidSearch|x64
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.LipidSearch|x64.Build.0 = LipidSearch|x64
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.Release|x64.ActiveCfg = Release|x64
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.Release|x64.Build.0 = Release|x64
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.Rsharp_app_release|Any CPU.ActiveCfg = Rsharp_app_release|Any CPU
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.Rsharp_app_release|Any CPU.Build.0 = Rsharp_app_release|Any CPU
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 		{C417247D-91B2-4A75-8221-BAC90438EEBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C417247D-91B2-4A75-8221-BAC90438EEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C417247D-91B2-4A75-8221-BAC90438EEBD}.Debug|x64.ActiveCfg = Debug|x64
@@ -471,22 +451,6 @@ Global
 		{0DA38150-30C6-4BE7-B18D-726E02ACF630}.Rsharp_app_release|Any CPU.Build.0 = Rsharp_app_release|Any CPU
 		{0DA38150-30C6-4BE7-B18D-726E02ACF630}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
 		{0DA38150-30C6-4BE7-B18D-726E02ACF630}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.Debug|x64.ActiveCfg = Debug|x64
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.Debug|x64.Build.0 = Debug|x64
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.LipidSearch|Any CPU.ActiveCfg = LipidSearch|Any CPU
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.LipidSearch|Any CPU.Build.0 = LipidSearch|Any CPU
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.LipidSearch|x64.ActiveCfg = LipidSearch|x64
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.LipidSearch|x64.Build.0 = LipidSearch|x64
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.Release|x64.ActiveCfg = Release|x64
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.Release|x64.Build.0 = Release|x64
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.Rsharp_app_release|Any CPU.ActiveCfg = Rsharp_app_release|Any CPU
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.Rsharp_app_release|Any CPU.Build.0 = Rsharp_app_release|Any CPU
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 		{B84FA53F-BF95-4F5D-9E29-01670E67FF37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B84FA53F-BF95-4F5D-9E29-01670E67FF37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B84FA53F-BF95-4F5D-9E29-01670E67FF37}.Debug|x64.ActiveCfg = Debug|x64
@@ -560,13 +524,11 @@ Global
 		{5D8FC0AF-39AA-40D0-904F-EBB5CADB2E57} = {F2379FF6-7766-446F-9680-EFC5C8B55015}
 		{BB2D76EF-B217-4889-BFEB-8CFBAA3C2746} = {5D8FC0AF-39AA-40D0-904F-EBB5CADB2E57}
 		{1C66059F-3211-431E-8DCF-728D11387EB4} = {5D8FC0AF-39AA-40D0-904F-EBB5CADB2E57}
-		{F9CE9F26-334F-4976-8F67-6D9F8897C5BF} = {5D8FC0AF-39AA-40D0-904F-EBB5CADB2E57}
 		{C417247D-91B2-4A75-8221-BAC90438EEBD} = {5D8FC0AF-39AA-40D0-904F-EBB5CADB2E57}
 		{878818EB-F887-477E-83DF-501269A9E7CC} = {F2379FF6-7766-446F-9680-EFC5C8B55015}
 		{3BD7E69A-8AFD-4877-8151-F6E94A460DE4} = {F2379FF6-7766-446F-9680-EFC5C8B55015}
 		{86C141DD-0496-4EDB-8F2E-F5D028AC044C} = {4A55D639-065A-405E-881B-4D140A1B4E00}
 		{0DA38150-30C6-4BE7-B18D-726E02ACF630} = {4A55D639-065A-405E-881B-4D140A1B4E00}
-		{A9A8E514-5632-42F9-8378-256B7BE25BB1} = {5D8FC0AF-39AA-40D0-904F-EBB5CADB2E57}
 		{B84FA53F-BF95-4F5D-9E29-01670E67FF37} = {6D293033-8F98-4CF4-8D2E-0047E1315812}
 		{02B58E78-2F06-49FE-99E7-3F958F866357} = {6D293033-8F98-4CF4-8D2E-0047E1315812}
 		{DE07D421-89BE-4314-9C53-983CC05143FA} = {6D293033-8F98-4CF4-8D2E-0047E1315812}

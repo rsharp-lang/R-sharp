@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
@@ -44,8 +44,6 @@ EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "umap-netcore5", "..\..\runtime\sciBASIC#\Data_science\DataMining\UMAP\umap-netcore5.vbproj", "{6FB0E9B5-2220-42A9-B289-C39D25CB5561}"
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "randomizer-netcore5", "..\..\runtime\sciBASIC#\Data_science\Mathematica\Math\Randomizer\randomizer-netcore5.vbproj", "{BCD4DC44-4D8E-4468-AF2C-74BC61C127C9}"
-EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "plots-netcore5", "..\..\runtime\sciBASIC#\Data_science\Visualization\Plots\plots-netcore5.vbproj", "{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1941,114 +1939,6 @@ Global
 		{BCD4DC44-4D8E-4468-AF2C-74BC61C127C9}.Surveillance-of-infectious-diseases|x64.Build.0 = Debug|x64
 		{BCD4DC44-4D8E-4468-AF2C-74BC61C127C9}.Surveillance-of-infectious-diseases|x86.ActiveCfg = Debug|Any CPU
 		{BCD4DC44-4D8E-4468-AF2C-74BC61C127C9}.Surveillance-of-infectious-diseases|x86.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.BioDeep_database|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.BioDeep_database|Any CPU.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.BioDeep_database|x64.ActiveCfg = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.BioDeep_database|x64.Build.0 = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.BioDeep_database|x86.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.BioDeep_database|x86.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biodeep|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biodeep|Any CPU.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biodeep|x64.ActiveCfg = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biodeep|x64.Build.0 = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biodeep|x86.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biodeep|x86.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biostack|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biostack|Any CPU.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biostack|x64.ActiveCfg = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biostack|x64.Build.0 = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biostack|x86.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biostack|x86.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biostack-Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biostack-Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biostack-Debug|x64.ActiveCfg = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biostack-Debug|x64.Build.0 = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biostack-Debug|x86.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Biostack-Debug|x86.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Debug|x64.ActiveCfg = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Debug|x64.Build.0 = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Debug|x86.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.docs|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.docs|Any CPU.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.docs|x64.ActiveCfg = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.docs|x64.Build.0 = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.docs|x86.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.docs|x86.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.GCModeller(Release_X64)|Any CPU.ActiveCfg = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.GCModeller(Release_X64)|Any CPU.Build.0 = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.GCModeller(Release_X64)|x64.ActiveCfg = Release|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.GCModeller(Release_X64)|x64.Build.0 = Release|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.GCModeller(Release_X64)|x86.ActiveCfg = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.GCModeller(Release_X64)|x86.Build.0 = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.GCModeller(UNIX-Release_X64)|Any CPU.ActiveCfg = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.GCModeller(UNIX-Release_X64)|Any CPU.Build.0 = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.GCModeller(UNIX-Release_X64)|x64.ActiveCfg = Release|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.GCModeller(UNIX-Release_X64)|x64.Build.0 = Release|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.GCModeller(UNIX-Release_X64)|x86.ActiveCfg = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.GCModeller(UNIX-Release_X64)|x86.Build.0 = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.installer_x64|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.installer_x64|Any CPU.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.installer_x64|x64.ActiveCfg = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.installer_x64|x64.Build.0 = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.installer_x64|x86.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.installer_x64|x86.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.LipidSearch|Any CPU.ActiveCfg = LipidSearch|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.LipidSearch|Any CPU.Build.0 = LipidSearch|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.LipidSearch|x64.ActiveCfg = LipidSearch|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.LipidSearch|x64.Build.0 = LipidSearch|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.LipidSearch|x86.ActiveCfg = LipidSearch|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.LipidSearch|x86.Build.0 = LipidSearch|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.MetaCardio|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.MetaCardio|Any CPU.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.MetaCardio|x64.ActiveCfg = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.MetaCardio|x64.Build.0 = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.MetaCardio|x86.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.MetaCardio|x86.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.mzkit_UnixDocker|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.mzkit_UnixDocker|Any CPU.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.mzkit_UnixDocker|x64.ActiveCfg = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.mzkit_UnixDocker|x64.Build.0 = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.mzkit_UnixDocker|x86.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.mzkit_UnixDocker|x86.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.mzkit|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.mzkit|Any CPU.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.mzkit|x64.ActiveCfg = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.mzkit|x64.Build.0 = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.mzkit|x86.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.mzkit|x86.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.node-debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.node-debug|Any CPU.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.node-debug|x64.ActiveCfg = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.node-debug|x64.Build.0 = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.node-debug|x86.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.node-debug|x86.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Publish|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Publish|Any CPU.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Publish|x64.ActiveCfg = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Publish|x64.Build.0 = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Publish|x86.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Publish|x86.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Release|x64.ActiveCfg = Release|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Release|x64.Build.0 = Release|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Release|x86.ActiveCfg = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Release|x86.Build.0 = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Rsharp_app_release|Any CPU.ActiveCfg = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Rsharp_app_release|x86.ActiveCfg = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Rsharp_app_release|x86.Build.0 = Release|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Surveillance-of-infectious-diseases|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Surveillance-of-infectious-diseases|Any CPU.Build.0 = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Surveillance-of-infectious-diseases|x64.ActiveCfg = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Surveillance-of-infectious-diseases|x64.Build.0 = Debug|x64
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Surveillance-of-infectious-diseases|x86.ActiveCfg = Debug|Any CPU
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF}.Surveillance-of-infectious-diseases|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2074,7 +1964,6 @@ Global
 		{8BEDA089-626B-4AD4-B424-6968405E32B3} = {AE8CD1BB-DFD8-4AB5-810D-1B9BE507CB72}
 		{6FB0E9B5-2220-42A9-B289-C39D25CB5561} = {AE8CD1BB-DFD8-4AB5-810D-1B9BE507CB72}
 		{BCD4DC44-4D8E-4468-AF2C-74BC61C127C9} = {AE8CD1BB-DFD8-4AB5-810D-1B9BE507CB72}
-		{8CAE2BBF-5BBC-4B4B-80F6-A2D77E729CFF} = {4D622A76-F39F-4ABD-9469-B75AF704CC4C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDE51030-DD43-43EA-A7B7-3085E639B151}
