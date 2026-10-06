@@ -59,6 +59,7 @@ Imports Microsoft.VisualBasic.CommandLine.InteropService.SharedORM
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Language.UnixBash
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.My
 Imports SMRUCC.Rsharp.Development.Package.File
 Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
 
@@ -97,6 +98,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
             )
         Catch ex As Exception
             Call App.LogException(ex)
+            Call Log4VB.ClearHooks()
             Call ex.PrintException
             Call VBDebugger.WaitOutput()
 
