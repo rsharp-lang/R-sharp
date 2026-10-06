@@ -75,6 +75,8 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.My
+Imports Microsoft.VisualBasic.Printing
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Development
 Imports SMRUCC.Rsharp.Development.Components
@@ -91,11 +93,11 @@ Imports SMRUCC.Rsharp.Runtime.Internal
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports LibDir = Microsoft.VisualBasic.FileIO.Directory
 Imports REnv = SMRUCC.Rsharp.Runtime.Internal.Invokes
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports std = System.Math
 Imports Strings = Microsoft.VisualBasic.Strings
-Imports LibDir = Microsoft.VisualBasic.FileIO.Directory
-Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 Namespace Interpreter
 
@@ -776,6 +778,9 @@ Namespace Interpreter
                     ' TODO: dispose managed state (managed objects)
                     Call warnings.Clear()
                     Call globalEnvir.Dispose()
+
+                    Log4VB.redirectError = Nothing
+                    Log4VB.redirectWarning = Nothing
                 End If
 
                 ' TODO: free unmanaged resources (unmanaged objects) and override finalizer

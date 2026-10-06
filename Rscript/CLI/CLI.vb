@@ -98,6 +98,7 @@ Imports RProgram = SMRUCC.Rsharp.Interpreter.Program
         Catch ex As Exception
             Call App.LogException(ex)
             Call ex.PrintException
+            Call VBDebugger.WaitOutput()
 
             Return -1
         End Try

@@ -321,8 +321,7 @@ Namespace Development.Package.File
         ''' <param name="package_dir"></param>
         ''' <returns></returns>
         <Extension>
-        Private Function buildUnixMan(file As PackageModel, package_dir As String) As Message
-            Dim REngine As New RInterpreter(env_label:="build_unix_man_page")
+        Private Function buildUnixMan(file As PackageModel, REngine As RInterpreter, package_dir As String) As Message
             Dim plugin As String = LibDLL.GetDllFile("roxygenNet.dll", REngine.globalEnvir)
 
             file.unixman = New List(Of String)
@@ -370,7 +369,7 @@ Namespace Development.Package.File
 
                 ' export symbol help index as json file 
                 Call DirectCast(err, list) _
-                    .AsGeneric(Of Document)(REngine.globalEnvir) _
+                    .asGeneric(Of Document)(REngine.globalEnvir) _
                     .GetJson _
                     .SaveTo($"{package_dir}/man/index.json")
 
@@ -515,6 +514,22 @@ Namespace Development.Package.File
             Next
 
             Return Nothing
+        End Function
+
+        ''' <summary>
+        ''' create unix .1 man page file and html help documents
+        ''' </summary>
+        ''' <param name="file"></param>
+        ''' <param name="package_dir"></param>
+        ''' <returns></returns>
+        <Extension>
+        Private Function buildUnixMan(file As PackageModel, package_dir As String) As Message
+            Dim REngine As New RInterpreter(env_label:="build_unix_man_page")
+            Dim result As Message = file.buildUnixMan(REngine, package_dir)
+
+            Call REngine.Dispose()
+
+            Return result
         End Function
 
         ''' <summary>
