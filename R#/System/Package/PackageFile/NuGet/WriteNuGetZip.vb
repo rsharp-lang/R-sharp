@@ -227,22 +227,27 @@ Namespace Development.Package.File
 
             If plugin.FileExists Then
                 Using file As New StreamWriter(zip.CreateEntry($"package/source.map").Open)
-                    Dim encoder As String = "VisualStudio::sourceMap_encode"
-                    Dim args As Object() = {sourceMaps.ToArray, pkg.info.Package}
+                    Try
+                        Dim encoder As String = "VisualStudio::sourceMap_encode"
+                        Dim args As Object() = {sourceMaps.ToArray, pkg.info.Package}
 
-                    Call PackageLoader.ParsePackages(plugin) _
-                        .Where(Function(pkg) pkg.namespace = "VisualStudio") _
-                        .FirstOrDefault _
-                        .DoCall(Sub(pkg)
-                                    Call REngine.globalEnvir.ImportsStatic(pkg.package)
-                                End Sub)
+                        Call PackageLoader.ParsePackages(plugin) _
+                            .Where(Function(pkg) pkg.namespace = "VisualStudio") _
+                            .FirstOrDefault _
+                            .DoCall(Sub(pkg)
+                                        Call REngine.globalEnvir.ImportsStatic(pkg.package, strict:=False)
+                                    End Sub)
 
-                    Call JsonContract _
-                        .GetObjectJson(
-                            obj:=REngine.Invoke(encoder, args),
-                            indent:=True
-                        ) _
-                        .DoCall(AddressOf file.WriteLine)
+                        Call JsonContract _
+                            .GetObjectJson(
+                                obj:=REngine.Invoke(encoder, args),
+                                indent:=True
+                            ) _
+                            .DoCall(AddressOf file.WriteLine)
+                    Catch ex As Exception
+                        Call ex.Message.warning
+                        Call VBDebugger.EchoLine($"warning: create package source map error [{ex.Message}]")
+                    End Try
                 End Using
             End If
 
