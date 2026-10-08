@@ -161,14 +161,14 @@ Namespace Runtime.Internal.Invokes
                                  Optional args As list = Nothing,
                                  Optional env As Environment = Nothing) As Object
 
-            Dim exprs As pipeline = pipeline.TryCreatePipeline(Of Expression)(expr, env)
+            Dim exprs As PipeIterator(Of Expression) = pipeline.Stream(Of Expression)(expr, env)
 
             If exprs.isError Then
                 ' this error will never happends
                 Return exprs.getError
             End If
 
-            Dim program As New Program(exprs.populates(Of Expression)(env))
+            Dim program As New Program(exprs)
             Dim eval As Object = program.Execute(env)
 
             If TypeOf eval Is Message Then
@@ -176,14 +176,14 @@ Namespace Runtime.Internal.Invokes
                 Dim err As Object = args!error
 
                 If err IsNot Nothing Then
-                    exprs = pipeline.TryCreatePipeline(Of Expression)(err, env)
+                    exprs = pipeline.Stream(Of Expression)(err, env)
 
                     If exprs.isError Then
                         ' this error will never happends
                         Return exprs.getError
                     Else
                         env.AddMessage(DirectCast(eval, Message).message, MSG_TYPES.WRN)
-                        program = New Program(exprs.populates(Of Expression)(env))
+                        program = New Program(exprs)
                         eval = program.Execute(env)
                     End If
                 End If
@@ -192,13 +192,13 @@ Namespace Runtime.Internal.Invokes
             If [finally] IsNot Nothing Then
                 Dim eval2 As Object
 
-                exprs = pipeline.TryCreatePipeline(Of Expression)([finally], env)
+                exprs = pipeline.Stream(Of Expression)([finally], env)
 
                 If exprs.isError Then
                     ' this error will never happends
                     Return exprs.getError
                 Else
-                    program = New Program(exprs.populates(Of Expression)(env))
+                    program = New Program(exprs)
                     eval2 = program.Execute(env)
 
                     If TypeOf eval2 Is Message Then

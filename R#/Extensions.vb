@@ -392,7 +392,7 @@ Public Module Extensions
     ''' <param name="env"></param>
     ''' <returns></returns>
     Public Function Buffer(<RRawVectorArgument> stream As Object, env As Environment) As [Variant](Of Byte(), Message)
-        Dim bytes As pipeline = pipeline.TryCreatePipeline(Of Byte)(stream, env)
+        Dim bytes As PipeIterator(Of Byte) = pipeline.Stream(Of Byte)(stream, env)
 
         If stream Is Nothing Then
             Return Nothing
@@ -412,7 +412,7 @@ Public Module Extensions
                 Return bytes.getError
             End If
         Else
-            Return bytes.populates(Of Byte)(env).ToArray
+            Return bytes.ToArray
         End If
     End Function
 End Module

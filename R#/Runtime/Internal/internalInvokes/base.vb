@@ -2341,7 +2341,7 @@ RE0:
         ''' </returns>
         <ExportAPI("is.na")>
         Public Function isNA(<RRawVectorArgument> x As Object, Optional env As Environment = Nothing) As Object
-            Dim numerics As pipeline = pipeline.TryCreatePipeline(Of Double)(x, env, suppress:=True)
+            Dim numerics As PipeIterator(Of Double) = pipeline.Stream(Of Double)(x, env, suppress:=True)
 
             If x Is Nothing Then
                 Return False
@@ -2354,7 +2354,6 @@ RE0:
             End If
 
             Return numerics _
-                .populates(Of Double)(env) _
                 .Select(Function(a) a.IsNaNImaginary) _
                 .ToArray
         End Function
