@@ -367,6 +367,10 @@ Namespace Runtime.Interop
             Return names.Clone
         End Function
 
+        Public Shared Function GetRSharpType(Of T)() As RType
+            Return GetRSharpType(GetType(T))
+        End Function
+
         ''' <summary>
         ''' Get VB.NET clr type to R# type wrapper <see cref="RType"/>
         ''' </summary>
