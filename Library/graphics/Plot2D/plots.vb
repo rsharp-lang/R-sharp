@@ -218,15 +218,15 @@ Module plots
             .Matrix = mat,
             .RowLabels = rowNames,
             .ColLabels = cols,
-            .ColorMap = parseColorMap(colors, ColorScale.ColorMapType.Viridis)
+            .ColorMap = parseColorMap(colors, Drawing2D.Colors.ScalerPalette.viridis)
         }
             Call plt.Plot()
             Return plt.AsGraphicsData()
         End Using
     End Function
 
-    Private Function parseColorMap(name As String, [default] As ColorScale.ColorMapType) As ColorScale.ColorMapType
-        Dim cmap As ColorScale.ColorMapType = Nothing
+    Private Function parseColorMap(name As String, [default] As ScalerPalette) As ScalerPalette
+        Dim cmap As ScalerPalette = Nothing
 
         If [Enum].TryParse(name, ignoreCase:=True, result:=cmap) Then
             Return cmap
