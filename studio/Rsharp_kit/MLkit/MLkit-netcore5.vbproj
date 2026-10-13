@@ -216,6 +216,7 @@
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\MachineLearning\MachineLearning\machine_learning-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\MachineLearning\MLDataStorage\MLDataStorage.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\MachineLearning\MLDebugger\ML_debugger-netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\MachineLearning\ML_SHAP\ML_SHAP.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\MachineLearning\TensorFlow\TensorFlow.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\MachineLearning\VAE\VAE.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\MachineLearning\XGBoostDataSet\XGBoostDataSet.vbproj" />
@@ -231,7 +232,6 @@
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Data_science\Visualization\Visualization\data_visualize-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\gr\Microsoft.VisualBasic.Imaging\imaging.NET5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\gr\network-visualization\Datavisualization.Network\network_graph-netcore5.vbproj" />
-    <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\gr\physics\physics-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\mime\application%json\JSON-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\..\runtime\sciBASIC#\mime\text%html\html_netcore5.vbproj" />
