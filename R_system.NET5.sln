@@ -14423,8 +14423,8 @@ Global
 		{84D4E021-2863-205E-A75B-C8719DA9AE36}.Rsharp_app_release|Any CPU.Build.0 = nuget_release|Any CPU
 		{84D4E021-2863-205E-A75B-C8719DA9AE36}.Rsharp_app_release|ARM32.ActiveCfg = nuget_release|Any CPU
 		{84D4E021-2863-205E-A75B-C8719DA9AE36}.Rsharp_app_release|ARM32.Build.0 = nuget_release|Any CPU
-		{84D4E021-2863-205E-A75B-C8719DA9AE36}.Rsharp_app_release|x64.ActiveCfg = nuget_release|x64
-		{84D4E021-2863-205E-A75B-C8719DA9AE36}.Rsharp_app_release|x64.Build.0 = nuget_release|x64
+		{84D4E021-2863-205E-A75B-C8719DA9AE36}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
+		{84D4E021-2863-205E-A75B-C8719DA9AE36}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 		{84D4E021-2863-205E-A75B-C8719DA9AE36}.Rsharp_app_release|x86.ActiveCfg = nuget_release|Any CPU
 		{84D4E021-2863-205E-A75B-C8719DA9AE36}.Rsharp_app_release|x86.Build.0 = nuget_release|Any CPU
 		{84D4E021-2863-205E-A75B-C8719DA9AE36}.RsharpDev|Any CPU.ActiveCfg = nuget_release|Any CPU
@@ -14711,8 +14711,8 @@ Global
 		{D653A402-34AA-FA06-E84B-1D2EE109F5B3}.Rsharp_app_release|Any CPU.Build.0 = Release|Any CPU
 		{D653A402-34AA-FA06-E84B-1D2EE109F5B3}.Rsharp_app_release|ARM32.ActiveCfg = Release|Any CPU
 		{D653A402-34AA-FA06-E84B-1D2EE109F5B3}.Rsharp_app_release|ARM32.Build.0 = Release|Any CPU
-		{D653A402-34AA-FA06-E84B-1D2EE109F5B3}.Rsharp_app_release|x64.ActiveCfg = Release|x64
-		{D653A402-34AA-FA06-E84B-1D2EE109F5B3}.Rsharp_app_release|x64.Build.0 = Release|x64
+		{D653A402-34AA-FA06-E84B-1D2EE109F5B3}.Rsharp_app_release|x64.ActiveCfg = Rsharp_app_release|x64
+		{D653A402-34AA-FA06-E84B-1D2EE109F5B3}.Rsharp_app_release|x64.Build.0 = Rsharp_app_release|x64
 		{D653A402-34AA-FA06-E84B-1D2EE109F5B3}.Rsharp_app_release|x86.ActiveCfg = Release|Any CPU
 		{D653A402-34AA-FA06-E84B-1D2EE109F5B3}.Rsharp_app_release|x86.Build.0 = Release|Any CPU
 		{D653A402-34AA-FA06-E84B-1D2EE109F5B3}.RsharpDev|Any CPU.ActiveCfg = Debug|Any CPU
