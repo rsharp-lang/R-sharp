@@ -100,10 +100,10 @@
     <OutputPath>../App\</OutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)|$(TargetFramework)'=='RsharpDev|x64|net8.0-windows'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RsharpDev|x64'">
     <DocumentationFile>Rscript.xml</DocumentationFile>
    
-    <OutputPath>../../../../mini-R/App/rstudio/bin</OutputPath>
+    <OutputPath>../../../../mini-R/dist/bin/rstudio/bin</OutputPath>
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
     <Optimize>False</Optimize>
     <DebugSymbols>true</DebugSymbols>
@@ -114,19 +114,6 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0-windows|x64'">
-    <DocumentationFile>Rserve.xml</DocumentationFile>
-    <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <Optimize>false</Optimize>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <DefineDebug>false</DefineDebug>
-    <DefineTrace>true</DefineTrace>
-    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
-    <OutputPath>../../workbench/win32_desktop/Apps/Rstudio/bin</OutputPath>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='nuget_release|net6.0-windows|x64'">
     <DocumentationFile>Rserve.xml</DocumentationFile>
