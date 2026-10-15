@@ -440,7 +440,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0|AnyCPU'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
     <DefineDebug>True</DefineDebug>
@@ -449,7 +449,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0|x64'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
     <DefineDebug>True</DefineDebug>
@@ -459,112 +459,112 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0|AnyCPU'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
     <Optimize>False</Optimize>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0|x64'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net10.0|AnyCPU'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Rsharp_app_release|net10.0|x64'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='PlantMAT|net10.0|AnyCPU'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='PlantMAT|net10.0|x64'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net10.0|AnyCPU'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CFD_win32|net10.0|x64'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net10.0|AnyCPU'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='mzkit_win32|net10.0|x64'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net10.0|AnyCPU'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net10.0|x64'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='RsharpDev|net10.0|AnyCPU'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='RsharpDev|net10.0|x64'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='nuget_release|net10.0|AnyCPU'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='nuget_release|net10.0|x64'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DefineTrace>True</DefineTrace>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
