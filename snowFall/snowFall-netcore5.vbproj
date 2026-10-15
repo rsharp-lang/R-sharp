@@ -19,6 +19,7 @@
     <OptionStrict>Off</OptionStrict>
     <Title>package library for R# parallel programming on unix .netcore environment</Title>
     <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
