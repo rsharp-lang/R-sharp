@@ -1,78 +1,78 @@
 ﻿#Region "Microsoft.VisualBasic::89f71cccbf37f90a872a9c06a0ab5dc5, R#\Runtime\Internal\internalInvokes\base.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 4026
-    '    Code Lines: 1733 (43.05%)
-    ' Comment Lines: 1965 (48.81%)
-    '    - Xml Docs: 83.56%
-    ' 
-    '   Blank Lines: 328 (8.15%)
-    '     File Size: 186.45 KB
+' Summaries:
 
 
-    '     Module base
-    ' 
-    '         Function: __empty, __invisible, [date], [stop], allocate
-    '                   append, appendFinal, appendOfList, appendOfVector, (+3 Overloads) argumentList
-    '                   as_array, attachPackageFile, autoDispose, c, cat
-    '                   cbind, character, checkDimensionsAgree, colnames, columnVector
-    '                   commandArgs, doPrintInternal, dQuote, factors, getOption
-    '                   getPosition, ifelse, ifelseScalar, ifelseVector, ints
-    '                   is_array, isDataframe, isEmpty, isEmptyArray, isFALSE
-    '                   isFunction, isList, isNA, isNull, isRVector
-    '                   isTRUE, join_data, length, library, logical
-    '                   makeNames, names, ncol, neg, nrow
-    '                   numeric, objectAddInvoke, on_exit, options, options_flush
-    '                   print, range, raws, rbind, Rdataframe
-    '                   rep, rep_int, rep_len, replace, requireNamespace
-    '                   Rlist, Robj_dimension, rownames, rowwise, seq
-    '                   setOptionsParameters, sink, sink_number, source, sQuote
-    '                   str, summary, Sys_time, t, uniqueNames
-    '                   unitOfT, ValueAt, warning, year
-    ' 
-    '         Sub: println_message, warnings
-    '         Class PrinterOptions
-    ' 
-    '             Properties: color, fields, maxPrint, maxWidth, quot
-    '                         syntax
-    ' 
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 4026
+'    Code Lines: 1733 (43.05%)
+' Comment Lines: 1965 (48.81%)
+'    - Xml Docs: 83.56%
+' 
+'   Blank Lines: 328 (8.15%)
+'     File Size: 186.45 KB
+
+
+'     Module base
+' 
+'         Function: __empty, __invisible, [date], [stop], allocate
+'                   append, appendFinal, appendOfList, appendOfVector, (+3 Overloads) argumentList
+'                   as_array, attachPackageFile, autoDispose, c, cat
+'                   cbind, character, checkDimensionsAgree, colnames, columnVector
+'                   commandArgs, doPrintInternal, dQuote, factors, getOption
+'                   getPosition, ifelse, ifelseScalar, ifelseVector, ints
+'                   is_array, isDataframe, isEmpty, isEmptyArray, isFALSE
+'                   isFunction, isList, isNA, isNull, isRVector
+'                   isTRUE, join_data, length, library, logical
+'                   makeNames, names, ncol, neg, nrow
+'                   numeric, objectAddInvoke, on_exit, options, options_flush
+'                   print, range, raws, rbind, Rdataframe
+'                   rep, rep_int, rep_len, replace, requireNamespace
+'                   Rlist, Robj_dimension, rownames, rowwise, seq
+'                   setOptionsParameters, sink, sink_number, source, sQuote
+'                   str, summary, Sys_time, t, uniqueNames
+'                   unitOfT, ValueAt, warning, year
+' 
+'         Sub: println_message, warnings
+'         Class PrinterOptions
+' 
+'             Properties: color, fields, maxPrint, maxWidth, quot
+'                         syntax
+' 
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -653,7 +653,7 @@ Namespace Runtime.Internal.Invokes
                                             Throw New InvalidDataException(msg)
                                         End If
 
-                                        Call msg.Warning
+                                        Call msg.warning
                                     End If
 
                                     Return pull
@@ -1937,11 +1937,11 @@ RE0:
                 slot = parameters(i)
 
                 If slot.haveSymbolName(hasObjectList:=listSymbolNames) Then
-                        ' 不支持tuple
-                        key = slot.name
-                        value = slot.Evaluate(envir)
-                    Else
-                        key = i + 1
+                    ' 不支持tuple
+                    key = slot.name
+                    value = slot.Evaluate(envir)
+                Else
+                    key = i + 1
                     key = $"[[{key}]]"
                     value = slot.Evaluate(envir)
                 End If
@@ -3602,7 +3602,18 @@ RE0:
         ''' <param name="list_len">
         ''' numeric; maximum number of list elements to display within a level.
         ''' </param>
-        ''' <returns></returns>
+        ''' <returns>
+        ''' str does not return anything, for efficiency reasons. The obvious side effect is output to the terminal.
+        ''' </returns>
+        ''' <remarks>
+        ''' See the extensive annotated ‘Examples’ below.
+        ''' 
+        ''' The Default method tries To “work always”, but needs To make some assumptions For the Case When Object has a 
+        ''' Class but no own str() method which Is the typical Case: There it relies On "[" And "[[" subsetting methods 
+        ''' To be compatible With length(). When this Is Not the Case, Or When Is.list(Object) Is True, but length(Object) 
+        ''' differs from length(unclass(Object)) it treats it As “irregular” And reports the contents Of unclass(Object) 
+        ''' As “hidden list”.
+        ''' </remarks>
         <ExportAPI("str")>
         Public Function str(<RRawVectorArgument>
                             [object] As Object,
@@ -3653,6 +3664,42 @@ RE0:
         ''' </param>
         ''' <param name="env"></param>
         ''' <returns></returns>
+        ''' <remarks>
+        ''' The default method, print.default has its own help page. Use methods("print") to get all the methods for the print generic.
+        ''' print.factor allows some customization And Is used for printing ordered factors as well.
+        ''' print.table for printing tables allows other customization. As of R 3.0.0, it only prints a description in case of a table with 0-extents (this can happen if a classifier has no valid data).
+        ''' See noquote As an example Of a Class whose main purpose Is a specific print method.
+        ''' </remarks>
+        ''' <example>
+        ''' require(stats)
+        ''' 
+        ''' ts(1:20)  #-- print is the "Default function" --> print.ts(.) is called
+        ''' for(i in 1:3) print(1:i)
+        ''' 
+        ''' ## Printing of factors
+        ''' attenu$station ## 117 levels -> 'max.levels' depending on width
+        ''' 
+        ''' ## ordered factors: levels  "l1 &lt; l2 &lt; .."
+        ''' esoph$agegp[1:12]
+        ''' esoph$alcgp[1:12]
+        ''' 
+        ''' ## Printing of sparse (contingency) tables
+        ''' set.seed(521)
+        ''' t1 &lt;- round(abs(rt(200, df = 1.8)))
+        ''' t2 &lt;- round(abs(rt(200, df = 1.4)))
+        ''' table(t1, t2) # simple
+        ''' print(table(t1, t2), zero.print = ".") # nicer to read
+        ''' 
+        ''' ## same for non-integer "table":
+        ''' T &lt;- table(t2,t1)
+        ''' T &lt;- T * (1+round(rlnorm(length(T)))/4)
+        ''' print(T, zero.print = ".") # quite nicer,
+        ''' print.table(T[,2:8] * 1e9, digits=3, zero.print = ".")
+        ''' ## still slightly inferior to  Matrix::Matrix(T)  for larger T
+        ''' 
+        ''' ## Corner cases with empty extents:
+        ''' table(1, NA) # &lt; table of extent 1 x 0 >
+        ''' </example>
         <ExportAPI("print")>
         Public Function print(<RRawVectorArgument> x As Object,
                               <RListObjectArgument>
