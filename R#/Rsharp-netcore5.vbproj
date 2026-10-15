@@ -689,7 +689,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Security.Permissions" Version="10.0.12" />
+    <PackageReference Include="System.Security.Permissions" Version="10.0.13" />
   </ItemGroup>
 
   <ItemGroup>
