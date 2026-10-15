@@ -226,6 +226,17 @@ Namespace Runtime
             Return Internal.Invokes.systemFile(resource, package, env:=Me)
         End Function
 
+        Public Function getPrimitive(symbolName As String) As Symbol
+            Dim f = Internal.invoke.getFunction(symbolName)
+            Dim s As Symbol = Nothing
+
+            If f IsNot Nothing Then
+                s = New Symbol(f, is_readonly:=True)
+            End If
+
+            Return s
+        End Function
+
         <DebuggerStepThrough>
         Public Shared Function defaultEmpty() As [Default](Of Environment)
             Return DirectCast(New RInterpreter().globalEnvir, Environment)

@@ -213,6 +213,11 @@ Namespace Runtime.Components
             MyBase.SetValue(value)
         End Sub
 
+        ''' <summary>
+        ''' Create a function symbol
+        ''' </summary>
+        ''' <param name="rfunc"></param>
+        ''' <param name="is_readonly"></param>
         Sub New(rfunc As RFunction, Optional is_readonly As Boolean = False)
             Call Me.New(TypeCodes.closure)
 
