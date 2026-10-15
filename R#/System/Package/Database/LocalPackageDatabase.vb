@@ -123,6 +123,10 @@ Namespace Development.Package
             Return Me.AsEnumerable.Select(Function(pkg) pkg.namespace)
         End Function
 
+        Public Function FindPackageInfo(pkg As String) As PackageInfo
+            Return c(assemblies.items, packages.AsEnumerable).Where(Function(a) a.namespace = pkg).FirstOrDefault
+        End Function
+
         ''' <summary>
         ''' If the package is not exists or load package failure
         ''' then this function returns nothing
@@ -130,7 +134,7 @@ Namespace Development.Package
         ''' <param name="packageName"></param>
         ''' <param name="exception"></param>
         ''' <returns></returns>
-        Public Function FindPackage(packageName As String, env As GlobalEnvironment, ByRef exception As Exception) As Package
+        Public Function FindPackage(packageName As String, env As GlobalEnvironment, ByRef exception As Exception, Optional checkLibPkg As Boolean = False) As Package
             Dim entry As PackageLoaderEntry = assemblies.items _
                 .SafeQuery _
                 .Where(Function(pkg)

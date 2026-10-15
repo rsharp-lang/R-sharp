@@ -120,6 +120,9 @@ Namespace Development.Package
         End Function
     End Class
 
+    ''' <summary>
+    ''' A sub type of <see cref="PackageInfo"/> for the CLR assembly package
+    ''' </summary>
     <XmlType("package")>
     Public Class PackageLoaderEntry : Inherits PackageInfo
 
