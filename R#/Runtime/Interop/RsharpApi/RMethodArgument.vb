@@ -118,7 +118,7 @@ Namespace Runtime.Interop
         Public Property isRequireRawVector As Boolean
 
         Friend rawVectorFlag As RRawVectorArgumentAttribute
-        Friend defaultScriptValue As RDefaultValueAttribute
+        Public defaultScriptValue As RDefaultValueAttribute
         Friend islazyeval As Boolean
 
         Public ReadOnly Property requireRawExpression As Boolean
