@@ -1,0 +1,58 @@
+﻿Namespace Language
+
+    <HideModuleName>
+    Public Module Keywords
+
+        Public ReadOnly Property KeywordSet As New Dictionary(Of String, String) From {
+            {"let", "Keyword for declare a new symbol in runtime."},
+            {"declare", "Keyword for declare a new constant lock symbol in runtime"},
+            {"function", ""},
+            {"return", ""},
+            {"as", "Keyword for type constraint"},
+            {"integer", ""},
+            {"double", ""},
+            {"boolean", ""},
+            {"string", ""},
+            {"const", "Keyword for declare a new constant lock symbol in runtime"},
+            {"imports", "Make package/module imports into current runtime."},
+            {"require", ""},
+            {"library", ""},
+            {"if", ""},
+            {"else", ""},
+            {"for", ""},
+            {"loop", ""},
+            {"while", ""},
+            {"repeat", ""},
+            {"step", "Step size for make sequential value vector"},
+            {"break", ""},
+            {"next", ""},
+            {"between", "Operator for check value is between a specific min and max range?"},
+            {"in", "Operator for get element from a collection or check element inside a specific set?"},
+            {"like", "Check of the given string like a specific regular expression pattern?"},
+            {"from", "R# language LINQ keyword"},
+            {"where", "R# language LINQ keyword"},
+            {"order", "R# language LINQ keyword"},
+            {"by", "R# language LINQ keyword"},
+            {"distinct", "R# language LINQ keyword"},
+            {"select", "R# language LINQ keyword"},
+            {"take", "R# language LINQ keyword"},
+            {"skip", "R# language LINQ keyword"},
+            {"into", "R# language LINQ keyword"},
+            {"aggregate", "R# language LINQ keyword"},
+            {"join", "R# language LINQ keyword"},
+            {"on", "R# language LINQ keyword"},
+            {"ascending", "R# language LINQ keyword"},
+            {"descending", "R# language LINQ keyword"},
+            {"suppress", "Suppress the wraning/error message"},
+            {"typeof", "R# check of the CLR type"},
+            {"modeof", "R# check of the r-sharp internal runtime type"},
+            {"valueof", "R# check of the actual .NET CLR type of the target .NET function."},
+            {"using", "Keyword for declare a new symbol with auto deconstruction"},
+            {"new", "Create a new S4object or create new object based on a specific exported .NET CLR type"},
+            {"try", "Try catch error"},
+            {"switch", "Switch control"},
+            {"of", "Loop through the collection element."},
+            {"yield", ""}
+        }
+    End Module
+End Namespace
