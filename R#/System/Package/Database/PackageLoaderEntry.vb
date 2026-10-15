@@ -114,6 +114,10 @@ Namespace Development.Package
         Public Property category As APICategories = APICategories.SoftwareTools
 
         Public Property symbols As String()
+
+        Public Overrides Function ToString() As String
+            Return $"{[namespace]} - {description}"
+        End Function
     End Class
 
     <XmlType("package")>
