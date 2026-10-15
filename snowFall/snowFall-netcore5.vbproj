@@ -117,6 +117,8 @@
     <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
     <DocumentationFile>snowFall.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <OutputPath>../../../../mini-R\dist\bin\rstudio\library</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
