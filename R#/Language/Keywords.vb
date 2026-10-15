@@ -3,6 +3,10 @@
     <HideModuleName>
     Public Module Keywords
 
+        ''' <summary>
+        ''' A list of the keywords inside the R# language.
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property KeywordSet As New Dictionary(Of String, String) From {
             {"let", "Keyword for declare a new symbol in runtime."},
             {"declare", "Keyword for declare a new constant lock symbol in runtime"},
