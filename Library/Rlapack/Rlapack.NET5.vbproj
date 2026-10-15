@@ -16,7 +16,7 @@
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Description>LAPACK (Linear Algebra PACKage)</Description>
-		<Configurations>Debug;Release;Rsharp_app_release;LipidSearch;mzkit_win32;gcmodeller_desktop;CFD_win32</Configurations>
+		<Configurations>Debug;Release;Rsharp_app_release;LipidSearch;mzkit_win32;gcmodeller_desktop;CFD_win32;RsharpDev</Configurations>
 		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 		<Title>LAPACK (Linear Algebra PACKage)</Title>
 	</PropertyGroup>
@@ -54,6 +54,10 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='gcmodeller_desktop|AnyCPU'">
+	  <DocumentationFile>Rlapack.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RsharpDev|AnyCPU'">
 	  <DocumentationFile>Rlapack.xml</DocumentationFile>
 	</PropertyGroup>
 
@@ -103,6 +107,10 @@
 	</PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'gcmodeller_desktop|net8.0-windows' ">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='RsharpDev|net8.0-windows'">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
@@ -358,6 +366,15 @@
 	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='RsharpDev|net6.0|AnyCPU'">
+	  <RemoveIntegerChecks>True</RemoveIntegerChecks>
+	  <Optimize>False</Optimize>
+	  <DebugType>full</DebugType>
+	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0-windows|AnyCPU'">
 	  <RemoveIntegerChecks>True</RemoveIntegerChecks>
 	  <Optimize>False</Optimize>
@@ -367,7 +384,25 @@
 	  <DefineConstants>MATH_DATASET=1</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='RsharpDev|net6.0-windows|AnyCPU'">
+	  <RemoveIntegerChecks>True</RemoveIntegerChecks>
+	  <Optimize>False</Optimize>
+	  <DebugType>full</DebugType>
+	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0|x64'">
+	  <RemoveIntegerChecks>True</RemoveIntegerChecks>
+	  <Optimize>False</Optimize>
+	  <DebugType>full</DebugType>
+	  <BaseAddress>4194304</BaseAddress>
+	  <DefineTrace>True</DefineTrace>
+	  <DefineConstants>MATH_DATASET=1</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='RsharpDev|net6.0|x64'">
 	  <RemoveIntegerChecks>True</RemoveIntegerChecks>
 	  <Optimize>False</Optimize>
 	  <DebugType>full</DebugType>

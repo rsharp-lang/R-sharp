@@ -5,7 +5,7 @@
     <TargetFrameworks>net10.0</TargetFrameworks>
     <Platforms>AnyCPU;x64</Platforms>
     <AssemblyName>MLkit</AssemblyName>
-    <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32;gcmodeller_desktop;CFD_win32</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32;gcmodeller_desktop;CFD_win32;RsharpDev</Configurations>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Title>MLkit: R# machine learning toolkit library</Title>
@@ -29,6 +29,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='gcmodeller_desktop|AnyCPU'">
+    <DocumentationFile>MLkit.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RsharpDev|AnyCPU'">
     <DocumentationFile>MLkit.xml</DocumentationFile>
   </PropertyGroup>
 
@@ -77,6 +81,18 @@
     <OutputPath>../../../App\</OutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RsharpDev|x64'">
+    <DocumentationFile>MLkit.xml</DocumentationFile>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DefineConstants>DATAMINING_DATASET=1,UNIX=1,MATH_DATASET=1</DefineConstants>
+    <OutputPath>../../../App\</OutputPath>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
     <DocumentationFile>MLkit.xml</DocumentationFile>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
@@ -96,7 +112,23 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='RsharpDev|net6.0-windows'">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0-windows|x64'">
+    <RemoveIntegerChecks>True</RemoveIntegerChecks>
+    <Optimize>False</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>True</DefineTrace>
+    <DefineConstants>DATAMINING_DATASET=1,MATH_DATASET=1,UNIX=1</DefineConstants>
+    <OutputPath>../../../../workbench/win32_desktop/Apps/Rstudio/library</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='RsharpDev|net6.0-windows|x64'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
     <Optimize>False</Optimize>
     <DebugSymbols>true</DebugSymbols>
@@ -175,7 +207,23 @@
     <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='RsharpDev|net6.0|AnyCPU'">
+    <RemoveIntegerChecks>True</RemoveIntegerChecks>
+    <Optimize>False</Optimize>
+    <DebugType>full</DebugType>
+    <DefineTrace>True</DefineTrace>
+    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='gcmodeller_desktop|net6.0-windows|AnyCPU'">
+    <RemoveIntegerChecks>True</RemoveIntegerChecks>
+    <Optimize>False</Optimize>
+    <DebugType>full</DebugType>
+    <DefineTrace>True</DefineTrace>
+    <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='RsharpDev|net6.0-windows|AnyCPU'">
     <RemoveIntegerChecks>True</RemoveIntegerChecks>
     <Optimize>False</Optimize>
     <DebugType>full</DebugType>

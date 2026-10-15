@@ -5,7 +5,7 @@
     <TargetFrameworks>net10.0</TargetFrameworks>
     <AssemblyName>devkit</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
-    <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32</Configurations>
+    <Configurations>Debug;Release;Rsharp_app_release;mzkit_win32;RsharpDev</Configurations>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <UseApplicationFramework>True</UseApplicationFramework>
@@ -37,6 +37,10 @@
     <DocumentationFile>devkit.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RsharpDev|AnyCPU'">
+    <DocumentationFile>devkit.xml</DocumentationFile>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DocumentationFile>devkit.xml</DocumentationFile>
   </PropertyGroup>
@@ -56,7 +60,23 @@
   <PropertyGroup Condition=" '$(Configuration)|$(TargetFramework)' == 'mzkit_win32|net8.0-windows' ">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='RsharpDev|net8.0-windows'">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
+    <DocumentationFile>devkit.xml</DocumentationFile>
+    <OutputPath>../../../../../../\mzkit\dist\bin\Rstudio\library\</OutputPath>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DefineConstants>netcore5=1,UNIX=1</DefineConstants>
+    <BaseAddress>4194304</BaseAddress>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RsharpDev|x64'">
     <DocumentationFile>devkit.xml</DocumentationFile>
     <OutputPath>../../../../../../\mzkit\dist\bin\Rstudio\library\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
