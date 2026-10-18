@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Computing.ILCuda.GPUTensor
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -10,10 +11,18 @@ Imports tfCompute = Microsoft.VisualBasic.MachineLearning.TensorFlow.Compute
 Module CUDATools
 
     <ExportAPI("register_cuda_tensor")>
-    Public Function register_cuda_tensor() As Boolean
+    Public Function register_cuda_tensor(p As Precision) As Boolean
         Dim opts As New ILCudaRuntime.EngineOptions()
+        Dim check As Boolean
 
-        If Not gpu.CudaTensor.Register(opts) Then
+        Select Case p
+            Case Precision.fp64 : check = CudaTensor.Register(opts)
+            Case Precision.fp32 : check = CudaTensorF.Register(opts)
+            Case Precision.fp16
+                Throw New NotImplementedException
+        End Select
+
+        If Not check Then
             Console.WriteLine($"    注册失败: {gpu.CudaTensor.LastError}")
 
             For Each line In opts.Diagnostics
@@ -27,8 +36,12 @@ Module CUDATools
     End Function
 
     <ExportAPI("unregister_cuda")>
-    Public Sub unregister_cuda()
-        Call tfCompute.SIMDTensor.Register()
+    Public Sub unregister_cuda(p As Precision)
+        Select Case p
+            Case Precision.fp64 : Call tfCompute.SIMDTensor.Register()
+            Case Precision.fp32 : Call tfCompute.SIMDTensorF.Register()
+            Case Precision.fp16 : Call tfCompute.SIMDTensorH.Register()
+        End Select
     End Sub
 
     ''' <summary>
