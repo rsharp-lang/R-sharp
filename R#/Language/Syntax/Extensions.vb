@@ -112,8 +112,11 @@ Namespace Language.Syntax
 
                 info.AppendLine($"parser error near by {syntaxErrors.span.ToString} produce an invalid syntax token:")
                 info.AppendLine()
-                info.AppendLine("    " & line)
-                info.AppendLine("    " & New String("~"c, line.Length))
+
+                If line IsNot Nothing Then
+                    info.AppendLine("    " & line)
+                    info.AppendLine("    " & New String("~"c, line.Length))
+                End If
 
                 opts.error = info.ToString
 
