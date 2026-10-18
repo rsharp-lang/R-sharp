@@ -177,6 +177,18 @@ Namespace Runtime.Internal.Object
             End If
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="upstream"></param>
+        ''' <param name="env"></param>
+        ''' <param name="suppress"></param>
+        ''' <param name="nullPipe"></param>
+        ''' <param name="callerFrameName"></param>
+        ''' <returns>
+        ''' this function will returns an empty collection if the given <paramref name="upstream"/> dataset is nothing
+        ''' </returns>
         Public Shared Function Stream(Of T)(upstream As Object, env As Environment,
                                             Optional suppress As Boolean = False,
                                             Optional nullPipe As Boolean = False,
@@ -189,7 +201,20 @@ Namespace Runtime.Internal.Object
                 Return DirectCast(upstream, CLRIterator).getData(Of T)(env)
             End If
 
-            Return TryCreatePipeline(Of T)(upstream, env, suppress:=suppress, nullPipe:=nullPipe, callerFrameName:=callerFrameName).getData(Of T)(env)
+            If upstream Is Nothing Then
+                Return New PipeIterator(Of T)(New T() {})
+            Else
+                Dim pipe = TryCreatePipeline(Of T)(upstream, env,
+                                                   suppress:=suppress,
+                                                   nullPipe:=nullPipe,
+                                                   callerFrameName:=callerFrameName)
+
+                If pipe Is Nothing Then
+                    Return New PipeIterator(Of T)(New T() {})
+                Else
+                    Return pipe.getData(Of T)(env)
+                End If
+            End If
         End Function
 
         ''' <summary>
