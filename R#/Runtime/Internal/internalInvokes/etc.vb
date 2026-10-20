@@ -306,7 +306,7 @@ Namespace Runtime.Internal.Invokes
             Dim framework As String
 
 #If NETCOREAPP Then
-            framework = ".NET 6.0"
+            framework = ".NET 10.0"
 #Else
             framework = ".NET Framework v4.8"
 #End If
