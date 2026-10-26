@@ -708,25 +708,9 @@ Module plots
             Call TryGetClassData(args!class, classes, classinfo)
         End If
 
-        Dim theme As New DendrogramTheme With {
-            .padding = padding,
-            .tagCSS = labelStyle,
-            .gridStrokeX = linkStroke,
-            .axisTickCSS = tickStyle,
-            .axisStroke = axisStroke,
-            .pointSize = CSng(ptSize),
-            .background = bg,
-            .XaxisTickFormat = axisFormat
-        }
+        Dim theme As New PlotTheme
 
-        Return New DendrogramPlot(
-            hist:=cluster,
-            theme:=theme,
-            classes:=classes,
-            classinfo:=classinfo,
-            pointColor:=pointColor,
-            showLeafLabels:=showLabels
-        ).Plot(size, dpi, driver:=driver)
+        Return Dendrogram.Plot(cluster, classinfo, size, dpi:=dpi, driver:=driver)
     End Function
 
     ''' <summary>
