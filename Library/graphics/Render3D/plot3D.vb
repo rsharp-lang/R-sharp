@@ -91,7 +91,9 @@ Module plot3D
         Return scatter3D.Plot(
             serials:=data,
             camera:=camera,
-            bg:=bg
+            bg:=bg,
+            title:=title,
+            driver:=env.getDriver
         )
     End Function
 
