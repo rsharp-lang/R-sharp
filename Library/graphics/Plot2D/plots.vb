@@ -1,60 +1,60 @@
 ﻿#Region "Microsoft.VisualBasic::3c0338b6d8ebf889f23bdea245303fc1, Library\graphics\Plot2D\plots.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 1343
-    '    Code Lines: 1056 (78.63%)
-    ' Comment Lines: 149 (11.09%)
-    '    - Xml Docs: 83.89%
-    ' 
-    '   Blank Lines: 138 (10.28%)
-    '     File Size: 61.50 KB
+' Summaries:
 
 
-    ' Module plots
-    ' 
-    '     Function: barplot, charPie, ContourPlot, CreateSerial, doViolinPlot
-    '               findNumberVector, measureDataTable, modelWithClass, modelWithoutClass, plot_binBox
-    '               plot_categoryBars, plot_corHeatmap, plot_deSolveResult, plot_hclust, plot_heatmap
-    '               plotArray, plotContourLayers, plotFormula, plotLinearYFit, plotLmCall
-    '               plotODEResult, plotPieChart, PlotPolygon, plotSerials, plotVector
-    '               printImage, UpSetPlot
-    ' 
-    '     Sub: Main, TryGetClassData
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 1343
+'    Code Lines: 1056 (78.63%)
+' Comment Lines: 149 (11.09%)
+'    - Xml Docs: 83.89%
+' 
+'   Blank Lines: 138 (10.28%)
+'     File Size: 61.50 KB
+
+
+' Module plots
+' 
+'     Function: barplot, charPie, ContourPlot, CreateSerial, doViolinPlot
+'               findNumberVector, measureDataTable, modelWithClass, modelWithoutClass, plot_binBox
+'               plot_categoryBars, plot_corHeatmap, plot_deSolveResult, plot_hclust, plot_heatmap
+'               plotArray, plotContourLayers, plotFormula, plotLinearYFit, plotLmCall
+'               plotODEResult, plotPieChart, PlotPolygon, plotSerials, plotVector
+'               printImage, UpSetPlot
+' 
+'     Sub: Main, TryGetClassData
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -64,6 +64,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Text
 Imports Microsoft.VisualBasic.ApplicationServices.Debugging.Logging
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.ComponentModel.DataStructures
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
@@ -72,7 +73,6 @@ Imports Microsoft.VisualBasic.Data.Framework.IO
 Imports Microsoft.VisualBasic.Data.Plots
 Imports Microsoft.VisualBasic.Data.Plots.Plot3D
 Imports Microsoft.VisualBasic.Data.Plots.Plot3D.Legend
-Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
 Imports Microsoft.VisualBasic.DataMining.HierarchicalClustering
 Imports Microsoft.VisualBasic.Emit.Delegates
 Imports Microsoft.VisualBasic.Imaging
@@ -113,32 +113,6 @@ Imports gaussVariable = Microsoft.VisualBasic.Math.SignalProcessing.EmGaussian.V
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports REnv = SMRUCC.Rsharp.Runtime
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
-
-#If NET48 Then
-Imports Pen = System.Drawing.Pen
-Imports Pens = System.Drawing.Pens
-Imports Brush = System.Drawing.Brush
-Imports Font = System.Drawing.Font
-Imports Brushes = System.Drawing.Brushes
-Imports SolidBrush = System.Drawing.SolidBrush
-Imports DashStyle = System.Drawing.Drawing2D.DashStyle
-Imports Image = System.Drawing.Image
-Imports Bitmap = System.Drawing.Bitmap
-Imports GraphicsPath = System.Drawing.Drawing2D.GraphicsPath
-Imports FontStyle = System.Drawing.FontStyle
-#Else
-Imports Pen = Microsoft.VisualBasic.Imaging.Pen
-Imports Pens = Microsoft.VisualBasic.Imaging.Pens
-Imports Brush = Microsoft.VisualBasic.Imaging.Brush
-Imports Font = Microsoft.VisualBasic.Imaging.Font
-Imports Brushes = Microsoft.VisualBasic.Imaging.Brushes
-Imports SolidBrush = Microsoft.VisualBasic.Imaging.SolidBrush
-Imports DashStyle = Microsoft.VisualBasic.Imaging.DashStyle
-Imports Image = Microsoft.VisualBasic.Imaging.Image
-Imports Bitmap = Microsoft.VisualBasic.Imaging.Bitmap
-Imports GraphicsPath = Microsoft.VisualBasic.Imaging.GraphicsPath
-Imports FontStyle = Microsoft.VisualBasic.Imaging.FontStyle
-#End If
 
 ''' <summary>
 ''' chartting plots for R#
@@ -943,8 +917,8 @@ Module plots
         If d3 Then
             If camera Is Nothing Then
                 camera = New Camera With {
-                    .screen = InteropArgumentHelper.getSize(size, env).SizeParser,
-                    .viewDistance = 10000
+                    .Screen = InteropArgumentHelper.getSize(size, env).SizeParser,
+                    .ViewDistance = 10000
                 }
             End If
 
@@ -1075,8 +1049,8 @@ Module plots
         Dim z As Double() = desolve.y(CStr(vector!z)).value
         If camera Is Nothing Then
             camera = New Camera With {
-                .screen = New Size(2400, 1800),
-                .viewDistance = 10000
+                .Screen = New Size(2400, 1800),
+                .ViewDistance = 10000
             }
         End If
 

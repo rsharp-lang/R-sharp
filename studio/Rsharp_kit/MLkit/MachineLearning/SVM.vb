@@ -1,67 +1,68 @@
 ﻿#Region "Microsoft.VisualBasic::59b0239b73166f04ac66f367cc3545f4, studio\Rsharp_kit\MLkit\MachineLearning\SVM.vb"
 
-    ' Author:
-    ' 
-    '       asuka (amethyst.asuka@gcmodeller.org)
-    '       xie (genetics@smrucc.org)
-    '       xieguigang (xie.guigang@live.com)
-    ' 
-    ' Copyright (c) 2018 GPL3 Licensed
-    ' 
-    ' 
-    ' GNU GENERAL PUBLIC LICENSE (GPL3)
-    ' 
-    ' 
-    ' This program is free software: you can redistribute it and/or modify
-    ' it under the terms of the GNU General Public License as published by
-    ' the Free Software Foundation, either version 3 of the License, or
-    ' (at your option) any later version.
-    ' 
-    ' This program is distributed in the hope that it will be useful,
-    ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-    ' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    ' GNU General Public License for more details.
-    ' 
-    ' You should have received a copy of the GNU General Public License
-    ' along with this program. If not, see <http://www.gnu.org/licenses/>.
+' Author:
+' 
+'       asuka (amethyst.asuka@gcmodeller.org)
+'       xie (genetics@smrucc.org)
+'       xieguigang (xie.guigang@live.com)
+' 
+' Copyright (c) 2018 GPL3 Licensed
+' 
+' 
+' GNU GENERAL PUBLIC LICENSE (GPL3)
+' 
+' 
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+' 
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+' 
+' You should have received a copy of the GNU General Public License
+' along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
-
-
-    ' Code Statistics:
-
-    '   Total Lines: 589
-    '    Code Lines: 423 (71.82%)
-    ' Comment Lines: 83 (14.09%)
-    '    - Xml Docs: 93.98%
-    ' 
-    '   Blank Lines: 83 (14.09%)
-    '     File Size: 23.83 KB
+' Summaries:
 
 
-    ' Module SVMkit
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: expandProblem, getSvmModel, joinTable, NewProblem, packCache
-    '               ParseProblemTableJSON, parseSVMJSON, plotROC, problemDataframe, problemsDataframe
-    '               problemValidateLabels, svmClassify, SVMJSON, svmModelTrimNULL, svmValidates
-    '               trainSVMModel, trimSingleProblem, validateMultipleSvmModel, validateSingleSvmModel
-    ' 
-    ' /********************************************************************************/
+' Code Statistics:
+
+'   Total Lines: 589
+'    Code Lines: 423 (71.82%)
+' Comment Lines: 83 (14.09%)
+'    - Xml Docs: 93.98%
+' 
+'   Blank Lines: 83 (14.09%)
+'     File Size: 23.83 KB
+
+
+' Module SVMkit
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: expandProblem, getSvmModel, joinTable, NewProblem, packCache
+'               ParseProblemTableJSON, parseSVMJSON, plotROC, problemDataframe, problemsDataframe
+'               problemValidateLabels, svmClassify, SVMJSON, svmModelTrimNULL, svmValidates
+'               trainSVMModel, trimSingleProblem, validateMultipleSvmModel, validateSingleSvmModel
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Drawing
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel
 Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel.SchemaMaps
-Imports Microsoft.VisualBasic.Data.Plots
 Imports Microsoft.VisualBasic.Data.Framework.IO
+Imports Microsoft.VisualBasic.Data.Plots
 Imports Microsoft.VisualBasic.DataMining.ComponentModel.Encoder
 Imports Microsoft.VisualBasic.DataMining.Evaluation
 Imports Microsoft.VisualBasic.Language
@@ -79,11 +80,10 @@ Imports SMRUCC.Rsharp.Runtime.Components
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports DashStyle = Microsoft.VisualBasic.Imaging.DashStyle
 Imports dataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports Parameter = Microsoft.VisualBasic.MachineLearning.SVM.Parameter
-Imports ROCCurve = Microsoft.VisualBasic.Data.Plots.ROCCurve
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+Imports ROCCurve = Microsoft.VisualBasic.Data.Plots.ROCCurve
 Imports std = System.Math
 
 <Package("SVM")>
@@ -403,7 +403,7 @@ Module SVMkit
         End If
 
         If Not weights Is Nothing Then
-            With weights.AsGeneric(Of Double)(env)
+            With weights.asGeneric(Of Double)(env)
                 For Each label In .AsEnumerable
                     Call param.weights.Add(CInt(label.Key), label.Value)
                 Next

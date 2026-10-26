@@ -164,9 +164,6 @@
     <PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="4.153.1" />
     <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="4.153.1" />
     <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
-    <PackageReference Include="System.Drawing.Common" Version="10.0.13" />
-    <PackageReference Include="System.Resources.Extensions" Version="10.0.13" />
-    <PackageReference Include="System.Security.Permissions" Version="10.0.13" />
   </ItemGroup>
 
   <ItemGroup>
