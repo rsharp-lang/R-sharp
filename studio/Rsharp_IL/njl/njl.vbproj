@@ -49,7 +49,7 @@
     <DocumentationFile>njl.xml</DocumentationFile>
     <OutputPath>../../../App\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
