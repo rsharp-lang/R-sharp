@@ -113,7 +113,7 @@ Imports vector = SMRUCC.Rsharp.Runtime.Internal.Object.vector
 Module math
 
     Sub New()
-        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(ODEsOut), AddressOf create_deSolve_DataFrame)
+        REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(ODESolution), AddressOf create_deSolve_DataFrame)
         REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(DataBinBox(Of Double)()), AddressOf getBinTable)
         REnv.Internal.Object.Converts.makeDataframe.addHandler(GetType(LassoFit), AddressOf lassoResultTable)
 
@@ -186,7 +186,7 @@ Module math
         Throw New NotImplementedException
     End Function
 
-    Private Function create_deSolve_DataFrame(x As ODEsOut, args As list, env As Environment) As Rdataframe
+    Private Function create_deSolve_DataFrame(x As ODESolution, args As list, env As Environment) As Rdataframe
         Dim data As New Rdataframe With {
             .columns = New Dictionary(Of String, Array)
         }
@@ -372,7 +372,7 @@ Module math
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("deSolve")>
-    <RApiReturn(GetType(ODEsOut))>
+    <RApiReturn(GetType(ODESolution))>
     Public Function RK4(system As DeclareLambdaFunction(), y0 As list, a#, b#,
                         Optional resolution% = 10000,
                         Optional tick As Action(Of Environment) = Nothing,

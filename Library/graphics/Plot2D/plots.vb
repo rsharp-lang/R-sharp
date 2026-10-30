@@ -128,7 +128,7 @@ Module plots
 
         Call REnv.Internal.generic.add("plot", GetType(DeclareLambdaFunction), AddressOf plotFormula)
         Call REnv.Internal.generic.add("plot", GetType(ODEOutput), AddressOf plotODEResult)
-        Call REnv.Internal.generic.add("plot", GetType(ODEsOut), AddressOf plot_deSolveResult)
+        Call REnv.Internal.generic.add("plot", GetType(ODESolution), AddressOf plot_deSolveResult)
         Call REnv.Internal.generic.add("plot", GetType(Series()), AddressOf plotSerials)
         Call REnv.Internal.generic.add("plot", GetType(Series), AddressOf plotSerials)
         Call REnv.Internal.generic.add("plot", GetType(DataBinBox(Of Double)()), AddressOf plot_binBox)
@@ -1022,7 +1022,7 @@ Module plots
         End Using
     End Function
 
-    Public Function plot_deSolveResult(desolve As ODEsOut, args As list, env As Environment) As Object
+    Public Function plot_deSolveResult(desolve As ODESolution, args As list, env As Environment) As Object
         Dim vector As list = args!vector
         Dim camera As Camera = args!camera
         Dim color As Color = RColorPalette.getColor(args!color, "black").TranslateColor
