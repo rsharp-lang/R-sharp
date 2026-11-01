@@ -34,6 +34,7 @@
     <DebugType>full</DebugType>
     <DefineConstants>write_csv=1,UNIX=1</DefineConstants>
     <DocumentationFile>base.xml</DocumentationFile>
+	 <OutputPath>../../App\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
