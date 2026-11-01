@@ -1257,6 +1257,7 @@
       <BuildType Solution="Rsharp_app_release|Any CPU" Project="Release" />
       <BuildType Solution="Rsharp_app_release|ARM32" Project="Release" />
       <BuildType Solution="Rsharp_app_release|x86" Project="Release" />
+      <Platform Solution="Debug|x64" Project="x64" />
       <Platform Solution="Rsharp_app_release|x64" Project="x64" />
     </Project>
     <Project Path="../runtime/sciBASIC#/Data_science/DataMining/t-SNE/t-SNE.vbproj">
@@ -1395,6 +1396,7 @@
       <BuildType Solution="Rsharp_app_release|Any CPU" Project="Release" />
       <BuildType Solution="Rsharp_app_release|ARM32" Project="Release" />
       <BuildType Solution="Rsharp_app_release|x86" Project="Release" />
+      <Platform Solution="Debug|x64" Project="x64" />
       <Platform Solution="Rsharp_app_release|x64" Project="x64" />
     </Project>
     <Project Path="../runtime/sciBASIC#/Data_science/MachineLearning/MachineLearning.Data.Extensions/MachineLearning.Data.Extensions.vbproj">
