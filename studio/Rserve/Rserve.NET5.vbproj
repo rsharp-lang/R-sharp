@@ -18,6 +18,7 @@
 	  <Product>R#</Product>
 	  <AssemblyTitle>R http/rest api web server</AssemblyTitle>
 	  <Description>R# web session backend progress</Description>
+	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='mzkit_win32|x64'">
@@ -129,8 +130,9 @@
     <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net10.0|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DefineConstants>MATH_DATASET=1,write_csv=1</DefineConstants>
+	  <OutputPath>..\..\App\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-windows|AnyCPU'">

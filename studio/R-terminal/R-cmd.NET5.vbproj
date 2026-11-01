@@ -46,7 +46,7 @@
     <DebugType>full</DebugType>
     <DefineConstants>netcore5=1</DefineConstants>
     <DocumentationFile>R#.xml</DocumentationFile>
-    <OutputPath>../../../../\src\R-sharp\App\</OutputPath>
+    <OutputPath>../../App\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
