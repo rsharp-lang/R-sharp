@@ -63,6 +63,12 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 <Package("yaml")>
 Module yamlTool
 
+    ''' <summary>
+    ''' Parse the YAML file and return the R object.
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("yaml.load_file")>
     Public Function load_file(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
         Dim is_file As Boolean = False
@@ -84,6 +90,12 @@ Module yamlTool
         Return doc
     End Function
 
+    ''' <summary>
+    ''' Parse the YAML string and return the R object.
+    ''' </summary>
+    ''' <param name="yaml"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("yaml.parse")>
     Public Function parse(yaml As String, Optional env As Environment = Nothing) As Object
         Dim doc As JsonElement = YamlParser.Parse(yaml)
