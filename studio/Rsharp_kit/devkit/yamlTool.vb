@@ -86,7 +86,7 @@ Module yamlTool
 
     <ExportAPI("yaml.parse")>
     Public Function parse(yaml As String, Optional env As Environment = Nothing) As Object
-        Dim doc As JsonElement = New YamlParser().Parse(yaml)
+        Dim doc As JsonElement = YamlParser.Parse(yaml)
         Dim robj As Object = doc.createRObj(env)
         Return robj
     End Function
