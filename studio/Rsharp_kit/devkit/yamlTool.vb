@@ -66,7 +66,7 @@ Module yamlTool
     <ExportAPI("yaml.load_file")>
     Public Function load_file(<RRawVectorArgument> file As Object, Optional env As Environment = Nothing) As Object
         Dim is_file As Boolean = False
-        Dim s = SMRUCC.Rsharp.GetFileStream(file, IO.FileAccess.Read, env, is_filepath:=is_file)
+        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Read, env, is_filepath:=is_file)
 
         If s Like GetType(Message) Then
             Return s.TryCast(Of Message)
