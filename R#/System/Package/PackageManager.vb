@@ -274,7 +274,7 @@ Namespace Development.Package
                 Call Console.WriteLine($"* installing *source* package '{pkginfo.Package}' ...")
 
                 libDir = PackageLoader2.GetPackageDirectory(config, pkginfo.Package)
-                libDirOld = $"{libDir.TrimDIR}.old"
+                libDirOld = $"{libDir.TrimDirSep}.old"
 
                 If libDir = "/" OrElse libDirOld = "/" Then
                     Throw New InvalidProgramException($"we unsure why library path of package '{pkginfo.Package}' is pointed to the root directory?")
