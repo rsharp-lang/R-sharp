@@ -65,11 +65,20 @@ Public Class EnvProbeSection
     Public Function add(name As String, value As Object,
                         Optional status As String = EnvProbeCommon.OK) As EnvProbeItem
 
+        Dim text As String = If(value Is Nothing, EnvProbeCommon.NA, CStr(value))
+        Dim itemStatus As String = status
+
+        If String.Equals(itemStatus, EnvProbeCommon.OK, StringComparison.OrdinalIgnoreCase) AndAlso
+            text.StartsWith(EnvProbeCommon.NA, StringComparison.OrdinalIgnoreCase) Then
+
+            itemStatus = EnvProbeCommon.NA
+        End If
+
         Dim item As New EnvProbeItem With {
             .name = name,
-            .value = If(value Is Nothing, EnvProbeCommon.NA, CStr(value)),
+            .value = text,
             .raw = value,
-            .status = status
+            .status = itemStatus
         }
 
         Call items.Add(item)
@@ -84,7 +93,7 @@ Public Class EnvProbeSection
     ''' <param name="reason"></param>
     ''' <returns></returns>
     Public Function na(name As String, reason As String) As EnvProbeItem
-        Return add(name, EnvProbeCommon.na(reason), EnvProbeCommon.NA)
+        Return add(name, EnvProbeCommon.naText(reason), EnvProbeCommon.NA)
     End Function
 End Class
 
@@ -167,6 +176,23 @@ Public Class EnvProbeReport
         End If
 
         Return s(name)?.raw
+    End Function
+
+    ''' <summary>
+    ''' get the probe status (``ok`` / ``warn`` / ``n/a``) of a specific probe item
+    ''' </summary>
+    ''' <param name="section"></param>
+    ''' <param name="name"></param>
+    ''' <returns></returns>
+    Public Function getStatus(section As String, name As String) As String
+        Dim s = sections.FirstOrDefault(
+            Function(x) String.Equals(x.section, section, StringComparison.OrdinalIgnoreCase))
+
+        If s Is Nothing Then
+            Return Nothing
+        End If
+
+        Return s(name)?.status
     End Function
 
     ''' <summary>
@@ -281,7 +307,7 @@ Public Module EnvProbeCommon
     ''' </summary>
     ''' <param name="reason"></param>
     ''' <returns></returns>
-    Public Function na(reason As String) As String
+    Public Function naText(reason As String) As String
         If String.IsNullOrWhiteSpace(reason) Then
             Return NA
         Else
@@ -589,15 +615,15 @@ Public Module EnvProbeCommon
     ''' <param name="text"></param>
     ''' <returns></returns>
     Public Function saveText(path As String, text As String) As String
-        Dim file As String = IO.Path.GetFullPath(path)
-        Dim dir As String = IO.Path.GetDirectoryName(file)
+        Dim filePath As String = IO.Path.GetFullPath(path)
+        Dim dir As String = IO.Path.GetDirectoryName(filePath)
 
         If Not String.IsNullOrWhiteSpace(dir) AndAlso Not IO.Directory.Exists(dir) Then
             Call IO.Directory.CreateDirectory(dir)
         End If
 
-        Call File.WriteAllText(file, text, New UTF8Encoding(encoderShouldEmitUTF8Identifier:=False))
+        Call File.WriteAllText(filePath, text, New UTF8Encoding(encoderShouldEmitUTF8Identifier:=False))
 
-        Return file
+        Return filePath
     End Function
 End Module

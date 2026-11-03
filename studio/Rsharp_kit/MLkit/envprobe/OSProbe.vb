@@ -9,7 +9,7 @@ Imports System.Text
 ''' </summary>
 Public Module EnvProbeOS
 
-    Public Const SECTION As String = "os"
+    Public Const SECTION_NAME As String = "os"
 
     Public Const ITEM_PLATFORM As String = "Platform"
     Public Const ITEM_OS As String = "Operating system"
@@ -46,7 +46,7 @@ Public Module EnvProbeOS
     ''' <param name="report"></param>
     ''' <returns></returns>
     Public Function probe(report As EnvProbeReport) As EnvProbeSection
-        Dim section As EnvProbeSection = report.getSection(SECTION)
+        Dim section As EnvProbeSection = report.getSection(SECTION_NAME)
 
         Call section.add(ITEM_HOST, System.Environment.MachineName)
         Call section.add(ITEM_OS, RuntimeInformation.OSDescription)
@@ -104,7 +104,7 @@ Public Module EnvProbeOS
         Dim ldPath As String = System.Environment.GetEnvironmentVariable("LD_LIBRARY_PATH")
 
         If String.IsNullOrWhiteSpace(ldPath) Then
-            Call section.add(ITEM_LD_LIBRARY, EnvProbeCommon.na("not defined"))
+            Call section.add(ITEM_LD_LIBRARY, EnvProbeCommon.naText("not defined"))
         Else
             Call section.add(ITEM_LD_LIBRARY, ldPath)
         End If
@@ -129,18 +129,12 @@ Public Module EnvProbeOS
 
         Call section.add(ITEM_DISTRIBUTION, osInfo.VersionString)
         Call section.add(ITEM_VERSION_ID, osInfo.Version.ToString)
-        Call section.add(ITEM_KERNEL, osInfo.VersionString & " " & If(osInfo.ServicePack, ""))
+        Call section.add(ITEM_KERNEL, EnvProbeCommon.formatText($"{osInfo.VersionString} {osInfo.ServicePack}"))
 
         Dim is64BitOS As String = If(System.Environment.Is64BitOperatingSystem, "yes", "no")
         Call section.add("64-bit operating system", is64BitOS)
 
-        Dim cudaPath As String = System.Environment.GetEnvironmentVariable("CUDA_PATH")
-
-        If String.IsNullOrWhiteSpace(cudaPath) Then
-            Call section.add(ITEM_LD_LIBRARY, EnvProbeCommon.na("CUDA_PATH not defined"))
-        Else
-            Call section.add(ITEM_LD_LIBRARY, "CUDA_PATH=" & cudaPath)
-        End If
+        Call section.add(ITEM_LD_LIBRARY, EnvProbeCommon.naText("LD_LIBRARY_PATH is a linux only setting"))
     End Sub
 
     Private Function releaseValue(lines As String(), key As String) As String

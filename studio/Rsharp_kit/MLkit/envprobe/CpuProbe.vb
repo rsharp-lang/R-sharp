@@ -12,7 +12,7 @@ Imports Microsoft.Win32
 ''' </summary>
 Public Module EnvProbeCPU
 
-    Public Const SECTION As String = "cpu"
+    Public Const SECTION_NAME As String = "cpu"
 
     Public Const ITEM_VISIBLE As String = "Visible logical processors"
     Public Const ITEM_MACHINE_LOGICAL As String = "Machine logical processors"
@@ -35,7 +35,7 @@ Public Module EnvProbeCPU
     ''' <param name="report"></param>
     ''' <returns></returns>
     Public Function probe(report As EnvProbeReport) As EnvProbeSection
-        Dim section As EnvProbeSection = report.getSection(SECTION)
+        Dim section As EnvProbeSection = report.getSection(SECTION_NAME)
         Dim visible As Integer = System.Environment.ProcessorCount
 
         Call section.add(ITEM_VISIBLE, visible)
@@ -245,7 +245,7 @@ Public Module EnvProbeCPU
 
         Try
             If Not Directory.Exists(cacheRoot) Then
-                Return EnvProbeCommon.na("missing sysfs cache directory")
+                Return EnvProbeCommon.naText("missing sysfs cache directory")
             End If
 
             Dim parts As New List(Of String)
@@ -269,12 +269,12 @@ Public Module EnvProbeCPU
             Next
 
             If parts.Count = 0 Then
-                Return EnvProbeCommon.na("empty sysfs cache directory")
+                Return EnvProbeCommon.naText("empty sysfs cache directory")
             Else
                 Return String.Join(", ", parts)
             End If
         Catch ex As Exception
-            Return EnvProbeCommon.na(ex.Message)
+            Return EnvProbeCommon.naText(ex.Message)
         End Try
     End Function
 
@@ -283,12 +283,12 @@ Public Module EnvProbeCPU
 
         Try
             If Not Directory.Exists(nodeRoot) Then
-                Return EnvProbeCommon.na("missing numa sysfs directory")
+                Return EnvProbeCommon.naText("missing numa sysfs directory")
             End If
 
             Return Directory.GetDirectories(nodeRoot, "node*").Length
         Catch ex As Exception
-            Return EnvProbeCommon.na(ex.Message)
+            Return EnvProbeCommon.naText(ex.Message)
         End Try
     End Function
 
@@ -378,7 +378,11 @@ Public Module EnvProbeCPU
             budget = Math.Min(budget, CInt(Math.Max(1, Math.Floor(quota))))
         End If
 
-        section(ITEM_CGROUP_QUOTA).raw = If(quota > 0, quota, -1.0)
+        Dim quotaItem As EnvProbeItem = section(ITEM_CGROUP_QUOTA)
+
+        If quotaItem IsNot Nothing Then
+            quotaItem.raw = If(quota > 0, quota, -1.0)
+        End If
 
         ' --- cpuset ---
         Dim cpuset As String = EnvProbeCommon.readProcText("/sys/fs/cgroup/cpuset.cpus.effective")
@@ -391,9 +395,10 @@ Public Module EnvProbeCPU
             Call section.na(ITEM_CGROUP_CPUSET, "cgroup cpuset controller is not mounted")
         Else
             Dim count As Integer = countCpuList(cpuset)
+            Dim cpusetItem As EnvProbeItem =
+                section.add(ITEM_CGROUP_CPUSET, $"{cpuset} ({count} processors)")
 
-            Call section.add(ITEM_CGROUP_CPUSET, $"{cpuset} ({count} processors)")
-            section(ITEM_CGROUP_CPUSET).raw = count
+            cpusetItem.raw = count
 
             If count > 0 Then
                 budget = Math.Min(budget, count)
@@ -410,14 +415,17 @@ Public Module EnvProbeCPU
         If memoryMax Is Nothing Then
             Call section.na(ITEM_CGROUP_MEMORY, "cgroup memory controller is not mounted")
         ElseIf String.Equals(memoryMax, "max", StringComparison.OrdinalIgnoreCase) Then
-            Call section.add(ITEM_CGROUP_MEMORY, "unlimited")
-            section(ITEM_CGROUP_MEMORY).raw = -1L
+            Dim memoryItem As EnvProbeItem = section.add(ITEM_CGROUP_MEMORY, "unlimited")
+
+            memoryItem.raw = -1L
         Else
             Dim bytes As Long
 
             If Long.TryParse(memoryMax, bytes) Then
-                Call section.add(ITEM_CGROUP_MEMORY, EnvProbeCommon.formatBytes(bytes))
-                section(ITEM_CGROUP_MEMORY).raw = bytes
+                Dim memoryItem As EnvProbeItem =
+                    section.add(ITEM_CGROUP_MEMORY, EnvProbeCommon.formatBytes(bytes))
+
+                memoryItem.raw = bytes
             Else
                 Call section.add(ITEM_CGROUP_MEMORY, memoryMax)
             End If
@@ -449,9 +457,9 @@ Public Module EnvProbeCPU
                     count += max - min + 1
                 End If
             Else
-                Dim single As Integer
+                Dim cpuIndex As Integer
 
-                If Integer.TryParse(range(0), single) Then
+                If Integer.TryParse(range(0), cpuIndex) Then
                     count += 1
                 End If
             End If
@@ -515,8 +523,8 @@ Public Module EnvProbeCPU
                         numa += 1
                     Case 2 ' RelationCache
                         Select Case info.Union.Cache.Level
-                            Case 2 : l2 = Math.Max(l2, info.Union.Cache.CacheSize)
-                            Case 3 : l3 += info.Union.Cache.CacheSize
+                            Case 2 : l2 = Math.Max(l2, CLng(info.Union.Cache.CacheSize))
+                            Case 3 : l3 += CLng(info.Union.Cache.CacheSize)
                         End Select
                 End Select
 
@@ -541,7 +549,7 @@ Public Module EnvProbeCPU
 
             Return topology
         Catch ex As Exception
-            topology.cache = EnvProbeCommon.na(ex.Message)
+            topology.cache = EnvProbeCommon.naText(ex.Message)
             Return topology
         Finally
             If buffer <> IntPtr.Zero Then
@@ -582,7 +590,11 @@ Public Module EnvProbeCPU
         Public Type As Integer
     End Structure
 
-    <StructLayout(LayoutKind.Explicit)>
+    ''' <summary>
+    ''' the native union contains a ``ULONGLONG Reserved[2]`` field, so the union size 
+    ''' is 16 bytes rather than the 12 bytes of the <see cref="CACHE_DESCRIPTOR"/>.
+    ''' </summary>
+    <StructLayout(LayoutKind.Explicit, Size:=16)>
     Private Structure PROCESSOR_UNION
         <FieldOffset(0)>
         Public ProcessorCoreFlags As Byte
@@ -590,6 +602,10 @@ Public Module EnvProbeCPU
         Public NumaNodeNumber As UInteger
         <FieldOffset(0)>
         Public Cache As CACHE_DESCRIPTOR
+        <FieldOffset(0)>
+        Public Reserved0 As ULong
+        <FieldOffset(8)>
+        Public Reserved1 As ULong
     End Structure
 
     <StructLayout(LayoutKind.Sequential)>

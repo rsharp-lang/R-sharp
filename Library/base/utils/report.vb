@@ -92,7 +92,7 @@ Public Module report
                 Throw New NotSupportedException($"the report format '{ext}' of '{path}' is not supported; use md/html/txt/docx/pdf/rtf/xps")
         End Select
 
-        Return path
+        Return True
     End Function
 
 End Module
