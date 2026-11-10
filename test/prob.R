@@ -3,5 +3,5 @@ imports "report" from "base";
 
 report::render(
     envprobe::blocks(), 
-    here("server_diagnostics.docx")
+    here("server_diagnostics.md")
 );
