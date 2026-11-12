@@ -338,14 +338,66 @@ Namespace Development.Package.File
             End Using
         End Sub
 
-        Private Function getDataSymbolName(dirRoot As String, filepath As String) As String
-            If filepath.ExtensionSuffix("csv", "txt", "rda", "rds") Then
-                Return filepath.BaseName
-            Else
-                filepath = normPath(filepath.GetFullPath)
-                filepath = filepath.Replace(dirRoot, "")
+        ''' <summary>
+        ''' get the file path which is relative to the ``data/`` directory of the 
+        ''' given data file, this relative path is a posix style file path string
+        ''' </summary>
+        ''' <param name="dirBase">the directory full path of the ``data/`` folder</param>
+        ''' <param name="filepath">the full file path of the data file</param>
+        ''' <returns></returns>
+        Private Function getDataRelativePath(dirBase As String, filepath As String) As String
+            Dim path As String = normPath(filepath.GetFullPath)
+            Dim prefix As String = $"{dirBase}/"
 
-                Return filepath
+            If path.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) Then
+                Return path.Substring(prefix.Length)
+            Else
+                ' 理论上不会发生：dataSymbols之中的文件都是枚举自data目录的
+                Return filepath.FileName
+            End If
+        End Function
+
+        ''' <summary>
+        ''' get the dataset name of a given data file
+        ''' </summary>
+        ''' <param name="relpath">
+        ''' the file path which is relative to the ``data/`` directory of the target data file
+        ''' </param>
+        ''' <param name="filepath">the full file path of the data file</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' 位于``data/``顶层的数据文件保持原有的命名规则，即表格类型的数据文件使用
+        ''' 不带扩展名的文件名作为数据集名称；
+        ''' 
+        ''' 而嵌套在子目录之中的数据文件则使用相对于``data/``目录的文件路径作为
+        ''' 数据集名称，这是为了避免同名的数据文件（例如模型文件之中的``trees.csv``）
+        ''' 在程序包之中产生重名冲突。
+        ''' </remarks>
+        Private Function getDataSymbolName(relpath As String, filepath As String) As String
+            Dim isDataFile As Boolean = filepath.ExtensionSuffix("csv", "txt", "rda", "rds")
+
+            If relpath.IndexOf("/"c) = -1 Then
+                ' 顶层数据文件：保持原有的命名规则
+                If isDataFile Then
+                    Return filepath.BaseName
+                Else
+                    Return relpath
+                End If
+            ElseIf isDataFile Then
+                ' 子目录数据文件：使用不带扩展名的相对路径
+                Return trimExtension(relpath, filepath.ExtensionSuffix)
+            Else
+                Return relpath
+            End If
+        End Function
+
+        Private Shared Function trimExtension(path As String, ext As String) As String
+            If ext.StringEmpty Then
+                Return path
+            ElseIf path.EndsWith($".{ext}", StringComparison.OrdinalIgnoreCase) Then
+                Return path.Substring(0, path.Length - ext.Length - 1)
+            Else
+                Return path
             End If
         End Function
 
@@ -360,11 +412,36 @@ Namespace Development.Package.File
             Dim dirBase As String = (pkg_dir & "/data") _
                 .GetDirectoryFullPath _
                 .DoCall(AddressOf normPath)
-            Dim dirRoot As String = pkg_dir.GetDirectoryFullPath.DoCall(AddressOf normPath)
+            Dim files As DataFileRef() = pkg.dataSymbols _
+                .Select(Function(d)
+                            Dim relpath As String = getDataRelativePath(dirBase, d.Key)
+
+                            Return New DataFileRef With {
+                                .file = d.Key,
+                                .relpath = relpath,
+                                .reader = d.Value,
+                                .name = getDataSymbolName(relpath, d.Key)
+                            }
+                        End Function) _
+                .ToArray
+
+            ' 20260302
+            ' 对于产生了冲突的数据集名称，回退为带扩展名的相对路径。
+            ' 因为文件在data目录下的相对路径是唯一的，所以该操作可以保证
+            ' 最终生成的数据集名称不会存在重名的冲突
+            For Each duplicated As IGrouping(Of String, DataFileRef) In files _
+                .GroupBy(Function(f) f.name) _
+                .Where(Function(g) g.Count > 1)
+
+                For Each datafile As DataFileRef In duplicated
+                    Call VBDebugger.EchoLine($"warning: dataset name '{datafile.name}' in the ``data/`` directory is duplicated, fallback to '{datafile.relpath}'.")
+                    datafile.name = datafile.relpath
+                Next
+            Next
 
             Using file As New StreamWriter(zip.CreateEntry("package/manifest/data.json").Open)
-                Dim check_duplicated_name = pkg.dataSymbols _
-                    .GroupBy(Function(d) getDataSymbolName(dirRoot, d.Key)) _
+                Dim check_duplicated_name = files _
+                    .GroupBy(Function(f) f.name) _
                     .Where(Function(g) g.Count > 1) _
                     .Keys
 
@@ -372,10 +449,10 @@ Namespace Development.Package.File
                     Throw New DuplicateNameException($"there is some file name in the ``data/`` directory is duplicated: {check_duplicated_name.GetJson}")
                 End If
 
-                text = pkg.dataSymbols _
-                    .ToDictionary(Function(d) getDataSymbolName(dirRoot, d.Key),
-                                  Function(d)
-                                      Return New NamedValue(d.Key.FileName, d.Value)
+                text = files _
+                    .ToDictionary(Function(f) f.name,
+                                  Function(f)
+                                      Return New NamedValue(f.relpath, f.reader)
                                   End Function) _
                     .GetJson(indent:=True)
 
@@ -384,18 +461,13 @@ Namespace Development.Package.File
                 Call file.Flush()
             End Using
 
-            For Each ref As KeyValuePair(Of String, String) In pkg.dataSymbols
-                Dim relpath As String = ref.Key _
-                    .GetFullPath _
-                    .DoCall(AddressOf normPath) _
-                    .Replace(dirBase, "") _
-                    .Replace("\", "/")
-                Dim dataKey As String = $"data/{relpath}".Replace("//", "/")
+            For Each datafile As DataFileRef In files
+                Dim dataKey As String = $"data/{datafile.relpath}"
 
                 ' 20220410 在这里为了保持和传统的R语言脚本对system.file函数使用上的一致性
                 ' 数据文件夹任然是放在程序包中的最顶层文件夹
                 Using file As Stream = zip.CreateEntry(dataKey).Open
-                    Dim buffer As Byte() = ref.Key.ReadBinary
+                    Dim buffer As Byte() = datafile.file.ReadBinary
 
                     Call file.Write(buffer, Scan0, buffer.Length)
                     Call file.Flush()
@@ -510,5 +582,31 @@ Namespace Development.Package.File
                 Call file.Flush()
             End Using
         End Sub
+
+        ''' <summary>
+        ''' the data file descriptor of the ``data/`` directory
+        ''' </summary>
+        Private Class DataFileRef
+            ''' <summary>
+            ''' the full file path of the data file
+            ''' </summary>
+            ''' <returns></returns>
+            Public Property file As String
+            ''' <summary>
+            ''' the file path which is relative to the ``data/`` directory
+            ''' </summary>
+            ''' <returns></returns>
+            Public Property relpath As String
+            ''' <summary>
+            ''' the lazy loading expression of the target data file
+            ''' </summary>
+            ''' <returns></returns>
+            Public Property reader As String
+            ''' <summary>
+            ''' the dataset name of the target data file
+            ''' </summary>
+            ''' <returns></returns>
+            Public Property name As String
+        End Class
     End Class
 End Namespace

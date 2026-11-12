@@ -1460,11 +1460,18 @@ Namespace Runtime.Internal.Invokes
                 Return Nothing
             Else
                 Dim file_ref As Object
+                ' 20260302
+                ' data.json之中的文件引用值可能是相对于data目录的子目录路径
+                ' 在这里需要先进行路径分隔符的归一化处理，然后再拼接到data目录下
+                Dim relpath As String = dataSymbols(name) _
+                    .name _
+                    .Replace("\"c, "/"c) _
+                    .TrimStart("/"c)
 
                 If TypeOf lib_pkgdir Is LibDir Then
-                    file_ref = lib_pkgdir.GetFullPath($"/data/{dataSymbols(name).name}")
+                    file_ref = lib_pkgdir.GetFullPath($"/data/{relpath}")
                 Else
-                    file_ref = lib_pkgdir.OpenFile($"/data/{dataSymbols(name).name}")
+                    file_ref = lib_pkgdir.OpenFile($"/data/{relpath}")
                 End If
 
                 reader = dataSymbols(name).text
