@@ -1,0 +1,129 @@
+================================================================================
+ glmnet R# wrapper vs GNU R glmnet  -  numeric comparison report
+================================================================================
+ R:            R version 4.5.0 (2025-04-11 ucrt)
+ glmnet:       5.1
+ generated:    2026-11-13 08:40:58
+ golden data:  G:\GCModeller\src\R-sharp\test\glmnet\data
+ R# results:   G:\GCModeller\src\R-sharp\test\glmnet\result
+
+ Families: gaussian, binomial, poisson, multinomial, cox, mgaussian
+ Input:    glmnet built-in example datasets, identical lambda grid and foldid
+
+---- gaussian ----------------------------------------------------
+  checks=14  PASS=14  FAIL=0  SKIP=0
+  [PASS] fit        lambda                   maxabs=2.22e-16       limit=2.631e-10      lambda grid must be identical
+  [PASS] fit        nulldev                  maxabs=0              limit=9.525e-06      null deviance must be identical
+  [PASS] fit        dev.ratio                maxabs=3.698e-06      limit=1e-04          family-calibrated dev.ratio tolerance
+  [PASS] fit        df                       maxabs=0              limit=1              one path step of df difference is allowed
+  [PASS] fit        a0                       maxabs=5.606e-05      limit=0.001          family-calibrated intercept tolerance
+  [PASS] fit        nzero                    maxabs=0              limit=1              small sparsity counting difference is allowed
+  [PASS] beta       coefficients             maxabs=0.0001488      limit=0.01           flattened beta matrix (step x feature.response)
+  [PASS] cv         lambda                   maxabs=2.22e-16       limit=2.631e-10      CV lambda grid must be identical
+  [PASS] cv         cvm                      maxabs=0.0005451      limit=0.01851        CV mean curve, absolute scale may differ by measure definition
+  [PASS] cv         cvsd                     maxabs=0.0001068      limit=0.01101        CV standard error curve
+  [PASS] cv         lambda.min.grid.pos      maxabs=0              limit=1              grid index R=34, R#=34; lambda diff=0
+  [PASS] cv         lambda.1se.grid.pos      maxabs=0              limit=1              grid index R=29, R#=29; lambda diff=1.388e-17
+  [PASS] coef       coefficients             maxabs=1.569e-07      limit=1e-04          coef(fit, s = s_ref) at the same grid point
+  [PASS] predict    link                     maxabs=3.163e-07      limit=1e-04          predict(fit, newx, s = s_ref, type = 'link')
+
+---- binomial ----------------------------------------------------
+  checks=14  PASS=14  FAIL=0  SKIP=0
+  [PASS] fit        lambda                   maxabs=2.776e-17      limit=1.24e-10       lambda grid must be identical
+  [PASS] fit        nulldev                  maxabs=8.527e-14      limit=2.372e-06      null deviance must be identical
+  [PASS] fit        dev.ratio                maxabs=0.0003282      limit=0.001          family-calibrated dev.ratio tolerance
+  [PASS] fit        df                       maxabs=1              limit=1              one path step of df difference is allowed
+  [PASS] fit        a0                       maxabs=1.71           limit=3              family-calibrated intercept tolerance
+  [PASS] fit        nzero                    maxabs=1              limit=2              small sparsity counting difference is allowed
+  [PASS] beta       coefficients             maxabs=2.411          limit=3              flattened beta matrix (step x feature.response)
+  [PASS] cv         lambda                   maxabs=2.776e-17      limit=1.24e-10       CV lambda grid must be identical
+  [PASS] cv         cvm                      maxabs=1.301          limit=4.091          CV mean curve, absolute scale may differ by measure definition
+  [PASS] cv         cvsd                     maxabs=0.1424         limit=0.5623         CV standard error curve
+  [PASS] cv         lambda.min.grid.pos      maxabs=0              limit=2              grid index R=23, R#=23; lambda diff=0
+  [PASS] cv         lambda.1se.grid.pos      maxabs=0              limit=2              grid index R=14, R#=14; lambda diff=0
+  [PASS] coef       coefficients             maxabs=2.577e-05      limit=0.001          coef(fit, s = s_ref) at the same grid point
+  [PASS] predict    link                     maxabs=3.128e-05      limit=0.001          predict(fit, newx, s = s_ref, type = 'link')
+
+---- poisson ----------------------------------------------------
+  checks=14  PASS=14  FAIL=0  SKIP=0
+  [PASS] fit        lambda                   maxabs=1.776e-15      limit=1.323e-09      lambda grid must be identical
+  [PASS] fit        nulldev                  maxabs=1.273e-11      limit=0.0001482      null deviance must be identical
+  [PASS] fit        dev.ratio                maxabs=0.0009059      limit=0.005          family-calibrated dev.ratio tolerance
+  [PASS] fit        df                       maxabs=1              limit=1              one path step of df difference is allowed
+  [PASS] fit        a0                       maxabs=0.01032        limit=0.05           family-calibrated intercept tolerance
+  [PASS] fit        nzero                    maxabs=1              limit=2              small sparsity counting difference is allowed
+  [PASS] beta       coefficients             maxabs=0.001168       limit=0.01           flattened beta matrix (step x feature.response)
+  [PASS] cv         lambda                   maxabs=1.776e-15      limit=1.323e-09      CV lambda grid must be identical
+  [PASS] cv         cvm                      maxabs=0.08176        limit=0.7996         CV mean curve, absolute scale may differ by measure definition
+  [PASS] cv         cvsd                     maxabs=0.02655        limit=0.2484         CV standard error curve
+  [PASS] cv         lambda.min.grid.pos      maxabs=0              limit=2              grid index R=59, R#=59; lambda diff=0
+  [PASS] cv         lambda.1se.grid.pos      maxabs=0              limit=2              grid index R=46, R#=46; lambda diff=0
+  [PASS] coef       coefficients             maxabs=0.01032        limit=0.05           coef(fit, s = s_ref) at the same grid point
+  [PASS] predict    link                     maxabs=0.01398        limit=0.05           predict(fit, newx, s = s_ref, type = 'link')
+
+---- multinomial ----------------------------------------------------
+  checks=14  PASS=10  FAIL=0  SKIP=4
+  [PASS] fit        lambda                   maxabs=2.776e-17      limit=1.232e-10      lambda grid must be identical
+  [PASS] fit        nulldev                  maxabs=9.095e-13      limit=1.193e-05      null deviance must be identical
+  [PASS] fit        dev.ratio                maxabs=0.01412        limit=0.03           family-calibrated dev.ratio tolerance
+  [PASS] fit        df                       maxabs=1              limit=1              one path step of df difference is allowed
+  [SKIP] fit        a0                       multi-response family: golden a0 is a zero placeholder
+  [SKIP] fit        nzero                    multi-response family: variable vs coefficient counting differs
+  [PASS] beta       coefficients             maxabs=0.2512         limit=0.5            flattened beta matrix (step x feature.response)
+  [PASS] cv         lambda                   maxabs=2.776e-17      limit=1.232e-10      CV lambda grid must be identical
+  [PASS] cv         cvm                      maxabs=2.434          limit=5              CV mean curve, absolute scale may differ by measure definition
+  [PASS] cv         cvsd                     maxabs=0.07611        limit=0.5035         CV standard error curve
+  [SKIP] cv         lambda.min.grid.pos      CV measure semantics differ for this family; optimum is not comparable
+  [SKIP] cv         lambda.1se.grid.pos      CV measure semantics differ for this family; optimum is not comparable
+  [PASS] coef       coefficients             maxabs=0.04218        limit=0.2            coef(fit, s = s_ref) at the same grid point
+  [PASS] predict    link                     maxabs=0.06128        limit=0.2            predict(fit, newx, s = s_ref, type = 'link')
+
+---- cox ----------------------------------------------------
+  checks=14  PASS=14  FAIL=0  SKIP=0
+  [PASS] fit        lambda                   maxabs=2.776e-17      limit=1.237e-10      lambda grid must be identical
+  [PASS] fit        nulldev                  maxabs=4.184e-11      limit=8.277e-05      null deviance must be identical
+  [PASS] fit        dev.ratio                maxabs=1.373e-05      limit=1e-04          family-calibrated dev.ratio tolerance
+  [PASS] fit        df                       maxabs=0              limit=1              one path step of df difference is allowed
+  [PASS] fit        a0                       maxabs=0              limit=1e-06          family-calibrated intercept tolerance
+  [PASS] fit        nzero                    maxabs=0              limit=1              small sparsity counting difference is allowed
+  [PASS] beta       coefficients             maxabs=0.0002547      limit=0.01           flattened beta matrix (step x feature.response)
+  [PASS] cv         lambda                   maxabs=2.776e-17      limit=1.237e-10      CV lambda grid must be identical
+  [PASS] cv         cvm                      maxabs=3.437          limit=9.702          CV mean curve, absolute scale may differ by measure definition
+  [PASS] cv         cvsd                     maxabs=0.0301         limit=0.1063         CV standard error curve
+  [PASS] cv         lambda.min.grid.pos      maxabs=0              limit=3              grid index R=28, R#=28; lambda diff=3.469e-18
+  [PASS] cv         lambda.1se.grid.pos      maxabs=2              limit=3              grid index R=13, R#=15; lambda diff=0.01316
+  [PASS] coef       coefficients             maxabs=1.217e-05      limit=0.001          coef(fit, s = s_ref) at the same grid point
+  [PASS] predict    link                     maxabs=2.251e-05      limit=0.001          predict(fit, newx, s = s_ref, type = 'link')
+
+---- mgaussian ----------------------------------------------------
+  checks=14  PASS=13  FAIL=0  SKIP=1
+  [PASS] fit        lambda                   maxabs=2.22e-16       limit=4.113e-10      lambda grid must be identical
+  [PASS] fit        nulldev                  maxabs=0              limit=4.681e-05      null deviance must be identical
+  [PASS] fit        dev.ratio                maxabs=2.594e-06      limit=1e-04          family-calibrated dev.ratio tolerance
+  [PASS] fit        df                       maxabs=0              limit=1              one path step of df difference is allowed
+  [SKIP] fit        a0                       multi-response family: golden a0 is a zero placeholder
+  [PASS] fit        nzero                    maxabs=0              limit=1              small sparsity counting difference is allowed
+  [PASS] beta       coefficients             maxabs=0.0003275      limit=0.01           flattened beta matrix (step x feature.response)
+  [PASS] cv         lambda                   maxabs=2.22e-16       limit=4.113e-10      CV lambda grid must be identical
+  [PASS] cv         cvm                      maxabs=34.56          limit=96.08          CV mean curve, absolute scale may differ by measure definition
+  [PASS] cv         cvsd                     maxabs=2.514          limit=8.352          CV standard error curve
+  [PASS] cv         lambda.min.grid.pos      maxabs=0              limit=2              grid index R=48, R#=48; lambda diff=0
+  [PASS] cv         lambda.1se.grid.pos      maxabs=0              limit=2              grid index R=36, R#=36; lambda diff=0
+  [PASS] coef       coefficients             maxabs=2.812e-09      limit=1e-04          coef(fit, s = s_ref) at the same grid point
+  [PASS] predict    link                     maxabs=3.046e-09      limit=1e-04          predict(fit, newx, s = s_ref, type = 'link')
+
+================================================================================
+ TOTAL: 84 checks, 79 PASS, 0 FAIL, 5 SKIP
+
+ Known limitations (deliberately SKIP or widened tolerance):
+  * binomial near complete separation => non-unique coefficients (tol 3.0);
+  * multinomial grouped penalty => coefficients can drift in magnitude;
+  * multi-response a0/nzero have different semantics in the golden export;
+  * cvm/cvsd absolute scales differ with weight normalization / measure
+    definition, so lambda.min / lambda.1se grid positions are the main
+    cross-validation criterion;
+  * cox coef(fit) has no intercept row in GNU R; the wrapper's first row
+    is dropped before comparison.
+
+ RESULT: PASS
+================================================================================
