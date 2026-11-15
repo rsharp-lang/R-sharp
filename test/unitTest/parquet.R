@@ -41,4 +41,10 @@ print(df2);
 write.parquet(df2, file = file2);
 
 print(`parquet file is written: ${file2}`);
+
+# 不指定目标文件时返回 parquet 格式的原始字节数据
+let bytes = write.parquet(df, row_names = FALSE);
+
+print(`raw parquet bytes type: ${typeof(bytes)}`);
+
 print("parquet test done!");

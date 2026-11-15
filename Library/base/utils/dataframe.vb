@@ -1153,6 +1153,7 @@ ReturnTable:
     ''' </param>
     ''' <param name="file">
     ''' the target parquet data file its file path, or a writable <see cref="Stream"/> object.
+    ''' If this parameter is not given, then the raw parquet binary bytes will be returned.
     ''' </param>
     ''' <param name="compression">
     ''' the page compression codec: ``none``/``snappy``/``gzip``, default is ``snappy``.
@@ -1170,7 +1171,8 @@ ReturnTable:
     ''' </param>
     ''' <param name="env"></param>
     ''' <returns>
-    ''' ``TRUE`` if the data file is write success, or a <see cref="Message"/> object 
+    ''' ``TRUE`` if the data file is write success, or a raw <see cref="Byte"/> vector when the 
+    ''' <paramref name="file"/> parameter is not given, or a <see cref="Message"/> object 
     ''' if the given object could not be cast to a dataframe object.
     ''' </returns>
     ''' <remarks>
@@ -1179,11 +1181,16 @@ ReturnTable:
     ''' 1. integer/short/byte is mapped to ``INT32``, long is mapped to ``INT64``.
     ''' 2. single is mapped to ``FLOAT`` and double is mapped to ``DOUBLE``.
     ''' 3. logical is mapped to ``BOOLEAN``.
-    ''' 4. character is mapped to ``BYTE_ARRAY`` with the ``STRING`` logical type, and 
-    '''    the missing value is written as a null value.
+    ''' 4. character is mapped to ``BYTE_ARRAY`` with the ``STRING`` logical type.
     ''' 5. date time is mapped to ``INT64`` with the ``TIMESTAMP_MILLIS`` logical type.
     ''' 6. a column which contains values with different clr types will be cast to 
     '''    a character vector automatically.
+    ''' 
+    ''' #### Missing value
+    ''' 
+    ''' both of the ``NULL`` character value and the ``NaN``/``NA`` numeric value are written 
+    ''' as the parquet **null** value (the definition level is lower than the max definition level), 
+    ''' so ``is.na()`` still returns ``TRUE`` after reading the data file back.
     ''' </remarks>
     ''' <example>
     ''' require(dataframe);
@@ -1199,10 +1206,14 @@ ReturnTable:
     ''' 
     ''' # write with the gzip compression and without the row names index column
     ''' write.parquet(df, file = "./data.parquet", compression = "gzip", row_names = FALSE);
+    ''' 
+    ''' # write to a raw byte vector
+    ''' let bytes = write.parquet(df);
     ''' </example>
     <ExportAPI("write.parquet")>
-    <RApiReturn(GetType(Boolean))>
-    Public Function writeParquet(<RRawVectorArgument> x As Object, file As Object,
+    <RApiReturn(GetType(Boolean), GetType(Byte()))>
+    Public Function writeParquet(<RRawVectorArgument> x As Object,
+                                 Optional file As Object = Nothing,
                                  Optional compression As String = "snappy",
                                  Optional row_group_size As Integer = 1000000,
                                  Optional row_names As Boolean = True,
@@ -1210,13 +1221,23 @@ ReturnTable:
                                  Optional env As Environment = Nothing) As Object
 
         Dim auto_close As Boolean = False
-        Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env, is_filepath:=auto_close)
+        Dim buffer As MemoryStream = Nothing
+        Dim stream As Stream
 
-        If s Like GetType(Message) Then
-            Return s.TryCast(Of Message)
+        If file Is Nothing Then
+            ' 没有给定目标文件时，返回 parquet 格式的原始字节数据
+            buffer = New MemoryStream()
+            stream = buffer
+        Else
+            Dim s = SMRUCC.Rsharp.GetFileStream(file, FileAccess.Write, env, is_filepath:=auto_close)
+
+            If s Like GetType(Message) Then
+                Return s.TryCast(Of Message)
+            End If
+
+            stream = s.TryCast(Of Stream)
         End If
 
-        Dim stream As Stream = s.TryCast(Of Stream)
         Dim model As Object = toParquetFrame(x, env)
 
         If TypeOf model Is Message Then
@@ -1244,6 +1265,10 @@ ReturnTable:
 
             Return RInternal.debug.stop(ex, env)
         End Try
+
+        If buffer IsNot Nothing Then
+            Return buffer.ToArray()
+        End If
 
         If auto_close Then
             Call closeStream(stream)

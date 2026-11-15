@@ -7,11 +7,14 @@ usage:
 第二个文件是「读取之后再写出」的结果，要求与第一个文件的内容完全一致。
 """
 
+import datetime
 import math
 import sys
 
 import pyarrow as pa
 import pyarrow.parquet as pq
+
+UTC = datetime.timezone.utc
 
 passed = 0
 failed = 0
@@ -28,6 +31,20 @@ def report(ok, name, expected=None, actual=None):
         sys.stdout.write("FAIL %s expected=%r actual=%r\n" % (name, expected, actual))
 
 
+def epoch_millis(value):
+    if isinstance(value, datetime.datetime):
+        if value.tzinfo is None:
+            value = value.replace(tzinfo=UTC)
+
+        return int(round(value.timestamp() * 1000))
+
+    if isinstance(value, datetime.date):
+        return int(round(datetime.datetime(value.year, value.month, value.day,
+                                          tzinfo=UTC).timestamp() * 1000))
+
+    return None
+
+
 def value_equals(expected, actual):
     if expected is None:
         return actual is None
@@ -40,6 +57,11 @@ def value_equals(expected, actual):
 
     if isinstance(expected, (int, float)) and isinstance(actual, (int, float)):
         return abs(float(actual) - float(expected)) <= 1e-9 * max(1.0, abs(float(expected)))
+
+    # date32 / timestamp 读取之后统一为日期时间，这里按时间戳比较
+    if isinstance(expected, (datetime.date, datetime.datetime)) and \
+            isinstance(actual, (datetime.date, datetime.datetime)):
+        return epoch_millis(expected) == epoch_millis(actual)
 
     return expected == actual
 
@@ -93,7 +115,8 @@ def verify_roundtrip(first, second):
     a = pq.read_table(first).to_pydict()
     b = pq.read_table(second).to_pydict()
 
-    report(sorted(a.keys()) == sorted(b.keys()), "roundtrip columns",
+    # 目标文件可能额外包含 __index__ 行名列，因此这里只要求原文件的列都还存在
+    report(set(a.keys()) <= set(b.keys()), "roundtrip columns",
            sorted(a.keys()), sorted(b.keys()))
 
     for name in sorted(a.keys()):
@@ -122,14 +145,18 @@ def verify_roundtrip(first, second):
 
 
 def main():
-    if len(sys.argv) < 2:
-        sys.stderr.write("usage: python parquet_verify.py <first.parquet> [second.parquet]\n")
+    roundtrip_only = "--roundtrip" in sys.argv
+    files = [arg for arg in sys.argv[1:] if not arg.startswith("--")]
+
+    if len(files) < 1:
+        sys.stderr.write("usage: python parquet_verify.py [--roundtrip] <first.parquet> [second.parquet]\n")
         return 2
 
-    verify_first(sys.argv[1])
+    if not roundtrip_only:
+        verify_first(files[0])
 
-    if len(sys.argv) > 2:
-        verify_roundtrip(sys.argv[1], sys.argv[2])
+    if len(files) > 1:
+        verify_roundtrip(files[0], files[1])
 
     sys.stdout.write("SUMMARY pass=%d fail=%d\n" % (passed, failed))
 

@@ -15,7 +15,7 @@
     <Authors>xie.guigang@gcmodeller.org</Authors>
     <Company>SMRUCC genomics</Company>
     <Product>R# language</Product>
-    <Description>R# language internal base package, includes build-in functions for handling basic data file formats</Description>
+    <Description>R# language internal base package, includes build-in functions for handling basic data file formats: csv, xlsx, json, feather, parquet, hdf5, netcdf, arff, bson.</Description>
     <PackageTags>netcdf;hdf5;parquet;json;xlsx;csv;txt;r-sharp</PackageTags>
     <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
   </PropertyGroup>
