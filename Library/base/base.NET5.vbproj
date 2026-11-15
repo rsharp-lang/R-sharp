@@ -16,7 +16,7 @@
     <Company>SMRUCC genomics</Company>
     <Product>R# language</Product>
     <Description>R# language internal base package, includes build-in functions for handling basic data file formats</Description>
-    <PackageTags>netcdf;hdf5;json;xlsx;csv;txt;r-sharp</PackageTags>
+    <PackageTags>netcdf;hdf5;parquet;json;xlsx;csv;txt;r-sharp</PackageTags>
     <DefineConstants>MATH_DATASET=1,UNIX=1</DefineConstants>
   </PropertyGroup>
 
@@ -194,6 +194,7 @@
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\BinaryData\HDF5\HDF5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\BinaryData\HDSPack\HDSPack.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\BinaryData\netCDF\netCDF.vbproj" />
+    <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\BinaryData\Parquet\Parquet.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\DataFrame.Extensions\DataFramework.Extensions-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data\DataFrame\dataframework-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\runtime\sciBASIC#\Data_science\DataMining\DynamicProgramming\DynamicProgramming.NET5.vbproj" />
