@@ -54,17 +54,12 @@
 #End Region
 
 Imports System.Drawing
-Imports System.Drawing.Drawing2D
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.Plots
 Imports Microsoft.VisualBasic.DataMining
-Imports Microsoft.VisualBasic.DataMining.ComponentModel
 Imports Microsoft.VisualBasic.DataMining.Evaluation
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Driver
-Imports Microsoft.VisualBasic.MachineLearning.ComponentModel.StoreProcedure
-Imports Microsoft.VisualBasic.MachineLearning.Debugger
-Imports Microsoft.VisualBasic.MachineLearning.NeuralNetwork
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Scripting.Runtime
 Imports Microsoft.VisualBasic.Text.Xml.Models
@@ -72,9 +67,9 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime.Vectorization
-Imports ROCCurve = Microsoft.VisualBasic.Data.Plots.ROCCurve
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+Imports ROCCurve = Microsoft.VisualBasic.Data.Plots.ROCCurve
 
 <Package("validation", Category:=APICategories.ResearchTools, Publisher:="xie.guigang@gcmodeller.org")>
 Module validation
@@ -102,7 +97,7 @@ Module validation
 
         Using plt As New ROCPlot(sz.Width, sz.Height, PlotTheme.Light(), type) With {
             .Title = "ROC Curve",
-            .Curves = New List(Of ROCCurve) From {curve}
+            .Curves = New ROCCurve() {curve}
         }
             Call plt.Plot()
             Return plt.AsGraphicsData()
