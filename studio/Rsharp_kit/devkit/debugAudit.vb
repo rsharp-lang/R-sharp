@@ -32,7 +32,7 @@ Module debugAuditRTools
         Dim boolVal As Object = condition.Evaluate(env)
         Dim bool As Boolean = CLRVector.asScalarLogical(boolVal)
 
-        Call DebugAudit.Check(bool, msg, expr, frame.File, frame.Line, frame.Method.ToString)
+        Call DebugAudit.Check(bool, msg, expr, frame)
     End Sub
 
     <ExportAPI("dump")>
