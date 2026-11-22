@@ -1,0 +1,10 @@
+[DebugAudit toolkit test]
+[PASS] step 1: reset / max_events / throw_on_failure
+[PASS] step 2: capture / capture_as / expr_text / value_text
+[PASS] step 3: captures / mark / clear_captures
+[PASS] step 4: check success and failure
+[PASS] step 5: test boolean return
+[PASS] step 6: are_equal scalar and vector
+[PASS] step 7: check_throws / require
+[PASS] step 8: watch / snapshot / dump / to_json / save_report
+[PASS] step 9: final state checks

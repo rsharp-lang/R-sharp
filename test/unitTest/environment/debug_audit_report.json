@@ -1,0 +1,101 @@
+﻿{
+  "captures": {
+    "x": "1",
+    "y": "2",
+    "z": "3"
+  },
+  "failureCount": 4,
+  "records": [
+    {
+      "time": "2026-11-22T21:44:19.514",
+      "kind": "Mark",
+      "level": "infom",
+      "expression": null,
+      "message": "checkpoint = 7",
+      "sourceFile": "G:\\GCModeller\\src\\R-sharp\\studio\\Rsharp_kit\\devkit\\debugAudit.vb",
+      "line": 369,
+      "member": "mark",
+      "threadId": 4,
+      "elapsedMs": 0,
+      "succeeded": true
+    },
+    {
+      "time": "2026-11-22T21:44:19.518",
+      "kind": "Assertion",
+      "level": "warng",
+      "expression": "Call \"all\"((&a <= 0))",
+      "message": "all values non-positive (Call \"all\"((&a <= 0)))",
+      "sourceFile": "frame_test.R",
+      "line": 67,
+      "member": "SMRUCC/R#.call_function.\"all\"((&a <= 0)...)",
+      "threadId": 4,
+      "elapsedMs": 0,
+      "succeeded": false
+    },
+    {
+      "time": "2026-11-22T21:44:19.523",
+      "kind": "Assertion",
+      "level": "warng",
+      "expression": "Call \"any\"((&a > 100))",
+      "message": "Assertion failed: Call \"any\"((&a > 100))",
+      "sourceFile": "frame_test.R",
+      "line": 77,
+      "member": "\"any\"((&a > 100)...)",
+      "threadId": 4,
+      "elapsedMs": 0,
+      "succeeded": false
+    },
+    {
+      "time": "2026-11-22T21:44:19.525",
+      "kind": "Assertion",
+      "level": "warng",
+      "expression": "1 == 2",
+      "message": "Assertion failed: 1 == 2",
+      "sourceFile": "[devkit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]",
+      "line": -1,
+      "member": "are_equal",
+      "threadId": 4,
+      "elapsedMs": 0,
+      "succeeded": false
+    },
+    {
+      "time": "2026-11-22T21:44:19.549",
+      "kind": "Assertion",
+      "level": "warng",
+      "expression": "(1 + 1)",
+      "message": "no exception was thrown, but an error was expected ((1 + 1))",
+      "sourceFile": "[devkit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]",
+      "line": -1,
+      "member": "check_throws",
+      "threadId": 4,
+      "elapsedMs": 0,
+      "succeeded": false
+    },
+    {
+      "time": "2026-11-22T21:44:19.564",
+      "kind": "Scope",
+      "level": "debug",
+      "expression": null,
+      "message": "sum(a)",
+      "sourceFile": "G:\\GCModeller\\src\\R-sharp\\studio\\Rsharp_kit\\devkit\\debugAudit.vb",
+      "line": 380,
+      "member": "watch",
+      "threadId": 4,
+      "elapsedMs": 1.609,
+      "succeeded": true
+    },
+    {
+      "time": "2026-11-22T21:44:19.567",
+      "kind": "Mark",
+      "level": "infom",
+      "expression": null,
+      "message": "snapshot",
+      "sourceFile": "G:\\GCModeller\\src\\R-sharp\\studio\\Rsharp_kit\\devkit\\debugAudit.vb",
+      "line": 258,
+      "member": "snapshot",
+      "threadId": 4,
+      "elapsedMs": 0,
+      "succeeded": true
+    }
+  ]
+}

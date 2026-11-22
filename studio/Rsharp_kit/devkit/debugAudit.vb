@@ -241,7 +241,7 @@ Module debugAuditRTools
     ''' DebugAudit::snapshot(list(x = 1, y = 2));
     ''' </example>
     <ExportAPI("snapshot")>
-    Public Sub snapshot(<RListObjectArgument, RRawVectorArgument> vars As Object, Optional env As Environment = Nothing)
+    Public Sub snapshot(<RRawVectorArgument> vars As Object, Optional env As Environment = Nothing)
         Dim names As New List(Of String)
 
         Call DebugAudit.ClearCaptures()

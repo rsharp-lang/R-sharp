@@ -1,6 +1,6 @@
 ---
 name: rsharp-package-testing
-description: 指导 LLM agent 编译 R# 程序包（VB.NET 源码 + R# 脚本）并通过 R#.exe 执行 R# 脚本测试与回归验证。当任务涉及 GCModeller、metaboanalyst、biocad_registry、cell-render、Daisy、environment-designer、GMN-Designer、graphQL 等 R# 程序包的代码修改后验证、.NET 程序集重新编译、运行时底层 CLR 刷新、或编写/运行 *.R 测试脚本时使用。
+description: 指导 LLM agent 编译 R# 程序包（VB.NET 源码 + R# 脚本）并通过 R#.exe 执行 R# 脚本测试与回归验证，包括使用 devkit 包的 DebugAudit 测试工具包编写断言脚本与生成审计报告。当任务涉及 GCModeller、metaboanalyst、biocad_registry、cell-render、Daisy、environment-designer、GMN-Designer、graphQL 等 R# 程序包的代码修改后验证、.NET 程序集重新编译、运行时底层 CLR 刷新、编写/运行 *.R 测试脚本、或使用 DebugAudit::check/test/require/capture 等 API 构建测试工具包时使用。
 ---
 
 # R# 程序包脚本测试
@@ -159,6 +159,77 @@ print(dim(result));
 print("[PASS] all checks passed");
 ```
 
+## DebugAudit：R# 脚本测试工具包
+
+`devkit` 程序集（`studio/Rsharp_kit/devkit/debugAudit.vb`）把底层 `Microsoft.VisualBasic.ApplicationServices.Debugging.DebugAudit` 的审计能力暴露为 R# ExportAPI，使测试脚本可以**累积断言结果、记录变量快照、导出结构化报告**，而不必每条断言都用 `stop()` 中断。
+
+源码位置：`G:\GCModeller\src\R-sharp\studio\Rsharp_kit\devkit\debugAudit.vb`（模块名 `debugAuditRTools`，`<Package("DebugAudit")>`）。该源码归入 `devkit-netcore5.vbproj`，构建后产物为 `App\net10.0\devkit.dll`，运行时自动加载，无需 `--attach` 指向 devkit 目录。
+
+### 引入方式
+
+```r
+imports "DebugAudit" from "devkit";
+```
+
+### API 分组
+
+| 类别 | API | 说明 |
+| --- | --- | --- |
+| 变量快照 | `capture(expr)` / `capture_as(name, expr)` | 记录表达式源码文本与求值结果 |
+| | `snapshot(list(...))` | 用命名列表整体替换快照 |
+| | `captures()` / `clear_captures()` | 查询副本 / 清空快照 |
+| 断言 | `check(cond, msg)` | 记录失败但不返回、不中断 |
+| | `test(cond, msg)` | 同 `check` 但返回 `TRUE`/`FALSE`，可用于 `if` |
+| | `are_equal(expected, actual, msg)` | 标量或向量相等比较，返回布尔值 |
+| | `check_throws(expr, expected, msg)` | 检查表达式是否抛出错误，`expected` 可填 `"RuntimeError"` / `"any"` |
+| | `require(cond, msg)` | fail-fast，条件不成立时抛出 `DebugAssertionException` 终止脚本 |
+| 标记与计时 | `mark(name, value)` | 写入标记事件，可选同步记录变量值 |
+| | `watch(name, expr)` | 计时执行表达式，返回求值结果并写入 Scope 事件 |
+| 报告 | `dump()` / `dump(json=TRUE)` | 文本表格 / JSON 文本 |
+| | `to_json(indent)` / `save_report(path)` | JSON 输出 / 落盘 |
+| | `value_text(value)` / `expr_text(expr)` | 对象文本化 / 表达式源码文本 |
+| | `records()` / `last_failure()` / `failure_count()` | 事件列表 / 最近失败 / 失败计数 |
+| 配置 | `max_events(n)` / `throw_on_failure(v)` | 无参调用为 getter，带参调用为 setter |
+
+### 推荐测试写法
+
+用 `test()` / `are_equal()` 的返回值做判定，`check()` 负责留痕，最后统一核对 `failure_count()` 并写报告：
+
+```r
+imports "DebugAudit" from "devkit";
+
+DebugAudit::reset();
+let data = c(25, 23, 5, 34);
+
+DebugAudit::capture(data * 2);
+DebugAudit::check(all(data > 0), "all values positive");
+
+if (DebugAudit::test(any(data > 30)) != TRUE) {
+    stop("[FAIL] no value above 30");
+}
+if (DebugAudit::are_equal(42, 42) != TRUE) {
+    stop("[FAIL] scalar equality");
+}
+
+let report = DebugAudit::dump();
+DebugAudit::save_report("G:/GCModeller/src/R-sharp/test/unitTest/environment/debug_audit_report.json");
+
+if (DebugAudit::failure_count() != 0) {
+    stop("[FAIL] unexpected audit failures");
+}
+print("[PASS] all checks passed");
+```
+
+完整可运行示例：`test\unitTest\environment\frame_test.R`；其报告产物为同目录下的 `frame_test_report.txt` 与 `debug_audit_report.json`。
+
+### 已验证的 R# 陷阱
+
+- 脚本里**没有** VB 的 `Call` 关键字，直接写 `DebugAudit::reset();`。
+- `namespace::require(...) != TRUE` 会让 R# 语法解析器报 `Unsure for parse: '!='`；先把返回值赋给局部变量再比较。
+- 任何形式的 `--debug`（包括 `--debug=none`）都会令 `Rscript.debug=TRUE`，此时 ExportAPI 抛出的 CLR 异常**不会**被包装成 R# `Message`，`tryCatch` 捕获不到。因此 `require()` 失败总是直接终止脚本；需要用 `tryCatch` 捕获的错误断言请改用 `check_throws()`。
+- CLR 对象与 `NULL` 直接比较可能报 `argument is of length zero`；改用 `value_text()` 判断是否为空。
+- 失败断言会以 warning 形式打印到标准输出（含表达式文本与脚本行号），这是预期行为，不代表测试失败；结论仍以 `[PASS]`/`[FAIL]` 与 `failure_count()` 为准。
+
 ## 结果验证与故障定位
 
 编译后必须核对程序集是否真的更新，这是判断「代码问题 vs 环境问题」的第一依据：
@@ -183,7 +254,10 @@ Get-ChildItem "G:\GCModeller\src\R-sharp\App\net10.0\R#.exe" | Select-Object Nam
 ## 测试报告
 
 - R# 脚本测试的报告由脚本自身产出：`writeLines` 写 `test\` 下的结果文件（`[PASS]`/`[FAIL]` 逐条记录 + 关键数值），配合退出码与标准输出结论。
-- `DebugAudit.vb`（`G:\GCModeller\src\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\ApplicationServices\Debugger\DebugAudit.vb`）仅适用于用 VB.NET 编写的 console 型测试工程，**不用于 R# 脚本测试**；只有当测试本身是一个 VB.NET 控制台程序时才使用它生成报告。
+- 结构化审计报告由 DebugAudit 工具包生成：脚本调用 `DebugAudit::save_report(path)` 得到 JSON 文件（变量快照 + 全部审计事件 + 失败计数），调用 `DebugAudit::dump()` 得到可读文本表格。
+- 两层 DebugAudit 要区分清楚：
+  - 底层 `G:\GCModeller\src\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\ApplicationServices\Debugger\DebugAudit.vb` 是 VB.NET 控制台测试工程直接调用的 API；其中带 `<Conditional("DEBUG")>` 的重载在 Release 构建下会被编译器移除。
+  - R# 侧通过 `devkit` 的 `debugAuditRTools` 模块调用其**非条件编译**重载，因此 Release 版本同样可用；测试脚本只需 `imports "DebugAudit" from "devkit";`，不要直接引用底层 .vb 文件。
 
 ## 执行前检查清单
 
@@ -194,4 +268,5 @@ Get-ChildItem "G:\GCModeller\src\R-sharp\App\net10.0\R#.exe" | Select-Object Nam
 - [ ] 已 `cd` 到 `G:\GCModeller\src\R-sharp\App\net10.0`。
 - [ ] `--attach` 指向包根目录，多个包写在同一次 `--attach` 内。
 - [ ] 脚本结尾有 `[PASS]` 输出或 `stop()`，结论不依赖退出码单独判断。
+- [ ] 使用 DebugAudit 时已核对 `failure_count()` 与预期一致，并确认 JSON 报告文件已生成。
 - [ ] 命令设置了超时，避免长时间挂起。

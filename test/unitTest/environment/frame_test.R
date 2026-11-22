@@ -121,15 +121,14 @@ if (DebugAudit::value_text(sumVal) != "87") {
     stop("[FAIL] watch should return the evaluated value");
 }
 DebugAudit::snapshot(list(x = 1, y = 2, z = 3));
-print(DebugAudit::captures());
 if (length(DebugAudit::captures()) != 3) {
     stop("[FAIL] snapshot should replace the whole capture set");
 }
 if (length(DebugAudit::records()) < 5) {
     stop("[FAIL] records should contain audit events");
 }
-if (DebugAudit::last_failure() == NULL) {
-    stop("[FAIL] last_failure should not be NULL after failures");
+if (DebugAudit::value_text(DebugAudit::last_failure()) == "") {
+    stop("[FAIL] last_failure should not be empty after failures");
 }
 let textReport = DebugAudit::dump();
 if (textReport == "") {
