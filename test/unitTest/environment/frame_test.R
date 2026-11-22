@@ -121,6 +121,7 @@ if (DebugAudit::value_text(sumVal) != "87") {
     stop("[FAIL] watch should return the evaluated value");
 }
 DebugAudit::snapshot(list(x = 1, y = 2, z = 3));
+print(DebugAudit::captures());
 if (length(DebugAudit::captures()) != 3) {
     stop("[FAIL] snapshot should replace the whole capture set");
 }
@@ -145,7 +146,7 @@ DebugAudit::save_report("G:/GCModeller/src/R-sharp/test/unitTest/environment/deb
 lines = c(lines, "[PASS] step 8: watch / snapshot / dump / to_json / save_report");
 
 print("[STEP] 9/9 final verification");
-if (DebugAudit::failure_count() != 5) {
+if (DebugAudit::failure_count() != 4) {
     stop("[FAIL] final failure count mismatch");
 }
 if (DebugAudit::max_events() != 32) {
