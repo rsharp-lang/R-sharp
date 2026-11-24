@@ -326,6 +326,23 @@
       <BuildType Solution="Rsharp_app_release|x86" Project="CellaLAB-Desktop" />
       <Platform Solution="*|x64" Project="x64" />
     </Project>
+    <Project Path="../runtime/sciBASIC#/Data_science/DirectML/DirectML.vbproj">
+      <BuildType Solution="Biodeep|*" Project="Release" />
+      <BuildType Solution="Biostack|*" Project="Rsharp_app_release" />
+      <BuildType Solution="CFD_win32|*" Project="nuget_release" />
+      <BuildType Solution="Docker|*" Project="Release" />
+      <BuildType Solution="GCModeller(Release_X64)|*" Project="nuget_release" />
+      <BuildType Solution="GCModeller(UNIX-Release_X64)|*" Project="Rsharp_app_release" />
+      <BuildType Solution="gcmodeller_desktop|*" Project="nuget_release" />
+      <BuildType Solution="LipidSearch|*" Project="nuget_release" />
+      <BuildType Solution="mzkit_UnixDocker|*" Project="Rsharp_app_release" />
+      <BuildType Solution="mzkit_win32|*" Project="Rsharp_app_release" />
+      <BuildType Solution="mzkit|*" Project="Debug" />
+      <BuildType Solution="NPSearch|*" Project="Rsharp_app_release" />
+      <BuildType Solution="PlantMAT|*" Project="Rsharp_app_release" />
+      <BuildType Solution="RsharpDev|*" Project="nuget_release" />
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
     <Project Path="../runtime/sciBASIC#/Data_science/Mathematica/SignalProcessing/SignalProcessing/signalprocessing-netcore5.vbproj">
       <BuildType Solution="Biodeep|Any CPU" Project="Debug" />
       <BuildType Solution="Biodeep|ARM32" Project="nuget_release" />
@@ -709,6 +726,42 @@
       <BuildType Solution="mzkit_UnixDocker|*" Project="mzkit" />
       <BuildType Solution="mzkit_win32|*" Project="mzkit" />
       <BuildType Solution="RsharpDev|*" Project="Rsharp_app_release" />
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="../runtime/sciBASIC#/Data/BinaryData/Parquet/Parquet.vbproj">
+      <BuildType Solution="Biodeep|*" Project="Release" />
+      <BuildType Solution="Biostack|*" Project="Release" />
+      <BuildType Solution="CFD_win32|*" Project="nuget_release" />
+      <BuildType Solution="Docker|*" Project="Release" />
+      <BuildType Solution="GCModeller(Release_X64)|*" Project="nuget_release" />
+      <BuildType Solution="GCModeller(UNIX-Release_X64)|*" Project="nuget_release" />
+      <BuildType Solution="gcmodeller_desktop|*" Project="nuget_release" />
+      <BuildType Solution="LipidSearch|*" Project="nuget_release" />
+      <BuildType Solution="mzkit_UnixDocker|*" Project="Release" />
+      <BuildType Solution="mzkit_win32|*" Project="Release" />
+      <BuildType Solution="mzkit|*" Project="Debug" />
+      <BuildType Solution="NPSearch|*" Project="Debug" />
+      <BuildType Solution="PlantMAT|*" Project="Release" />
+      <BuildType Solution="RsharpDev|*" Project="nuget_release" />
+      <BuildType Solution="Rsharp_app_release|*" Project="nuget_release" />
+      <Platform Solution="*|x64" Project="x64" />
+    </Project>
+    <Project Path="../runtime/sciBASIC#/Data/BinaryData/Protobuf/Protobuf.vbproj">
+      <BuildType Solution="Biodeep|*" Project="Release" />
+      <BuildType Solution="Biostack|*" Project="Release" />
+      <BuildType Solution="CFD_win32|*" Project="nuget_release" />
+      <BuildType Solution="Docker|*" Project="Release" />
+      <BuildType Solution="GCModeller(Release_X64)|*" Project="nuget_release" />
+      <BuildType Solution="GCModeller(UNIX-Release_X64)|*" Project="nuget_release" />
+      <BuildType Solution="gcmodeller_desktop|*" Project="nuget_release" />
+      <BuildType Solution="LipidSearch|*" Project="nuget_release" />
+      <BuildType Solution="mzkit_UnixDocker|*" Project="Release" />
+      <BuildType Solution="mzkit_win32|*" Project="Release" />
+      <BuildType Solution="mzkit|*" Project="Debug" />
+      <BuildType Solution="NPSearch|*" Project="Debug" />
+      <BuildType Solution="PlantMAT|*" Project="Release" />
+      <BuildType Solution="RsharpDev|*" Project="nuget_release" />
+      <BuildType Solution="Rsharp_app_release|*" Project="nuget_release" />
       <Platform Solution="*|x64" Project="x64" />
     </Project>
     <Project Path="../runtime/sciBASIC#/Data/BinaryData/SQLite3/SQLite3.vbproj">
