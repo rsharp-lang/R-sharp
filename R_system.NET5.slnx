@@ -743,7 +743,9 @@
       <BuildType Solution="NPSearch|*" Project="Debug" />
       <BuildType Solution="PlantMAT|*" Project="Release" />
       <BuildType Solution="RsharpDev|*" Project="nuget_release" />
-      <BuildType Solution="Rsharp_app_release|*" Project="nuget_release" />
+      <BuildType Solution="Rsharp_app_release|Any CPU" Project="nuget_release" />
+      <BuildType Solution="Rsharp_app_release|ARM32" Project="nuget_release" />
+      <BuildType Solution="Rsharp_app_release|x86" Project="nuget_release" />
       <Platform Solution="*|x64" Project="x64" />
     </Project>
     <Project Path="../runtime/sciBASIC#/Data/BinaryData/Protobuf/Protobuf.vbproj">
@@ -761,7 +763,9 @@
       <BuildType Solution="NPSearch|*" Project="Debug" />
       <BuildType Solution="PlantMAT|*" Project="Release" />
       <BuildType Solution="RsharpDev|*" Project="nuget_release" />
-      <BuildType Solution="Rsharp_app_release|*" Project="nuget_release" />
+      <BuildType Solution="Rsharp_app_release|Any CPU" Project="nuget_release" />
+      <BuildType Solution="Rsharp_app_release|ARM32" Project="nuget_release" />
+      <BuildType Solution="Rsharp_app_release|x86" Project="nuget_release" />
       <Platform Solution="*|x64" Project="x64" />
     </Project>
     <Project Path="../runtime/sciBASIC#/Data/BinaryData/SQLite3/SQLite3.vbproj">
